@@ -1,0 +1,5 @@
+h5folder /scratch0/staneker/SPH/output
+;h5folder /Users/johannes/git/NNS/MolecularDynamics/BarnesHutParallel/SpaceFillingCurves/output
+systemSize 25. # system size as a cube
+imgHeight 512 # width = 2*height, specified in pixel
+processColoring true # future option to re-include velocity plotting

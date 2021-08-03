@@ -1,0 +1,12 @@
+render true
+width 512
+height 512
+depth 512
+renderScale 1.2
+maxVelColor 1
+minVelColor 0.0001
+particleBrightness .35
+particleSharpness 1
+dotSize 8
+renderInterval 1
+processColoring true

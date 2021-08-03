@@ -1,0 +1,14 @@
+
+numParticles 200
+systemSize 5.
+timeStep .15
+timeEnd 100.0 //100.0
+initMass 1e-4
+initVel .125
+smoothingLength 0.5
+outputRank 0
+loadBalancing true
+distributionType 0
+curveType 0
+
+#include "config/rendering.info"
