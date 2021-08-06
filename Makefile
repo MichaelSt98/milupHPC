@@ -24,13 +24,13 @@ OBJEXT         := o
 
 #Flags, Libraries and Includes
 CXXFLAGS       += -std=c++11 -w -I/usr/include/hdf5/openmpi#-O3
-NVFLAGS        := --std=c++11 -x cu -c -dc -w -Xcompiler "-pthread" -Wno-deprecated-gpu-targets -O3 -I/opt/openmpi-4.1.0/include -I/usr/include/hdf5/openmpi#-lmpi
-LFLAGS         += -g -lm -L$(CUDADIR)/lib64 -lcudart -lpthread -lconfig -L/usr/local/cuda-10.1/lib64 -L/opt/openmpi-4.1.0/lib -L/usr/lib/x86_64-linux-gnu/hdf5/openmpi -lmpi -lhdf5
+NVFLAGS        := --std=c++11 -x cu -c -dc -w -Xcompiler "-pthread" -Wno-deprecated-gpu-targets -O3 -I/opt/openmpi-4.1.0/include -I/usr/include/hdf5/openmpi
+LFLAGS         += -g -lm -L$(CUDADIR)/lib64 -lcudart -lpthread -lconfig -L/usr/local/cuda-10.1/lib64 -L/opt/openmpi-4.1.0/lib -L/usr/lib/x86_64-linux-gnu/hdf5/openmpi -lmpi -lhdf5 -lboost_filesystem -lboost_system
 GPU_ARCH       := -arch=sm_52
 CUDALFLAGS     := -dlink
 CUDALINKOBJ    := cuLink.o #needed?
 LIB            :=
-INC            := -I$(INCDIR) -I$(CUDADIR)/include -I/opt/openmpi-4.1.0/include #-L/opt/openmpi-4.1.0/lib -lmpi #-I/usr/local/include
+INC            := -I$(INCDIR) -I/usr/include/boost -I$(CUDADIR)/include -I/opt/openmpi-4.1.0/include -I/usr/local/Headeronly/ #-L/opt/openmpi-4.1.0/lib -lmpi #-I/usr/local/include
 INCDEP         := -I$(INCDIR)
 
 #Source and Object files
