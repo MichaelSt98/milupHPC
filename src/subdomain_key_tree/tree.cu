@@ -1,49 +1,43 @@
 #include "../../include/subdomain_key_tree/tree.cuh"
 
-/*CUDA_CALLABLE_MEMBER Foo::Foo(int test) : d_test(test) {
+CUDA_CALLABLE_MEMBER Foo::Foo() {
 
-    //h_test = new int[10];
-    //gpuErrorcheck(cudaMalloc((void**)&d_test, 10*sizeof(int)));
-    //d_test = new int[10];
+}
+
+CUDA_CALLABLE_MEMBER Foo::Foo(int *test) : d_test(test) {
 
 }
 
 CUDA_CALLABLE_MEMBER Foo::~Foo() {
 
-    //delete [] d_test;
-    //delete [] h_test;
-    //gpuErrorcheck(cudaFree(d_test));
-    //delete [] d_test;
-
 }
 
-CUDA_CALLABLE_MEMBER void Foo::aMethod() {
+CUDA_CALLABLE_MEMBER void Foo::aMethod(int *test) {
+    d_test = test;
+}
 
-    gpuErrorcheck(cudaMemcpy(h_test, d_test, 10*sizeof(int), cudaMemcpyDeviceToHost));
-
-    for (int i=0; i<10; i++) {
-        std::cout << "h_test[" << i << "] = " << h_test[i];
-    }
+__global__ void setKernel(Foo *foo, int *test) {
+    foo->d_test = test;
 }
 
 __global__ void testKernel(Foo *foo) {
 
-    //int index = threadIdx.x + blockIdx.x * blockDim.x;
-    //int stride = blockDim.x * gridDim.x;
+    for (int i=0; i<5; i++) {
+        foo->d_test[i] = i;
+        printf("<<<testKernel>>> test = %i\n", foo->d_test[i]);
+    }
 
-    printf("test = %i\n", foo->d_test);
+}
 
-    //for (int index=0; index<10; index++) {
-    //    foo->d_test[index] = index;
-    //    printf("foo->d_Test[%i] = %i", index, foo->d_test);
-    //}
+void launchTestKernel(Foo *foo) {
+    //ExecutionPolicy executionPolicy(1, 1);
+    //cudaLaunch(false, executionPolicy, testKernel, foo);
+    testKernel<<<1, 1>>>(foo);
+}
 
-    //while (index < 10) {
-    //    foo->d_test[index] = index;
-    //    index +=stride;
-    //    printf("foo->d_Test[%i] = %i", index, foo->d_test);
-    //}
-}*/
+void launchSetKernel(Foo *foo, int *test) {
+    setKernel<<<1, 1>>>(foo, test);
+}
 
 /*__global__ void buildTreeKernel(float *x, float *y, float *z, float *mass, int *count, int *start,
                                 int *child, int *index, float *minX, float *maxX, float *minY, float *maxY,

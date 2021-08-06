@@ -4,6 +4,7 @@
 #include "../include/utils/cxxopts.h"
 #include "../include/utils/config_parser.h"
 #include "../include/cuda_utils/cuda_utilities.cuh"
+//#include "../include/cuda_utils/cuda_launcher.cuh"
 
 #include "../include/subdomain_key_tree/tree.cuh"
 
@@ -111,36 +112,41 @@ int main(int argc, char** argv)
 
     // ...
 
-    Foo *foo = new Foo(2);
+    // host allocation/declaration
+    int *test = new int[5];
+    for (int i=0; i<5; i++) {
+        test[i] = 0;
+    }
+    Foo *foo = new Foo(test);
+    for (int i=0; i<5; i++) {
+        Logger(INFO) << "foo->d_test[" << i << "] = " << foo->d_test[i];
+    }
+
+    // device allocation/declaration
     Foo *d_foo;
     const size_t sz = sizeof(Foo);
-    //cudaMalloc((void**)&d_foo, sz);
-    //gpuErrorcheck(cudaMemcpy(d_foo, foo, sz, cudaMemcpyHostToDevice));
-    //testKernel<<<1, 1>>>(d_foo);
-    //gpuErrorcheck( cudaPeekAtLastError() );
-    //gpuErrorcheck( cudaDeviceSynchronize() );
+    int *d_test;
+    cudaMalloc((void**)&d_test, 5 * sizeof(int));
+    cudaMalloc((void**)&d_foo, sz);
+    //set d_test as member for d_foo
+    launchSetKernel(d_foo, d_test);
+    gpuErrorcheck( cudaPeekAtLastError() );
+    gpuErrorcheck( cudaDeviceSynchronize() );
+    // launch a kernel
+    launchTestKernel(d_foo);
+    gpuErrorcheck( cudaPeekAtLastError() );
+    gpuErrorcheck( cudaDeviceSynchronize() );
 
-    //int *test;
-    //gpuErrorcheck(cudaMalloc((void**)&test, 10*sizeof(int)));
-    //Foo *foo;
-    //foo = new Foo(test);
-    //gpuErrorcheck(cudaMalloc((void**)&foo, sizeof(Foo)));
-    //gpuErrorcheck(cudaMalloc((void**)&foo->d_test, 10*sizeof(int)));
-    //testKernel<<<1, 1>>>(foo);
-    //foo->aMethod();
+    //gpuErrorcheck(cudaMemcpy(foo, d_foo, sizeof(Foo) /*+ 5 * sizeof(int)*/, cudaMemcpyDeviceToHost));
+    gpuErrorcheck(cudaMemcpy(foo->d_test, d_test, 5 * sizeof(int), cudaMemcpyDeviceToHost));
 
-    /*int *h_test;
-    h_test = new int[10];
-
-    gpuErrorcheck(cudaMemcpy(h_test, &(foo->d_test), 10*sizeof(int), cudaMemcpyDeviceToHost));
-
-    for (int i=0; i<10; i++) {
-        std::cout << "h_test[" << i << "] = " << h_test[i];
+    for (int i=0; i<5; i++) {
+        Logger(INFO) << "foo->d_test[" << i << "] = " << foo->d_test[i];
     }
-    delete [] h_test;*/
 
-    //delete foo;
-
+    delete [] test;
+    gpuErrorcheck( cudaFree(d_test) );
+    gpuErrorcheck( cudaFree(d_foo) );
 
     MPI_Finalize();
     return 0;
