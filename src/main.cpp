@@ -7,6 +7,10 @@
 //#include "../include/cuda_utils/cuda_launcher.cuh"
 
 #include "../include/subdomain_key_tree/tree.cuh"
+#include "../include/subdomain_key_tree/sample.cuh"
+#include "../include/particles.cuh"
+#include "../include/particle_handler.h"
+#include "../include/memory_handling.h"
 
 #include <mpi.h>
 #include <fenv.h>
@@ -117,7 +121,8 @@ int main(int argc, char** argv)
     for (int i=0; i<5; i++) {
         test[i] = 0;
     }
-    Foo *foo = new Foo(test);
+    Foo *foo = new Foo(); //new Foo(test);
+    foo->aMethod(test);
     for (int i=0; i<5; i++) {
         Logger(INFO) << "foo->d_test[" << i << "] = " << foo->d_test[i];
     }
@@ -147,6 +152,24 @@ int main(int argc, char** argv)
     delete [] test;
     gpuErrorcheck( cudaFree(d_test) );
     gpuErrorcheck( cudaFree(d_foo) );
+
+
+    // --------------------------
+    //memory_handling memoryHandler(1000);
+    //memoryHandler.allocateParticles();
+    //Particles *h_particles;
+    //Particles *d_particles;
+    //memoryHandler.getParticlesObjects(h_particles, d_particles);
+    //memoryHandler.h_particles->x[0] = 10.f;
+    //h_particles->x[0] = 10.f;
+    //Logger(INFO) << "h_particles->x[0] = " << h_particles->x[0];
+    //Logger(INFO) << "memoryHandler.h_particles->x[0] = " << memoryHandler.h_particles->x[0];
+
+    ParticleHandler particleHandler(1000, 2000);
+    particleHandler.h_particles->x[0] = 10.f;
+    Logger(INFO) << "particleHandler.h_particles->x[0] = " << particleHandler.h_particles->x[0];
+
+    Logger(INFO) << "Finished!";
 
     MPI_Finalize();
     return 0;

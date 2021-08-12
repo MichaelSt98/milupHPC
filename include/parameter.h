@@ -1,6 +1,10 @@
 #ifndef MILUPHPC_PARAMETER_H
 #define MILUPHPC_PARAMETER_H
 
+typedef float real;
+typedef int integer;
+typedef unsigned long int keyType;
+
 // Dimension of the problem
 #define DIM 3
 

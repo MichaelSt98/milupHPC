@@ -5,6 +5,8 @@
 #ifndef MILUPHPC_CUDALAUNCHER_CUH
 #define MILUPHPC_CUDALAUNCHER_CUH
 
+#include "../parameter.h"
+
 #include <iostream>
 #include <cuda.h>
 #include <cuda_runtime.h>
@@ -23,11 +25,11 @@ public:
 };
 
 template <typename... Arguments>
-float cudaLaunch(bool timeKernel, const ExecutionPolicy &policy,
+real cudaLaunch(bool timeKernel, const ExecutionPolicy &policy,
                  void (*f)(Arguments...),
                  Arguments... args)
 {
-    float elapsedTime = 0.f;
+    real elapsedTime = 0.f;
     ExecutionPolicy p = policy;
     //checkCuda(configureGrid(p, f));
     if (timeKernel) {
@@ -52,10 +54,11 @@ float cudaLaunch(bool timeKernel, const ExecutionPolicy &policy,
 }
 
 template <typename... Arguments>
-float cudaLaunch(bool timeKernel, void(*f)(Arguments... args), Arguments... args)
+real cudaLaunch(bool timeKernel, void(*f)(Arguments... args), Arguments... args)
 {
     cudaLaunch(ExecutionPolicy(), f, args...);
 }
 
+//#elseif
 
 #endif //MILUPHPC_CUDALAUNCHER_CUH
