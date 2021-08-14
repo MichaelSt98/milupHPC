@@ -8,6 +8,9 @@ typedef unsigned long int keyType;
 // Dimension of the problem
 #define DIM 3
 
+#define power_two(x) (1 << (x))
+#define POW_DIM power_two(DIM)
+
 /*
 // Basic physical model, choose one of the following:
 // SOLID solves continuum mechanics with material strength, and stress tensor \sigma^{\alpha \beta} = -p \delta^{\alpha \beta} + S^{\alpha \beta}

@@ -49,8 +49,6 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     h_particles->setParticle(numParticles, numNodes, h_mass, h_x, h_y, h_z, h_vx, h_vy, h_vz, h_ax, h_ay, h_az);
     ParticlesNS::launchSetKernel(d_particles, numParticles, numNodes, d_mass, d_x, d_y, d_z, d_vx, d_vy, d_vz, d_ax, d_ay, d_az);
 #endif
-    gpuErrorcheck( cudaPeekAtLastError() ); // check CUDA kernel
-    gpuErrorcheck( cudaDeviceSynchronize() ); // check CUDA kernel
 
 }
 

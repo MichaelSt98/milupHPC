@@ -62,7 +62,7 @@ namespace ParticlesNS {
     void launchSetKernel(Particles *particles, integer numParticles, integer numNodes, real *mass, real *x, real *y, real *vx,
                          real *vy, real *ax, real *ay);
 #if DIM == 3
-    __global__ void setKernel(Particles *particles, integer numParticles, integer numNodes,, real *mass, real *x, real *y, real *z, real *vx,
+    __global__ void setKernel(Particles *particles, integer numParticles, integer numNodes, real *mass, real *x, real *y, real *z, real *vx,
                               real *vy, real *vz, real *ax, real *ay, real *az);
 
     void launchSetKernel(Particles *particles, integer numParticles, integer numNodes, real *mass, real *x, real *y, real *z, real *vx,

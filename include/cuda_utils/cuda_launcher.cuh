@@ -18,45 +18,45 @@ public:
     const dim3 gridSize;
     const dim3 blockSize;
     const size_t sharedMemBytes;
+    //const blockSizeInt = ;
 
     ExecutionPolicy();
     ExecutionPolicy(dim3 _gridSize, dim3 _blockSize, size_t _sharedMemBytes);
     ExecutionPolicy(dim3 _gridSize, dim3 _blockSize);
 };
 
-template <typename... Arguments>
-real cudaLaunch(bool timeKernel, const ExecutionPolicy &policy,
-                 void (*f)(Arguments...),
-                 Arguments... args)
-{
-    real elapsedTime = 0.f;
-    ExecutionPolicy p = policy;
-    //checkCuda(configureGrid(p, f));
-    if (timeKernel) {
-        cudaEvent_t start_t, stop_t;
-        cudaEventCreate(&start_t);
-        cudaEventCreate(&stop_t);
-        cudaEventRecord(start_t, 0);
+namespace cuda {
+    template<typename... Arguments>
+    real launch(bool timeKernel, const ExecutionPolicy &policy,
+                    void (*f)(Arguments...),
+                    Arguments... args) {
+        real elapsedTime = 0.f;
+        ExecutionPolicy p = policy;
+        //checkCuda(configureGrid(p, f));
+        if (timeKernel) {
+            cudaEvent_t start_t, stop_t;
+            cudaEventCreate(&start_t);
+            cudaEventCreate(&stop_t);
+            cudaEventRecord(start_t, 0);
 
-        f<<<p.gridSize, p.blockSize, p.sharedMemBytes>>>(args...);
+            f<<<p.gridSize, p.blockSize, p.sharedMemBytes>>>(args...);
 
-        cudaEventRecord(stop_t, 0);
-        cudaEventSynchronize(stop_t);
-        cudaEventElapsedTime(&elapsedTime, start_t, stop_t);
-        cudaEventDestroy(start_t);
-        cudaEventDestroy(stop_t);
+            cudaEventRecord(stop_t, 0);
+            cudaEventSynchronize(stop_t);
+            cudaEventElapsedTime(&elapsedTime, start_t, stop_t);
+            cudaEventDestroy(start_t);
+            cudaEventDestroy(stop_t);
+        } else {
+            f<<<p.gridSize, p.blockSize, p.sharedMemBytes>>>(args...);
+        }
+
+        return elapsedTime;
     }
-    else {
-        f<<<p.gridSize, p.blockSize, p.sharedMemBytes>>>(args...);
+
+    template<typename... Arguments>
+    real launch(bool timeKernel, void(*f)(Arguments... args), Arguments... args) {
+        cudaLaunch(ExecutionPolicy(), f, args...);
     }
-
-    return elapsedTime;
-}
-
-template <typename... Arguments>
-real cudaLaunch(bool timeKernel, void(*f)(Arguments... args), Arguments... args)
-{
-    cudaLaunch(ExecutionPolicy(), f, args...);
 }
 
 //#elseif

@@ -33,7 +33,7 @@ __global__ void testKernel(Foo *foo) {
 
 void launchTestKernel(Foo *foo) {
     ExecutionPolicy executionPolicy(1, 1);
-    cudaLaunch(false, executionPolicy, testKernel, foo);
+    cuda::launch(false, executionPolicy, testKernel, foo);
     //testKernel<<<1, 1>>>(foo);
 }
 

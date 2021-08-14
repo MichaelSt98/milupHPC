@@ -87,7 +87,7 @@ namespace ParticlesNS {
     void launchSetKernel(Particles *particles, integer numParticles, integer numNodes, real *mass, real *x, real *vx, real *ax) {
 
         ExecutionPolicy executionPolicy(1, 1);
-        cudaLaunch(false, executionPolicy, setKernel, particles, numParticles, numNodes, mass, x, vx, ax);
+        cuda::launch(false, executionPolicy, setKernel, particles, numParticles, numNodes, mass, x, vx, ax);
 
     }
 #if DIM > 1
@@ -102,7 +102,7 @@ namespace ParticlesNS {
                          real *vy, real *ax, real *ay) {
 
         ExecutionPolicy executionPolicy(1, 1);
-        cudaLaunch(false, executionPolicy, setKernel, particles, numParticles, numNodes, mass, x, y, vx, vy, ax, ay);
+        cuda::launch(false, executionPolicy, setKernel, particles, numParticles, numNodes, mass, x, y, vx, vy, ax, ay);
 
     }
 #if DIM == 3
@@ -117,7 +117,7 @@ namespace ParticlesNS {
                          real *vy, real *vz, real *ax, real *ay, real *az) {
 
         ExecutionPolicy executionPolicy(1, 1);
-        cudaLaunch(false, executionPolicy, setKernel, particles, numParticles, numNodes, mass, x, y, z,
+        cuda::launch(false, executionPolicy, setKernel, particles, numParticles, numNodes, mass, x, y, z,
                    vx, vy, vz, ax, ay, az);
         //setKernel<<<1, 1>>>(particles, count, mass, x, y, z, vx, vy, vz, ax, ay, az);
 
