@@ -31,19 +31,19 @@ public:
 
     CUDA_CALLABLE_MEMBER Tree(integer *count, integer *start, integer *child, integer *sorted, integer *index,
                               real *minX, real *maxX);
-    CUDA_CALLABLE_MEMBER void setTree(integer *count, integer *start, integer *child, integer *sorted,
+    CUDA_CALLABLE_MEMBER void set(integer *count, integer *start, integer *child, integer *sorted,
                                       integer *index, real *minX, real *maxX);
 
 #if DIM > 1
     CUDA_CALLABLE_MEMBER Tree(integer *count, integer *start, integer *child, integer *sorted, integer *index,
                               real *minX, real *maxX, real *minY, real *maxY);
-    CUDA_CALLABLE_MEMBER void setTree(integer *count, integer *start, integer *child, integer *sorted,
+    CUDA_CALLABLE_MEMBER void set(integer *count, integer *start, integer *child, integer *sorted,
                                       integer *index, real *minX, real *maxX, real *minY, real *maxY);
 
 #if DIM == 3
     CUDA_CALLABLE_MEMBER Tree(integer *count, integer *start, integer *child, integer *sorted, integer *index,
                               real *minX, real *maxX, real *minY, real *maxY, real *minZ, real *maxZ);
-    CUDA_CALLABLE_MEMBER void setTree(integer *count, integer *start, integer *child, integer *sorted,
+    CUDA_CALLABLE_MEMBER void set(integer *count, integer *start, integer *child, integer *sorted,
                                       integer *index, real *minX, real *maxX, real *minY, real *maxY,
                                       real *minZ, real *maxZ);
 #endif

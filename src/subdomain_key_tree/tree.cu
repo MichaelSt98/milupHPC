@@ -16,7 +16,7 @@ CUDA_CALLABLE_MEMBER Tree::Tree(integer *count, integer *start, integer *child, 
                                 index(index), minX(minX), maxX(maxX) {
 
 }
-CUDA_CALLABLE_MEMBER void Tree::setTree(integer *count, integer *start, integer *child, integer *sorted,
+CUDA_CALLABLE_MEMBER void Tree::set(integer *count, integer *start, integer *child, integer *sorted,
                                         integer *index, real *minX, real *maxX) {
     this->count = count;
     this->start = start;
@@ -34,7 +34,7 @@ CUDA_CALLABLE_MEMBER Tree::Tree(integer *count, integer *start, integer *child, 
                                 maxY(maxY) {
 
 }
-CUDA_CALLABLE_MEMBER void Tree::setTree(integer *count, integer *start, integer *child, integer *sorted,
+CUDA_CALLABLE_MEMBER void Tree::set(integer *count, integer *start, integer *child, integer *sorted,
                                         integer *index, real *minX, real *maxX, real *minY, real *maxY) {
     this->count = count;
     this->start = start;
@@ -54,7 +54,7 @@ CUDA_CALLABLE_MEMBER Tree::Tree(integer *count, integer *start, integer *child, 
                                 minY(minY), maxY(maxY), minZ(minZ), maxZ(maxZ) {
 
 }
-CUDA_CALLABLE_MEMBER void Tree::setTree(integer *count, integer *start, integer *child, integer *sorted,
+CUDA_CALLABLE_MEMBER void Tree::set(integer *count, integer *start, integer *child, integer *sorted,
                                         integer *index, real *minX, real *maxX, real *minY, real *maxY,
                                         real *minZ, real *maxZ) {
     this->count = count;
@@ -478,7 +478,7 @@ namespace TreeNS {
 
     __global__ void setKernel(Tree *tree, integer *count, integer *start, integer *child, integer *sorted,
                               integer *index, real *minX, real *maxX) {
-        tree->setTree(count, start, child, sorted, index, minX, maxX);
+        tree->set(count, start, child, sorted, index, minX, maxX);
     }
 
     void launchSetKernel(Tree *tree, integer *count, integer *start, integer *child, integer *sorted,
@@ -490,7 +490,7 @@ namespace TreeNS {
 #if DIM > 1
     __global__ void setKernel(Tree *tree, integer *count, integer *start, integer *child, integer *sorted,
                               integer *index, real *minX, real *maxX, real *minY, real *maxY) {
-        tree->setTree(count, start, child, sorted, index, minX, maxX, minY, maxY);
+        tree->set(count, start, child, sorted, index, minX, maxX, minY, maxY);
     }
 
     void launchSetKernel(Tree *tree, integer *count, integer *start, integer *child, integer *sorted,
@@ -503,7 +503,7 @@ namespace TreeNS {
     __global__ void setKernel(Tree *tree, integer *count, integer *start, integer *child, integer *sorted,
                               integer *index, real *minX, real *maxX, real *minY, real *maxY,
                               real *minZ, real *maxZ) {
-        tree->setTree(count, start, child, sorted, index, minX, maxX, minY, maxY, minZ, maxZ);
+        tree->set(count, start, child, sorted, index, minX, maxX, minY, maxY, minZ, maxZ);
     }
 
     void launchSetKernel(Tree *tree, integer *count, integer *start, integer *child, integer *sorted,

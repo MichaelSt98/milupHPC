@@ -11,8 +11,10 @@
 #include "../include/particles.cuh"
 #include "../include/particle_handler.h"
 #include "../include/memory_handling.h"
+#include "../include/device_rhs.cuh"
+#include "../include/subdomain_key_tree/subdomain_handler.h"
 
-#include <mpi.h>
+//#include <mpi.h>
 #include <fenv.h>
 #include <iostream>
 #include <fstream>

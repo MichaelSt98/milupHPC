@@ -14,7 +14,7 @@ CUDA_CALLABLE_MEMBER Particles::Particles(integer numParticles, integer numNodes
 
 }
 
-CUDA_CALLABLE_MEMBER void Particles::setParticle(integer numParticles, integer numNodes, real *mass, real *x, real *vx, real *ax) {
+CUDA_CALLABLE_MEMBER void Particles::set(integer numParticles, integer numNodes, real *mass, real *x, real *vx, real *ax) {
 
     this->numParticles = numParticles;
     this->numNodes = numNodes;
@@ -33,7 +33,7 @@ CUDA_CALLABLE_MEMBER Particles::Particles(integer numParticles, integer numNodes
 
 }
 
-CUDA_CALLABLE_MEMBER void Particles::setParticle(integer numParticles, integer numNodes, real *mass, real *x, real *y, real *vx, real *vy,
+CUDA_CALLABLE_MEMBER void Particles::set(integer numParticles, integer numNodes, real *mass, real *x, real *y, real *vx, real *vy,
                                       real *ax, real *ay) {
 
     this->numParticles = numParticles;
@@ -55,7 +55,7 @@ CUDA_CALLABLE_MEMBER Particles::Particles(integer numParticles, integer numNodes
 
 }
 
-CUDA_CALLABLE_MEMBER void Particles::setParticle(integer numParticles, integer numNodes, real *mass, real *x, real *y, real *z, real *vx,
+CUDA_CALLABLE_MEMBER void Particles::set(integer numParticles, integer numNodes, real *mass, real *x, real *y, real *z, real *vx,
                                                  real *vy, real *vz, real *ax, real *ay, real *az) {
 
     this->numParticles = numParticles;
@@ -75,12 +75,26 @@ CUDA_CALLABLE_MEMBER void Particles::setParticle(integer numParticles, integer n
 #endif
 #endif
 
+CUDA_CALLABLE_MEMBER void Particles::reset(integer index) {
+    x[index] = 0;
+#if DIM > 1
+    y[index] = 0;
+#if DIM == 3
+    z[index] = 0;
+#endif
+#endif
+    mass[index] = 0;
+}
+
+CUDA_CALLABLE_MEMBER Particles::~Particles() {
+
+}
 
 namespace ParticlesNS {
 
     __global__ void setKernel(Particles *particles, integer numParticles, integer numNodes, real *mass, real *x, real *vx, real *ax) {
 
-        particles->setParticle(numParticles, numNodes, mass, x, vx, ax);
+        particles->set(numParticles, numNodes, mass, x, vx, ax);
 
     }
 
@@ -94,7 +108,7 @@ namespace ParticlesNS {
     __global__ void setKernel(Particles *particles, integer numParticles, integer numNodes, real *mass, real *x, real *y, real *vx,
                               real *vy, real *ax, real *ay) {
 
-        particles->setParticle(numParticles, numNodes, mass, x, y, vx, vy, ax, ay);
+        particles->set(numParticles, numNodes, mass, x, y, vx, vy, ax, ay);
 
     }
 
@@ -109,7 +123,7 @@ namespace ParticlesNS {
     __global__ void setKernel(Particles *particles, integer numParticles, integer numNodes, real *mass, real *x, real *y, real *z, real *vx,
                               real *vy, real *vz, real *ax, real *ay, real *az) {
 
-        particles->setParticle(numParticles, numNodes, mass, x, y, z, vx, vy, vz, ax, ay, az);
+        particles->set(numParticles, numNodes, mass, x, y, z, vx, vy, vz, ax, ay, az);
 
     }
 
@@ -133,9 +147,5 @@ namespace ParticlesNS {
     void launchTestKernel(Particles *particles) {
 
     }
-
-}
-
-CUDA_CALLABLE_MEMBER Particles::~Particles() {
 
 }

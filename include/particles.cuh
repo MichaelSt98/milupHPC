@@ -30,21 +30,23 @@ public:
     //TODO: wouldn't be necessary but better for compilation?
     CUDA_CALLABLE_MEMBER Particles(integer numParticles, integer numNodes, real *mass, real *x, real *vx, real *ax);
 
-    CUDA_CALLABLE_MEMBER void setParticle(integer numParticles, integer numNodes, real *mass,
+    CUDA_CALLABLE_MEMBER void set(integer numParticles, integer numNodes, real *mass,
                                           real *x, real *vx, real *ax);
 #if DIM > 1
     CUDA_CALLABLE_MEMBER Particles(integer numParticles, integer numNodes, real *mass, real *x, real *y, real *vx, real *vy, real *ax, real *ay);
 
-    CUDA_CALLABLE_MEMBER void setParticle(integer numParticles, integer numNodes, real *mass, real *x, real *y, real *vx, real *vy,
+    CUDA_CALLABLE_MEMBER void set(integer numParticles, integer numNodes, real *mass, real *x, real *y, real *vx, real *vy,
                                           real *ax, real *ay);
 #if DIM == 3
     CUDA_CALLABLE_MEMBER Particles(integer numParticles, integer numNodes, real *mass, real *x, real *y, real *z, real *vx,
                                    real *vy, real *vz, real *ax, real *ay, real *az);
 
-    CUDA_CALLABLE_MEMBER void setParticle(integer numParticles, integer numNodes, real *mass, real *x, real *y, real *z, real *vx,
+    CUDA_CALLABLE_MEMBER void set(integer numParticles, integer numNodes, real *mass, real *x, real *y, real *z, real *vx,
                                           real *vy, real *vz, real *ax, real *ay, real *az);
 #endif
 #endif
+
+    CUDA_CALLABLE_MEMBER void reset(integer index);
 
     CUDA_CALLABLE_MEMBER ~Particles();
 
