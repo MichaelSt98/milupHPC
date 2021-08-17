@@ -13,8 +13,8 @@ class Particles {
 
 public:
 
-    integer numParticles;
-    integer numNodes;
+    integer *numParticles;
+    integer *numNodes;
 
     real *mass;
     real *x, *vx, *ax;
@@ -28,20 +28,20 @@ public:
     CUDA_CALLABLE_MEMBER Particles();
 
     //TODO: wouldn't be necessary but better for compilation?
-    CUDA_CALLABLE_MEMBER Particles(integer numParticles, integer numNodes, real *mass, real *x, real *vx, real *ax);
+    CUDA_CALLABLE_MEMBER Particles(integer *numParticles, integer *numNodes, real *mass, real *x, real *vx, real *ax);
 
-    CUDA_CALLABLE_MEMBER void set(integer numParticles, integer numNodes, real *mass,
+    CUDA_CALLABLE_MEMBER void set(integer *numParticles, integer *numNodes, real *mass,
                                           real *x, real *vx, real *ax);
 #if DIM > 1
-    CUDA_CALLABLE_MEMBER Particles(integer numParticles, integer numNodes, real *mass, real *x, real *y, real *vx, real *vy, real *ax, real *ay);
+    CUDA_CALLABLE_MEMBER Particles(integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *vx, real *vy, real *ax, real *ay);
 
-    CUDA_CALLABLE_MEMBER void set(integer numParticles, integer numNodes, real *mass, real *x, real *y, real *vx, real *vy,
+    CUDA_CALLABLE_MEMBER void set(integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *vx, real *vy,
                                           real *ax, real *ay);
 #if DIM == 3
-    CUDA_CALLABLE_MEMBER Particles(integer numParticles, integer numNodes, real *mass, real *x, real *y, real *z, real *vx,
+    CUDA_CALLABLE_MEMBER Particles(integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *z, real *vx,
                                    real *vy, real *vz, real *ax, real *ay, real *az);
 
-    CUDA_CALLABLE_MEMBER void set(integer numParticles, integer numNodes, real *mass, real *x, real *y, real *z, real *vx,
+    CUDA_CALLABLE_MEMBER void set(integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *z, real *vx,
                                           real *vy, real *vz, real *ax, real *ay, real *az);
 #endif
 #endif
@@ -54,20 +54,20 @@ public:
 
 namespace ParticlesNS {
 
-    __global__ void setKernel(Particles *particles, integer numParticles, integer numNodes, real *mass, real *x, real *vx, real *ax);
+    __global__ void setKernel(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *vx, real *ax);
 
-    void launchSetKernel(Particles *particles, integer numParticles, integer numNodes, real *mass, real *x, real *vx, real *ax);
+    void launchSetKernel(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *vx, real *ax);
 #if DIM > 1
-    __global__ void setKernel(Particles *particles, integer numParticles, integer numNodes, real *mass, real *x, real *y, real *vx,
+    __global__ void setKernel(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *vx,
                               real *vy, real *ax, real *ay);
 
-    void launchSetKernel(Particles *particles, integer numParticles, integer numNodes, real *mass, real *x, real *y, real *vx,
+    void launchSetKernel(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *vx,
                          real *vy, real *ax, real *ay);
 #if DIM == 3
-    __global__ void setKernel(Particles *particles, integer numParticles, integer numNodes, real *mass, real *x, real *y, real *z, real *vx,
+    __global__ void setKernel(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *z, real *vx,
                               real *vy, real *vz, real *ax, real *ay, real *az);
 
-    void launchSetKernel(Particles *particles, integer numParticles, integer numNodes, real *mass, real *x, real *y, real *z, real *vx,
+    void launchSetKernel(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *z, real *vx,
                          real *vy, real *vz, real *ax, real *ay, real *az);
 #endif
 #endif

@@ -8,6 +8,9 @@
 #include "particle_handler.h"
 #include "subdomain_key_tree/tree_handler.h"
 #include "subdomain_key_tree/subdomain_handler.h"
+#include "device_rhs.cuh"
+#include "cuda_utils/cuda_utilities.cuh"
+#include "utils/logger.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -47,13 +50,16 @@ public:
     integer numParticlesLocal;
     integer numNodes;
 
+    integer *d_mutex;
     ParticleHandler *particleHandler;
     SubDomainKeyTreeHandler *subDomainKeyTreeHandler;
+    TreeHandler *treeHandler;
 
     Miluphpc(integer numParticles, integer numNodes);
     ~Miluphpc();
 
     void initDistribution(ParticleDistribution::Type particleDistribution=ParticleDistribution::disk);
+    void run();
 
 };
 

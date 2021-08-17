@@ -1,4 +1,4 @@
-#include "../include/constants.h"
+/*#include "../include/constants.h"
 #include "../include/utils/logger.h"
 #include "../include/utils/timer.h"
 #include "../include/utils/cxxopts.h"
@@ -12,7 +12,10 @@
 #include "../include/particle_handler.h"
 #include "../include/memory_handling.h"
 #include "../include/device_rhs.cuh"
-#include "../include/subdomain_key_tree/subdomain_handler.h"
+#include "../include/subdomain_key_tree/subdomain_handler.h"*/
+
+#include "../include/rhs.h"
+#include "../include/miluphpc.h"
 
 //#include <mpi.h>
 #include <fenv.h>
@@ -57,7 +60,7 @@ int main(int argc, char** argv)
 
     printf("Hello World from proc %i out of %i\n", rank, numProcesses);
 
-    cudaSetDevice(rank);
+    //cudaSetDevice(rank);
     int device;
     cudaGetDevice(&device);
     Logger(INFO) << "Set device to " << device;
@@ -118,7 +121,27 @@ int main(int argc, char** argv)
 
     // ...
 
-    // host allocation/declaration
+    integer numParticles = 100000;
+    integer numNodes = 3 * numParticles + 12000;
+    Miluphpc miluphpc(numParticles, numNodes);
+    miluphpc.run();
+
+
+    //ParticleHandler particleHandler(1000, 2000);
+    //particleHandler.h_particles->x[0] = 10.f;
+    //Logger(INFO) << "particleHandler.h_particles->x[0] = " << particleHandler.h_particles->x[0];
+
+
+
+    Logger(INFO) << "Finished!";
+
+    MPI_Finalize();
+    return 0;
+}
+
+
+/*
+ // host allocation/declaration
     int *test = new int[5];
     for (int i=0; i<5; i++) {
         test[i] = 0;
@@ -144,35 +167,14 @@ int main(int argc, char** argv)
     gpuErrorcheck( cudaPeekAtLastError() );
     gpuErrorcheck( cudaDeviceSynchronize() );
 
-    //gpuErrorcheck(cudaMemcpy(foo, d_foo, sizeof(Foo) /*+ 5 * sizeof(int)*/, cudaMemcpyDeviceToHost));
+    //gpuErrorcheck(cudaMemcpy(foo, d_foo, sizeof(Foo) + 5 * sizeof(int), cudaMemcpyDeviceToHost));
     gpuErrorcheck(cudaMemcpy(foo->d_test, d_test, 5 * sizeof(int), cudaMemcpyDeviceToHost));
 
     for (int i=0; i<5; i++) {
-        Logger(INFO) << "foo->d_test[" << i << "] = " << foo->d_test[i];
+    Logger(INFO) << "foo->d_test[" << i << "] = " << foo->d_test[i];
     }
 
     delete [] test;
     gpuErrorcheck( cudaFree(d_test) );
     gpuErrorcheck( cudaFree(d_foo) );
-
-
-    // --------------------------
-    //memory_handling memoryHandler(1000);
-    //memoryHandler.allocateParticles();
-    //Particles *h_particles;
-    //Particles *d_particles;
-    //memoryHandler.getParticlesObjects(h_particles, d_particles);
-    //memoryHandler.h_particles->x[0] = 10.f;
-    //h_particles->x[0] = 10.f;
-    //Logger(INFO) << "h_particles->x[0] = " << h_particles->x[0];
-    //Logger(INFO) << "memoryHandler.h_particles->x[0] = " << memoryHandler.h_particles->x[0];
-
-    ParticleHandler particleHandler(1000, 2000);
-    particleHandler.h_particles->x[0] = 10.f;
-    Logger(INFO) << "particleHandler.h_particles->x[0] = " << particleHandler.h_particles->x[0];
-
-    Logger(INFO) << "Finished!";
-
-    MPI_Finalize();
-    return 0;
-}
+ */

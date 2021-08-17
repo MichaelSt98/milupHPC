@@ -7,6 +7,7 @@
 
 #include "parameter.h"
 #include "particles.cuh"
+#include "utils/logger.h"
 
 class ParticleHandler {
 
@@ -41,6 +42,16 @@ public:
 
     ParticleHandler(integer numParticles, integer numNodes);
     ~ParticleHandler();
+
+    void positionToDevice();
+    void velocityToDevice();
+    void accelerationToDevice();
+    void distributionToDevice(bool velocity=true, bool acceleration=true);
+    void positionToHost();
+    void velocityToHost();
+    void accelerationToHost();
+    void distributionToHost(bool velocity=true, bool acceleration=true);
+
 };
 
 

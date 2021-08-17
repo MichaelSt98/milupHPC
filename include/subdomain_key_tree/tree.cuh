@@ -5,9 +5,11 @@
 //#include "../cuda_utils/cuda_launcher.cuh"
 #include "../parameter.h"
 #include "../particles.cuh"
+#include "subdomain.cuh"
 
 #include <iostream>
 #include <stdio.h>
+#include <cuda.h>
 
 class Tree {
 
@@ -94,6 +96,7 @@ namespace TreeNS {
 
     __global__ void sortKernel(Tree *tree, integer n, integer m);
     void launchSortKernel(Tree *tree, integer n, integer m);
+
 }
 
 #endif //MILUPHPC_TREE_CUH

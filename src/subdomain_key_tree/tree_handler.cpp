@@ -4,8 +4,10 @@
 
 #include "../../include/subdomain_key_tree/tree_handler.h"
 
-TreeHandler::TreeHandler(integer numParticles, integer numNodes) {
+TreeHandler::TreeHandler(integer numParticles, integer numNodes) : numParticles(numParticles),
+                                                        numNodes(numNodes) {
 
+    printf("POW_DIM: %i\n", POW_DIM);
     gpuErrorcheck(cudaMalloc((void**)&d_count, numNodes * sizeof(integer)));
     gpuErrorcheck(cudaMalloc((void**)&d_start, numNodes * sizeof(integer)));
     gpuErrorcheck(cudaMalloc((void**)&d_sorted, numNodes * sizeof(integer)));
@@ -70,3 +72,63 @@ TreeHandler::~TreeHandler() {
 #endif
 
 }
+
+void TreeHandler::toDevice() {
+    gpuErrorcheck(cudaMemcpy(d_minX, h_minX, sizeof(real), cudaMemcpyHostToDevice));
+    gpuErrorcheck(cudaMemcpy(d_maxX, h_maxX, sizeof(real), cudaMemcpyHostToDevice));
+#if DIM > 1
+    gpuErrorcheck(cudaMemcpy(d_minY, h_minY, sizeof(real), cudaMemcpyHostToDevice));
+    gpuErrorcheck(cudaMemcpy(d_maxY, h_maxY, sizeof(real), cudaMemcpyHostToDevice));
+#if DIM == 3
+    gpuErrorcheck(cudaMemcpy(d_minZ, h_minZ, sizeof(real), cudaMemcpyHostToDevice));
+    gpuErrorcheck(cudaMemcpy(d_maxZ, h_maxZ, sizeof(real), cudaMemcpyHostToDevice));
+#endif
+#endif
+}
+
+void TreeHandler::toHost() {
+    gpuErrorcheck(cudaMemcpy(h_minX, d_minX, sizeof(real), cudaMemcpyDeviceToHost));
+    gpuErrorcheck(cudaMemcpy(h_maxX, d_maxX, sizeof(real), cudaMemcpyDeviceToHost));
+#if DIM > 1
+    gpuErrorcheck(cudaMemcpy(h_minY, d_minY, sizeof(real), cudaMemcpyDeviceToHost));
+    gpuErrorcheck(cudaMemcpy(h_maxY, d_maxY, sizeof(real), cudaMemcpyDeviceToHost));
+#if DIM == 3
+    gpuErrorcheck(cudaMemcpy(h_minZ, d_minZ, sizeof(real), cudaMemcpyDeviceToHost));
+    gpuErrorcheck(cudaMemcpy(h_maxZ, d_maxZ, sizeof(real), cudaMemcpyDeviceToHost));
+#endif
+#endif
+}
+
+void TreeHandler::globalizeBoundingBox(Execution::Location exLoc) {
+
+    switch (exLoc) {
+        case Execution::device:
+            MPI_Allreduce(MPI_IN_PLACE, d_minX, 1, MPI_FLOAT, MPI_MIN, MPI_COMM_WORLD);
+            MPI_Allreduce(MPI_IN_PLACE, d_maxX, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
+#if DIM > 1
+            MPI_Allreduce(MPI_IN_PLACE, d_minY, 1, MPI_FLOAT, MPI_MIN, MPI_COMM_WORLD);
+            MPI_Allreduce(MPI_IN_PLACE, d_maxY, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
+#if DIM == 3
+            MPI_Allreduce(MPI_IN_PLACE, d_minZ, 1, MPI_FLOAT, MPI_MIN, MPI_COMM_WORLD);
+            MPI_Allreduce(MPI_IN_PLACE, d_maxZ, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
+#endif
+#endif
+            break;
+        case Execution::host:
+            MPI_Allreduce(MPI_IN_PLACE, h_minX, 1, MPI_FLOAT, MPI_MIN, MPI_COMM_WORLD);
+            MPI_Allreduce(MPI_IN_PLACE, h_maxX, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
+#if DIM > 1
+            MPI_Allreduce(MPI_IN_PLACE, h_minY, 1, MPI_FLOAT, MPI_MIN, MPI_COMM_WORLD);
+            MPI_Allreduce(MPI_IN_PLACE, h_maxY, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
+#if DIM == 3
+            MPI_Allreduce(MPI_IN_PLACE, h_minZ, 1, MPI_FLOAT, MPI_MIN, MPI_COMM_WORLD);
+            MPI_Allreduce(MPI_IN_PLACE, h_maxZ, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
+#endif
+#endif
+            break;
+        default:
+            Logger(ERROR) << "not available!";
+    }
+
+}
+

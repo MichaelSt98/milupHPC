@@ -2,8 +2,10 @@
 
 Miluphpc::Miluphpc(integer numParticles, integer numNodes) : numParticles(numParticles), numNodes(numNodes) {
 
+    gpuErrorcheck(cudaMalloc((void**)&d_mutex, sizeof(integer)));
     particleHandler = new ParticleHandler(numParticles, numNodes);
     subDomainKeyTreeHandler = new SubDomainKeyTreeHandler();
+    treeHandler = new TreeHandler(numParticles, numNodes);
 
 }
 
@@ -26,6 +28,8 @@ void Miluphpc::initDistribution(ParticleDistribution::Type particleDistribution)
         default:
             diskModel();
     }
+
+    particleHandler->distributionToDevice();
 }
 
 void Miluphpc::diskModel() {
@@ -39,7 +43,7 @@ void Miluphpc::diskModel() {
     real solarMass = 100000;
 
     // loop through all particles
-    for (int i = 0; i < numParticlesLocal; i++) {
+    for (int i = 0; i < numParticles; i++) {
 
         real theta = distribution_theta(generator);
         real r = distribution(generator);
@@ -106,5 +110,45 @@ void Miluphpc::diskModel() {
         particleHandler->h_particles->ay[i] = 0.0;
         particleHandler->h_particles->az[i] = 0.0;
     }
+
+}
+
+void Miluphpc::run() {
+
+    Logger(INFO) << "Starting ...";
+
+    Logger(INFO) << "initialize particle distribution ...";
+    initDistribution();
+
+    for (int i=0; i<numParticles; i++) {
+        if (i % 1000 == 0) {
+            printf("x[%i] = (%f, %f, %f)\n", i, particleHandler->h_x[i], particleHandler->h_y[i],
+                   particleHandler->h_z[i]);
+        }
+    }
+
+    ParticlesNS::launchTestKernel(particleHandler->d_particles);
+
+    //treeHandler->toHost();
+    //treeHandler->toDevice();
+
+    Logger(INFO) << "resetting (device) arrays ...";
+    device::launchResetArraysKernel(treeHandler->d_tree, particleHandler->d_particles, d_mutex, numParticles, numNodes);
+
+    Logger(INFO) << "computing bounding box ...";
+    //TreeNS::computeBoundingBoxKernel(treeHandler->d_tree, particleHandler->d_particles, d_mutex, numNodes, 256);
+    TreeNS::launchComputeBoundingBoxKernel(treeHandler->d_tree, particleHandler->d_particles, d_mutex, numParticles, 256);
+
+    treeHandler->toHost();
+    printf("min/max: x = (%f, %f), y = (%f, %f), z = (%f, %f)\n", *treeHandler->h_minX, *treeHandler->h_maxX,
+           *treeHandler->h_minY, *treeHandler->h_maxY, *treeHandler->h_minZ, *treeHandler->h_maxZ);
+
+    treeHandler->globalizeBoundingBox(Execution::device);
+    treeHandler->toHost();
+    printf("min/max: x = (%f, %f), y = (%f, %f), z = (%f, %f)\n", *treeHandler->h_minX, *treeHandler->h_maxX,
+           *treeHandler->h_minY, *treeHandler->h_maxY, *treeHandler->h_minZ, *treeHandler->h_maxZ);
+
+    Logger(INFO) << "building tree ...";
+    TreeNS::buildTreeKernel(treeHandler->d_tree, particleHandler->d_particles, numParticles, numNodes);
 
 }

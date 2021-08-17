@@ -1,11 +1,9 @@
-//
-// Created by Michael Staneker on 12.08.21.
-//
-
 #include "../include/particle_handler.h"
 
 ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numParticles(numParticles),
                                                                             numNodes(numNodes) {
+
+    Logger(INFO) << "numParticles: " << numParticles << "   numNodes: " << numNodes;
 
     h_mass = new real[numNodes];
     h_x = new real[numNodes];
@@ -46,15 +44,14 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     h_particles->set(numParticles, numNodes, h_mass, h_x, h_y, h_vx, h_vy, h_ax, h_ay);
     ParticlesNS::launchSetKernel(d_particles, numParticles, numNodes, h_mass, h_x, h_y, h_vx, h_vy, h_ax, h_ay);
 #else
-    h_particles->set(numParticles, numNodes, h_mass, h_x, h_y, h_z, h_vx, h_vy, h_vz, h_ax, h_ay, h_az);
-    ParticlesNS::launchSetKernel(d_particles, numParticles, numNodes, d_mass, d_x, d_y, d_z, d_vx, d_vy, d_vz, d_ax, d_ay, d_az);
+    h_particles->set(&numParticles, &numNodes, h_mass, h_x, h_y, h_z, h_vx, h_vy, h_vz, h_ax, h_ay, h_az);
+    ParticlesNS::launchSetKernel(d_particles, &numParticles, &numNodes, d_mass, d_x, d_y, d_z, d_vx, d_vy, d_vz, d_ax, d_ay, d_az);
 #endif
 
 }
 
 ParticleHandler::~ParticleHandler() {
 
-    delete h_particles;
     delete [] h_mass;
     delete [] h_x;
     delete [] h_vx;
@@ -69,9 +66,10 @@ ParticleHandler::~ParticleHandler() {
     delete [] h_az;
 #endif
 #endif
+    delete h_particles;
 
+    //TODO: why is this not working (or necessary)?
     // device particle entries
-    gpuErrorcheck(cudaFree(d_particles));
     gpuErrorcheck(cudaFree(d_mass));
     gpuErrorcheck(cudaFree(d_x));
     gpuErrorcheck(cudaFree(d_vx));
@@ -86,5 +84,86 @@ ParticleHandler::~ParticleHandler() {
     gpuErrorcheck(cudaFree(d_az));
 #endif
 #endif
+    gpuErrorcheck(cudaFree(d_particles));
+
+}
+
+void ParticleHandler::positionToDevice() {
+    gpuErrorcheck(cudaMemcpy(d_x,  h_x,  numParticles*sizeof(real), cudaMemcpyHostToDevice));
+#if DIM > 1
+    gpuErrorcheck(cudaMemcpy(d_y,  h_y,  numParticles*sizeof(real), cudaMemcpyHostToDevice));
+#if DIM == 3
+    gpuErrorcheck(cudaMemcpy(d_z,  h_z,  numParticles*sizeof(real), cudaMemcpyHostToDevice));
+#endif
+#endif
+}
+void ParticleHandler::velocityToDevice() {
+    gpuErrorcheck(cudaMemcpy(d_vx, h_vx, numParticles*sizeof(real), cudaMemcpyHostToDevice));
+#if DIM > 1
+    gpuErrorcheck(cudaMemcpy(d_vy, h_vy, numParticles*sizeof(real), cudaMemcpyHostToDevice));
+#if DIM == 3
+    gpuErrorcheck(cudaMemcpy(d_vz, h_vz, numParticles*sizeof(real), cudaMemcpyHostToDevice));
+#endif
+#endif
+}
+void ParticleHandler::accelerationToDevice() {
+    gpuErrorcheck(cudaMemcpy(d_ax, h_ax, numParticles*sizeof(real), cudaMemcpyHostToDevice));
+#if DIM > 1
+    gpuErrorcheck(cudaMemcpy(d_ay, h_ay, numParticles*sizeof(real), cudaMemcpyHostToDevice));
+#if DIM == 3
+    gpuErrorcheck(cudaMemcpy(d_az, h_az, numParticles*sizeof(real), cudaMemcpyHostToDevice));
+#endif
+#endif
+}
+
+void ParticleHandler::distributionToDevice(bool velocity, bool acceleration) {
+
+    positionToDevice();
+    if (velocity) {
+        velocityToDevice();
+    }
+    if (acceleration) {
+        accelerationToDevice();
+    }
+
+}
+
+void ParticleHandler::positionToHost() {
+    gpuErrorcheck(cudaMemcpy(h_x, d_x, numParticles*sizeof(real), cudaMemcpyDeviceToHost));
+#if DIM > 1
+    gpuErrorcheck(cudaMemcpy(h_y, d_y, numParticles*sizeof(real), cudaMemcpyDeviceToHost));
+#if DIM == 3
+    gpuErrorcheck(cudaMemcpy(h_z, d_z, numParticles*sizeof(real), cudaMemcpyDeviceToHost));
+#endif
+#endif
+}
+void ParticleHandler::velocityToHost() {
+    gpuErrorcheck(cudaMemcpy(h_vx, d_vx, numParticles*sizeof(real), cudaMemcpyDeviceToHost));
+#if DIM > 1
+    gpuErrorcheck(cudaMemcpy(h_vy, d_vy, numParticles*sizeof(real), cudaMemcpyDeviceToHost));
+#if DIM == 3
+    gpuErrorcheck(cudaMemcpy(h_vz, d_vz, numParticles*sizeof(real), cudaMemcpyDeviceToHost));
+#endif
+#endif
+}
+void ParticleHandler::accelerationToHost() {
+    gpuErrorcheck(cudaMemcpy(h_x, d_x, numParticles*sizeof(real), cudaMemcpyDeviceToHost));
+#if DIM > 1
+    gpuErrorcheck(cudaMemcpy(h_y, d_y, numParticles*sizeof(real), cudaMemcpyDeviceToHost));
+#if DIM == 3
+    gpuErrorcheck(cudaMemcpy(h_z, d_z, numParticles*sizeof(real), cudaMemcpyDeviceToHost));
+#endif
+#endif
+}
+
+void ParticleHandler::distributionToHost(bool velocity, bool acceleration) {
+
+    positionToHost();
+    if (velocity) {
+        velocityToHost();
+    }
+    if (acceleration) {
+        accelerationToDevice();
+    }
 
 }

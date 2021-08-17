@@ -5,6 +5,20 @@ typedef float real;
 typedef int integer;
 typedef unsigned long int keyType;
 
+struct Execution
+{
+    enum Location
+    {
+        host, device
+    };
+    Location t_;
+    Execution(Location t) : t_(t) {}
+    operator Location () const {return t_;}
+private:
+    template<typename T>
+    operator T () const;
+};
+
 // Dimension of the problem
 #define DIM 3
 

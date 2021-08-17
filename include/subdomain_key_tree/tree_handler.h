@@ -7,10 +7,16 @@
 
 #include "tree.cuh"
 #include "../parameter.h"
+#include "../utils/logger.h"
+#include <mpi.h>
 
 class TreeHandler {
 
 public:
+
+    integer numParticles;
+    integer numNodes;
+
     integer *d_count;
     integer *d_start;
     integer *d_sorted;
@@ -33,6 +39,11 @@ public:
 
     TreeHandler(integer numParticles, integer numNodes);
     ~TreeHandler();
+
+    void globalizeBoundingBox(Execution::Location exLoc=Execution::device);
+
+    void toDevice();
+    void toHost();
 
 };
 

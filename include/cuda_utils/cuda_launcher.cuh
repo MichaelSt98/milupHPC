@@ -6,6 +6,7 @@
 #define MILUPHPC_CUDALAUNCHER_CUH
 
 #include "../parameter.h"
+#include "cuda_utilities.cuh"
 
 #include <iostream>
 #include <cuda.h>
@@ -49,6 +50,9 @@ namespace cuda {
         } else {
             f<<<p.gridSize, p.blockSize, p.sharedMemBytes>>>(args...);
         }
+
+        gpuErrorcheck( cudaPeekAtLastError() );
+        gpuErrorcheck( cudaDeviceSynchronize() );
 
         return elapsedTime;
     }

@@ -311,12 +311,20 @@ __global__ void TreeNS::computeBoundingBoxKernel(Tree *tree, Particles *particle
     integer stride = blockDim.x * gridDim.x;
 
     // initialize local min/max
+    //if (particles->x[index] != 0.f || particles->y[index] != 0.f || particles->z[index] != 0.f) {
+    //    printf("device: x = (%f, %f, %f)\n", particles->x[index], particles->y[index], particles->z[index]);
+    //}
+
     real x_min = particles->x[index];
     real x_max = particles->x[index];
     real y_min = particles->y[index];
     real y_max = particles->y[index];
     real z_min = particles->z[index];
     real z_max = particles->z[index];
+
+    //if (index % 1000 == 0) {
+    //    printf("device: x_min[%i] = %f\n", index, x_min);
+    //}
 
     extern __shared__ real buffer[];
 
@@ -379,6 +387,11 @@ __global__ void TreeNS::computeBoundingBoxKernel(Tree *tree, Particles *particle
         *tree->maxY = fmaxf(*tree->maxY, y_max_buffer[0]);
         *tree->minZ = fminf(*tree->minZ, z_min_buffer[0]);
         *tree->maxZ = fmaxf(*tree->maxZ, z_max_buffer[0]);
+
+        //if (*tree->minX != 0.f || *tree->minX) {
+        //    printf("device: min/max: x = (%f, %f), y = (%f, %f), z = (%f, %f)\n", *tree->minX, *tree->maxX,
+        //           *tree->minY, *tree->maxY, *tree->minZ, *tree->maxZ);
+        //}
 
         atomicExch(mutex, 0); // unlock
     }
@@ -522,7 +535,8 @@ namespace TreeNS {
 
     void launchComputeBoundingBoxKernel(Tree *tree, Particles *particles, integer *mutex, integer n, integer blockSize) {
         size_t sharedMemory= 6 * sizeof(real) * blockSize;
-        ExecutionPolicy executionPolicy(256, 256, 6 * sharedMemory);
+        //ExecutionPolicy executionPolicy(1024, 256, sharedMemory);
+        ExecutionPolicy executionPolicy(256, 256, sharedMemory);
         cuda::launch(false, executionPolicy, computeBoundingBoxKernel, tree, particles, mutex, n, blockSize);
     }
 

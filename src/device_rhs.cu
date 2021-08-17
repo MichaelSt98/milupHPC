@@ -9,9 +9,9 @@ namespace device {
 
     __global__ void resetArraysKernel(Tree *tree, Particles *particles, integer *mutex, integer n, integer m) {
 
-        int bodyIndex = threadIdx.x + blockDim.x*blockIdx.x;
-        int stride = blockDim.x*gridDim.x;
-        int offset = 0;
+        integer bodyIndex = threadIdx.x + blockDim.x*blockIdx.x;
+        integer stride = blockDim.x*gridDim.x;
+        integer offset = 0;
 
         while ((bodyIndex + offset) < m) {
 
@@ -21,7 +21,7 @@ namespace device {
                 particles->reset(bodyIndex + offset);
             }
 
-            bodyIndex += offset;
+            offset += stride;
         }
 
         if (bodyIndex == 0) {
@@ -37,6 +37,7 @@ namespace device {
             *tree->maxZ = 0;
 #endif
 #endif
+
         }
     }
 

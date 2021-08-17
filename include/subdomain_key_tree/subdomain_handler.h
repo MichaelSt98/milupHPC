@@ -15,6 +15,7 @@ class KeyHandler {
 
 class SubDomainKeyTreeHandler {
 
+public:
     integer h_rank;
     integer h_numProcesses;
     keyType *h_range;
@@ -33,6 +34,7 @@ class SubDomainKeyTreeHandler {
 
 class DomainListHandler {
 
+public:
     integer domainListSize;
 
     integer *d_domainListIndices;
