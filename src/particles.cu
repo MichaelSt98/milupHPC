@@ -93,75 +93,89 @@ CUDA_CALLABLE_MEMBER Particles::~Particles() {
 
 namespace ParticlesNS {
 
-    __global__ void setKernel(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *vx, real *ax) {
+    namespace Kernel {
 
-        particles->set(numParticles, numNodes, mass, x, vx, ax);
+        __global__ void set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x,
+                            real *vx, real *ax) {
 
-    }
+            particles->set(numParticles, numNodes, mass, x, vx, ax);
 
-    void launchSetKernel(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *vx, real *ax) {
+        }
 
-        ExecutionPolicy executionPolicy(1, 1);
-        cuda::launch(false, executionPolicy, setKernel, particles, numParticles, numNodes, mass, x, vx, ax);
+        void Launch::set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x,
+                                real *vx, real *ax) {
 
-    }
-#if DIM > 1
-    __global__ void setKernel(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *vx,
-                              real *vy, real *ax, real *ay) {
+            ExecutionPolicy executionPolicy(1, 1);
+            cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::set, particles, numParticles, numNodes, mass, x, vx, ax);
 
-        particles->set(numParticles, numNodes, mass, x, y, vx, vy, ax, ay);
-
-    }
-
-    void launchSetKernel(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *vx,
-                         real *vy, real *ax, real *ay) {
-
-        ExecutionPolicy executionPolicy(1, 1);
-        cuda::launch(false, executionPolicy, setKernel, particles, numParticles, numNodes, mass, x, y, vx, vy, ax, ay);
-
-    }
-#if DIM == 3
-    __global__ void setKernel(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *z, real *vx,
-                              real *vy, real *vz, real *ax, real *ay, real *az) {
-
-        particles->set(numParticles, numNodes, mass, x, y, z, vx, vy, vz, ax, ay, az);
-
-    }
-
-    void launchSetKernel(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *z, real *vx,
-                         real *vy, real *vz, real *ax, real *ay, real *az) {
-
-        ExecutionPolicy executionPolicy(1, 1);
-        cuda::launch(false, executionPolicy, setKernel, particles, numParticles, numNodes, mass, x, y, z,
-                   vx, vy, vz, ax, ay, az);
-        //setKernel<<<1, 1>>>(particles, count, mass, x, y, z, vx, vy, vz, ax, ay, az);
-
-    }
-#endif
-#endif
-
-
-    __global__ void testKernel(Particles *particles) {
-
-        int bodyIndex = threadIdx.x + blockDim.x*blockIdx.x;
-        int stride = blockDim.x*gridDim.x;
-        int offset = 0;
-
-        while ((bodyIndex + offset) < 10000 /* *particles->numParticles*/) {
-            if ((bodyIndex + offset) % 1000 == 0) {
-                printf("device: x[%i] = (%f, %f, %f)\n", bodyIndex+offset, particles->x[bodyIndex + offset], particles->y[bodyIndex + offset],
-                       particles->z[bodyIndex + offset]);
-            }
-            offset += stride;
         }
 
 
-    }
+#if DIM > 1
 
-    void launchTestKernel(Particles *particles) {
-        ExecutionPolicy executionPolicy;
-        cuda::launch(false, executionPolicy, testKernel, particles);
-        //testKernel<<<256, 256>>>(particles);
+        __global__ void set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x,
+                            real *y, real *vx, real *vy, real *ax, real *ay) {
+
+            particles->set(numParticles, numNodes, mass, x, y, vx, vy, ax, ay);
+
+        }
+
+        void Launch::set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *y,
+                         real *vx, real *vy, real *ax, real *ay) {
+
+            ExecutionPolicy executionPolicy(1, 1);
+            cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::set, particles, numParticles, numNodes,
+                         mass, x, y, vx, vy, ax, ay);
+
+        }
+
+
+#if DIM == 3
+
+        __global__ void set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x,
+                                  real *y, real *z, real *vx, real *vy, real *vz, real *ax, real *ay, real *az) {
+
+            particles->set(numParticles, numNodes, mass, x, y, z, vx, vy, vz, ax, ay, az);
+
+        }
+
+        void Launch::set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *y,
+                         real *z, real *vx, real *vy, real *vz, real *ax, real *ay, real *az) {
+
+            ExecutionPolicy executionPolicy(1, 1);
+            cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::set, particles, numParticles, numNodes,
+                         mass, x, y, z, vx, vy, vz, ax, ay, az);
+            //setKernel<<<1, 1>>>(particles, count, mass, x, y, z, vx, vy, vz, ax, ay, az);
+
+        }
+
+#endif
+#endif
+
+
+        __global__ void test(Particles *particles) {
+
+            int bodyIndex = threadIdx.x + blockDim.x * blockIdx.x;
+            int stride = blockDim.x * gridDim.x;
+            int offset = 0;
+
+            while ((bodyIndex + offset) < 10000 /* *particles->numParticles*/) {
+                if ((bodyIndex + offset) % 1000 == 0) {
+                    printf("device: x[%i] = (%f, %f, %f)\n", bodyIndex + offset, particles->x[bodyIndex + offset],
+                           particles->y[bodyIndex + offset],
+                           particles->z[bodyIndex + offset]);
+                }
+                offset += stride;
+            }
+
+
+        }
+
+        real Launch::test(Particles *particles, bool time) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(time, executionPolicy, ::ParticlesNS::Kernel::test, particles);
+            //testKernel<<<256, 256>>>(particles);
+        }
     }
 
 }

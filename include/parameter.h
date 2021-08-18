@@ -19,6 +19,20 @@ private:
     operator T () const;
 };
 
+struct Curve
+{
+    enum Type
+    {
+        lebesgue, hilbert
+    };
+    Type t_;
+    Curve(Type t) : t_(t) {}
+    operator Type () const {return t_;}
+private:
+    template<typename T>
+    operator T () const;
+};
+
 // Dimension of the problem
 #define DIM 3
 

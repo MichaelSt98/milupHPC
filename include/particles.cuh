@@ -54,27 +54,45 @@ public:
 
 namespace ParticlesNS {
 
-    __global__ void setKernel(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *vx, real *ax);
+    namespace Kernel {
 
-    void launchSetKernel(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *vx, real *ax);
+        __global__ void set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x,
+                            real *vx, real *ax);
+
+        namespace Launch {
+            void set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *vx,
+                      real *ax);
+        }
+
 #if DIM > 1
-    __global__ void setKernel(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *vx,
-                              real *vy, real *ax, real *ay);
 
-    void launchSetKernel(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *vx,
-                         real *vy, real *ax, real *ay);
+        __global__ void set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x,
+                            real *y, real *vx, real *vy, real *ax, real *ay);
+
+        namespace Launch {
+            void set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *y,
+                     real *vx, real *vy, real *ax, real *ay);
+        }
+
 #if DIM == 3
-    __global__ void setKernel(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *z, real *vx,
-                              real *vy, real *vz, real *ax, real *ay, real *az);
 
-    void launchSetKernel(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *z, real *vx,
-                         real *vy, real *vz, real *ax, real *ay, real *az);
+        __global__ void set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x,
+                            real *y, real *z, real *vx, real *vy, real *vz, real *ax, real *ay, real *az);
+
+        namespace Launch {
+            void set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *y,
+                     real *z, real *vx, real *vy, real *vz, real *ax, real *ay, real *az);
+        }
+
 #endif
 #endif
 
-    __global__ void testKernel(Particles *particles);
+        __global__ void test(Particles *particles);
 
-    void launchTestKernel(Particles *particles);
+        namespace Launch {
+            real test(Particles *particles, bool time=false);
+        }
+    }
 
 }
 

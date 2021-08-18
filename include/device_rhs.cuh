@@ -9,10 +9,12 @@
 #include "particles.cuh"
 #include "constants.h"
 
-namespace device {
+namespace Kernel {
 
-    __global__ void resetArraysKernel(Tree *tree, Particles *particles, integer *mutex, integer n, integer m);
-    void launchResetArraysKernel(Tree *tree, Particles *particles, integer *mutex, integer n, integer m);
+    __global__ void resetArrays(Tree *tree, Particles *particles, integer *mutex, integer n, integer m);
+    namespace Launch {
+        real resetArrays(Tree *tree, Particles *particles, integer *mutex, integer n, integer m, bool time=false);
+    }
 
 }
 

@@ -115,6 +115,8 @@ void Miluphpc::diskModel() {
 
 void Miluphpc::run() {
 
+    real time;
+
     Logger(INFO) << "Starting ...";
 
     Logger(INFO) << "initialize particle distribution ...";
@@ -127,17 +129,21 @@ void Miluphpc::run() {
         }
     }
 
-    ParticlesNS::launchTestKernel(particleHandler->d_particles);
-
+    time = ParticlesNS::Kernel::Launch::test(particleHandler->d_particles, true);
+    Logger(TIME) << "test: " << time << " ms";
     //treeHandler->toHost();
     //treeHandler->toDevice();
 
     Logger(INFO) << "resetting (device) arrays ...";
-    device::launchResetArraysKernel(treeHandler->d_tree, particleHandler->d_particles, d_mutex, numParticles, numNodes);
+    time = Kernel::Launch::resetArrays(treeHandler->d_tree, particleHandler->d_particles, d_mutex, numParticles,
+                                       numNodes, true);
+    Logger(TIME) << "resetArrays: " << time << " ms";
 
     Logger(INFO) << "computing bounding box ...";
     //TreeNS::computeBoundingBoxKernel(treeHandler->d_tree, particleHandler->d_particles, d_mutex, numNodes, 256);
-    TreeNS::launchComputeBoundingBoxKernel(treeHandler->d_tree, particleHandler->d_particles, d_mutex, numParticles, 256);
+    time = TreeNS::Kernel::Launch::computeBoundingBox(treeHandler->d_tree, particleHandler->d_particles, d_mutex,
+                                                           numParticles, 256, true);
+    Logger(TIME) << "computeBoundingBox: " << time << " ms";
 
     treeHandler->toHost();
     printf("min/max: x = (%f, %f), y = (%f, %f), z = (%f, %f)\n", *treeHandler->h_minX, *treeHandler->h_maxX,
@@ -149,6 +155,17 @@ void Miluphpc::run() {
            *treeHandler->h_minY, *treeHandler->h_maxY, *treeHandler->h_minZ, *treeHandler->h_maxZ);
 
     Logger(INFO) << "building tree ...";
-    TreeNS::buildTreeKernel(treeHandler->d_tree, particleHandler->d_particles, numParticles, numNodes);
+    time = TreeNS::Kernel::Launch::buildTree(treeHandler->d_tree, particleHandler->d_particles, numParticles,
+                                             numParticles, true);
+    Logger(TIME) << "buildTree: " << time << " ms";
+
+    Logger(INFO) << "center of mass ...";
+    time = TreeNS::Kernel::Launch::centerOfMass(treeHandler->d_tree, particleHandler->d_particles,
+                                                numParticles, true);
+    Logger(TIME) << "centerOfMass: " << time << " ms";
+
+    Logger(INFO) << "sorting ...";
+    time = TreeNS::Kernel::Launch::sort(treeHandler->d_tree, numParticles, numNodes, true);
+    Logger(TIME) << "sort: " << time << " ms";
 
 }

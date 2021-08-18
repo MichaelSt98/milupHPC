@@ -39,13 +39,14 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
 
 #if DIM == 1
     h_particles->set(numParticles, numNodes, h_mass, h_x, h_vx, h_ax);
-    ParticlesNS::launchSetKernel(d_particles, numParticles, numNodes, h_mass, h_x, h_vx, h_ax);
+    ParticlesNS::Kernel::Launch::set(d_particles, numParticles, numNodes, h_mass, h_x, h_vx, h_ax);
 #elif DIM == 2
     h_particles->set(numParticles, numNodes, h_mass, h_x, h_y, h_vx, h_vy, h_ax, h_ay);
-    ParticlesNS::launchSetKernel(d_particles, numParticles, numNodes, h_mass, h_x, h_y, h_vx, h_vy, h_ax, h_ay);
+    ParticlesNS::Kernel::Launch::set(d_particles, numParticles, numNodes, h_mass, h_x, h_y, h_vx, h_vy, h_ax, h_ay);
 #else
     h_particles->set(&numParticles, &numNodes, h_mass, h_x, h_y, h_z, h_vx, h_vy, h_vz, h_ax, h_ay, h_az);
-    ParticlesNS::launchSetKernel(d_particles, &numParticles, &numNodes, d_mass, d_x, d_y, d_z, d_vx, d_vy, d_vz, d_ax, d_ay, d_az);
+    ParticlesNS::Kernel::Launch::set(d_particles, &numParticles, &numNodes, d_mass, d_x, d_y, d_z, d_vx, d_vy, d_vz,
+                                     d_ax, d_ay, d_az);
 #endif
 
 }

@@ -35,12 +35,12 @@ TreeHandler::TreeHandler(integer numParticles, integer numNodes) : numParticles(
     gpuErrorcheck(cudaMalloc((void**)&d_tree, sizeof(Tree)));
 
 #if DIM == 1
-    TreeNS::launchSetKernel(d_tree, d_count, d_start, d_child, d_sorted, d_index, d_minX, d_maxX);
+    TreeNS::Kernel::Launch::set(d_tree, d_count, d_start, d_child, d_sorted, d_index, d_minX, d_maxX);
 #elif DIM == 2
-    TreeNS::launchSetKernel(d_tree, d_count, d_start, d_child, d_sorted, d_index, d_minX, d_maxX, d_minY, d_maxY);
+    TreeNS:Kernel::Launch::set(d_tree, d_count, d_start, d_child, d_sorted, d_index, d_minX, d_maxX, d_minY, d_maxY);
 #else
-    TreeNS::launchSetKernel(d_tree, d_count, d_start, d_child, d_sorted, d_index, d_minX, d_maxX, d_minY, d_maxY,
-                            d_minZ, d_maxZ);
+    TreeNS::Kernel::Launch::set(d_tree, d_count, d_start, d_child, d_sorted, d_index, d_minX, d_maxX, d_minY, d_maxY,
+                                d_minZ, d_maxZ);
 #endif
 
 }

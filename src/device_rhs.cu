@@ -5,9 +5,9 @@
 #include "../include/device_rhs.cuh"
 #include "../include/cuda_utils/cuda_launcher.cuh"
 
-namespace device {
+namespace Kernel {
 
-    __global__ void resetArraysKernel(Tree *tree, Particles *particles, integer *mutex, integer n, integer m) {
+    __global__ void resetArrays(Tree *tree, Particles *particles, integer *mutex, integer n, integer m) {
 
         integer bodyIndex = threadIdx.x + blockDim.x*blockIdx.x;
         integer stride = blockDim.x*gridDim.x;
@@ -41,9 +41,9 @@ namespace device {
         }
     }
 
-    void launchResetArraysKernel(Tree *tree, Particles *particles, integer *mutex, integer n, integer m) {
+    real Launch::resetArrays(Tree *tree, Particles *particles, integer *mutex, integer n, integer m, bool time) {
         ExecutionPolicy executionPolicy;
-        cuda::launch(false, executionPolicy, resetArraysKernel, tree, particles, mutex,  n, m);
+        return cuda::launch(time, executionPolicy, ::Kernel::resetArrays, tree, particles, mutex,  n, m);
     }
 
 }
