@@ -13,6 +13,7 @@ Miluphpc::~Miluphpc() {
 
     delete particleHandler;
     delete subDomainKeyTreeHandler;
+    delete treeHandler;
 
 }
 
@@ -123,8 +124,8 @@ void Miluphpc::run() {
     initDistribution();
 
     for (int i=0; i<numParticles; i++) {
-        if (i % 1000 == 0) {
-            printf("x[%i] = (%f, %f, %f)\n", i, particleHandler->h_x[i], particleHandler->h_y[i],
+        if (i % 10000 == 0) {
+            printf("host: x[%i] = (%f, %f, %f)\n", i, particleHandler->h_x[i], particleHandler->h_y[i],
                    particleHandler->h_z[i]);
         }
     }

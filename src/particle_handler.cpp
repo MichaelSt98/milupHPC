@@ -21,6 +21,9 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
 #endif
     h_particles = new Particles();
 
+    gpuErrorcheck(cudaMalloc((void**)&d_numParticles, sizeof(integer)));
+    gpuErrorcheck(cudaMalloc((void**)&d_numNodes, sizeof(integer)));
+
     gpuErrorcheck(cudaMalloc((void**)&d_mass, numNodes * sizeof(real)));
     gpuErrorcheck(cudaMalloc((void**)&d_x, numNodes * sizeof(real)));
     gpuErrorcheck(cudaMalloc((void**)&d_vx, numNodes * sizeof(real)));
@@ -39,15 +42,20 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
 
 #if DIM == 1
     h_particles->set(numParticles, numNodes, h_mass, h_x, h_vx, h_ax);
-    ParticlesNS::Kernel::Launch::set(d_particles, numParticles, numNodes, h_mass, h_x, h_vx, h_ax);
+    ParticlesNS::Kernel::Launch::set(d_particles, d_numParticles, d_numNodes, h_mass, h_x, h_vx, h_ax);
 #elif DIM == 2
     h_particles->set(numParticles, numNodes, h_mass, h_x, h_y, h_vx, h_vy, h_ax, h_ay);
-    ParticlesNS::Kernel::Launch::set(d_particles, numParticles, numNodes, h_mass, h_x, h_y, h_vx, h_vy, h_ax, h_ay);
+    ParticlesNS::Kernel::Launch::set(d_particles, d_numParticles, d_numNodes, h_mass, h_x, h_y, h_vx, h_vy, h_ax, h_ay);
 #else
     h_particles->set(&numParticles, &numNodes, h_mass, h_x, h_y, h_z, h_vx, h_vy, h_vz, h_ax, h_ay, h_az);
-    ParticlesNS::Kernel::Launch::set(d_particles, &numParticles, &numNodes, d_mass, d_x, d_y, d_z, d_vx, d_vy, d_vz,
+    ParticlesNS::Kernel::Launch::set(d_particles, d_numParticles, d_numNodes, d_mass, d_x, d_y, d_z, d_vx, d_vy, d_vz,
                                      d_ax, d_ay, d_az);
 #endif
+
+    //gpuErrorcheck(cudaMemset(d_numParticles, numParticles, sizeof(integer)));
+    //gpuErrorcheck(cudaMemset(d_numNodes, numNodes, sizeof(integer)));
+    gpuErrorcheck(cudaMemcpy(d_numParticles, &numParticles, sizeof(integer), cudaMemcpyHostToDevice));
+    gpuErrorcheck(cudaMemcpy(d_numNodes, &numNodes, sizeof(integer), cudaMemcpyHostToDevice));
 
 }
 
@@ -71,6 +79,9 @@ ParticleHandler::~ParticleHandler() {
 
     //TODO: why is this not working (or necessary)?
     // device particle entries
+    gpuErrorcheck(cudaFree(d_numParticles));
+    gpuErrorcheck(cudaFree(d_numNodes));
+
     gpuErrorcheck(cudaFree(d_mass));
     gpuErrorcheck(cudaFree(d_x));
     gpuErrorcheck(cudaFree(d_vx));

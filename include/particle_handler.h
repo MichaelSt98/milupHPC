@@ -25,6 +25,9 @@ public:
 #endif
 #endif
 
+    integer *d_numParticles;
+    integer *d_numNodes;
+
     // device particle entries
     real *d_mass;
     real *d_x, *d_vx, *d_ax;

@@ -159,8 +159,12 @@ namespace ParticlesNS {
             int stride = blockDim.x * gridDim.x;
             int offset = 0;
 
-            while ((bodyIndex + offset) < 10000 /* *particles->numParticles*/) {
-                if ((bodyIndex + offset) % 1000 == 0) {
+            if (bodyIndex == 0) {
+                printf("device: numParticles = %i\n", *particles->numParticles);
+            }
+
+            while ((bodyIndex + offset) < *particles->numParticles) {
+                if ((bodyIndex + offset) % 10000 == 0) {
                     printf("device: x[%i] = (%f, %f, %f)\n", bodyIndex + offset, particles->x[bodyIndex + offset],
                            particles->y[bodyIndex + offset],
                            particles->z[bodyIndex + offset]);
