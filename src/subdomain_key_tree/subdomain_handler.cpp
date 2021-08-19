@@ -18,7 +18,9 @@ SubDomainKeyTreeHandler::SubDomainKeyTreeHandler() {
     gpuErrorcheck(cudaMalloc((void**)&d_range, (h_numProcesses + 1) * sizeof(keyType)));
 
     gpuErrorcheck(cudaMalloc((void**)&d_subDomainKeyTree, sizeof(SubDomainKeyTree)));
-    SubDomainKeyTreeNS::launchSetKernel(d_subDomainKeyTree, d_rank, d_numProcesses, d_range);
+    SubDomainKeyTreeNS::Kernel::Launch::set(d_subDomainKeyTree, h_rank, h_numProcesses, d_range);
+    //gpuErrorcheck(cudaMemcpy(d_rank, &h_rank, sizeof(integer), cudaMemcpyHostToDevice));
+    //gpuErrorcheck(cudaMemcpy(d_numProcesses, &h_numProcesses, sizeof(integer), cudaMemcpyHostToDevice));
 }
 
 SubDomainKeyTreeHandler::~SubDomainKeyTreeHandler() {

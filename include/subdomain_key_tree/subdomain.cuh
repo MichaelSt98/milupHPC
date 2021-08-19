@@ -8,6 +8,9 @@
 #include "../parameter.h"
 #include "../cuda_utils/cuda_utilities.cuh"
 
+class Tree;
+class Particles;
+
 class Key {
 
     /*keyType *keys;
@@ -62,8 +65,26 @@ public:
 
 namespace SubDomainKeyTreeNS {
 
-    __global__ void setKernel(SubDomainKeyTree *subDomainKeyTree, integer rank, integer numProcesses, keyType *range);
-    void launchSetKernel(SubDomainKeyTree *subDomainKeyTree, integer rank, integer numProcesses, keyType *range);
+    namespace Kernel {
+
+        __global__ void set(SubDomainKeyTree *subDomainKeyTree, integer rank, integer numProcesses, keyType *range);
+
+        __global__ void test(SubDomainKeyTree *subDomainKeyTree);
+
+        namespace Launch {
+
+            void set(SubDomainKeyTree *subDomainKeyTree, integer rank, integer numProcesses, keyType *range);
+
+            void test(SubDomainKeyTree *subDomainKeyTree);
+        }
+
+        __global__ void particlesPerProcessKernel(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                                  Curve::Type = Curve::lebesgue);
+
+        __global__ void markParticlesProcessKernel(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                                   integer *sortArray, Curve::Type = Curve::lebesgue);
+
+    }
 
 }
 

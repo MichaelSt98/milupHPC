@@ -169,4 +169,9 @@ void Miluphpc::run() {
     time = TreeNS::Kernel::Launch::sort(treeHandler->d_tree, numParticles, numNodes, true);
     Logger(TIME) << "sort: " << time << " ms";
 
+
+    printf("host: subDomainKeyTree->rank = %i\n", subDomainKeyTreeHandler->h_subDomainKeyTree->rank);
+    printf("host: subDomainKeyTree->numProcesses = %i\n", subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
+    SubDomainKeyTreeNS::Kernel::Launch::test(subDomainKeyTreeHandler->d_subDomainKeyTree);
+
 }

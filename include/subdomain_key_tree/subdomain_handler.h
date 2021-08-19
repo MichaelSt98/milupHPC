@@ -20,8 +20,8 @@ public:
     integer h_numProcesses;
     keyType *h_range;
 
-    integer d_rank;
-    integer d_numProcesses;
+    integer *d_rank;
+    integer *d_numProcesses;
     keyType *d_range;
 
     SubDomainKeyTree *h_subDomainKeyTree;

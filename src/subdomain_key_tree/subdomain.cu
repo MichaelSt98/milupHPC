@@ -58,13 +58,42 @@ CUDA_CALLABLE_MEMBER void SubDomainKeyTree::set(integer rank, integer numProcess
 
 namespace SubDomainKeyTreeNS {
 
-    __global__ void setKernel(SubDomainKeyTree *subDomainKeyTree, integer rank, integer numProcesses, keyType *range) {
-        subDomainKeyTree->set(rank, numProcesses, range);
-    }
+    namespace Kernel {
 
-    void launchSetKernel(SubDomainKeyTree *subDomainKeyTree, integer rank, integer numProcesses, keyType *range) {
-        ExecutionPolicy executionPolicy(1, 1);
-        cuda::launch(false, executionPolicy, setKernel, subDomainKeyTree, rank, numProcesses, range);
+        __global__ void set(SubDomainKeyTree *subDomainKeyTree, integer rank, integer numProcesses, keyType *range) {
+            subDomainKeyTree->set(rank, numProcesses, range);
+        }
+
+        __global__ void test(SubDomainKeyTree *subDomainKeyTree) {
+            printf("device: subDomainKeyTree->rank = %i\n", subDomainKeyTree->rank);
+            printf("device: subDomainKeyTree->numProcesses = %i\n", subDomainKeyTree->numProcesses);
+            //printf("device: subDomainKeyTree->rank = %i\n", *subDomainKeyTree->rank);
+            //printf("device: subDomainKeyTree->numProcesses = %i\n", *subDomainKeyTree->numProcesses);
+            //for (int i=0; i<)
+            //printf("device: subDomainKeyTree->rank = %i\n", subDomainKeyTree->rank);
+        }
+
+        void Launch::set(SubDomainKeyTree *subDomainKeyTree, integer rank, integer numProcesses, keyType *range) {
+            ExecutionPolicy executionPolicy(1, 1);
+            cuda::launch(false, executionPolicy, ::SubDomainKeyTreeNS::Kernel::set, subDomainKeyTree, rank,
+                         numProcesses, range);
+        }
+
+        void Launch::test(SubDomainKeyTree *subDomainKeyTree) {
+            ExecutionPolicy executionPolicy(1, 1);
+            cuda::launch(false, executionPolicy, ::SubDomainKeyTreeNS::Kernel::test, subDomainKeyTree);
+        }
+
+        __global__ void particlesPerProcessKernel(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                                  Curve::Type) {
+
+        }
+
+        __global__ void markParticlesProcessKernel(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                                   integer *sortArray, Curve::Type) {
+
+        }
+
     }
 
 }
