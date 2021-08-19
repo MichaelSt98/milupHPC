@@ -25,12 +25,16 @@ CUDA_CALLABLE_MEMBER void Helper::set(integer *intBuffer, real *floatBuffer) {
 
 namespace HelperNS {
 
-    __global__ void setKernel(Helper *helper, integer *intBuffer, real *floatBuffer) {
-        helper->set(intBuffer, floatBuffer);
-    }
+    namespace Kernel {
+        __global__ void set(Helper *helper, integer *intBuffer, real *floatBuffer) {
+            helper->set(intBuffer, floatBuffer);
+        }
 
-    void launchSetKernel(Helper *helper, integer *intBuffer, real *floatBuffer) {
-        ExecutionPolicy executionPolicy(1, 1);
-        cuda::launch(false, executionPolicy, setKernel, helper, intBuffer, floatBuffer);
+        void Launch::set(Helper *helper, integer *intBuffer, real *floatBuffer) {
+            ExecutionPolicy executionPolicy(1, 1);
+            cuda::launch(false, executionPolicy, ::HelperNS::Kernel::Launch::set, helper, intBuffer,
+                         floatBuffer);
+
+        }
     }
 }

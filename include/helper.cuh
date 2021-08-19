@@ -24,9 +24,13 @@ public:
 
 namespace HelperNS {
 
-    __global__ void setKernel(Helper *helper, integer *intBuffer, real *floatBuffer);
+    namespace Kernel {
+        __global__ void set(Helper *helper, integer *intBuffer, real *floatBuffer);
 
-    void launchSetKernel(Helper *helper, integer *intBuffer, real *floatBuffer);
+        namespace Launch {
+            void set(Helper *helper, integer *intBuffer, real *floatBuffer);
+        }
+    }
 }
 
 #endif //MILUPHPC_HELPER_CUH
