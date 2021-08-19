@@ -123,6 +123,7 @@ int main(int argc, char** argv)
 
     integer numParticles = 100000;
     integer numNodes = 3 * numParticles + 12000;
+
     Miluphpc miluphpc(numParticles, numNodes);
     miluphpc.run();
 

@@ -39,6 +39,11 @@ private:
 #define power_two(x) (1 << (x))
 #define POW_DIM power_two(DIM)
 
+//#define SOLID
+// ideal hydro, navier stokes
+//#define HYDRO
+//#define PLASTICITY // no changes for particles (class) itself, but for material config
+
 /*
 // Basic physical model, choose one of the following:
 // SOLID solves continuum mechanics with material strength, and stress tensor \sigma^{\alpha \beta} = -p \delta^{\alpha \beta} + S^{\alpha \beta}
