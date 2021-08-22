@@ -4,6 +4,7 @@
 typedef float real;
 typedef int integer;
 typedef unsigned long int keyType;
+typedef unsigned long int idInteger;
 
 struct Execution
 {
@@ -38,6 +39,26 @@ private:
 
 #define power_two(x) (1 << (x))
 #define POW_DIM power_two(DIM)
+
+#define INTEGRATE_DENSITY 1
+
+#define VARIABLE_SML 1
+
+#define SOLID 1
+
+#define NAVIER_STOKES 1
+
+#define ARTIFICIAL_STRESS 1
+
+#define POROSITY 1
+
+#define ZERO_CONSISTENCY 1
+
+#define LINEAR_CONSISTENCY 1
+
+#define FRAGMENTATION 1
+
+#define PALPHA_POROSITY 1
 
 //#define SOLID
 // ideal hydro, navier stokes
