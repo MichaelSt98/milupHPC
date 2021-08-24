@@ -34,6 +34,21 @@ private:
     operator T () const;
 };
 
+struct IntegratorSelection
+{
+    enum Type
+    {
+        euler, predictor_corrector
+    };
+    Type t_;
+    IntegratorSelection(Type t) : t_(t) {}
+    operator Type () const {return t_;}
+private:
+    template<typename T>
+    operator T () const;
+};
+
+
 // Dimension of the problem
 #define DIM 3
 
