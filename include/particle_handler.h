@@ -185,5 +185,29 @@ public:
 
 };
 
+class IntegratedParticleHandler {
+
+public:
+
+    integer numParticles;
+    integer numNodes;
+
+    integer *d_uid;
+    real *d_drhodt;
+
+    real *d_dxdt, *d_dvxdt;
+#if DIM > 1
+    real *d_dydt, *d_dvydt;
+#if DIM == 3
+    real *d_dzdt, *d_dvzdt;
+#endif
+#endif
+
+    IntegratedParticles *d_integratedParticles;
+
+    IntegratedParticleHandler(integer numParticles, integer numNodes);
+    ~IntegratedParticleHandler();
+
+};
 
 #endif //MILUPHPC_PARTICLE_HANDLER_H

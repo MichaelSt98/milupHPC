@@ -9,23 +9,6 @@
 //#include "../cuda_utils/cuda_launcher.cuh"
 #include "parameter.h"
 
-class IntegratedParticles {
-
-public:
-    real *drhodt;
-
-    real *dxdt;
-    real *dydt;
-    real *dzdt;
-
-    real *dvxdt;
-    real *dvydt;
-    real *dvzdt;
-
-    //...
-    //TODO: implement and add Handler class
-};
-
 class Particles {
 
 public:
@@ -302,7 +285,7 @@ namespace ParticlesNS {
             void setFragmentation(Particles *particles, real *d, real *damage_total, real *dddt, integer *numFlaws,
                                   integer *maxNumFlaws, integer *numActiveFlaws, real *flaws);
         }
-#if PALPAH_POROSITY
+#if PALPHA_POROSITY
         __global__ void setPalphaPorosity(Particles *particles, real *damage_porjutzi, real *ddamage_porjutzidt);
         namespace Launch {
             void setPalphaPorosity(Particles *particles, real *damage_porjutzi, real *ddamage_porjutzidt);
@@ -317,6 +300,91 @@ namespace ParticlesNS {
         }
     }
 
+}
+
+class IntegratedParticles {
+
+public:
+
+    integer *uid;
+
+    real *drhodt;
+
+    real *dxdt, *dvxdt;
+#if DIM > 1
+    real *dydt, *dvydt;
+#if DIM == 3
+    real *dzdt, *dvzdt;
+#endif
+#endif
+
+    CUDA_CALLABLE_MEMBER IntegratedParticles();
+
+    CUDA_CALLABLE_MEMBER IntegratedParticles(integer *uid, real *drhodt, real *dxdt, real *dvxdt);
+
+    CUDA_CALLABLE_MEMBER void set(integer *uid, real *drhodt, real *dxdt, real *dvxdt);
+
+#if DIM > 1
+
+    CUDA_CALLABLE_MEMBER IntegratedParticles(integer *uid, real *drhodt, real *dxdt, real *dydt, real *dvxdt,
+                                             real *dvydt);
+
+    CUDA_CALLABLE_MEMBER void set(integer *uid, real *drhodt, real *dxdt, real *dydt, real *dvxdt,
+                                  real *dvydt);
+
+#if DIM == 3
+
+    CUDA_CALLABLE_MEMBER IntegratedParticles(integer *uid, real *drhodt, real *dxdt, real *dydt, real *dzdt,
+                                             real *dvxdt, real *dvydt, real *dvzdt);
+
+    CUDA_CALLABLE_MEMBER void set(integer *uid, real *drhodt, real *dxdt, real *dydt, real *dzdt,
+                                  real *dvxdt, real *dvydt, real *dvzdt);
+
+#endif
+#endif
+
+    CUDA_CALLABLE_MEMBER void reset(integer index);
+
+    CUDA_CALLABLE_MEMBER ~IntegratedParticles();
+
+};
+
+namespace IntegratedParticlesNS {
+
+    namespace Kernel {
+
+        __global__ void set(IntegratedParticles *integratedParticles, integer *uid, real *drhodt, real *dxdt,
+                            real *dvxdt);
+
+        namespace Launch {
+            void set(IntegratedParticles *integratedParticles, integer *uid, real *drhodt, real *dxdt,
+                     real *dvxdt);
+        }
+
+#if DIM > 1
+
+        __global__ void set(IntegratedParticles *integratedParticles, integer *uid, real *drhodt, real *dxdt,
+                            real *dydt, real *dvxdt, real *dvydt);
+
+        namespace Launch {
+            void set(IntegratedParticles *integratedParticles, integer *uid, real *drhodt, real *dxdt,
+                     real *dydt, real *dvxdt, real *dvydt);
+        }
+
+#if DIM == 3
+
+        __global__ void set(IntegratedParticles *integratedParticles, integer *uid, real *drhodt, real *dxdt,
+                            real *dydt, real *dzdt, real *dvxdt, real *dvydt, real *dvzdt);
+
+        namespace Launch {
+            void set(IntegratedParticles *integratedParticles, integer *uid, real *drhodt, real *dxdt,
+                     real *dydt, real *dzdt, real *dvxdt, real *dvydt, real *dvzdt);
+        }
+
+#endif
+#endif
+
+    }
 }
 
 #endif //MILUPHPC_PARTICLES_CUH
