@@ -174,4 +174,31 @@ void Miluphpc::run() {
     printf("host: subDomainKeyTree->numProcesses = %i\n", subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
     SubDomainKeyTreeNS::Kernel::Launch::test(subDomainKeyTreeHandler->d_subDomainKeyTree);
 
+    //if (subDomainKeyTreeHandler->h_subDomainKeyTree->rank == 0) {
+    MaterialHandler materialHandler(1, subDomainKeyTreeHandler->h_subDomainKeyTree->rank, 100, 3.5, 2.5);
+    //MaterialNS::Kernel::Launch::info(&materialHandler.d_materials[0]);
+    //}
+    //else {
+    //    MaterialHandler materialHandler(1);
+    //    MaterialNS::Kernel::Launch::info(&materialHandler.d_materials[0]);
+    //}
+
+    materialHandler.h_materials[0].info();
+
+    //materialHandler.communicate(0, 1);
+    materialHandler.broadcast();
+
+    materialHandler.h_materials[0].info();
+
+    Integrator defaultIntegrator;
+    defaultIntegrator.integrate();
+
+    Integrator eulerIntegrator(IntegratorSelection::euler);
+    eulerIntegrator.integrate();
+
+    Integrator predictorCorrectorIntegrator(IntegratorSelection::predictor_corrector);
+    predictorCorrectorIntegrator.integrate();
+
+
+
 }

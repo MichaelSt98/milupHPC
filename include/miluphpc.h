@@ -11,6 +11,8 @@
 #include "device_rhs.cuh"
 #include "cuda_utils/cuda_utilities.cuh"
 #include "utils/logger.h"
+#include "materials/material_handler.h"
+#include "integrator/integrator.h"
 
 #include <iostream>
 #include <stdio.h>
