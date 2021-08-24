@@ -29,8 +29,8 @@ LFLAGS         += -g -lm -L$(CUDADIR)/lib64 -lcudart -lpthread -lconfig -L/usr/l
 GPU_ARCH       := -arch=sm_52
 CUDALFLAGS     := -dlink
 CUDALINKOBJ    := cuLink.o #needed?
-LIB            :=
-INC            := -I$(INCDIR) -I/usr/include/boost -I$(CUDADIR)/include -I/opt/openmpi-4.1.0/include -I/usr/local/Headeronly/ #-L/opt/openmpi-4.1.0/lib -lmpi #-I/usr/local/include
+LIB            := -lboost_mpi -lboost_serialization
+INC            := -I$(INCDIR) -I/usr/include -I$(CUDADIR)/include -I/opt/openmpi-4.1.0/include -I/usr/local/Headeronly/ #-L/opt/openmpi-4.1.0/lib -lmpi #-I/usr/local/include
 INCDEP         := -I$(INCDIR)
 
 #Source and Object files
