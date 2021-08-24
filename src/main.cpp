@@ -79,6 +79,7 @@ int main(int argc, char** argv)
             //("R,renderinterval", "render interval", cxxopts::value<int>()->default_value("10"))
             //("l,loadbalancing", "load balancing", cxxopts::value<bool>(loadBalancing))
             //("L,loadbalancinginterval", "load balancing interval", cxxopts::value<int>()->default_value("10"))
+            ("m,material", "material config file", cxxopts::value<std::string>()->default_value("config/material.cfg"))
             ("c,curvetype", "curve type (Lebesgue/Hilbert)", cxxopts::value<int>()->default_value("0"))
             ("v,verbosity", "Verbosity level")
             ("h,help", "Show this help");

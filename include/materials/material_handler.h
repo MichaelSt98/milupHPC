@@ -3,8 +3,18 @@
 
 #include "material.cuh"
 #include "../parameter.h"
+
+#include <fstream>
+#include <libconfig.h>
 //#include "../cuda_utils/cuda_utlities.cuh"
 //#include "../cuda_utils/cuda_launcher.cuh"
+
+class LibConfigReader {
+public:
+    config_t config;
+    config_setting_t *materials;
+    int loadConfigFromFile(char *configFile);
+};
 
 //TODO: initialize classes using config file(s)
 // use libconfig? (a C++ API is available!)
@@ -17,6 +27,7 @@ public:
     Material *d_materials;
 
     MaterialHandler(integer numMaterials);
+    MaterialHandler(char *material_cfg);
     MaterialHandler(integer numMaterials, integer ID, integer interactions, real alpha, real beta);
     ~MaterialHandler();
 
