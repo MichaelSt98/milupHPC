@@ -131,6 +131,40 @@ CUDA_CALLABLE_MEMBER keyType Tree::getParticleKey(Particles *particles, integer 
     //return Lebesgue2Hilbert(particleKey, 21);
 }
 
+CUDA_CALLABLE_MEMBER integer Tree::getTreeLevel(Particles *particles, integer index, integer maxLevel) {
+
+    keyType key = getParticleKey(particles, index, maxLevel);
+    //printf("key = %lu\n", key);
+    integer level = 0; //TODO: initialize level with 0 or 1 for getTreeLevel()?
+    integer childIndex;
+
+    integer *path = new integer[maxLevel];
+    for (integer i=0; i<maxLevel; i++) {
+        path[i] = (integer) (key >> (maxLevel * DIM - DIM * (i + 1)) & (integer)(POW_DIM - 1));
+        //printf("path[%i] = %i\n", i, path[i]);
+    }
+
+    childIndex = 0;
+
+    //TODO: where to put level++ for getTreeLevel()?
+    for (integer i=0; i<maxLevel; i++) {
+        if (childIndex == index) {
+            return level;
+        }
+        childIndex = child[POW_DIM * childIndex + path[i]];
+        //printf("childIndex (i = %i) = %i\n", i, childIndex);
+        level++;
+    }
+
+    childIndex = 0; //child[path[0]];
+    printf("ATTENTION: level = -1 (index = %i x = (%f, %f, %f))\n", index, particles->x[index], particles->y[index],
+           particles->z[index]);
+
+    delete [] path;
+
+    return -1;
+}
+
 CUDA_CALLABLE_MEMBER Tree::~Tree() {
 
 }
@@ -494,6 +528,13 @@ __global__ void TreeNS::Kernel::centerOfMass(Tree *tree, Particles *particles, i
     integer stride = blockDim.x*gridDim.x;
     integer offset = 0;
 
+    //TESTING: getTreeLevel()
+    //if (bodyIndex == 0) {
+    //    int level = tree->getTreeLevel(particles, 10000, 21);
+    //    printf("Testing getTreeLevel: level = %i\n", level);
+    //}
+    //END TESTING
+
     //note: most of it already done within buildTreeKernel
     bodyIndex += n;
 
@@ -583,6 +624,30 @@ __global__ void TreeNS::Kernel::sort(Tree *tree, integer n, integer m) {
     }
 }
 
+__global__ void TreeNS::Kernel::getParticleKeys(Tree *tree, Particles *particles, keyType *keys, integer maxLevel,
+                                integer n) {
+
+    int bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+    int stride = blockDim.x * gridDim.x;
+    int offset = 0;
+
+    unsigned long particleKey;
+    unsigned long hilbertParticleKey;
+
+
+    while (bodyIndex + offset < n) {
+
+        //particleKey = 0UL;
+        particleKey = tree->getParticleKey(particles, bodyIndex + offset, maxLevel);
+
+        //TODO: Hilbert key
+        //hilbertParticleKey = Lebesgue2Hilbert(particleKey, 21);
+        keys[bodyIndex + offset] = particleKey; //hilbertParticleKey;
+
+        offset += stride;
+    }
+}
+
 namespace TreeNS {
 
     namespace Kernel {
@@ -633,30 +698,6 @@ namespace TreeNS {
 #endif
 
 
-        __global__ void getParticleKeys(Tree *tree, Particles *particles, keyType *keys, integer maxLevel,
-                                              integer n) {
-
-            int bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
-            int stride = blockDim.x * gridDim.x;
-            int offset = 0;
-
-            unsigned long particleKey;
-            unsigned long hilbertParticleKey;
-
-
-            while (bodyIndex + offset < n) {
-
-                //particleKey = 0UL;
-                particleKey = tree->getParticleKey(particles, bodyIndex + offset, maxLevel);
-
-                //TODO: Hilbert key
-                //hilbertParticleKey = Lebesgue2Hilbert(particleKey, 21);
-                keys[bodyIndex + offset] = particleKey; //hilbertParticleKey;
-
-                offset += stride;
-            }
-        }
-
         namespace Launch {
             real buildTree(Tree *tree, Particles *particles, integer n, integer m, bool time) {
                 ExecutionPolicy executionPolicy;
@@ -686,6 +727,7 @@ namespace TreeNS {
                 ExecutionPolicy executionPolicy;
                 return cuda::launch(time, executionPolicy, ::TreeNS::Kernel::getParticleKeys, tree, particles, keys, maxLevel, n);
             }
+
         }
     }
 }

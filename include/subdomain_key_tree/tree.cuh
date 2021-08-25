@@ -56,8 +56,9 @@ public:
 
     CUDA_CALLABLE_MEMBER keyType getParticleKey(Particles *particles, integer index, integer maxLevel);
 
-    CUDA_CALLABLE_MEMBER ~Tree();
+    CUDA_CALLABLE_MEMBER integer getTreeLevel(Particles *particles, integer index, integer maxLevel);
 
+    CUDA_CALLABLE_MEMBER ~Tree();
 
 
 };
