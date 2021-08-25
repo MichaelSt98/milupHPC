@@ -210,6 +210,53 @@ CUDA_CALLABLE_MEMBER void Particles::reset(integer index) {
     mass[index] = 0;
 }
 
+CUDA_CALLABLE_MEMBER real Particles::distance(integer index_1, integer index_2) {
+    
+    float dx;
+    if (x[index_1] < x[index_2]) {
+        dx = x[index_2] - x[index_1];
+    }
+    else if (x[index_1] > x[index_2]) {
+        dx = x[index_1] - x[index_2];
+    }
+    else {
+        dx = 0.f;
+    }
+#if DIM > 1
+    float dy;
+    if (y[index_1] < y[index_2]) {
+        dy = y[index_2] - y[index_1];
+    }
+    else if (y[index_1] > y[index_2]) {
+        dy = y[index_1] - y[index_2];
+    }
+    else {
+        dy = 0.f;
+    }
+#if DIM == 3
+    float dz;
+    if (z[index_1] < z[index_2]) {
+        dz = z[index_2] - z[index_1];
+    }
+    else if (z[index_1] > z[index_2]) {
+        dz = z[index_1] - z[index_2];
+    }
+    else {
+        dz = 0.f;
+    }
+#endif
+#endif
+
+#if DIM == 1
+    return sqrtf(dx*dx);
+#elif DIM == 2
+    return sqrtf(dx*dx + dy*dy);
+#else
+    return sqrtf(dx*dx + dy*dy + dz*dz);
+#endif
+
+}
+
 CUDA_CALLABLE_MEMBER Particles::~Particles() {
 
 }
