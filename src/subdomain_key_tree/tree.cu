@@ -535,6 +535,13 @@ __global__ void TreeNS::Kernel::centerOfMass(Tree *tree, Particles *particles, i
     //}
     //END TESTING
 
+    //TESTING: Particle.distance()
+    //if (bodyIndex == 0) {
+    //    real distance = particles->distance(10, 1000);
+    //    printf("Testing Particle.distance(): %f\n", distance);
+    //}
+    //END TESTING
+
     //note: most of it already done within buildTreeKernel
     bodyIndex += n;
 

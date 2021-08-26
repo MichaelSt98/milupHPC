@@ -5,7 +5,7 @@
 //#include "../cuda_utils/cuda_launcher.cuh"
 #include "../parameter.h"
 #include "../particles.cuh"
-#include "subdomain.cuh"
+//#include "subdomain.cuh"
 
 #include <iostream>
 #include <stdio.h>

@@ -7,9 +7,11 @@
 
 #include "../parameter.h"
 #include "../cuda_utils/cuda_utilities.cuh"
+#include "tree.cuh"
 
-class Tree;
-class Particles;
+//class Tree;
+//class Particles;
+class DomainList;
 
 class Key {
 
@@ -29,7 +31,7 @@ namespace KeyNS {
 
     //TODO: 2D DirTable
     // table needed to convert from Lebesgue to Hilbert keys
-    __device__ const unsigned char DirTable[12][8] =
+    CUDA_CALLABLE_MEMBER const unsigned char DirTable[12][8] =
             { { 8,10, 3, 3, 4, 5, 4, 5}, { 2, 2,11, 9, 4, 5, 4, 5},
               { 7, 6, 7, 6, 8,10, 1, 1}, { 7, 6, 7, 6, 0, 0,11, 9},
               { 0, 8, 1,11, 6, 8, 6,11}, {10, 0, 9, 1,10, 7, 9, 7},
@@ -39,13 +41,13 @@ namespace KeyNS {
 
     //TODO: 2d Hilbert table
     // table needed to convert from Lebesgue to Hilbert keys
-    __device__ const unsigned char HilbertTable[12][8] = { {0,7,3,4,1,6,2,5}, {4,3,7,0,5,2,6,1}, {6,1,5,2,7,0,4,3},
+    CUDA_CALLABLE_MEMBER const unsigned char HilbertTable[12][8] = { {0,7,3,4,1,6,2,5}, {4,3,7,0,5,2,6,1}, {6,1,5,2,7,0,4,3},
                                                            {2,5,1,6,3,4,0,7}, {0,1,7,6,3,2,4,5}, {6,7,1,0,5,4,2,3},
                                                            {2,3,5,4,1,0,6,7}, {4,5,3,2,7,6,0,1}, {0,3,1,2,7,4,6,5},
                                                            {2,1,3,0,5,6,4,7}, {4,7,5,6,3,0,2,1}, {6,5,7,4,1,2,0,3} };
 
-    __device__ __host__ void key2Char(keyType key, integer maxLevel, char *keyAsChar);
-    __device__ __host__ integer key2proc(keyType key, SubDomainKeyTree *s, Curve::Type=Curve::lebesgue);
+    CUDA_CALLABLE_MEMBER void key2Char(keyType key, integer maxLevel, char *keyAsChar);
+    CUDA_CALLABLE_MEMBER integer key2proc(keyType key, SubDomainKeyTree *s, Curve::Type curveType=Curve::lebesgue);
 
 }
 
@@ -56,10 +58,16 @@ public:
     integer numProcesses;
     keyType *range;
 
+    integer *procParticleCounter;
+
     CUDA_CALLABLE_MEMBER SubDomainKeyTree();
-    CUDA_CALLABLE_MEMBER SubDomainKeyTree(integer rank, integer numProcesses, keyType *range);
+    CUDA_CALLABLE_MEMBER SubDomainKeyTree(integer rank, integer numProcesses, keyType *range,
+                                          integer *procParticleCounter);
     CUDA_CALLABLE_MEMBER ~SubDomainKeyTree();
-    CUDA_CALLABLE_MEMBER void set(integer rank, integer numProcesses, keyType *range);
+    CUDA_CALLABLE_MEMBER void set(integer rank, integer numProcesses, keyType *range, integer *procParticleCounter);
+    CUDA_CALLABLE_MEMBER integer key2proc(keyType key, Curve::Type curveType=Curve::lebesgue);
+    CUDA_CALLABLE_MEMBER bool isDomainListNode(keyType key, integer maxLevel, integer level,
+                                               Curve::Type curveType=Curve::lebesgue);
 
 };
 
@@ -67,22 +75,29 @@ namespace SubDomainKeyTreeNS {
 
     namespace Kernel {
 
-        __global__ void set(SubDomainKeyTree *subDomainKeyTree, integer rank, integer numProcesses, keyType *range);
+        __global__ void set(SubDomainKeyTree *subDomainKeyTree, integer rank, integer numProcesses, keyType *range,
+                            integer *procParticleCounter);
 
         __global__ void test(SubDomainKeyTree *subDomainKeyTree);
 
+        __global__ void buildTree(Tree *tree, Particles *particles, DomainList *domainList, integer n, integer m);
+
+        __global__ void particlesPerProcess(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                            integer n, integer m, Curve::Type curveType=Curve::lebesgue);
+
+        __global__ void markParticlesProcess(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                             integer n, integer m, integer *sortArray,
+                                             Curve::Type curveType=Curve::lebesgue);
+
         namespace Launch {
 
-            void set(SubDomainKeyTree *subDomainKeyTree, integer rank, integer numProcesses, keyType *range);
+            void set(SubDomainKeyTree *subDomainKeyTree, integer rank, integer numProcesses, keyType *range,
+                     integer *procParticleCounter);
 
             void test(SubDomainKeyTree *subDomainKeyTree);
+
+            real buildTree(Tree *tree, Particles *particles, DomainList *domainList, integer n, integer m);
         }
-
-        __global__ void particlesPerProcessKernel(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
-                                                  Curve::Type = Curve::lebesgue);
-
-        __global__ void markParticlesProcessKernel(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
-                                                   integer *sortArray, Curve::Type = Curve::lebesgue);
 
     }
 
@@ -110,13 +125,24 @@ public:
 
 namespace DomainListNS {
 
-    __global__ void setKernel(DomainList *domainList, integer *domainListIndices, integer *domainListLevels,
-                              integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
-                              keyType *sortedDomainListKeys);
+    namespace Kernel {
+        __global__ void set(DomainList *domainList, integer *domainListIndices, integer *domainListLevels,
+                            integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
+                            keyType *sortedDomainListKeys);
 
-    void launchSetKernel(DomainList *domainList, integer *domainListIndices, integer *domainListLevels,
-                         integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
-                         keyType *sortedDomainListKeys);
+
+        __global__ void createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList,
+                                         integer maxLevel, Curve::Type curveType = Curve::lebesgue);
+
+        namespace Launch {
+            void set(DomainList *domainList, integer *domainListIndices, integer *domainListLevels,
+                     integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
+                     keyType *sortedDomainListKeys);
+
+            real createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList,
+                                  integer maxLevel, Curve::Type curveType = Curve::lebesgue);
+        }
+    }
 
 }
 

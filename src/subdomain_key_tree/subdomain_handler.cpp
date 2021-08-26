@@ -9,16 +9,18 @@ SubDomainKeyTreeHandler::SubDomainKeyTreeHandler() {
     MPI_Comm_rank(MPI_COMM_WORLD, &h_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &h_numProcesses);
     h_range = new keyType[h_numProcesses + 1];
+    h_procParticleCounter = new integer[h_numProcesses];
 
     h_subDomainKeyTree = new SubDomainKeyTree();
-    h_subDomainKeyTree->set(h_rank, h_numProcesses, h_range);
+    h_subDomainKeyTree->set(h_rank, h_numProcesses, h_range, h_procParticleCounter);
 
     gpuErrorcheck(cudaMalloc((void**)&d_rank, sizeof(integer)));
     gpuErrorcheck(cudaMalloc((void**)&d_numProcesses, sizeof(integer)));
     gpuErrorcheck(cudaMalloc((void**)&d_range, (h_numProcesses + 1) * sizeof(keyType)));
+    gpuErrorcheck(cudaMalloc((void**)&d_procParticleCounter, h_numProcesses * sizeof(integer)));
 
     gpuErrorcheck(cudaMalloc((void**)&d_subDomainKeyTree, sizeof(SubDomainKeyTree)));
-    SubDomainKeyTreeNS::Kernel::Launch::set(d_subDomainKeyTree, h_rank, h_numProcesses, d_range);
+    SubDomainKeyTreeNS::Kernel::Launch::set(d_subDomainKeyTree, h_rank, h_numProcesses, d_range, d_procParticleCounter);
     //gpuErrorcheck(cudaMemcpy(d_rank, &h_rank, sizeof(integer), cudaMemcpyHostToDevice));
     //gpuErrorcheck(cudaMemcpy(d_numProcesses, &h_numProcesses, sizeof(integer), cudaMemcpyHostToDevice));
 }
@@ -26,7 +28,12 @@ SubDomainKeyTreeHandler::SubDomainKeyTreeHandler() {
 SubDomainKeyTreeHandler::~SubDomainKeyTreeHandler() {
 
     delete [] h_range;
+    delete [] h_procParticleCounter;
     delete h_subDomainKeyTree;
+
+    gpuErrorcheck(cudaFree(d_range));
+    gpuErrorcheck(cudaFree(d_procParticleCounter));
+    gpuErrorcheck(cudaFree(d_subDomainKeyTree));
 }
 
 
@@ -40,9 +47,9 @@ DomainListHandler::DomainListHandler(integer domainListSize) : domainListSize(do
     gpuErrorcheck(cudaMalloc((void**)&d_sortedDomainListKeys, domainListSize * sizeof(integer)));
 
     gpuErrorcheck(cudaMalloc((void**)&d_domainList, sizeof(DomainList)));
-    DomainListNS::launchSetKernel(d_domainList, d_domainListIndices, d_domainListLevels,
-                                  d_domainListIndex, d_domainListCounter, d_domainListKeys,
-                                  d_sortedDomainListKeys);
+    DomainListNS::Kernel::Launch::set(d_domainList, d_domainListIndices, d_domainListLevels,
+                                      d_domainListIndex, d_domainListCounter, d_domainListKeys,
+                                      d_sortedDomainListKeys);
 }
 
 DomainListHandler::~DomainListHandler() {

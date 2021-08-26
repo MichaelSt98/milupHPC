@@ -19,10 +19,12 @@ public:
     integer h_rank;
     integer h_numProcesses;
     keyType *h_range;
+    integer *h_procParticleCounter;
 
     integer *d_rank;
     integer *d_numProcesses;
     keyType *d_range;
+    integer *d_procParticleCounter;
 
     SubDomainKeyTree *h_subDomainKeyTree;
     SubDomainKeyTree *d_subDomainKeyTree;
