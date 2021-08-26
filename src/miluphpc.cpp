@@ -206,4 +206,38 @@ void Miluphpc::run() {
     //Logger(INFO) << "duplicates: " << duplicates;
     //END: TESTING
 
+    //TESTING: Helper: sortArray()
+    //HelperHandler *helperHandler = new HelperHandler(1000);
+    //HelperHandler helperHandler(10000);
+    //gpuErrorcheck(cudaMemset(&helperHandler.d_integerBuffer[0], 10, 200 * sizeof(integer)));
+    //gpuErrorcheck(cudaMemset(&helperHandler.d_integerBuffer[200], 100, 200 * sizeof(integer)));
+    //gpuErrorcheck(cudaMemset(&helperHandler.d_integerBuffer[400], 1, 200 * sizeof(integer)));
+    //gpuErrorcheck(cudaMemset(&helperHandler.d_integerBuffer[600], 155, 200 * sizeof(integer)));
+    //gpuErrorcheck(cudaMemset(&helperHandler.d_integerBuffer[800], 17, 200 * sizeof(integer)));
+    // Works both!
+    //HelperNS::sortArray<real, integer>(particleHandler->d_x, helperHandler.d_realBuffer, &helperHandler.d_integerBuffer[0],
+    //                    helperHandler.d_integerBuffer[&5000], 1000);
+    //HelperNS::sortArray(particleHandler->d_x, helperHandler.d_realBuffer, &helperHandler.d_integerBuffer[0],
+    //                    &helperHandler.d_integerBuffer[5000], 1000);
+
+
+    int *toReceive = new int[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+    int *toSend = new int[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+
+    for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
+        toReceive[i] = 0;
+        if (i != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
+            toSend[i] = 10 + subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+        }
+    }
+
+    mpi::messageLengths(subDomainKeyTreeHandler->h_subDomainKeyTree, toSend, toReceive);
+
+    for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
+        Logger(INFO) << "toReceive[" << i << "] = " << toReceive[i];
+    }
+
+    delete [] toReceive;
+    delete [] toSend;
+
 }

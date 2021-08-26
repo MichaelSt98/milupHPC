@@ -6,8 +6,10 @@
 
 SubDomainKeyTreeHandler::SubDomainKeyTreeHandler() {
 
-    MPI_Comm_rank(MPI_COMM_WORLD, &h_rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &h_numProcesses);
+    boost::mpi::communicator comm;
+
+    h_rank = comm.rank();
+    h_numProcesses = comm.size();
     h_range = new keyType[h_numProcesses + 1];
     h_procParticleCounter = new integer[h_numProcesses];
 

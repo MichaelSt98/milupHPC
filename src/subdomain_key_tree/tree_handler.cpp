@@ -101,28 +101,30 @@ void TreeHandler::toHost() {
 
 void TreeHandler::globalizeBoundingBox(Execution::Location exLoc) {
 
+    boost::mpi::communicator comm;
+
     switch (exLoc) {
         case Execution::device:
-            MPI_Allreduce(MPI_IN_PLACE, d_minX, 1, MPI_FLOAT, MPI_MIN, MPI_COMM_WORLD);
-            MPI_Allreduce(MPI_IN_PLACE, d_maxX, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
+            all_reduce(comm, boost::mpi::inplace_t<real*>(d_minX), 1, boost::mpi::minimum<real>());
+            all_reduce(comm, boost::mpi::inplace_t<real*>(d_maxX), 1, boost::mpi::maximum<real>());
 #if DIM > 1
-            MPI_Allreduce(MPI_IN_PLACE, d_minY, 1, MPI_FLOAT, MPI_MIN, MPI_COMM_WORLD);
-            MPI_Allreduce(MPI_IN_PLACE, d_maxY, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
+            all_reduce(comm, boost::mpi::inplace_t<real*>(d_minY), 1, boost::mpi::minimum<real>());
+            all_reduce(comm, boost::mpi::inplace_t<real*>(d_maxY), 1, boost::mpi::maximum<real>());
 #if DIM == 3
-            MPI_Allreduce(MPI_IN_PLACE, d_minZ, 1, MPI_FLOAT, MPI_MIN, MPI_COMM_WORLD);
-            MPI_Allreduce(MPI_IN_PLACE, d_maxZ, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
+            all_reduce(comm, boost::mpi::inplace_t<real*>(d_minZ), 1, boost::mpi::minimum<real>());
+            all_reduce(comm, boost::mpi::inplace_t<real*>(d_maxZ), 1, boost::mpi::maximum<real>());
 #endif
 #endif
             break;
         case Execution::host:
-            MPI_Allreduce(MPI_IN_PLACE, h_minX, 1, MPI_FLOAT, MPI_MIN, MPI_COMM_WORLD);
-            MPI_Allreduce(MPI_IN_PLACE, h_maxX, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
+            all_reduce(comm, boost::mpi::inplace_t<real*>(h_minX), 1, boost::mpi::minimum<real>());
+            all_reduce(comm, boost::mpi::inplace_t<real*>(h_maxX), 1, boost::mpi::maximum<real>());
 #if DIM > 1
-            MPI_Allreduce(MPI_IN_PLACE, h_minY, 1, MPI_FLOAT, MPI_MIN, MPI_COMM_WORLD);
-            MPI_Allreduce(MPI_IN_PLACE, h_maxY, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
+            all_reduce(comm, boost::mpi::inplace_t<real*>(h_minY), 1, boost::mpi::minimum<real>());
+            all_reduce(comm, boost::mpi::inplace_t<real*>(h_maxY), 1, boost::mpi::maximum<real>());
 #if DIM == 3
-            MPI_Allreduce(MPI_IN_PLACE, h_minZ, 1, MPI_FLOAT, MPI_MIN, MPI_COMM_WORLD);
-            MPI_Allreduce(MPI_IN_PLACE, h_maxZ, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
+            all_reduce(comm, boost::mpi::inplace_t<real*>(h_minZ), 1, boost::mpi::minimum<real>());
+            all_reduce(comm, boost::mpi::inplace_t<real*>(h_maxZ), 1, boost::mpi::maximum<real>());
 #endif
 #endif
             break;

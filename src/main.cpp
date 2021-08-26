@@ -50,13 +50,11 @@ int main(int argc, char** argv)
 
     //SetDeviceBeforeInit();
 
-    MPI_Init(&argc, &argv);
+    boost::mpi::environment env(argc, argv);
+    boost::mpi::communicator comm;
 
-    int rank;
-    int numProcesses;
-
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &numProcesses);
+    int rank = comm.rank();
+    int numProcesses = comm.size();
 
     printf("Hello World from proc %i out of %i\n", rank, numProcesses);
 
@@ -137,7 +135,6 @@ int main(int argc, char** argv)
 
     Logger(INFO) << "Finished!";
 
-    MPI_Finalize();
     return 0;
 }
 

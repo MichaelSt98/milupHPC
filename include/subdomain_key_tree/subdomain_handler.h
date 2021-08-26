@@ -7,7 +7,8 @@
 
 #include "../parameter.h"
 #include "subdomain.cuh"
-#include <mpi.h>
+//#include <mpi.h>
+#include <boost/mpi.hpp>
 
 class KeyHandler {
 
@@ -52,5 +53,29 @@ public:
     ~DomainListHandler();
 
 };
+
+namespace mpi {
+
+    template <typename T>
+    void messageLengths(SubDomainKeyTree *subDomainKeyTree, T *toSend, T *toReceive) {
+
+        //boost::mpi::environment env;
+        boost::mpi::communicator comm;
+
+        std::vector <boost::mpi::request> reqParticles;
+        std::vector <boost::mpi::status> statParticles;
+
+        for (int proc = 0; proc < subDomainKeyTree->numProcesses; proc++) {
+            if (proc != subDomainKeyTree->rank) {
+                reqParticles.push_back(comm.isend(proc, 17, &toSend[proc], 1));
+                statParticles.push_back(comm.recv(proc, 17, &toReceive[proc], 1));
+            }
+        }
+
+        boost::mpi::wait_all(reqParticles.begin(), reqParticles.end());
+
+    }
+
+}
 
 #endif //MILUPHPC_SUBDOMAIN_HANDLER_H

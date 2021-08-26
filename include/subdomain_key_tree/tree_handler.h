@@ -8,7 +8,7 @@
 #include "tree.cuh"
 #include "../parameter.h"
 #include "../utils/logger.h"
-#include <mpi.h>
+#include <boost/mpi.hpp>
 
 class TreeHandler {
 

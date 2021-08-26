@@ -13,6 +13,7 @@
 #include "utils/logger.h"
 #include "materials/material_handler.h"
 #include "integrator/integrator.h"
+#include "helper_handler.h"
 
 #include <iostream>
 #include <stdio.h>
