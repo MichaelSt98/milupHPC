@@ -55,6 +55,8 @@ private:
 #define power_two(x) (1 << (x))
 #define POW_DIM power_two(DIM)
 
+#define MAX_LEVEL 21
+
 #define INTEGRATE_DENSITY 1
 
 #define VARIABLE_SML 1
