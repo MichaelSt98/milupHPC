@@ -4,6 +4,7 @@
 
 #include "../include/helper.cuh"
 #include "../include/cuda_utils/cuda_launcher.cuh"
+#include <cub/cub.cuh>
 
 CUDA_CALLABLE_MEMBER Helper::Helper() {
 
@@ -32,9 +33,46 @@ namespace HelperNS {
 
         void Launch::set(Helper *helper, integer *integerBuffer, real *realBuffer) {
             ExecutionPolicy executionPolicy(1, 1);
-            cuda::launch(false, executionPolicy, ::HelperNS::Kernel::Launch::set, helper, integerBuffer,
+            cuda::launch(false, executionPolicy, ::HelperNS::Kernel::set, helper, integerBuffer,
                          realBuffer);
 
         }
     }
+}
+
+namespace HelperNS {
+
+    template <typename A, typename B>
+    real sortArray(A *arrayToSort, A *sortedArray, B *keyIn, B *keyOut, integer n) {
+
+        void     *d_temp_storage = NULL;
+        size_t   temp_storage_bytes = 0;
+        gpuErrorcheck(cub::DeviceRadixSort::SortPairs(d_temp_storage, temp_storage_bytes,
+                                                      keyIn, keyOut, arrayToSort, sortedArray, n));
+        // Allocate temporary storage
+        gpuErrorcheck(cudaMalloc(&d_temp_storage, temp_storage_bytes));
+        gpuErrorcheck(cudaMalloc((void**)&d_temp_storage, temp_storage_bytes));
+
+        // Run sorting operation
+        gpuErrorcheck(cub::DeviceRadixSort::SortPairs(d_temp_storage, temp_storage_bytes,
+                                                      keyIn, keyOut, arrayToSort, sortedArray, n));
+
+        gpuErrorcheck(cudaFree(d_temp_storage));
+
+        return 0.f;
+    }
+
+    template real sortArray<real, integer>(real *arrayToSort, real *sortedArray, integer *keyIn, integer *keyOut,
+            integer n);
+    template real sortArray<real, keyType>(real *arrayToSort, real *sortedArray, keyType *keyIn, keyType *keyOut,
+            integer n);
+    template real sortArray<integer, integer>(integer *arrayToSort, integer *sortedArray, integer *keyIn,
+            integer *keyOut, integer n);
+    template real sortArray<integer, keyType>(integer *arrayToSort, integer *sortedArray, keyType *keyIn,
+            keyType *keyOut, integer n);
+    template real sortArray<keyType, integer>(keyType *arrayToSort, keyType *sortedArray, integer *keyIn,
+            integer *keyOut, integer n);
+    template real sortArray<keyType , keyType>(keyType *arrayToSort, keyType *sortedArray, keyType *keyIn,
+            keyType *keyOut, integer n);
+
 }

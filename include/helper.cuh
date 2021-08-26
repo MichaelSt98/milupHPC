@@ -31,6 +31,10 @@ namespace HelperNS {
             void set(Helper *helper, integer *integerBuffer, real *realBuffer);
         }
     }
+
+    template <typename A, typename B>
+    real sortArray(A *arrayToSort, A *sortedArray, B *keyIn, B *keyOut, integer n);
+
 }
 
 #endif //MILUPHPC_HELPER_CUH

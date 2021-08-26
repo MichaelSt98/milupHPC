@@ -12,9 +12,8 @@ HelperHandler::HelperHandler(integer length) : length(length) {
 
 HelperHandler::~HelperHandler() {
 
-    delete [] d_integerBuffer;
-    delete [] d_realBuffer;
-
-    delete d_helper;
+    gpuErrorcheck(cudaFree(d_integerBuffer));
+    gpuErrorcheck(cudaFree(d_realBuffer));
+    gpuErrorcheck(cudaFree(d_helper));
 
 }

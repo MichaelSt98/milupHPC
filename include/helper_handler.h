@@ -4,8 +4,11 @@
 #include "helper.cuh"
 #include "parameter.h"
 
+#include <mpi.h>
+
 class HelperHandler {
 
+public:
     integer length;
 
     integer *d_integerBuffer;
@@ -17,6 +20,7 @@ class HelperHandler {
     ~HelperHandler();
 
 };
+
 
 
 #endif //MILUPHPC_HELPER_HANDLER_H
