@@ -197,4 +197,13 @@ void Miluphpc::run() {
         materialHandler.h_materials[i].info();
     }
 
+    //TESTING: cuda utils: findDuplicates()
+    //gpuErrorcheck(cudaMemset(treeHandler->d_index, 0, sizeof(integer)));
+    //CudaUtils::Kernel::Launch::findDuplicates(particleHandler->d_x,
+    //                                          treeHandler->d_index, 1000);
+    //integer duplicates;
+    //gpuErrorcheck(cudaMemcpy(&duplicates, treeHandler->d_index, sizeof(integer), cudaMemcpyDeviceToHost));
+    //Logger(INFO) << "duplicates: " << duplicates;
+    //END: TESTING
+
 }
