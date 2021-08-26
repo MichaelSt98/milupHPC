@@ -12,23 +12,23 @@ class Helper {
 
 public:
 
-    integer *intBuffer;
-    real *floatBuffer;
+    integer *integerBuffer;
+    real *realBuffer;
 
     CUDA_CALLABLE_MEMBER Helper();
-    CUDA_CALLABLE_MEMBER Helper(integer *intBuffer, real *floatBuffer);
+    CUDA_CALLABLE_MEMBER Helper(integer *integerBuffer, real *realBuffer);
     CUDA_CALLABLE_MEMBER ~Helper();
-    CUDA_CALLABLE_MEMBER void set(integer *intBuffer, real *floatBuffer);
+    CUDA_CALLABLE_MEMBER void set(integer *integerBuffer, real *realBuffer);
 
 };
 
 namespace HelperNS {
 
     namespace Kernel {
-        __global__ void set(Helper *helper, integer *intBuffer, real *floatBuffer);
+        __global__ void set(Helper *helper, integer *integerBuffer, real *realBuffer);
 
         namespace Launch {
-            void set(Helper *helper, integer *intBuffer, real *floatBuffer);
+            void set(Helper *helper, integer *integerBuffer, real *realBuffer);
         }
     }
 }
