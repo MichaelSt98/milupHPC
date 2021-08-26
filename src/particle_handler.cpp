@@ -269,7 +269,6 @@ ParticleHandler::~ParticleHandler() {
     delete [] h_rho;
     delete [] h_p;
 
-    //TODO: why is this not working (or necessary)?
     // device particle entries
     gpuErrorcheck(cudaFree(d_numParticles));
     gpuErrorcheck(cudaFree(d_numNodes));

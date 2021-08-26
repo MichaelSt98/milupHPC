@@ -211,7 +211,7 @@ public:
     T getDistance(const Vector3& u) const {
         T getDistanceSquared(u);
         return 0;
-        //return sqrt(T); //TODO: implement sqrt
+        //return sqrt(T);
     }
 
     bool operator==(const Vector3& u) const {

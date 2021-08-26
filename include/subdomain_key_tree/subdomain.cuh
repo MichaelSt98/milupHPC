@@ -29,7 +29,7 @@ class SubDomainKeyTree;
 
 namespace KeyNS {
 
-    //TODO: 2D DirTable
+    //TODO: 1D and 2D DirTable
     // table needed to convert from Lebesgue to Hilbert keys
     CUDA_CALLABLE_MEMBER const unsigned char DirTable[12][8] =
             { { 8,10, 3, 3, 4, 5, 4, 5}, { 2, 2,11, 9, 4, 5, 4, 5},
@@ -39,7 +39,7 @@ namespace KeyNS {
               { 4, 9, 0, 0, 7, 9, 2, 2}, { 1, 1, 8, 5, 3, 3, 8, 6},
               {11, 5, 0, 0,11, 6, 2, 2}, { 1, 1, 4,10, 3, 3, 7,10} };
 
-    //TODO: 2d Hilbert table
+    //TODO: 1D and 2d Hilbert table
     // table needed to convert from Lebesgue to Hilbert keys
     CUDA_CALLABLE_MEMBER const unsigned char HilbertTable[12][8] = { {0,7,3,4,1,6,2,5}, {4,3,7,0,5,2,6,1}, {6,1,5,2,7,0,4,3},
                                                            {2,5,1,6,3,4,0,7}, {0,1,7,6,3,2,4,5}, {6,7,1,0,5,4,2,3},

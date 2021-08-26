@@ -16,8 +16,6 @@ public:
     int loadConfigFromFile(char *configFile);
 };
 
-//TODO: initialize classes using config file(s)
-// use libconfig? (a C++ API is available!)
 class MaterialHandler {
 
 public:

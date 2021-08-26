@@ -51,7 +51,6 @@ public:
 #endif
 #endif
 
-    //TODO: reset pointers! (minX, maxX, ...)
     CUDA_CALLABLE_MEMBER void reset(integer index, integer n);
 
     CUDA_CALLABLE_MEMBER keyType getParticleKey(Particles *particles, integer index, integer maxLevel);

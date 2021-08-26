@@ -111,7 +111,6 @@ public:
 
     CUDA_CALLABLE_MEMBER Particles();
 
-    //TODO: wouldn't be necessary but better for compilation?
     CUDA_CALLABLE_MEMBER Particles(integer *numParticles, integer *numNodes, real *mass, real *x, real *vx, real *ax,
                                    idInteger *uid, integer *materialId, real *sml, integer *nnl, integer *noi, real *e,
                                    real *dedt, real *cs, real *rho, real *p);
