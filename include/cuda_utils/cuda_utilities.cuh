@@ -8,6 +8,7 @@
 #include <iostream>
 #include <cuda.h>
 #include <cuda_runtime.h>
+#include "../parameter.h"
 
 
 #ifdef __CUDACC__
@@ -22,5 +23,35 @@
 
 void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true);
 void checkCudaCall(cudaError_t command, const char * commandName, const char * fileName, int line);
+
+namespace CudaUtils {
+    namespace Kernel {
+
+        __global__ void collectValues(integer *indices, real *entries, real *collector, integer count);
+
+        template<typename T>
+        __global__ void findDuplicates(T *array, integer *duplicateCounter, int length);
+
+        template<typename T>
+        __global__ void markDuplicates(T *array, integer *duplicateCounter, int length);
+
+        template<typename T>
+        __global__ void removeDuplicates(T *array, T *removedArray, integer *duplicateCounter, int length);
+
+        namespace Launch {
+            real collectValues(integer *indices, real *entries, real *collector, integer count);
+
+            template<typename T>
+            real findDuplicates(T *array, integer *duplicateCounter, int length);
+
+            template<typename T>
+            real markDuplicates(T *array, integer *duplicateCounter, int length);
+
+            template<typename T>
+            real removeDuplicates(T *array, T *removedArray, integer *duplicateCounter, int length);
+
+        }
+    }
+}
 
 #endif //MILUPHPC_CUDAUTILITIES_CUH
