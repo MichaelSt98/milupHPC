@@ -39,14 +39,14 @@ void Miluphpc::diskModel() {
     real pi = 3.14159265;
     std::default_random_engine generator;
     std::uniform_real_distribution<real> distribution(1.5, 12.0);
-    std::uniform_real_distribution<real> distribution_theta(0.0, 2 * pi);
+    std::uniform_real_distribution<real> distribution_theta_angle(0.0, 2 * pi);
 
     real solarMass = 100000;
 
     // loop through all particles
     for (int i = 0; i < numParticles; i++) {
 
-        real theta = distribution_theta(generator);
+        real theta_angle = distribution_theta_angle(generator);
         real r = distribution(generator);
 
         // set mass and position of particle
@@ -58,9 +58,9 @@ void Miluphpc::diskModel() {
                 particleHandler->h_particles->z[i] = 0;
             } else {
                 particleHandler->h_particles->mass[i] = 2 * solarMass / numParticles;
-                particleHandler->h_particles->x[i] = r * cos(theta);
+                particleHandler->h_particles->x[i] = r * cos(theta_angle);
                 //y[i] = r * sin(theta);
-                particleHandler->h_particles->z[i] = r * sin(theta);
+                particleHandler->h_particles->z[i] = r * sin(theta_angle);
 
                 if (i % 2 == 0) {
                     particleHandler->h_particles->y[i] = i * 1e-7;//z[i] = i * 1e-7;
@@ -72,10 +72,10 @@ void Miluphpc::diskModel() {
         else {
             particleHandler->h_particles->mass[i] = 2 * solarMass / numParticles;
             particleHandler->h_particles->x[i] = (r + subDomainKeyTreeHandler->h_subDomainKeyTree->rank * 1.1e-1) *
-                    cos(theta) + 1.0e-2*subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+                    cos(theta_angle) + 1.0e-2*subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
             //y[i] = (r + h_subDomainHandler->rank * 1.3e-1) * sin(theta) + 1.1e-2*h_subDomainHandler->rank;
             particleHandler->h_particles->z[i] = (r + subDomainKeyTreeHandler->h_subDomainKeyTree->rank * 1.3e-1) *
-                    sin(theta) + 1.1e-2*subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+                    sin(theta_angle) + 1.1e-2*subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
 
             if (i % 2 == 0) {
                 //z[i] = i * 1e-7 * h_subDomainHandler->rank + 0.5e-7*h_subDomainHandler->rank;
@@ -99,9 +99,9 @@ void Miluphpc::diskModel() {
             particleHandler->h_particles->vz[0] = 0.0;
         }
         else{
-            particleHandler->h_particles->vx[i] = rotation*v*sin(theta);
+            particleHandler->h_particles->vx[i] = rotation*v*sin(theta_angle);
             //y_vel[i] = -rotation*v*cos(theta);
-            particleHandler->h_particles->vz[i] = -rotation*v*cos(theta);
+            particleHandler->h_particles->vz[i] = -rotation*v*cos(theta_angle);
             //z_vel[i] = 0.0;
             particleHandler->h_particles->vy[i] = 0.0;
         }

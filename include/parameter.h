@@ -6,6 +6,9 @@ typedef int integer;
 typedef unsigned long int keyType;
 typedef unsigned long int idInteger;
 
+#define theta 0.7
+
+
 struct Execution
 {
     enum Location
@@ -51,6 +54,26 @@ private:
 
 // Dimension of the problem
 #define DIM 3
+
+struct Entry
+{
+    enum Name
+    {
+#if DIM == 1
+        x, mass
+#elif DIM == 2
+        x, y, mass
+#else
+        x, y, z, mass
+#endif
+    };
+    Name t_;
+    Entry(Name t) : t_(t) {}
+    operator Name () const {return t_;}
+private:
+    template<typename T>
+    operator T () const;
+};
 
 #define power_two(x) (1 << (x))
 #define POW_DIM power_two(DIM)
