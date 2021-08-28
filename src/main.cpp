@@ -124,14 +124,8 @@ int main(int argc, char** argv)
     integer numNodes = 3 * numParticles + 12000;
 
     Miluphpc miluphpc(numParticles, numNodes);
-    miluphpc.run();
-
-
-    //ParticleHandler particleHandler(1000, 2000);
-    //particleHandler.h_particles->x[0] = 10.f;
-    //Logger(INFO) << "particleHandler.h_particles->x[0] = " << particleHandler.h_particles->x[0];
-
-
+    //miluphpc.run();
+    miluphpc.barnesHut();
 
     Logger(INFO) << "Finished!";
 

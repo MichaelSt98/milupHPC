@@ -10,8 +10,10 @@ CUDA_CALLABLE_MEMBER Helper::Helper() {
 
 }
 
-CUDA_CALLABLE_MEMBER Helper::Helper(integer *integerBuffer, real *realBuffer) : integerBuffer(integerBuffer),
-                realBuffer(realBuffer) {
+CUDA_CALLABLE_MEMBER Helper::Helper(integer *integerVal, real *realVal, keyType *keyTypeVal, integer *integerBuffer,
+                                    real *realBuffer, keyType *keyTypeBuffer) : integerVal(integerVal),
+                                    realVal(realVal), keyTypeVal(keyTypeVal), integerBuffer(integerBuffer),
+                                    realBuffer(realBuffer) , keyTypeBuffer(keyTypeBuffer) {
 
 }
 
@@ -19,22 +21,29 @@ CUDA_CALLABLE_MEMBER Helper::~Helper() {
 
 }
 
-CUDA_CALLABLE_MEMBER void Helper::set(integer *integerBuffer, real *realBuffer) {
+CUDA_CALLABLE_MEMBER void Helper::set(integer *integerVal, real *realVal, keyType *keyTypeVal, integer *integerBuffer,
+                                      real *realBuffer, keyType *keyTypeBuffer) {
+    this->integerVal = integerVal;
+    this->realVal = realVal;
+    this->keyTypeVal = keyTypeVal;
     this->integerBuffer = integerBuffer;
     this->realBuffer = realBuffer;
+    this->keyTypeBuffer = keyTypeBuffer;
 }
 
 namespace HelperNS {
 
     namespace Kernel {
-        __global__ void set(Helper *helper, integer *integerBuffer, real *realBuffer) {
-            helper->set(integerBuffer, realBuffer);
+        __global__ void set(Helper *helper, integer *integerVal, real *realVal, keyType *keyTypeVal,
+                            integer *integerBuffer, real *realBuffer, keyType *keyTypeBuffer) {
+            helper->set(integerVal, realVal, keyTypeVal, integerBuffer, realBuffer, keyTypeBuffer);
         }
 
-        void Launch::set(Helper *helper, integer *integerBuffer, real *realBuffer) {
+        void Launch::set(Helper *helper, integer *integerVal, real *realVal, keyType *keyTypeVal,
+                         integer *integerBuffer, real *realBuffer, keyType *keyTypeBuffer) {
             ExecutionPolicy executionPolicy(1, 1);
-            cuda::launch(false, executionPolicy, ::HelperNS::Kernel::set, helper, integerBuffer,
-                         realBuffer);
+            cuda::launch(false, executionPolicy, ::HelperNS::Kernel::set, helper, integerVal, realVal, keyTypeVal,
+                         integerBuffer, realBuffer, keyTypeBuffer);
 
         }
     }
@@ -74,5 +83,44 @@ namespace HelperNS {
             integer *keyOut, integer n);
     template real sortArray<keyType , keyType>(keyType *arrayToSort, keyType *sortedArray, keyType *keyIn,
             keyType *keyOut, integer n);
+
+    namespace Kernel {
+
+        template <typename T>
+        __global__ void copyArray(T *targetArray, T *sourceArray, integer n) {
+
+            int index = threadIdx.x + blockIdx.x * blockDim.x;
+            int stride = blockDim.x * gridDim.x;
+            int offset = 0;
+
+            while ((index + offset) < n) {
+                targetArray[index + offset] = sourceArray[index + offset];
+
+                offset += stride;
+            }
+        }
+
+        namespace Launch {
+
+            template<typename T>
+            real copyArray(T *targetArray, T *sourceArray, integer n) {
+                ExecutionPolicy executionPolicy;
+                return cuda::launch(true, executionPolicy, ::HelperNS::Kernel::copyArray, targetArray, sourceArray, n);
+            }
+            template real copyArray<integer>(integer *targetArray, integer *sourceArray, integer n);
+            template real copyArray<real>(real *targetArray, real *sourceArray, integer n);
+            template real copyArray<keyType>(keyType *targetArray, keyType *sourceArray, integer n);
+        }
+        /*__global__ void reset(Helper *helper, int length) {
+
+            integer index = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+
+            while ((index + offset) < length) {
+                helper->
+            }
+        }*/
+    }
 
 }

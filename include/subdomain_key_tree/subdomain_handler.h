@@ -33,6 +33,9 @@ public:
     SubDomainKeyTreeHandler();
     ~SubDomainKeyTreeHandler();
 
+    void toDevice();
+    void toHost();
+
 };
 
 class DomainListHandler {

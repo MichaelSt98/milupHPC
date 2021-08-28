@@ -7,7 +7,7 @@ typedef unsigned long int keyType;
 typedef unsigned long int idInteger;
 
 #define theta 0.7
-
+#define KEY_MAX ULONG_MAX
 
 struct Execution
 {

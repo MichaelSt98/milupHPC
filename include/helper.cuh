@@ -14,21 +14,38 @@ public:
 
     integer *integerBuffer;
     real *realBuffer;
+    keyType *keyTypeBuffer;
+
+    integer *integerVal;
+    real *realVal;
+    keyType *keyTypeVal;
 
     CUDA_CALLABLE_MEMBER Helper();
-    CUDA_CALLABLE_MEMBER Helper(integer *integerBuffer, real *realBuffer);
+    CUDA_CALLABLE_MEMBER Helper(integer *integerVal, real *realVal, keyType *keyTypeVal, integer *integerBuffer,
+                                real *realBuffer, keyType *keyTypeBuffer);
     CUDA_CALLABLE_MEMBER ~Helper();
-    CUDA_CALLABLE_MEMBER void set(integer *integerBuffer, real *realBuffer);
+    CUDA_CALLABLE_MEMBER void set(integer *integerVal, real *realVal, keyType *keyTypeVal, integer *integerBuffer,
+                                  real *realBuffer, keyType *keyTypeBuffer);
 
 };
 
 namespace HelperNS {
 
     namespace Kernel {
-        __global__ void set(Helper *helper, integer *integerBuffer, real *realBuffer);
+        __global__ void set(Helper *helper, integer *integerVal, real *realVal, keyType *keyTypeVal,
+                            integer *integerBuffer, real *realBuffer, keyType *keyTypeBuffer);
 
         namespace Launch {
-            void set(Helper *helper, integer *integerBuffer, real *realBuffer);
+            void set(Helper *helper, integer *integerVal, real *realVal, keyType *keyTypeVal, integer *integerBuffer,
+                     real *realBuffer, keyType *keyTypeBuffer);
+        }
+
+        template <typename T>
+        __global__ void copyArray(T *targetArray, T *sourceArray, integer n);
+
+        namespace Launch {
+            template <typename T>
+            real copyArray(T *targetArray, T *sourceArray, integer n);
         }
     }
 

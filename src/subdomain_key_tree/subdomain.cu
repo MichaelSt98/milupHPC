@@ -315,6 +315,21 @@ namespace SubDomainKeyTreeNS {
                          domainList, n, m);
         }
 
+        real Launch::particlesPerProcess(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                         integer n, integer m, Curve::Type curveType) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::SubDomainKeyTreeNS::Kernel::particlesPerProcess,
+                                subDomainKeyTree, tree, particles, n, m, curveType);
+        }
+
+        real Launch::markParticlesProcess(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                          integer n, integer m, integer *sortArray,
+                                          Curve::Type curveType) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::SubDomainKeyTreeNS::Kernel::markParticlesProcess,
+                                subDomainKeyTree, tree, particles, n, m, sortArray, curveType);
+        }
+
     }
 
 }

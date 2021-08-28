@@ -14,6 +14,7 @@
 #include "materials/material_handler.h"
 #include "integrator/integrator.h"
 #include "helper_handler.h"
+#include "gravity/gravity.cuh"
 
 #include <iostream>
 #include <stdio.h>
@@ -47,6 +48,9 @@ class Miluphpc {
 private:
     void diskModel();
 
+    void updateRangeApproximately(int aimedParticlesPerProcess, int bins=4000);
+    void newLoadDistribution();
+
 public:
 
     integer numParticles;
@@ -54,6 +58,8 @@ public:
     integer numNodes;
 
     integer *d_mutex;
+    HelperHandler *helperHandler;
+    HelperHandler *buffer;
     ParticleHandler *particleHandler;
     SubDomainKeyTreeHandler *subDomainKeyTreeHandler;
     TreeHandler *treeHandler;
@@ -62,6 +68,7 @@ public:
     ~Miluphpc();
 
     void initDistribution(ParticleDistribution::Type particleDistribution=ParticleDistribution::disk);
+    void barnesHut();
     void run();
 
 };

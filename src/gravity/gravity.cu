@@ -99,7 +99,7 @@ namespace Gravity {
             }
         }
 
-        __global__ void compLowestDomainListNodesKernel(Particles *particles, DomainList *lowestDomainList) {
+        __global__ void compLowestDomainListNodes(Particles *particles, DomainList *lowestDomainList) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x*blockDim.x;
             integer stride = blockDim.x*gridDim.x;
@@ -384,6 +384,172 @@ namespace Gravity {
 
         }
 
+        __global__ void update(Particles *particles, integer n, real dt, real d) {
+
+            integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+
+            while (bodyIndex + offset < n) {
+
+                // calculating/updating the velocities
+                particles->vx[bodyIndex + offset] += dt * particles->ax[bodyIndex + offset];
+#if DIM > 1
+                particles->vy[bodyIndex + offset] += dt * particles->ay[bodyIndex + offset];
+#if DIM == 3
+                particles->vz[bodyIndex + offset] += dt * particles->az[bodyIndex + offset];
+#endif
+#endif
+
+                // calculating/updating the positions
+                particles->x[bodyIndex + offset] += d * dt * particles->vx[bodyIndex + offset];
+#if DIM > 1
+                particles->y[bodyIndex + offset] += d * dt * particles->vy[bodyIndex + offset];
+#if DIM == 3
+                particles->z[bodyIndex + offset] += d * dt * particles->vz[bodyIndex + offset];
+#endif
+#endif
+                offset += stride;
+            }
+        }
+
+        __global__ void createKeyHistRanges(Helper *helper, integer bins) {
+
+            integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+
+            keyType max_key = 1UL << 63;
+
+            while ((bodyIndex + offset) < bins) {
+
+                helper->keyTypeBuffer[bodyIndex + offset] = (bodyIndex + offset) * (max_key/bins);
+                //printf("keyHistRanges[%i] = %lu\n", bodyIndex + offset, keyHistRanges[bodyIndex + offset]);
+
+                if ((bodyIndex + offset) == (bins - 1)) {
+                    helper->keyTypeBuffer[bins-1] = KEY_MAX;
+                }
+                offset += stride;
+            }
+        }
+
+        __global__ void keyHistCounter(Tree *tree, Particles *particles, SubDomainKeyTree *subDomainKeyTree,
+                                       Helper *helper,
+                                       /*keyType *keyHistRanges, integer *keyHistCounts,*/ int bins, int n,
+                                       Curve::Type curveType) {
+
+            integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+
+            keyType key;
+
+            while ((bodyIndex + offset) < n) {
+
+                key = tree->getParticleKey(particles, bodyIndex + offset, MAX_LEVEL);
+
+                switch (curveType) {
+                    case Curve::lebesgue: {
+                        for (int i = 0; i < (bins); i++) {
+                            if (key >= helper->keyTypeBuffer[i] && key < helper->keyTypeBuffer[i + 1]) {
+                                //keyHistCounts[i] += 1;
+                                atomicAdd(&helper->integerBuffer[i], 1);
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                    case Curve::hilbert: {
+                        //TODO: Hilbert change
+                        printf("Attention: not implemented yet!\n");
+                        /*unsigned long hilbert = Lebesgue2Hilbert(key, 21);
+                        for (int i = 0; i < (bins); i++) {
+                            if (hilbert >= keyHistRanges[i] && hilbert < keyHistRanges[i + 1]) {
+                                //keyHistCounts[i] += 1;
+                                atomicAdd(&keyHistCounts[i], 1);
+                                break;
+                            }
+                        }
+                        break;*/
+                    }
+                    default:
+                        printf("Not available!\n");
+                }
+
+                offset += stride;
+            }
+
+        }
+
+        //TODO: resetting helper (buffers)?!
+        __global__ void calculateNewRange(SubDomainKeyTree *subDomainKeyTree, Helper *helper,
+                                          /*keyType *keyHistRanges, integer *keyHistCounts,*/ int bins, int n,
+                                          Curve::Type curveType) {
+
+            integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+
+            integer sum;
+            keyType newRange;
+
+            while ((bodyIndex + offset) < (bins-1)) {
+
+                sum = 0;
+                for (integer i=0; i<(bodyIndex+offset); i++) {
+                    sum += helper->integerBuffer[i];
+                }
+
+                for (integer i=1; i<subDomainKeyTree->numProcesses; i++) {
+                    if ((sum + helper->integerBuffer[bodyIndex + offset]) >= (i*n) && sum < (i*n)) {
+                        printf("[rank %i] new range: %lu\n", subDomainKeyTree->rank,
+                               helper->keyTypeBuffer[bodyIndex + offset]);
+                        subDomainKeyTree->range[i] = helper->keyTypeBuffer[bodyIndex + offset];
+                    }
+                }
+
+
+                //printf("[rank %i] keyHistCounts[%i] = %i\n", s->rank, bodyIndex+offset, keyHistCounts[bodyIndex+offset]);
+                atomicAdd(helper->integerVal, helper->integerBuffer[bodyIndex+offset]);
+                offset += stride;
+            }
+
+        }
+
+        real Launch::prepareLowestDomainExchange(Particles *particles, DomainList *lowestDomainList,
+                                                 Helper *helper, Entry::Name entry) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::prepareLowestDomainExchange, particles,
+                                lowestDomainList, helper, entry);
+        }
+
+        real Launch::updateLowestDomainListNodes(Particles *particles, DomainList *lowestDomainList,
+                                                 Helper *helper, Entry::Name entry) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::updateLowestDomainListNodes, particles,
+                                lowestDomainList, helper, entry);
+
+        }
+
+        real Launch::compLowestDomainListNodes(Particles *particles, DomainList *lowestDomainList) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::compLowestDomainListNodes, particles,
+                                lowestDomainList);
+        }
+
+        real Launch::compLocalPseudoParticles(Tree *tree, Particles *particles, DomainList *domainList, int n) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::compLocalPseudoParticles, tree, particles,
+                                domainList, n);
+        }
+
+        real Launch::compDomainListPseudoParticles(Tree *tree, Particles *particles, DomainList *domainList,
+                                                   DomainList *lowestDomainList, int n) {
+            ExecutionPolicy executionPolicy(256, 1);
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::compDomainListPseudoParticles, tree,
+                                particles, domainList, lowestDomainList, n);
+        }
+
         real Launch::computeForces(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
                                    integer warp, integer stackSize) {
 
@@ -391,6 +557,30 @@ namespace Gravity {
             ExecutionPolicy executionPolicy(256, 256, sharedMemory);
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces, tree, particles, n, m,
                                 blockSize, warp, stackSize);
+        }
+
+        real Launch::update(Particles *particles, integer n, real dt, real d) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::update, particles, n, dt, d);
+        }
+
+        real Launch::createKeyHistRanges(Helper *helper, integer bins) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::createKeyHistRanges, helper, bins);
+        }
+
+        real Launch::keyHistCounter(Tree *tree, Particles *particles, SubDomainKeyTree *subDomainKeyTree,
+                            Helper *helper, int bins, int n, Curve::Type curveType) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::keyHistCounter, tree, particles,
+                                subDomainKeyTree, helper, bins, n, curveType);
+        }
+
+        real Launch::calculateNewRange(SubDomainKeyTree *subDomainKeyTree, Helper *helper, int bins, int n,
+                               Curve::Type curveType) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::calculateNewRange, subDomainKeyTree, helper,
+                                bins, n, curveType);
         }
 
     }

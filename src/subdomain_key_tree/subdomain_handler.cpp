@@ -38,6 +38,17 @@ SubDomainKeyTreeHandler::~SubDomainKeyTreeHandler() {
     gpuErrorcheck(cudaFree(d_subDomainKeyTree));
 }
 
+void SubDomainKeyTreeHandler::toDevice() {
+    gpuErrorcheck(cudaMemcpy(d_range, h_range, (h_numProcesses + 1) * sizeof(keyType), cudaMemcpyHostToDevice));
+    gpuErrorcheck(cudaMemcpy(d_procParticleCounter, h_procParticleCounter,
+                             h_numProcesses* sizeof(integer), cudaMemcpyHostToDevice));
+}
+
+void SubDomainKeyTreeHandler::toHost() {
+    gpuErrorcheck(cudaMemcpy(h_range, d_range, (h_numProcesses + 1) * sizeof(keyType), cudaMemcpyDeviceToHost));
+    gpuErrorcheck(cudaMemcpy(h_procParticleCounter, d_procParticleCounter, h_numProcesses * sizeof(integer),
+                             cudaMemcpyDeviceToHost));
+}
 
 DomainListHandler::DomainListHandler(integer domainListSize) : domainListSize(domainListSize) {
 

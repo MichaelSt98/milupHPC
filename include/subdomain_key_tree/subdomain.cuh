@@ -97,6 +97,13 @@ namespace SubDomainKeyTreeNS {
             void test(SubDomainKeyTree *subDomainKeyTree);
 
             real buildTree(Tree *tree, Particles *particles, DomainList *domainList, integer n, integer m);
+
+            real particlesPerProcess(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                                integer n, integer m, Curve::Type curveType=Curve::lebesgue);
+
+            real markParticlesProcess(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                                 integer n, integer m, integer *sortArray,
+                                                 Curve::Type curveType=Curve::lebesgue);
         }
 
     }
