@@ -8,6 +8,7 @@ typedef unsigned long int idInteger;
 
 #define theta 0.7
 #define KEY_MAX ULONG_MAX
+#define DOMAIN_LIST_SIZE 512
 
 struct Execution
 {

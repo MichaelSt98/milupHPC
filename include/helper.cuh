@@ -43,9 +43,15 @@ namespace HelperNS {
         template <typename T>
         __global__ void copyArray(T *targetArray, T *sourceArray, integer n);
 
+        template <typename T>
+        __global__ void resetArray(T *array, T value, integer n);
+
         namespace Launch {
             template <typename T>
             real copyArray(T *targetArray, T *sourceArray, integer n);
+
+            template <typename T>
+            real resetArray(T *array, T value, integer n);
         }
     }
 

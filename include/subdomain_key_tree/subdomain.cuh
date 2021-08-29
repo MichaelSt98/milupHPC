@@ -47,7 +47,8 @@ namespace KeyNS {
                                                            {2,1,3,0,5,6,4,7}, {4,7,5,6,3,0,2,1}, {6,5,7,4,1,2,0,3} };
 
     CUDA_CALLABLE_MEMBER void key2Char(keyType key, integer maxLevel, char *keyAsChar);
-    CUDA_CALLABLE_MEMBER integer key2proc(keyType key, SubDomainKeyTree *s, Curve::Type curveType=Curve::lebesgue);
+    CUDA_CALLABLE_MEMBER integer key2proc(keyType key, SubDomainKeyTree *subDomainKeyTree,
+                                          Curve::Type curveType=Curve::lebesgue);
 
 }
 
@@ -80,7 +81,7 @@ namespace SubDomainKeyTreeNS {
 
         __global__ void test(SubDomainKeyTree *subDomainKeyTree);
 
-        __global__ void buildTree(Tree *tree, Particles *particles, DomainList *domainList, integer n, integer m);
+        __global__ void buildDomainTree(Tree *tree, Particles *particles, DomainList *domainList, integer n, integer m);
 
         __global__ void particlesPerProcess(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                             integer n, integer m, Curve::Type curveType=Curve::lebesgue);
@@ -96,7 +97,7 @@ namespace SubDomainKeyTreeNS {
 
             void test(SubDomainKeyTree *subDomainKeyTree);
 
-            real buildTree(Tree *tree, Particles *particles, DomainList *domainList, integer n, integer m);
+            real buildDomainTree(Tree *tree, Particles *particles, DomainList *domainList, integer n, integer m);
 
             real particlesPerProcess(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                 integer n, integer m, Curve::Type curveType=Curve::lebesgue);
@@ -141,6 +142,9 @@ namespace DomainListNS {
         __global__ void createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList,
                                          integer maxLevel, Curve::Type curveType = Curve::lebesgue);
 
+        __global__ void lowestDomainList(SubDomainKeyTree *subDomainKeyTree, Tree *tree, DomainList *domainList,
+                                         DomainList *lowestDomainList, integer n, integer m);
+
         namespace Launch {
             void set(DomainList *domainList, integer *domainListIndices, integer *domainListLevels,
                      integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
@@ -148,6 +152,9 @@ namespace DomainListNS {
 
             real createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList,
                                   integer maxLevel, Curve::Type curveType = Curve::lebesgue);
+
+            real lowestDomainList(SubDomainKeyTree *subDomainKeyTree, Tree *tree, DomainList *domainList,
+                                             DomainList *lowestDomainList, integer n, integer m);
         }
     }
 

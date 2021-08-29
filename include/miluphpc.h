@@ -51,6 +51,12 @@ private:
     void updateRangeApproximately(int aimedParticlesPerProcess, int bins=4000);
     void newLoadDistribution();
 
+    void compPseudoParticlesParallel();
+    void parallelForce();
+
+    template <typename T>
+    integer sendParticlesEntry(integer *sendLengths, integer *receiveLengths, T *entry);
+
 public:
 
     integer numParticles;
@@ -58,11 +64,13 @@ public:
     integer numNodes;
 
     integer *d_mutex;
-    HelperHandler *helperHandler;
+    HelperHandler *helperHandler; // TODO: more than one is needed: how to name?
     HelperHandler *buffer;
     ParticleHandler *particleHandler;
     SubDomainKeyTreeHandler *subDomainKeyTreeHandler;
     TreeHandler *treeHandler;
+    DomainListHandler *domainListHandler;
+    DomainListHandler *lowestDomainListHandler;
 
     Miluphpc(integer numParticles, integer numNodes);
     ~Miluphpc();

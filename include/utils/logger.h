@@ -45,7 +45,7 @@ public:
         return *this;
     }
 
-    /*Logger &operator<<(const unsigned long &key) {
+    Logger &operator<<(const unsigned long &key) {
         int level = 21;
         if (msglevel >= LOGCFG.level && (LOGCFG.myrank == LOGCFG.outputRank || LOGCFG.outputRank == -1)) {
             int levels [level];
@@ -61,7 +61,7 @@ public:
             opened = true;
         }
         return *this;
-    }*/
+    }
 
 
 

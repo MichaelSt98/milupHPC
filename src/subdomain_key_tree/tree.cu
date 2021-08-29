@@ -89,16 +89,20 @@ CUDA_CALLABLE_MEMBER void Tree::reset(integer index, integer n) {
 
 CUDA_CALLABLE_MEMBER keyType Tree::getParticleKey(Particles *particles, integer index, integer maxLevel) {
 
-    int level = 0;
+    integer level = 0;
     keyType particleKey = (keyType)0;
 
-    int sonBox = 0;
-    float min_x = *minX;
-    float max_x = *maxX;
-    float min_y = *minY;
-    float max_y = *maxY;
-    float min_z = *minZ;
-    float max_z = *maxZ;
+    integer sonBox;
+    real min_x = *this->minX;
+    real max_x = *this->maxX;
+#if DIM > 1
+    real min_y = *this->minY;
+    real max_y = *this->maxY;
+#if DIM == 3
+    real min_z = *this->minZ;
+    real max_z = *this->maxZ;
+#endif
+#endif
 
     // calculate path to the particle's position assuming an octree with above bounding boxes
     while (level <= maxLevel) {
@@ -123,10 +127,14 @@ CUDA_CALLABLE_MEMBER keyType Tree::getParticleKey(Particles *particles, integer 
         else { min_z =  0.5 * (min_z + max_z); }
 #endif
 #endif
-        particleKey = particleKey | ((unsigned long)sonBox << (unsigned long)(DIM * (maxLevel-level-1)));
+        particleKey = particleKey | ((keyType)sonBox << (keyType)(DIM * (maxLevel-level-1)));
         level ++;
     }
     //TODO: Hilbert change
+    if (particleKey == 0UL) {
+        printf("Why key = %lu? x = (%f, %f, %f) min = (%f, %f, %f), max = (%f, %f, %f)\n", particleKey, particles->x[index], particles->y[index],
+               particles->z[index], *this->minX, *this->minY, *this->minZ, *this->maxX, *this->maxY, *this->maxZ);
+    }
     return particleKey;
     //return Lebesgue2Hilbert(particleKey, 21);
 }

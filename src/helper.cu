@@ -100,6 +100,20 @@ namespace HelperNS {
             }
         }
 
+        template <typename T>
+        __global__ void resetArray(T *array, T value, integer n) {
+
+            int index = threadIdx.x + blockIdx.x * blockDim.x;
+            int stride = blockDim.x * gridDim.x;
+            int offset = 0;
+
+            while ((index + offset) < n) {
+                array[index + offset] = value;
+
+                offset += stride;
+            }
+        }
+
         namespace Launch {
 
             template<typename T>
@@ -110,6 +124,16 @@ namespace HelperNS {
             template real copyArray<integer>(integer *targetArray, integer *sourceArray, integer n);
             template real copyArray<real>(real *targetArray, real *sourceArray, integer n);
             template real copyArray<keyType>(keyType *targetArray, keyType *sourceArray, integer n);
+
+            template <typename T>
+            real resetArray(T *array, T value, integer n) {
+                ExecutionPolicy executionPolicy;
+                return cuda::launch(true, executionPolicy, ::HelperNS::Kernel::resetArray, array, value, n);
+            }
+            template real resetArray<integer>(integer *array, integer value, integer n);
+            template real resetArray<real>(real *array, real value, integer n);
+            template real resetArray<keyType>(keyType *array, keyType value, integer n);
+
         }
         /*__global__ void reset(Helper *helper, int length) {
 
