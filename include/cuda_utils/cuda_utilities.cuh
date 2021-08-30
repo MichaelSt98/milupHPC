@@ -29,11 +29,22 @@ namespace CudaUtils {
 
         __global__ void collectValues(integer *indices, real *entries, real *collector, integer count);
 
+        __global__ void checkValues(integer *indices, real *entry1, real *entry2, real *entry3, integer count);
+
         template<typename T>
         __global__ void findDuplicates(T *array, integer *duplicateCounter, int length);
 
         template<typename T>
+        __global__ void findDuplicates(T *array1, T *array2, integer *duplicateCounter, int length);
+
+        template<typename T, typename U>
+        __global__ void findDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, int length);
+
+        template<typename T>
         __global__ void markDuplicates(T *array, integer *duplicateCounter, int length);
+
+        template<typename T, typename U>
+        __global__ void markDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, int length);
 
         template<typename T>
         __global__ void removeDuplicates(T *array, T *removedArray, integer *duplicateCounter, int length);
@@ -41,11 +52,22 @@ namespace CudaUtils {
         namespace Launch {
             real collectValues(integer *indices, real *entries, real *collector, integer count);
 
+            real checkValues(integer *indices, real *entry1, real *entry2, real *entry3, integer count);
+
             template<typename T>
             real findDuplicates(T *array, integer *duplicateCounter, int length);
 
             template<typename T>
+            real findDuplicates(T *array1, T *array2, integer *duplicateCounter, int length);
+
+            template<typename T, typename U>
+            real findDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, int length);
+
+            template<typename T>
             real markDuplicates(T *array, integer *duplicateCounter, int length);
+
+            template<typename T, typename U>
+            real markDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, int length);
 
             template<typename T>
             real removeDuplicates(T *array, T *removedArray, integer *duplicateCounter, int length);

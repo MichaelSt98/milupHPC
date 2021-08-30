@@ -285,6 +285,39 @@ namespace ParticlesNS {
 
         }
 
+        __global__ void info(Particles *particles, integer n, integer m, integer k) {
+            int bodyIndex = threadIdx.x + blockDim.x * blockIdx.x;
+            int stride = blockDim.x * gridDim.x;
+            int offset = 0;
+
+            while ((bodyIndex + offset) < n) {
+                if ((bodyIndex + offset) % 100 == 0) {
+                    printf("x[%i] = (%f, %f, %f) mass = %f\n", bodyIndex + offset, particles->x[bodyIndex + offset],
+                           particles->y[bodyIndex + offset],
+                           particles->z[bodyIndex + offset],
+                           particles->mass[bodyIndex + offset]);
+                }
+                offset += stride;
+            }
+
+            offset = m;
+            while ((bodyIndex + offset) < k && (bodyIndex + offset) > m) {
+                if ((bodyIndex + offset) % 100 == 0) {
+                    printf("x[%i] = (%f, %f, %f) mass = %f\n", bodyIndex + offset, particles->x[bodyIndex + offset],
+                           particles->y[bodyIndex + offset],
+                           particles->z[bodyIndex + offset],
+                           particles->mass[bodyIndex + offset]);
+                }
+                offset += stride;
+            }
+
+        }
+
+        real Launch::info(Particles *particles, integer n, integer m, integer k) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::ParticlesNS::Kernel::info, particles, n, m, k);
+        }
+
 
 #if DIM > 1
 

@@ -24,6 +24,11 @@ public:
     integer *d_index;
     integer *d_mutex;
 
+    integer *h_toDeleteLeaf;
+    integer *h_toDeleteNode;
+    integer *d_toDeleteLeaf;
+    integer *d_toDeleteNode;
+
     real *d_minX, *d_maxX;
     real *h_minX, *h_maxX;
 #if DIM > 1

@@ -341,10 +341,12 @@ CUDA_CALLABLE_MEMBER DomainList::DomainList() {
 
 CUDA_CALLABLE_MEMBER DomainList::DomainList(integer *domainListIndices, integer *domainListLevels,
                                             integer *domainListIndex, integer *domainListCounter,
-                                            keyType *domainListKeys, keyType *sortedDomainListKeys) :
+                                            keyType *domainListKeys, keyType *sortedDomainListKeys,
+                                            integer *relevantDomainListIndices) :
                                             domainListIndices(domainListIndices), domainListLevels(domainListLevels),
                                             domainListIndex(domainListIndex), domainListCounter(domainListCounter),
-                                            domainListKeys(domainListKeys), sortedDomainListKeys(sortedDomainListKeys) {
+                                            domainListKeys(domainListKeys), sortedDomainListKeys(sortedDomainListKeys),
+                                            relevantDomainListIndices(relevantDomainListIndices) {
 
 }
 
@@ -353,7 +355,8 @@ CUDA_CALLABLE_MEMBER DomainList::~DomainList() {
 }
 
 CUDA_CALLABLE_MEMBER void DomainList::set(integer *domainListIndices, integer *domainListLevels, integer *domainListIndex,
-                              integer *domainListCounter, keyType *domainListKeys, keyType *sortedDomainListKeys) {
+                              integer *domainListCounter, keyType *domainListKeys, keyType *sortedDomainListKeys,
+                                          integer *relevantDomainListIndices) {
 
     this->domainListIndices = domainListIndices;
     this->domainListLevels = domainListLevels;
@@ -361,6 +364,7 @@ CUDA_CALLABLE_MEMBER void DomainList::set(integer *domainListIndices, integer *d
     this->domainListCounter = domainListCounter;
     this->domainListKeys = domainListKeys;
     this->sortedDomainListKeys = sortedDomainListKeys;
+    this->relevantDomainListIndices = relevantDomainListIndices;
 
     *domainListIndex = 0;
 }
@@ -371,10 +375,10 @@ namespace DomainListNS {
 
         __global__ void set(DomainList *domainList, integer *domainListIndices, integer *domainListLevels,
                             integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
-                            keyType *sortedDomainListKeys) {
+                            keyType *sortedDomainListKeys, integer *relevantDomainListIndices) {
 
             domainList->set(domainListIndices, domainListLevels, domainListIndex, domainListCounter, domainListKeys,
-                            sortedDomainListKeys);
+                            sortedDomainListKeys, relevantDomainListIndices);
         }
 
         __global__ void createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList,
@@ -481,10 +485,11 @@ namespace DomainListNS {
 
         void Launch::set(DomainList *domainList, integer *domainListIndices, integer *domainListLevels,
                              integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
-                             keyType *sortedDomainListKeys) {
+                             keyType *sortedDomainListKeys, integer *relevantDomainListIndices) {
             ExecutionPolicy executionPolicy(1, 1);
             cuda::launch(false, executionPolicy, ::DomainListNS::Kernel::set, domainList, domainListIndices, domainListLevels,
-                         domainListIndex, domainListCounter, domainListKeys, sortedDomainListKeys);
+                         domainListIndex, domainListCounter, domainListKeys, sortedDomainListKeys,
+                         relevantDomainListIndices);
         }
 
         real Launch::createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList, integer maxLevel,

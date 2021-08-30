@@ -21,6 +21,9 @@ public:
     integer *sorted;
     integer *index;
 
+    integer *toDeleteLeaf;
+    integer *toDeleteNode;
+
     real *minX, *maxX;
 #if DIM > 1
     real *minY, *maxY;
@@ -32,21 +35,27 @@ public:
     CUDA_CALLABLE_MEMBER Tree();
 
     CUDA_CALLABLE_MEMBER Tree(integer *count, integer *start, integer *child, integer *sorted, integer *index,
+                              integer *toDeleteLeaf, integer *toDeleteNode,
                               real *minX, real *maxX);
     CUDA_CALLABLE_MEMBER void set(integer *count, integer *start, integer *child, integer *sorted,
-                                      integer *index, real *minX, real *maxX);
+                                      integer *index, integer *toDeleteLeaf, integer *toDeleteNode,
+                                      real *minX, real *maxX);
 
 #if DIM > 1
     CUDA_CALLABLE_MEMBER Tree(integer *count, integer *start, integer *child, integer *sorted, integer *index,
+                              integer *toDeleteLeaf, integer *toDeleteNode,
                               real *minX, real *maxX, real *minY, real *maxY);
     CUDA_CALLABLE_MEMBER void set(integer *count, integer *start, integer *child, integer *sorted,
-                                      integer *index, real *minX, real *maxX, real *minY, real *maxY);
+                                      integer *index, integer *toDeleteLeaf, integer *toDeleteNode,
+                                      real *minX, real *maxX, real *minY, real *maxY);
 
 #if DIM == 3
     CUDA_CALLABLE_MEMBER Tree(integer *count, integer *start, integer *child, integer *sorted, integer *index,
+                              integer *toDeleteLeaf, integer *toDeleteNode,
                               real *minX, real *maxX, real *minY, real *maxY, real *minZ, real *maxZ);
     CUDA_CALLABLE_MEMBER void set(integer *count, integer *start, integer *child, integer *sorted,
-                                      integer *index, real *minX, real *maxX, real *minY, real *maxY,
+                                      integer *index, integer *toDeleteLeaf, integer *toDeleteNode,
+                                      real *minX, real *maxX, real *minY, real *maxY,
                                       real *minZ, real *maxZ);
 #endif
 #endif
@@ -67,33 +76,42 @@ namespace TreeNS {
     namespace Kernel {
 
         __global__ void set(Tree *tree, integer *count, integer *start, integer *child, integer *sorted,
-                            integer *index, real *minX, real *maxX);
+                            integer *index, integer *toDeleteLeaf, integer *toDeleteNode,
+                            real *minX, real *maxX);
+
+        __global__ void info(Tree *tree, integer n, integer m);
 
         namespace Launch {
             void set(Tree *tree, integer *count, integer *start, integer *child, integer *sorted, integer *index,
+                     integer *toDeleteLeaf, integer *toDeleteNode,
                      real *minX, real *maxX);
+
+            real info(Tree *tree, integer n, integer m);
         }
 
 #if DIM > 1
 
         __global__ void set(Tree *tree, integer *count, integer *start, integer *child, integer *sorted,
-                            integer *index, real *minX, real *maxX,
-                            real *minY, real *maxY);
+                            integer *index, integer *toDeleteLeaf, integer *toDeleteNode,
+                            real *minX, real *maxX, real *minY, real *maxY);
 
         namespace Launch {
             void set(Tree *tree, integer *count, integer *start, integer *child, integer *sorted,
-                     integer *index, real *minX, real *maxX, real *minY, real *maxY);
+                     integer *index, integer *toDeleteLeaf, integer *toDeleteNode,
+                     real *minX, real *maxX, real *minY, real *maxY);
         }
 
 #if DIM == 3
 
         __global__ void set(Tree *tree, integer *count, integer *start, integer *child, integer *sorted,
-                            integer *index, real *minX, real *maxX, real *minY, real *maxY, real *minZ,
+                            integer *index, integer *toDeleteLeaf, integer *toDeleteNode,
+                            real *minX, real *maxX, real *minY, real *maxY, real *minZ,
                             real *maxZ);
 
         namespace Launch {
             void set(Tree *tree, integer *count, integer *start, integer *child, integer *sorted,
-                     integer *index, real *minX, real *maxX, real *minY, real *maxY, real *minZ,
+                     integer *index, integer *toDeleteLeaf, integer *toDeleteNode,
+                     real *minX, real *maxX, real *minY, real *maxY, real *minZ,
                      real *maxZ);
         }
 

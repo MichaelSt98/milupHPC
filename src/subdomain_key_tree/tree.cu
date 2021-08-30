@@ -12,35 +12,43 @@ CUDA_CALLABLE_MEMBER Tree::Tree() {
 }
 
 CUDA_CALLABLE_MEMBER Tree::Tree(integer *count, integer *start, integer *child, integer *sorted, integer *index,
-                                real *minX, real *maxX) : count(count), start(start), child(child), sorted(sorted),
-                                index(index), minX(minX), maxX(maxX) {
+                                integer *toDeleteLeaf, integer *toDeleteNode, real *minX, real *maxX) : count(count),
+                                start(start), child(child), sorted(sorted), index(index), toDeleteLeaf(toDeleteLeaf),
+                                toDeleteNode(toDeleteNode), minX(minX), maxX(maxX) {
 
 }
 CUDA_CALLABLE_MEMBER void Tree::set(integer *count, integer *start, integer *child, integer *sorted,
-                                        integer *index, real *minX, real *maxX) {
+                                        integer *index, integer *toDeleteLeaf, integer *toDeleteNode,
+                                        real *minX, real *maxX) {
     this->count = count;
     this->start = start;
     this->child = child;
     this->sorted = sorted;
     this->index = index;
+    this->toDeleteNode = toDeleteNode;
+    this->toDeleteLeaf = toDeleteLeaf;
     this->minX = minX;
     this->maxX = maxX;
 }
 
 #if DIM > 1
 CUDA_CALLABLE_MEMBER Tree::Tree(integer *count, integer *start, integer *child, integer *sorted, integer *index,
-                                real *minX, real *maxX, real *minY, real *maxY) : count(count), start(start),
-                                child(child), sorted(sorted), index(index), minX(minX), maxX(maxX), minY(minY),
-                                maxY(maxY) {
+                                integer *toDeleteLeaf, integer *toDeleteNode, real *minX, real *maxX, real *minY,
+                                real *maxY) : count(count), start(start), child(child), sorted(sorted), index(index),
+                                toDeleteLeaf(toDeleteLeaf), toDeleteNode(toDeleteNode), minX(minX), maxX(maxX),
+                                minY(minY), maxY(maxY) {
 
 }
 CUDA_CALLABLE_MEMBER void Tree::set(integer *count, integer *start, integer *child, integer *sorted,
-                                        integer *index, real *minX, real *maxX, real *minY, real *maxY) {
+                                        integer *index, integer *toDeleteLeaf, integer *toDeleteNode, real *minX,
+                                        real *maxX, real *minY, real *maxY) {
     this->count = count;
     this->start = start;
     this->child = child;
     this->sorted = sorted;
     this->index = index;
+    this->toDeleteNode = toDeleteNode;
+    this->toDeleteLeaf = toDeleteLeaf;
     this->minX = minX;
     this->maxX = maxX;
     this->minY = minY;
@@ -49,19 +57,24 @@ CUDA_CALLABLE_MEMBER void Tree::set(integer *count, integer *start, integer *chi
 
 #if DIM == 3
 CUDA_CALLABLE_MEMBER Tree::Tree(integer *count, integer *start, integer *child, integer *sorted, integer *index,
+                                integer *toDeleteLeaf, integer *toDeleteNode,
                                 real *minX, real *maxX, real *minY, real *maxY, real *minZ, real *maxZ) : count(count),
-                                start(start), child(child), sorted(sorted), index(index), minX(minX), maxX(maxX),
-                                minY(minY), maxY(maxY), minZ(minZ), maxZ(maxZ) {
+                                start(start), child(child), sorted(sorted), index(index), toDeleteLeaf(toDeleteLeaf),
+                                toDeleteNode(toDeleteNode), minX(minX), maxX(maxX), minY(minY), maxY(maxY), minZ(minZ),
+                                maxZ(maxZ) {
 
 }
 CUDA_CALLABLE_MEMBER void Tree::set(integer *count, integer *start, integer *child, integer *sorted,
-                                        integer *index, real *minX, real *maxX, real *minY, real *maxY,
+                                        integer *index, integer *toDeleteLeaf, integer *toDeleteNode,
+                                        real *minX, real *maxX, real *minY, real *maxY,
                                         real *minZ, real *maxZ) {
     this->count = count;
     this->start = start;
     this->child = child;
     this->sorted = sorted;
     this->index = index;
+    this->toDeleteNode = toDeleteNode;
+    this->toDeleteLeaf = toDeleteLeaf;
     this->minX = minX;
     this->maxX = maxX;
     this->minY = minY;
@@ -146,7 +159,8 @@ CUDA_CALLABLE_MEMBER integer Tree::getTreeLevel(Particles *particles, integer in
     integer level = 0; //TODO: initialize level with 0 or 1 for getTreeLevel()?
     integer childIndex;
 
-    integer *path = new integer[maxLevel];
+    //integer *path = new integer[maxLevel];
+    integer path[MAX_LEVEL];
     for (integer i=0; i<maxLevel; i++) {
         path[i] = (integer) (key >> (maxLevel * DIM - DIM * (i + 1)) & (integer)(POW_DIM - 1));
         //printf("path[%i] = %i\n", i, path[i]);
@@ -168,7 +182,7 @@ CUDA_CALLABLE_MEMBER integer Tree::getTreeLevel(Particles *particles, integer in
     printf("ATTENTION: level = -1 (index = %i x = (%f, %f, %f))\n", index, particles->x[index], particles->y[index],
            particles->z[index]);
 
-    delete [] path;
+    //delete [] path;
 
     return -1;
 }
@@ -467,6 +481,12 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
 #endif
 #endif
 
+                        //if (cell % 1000 == 0) {
+                        //    printf("buildTree: x[%i] = (%f, %f, %f) from x[%i] = (%f, %f, %f) m = %f\n", cell, particles->x[cell], particles->y[cell],
+                        //           particles->z[cell], childIndex, particles->x[childIndex], particles->y[childIndex],
+                        //           particles->z[childIndex], particles->mass[childIndex]);
+                        //}
+
                         particles->mass[cell] += particles->mass[childIndex];
                         tree->count[cell] += tree->count[childIndex];
 
@@ -580,13 +600,13 @@ __global__ void TreeNS::Kernel::sort(Tree *tree, integer n, integer m) {
     integer stride = blockDim.x * gridDim.x;
     integer offset = 0;
 
-    if (bodyIndex == 0) {
+    /*if (bodyIndex == 0) {
         integer sumParticles = 0;
         for (integer i=0; i<POW_DIM; i++) {
             sumParticles += tree->count[tree->child[i]];
         }
         printf("sumParticles = %i\n", sumParticles);
-    }
+    }*/
 
     integer s = 0;
     if (threadIdx.x == 0) {
@@ -668,45 +688,56 @@ namespace TreeNS {
     namespace Kernel {
 
         __global__ void set(Tree *tree, integer *count, integer *start, integer *child, integer *sorted,
-                                  integer *index, real *minX, real *maxX) {
-            tree->set(count, start, child, sorted, index, minX, maxX);
+                                  integer *index, integer *toDeleteLeaf, integer *toDeleteNode, real *minX, real *maxX) {
+            tree->set(count, start, child, sorted, index, toDeleteLeaf, toDeleteNode, minX, maxX);
+        }
+
+        __global__ void info(Tree *tree, integer n, integer m) {
+
         }
 
         void Launch::set(Tree *tree, integer *count, integer *start, integer *child, integer *sorted,
-                             integer *index, real *minX, real *maxX) {
+                             integer *index, integer *toDeleteLeaf, integer *toDeleteNode , real *minX, real *maxX) {
             ExecutionPolicy executionPolicy(1, 1);
             cuda::launch(false, executionPolicy, ::TreeNS::Kernel::set, tree, count, start, child, sorted,
-                         index, minX, maxX);
+                         index, toDeleteLeaf, toDeleteNode, minX, maxX);
+        }
+
+        real Launch::info(Tree *tree, integer n, integer m) {
+            return 0.f;
         }
 
 #if DIM > 1
 
         __global__ void set(Tree *tree, integer *count, integer *start, integer *child, integer *sorted,
-                                  integer *index, real *minX, real *maxX, real *minY, real *maxY) {
-            tree->set(count, start, child, sorted, index, minX, maxX, minY, maxY);
+                                  integer *index, integer *toDeleteLeaf, integer *toDeleteNode, real *minX, real *maxX,
+                                  real *minY, real *maxY) {
+            tree->set(count, start, child, sorted, index, toDeleteLeaf, toDeleteNode, minX, maxX, minY, maxY);
         }
 
         void Launch::set(Tree *tree, integer *count, integer *start, integer *child, integer *sorted,
-                             integer *index, real *minX, real *maxX, real *minY, real *maxY) {
+                             integer *index, integer *toDeleteLeaf, integer *toDeleteNode, real *minX, real *maxX,
+                             real *minY, real *maxY) {
             ExecutionPolicy executionPolicy(1, 1);
             cuda::launch(false, executionPolicy, ::TreeNS::Kernel::set, tree, count, start, child, sorted, index,
-                         minX, maxX, minY, maxY);
+                         toDeleteLeaf, toDeleteNode, minX, maxX, minY, maxY);
         }
 
 #if DIM == 3
 
         __global__ void set(Tree *tree, integer *count, integer *start, integer *child, integer *sorted,
-                                  integer *index, real *minX, real *maxX, real *minY, real *maxY,
-                                  real *minZ, real *maxZ) {
-            tree->set(count, start, child, sorted, index, minX, maxX, minY, maxY, minZ, maxZ);
+                                  integer *index, integer *toDeleteLeaf, integer *toDeleteNode, real *minX, real *maxX,
+                                  real *minY, real *maxY, real *minZ, real *maxZ) {
+            tree->set(count, start, child, sorted, index, toDeleteLeaf, toDeleteNode, minX, maxX, minY, maxY,
+                      minZ, maxZ);
         }
 
         void Launch::set(Tree *tree, integer *count, integer *start, integer *child, integer *sorted,
-                             integer *index, real *minX, real *maxX, real *minY, real *maxY,
-                             real *minZ, real *maxZ) {
+                             integer *index, integer *toDeleteLeaf, integer *toDeleteNode, real *minX, real *maxX,
+                             real *minY, real *maxY, real *minZ, real *maxZ) {
             ExecutionPolicy executionPolicy(1, 1);
-            cuda::launch(false, executionPolicy, ::TreeNS::Kernel::set, tree, count, start, child, sorted, index, minX,
-                         maxX, minY, maxY, minZ, maxZ);
+            cuda::launch(false, executionPolicy, ::TreeNS::Kernel::set, tree, count, start, child, sorted, index,
+                         toDeleteLeaf, toDeleteNode, minX, maxX, minY, maxY, minZ, maxZ);
         }
 
 #endif

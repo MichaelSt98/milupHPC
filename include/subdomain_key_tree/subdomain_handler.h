@@ -49,6 +49,7 @@ public:
     integer *d_domainListCounter;
     keyType *d_domainListKeys;
     keyType *d_sortedDomainListKeys;
+    integer *d_relevantDomainListIndices;
 
     DomainList *d_domainList;
 

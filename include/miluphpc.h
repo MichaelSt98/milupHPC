@@ -56,6 +56,7 @@ private:
 
     template <typename T>
     integer sendParticlesEntry(integer *sendLengths, integer *receiveLengths, T *entry);
+    void exchangeParticleEntry(integer *sendLengths, integer *receiveLengths, real *entry);
 
 public:
 

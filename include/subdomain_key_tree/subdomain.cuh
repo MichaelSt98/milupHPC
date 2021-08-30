@@ -121,13 +121,16 @@ public:
     integer *domainListCounter;
     keyType *domainListKeys;
     keyType *sortedDomainListKeys;
+    integer *relevantDomainListIndices;
 
     CUDA_CALLABLE_MEMBER DomainList();
     CUDA_CALLABLE_MEMBER DomainList(integer *domainListIndices, integer *domainListLevels, integer *domainListIndex,
-                                    integer *domainListCounter, keyType *domainListKeys, keyType *sortedDomainListKeys);
+                                    integer *domainListCounter, keyType *domainListKeys, keyType *sortedDomainListKeys,
+                                    integer *relevantDomainListIndices);
     CUDA_CALLABLE_MEMBER ~DomainList();
     CUDA_CALLABLE_MEMBER void set(integer *domainListIndices, integer *domainListLevels, integer *domainListIndex,
-                                  integer *domainListCounter, keyType *domainListKeys, keyType *sortedDomainListKeys);
+                                  integer *domainListCounter, keyType *domainListKeys, keyType *sortedDomainListKeys,
+                                  integer *relevantDomainListIndices);
 
 };
 
@@ -136,7 +139,7 @@ namespace DomainListNS {
     namespace Kernel {
         __global__ void set(DomainList *domainList, integer *domainListIndices, integer *domainListLevels,
                             integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
-                            keyType *sortedDomainListKeys);
+                            keyType *sortedDomainListKeys, integer *relevantDomainListIndices);
 
 
         __global__ void createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList,
@@ -148,7 +151,7 @@ namespace DomainListNS {
         namespace Launch {
             void set(DomainList *domainList, integer *domainListIndices, integer *domainListLevels,
                      integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
-                     keyType *sortedDomainListKeys);
+                     keyType *sortedDomainListKeys, integer *relevantDomainListIndices);
 
             real createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList,
                                   integer maxLevel, Curve::Type curveType = Curve::lebesgue);

@@ -32,15 +32,22 @@ TreeHandler::TreeHandler(integer numParticles, integer numNodes) : numParticles(
 #endif
 #endif
 
+    h_toDeleteLeaf = new integer[2];
+    h_toDeleteNode = new integer[2];
+    gpuErrorcheck(cudaMalloc((void**)&d_toDeleteLeaf, 2*sizeof(integer)));
+    gpuErrorcheck(cudaMalloc((void**)&d_toDeleteNode, 2*sizeof(integer)));
+
     gpuErrorcheck(cudaMalloc((void**)&d_tree, sizeof(Tree)));
 
 #if DIM == 1
-    TreeNS::Kernel::Launch::set(d_tree, d_count, d_start, d_child, d_sorted, d_index, d_minX, d_maxX);
+    TreeNS::Kernel::Launch::set(d_tree, d_count, d_start, d_child, d_sorted, d_index, d_toDeleteLeaf, d_toDeleteNode,
+                                d_minX, d_maxX);
 #elif DIM == 2
-    TreeNS:Kernel::Launch::set(d_tree, d_count, d_start, d_child, d_sorted, d_index, d_minX, d_maxX, d_minY, d_maxY);
+    TreeNS:Kernel::Launch::set(d_tree, d_count, d_start, d_child, d_sorted, d_index, d_toDeleteLeaf, d_toDeleteNode,
+                               d_minX, d_maxX, d_minY, d_maxY);
 #else
-    TreeNS::Kernel::Launch::set(d_tree, d_count, d_start, d_child, d_sorted, d_index, d_minX, d_maxX, d_minY, d_maxY,
-                                d_minZ, d_maxZ);
+    TreeNS::Kernel::Launch::set(d_tree, d_count, d_start, d_child, d_sorted, d_index, d_toDeleteLeaf, d_toDeleteNode,
+                                d_minX, d_maxX, d_minY, d_maxY, d_minZ, d_maxZ);
 #endif
 
 }
@@ -70,6 +77,13 @@ TreeHandler::~TreeHandler() {
     delete h_maxZ;
 #endif
 #endif
+
+    delete [] h_toDeleteLeaf;
+    delete [] h_toDeleteNode;
+    gpuErrorcheck(cudaFree(d_toDeleteLeaf));
+    gpuErrorcheck(cudaFree(d_toDeleteNode));
+
+    gpuErrorcheck(cudaFree(d_tree));
 
 }
 

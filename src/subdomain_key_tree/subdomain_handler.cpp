@@ -58,11 +58,12 @@ DomainListHandler::DomainListHandler(integer domainListSize) : domainListSize(do
     gpuErrorcheck(cudaMalloc((void**)&d_domainListCounter, sizeof(integer)));
     gpuErrorcheck(cudaMalloc((void**)&d_domainListKeys, domainListSize * sizeof(integer)));
     gpuErrorcheck(cudaMalloc((void**)&d_sortedDomainListKeys, domainListSize * sizeof(integer)));
+    gpuErrorcheck(cudaMalloc((void**)&d_relevantDomainListIndices, domainListSize * sizeof(integer)));
 
     gpuErrorcheck(cudaMalloc((void**)&d_domainList, sizeof(DomainList)));
     DomainListNS::Kernel::Launch::set(d_domainList, d_domainListIndices, d_domainListLevels,
                                       d_domainListIndex, d_domainListCounter, d_domainListKeys,
-                                      d_sortedDomainListKeys);
+                                      d_sortedDomainListKeys, d_relevantDomainListIndices);
 }
 
 DomainListHandler::~DomainListHandler() {
@@ -73,6 +74,7 @@ DomainListHandler::~DomainListHandler() {
     gpuErrorcheck(cudaFree(d_domainListCounter));
     gpuErrorcheck(cudaFree(d_domainListKeys));
     gpuErrorcheck(cudaFree(d_sortedDomainListKeys));
+    gpuErrorcheck(cudaFree(d_relevantDomainListIndices));
     gpuErrorcheck(cudaFree(d_domainList));
 
 }

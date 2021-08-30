@@ -420,6 +420,7 @@ void ParticleHandler::accelerationToDevice() {
 
 void ParticleHandler::distributionToDevice(bool velocity, bool acceleration) {
 
+    gpuErrorcheck(cudaMemcpy(d_mass,  h_mass,  numParticles*sizeof(real), cudaMemcpyHostToDevice));
     positionToDevice();
     if (velocity) {
         velocityToDevice();
@@ -460,6 +461,7 @@ void ParticleHandler::accelerationToHost() {
 
 void ParticleHandler::distributionToHost(bool velocity, bool acceleration) {
 
+    gpuErrorcheck(cudaMemcpy(h_mass, d_mass, numParticles*sizeof(real), cudaMemcpyDeviceToHost));
     positionToHost();
     if (velocity) {
         velocityToHost();

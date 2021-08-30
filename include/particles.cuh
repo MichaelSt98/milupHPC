@@ -196,6 +196,12 @@ namespace ParticlesNS {
                      real *dedt, real *cs, real *rho, real *p);
         }
 
+        __global__ void info(Particles *particles, integer n, integer m, integer k);
+
+        namespace Launch {
+            real info(Particles *particles, integer n, integer m, integer k);
+        }
+
 #if DIM > 1
 
         __global__ void set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x,

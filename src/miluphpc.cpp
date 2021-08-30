@@ -168,17 +168,17 @@ void Miluphpc::run() {
            *treeHandler->h_minY, *treeHandler->h_maxY, *treeHandler->h_minZ, *treeHandler->h_maxZ);
 
     Logger(INFO) << "building tree ...";
-    time = TreeNS::Kernel::Launch::buildTree(treeHandler->d_tree, particleHandler->d_particles, numParticles,
-                                             numParticles, true);
+    //time = TreeNS::Kernel::Launch::buildTree(treeHandler->d_tree, particleHandler->d_particles, numParticles,
+    //                                         numParticles, true);
     Logger(TIME) << "buildTree: " << time << " ms";
 
     Logger(INFO) << "center of mass ...";
-    time = TreeNS::Kernel::Launch::centerOfMass(treeHandler->d_tree, particleHandler->d_particles,
-                                                numParticles, true);
+    //time = TreeNS::Kernel::Launch::centerOfMass(treeHandler->d_tree, particleHandler->d_particles,
+    //                                            numParticles, true);
     Logger(TIME) << "centerOfMass: " << time << " ms";
 
     Logger(INFO) << "sorting ...";
-    time = TreeNS::Kernel::Launch::sort(treeHandler->d_tree, numParticles, numNodes, true);
+    //time = TreeNS::Kernel::Launch::sort(treeHandler->d_tree, numParticles, numNodes, true);
     Logger(TIME) << "sort: " << time << " ms";
 
 
@@ -262,6 +262,8 @@ void Miluphpc::barnesHut() {
 
     Logger(INFO) << "initialize particle distribution ...";
     initDistribution();
+
+    //ParticlesNS::Kernel::Launch::info(particleHandler->d_particles, numParticlesLocal, numParticles, numParticles);
 
     time = TreeNS::Kernel::Launch::computeBoundingBox(treeHandler->d_tree, particleHandler->d_particles, d_mutex,
                                                       numParticlesLocal, 256, true);
@@ -393,6 +395,7 @@ void Miluphpc::barnesHut() {
 #endif
 
     numParticlesLocal = sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_mass);
+    Logger(INFO) << "New numParticlesLocal = " << numParticlesLocal;
 
     delete [] sendLengths;
     delete [] receiveLengths;
@@ -423,10 +426,24 @@ void Miluphpc::barnesHut() {
     cudaMemcpy(&domainListLength, domainListHandler->d_domainListIndex, sizeof(integer), cudaMemcpyDeviceToHost);
     Logger(INFO) << "domainListLength = " << domainListLength;
 
+    integer treeIndexBeforeBuildingTree;
+    gpuErrorcheck(cudaMemcpy(&treeIndexBeforeBuildingTree, treeHandler->d_index, sizeof(integer),
+                             cudaMemcpyDeviceToHost));
+    Logger(INFO) << "treeIndexBeforeBuildingTree: " << treeIndexBeforeBuildingTree;
+
     Logger(INFO) << "building tree ...";
     time = TreeNS::Kernel::Launch::buildTree(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal,
                                              numParticles, true);
     Logger(TIME) << "buildTree: " << time << " ms";
+
+    integer treeIndex;
+    gpuErrorcheck(cudaMemcpy(&treeIndex, treeHandler->d_index, sizeof(integer),
+                             cudaMemcpyDeviceToHost));
+    Logger(INFO) << "numParticlesLocal: " << numParticlesLocal;
+    Logger(INFO) << "numParticles: " << numParticles;
+    Logger(INFO) << "numNodes: " << numNodes;
+    Logger(INFO) << "treeIndex: " << treeIndex;
+    //ParticlesNS::Kernel::Launch::info(particleHandler->d_particles, numParticlesLocal, numParticles, treeIndex);
 
     Logger(INFO) << "building domain tree ...";
     time = SubDomainKeyTreeNS::Kernel::Launch::buildDomainTree(treeHandler->d_tree, particleHandler->d_particles,
@@ -437,6 +454,8 @@ void Miluphpc::barnesHut() {
     compPseudoParticlesParallel();
 
     parallelForce();
+
+    Gravity::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal, 0.001, 1.);
 
     //Logger(INFO) << "center of mass ...";
     //time = TreeNS::Kernel::Launch::centerOfMass(treeHandler->d_tree, particleHandler->d_particles,
@@ -515,6 +534,36 @@ void Miluphpc::updateRangeApproximately(int aimedParticlesPerProcess, int bins) 
 
 }
 
+
+void Miluphpc::exchangeParticleEntry(integer *sendLengths, integer *receiveLengths, real *entry) {
+
+    boost::mpi::communicator comm;
+
+    std::vector<boost::mpi::request> reqParticles;
+    std::vector<boost::mpi::status> statParticles;
+
+    integer reqCounter = 0;
+    integer receiveOffset = 0;
+
+    for (integer proc=0; proc<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
+        if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
+            reqParticles.push_back(comm.isend(proc, 17, &helperHandler->d_realBuffer[0], sendLengths[proc])); //TODO: buffer or helperHandler
+            statParticles.push_back(comm.recv(proc, 17, &entry[numParticlesLocal] + receiveOffset,
+                                              receiveLengths[proc]));
+            receiveOffset += receiveLengths[proc];
+        }
+    }
+
+    boost::mpi::wait_all(reqParticles.begin(), reqParticles.end());
+
+    //int offset = 0;
+    //for (int i=0; i < h_subDomainHandler->rank; i++) {
+    //    offset += h_procCounter[h_subDomainHandler->rank];
+    //}
+
+}
+
+//TODO: combine and generalize sendParticlesEntry and exchangeParticlesEntry
 template <typename T>
 integer Miluphpc::sendParticlesEntry(integer *sendLengths, integer *receiveLengths, T *entry) {
 
@@ -532,10 +581,12 @@ integer Miluphpc::sendParticlesEntry(integer *sendLengths, integer *receiveLengt
                 reqParticles.push_back(comm.isend(proc, 17, &entry[0], sendLengths[proc]));
             }
             else {
-                reqParticles.push_back(comm.isend(proc, 17, &entry[subDomainKeyTreeHandler->h_procParticleCounter[proc-1]],
+                reqParticles.push_back(comm.isend(proc, 17,
+                                                  &entry[subDomainKeyTreeHandler->h_procParticleCounter[proc-1]],
                                                   sendLengths[proc]));
             }
-            statParticles.push_back(comm.recv(proc, 17, &helperHandler->d_realBuffer[0] + receiveOffset, receiveLengths[proc]));
+            statParticles.push_back(comm.recv(proc, 17, &helperHandler->d_realBuffer[0] + receiveOffset,
+                                              receiveLengths[proc]));
             receiveOffset += receiveLengths[proc];
         }
     }
@@ -715,188 +766,254 @@ void Miluphpc::compPseudoParticlesParallel() {
 
 void Miluphpc::parallelForce() {
 
-    /*//debugging
-    KernelHandler.resetFloatArray(d_tempArray, 0.f, 2*numParticles, false);
+    //debugging
+    HelperNS::Kernel::Launch::resetArray(helperHandler->d_realBuffer, (real)0, numParticles);
+    //KernelHandler.resetFloatArray(d_tempArray, 0.f, 2*numParticles, false);
 
-    gpuErrorcheck(cudaMemset(d_domainListCounter, 0, sizeof(int)));
-
-    //KernelHandler.domainListInfo(d_x, d_y, d_z, d_mass, d_child, d_index, numParticlesLocal,
-    //                             d_domainListIndices, d_domainListIndex, d_domainListLevels, d_lowestDomainListIndices,
-    //                             d_lowestDomainListIndex, d_subDomainHandler, false);
+    gpuErrorcheck(cudaMemset(domainListHandler->d_domainListCounter, 0, sizeof(integer)));
 
     //compTheta
-    KernelHandler.compTheta(d_x, d_y, d_z, d_min_x, d_max_x, d_min_y, d_max_y, d_min_z, d_max_z, d_domainListIndex, d_domainListCounter,
-                            d_domainListKeys, d_domainListIndices, d_domainListLevels, d_relevantDomainListIndices,
-                            d_subDomainHandler, parameters.curveType, false);
+    Gravity::Kernel::Launch::compTheta(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
+                                       particleHandler->d_particles, domainListHandler->d_domainList,
+                                       helperHandler->d_helper);
 
-    int relevantIndicesCounter;
-    gpuErrorcheck(cudaMemcpy(&relevantIndicesCounter, d_domainListCounter, sizeof(int), cudaMemcpyDeviceToHost));
+    integer relevantIndicesCounter;
+    gpuErrorcheck(cudaMemcpy(&relevantIndicesCounter, domainListHandler->d_domainListCounter, sizeof(integer),
+                             cudaMemcpyDeviceToHost));
 
     Logger(INFO) << "relevantIndicesCounter: " << relevantIndicesCounter;
 
     //cudaMemcpy(&domainListIndex, d_relevantDomainListIndices, relevantIndicesCounter*sizeof(int), cudaMemcpyDeviceToHost);
 
-    gpuErrorcheck(cudaMemcpy(h_min_x, d_min_x, sizeof(float), cudaMemcpyDeviceToHost));
-    gpuErrorcheck(cudaMemcpy(h_max_x, d_max_x, sizeof(float), cudaMemcpyDeviceToHost));
-    gpuErrorcheck(cudaMemcpy(h_min_y, d_min_y, sizeof(float), cudaMemcpyDeviceToHost));
-    gpuErrorcheck(cudaMemcpy(h_max_y, d_max_y, sizeof(float), cudaMemcpyDeviceToHost));
-    gpuErrorcheck(cudaMemcpy(h_min_z, d_min_z, sizeof(float), cudaMemcpyDeviceToHost));
-    gpuErrorcheck(cudaMemcpy(h_max_z, d_max_z, sizeof(float), cudaMemcpyDeviceToHost));
+    treeHandler->toHost();
 
-    float diam_x = std::abs(*h_max_x) + std::abs(*h_min_x);
-    float diam_y = std::abs(*h_max_y) + std::abs(*h_min_y);
-    float diam_z = std::abs(*h_max_z) + std::abs(*h_min_z);
+    real diam_x = std::abs(*treeHandler->h_maxX) + std::abs(*treeHandler->h_minX);
+#if DIM > 1
+    real diam_y = std::abs(*treeHandler->h_maxY) + std::abs(*treeHandler->h_minY);
+#if DIM == 3
+    real diam_z = std::abs(*treeHandler->h_maxZ) + std::abs(*treeHandler->h_minZ);
+#endif
+#endif
 
-    float diam = std::max({diam_x, diam_y, diam_z});
+#if DIM == 1
+    real diam = diam_x;
+#elif DIM == 2
+    real diam = std::max({diam_x, diam_y});
+#else
+    real diam = std::max({diam_x, diam_y, diam_z});
     Logger(INFO) << "diam: " << diam << "  (x = " << diam_x << ", y = " << diam_y << ", z = " << diam_z << ")";
-    float theta = 0.5f;
+#endif
 
-    gpuErrorcheck(cudaMemset(d_domainListCounter, 0, sizeof(int)));
-    int currentDomainListCounter;
-    float massOfDomainListNode;
-    for (int relevantIndex=0; relevantIndex<relevantIndicesCounter; relevantIndex++) {
-        gpuErrorcheck(cudaMemcpy(&currentDomainListCounter, d_domainListCounter, sizeof(int), cudaMemcpyDeviceToHost));
+    real theta_ = theta; //0.5f;
+
+    gpuErrorcheck(cudaMemset(domainListHandler->d_domainListCounter, 0, sizeof(integer)));
+    integer currentDomainListCounter;
+    real massOfDomainListNode;
+    for (integer relevantIndex=0; relevantIndex</*1*/relevantIndicesCounter; relevantIndex++) {
+        gpuErrorcheck(cudaMemcpy(&currentDomainListCounter, domainListHandler->d_domainListCounter, sizeof(integer),
+                                 cudaMemcpyDeviceToHost));
         //gpuErrorcheck(cudaMemset(d_mutex, 0, sizeof(int)));
         //Logger(INFO) << "current value of domain list counter: " << currentDomainListCounter;
 
-        KernelHandler.symbolicForce(relevantIndex, d_x, d_y, d_z, d_mass, d_min_x, d_max_x, d_min_y, d_max_y, d_min_z, d_max_z,
-                                    d_child, d_domainListIndex, d_domainListKeys, d_domainListIndices, d_domainListLevels,
-                                    d_domainListCounter, d_sendIndicesTemp, d_index, d_procCounter, d_subDomainHandler,
-                                    numParticles, numNodes, diam, theta, d_mutex, d_relevantDomainListIndices, false);
+        integer treeIndex;
+        gpuErrorcheck(cudaMemcpy(&treeIndex, treeHandler->d_index, sizeof(integer),
+                                 cudaMemcpyDeviceToHost));
+        //Logger(INFO) << "treeIndex = " << treeIndex;
+        //Logger(INFO) << "symbolicForce ...";
+        Gravity::Kernel::Launch::symbolicForce(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
+                                               particleHandler->d_particles, domainListHandler->d_domainList,
+                                               helperHandler->d_helper, diam, theta_, numParticles, numNodes,
+                                               relevantIndex);
+
+        //KernelHandler.symbolicForce(relevantIndex, d_x, d_y, d_z, d_mass, d_min_x, d_max_x, d_min_y, d_max_y, d_min_z, d_max_z,
+        //                            d_child, d_domainListIndex, d_domainListKeys, d_domainListIndices, d_domainListLevels,
+        //                            d_domainListCounter, d_sendIndicesTemp, d_index, d_procCounter, d_subDomainHandler,
+        //                            numParticles, numNodes, diam, theta, d_mutex, d_relevantDomainListIndices, false);
 
         // removing duplicates
         // TODO: remove duplicates by overwriting same array with index of to send and afterwards remove empty entries
         int sendCountTemp;
-        gpuErrorcheck(cudaMemcpy(&sendCountTemp, d_domainListCounter, sizeof(int), cudaMemcpyDeviceToHost));
+        gpuErrorcheck(cudaMemcpy(&sendCountTemp, domainListHandler->d_domainListCounter, sizeof(integer),
+                                 cudaMemcpyDeviceToHost));
 
-        gpuErrorcheck(cudaMemset(d_domainListCounter, 0, sizeof(int)));
-        KernelHandler.markDuplicates(d_sendIndicesTemp, d_x, d_y, d_z, d_mass, d_subDomainHandler, d_domainListCounter,
-                                     sendCountTemp, false);
-        int duplicatesCounter;
-        gpuErrorcheck(cudaMemcpy(&duplicatesCounter, d_domainListCounter, sizeof(int), cudaMemcpyDeviceToHost));
+        gpuErrorcheck(cudaMemset(domainListHandler->d_domainListCounter, 0, sizeof(integer)));
+
+        //CudaUtils::Kernel::Launch::markDuplicates(helperHandler->d_integerBuffer, domainListHandler->d_domainListCounter,
+        //                                          sendCountTemp);
+        CudaUtils::Kernel::Launch::markDuplicates(helperHandler->d_integerBuffer, particleHandler->d_x,
+                                                  particleHandler->d_y, domainListHandler->d_domainListCounter,
+                                                  sendCountTemp);
+        //KernelHandler.markDuplicates(d_sendIndicesTemp, d_x, d_y, d_z, d_mass, d_subDomainHandler, d_domainListCounter,
+        //                             sendCountTemp, false);
+
+        integer duplicatesCounter;
+        gpuErrorcheck(cudaMemcpy(&duplicatesCounter, domainListHandler->d_domainListCounter, sizeof(integer),
+                                 cudaMemcpyDeviceToHost));
         //Logger(INFO) << "duplicatesCounter: " << duplicatesCounter;
         //Logger(INFO) << "now resetting d_domainListCounter..";
-        gpuErrorcheck(cudaMemset(d_domainListCounter, 0, sizeof(int)));
+        gpuErrorcheck(cudaMemset(domainListHandler->d_domainListCounter, 0, sizeof(integer)));
         //Logger(INFO) << "now removing duplicates..";
-        KernelHandler.removeDuplicates(d_sendIndicesTemp, d_sendIndices, d_domainListCounter, sendCountTemp, false);
-        int sendCount;
-        gpuErrorcheck(cudaMemcpy(&sendCount, d_domainListCounter, sizeof(int), cudaMemcpyDeviceToHost));
+        CudaUtils::Kernel::Launch::removeDuplicates(helperHandler->d_integerBuffer, buffer->d_integerBuffer,
+                                                    domainListHandler->d_domainListCounter, sendCountTemp);
+        //KernelHandler.removeDuplicates(d_sendIndicesTemp, d_sendIndices, d_domainListCounter, sendCountTemp, false);
+        integer sendCount;
+        gpuErrorcheck(cudaMemcpy(&sendCount, domainListHandler->d_domainListCounter, sizeof(integer),
+                                 cudaMemcpyDeviceToHost));
         //Logger(INFO) << "sendCount: " << sendCount;
         // end: removing duplicates
     }
 
-    gpuErrorcheck(cudaMemcpy(h_procCounter, d_procCounter, h_subDomainHandler->numProcesses*sizeof(int), cudaMemcpyDeviceToHost));
+
+    subDomainKeyTreeHandler->toHost();
+    //gpuErrorcheck(cudaMemcpy(h_procCounter, d_procCounter, h_subDomainHandler->numProcesses*sizeof(int), cudaMemcpyDeviceToHost));
 
     int sendCountTemp;
-    gpuErrorcheck(cudaMemcpy(&sendCountTemp, d_domainListCounter, sizeof(int), cudaMemcpyDeviceToHost));
+    gpuErrorcheck(cudaMemcpy(&sendCountTemp, domainListHandler->d_domainListCounter, sizeof(integer),
+                             cudaMemcpyDeviceToHost));
     Logger(INFO) << "sendCountTemp: " << sendCountTemp;
 
     int newSendCount;
-    gpuErrorcheck(cudaMemset(d_domainListCounter, 0, sizeof(int)));
-    KernelHandler.markDuplicates(d_sendIndicesTemp, d_x, d_y, d_z, d_mass, d_subDomainHandler, d_domainListCounter,
-                                 sendCountTemp, false);
+    gpuErrorcheck(cudaMemset(domainListHandler->d_domainListCounter, 0, sizeof(integer)));
+    //CudaUtils::Kernel::Launch::markDuplicates(helperHandler->d_integerBuffer, domainListHandler->d_domainListCounter,
+    //                                          sendCountTemp);
+    CudaUtils::Kernel::Launch::markDuplicates(helperHandler->d_integerBuffer, particleHandler->d_x,
+                                              particleHandler->d_y, domainListHandler->d_domainListCounter,
+                                              sendCountTemp);
+    //KernelHandler.markDuplicates(d_sendIndicesTemp, d_x, d_y, d_z, d_mass, d_subDomainHandler, d_domainListCounter,
+    //                             sendCountTemp, false);
     int duplicatesCounter;
-    gpuErrorcheck(cudaMemcpy(&duplicatesCounter, d_domainListCounter, sizeof(int), cudaMemcpyDeviceToHost));
+    gpuErrorcheck(cudaMemcpy(&duplicatesCounter, domainListHandler->d_domainListCounter, sizeof(integer),
+                             cudaMemcpyDeviceToHost));
     Logger(INFO) << "duplicatesCounter: " << duplicatesCounter;
     Logger(INFO) << "now resetting d_domainListCounter..";
-    gpuErrorcheck(cudaMemset(d_domainListCounter, 0, sizeof(int)));
+    gpuErrorcheck(cudaMemset(domainListHandler->d_domainListCounter, 0, sizeof(integer)));
     Logger(INFO) << "now removing duplicates..";
-    KernelHandler.removeDuplicates(d_sendIndicesTemp, d_sendIndices, d_domainListCounter, sendCountTemp, false);
+    CudaUtils::Kernel::Launch::removeDuplicates(helperHandler->d_integerBuffer, buffer->d_integerBuffer,
+                                                domainListHandler->d_domainListCounter, sendCountTemp);
+    //KernelHandler.removeDuplicates(d_sendIndicesTemp, d_sendIndices, d_domainListCounter, sendCountTemp, false);
     int sendCount;
-    gpuErrorcheck(cudaMemcpy(&sendCount, d_domainListCounter, sizeof(int), cudaMemcpyDeviceToHost));
+    gpuErrorcheck(cudaMemcpy(&sendCount, domainListHandler->d_domainListCounter, sizeof(integer), cudaMemcpyDeviceToHost));
     Logger(INFO) << "sendCount: " << sendCount;
 
+    gpuErrorcheck(cudaMemset(buffer->d_integerVal, 0, sizeof(integer)));
+    CudaUtils::Kernel::Launch::findDuplicates(buffer->d_integerBuffer, particleHandler->d_x,
+                                              particleHandler->d_y, buffer->d_integerVal, sendCount);
+    //CudaUtils::Kernel::Launch::findDuplicates(buffer->d_integerBuffer, particleHandler->d_x,
+    //                                          particleHandler->d_y, buffer->d_integerVal, sendCount);
+    integer duplicates;
+    gpuErrorcheck(cudaMemcpy(&duplicates, buffer->d_integerVal, sizeof(integer), cudaMemcpyDeviceToHost));
+    Logger(INFO) << "duplicates: " << duplicates;
 
-    int *sendLengths;
-    sendLengths = new int[h_subDomainHandler->numProcesses];
-    sendLengths[h_subDomainHandler->rank] = 0;
-    int *receiveLengths;
-    receiveLengths = new int[h_subDomainHandler->numProcesses];
-    receiveLengths[h_subDomainHandler->rank] = 0;
+    //debug
+    //gpuErrorcheck(cudaMemset(domainListHandler->d_domainListCounter, 0, sizeof(integer)));
+    //CudaUtils::Kernel::Launch::markDuplicates(buffer->d_integerBuffer, domainListHandler->d_domainListCounter,
+    //                                          sendCount);
+    //gpuErrorcheck(cudaMemcpy(&duplicatesCounter, domainListHandler->d_domainListCounter, sizeof(integer), cudaMemcpyDeviceToHost));
+    //Logger(INFO) << "duplicatesCounter after removing: " << duplicatesCounter;
+    //end:debug
 
-    for (int proc=0; proc < h_subDomainHandler->numProcesses; proc++) {
-        if (proc != h_subDomainHandler->rank) {
+    integer *sendLengths;
+    sendLengths = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+    sendLengths[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] = 0;
+    integer *receiveLengths;
+    receiveLengths = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+    receiveLengths[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] = 0;
+
+    for (int proc=0; proc < subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
+        if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
             sendLengths[proc] = sendCount;
         }
     }
 
-    int reqCounter = 0;
-    MPI_Request reqMessageLengths[h_subDomainHandler->numProcesses-1];
-    MPI_Status statMessageLengths[h_subDomainHandler->numProcesses-1];
-
-    for (int proc=0; proc < h_subDomainHandler->numProcesses; proc++) {
-        if (proc != h_subDomainHandler->rank) {
-            MPI_Isend(&sendLengths[proc], 1, MPI_INT, proc, 17, MPI_COMM_WORLD, &reqMessageLengths[reqCounter]);
-            MPI_Recv(&receiveLengths[proc], 1, MPI_INT, proc, 17, MPI_COMM_WORLD, &statMessageLengths[reqCounter]);
-            reqCounter++;
-        }
-    }
-
-    MPI_Waitall(h_subDomainHandler->numProcesses-1, reqMessageLengths, statMessageLengths);
+    mpi::messageLengths(subDomainKeyTreeHandler->h_subDomainKeyTree, sendLengths, receiveLengths);
 
     int totalReceiveLength = 0;
-    for (int proc=0; proc<h_subDomainHandler->numProcesses; proc++) {
-        if (proc != h_subDomainHandler->rank) {
+    for (int proc=0; proc<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
+        if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
             totalReceiveLength += receiveLengths[proc];
         }
     }
 
     Logger(INFO) << "totalReceiveLength = " << totalReceiveLength;
 
-    int to_delete_leaf_0 = numParticlesLocal;
-    int to_delete_leaf_1 = numParticlesLocal + totalReceiveLength; //+ sendCount;
+    treeHandler->h_toDeleteLeaf[0] = numParticlesLocal;
+    treeHandler->h_toDeleteLeaf[1] = numParticlesLocal + totalReceiveLength; //+ sendCount;
     //cudaMemcpy(&d_to_delete_leaf[0], &h_procCounter[h_subDomainHandler->rank], sizeof(int), cudaMemcpyHostToDevice);
     //cudaMemcpy(&d_to_delete_leaf[1], &to_delete_leaf_1, sizeof(int),
     //         cudaMemcpyHostToDevice);
-    gpuErrorcheck(cudaMemcpy(&d_to_delete_leaf[0], &to_delete_leaf_0, sizeof(int), cudaMemcpyHostToDevice));
-    gpuErrorcheck(cudaMemcpy(&d_to_delete_leaf[1], &to_delete_leaf_1, sizeof(int),
+    gpuErrorcheck(cudaMemcpy(treeHandler->d_toDeleteLeaf, treeHandler->h_toDeleteLeaf, 2*sizeof(integer),
                              cudaMemcpyHostToDevice));
+    //gpuErrorcheck(cudaMemcpy(&treeHandler->d_toDeleteLeaf[1] &treeHandler->h_toDeleteLeaf[1], sizeof(integer),
+    //                         cudaMemcpyHostToDevice));
 
     //copy values[indices] into d_tempArray (float)
 
+
+    //CudaUtils::Kernel::Launch::checkValues(buffer->d_integerBuffer, particleHandler->d_x, particleHandler->d_y,
+    //                                       particleHandler->d_z, sendCount);
+
     // x
-    KernelHandler.collectSendIndices(d_sendIndices, d_x, d_tempArray, d_domainListCounter, sendCount);
-    //debugging
-    //KernelHandler.debug(d_x, d_y, d_z, d_mass, d_count, d_start, d_child, d_index, d_min_x, d_max_x, d_min_y, d_max_y,
-    //                                    d_min_z, d_max_z, numParticlesLocal, numNodes, d_subDomainHandler, d_procCounter, d_tempArray,
-    //                                    d_sortArray, d_sortArrayOut);
-    exchangeParticleEntry(sendLengths, receiveLengths, d_x);
+    CudaUtils::Kernel::Launch::collectValues(buffer->d_integerBuffer, particleHandler->d_x, helperHandler->d_realBuffer,
+                                             sendCount);
+    exchangeParticleEntry(sendLengths, receiveLengths, particleHandler->d_x);
+#if DIM > 1
     // y
-    KernelHandler.collectSendIndices(d_sendIndices, d_y, d_tempArray, d_domainListCounter, sendCount);
-    exchangeParticleEntry(sendLengths, receiveLengths, d_y);
+    CudaUtils::Kernel::Launch::collectValues(buffer->d_integerBuffer, particleHandler->d_y, helperHandler->d_realBuffer,
+                                             sendCount);
+    exchangeParticleEntry(sendLengths, receiveLengths, particleHandler->d_y);
+#if DIM == 3
     // z
-    KernelHandler.collectSendIndices(d_sendIndices, d_z, d_tempArray, d_domainListCounter, sendCount);
-    exchangeParticleEntry(sendLengths, receiveLengths, d_z);
+    CudaUtils::Kernel::Launch::collectValues(buffer->d_integerBuffer, particleHandler->d_z, helperHandler->d_realBuffer,
+                                             sendCount);
+    exchangeParticleEntry(sendLengths, receiveLengths, particleHandler->d_z);
+#endif
+#endif
 
     // vx
-    KernelHandler.collectSendIndices(d_sendIndices, d_vx, d_tempArray, d_domainListCounter, sendCount);
-    exchangeParticleEntry(sendLengths, receiveLengths, d_vx);
+    CudaUtils::Kernel::Launch::collectValues(buffer->d_integerBuffer, particleHandler->d_vx, helperHandler->d_realBuffer,
+                                             sendCount);
+    exchangeParticleEntry(sendLengths, receiveLengths, particleHandler->d_vx);
+#if DIM > 1
     // vy
-    KernelHandler.collectSendIndices(d_sendIndices, d_vy, d_tempArray, d_domainListCounter, sendCount);
-    exchangeParticleEntry(sendLengths, receiveLengths, d_vy);
+    CudaUtils::Kernel::Launch::collectValues(buffer->d_integerBuffer, particleHandler->d_vy, helperHandler->d_realBuffer,
+                                             sendCount);
+    exchangeParticleEntry(sendLengths, receiveLengths, particleHandler->d_vy);
+#if DIM == 3
     // vz
-    KernelHandler.collectSendIndices(d_sendIndices, d_vz, d_tempArray, d_domainListCounter, sendCount);
-    exchangeParticleEntry(sendLengths, receiveLengths, d_vz);
+    CudaUtils::Kernel::Launch::collectValues(buffer->d_integerBuffer, particleHandler->d_vz, helperHandler->d_realBuffer,
+                                             sendCount);
+    exchangeParticleEntry(sendLengths, receiveLengths, particleHandler->d_vz);
+#endif
+#endif
 
-    // ax
-    KernelHandler.collectSendIndices(d_sendIndices, d_ax, d_tempArray, d_domainListCounter, sendCount);
-    exchangeParticleEntry(sendLengths, receiveLengths, d_ax);
-    // ay
-    KernelHandler.collectSendIndices(d_sendIndices, d_ay, d_tempArray, d_domainListCounter, sendCount);
-    exchangeParticleEntry(sendLengths, receiveLengths, d_ay);
-    // az
-    KernelHandler.collectSendIndices(d_sendIndices, d_az, d_tempArray, d_domainListCounter, sendCount);
-    exchangeParticleEntry(sendLengths, receiveLengths, d_az);
+    // x
+    CudaUtils::Kernel::Launch::collectValues(buffer->d_integerBuffer, particleHandler->d_ax, helperHandler->d_realBuffer,
+                                             sendCount);
+    exchangeParticleEntry(sendLengths, receiveLengths, particleHandler->d_ax);
+#if DIM > 1
+    // y
+    CudaUtils::Kernel::Launch::collectValues(buffer->d_integerBuffer, particleHandler->d_ay, helperHandler->d_realBuffer,
+                                             sendCount);
+    exchangeParticleEntry(sendLengths, receiveLengths, particleHandler->d_ay);
+#if DIM == 3
+    // z
+    CudaUtils::Kernel::Launch::collectValues(buffer->d_integerBuffer, particleHandler->d_az, helperHandler->d_realBuffer,
+                                             sendCount);
+    exchangeParticleEntry(sendLengths, receiveLengths, particleHandler->d_az);
+#endif
+#endif
 
     // mass
-    KernelHandler.collectSendIndices(d_sendIndices, d_mass, d_tempArray, d_domainListCounter, sendCount);
-    exchangeParticleEntry(sendLengths, receiveLengths, d_mass);
+    CudaUtils::Kernel::Launch::collectValues(buffer->d_integerBuffer, particleHandler->d_mass, helperHandler->d_realBuffer,
+                                             sendCount);
+    exchangeParticleEntry(sendLengths, receiveLengths, particleHandler->d_mass);
 
     //insert into tree // remember within to_delete_cell
     //remember index
-    int indexBeforeInserting;
-    gpuErrorcheck(cudaMemcpy(&indexBeforeInserting, d_index, sizeof(int), cudaMemcpyDeviceToHost));
-    gpuErrorcheck(cudaMemcpy(h_min_x, d_min_x, sizeof(float), cudaMemcpyDeviceToHost));
+    //int indexBeforeInserting;
+    gpuErrorcheck(cudaMemcpy(&treeHandler->h_toDeleteNode[0], treeHandler->d_index, sizeof(integer),
+                             cudaMemcpyDeviceToHost));
+    //gpuErrorcheck(cudaMemcpy(h_min_x, d_min_x, sizeof(float), cudaMemcpyDeviceToHost));
 
 
     //Logger(INFO) << "duplicateCounterCounter = " << duplicateCounterCounter;
@@ -906,30 +1023,49 @@ void Miluphpc::parallelForce() {
     //                       d_sortArrayOut);
 
     Logger(INFO) << "Starting inserting particles...";
-    KernelHandler.insertReceivedParticles(d_x, d_y, d_z, d_mass, d_count, d_start, d_child, d_index, d_min_x, d_max_x,
-                                          d_min_y, d_max_y, d_min_z, d_max_z, d_to_delete_leaf, d_domainListIndices,
-                                          d_domainListIndex, d_lowestDomainListIndices, d_lowestDomainListIndex,
-            to_delete_leaf_1, numParticles, false);
+    Logger(INFO) << "treeHandler->h_toDeleteLeaf[0]: " << treeHandler->h_toDeleteLeaf[0];
+    Logger(INFO) << "treeHandler->h_toDeleteLeaf[1]: " << treeHandler->h_toDeleteLeaf[1];
+    Gravity::Kernel::Launch::insertReceivedParticles(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
+                                                     particleHandler->d_particles, domainListHandler->d_domainList,
+                                                     lowestDomainListHandler->d_domainList, treeHandler->h_toDeleteLeaf[1],
+                                                     numParticles);
+
+
+
+    //KernelHandler.insertReceivedParticles(d_x, d_y, d_z, d_mass, d_count, d_start, d_child, d_index, d_min_x, d_max_x,
+    //                                      d_min_y, d_max_y, d_min_z, d_max_z, d_to_delete_leaf, d_domainListIndices,
+    //                                      d_domainListIndex, d_lowestDomainListIndices, d_lowestDomainListIndex,
+    //        to_delete_leaf_1, numParticles, false);
 
 
     //KernelHandler.treeInfo(d_x, d_y, d_z, d_mass, d_count, d_start, d_child, d_index, d_min_x, d_max_x, d_min_y, d_max_y,
     //                       d_min_z, d_max_z, numParticlesLocal, numNodes, d_procCounter, d_subDomainHandler, d_sortArray,
     //                       d_sortArrayOut);
 
-    int indexAfterInserting;
-    gpuErrorcheck(cudaMemcpy(&indexAfterInserting, d_index, sizeof(int), cudaMemcpyDeviceToHost));
+    //int indexAfterInserting;
+    gpuErrorcheck(cudaMemcpy(&treeHandler->h_toDeleteNode[1], treeHandler->d_index, sizeof(integer), cudaMemcpyDeviceToHost));
 
-    Logger(INFO) << "to_delete_leaf[0] = " << to_delete_leaf_0
-                 << " | " << "to_delete_leaf[1] = " << to_delete_leaf_1;
+    //Logger(INFO) << "to_delete_leaf[0] = " << to_delete_leaf_0
+    //             << " | " << "to_delete_leaf[1] = " << to_delete_leaf_1;
 
-    Logger(INFO) << "to_delete_cell[0] = " << indexBeforeInserting << " | " << "to_delete_cell[1] = "
-                 << indexAfterInserting;
+    //Logger(INFO) << "to_delete_cell[0] = " << indexBeforeInserting << " | " << "to_delete_cell[1] = "
+    //             << indexAfterInserting;
 
-    gpuErrorcheck(cudaMemcpy(&d_to_delete_cell[0], &indexBeforeInserting, sizeof(int), cudaMemcpyHostToDevice));
-    gpuErrorcheck(cudaMemcpy(&d_to_delete_cell[1], &indexAfterInserting, sizeof(int), cudaMemcpyHostToDevice));
+    //gpuErrorcheck(cudaMemcpy(&treeHandler->d_toDeleteNode[0], &indexBeforeInserting, sizeof(integer),
+    //                         cudaMemcpyHostToDevice));
+    //gpuErrorcheck(cudaMemcpy(&treeHandler->d_toDeleteNode[1], &indexAfterInserting, sizeof(integer),
+    //                         cudaMemcpyHostToDevice));
 
-    KernelHandler.centreOfMassReceivedParticles(d_x, d_y, d_z, d_mass, &d_to_delete_cell[0], &d_to_delete_cell[1],
-                                                numParticlesLocal, false);
+    gpuErrorcheck(cudaMemcpy(treeHandler->d_toDeleteNode, treeHandler->h_toDeleteNode, 2*sizeof(integer),
+                                                   cudaMemcpyHostToDevice));
+
+    Logger(INFO) << "treeHandler->h_toDeleteNode[0]: " << treeHandler->h_toDeleteNode[0];
+    Logger(INFO) << "treeHandler->h_toDeleteNode[1]: " << treeHandler->h_toDeleteNode[1];
+
+    Gravity::Kernel::Launch::centreOfMassReceivedParticles(particleHandler->d_particles, &treeHandler->d_toDeleteNode[0],
+                                                           &treeHandler->d_toDeleteNode[1], numParticlesLocal);
+    //KernelHandler.centreOfMassReceivedParticles(d_x, d_y, d_z, d_mass, &d_to_delete_cell[0], &d_to_delete_cell[1],
+    //                                            numParticlesLocal, false);
 
     Logger(INFO) << "Finished inserting received particles!";
 
@@ -940,24 +1076,36 @@ void Miluphpc::parallelForce() {
 
     float elapsedTime = 0.f;
 
-    KernelHandler.sort(d_count, d_start, d_sorted, d_child, d_index, numParticles, numParticles, false); //TODO: numParticlesLocal or numParticles?
+
+    TreeNS::Kernel::Launch::sort(treeHandler->d_tree, numParticles, numParticles, false);
+    //KernelHandler.sort(d_count, d_start, d_sorted, d_child, d_index, numParticles, numParticles, false); //TODO: numParticlesLocal or numParticles?
 
     //actual (local) force
-    elapsedTime = KernelHandler.computeForces(d_x, d_y, d_z, d_vx, d_vy, d_vz, d_ax, d_ay, d_az, d_mass, d_sorted, d_child,
-                                              d_min_x, d_max_x, d_min_y, d_max_y, d_min_z, d_max_z, numParticlesLocal,
-                                              numParticles, parameters.gravity, d_subDomainHandler, true); //TODO: numParticlesLocal or numParticles?
+    integer warp = 32;
+    integer stackSize = 64;
+    integer blockSize = 256;
+    Gravity::Kernel::Launch::computeForces(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal, numParticles,
+                                           blockSize, warp, stackSize);
+
+    //elapsedTime = KernelHandler.computeForces(d_x, d_y, d_z, d_vx, d_vy, d_vz, d_ax, d_ay, d_az, d_mass, d_sorted, d_child,
+    //                                          d_min_x, d_max_x, d_min_y, d_max_y, d_min_z, d_max_z, numParticlesLocal,
+    //                                          numParticles, parameters.gravity, d_subDomainHandler, true); //TODO: numParticlesLocal or numParticles?
 
 
     // repairTree
     //TODO: necessary? Tree is build for every iteration
-    KernelHandler.repairTree(d_x, d_y, d_z, d_vx, d_vy, d_vz, d_ax, d_ay, d_az, d_mass, d_count, d_start, d_child,
-                             d_index, d_min_x, d_max_x, d_min_y, d_max_y, d_min_z, d_max_z, d_to_delete_cell, d_to_delete_leaf,
-                             d_domainListIndices, numParticlesLocal, numNodes, false);
+
+    Gravity::Kernel::Launch::repairTree(treeHandler->d_tree, particleHandler->d_particles,
+                                        domainListHandler->d_domainList, numParticlesLocal, numNodes);
+
+    //KernelHandler.repairTree(d_x, d_y, d_z, d_vx, d_vy, d_vz, d_ax, d_ay, d_az, d_mass, d_count, d_start, d_child,
+    //                         d_index, d_min_x, d_max_x, d_min_y, d_max_y, d_min_z, d_max_z, d_to_delete_cell, d_to_delete_leaf,
+    //                         d_domainListIndices, numParticlesLocal, numNodes, false);
 
 
     //gpuErrorcheck(cudaMemcpy(d_index, &indexBeforeInserting, sizeof(int), cudaMemcpyHostToDevice));
     //gpuErrorcheck(cudaMemcpy(&d_to_delete_leaf[0], &numParticlesLocal, sizeof(int), cudaMemcpyHostToDevice));
 
-    return elapsedTime;*/
+    //return elapsedTime;
 
 }
