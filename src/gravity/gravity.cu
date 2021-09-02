@@ -5,6 +5,37 @@ namespace Gravity {
 
     namespace Kernel {
 
+        __global__ void zeroDomainListNodes(Particles *particles, DomainList *domainList,
+                                            DomainList *lowestDomainList) {
+
+            integer bodyIndex = threadIdx.x + blockIdx.x*blockDim.x;
+            integer stride = blockDim.x*gridDim.x;
+            integer offset = 0;
+            integer domainIndex;
+            bool zero;
+
+            while ((bodyIndex + offset) < *domainList->domainListIndex) {
+                zero = true;
+                domainIndex = domainList->domainListIndices[bodyIndex + offset];
+                for (int i=0; i<*lowestDomainList->domainListIndex-1; i++) {
+                    if (domainIndex = lowestDomainList->domainListIndices[i]) {
+                        zero = false;
+                    }
+                }
+
+                if (zero) {
+                    particles->x[domainIndex] = 0.f;
+                    particles->y[domainIndex] = 0.f;
+                    particles->z[domainIndex] = 0.f;
+
+                    particles->mass[domainIndex] = 0.f;
+                }
+
+                offset += stride;
+            }
+
+        }
+
         __global__ void prepareLowestDomainExchange(Particles *particles, DomainList *lowestDomainList,
                                                     Helper *helper, Entry::Name entry) {
 
@@ -22,19 +53,23 @@ namespace Gravity {
                     switch (entry) {
                         case Entry::x:
                             helper->realBuffer[bodyIndex + offset] = particles->x[lowestDomainIndex];
+                            printf("lowestDomainIndex = %i: realBuffer = %f, x = %f\n", lowestDomainIndex,
+                                   helper->realBuffer[bodyIndex + offset], particles->x[lowestDomainIndex]);
                             break;
 #if DIM > 1
                         case Entry::y:
-                            helper->realBuffer[bodyIndex + offset] = particles->x[lowestDomainIndex];
+                            helper->realBuffer[bodyIndex + offset] = particles->y[lowestDomainIndex];
                             break;
 #if DIM == 3
                         case Entry::z:
-                            helper->realBuffer[bodyIndex + offset] = particles->x[lowestDomainIndex];
+                            helper->realBuffer[bodyIndex + offset] = particles->z[lowestDomainIndex];
                             break;
 #endif
 #endif
                         case Entry::mass:
                             helper->realBuffer[bodyIndex + offset] = particles->mass[lowestDomainIndex];
+                            //printf("lowestDomainIndex = %i: realBuffer = %f, mass = %f\n", lowestDomainIndex,
+                            //       helper->realBuffer[bodyIndex + offset], particles->mass[lowestDomainIndex]);
                             break;
                         default:
                             helper->realBuffer[bodyIndex + offset] = particles->mass[lowestDomainIndex];
@@ -59,6 +94,9 @@ namespace Gravity {
                     if (lowestDomainList->sortedDomainListKeys[bodyIndex + offset] ==
                         lowestDomainList->domainListKeys[i]) {
                         originalIndex = i;
+                        //if (entry == Entry::x) {
+                        //    printf("original lowestDomainIndex = %i\n", originalIndex);
+                        //}
                         //break;
                     }
                 }
@@ -71,27 +109,28 @@ namespace Gravity {
                 switch (entry) {
                     case Entry::x:
                         particles->x[lowestDomainList->domainListIndices[originalIndex]] =
-                                helper->realBuffer[bodyIndex + offset];
+                                helper->realBuffer[DOMAIN_LIST_SIZE + bodyIndex + offset];
+                        //printf("lowestDomainIndex: lowestDomainList->domainListIndices[%i] = %i == %f\n", originalIndex,
+                        //       lowestDomainList->domainListIndices[originalIndex], helper->realBuffer[DOMAIN_LIST_SIZE + bodyIndex + offset]);
                         break;
 #if DIM > 1
                     case Entry::y:
                         particles->y[lowestDomainList->domainListIndices[originalIndex]] =
-                                helper->realBuffer[bodyIndex + offset];
+                                helper->realBuffer[DOMAIN_LIST_SIZE + bodyIndex + offset];
                         break;
 #if DIM == 3
                     case Entry::z:
                         particles->z[lowestDomainList->domainListIndices[originalIndex]] =
-                                helper->realBuffer[bodyIndex + offset];
+                                helper->realBuffer[DOMAIN_LIST_SIZE + bodyIndex + offset];
                         break;
 #endif
 #endif
                     case Entry::mass:
                         particles->mass[lowestDomainList->domainListIndices[originalIndex]] =
-                                helper->realBuffer[bodyIndex + offset];
+                                helper->realBuffer[DOMAIN_LIST_SIZE + bodyIndex + offset];
                         break;
                     default:
-                        particles->mass[lowestDomainList->domainListIndices[originalIndex]] =
-                                helper->realBuffer[bodyIndex + offset];
+                        printf("Entry not available!\n");
                         break;
                 }
 
@@ -185,6 +224,9 @@ namespace Gravity {
                         for (int i=0; i<POW_DIM; i++) {
                             particles->x[domainIndex] += particles->x[tree->child[POW_DIM*domainIndex + i]] *
                                     particles->mass[tree->child[POW_DIM*domainIndex + i]];
+                            printf("x += %f * %f = %f (%i)\n", particles->x[tree->child[POW_DIM*domainIndex + i]], particles->mass[tree->child[POW_DIM*domainIndex + i]],
+                                   particles->x[tree->child[POW_DIM*domainIndex + i]] * particles->mass[tree->child[POW_DIM*domainIndex + i]],
+                                   tree->child[POW_DIM*domainIndex + i]);
 #if DIM > 1
                             particles->y[domainIndex] += particles->y[tree->child[POW_DIM*domainIndex + i]] *
                                     particles->mass[tree->child[POW_DIM*domainIndex + i]];
@@ -196,7 +238,7 @@ namespace Gravity {
                             particles->mass[domainIndex] += particles->mass[tree->child[POW_DIM*domainIndex + i]];
                         }
 
-                        if (particles->mass[domainIndex] != 0) {
+                        if (particles->mass[domainIndex] != 0.f) {
                             particles->x[domainIndex] /= particles->mass[domainIndex];
 #if DIM > 1
                             particles->y[domainIndex] /= particles->mass[domainIndex];
@@ -260,6 +302,10 @@ namespace Gravity {
 
                 integer sortedIndex = tree->sorted[bodyIndex + offset];
 
+                //if ((bodyIndex + offset) % 1000 == 0) {
+                //    printf("computeForces: sortedIndex = %i\n", sortedIndex);
+                //}
+
                 real pos_x = particles->x[sortedIndex];
 #if DIM > 1
                 real pos_y = particles->y[sortedIndex];
@@ -306,9 +352,9 @@ namespace Gravity {
                     //end: debug
                     real dp = 0.25*depth[top]; // float dp = depth[top];
 
-                    for (integer i=0; i<8; i++) {
+                    for (integer i=0; i<POW_DIM; i++) {
 
-                        integer ch = tree->child[8*node + i];
+                        integer ch = tree->child[POW_DIM*node + i];
                         //__threadfence();
 
                         if (ch >= 0) {
@@ -321,7 +367,7 @@ namespace Gravity {
 #endif
 #endif
 
-                            real r = dx*dx;
+                            real r = dx*dx + 0.0025;
 #if DIM > 1
                             r += dy*dy;
 #if DIM == 3
@@ -332,7 +378,7 @@ namespace Gravity {
                             //unsigned activeMask = __activemask();
 
                             //if (ch < n /*is leaf node*/ || !__any_sync(activeMask, dp > r)) {
-                            if (ch < n /*is leaf node*/ || __all_sync(__activemask(), dp <= r)) {
+                            if (ch < n /*is leaf node*/ || __all_sync(__activemask(), dp <= r)) { //NEW: && ch != sortedIndex
 
                                 /*//debug
                                 key = getParticleKeyPerParticle(x[ch], y[ch], z[ch], minX, maxX, minY, maxY,
@@ -343,16 +389,33 @@ namespace Gravity {
                                 //end: debug*/
 
                                 // calculate interaction force contribution
-                                r = rsqrt(r);
-                                real f = particles->mass[ch] * r * r * r;
+                                if (r > 0.f) { //NEW
+                                    r = rsqrt(r);
+                                }
+                                /*if (r == 0.f) {
+                                    printf("r = 0!!! x[%i] = (%f, %f, %f) vs x[%i] = (%f, %f, %f)\n", sortedIndex,
+                                           particles->x[sortedIndex], particles->y[sortedIndex], particles->z[sortedIndex],
+                                           ch, particles->x[ch], particles->y[ch], particles->z[ch]);
+                                }*/
+                                real f = particles->mass[ch] * r * r * r;// + 0.0025;
 
-                                acc_x += f*dx;
+
+
+                                acc_x += f*dx; // * 0.0001;
+                                /*if ((bodyIndex + offset) % 10000 == 0) {
+                                    printf("index = %i: acc_x = %f += (%f) f (%f) * dx (%f) | mass[%i] = %f, r = %f (%f = %f - %f, %f, %f) sIndex=%i\n", bodyIndex + offset,
+                                           acc_x, f*dx, f, dx, ch, particles->mass[ch], r, dx, particles->x[ch], pos_x, dy, dz, sortedIndex);
+                                }*/
 #if DIM > 1
-                                acc_y += f*dy;
+                                acc_y += f*dy; // * 0.0001;
 #if DIM == 3
-                                acc_z += f*dz;
+                                acc_z += f*dz; // * 0.0001;
 #endif
 #endif
+                                //if (particles->mass[ch] > 10000) {
+                                //    printf("mass is huge for ch=%i with node = %i (mass = %f, r = %f, f = %f -> acc = (%f, %f, %f) f = (%f, %f, %f))!\n", ch, node, particles->mass[ch],
+                                //    r, f, acc_x, acc_y, acc_z, f*dx, f*dy, f*dz);
+                                //}
                             }
                             else {
                                 // if first thread in warp: push node's children onto iteration stack
@@ -369,7 +432,13 @@ namespace Gravity {
                     top--;
                 }
                 // update body data
+                //if (std::isnan(acc_x)) {
+                //    printf("sortedIndex = %i\n", sortedIndex);
+                //}
                 particles->ax[sortedIndex] = acc_x;
+                //if ((bodyIndex + offset) % 10000 == 0) {
+                //    printf("acc_x = %f (index = %i, sortedIndex = %i)\n", acc_x, bodyIndex + offset, sortedIndex);
+                //}
 #if DIM > 1
                 particles->ay[sortedIndex] = acc_y;
 #if DIM == 3
@@ -392,7 +461,16 @@ namespace Gravity {
 
             while (bodyIndex + offset < n) {
 
-                // calculating/updating the velocities
+                /*if ((bodyIndex + offset) % 1000 == 0) {
+                    printf("index= %i: velocity = = (%f, %f, %f)  acceleration = (%f, %f, %f)\n",
+                           bodyIndex + offset,
+                           particles->vx[bodyIndex + offset], particles->vy[bodyIndex + offset],
+                           particles->vz[bodyIndex + offset],
+                           particles->ax[bodyIndex + offset], particles->ay[bodyIndex + offset],
+                           particles->az[bodyIndex + offset]);
+                }*/
+
+               // calculating/updating the velocities
                 particles->vx[bodyIndex + offset] += dt * particles->ax[bodyIndex + offset];
 #if DIM > 1
                 particles->vy[bodyIndex + offset] += dt * particles->ay[bodyIndex + offset];
@@ -534,7 +612,7 @@ namespace Gravity {
             integer index = threadIdx.x + blockIdx.x * blockDim.x;
             integer stride = blockDim.x * gridDim.x;
             integer offset = 0;
-            integer bodyIndex = 0;
+            integer bodyIndex;
             keyType key;
             integer domainIndex;
 
@@ -542,6 +620,8 @@ namespace Gravity {
             while ((index + offset) < *domainList->domainListIndex) {
 
                 bodyIndex = domainList->domainListIndices[index + offset];
+                //printf("[rank %i] relevantIndices compTheta[%i]: x = (%f, %f, %f)\n", subDomainKeyTree->rank,
+                //       index + offset, particles->x[bodyIndex], particles->y[bodyIndex], particles->z[bodyIndex]);
                 //printf("bodyIndex = %i\n", bodyIndex);
                 //calculate key
                 key = tree->getParticleKey(particles, bodyIndex, MAX_LEVEL);
@@ -549,7 +629,9 @@ namespace Gravity {
                 //                                minZ, maxZ, 21);
 
                 //if domain list node belongs to other process: add to relevant domain list indices
+                //printf("[rank %i] relevantIndices compTheta[%i]: proc = %i\n", subDomainKeyTree->rank, index + offset, subDomainKeyTree->key2proc(key, curveType));
                 if (subDomainKeyTree->key2proc(key, curveType) != subDomainKeyTree->rank) {
+                    //printf("relevantIndices += 1\n");
                     domainIndex = atomicAdd(domainList->domainListCounter, 1);
                     domainList->relevantDomainListIndices[domainIndex] = bodyIndex;
                     //printf("relevant domain list index: %i\n", bodyIndex);
@@ -834,8 +916,12 @@ namespace Gravity {
 #endif
 
                                 particles->x[cell] += particles->mass[childIndex] * particles->x[childIndex];
+#if DIM > 1
                                 particles->y[cell] += particles->mass[childIndex] * particles->y[childIndex];
+#if DIM == 3
                                 particles->z[cell] += particles->mass[childIndex] * particles->z[childIndex];
+#endif
+#endif
 
                                 particles->mass[cell] += particles->mass[childIndex];
                                 // do not count, since particles are just temporarily saved on this process
@@ -926,7 +1012,7 @@ namespace Gravity {
                     printf("centreOfMassKernel: mass = 0 (%i)!\n", bodyIndex + offset);
                 }
 
-                if (particles->mass != 0) {
+                if (particles->mass[bodyIndex + offset] != 0) {
                     particles->x[bodyIndex + offset] /= particles->mass[bodyIndex + offset];
                     particles->y[bodyIndex + offset] /= particles->mass[bodyIndex + offset];
                     particles->z[bodyIndex + offset] /= particles->mass[bodyIndex + offset];
@@ -997,6 +1083,12 @@ namespace Gravity {
 
                 offset += stride;
             }
+        }
+
+        real Launch::zeroDomainListNodes(Particles *particles, DomainList *domainList, DomainList *lowestDomainList) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::zeroDomainListNodes, particles, domainList,
+                                lowestDomainList);
         }
 
         real Launch::prepareLowestDomainExchange(Particles *particles, DomainList *lowestDomainList,

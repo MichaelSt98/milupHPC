@@ -14,7 +14,7 @@ Miluphpc::Miluphpc(integer numParticles, integer numNodes) : numParticles(numPar
     domainListHandler = new DomainListHandler(DOMAIN_LIST_SIZE);
     lowestDomainListHandler = new DomainListHandler(DOMAIN_LIST_SIZE);
 
-    numParticlesLocal = numParticles/2 + subDomainKeyTreeHandler->h_subDomainKeyTree->rank * 5000;
+    numParticlesLocal = numParticles/2; //+ subDomainKeyTreeHandler->h_subDomainKeyTree->rank * 5000;
     Logger(INFO) << "numParticlesLocal = " << numParticlesLocal;
 
 }
@@ -29,11 +29,11 @@ Miluphpc::~Miluphpc() {
 
 }
 
-void Miluphpc::initDistribution(ParticleDistribution::Type particleDistribution) {
+void Miluphpc::initDistribution(ParticleDistribution::Type particleDistribution, Curve::Type curveType) {
 
     switch(particleDistribution) {
         case ParticleDistribution::disk:
-            diskModel();
+            diskModel(Curve::lebesgue);
             break;
         case ParticleDistribution::plummer:
             //
@@ -45,7 +45,7 @@ void Miluphpc::initDistribution(ParticleDistribution::Type particleDistribution)
     particleHandler->distributionToDevice();
 }
 
-void Miluphpc::diskModel() {
+void Miluphpc::diskModel(Curve::Type curveType) {
 
     real a = 1.0;
     real pi = 3.14159265;
@@ -55,73 +55,161 @@ void Miluphpc::diskModel() {
 
     real solarMass = 100000;
 
-    // loop through all particles
-    for (int i = 0; i < numParticlesLocal; i++) {
+    switch (curveType) {
 
-        real theta_angle = distribution_theta_angle(generator);
-        real r = distribution(generator);
+        case Curve::lebesgue: {
+            // loop through all particles
+            for (int i = 0; i < numParticlesLocal; i++) {
 
-        // set mass and position of particle
-        if (subDomainKeyTreeHandler->h_subDomainKeyTree->rank == 0) {
-            if (i == 0) {
-                particleHandler->h_particles->mass[i] = 2 * solarMass / numParticlesLocal; //solarMass; //100000; 2 * solarMass / numParticles;
-                particleHandler->h_particles->x[i] = 0;
-                particleHandler->h_particles->y[i] = 0;
-                particleHandler->h_particles->z[i] = 0;
-            } else {
-                particleHandler->h_particles->mass[i] = 2 * solarMass / numParticlesLocal;
-                particleHandler->h_particles->x[i] = r * cos(theta_angle);
-                //y[i] = r * sin(theta);
-                particleHandler->h_particles->z[i] = r * sin(theta_angle);
+                real theta_angle = distribution_theta_angle(generator);
+                real r = distribution(generator);
 
-                if (i % 2 == 0) {
-                    particleHandler->h_particles->y[i] = i * 1e-7;//z[i] = i * 1e-7;
+                // set mass and position of particle
+                if (subDomainKeyTreeHandler->h_subDomainKeyTree->rank == 0) {
+                    if (i == 0) {
+                        particleHandler->h_particles->mass[i] =
+                                2 * solarMass / numParticlesLocal; //solarMass; //100000; 2 * solarMass / numParticles;
+                        particleHandler->h_particles->x[i] = 0;
+                        particleHandler->h_particles->y[i] = 0;
+                        particleHandler->h_particles->z[i] = 0;
+                    } else {
+                        particleHandler->h_particles->mass[i] = 2 * solarMass / numParticlesLocal;
+                        particleHandler->h_particles->x[i] = r * cos(theta_angle);
+                        particleHandler->h_particles->y[i] = r * sin(theta_angle);
+                        if (i % 2 == 0) {
+                            particleHandler->h_particles->z[i] = i * 1e-7;//z[i] = i * 1e-7;
+                        } else {
+                            particleHandler->h_particles->z[i] = i * -1e-7;//z[i] = i * -1e-7;
+                        }
+                    }
                 } else {
-                    particleHandler->h_particles->y[i] = i * -1e-7;//z[i] = i * -1e-7;
+                    particleHandler->h_particles->mass[i] = 2 * solarMass / numParticlesLocal;
+                    particleHandler->h_particles->x[i] =
+                            (r + subDomainKeyTreeHandler->h_subDomainKeyTree->rank * 1.1e-1) *
+                            cos(theta_angle) +
+                            1.0e-2 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+                    //y[i] = (r + h_subDomainHandler->rank * 1.3e-1) * sin(theta) + 1.1e-2*h_subDomainHandler->rank;
+                    particleHandler->h_particles->y[i] =
+                            (r + subDomainKeyTreeHandler->h_subDomainKeyTree->rank * 1.3e-1) *
+                            sin(theta_angle) +
+                            1.1e-2 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+
+                    if (i % 2 == 0) {
+                        //z[i] = i * 1e-7 * h_subDomainHandler->rank + 0.5e-7*h_subDomainHandler->rank;
+                        particleHandler->h_particles->z[i] =
+                                i * 1e-7 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank +
+                                0.5e-7 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+                    } else {
+                        //z[i] = i * -1e-7 * h_subDomainHandler->rank + 0.4e-7*h_subDomainHandler->rank;
+                        particleHandler->h_particles->z[i] =
+                                i * -1e-7 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank
+                                + 0.4e-7 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+                    }
                 }
+
+
+                // set velocity of particle
+                real rotation = 1;  // 1: clockwise   -1: counter-clockwise
+                real v = sqrt(solarMass / (r));
+
+                if (true/*i == 0*/) {
+                    particleHandler->h_particles->vx[0] = 0.0;
+                    particleHandler->h_particles->vy[0] = 0.0;
+                    particleHandler->h_particles->vz[0] = 0.0;
+                } else {
+                    particleHandler->h_particles->vx[i] = rotation * v * sin(theta_angle);
+                    //y_vel[i] = -rotation*v*cos(theta);
+                    particleHandler->h_particles->vy[i] = -rotation * v * cos(theta_angle);
+                    //z_vel[i] = 0.0;
+                    particleHandler->h_particles->vz[i] = 0.0;
+                }
+
+                // set acceleration to zero
+                particleHandler->h_particles->ax[i] = 0.0;
+                particleHandler->h_particles->ay[i] = 0.0;
+                particleHandler->h_particles->az[i] = 0.0;
             }
+            break;
         }
-        else {
-            particleHandler->h_particles->mass[i] = 2 * solarMass / numParticlesLocal;
-            particleHandler->h_particles->x[i] = (r + subDomainKeyTreeHandler->h_subDomainKeyTree->rank * 1.1e-1) *
-                    cos(theta_angle) + 1.0e-2*subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
-            //y[i] = (r + h_subDomainHandler->rank * 1.3e-1) * sin(theta) + 1.1e-2*h_subDomainHandler->rank;
-            particleHandler->h_particles->z[i] = (r + subDomainKeyTreeHandler->h_subDomainKeyTree->rank * 1.3e-1) *
-                    sin(theta_angle) + 1.1e-2*subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+        case Curve::hilbert: {
+            // loop through all particles
+            for (int i = 0; i < numParticlesLocal; i++) {
 
-            if (i % 2 == 0) {
-                //z[i] = i * 1e-7 * h_subDomainHandler->rank + 0.5e-7*h_subDomainHandler->rank;
-                particleHandler->h_particles->y[i] = i * 1e-7 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank +
-                        0.5e-7*subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
-            } else {
-                //z[i] = i * -1e-7 * h_subDomainHandler->rank + 0.4e-7*h_subDomainHandler->rank;
-                particleHandler->h_particles->y[i] = i * -1e-7 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank
-                        + 0.4e-7*subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+                real theta_angle = distribution_theta_angle(generator);
+                real r = distribution(generator);
+
+                // set mass and position of particle
+                if (subDomainKeyTreeHandler->h_subDomainKeyTree->rank == 0) {
+                    if (i == 0) {
+                        particleHandler->h_particles->mass[i] =
+                                2 * solarMass / numParticlesLocal; //solarMass; //100000; 2 * solarMass / numParticles;
+                        particleHandler->h_particles->x[i] = 0;
+                        particleHandler->h_particles->y[i] = 0;
+                        particleHandler->h_particles->z[i] = 0;
+                    } else {
+                        particleHandler->h_particles->mass[i] = 2 * solarMass / numParticlesLocal;
+                        particleHandler->h_particles->x[i] = r * cos(theta_angle);
+                        //y[i] = r * sin(theta);
+                        particleHandler->h_particles->z[i] = r * sin(theta_angle);
+
+                        if (i % 2 == 0) {
+                            particleHandler->h_particles->y[i] = i * 1e-7;//z[i] = i * 1e-7;
+                        } else {
+                            particleHandler->h_particles->y[i] = i * -1e-7;//z[i] = i * -1e-7;
+                        }
+                    }
+                } else {
+                    particleHandler->h_particles->mass[i] = 2 * solarMass / numParticlesLocal;
+                    particleHandler->h_particles->x[i] =
+                            (r + subDomainKeyTreeHandler->h_subDomainKeyTree->rank * 1.1e-1) *
+                            cos(theta_angle) +
+                            1.0e-2 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+                    //y[i] = (r + h_subDomainHandler->rank * 1.3e-1) * sin(theta) + 1.1e-2*h_subDomainHandler->rank;
+                    particleHandler->h_particles->z[i] =
+                            (r + subDomainKeyTreeHandler->h_subDomainKeyTree->rank * 1.3e-1) *
+                            sin(theta_angle) +
+                            1.1e-2 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+
+                    if (i % 2 == 0) {
+                        //z[i] = i * 1e-7 * h_subDomainHandler->rank + 0.5e-7*h_subDomainHandler->rank;
+                        particleHandler->h_particles->y[i] =
+                                i * 1e-7 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank +
+                                0.5e-7 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+                    } else {
+                        //z[i] = i * -1e-7 * h_subDomainHandler->rank + 0.4e-7*h_subDomainHandler->rank;
+                        particleHandler->h_particles->y[i] =
+                                i * -1e-7 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank
+                                + 0.4e-7 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+                    }
+                }
+
+
+                // set velocity of particle
+                real rotation = 1;  // 1: clockwise   -1: counter-clockwise
+                real v = sqrt(solarMass / (r));
+
+                if (true/*i == 0*/) {
+                    particleHandler->h_particles->vx[0] = 0.0;
+                    particleHandler->h_particles->vy[0] = 0.0;
+                    particleHandler->h_particles->vz[0] = 0.0;
+                } else {
+                    particleHandler->h_particles->vx[i] = rotation * v * sin(theta_angle);
+                    //y_vel[i] = -rotation*v*cos(theta);
+                    particleHandler->h_particles->vz[i] = -rotation * v * cos(theta_angle);
+                    //z_vel[i] = 0.0;
+                    particleHandler->h_particles->vy[i] = 0.0;
+                }
+
+                // set acceleration to zero
+                particleHandler->h_particles->ax[i] = 0.0;
+                particleHandler->h_particles->ay[i] = 0.0;
+                particleHandler->h_particles->az[i] = 0.0;
             }
+            break;
         }
-
-
-        // set velocity of particle
-        real rotation = 1;  // 1: clockwise   -1: counter-clockwise
-        real v = sqrt(solarMass / (r));
-
-        if (i == 0) {
-            particleHandler->h_particles->vx[0] = 0.0;
-            particleHandler->h_particles->vy[0] = 0.0;
-            particleHandler->h_particles->vz[0] = 0.0;
-        }
-        else{
-            particleHandler->h_particles->vx[i] = rotation*v*sin(theta_angle);
-            //y_vel[i] = -rotation*v*cos(theta);
-            particleHandler->h_particles->vz[i] = -rotation*v*cos(theta_angle);
-            //z_vel[i] = 0.0;
-            particleHandler->h_particles->vy[i] = 0.0;
-        }
-
-        // set acceleration to zero
-        particleHandler->h_particles->ax[i] = 0.0;
-        particleHandler->h_particles->ay[i] = 0.0;
-        particleHandler->h_particles->az[i] = 0.0;
+        default:
+            Logger(INFO) << "Curve type not available!";
+            exit(0);
     }
 
 }
@@ -150,6 +238,13 @@ void Miluphpc::run() {
     Logger(INFO) << "resetting (device) arrays ...";
     time = Kernel::Launch::resetArrays(treeHandler->d_tree, particleHandler->d_particles, d_mutex, numParticles,
                                        numNodes, true);
+
+    buffer->reset();
+    helperHandler->reset();
+    domainListHandler->reset();
+    lowestDomainListHandler->reset();
+    subDomainKeyTreeHandler->reset();
+
     Logger(TIME) << "resetArrays: " << time << " ms";
 
     Logger(INFO) << "computing bounding box ...";
@@ -254,7 +349,7 @@ void Miluphpc::run() {
 
 }
 
-void Miluphpc::barnesHut() {
+void Miluphpc::initBarnesHut() {
 
     real time;
 
@@ -263,8 +358,6 @@ void Miluphpc::barnesHut() {
     Logger(INFO) << "initialize particle distribution ...";
     initDistribution();
 
-    //ParticlesNS::Kernel::Launch::info(particleHandler->d_particles, numParticlesLocal, numParticles, numParticles);
-
     time = TreeNS::Kernel::Launch::computeBoundingBox(treeHandler->d_tree, particleHandler->d_particles, d_mutex,
                                                       numParticlesLocal, 256, true);
     treeHandler->toHost();
@@ -272,38 +365,64 @@ void Miluphpc::barnesHut() {
            *treeHandler->h_minY, *treeHandler->h_maxY, *treeHandler->h_minZ, *treeHandler->h_maxZ);
     treeHandler->globalizeBoundingBox(Execution::device);
 
-    if (true/*parameters.loadBalancing*/) {
+    if (false/*parameters.loadBalancing*/) {
+        dynamicLoadDistribution();
+    }
+    else {
+        fixedLoadDistribution();
+    }
+}
+
+void Miluphpc::barnesHut() {
+
+    if (false/*parameters.loadBalancing*/) {
         Logger(INFO) << "load balancing ...";
         if (true/*step == 0 || step % parameters.loadBalancingInterval == 0*/) {
-            newLoadDistribution();
+            dynamicLoadDistribution();
         }
     }
+
+    real time;
 
     Logger(INFO) << "resetting (device) arrays ...";
     time = Kernel::Launch::resetArrays(treeHandler->d_tree, particleHandler->d_particles, d_mutex, numParticles,
                                        numNodes, true);
     helperHandler->reset();
+    buffer->reset();
+    domainListHandler->reset();
+    lowestDomainListHandler->reset();
+    subDomainKeyTreeHandler->reset();
 
     Logger(TIME) << "resetArrays: " << time << " ms";
 
     Logger(INFO) << "computing bounding box ...";
-    //TreeNS::computeBoundingBoxKernel(treeHandler->d_tree, particleHandler->d_particles, d_mutex, numNodes, 256);
+
     time = TreeNS::Kernel::Launch::computeBoundingBox(treeHandler->d_tree, particleHandler->d_particles, d_mutex,
                                                       numParticlesLocal, 256, true);
     Logger(TIME) << "computeBoundingBox: " << time << " ms";
 
-    treeHandler->toHost();
-    printf("min/max: x = (%f, %f), y = (%f, %f), z = (%f, %f)\n", *treeHandler->h_minX, *treeHandler->h_maxX,
-           *treeHandler->h_minY, *treeHandler->h_maxY, *treeHandler->h_minZ, *treeHandler->h_maxZ);
-
     treeHandler->globalizeBoundingBox(Execution::device);
     treeHandler->toHost();
-    printf("min/max: x = (%f, %f), y = (%f, %f), z = (%f, %f)\n", *treeHandler->h_minX, *treeHandler->h_maxX,
+
+    printf("bounding box: x = (%f, %f), y = (%f, %f), z = (%f, %f)\n", *treeHandler->h_minX, *treeHandler->h_maxX,
            *treeHandler->h_minY, *treeHandler->h_maxY, *treeHandler->h_minZ, *treeHandler->h_maxZ);
+
+
+    //subDomainKeyTreeHandler->toHost(); //TODO: needed?
+    //for (int proc=0; proc < subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
+    //    printf("[rank %i] before particlesPerProcess(): subDomainKeyTreeHandler->h_procParticleCounter[%i] = %i\n", subDomainKeyTreeHandler->h_rank,
+    //           proc, subDomainKeyTreeHandler->h_procParticleCounter[proc]);
+    //}
 
     SubDomainKeyTreeNS::Kernel::Launch::particlesPerProcess(subDomainKeyTreeHandler->d_subDomainKeyTree,
                                                             treeHandler->d_tree, particleHandler->d_particles,
                                                             numParticlesLocal, numNodes);
+
+    //subDomainKeyTreeHandler->toHost(); //TODO: needed?
+    //for (int proc=0; proc < subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
+    //    printf("[rank %i] before particlesPerProcess(): subDomainKeyTreeHandler->h_procParticleCounter[%i] = %i\n", subDomainKeyTreeHandler->h_rank,
+    //           proc, subDomainKeyTreeHandler->h_procParticleCounter[proc]);
+    //}
 
     SubDomainKeyTreeNS::Kernel::Launch::markParticlesProcess(subDomainKeyTreeHandler->d_subDomainKeyTree,
                                                              treeHandler->d_tree, particleHandler->d_particles,
@@ -374,10 +493,10 @@ void Miluphpc::barnesHut() {
     }
     mpi::messageLengths(subDomainKeyTreeHandler->h_subDomainKeyTree, sendLengths, receiveLengths);
 
-    for (int proc = 0; proc < subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
-        Logger(INFO) << "sendLengths[" << proc << "] = " << sendLengths[proc];
-        Logger(INFO) << "receiveLengths[" << proc << "] = " << receiveLengths[proc];
-    }
+    //for (int proc = 0; proc < subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
+    //    Logger(INFO) << "(numParticles) loadBalancing: sendLengths[" << proc << "] = " << sendLengths[proc];
+    //    Logger(INFO) << "(numParticles) loadBalancing: receiveLengths[" << proc << "] = " << receiveLengths[proc];
+    //}
 
     //TODO: next: sending particle entries (see: SPH: sendParticlesEntry...)
     sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_x);
@@ -394,8 +513,9 @@ void Miluphpc::barnesHut() {
 #endif
 #endif
 
+    //Logger(INFO) << "numParticlesLocal before sending = " << numParticlesLocal;
     numParticlesLocal = sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_mass);
-    Logger(INFO) << "New numParticlesLocal = " << numParticlesLocal;
+    //Logger(INFO) << "numParticlesLocal after sending = " << numParticlesLocal;
 
     delete [] sendLengths;
     delete [] receiveLengths;
@@ -418,8 +538,8 @@ void Miluphpc::barnesHut() {
     Logger(TIME) << "\tSorting for process: " << elapsedTimeSorting << " ms";
 
     Logger(INFO) << "building domain list ...";
-    time = DomainListNS::Kernel::Launch::createDomainList(subDomainKeyTreeHandler->d_subDomainKeyTree, domainListHandler->d_domainList,
-                                                   MAX_LEVEL);
+    time = DomainListNS::Kernel::Launch::createDomainList(subDomainKeyTreeHandler->d_subDomainKeyTree,
+                                                          domainListHandler->d_domainList, MAX_LEVEL);
     Logger(TIME) << "createDomainList: " << time << " ms";
 
     integer domainListLength;
@@ -436,13 +556,14 @@ void Miluphpc::barnesHut() {
                                              numParticles, true);
     Logger(TIME) << "buildTree: " << time << " ms";
 
-    integer treeIndex;
-    gpuErrorcheck(cudaMemcpy(&treeIndex, treeHandler->d_index, sizeof(integer),
-                             cudaMemcpyDeviceToHost));
-    Logger(INFO) << "numParticlesLocal: " << numParticlesLocal;
-    Logger(INFO) << "numParticles: " << numParticles;
-    Logger(INFO) << "numNodes: " << numNodes;
-    Logger(INFO) << "treeIndex: " << treeIndex;
+    //integer treeIndex;
+    //gpuErrorcheck(cudaMemcpy(&treeIndex, treeHandler->d_index, sizeof(integer),
+    //                         cudaMemcpyDeviceToHost));
+
+    //Logger(INFO) << "numParticlesLocal: " << numParticlesLocal;
+    //Logger(INFO) << "numParticles: " << numParticles;
+    //Logger(INFO) << "numNodes: " << numNodes;
+    //Logger(INFO) << "treeIndex: " << treeIndex;
     //ParticlesNS::Kernel::Launch::info(particleHandler->d_particles, numParticlesLocal, numParticles, treeIndex);
 
     Logger(INFO) << "building domain tree ...";
@@ -451,28 +572,51 @@ void Miluphpc::barnesHut() {
                                                          numNodes);
     Logger(TIME) << "build(Domain)Tree: " << time << " ms";
 
+
+
+
+    //DomainListNS::Kernel::Launch::info(particleHandler->d_particles, domainListHandler->d_domainList);
+
+    //DomainListNS::Kernel::Launch::info(particleHandler->d_particles, domainListHandler->d_domainList);
+    //DomainListNS::Kernel::Launch::info(particleHandler->d_particles, domainListHandler->d_domainList, lowestDomainListHandler->d_domainList);
+
     compPseudoParticlesParallel();
+
+    //DomainListNS::Kernel::Launch::info(particleHandler->d_particles, domainListHandler->d_domainList);
+    //DomainListNS::Kernel::Launch::info(particleHandler->d_particles, domainListHandler->d_domainList, lowestDomainListHandler->d_domainList);
+    //DomainListNS::Kernel::Launch::info(particleHandler->d_particles, lowestDomainListHandler->d_domainList);
+
+    /*time = TreeNS::Kernel::Launch::centerOfMass(treeHandler->d_tree, particleHandler->d_particles,
+                                                        numParticlesLocal, true);
+
+    TreeNS::Kernel::Launch::sort(treeHandler->d_tree, numParticles, numParticles, false);
+    //KernelHandler.sort(d_count, d_start, d_sorted, d_child, d_index, numParticles, numParticles, false); //TODO: numParticlesLocal or numParticles?
+
+    //actual (local) force
+    integer warp = 32;
+    integer stackSize = 64;
+    integer blockSize = 256;
+    Gravity::Kernel::Launch::computeForces(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal, numParticles,
+                                           blockSize, warp, stackSize);*/
+
+    //ParticlesNS::Kernel::Launch::info(particleHandler->d_particles, numParticlesLocal, numParticles, numParticles);
 
     parallelForce();
 
     Gravity::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal, 0.001, 1.);
 
-    //Logger(INFO) << "center of mass ...";
-    //time = TreeNS::Kernel::Launch::centerOfMass(treeHandler->d_tree, particleHandler->d_particles,
-    //                                            numParticlesLocal, true);
-    //Logger(TIME) << "centerOfMass: " << time << " ms";
-
-    /*Logger(INFO) << "sorting ...";
-    time = TreeNS::Kernel::Launch::sort(treeHandler->d_tree, numParticlesLocal, numNodes, true);
-    Logger(TIME) << "sort: " << time << " ms";
-
-
-    //particleHandler->*/
-
-
 }
 
-void Miluphpc::newLoadDistribution() {
+void Miluphpc::fixedLoadDistribution() {
+    for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
+        subDomainKeyTreeHandler->h_subDomainKeyTree->range[i] = i * (1UL << 63)/(subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
+    }
+    subDomainKeyTreeHandler->h_subDomainKeyTree->range[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses] = KEY_MAX;
+
+    subDomainKeyTreeHandler->toDevice();
+}
+
+void Miluphpc::dynamicLoadDistribution() {
 
     boost::mpi::communicator comm;
 
@@ -531,6 +675,15 @@ void Miluphpc::updateRangeApproximately(int aimedParticlesPerProcess, int bins) 
     int h_sum;
     cudaMemcpy(&h_sum, helperHandler->d_integerVal, sizeof(integer), cudaMemcpyDeviceToHost);
     Logger(INFO) << "h_sum = " << h_sum;
+
+    // debug
+    /*for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
+        subDomainKeyTreeHandler->h_subDomainKeyTree->range[i] = i * (1UL << 63)/(subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
+    }
+    subDomainKeyTreeHandler->h_subDomainKeyTree->range[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses] = KEY_MAX;
+
+    subDomainKeyTreeHandler->toDevice();*/
+    // end: debug
 
 }
 
@@ -616,6 +769,7 @@ integer Miluphpc::sendParticlesEntry(integer *sendLengths, integer *receiveLengt
      //KernelHandler.resetFloatArray(&entry[h_procCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]], 0, numParticles-h_procCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]); //resetFloatArrayKernel(float *array, float value, int n)
     //KernelHandler.copyArray(&entry[h_procCounter[h_subDomainHandler->rank]], d_tempArray, receiveOffset);
 
+    Logger(INFO) << "numParticlesLocal = " << receiveOffset << " + " << subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank];
     return receiveOffset + subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank];
 }
 
@@ -625,10 +779,9 @@ void Miluphpc::compPseudoParticlesParallel() {
                                                    domainListHandler->d_domainList,
                                                    lowestDomainListHandler->d_domainList, numParticles, numNodes);
 
-
-    // zero domain list nodes (if needed)
-    //KernelHandler.zeroDomainListNodes(d_domainListIndex, d_domainListIndices, d_lowestDomainListIndex,
-    //                                  d_lowestDomainListIndices, d_x, d_y, d_z, d_mass, false); //TODO: needed to zero domain list nodes?
+    //TODO: needed to zero domain list nodes?
+    //Gravity::Kernel::Launch::zeroDomainListNodes(particleHandler->d_particles, domainListHandler->d_domainList,
+    //                                             lowestDomainListHandler->d_domainList);
 
     // compute local pseudo particles (not for domain list nodes, at least not for the upper domain list nodes)
     Gravity::Kernel::Launch::compLocalPseudoParticles(treeHandler->d_tree, particleHandler->d_particles,
@@ -659,14 +812,16 @@ void Miluphpc::compPseudoParticlesParallel() {
 
     // share among processes
     //TODO: domainListIndex or lowestDomainListIndex?
-    //MPI_Allreduce(MPI_IN_PLACE, &d_tempArray[DOMAIN_LIST_SIZE], domainListIndex, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
-    all_reduce(comm, boost::mpi::inplace_t<real*>(&helperHandler->d_realBuffer[DOMAIN_LIST_SIZE]), domainListIndex,
-               std::plus<integer>());
+    MPI_Allreduce(MPI_IN_PLACE, &helperHandler->d_realBuffer[DOMAIN_LIST_SIZE], domainListIndex, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
+    //all_reduce(comm, boost::mpi::inplace_t<real*>(&helperHandler->d_realBuffer[DOMAIN_LIST_SIZE]), domainListIndex,
+    //           std::plus<real>());
 
     gpuErrorcheck(cudaMemset(lowestDomainListHandler->d_domainListCounter, 0, sizeof(integer)));
 
     Gravity::Kernel::Launch::updateLowestDomainListNodes(particleHandler->d_particles, lowestDomainListHandler->d_domainList,
                                                          helperHandler->d_helper, Entry::x);
+
+    //DomainListNS::Kernel::Launch::info(particleHandler->d_particles, domainListHandler->d_domainList);
 
     // y ----------------------------------------------------------------------------------------------
 
@@ -685,7 +840,7 @@ void Miluphpc::compPseudoParticlesParallel() {
     //TODO: domainListIndex or lowestDomainListIndex?
     //MPI_Allreduce(MPI_IN_PLACE, &d_tempArray[DOMAIN_LIST_SIZE], domainListIndex, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
     all_reduce(comm, boost::mpi::inplace_t<real*>(&helperHandler->d_realBuffer[DOMAIN_LIST_SIZE]), domainListIndex,
-               std::plus<integer>());
+               std::plus<real>());
 
     gpuErrorcheck(cudaMemset(lowestDomainListHandler->d_domainListCounter, 0, sizeof(integer)));
 
@@ -709,7 +864,7 @@ void Miluphpc::compPseudoParticlesParallel() {
     //TODO: domainListIndex or lowestDomainListIndex?
     //MPI_Allreduce(MPI_IN_PLACE, &d_tempArray[DOMAIN_LIST_SIZE], domainListIndex, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
     all_reduce(comm, boost::mpi::inplace_t<real*>(&helperHandler->d_realBuffer[DOMAIN_LIST_SIZE]), domainListIndex,
-               std::plus<integer>());
+               std::plus<real>());
 
     gpuErrorcheck(cudaMemset(lowestDomainListHandler->d_domainListCounter, 0, sizeof(integer)));
 
@@ -733,7 +888,7 @@ void Miluphpc::compPseudoParticlesParallel() {
     //TODO: domainListIndex or lowestDomainListIndex?
     //MPI_Allreduce(MPI_IN_PLACE, &d_tempArray[DOMAIN_LIST_SIZE], domainListIndex, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
     all_reduce(comm, boost::mpi::inplace_t<real*>(&helperHandler->d_realBuffer[DOMAIN_LIST_SIZE]), domainListIndex,
-               std::plus<integer>());
+               std::plus<real>());
 
     gpuErrorcheck(cudaMemset(lowestDomainListHandler->d_domainListCounter, 0, sizeof(integer)));
 
@@ -753,6 +908,8 @@ void Miluphpc::compPseudoParticlesParallel() {
     Gravity::Kernel::Launch::compDomainListPseudoParticles(treeHandler->d_tree, particleHandler->d_particles,
                                                            domainListHandler->d_domainList, lowestDomainListHandler->d_domainList,
                                                            numParticles);
+
+    //DomainListNS::Kernel::Launch::info(particleHandler->d_particles, domainListHandler->d_domainList);
 
     // compute for the rest of the domain list nodes the values
     //KernelHandler.compDomainListPseudoParticlesPar(d_x, d_y, d_z, d_mass, d_child, d_index, numParticles, d_domainListIndices,
@@ -1107,5 +1264,64 @@ void Miluphpc::parallelForce() {
     //gpuErrorcheck(cudaMemcpy(&d_to_delete_leaf[0], &numParticlesLocal, sizeof(int), cudaMemcpyHostToDevice));
 
     //return elapsedTime;
+
+}
+
+void Miluphpc::particles2file(HighFive::DataSet *pos, HighFive::DataSet *vel, HighFive::DataSet *key) {
+
+    std::vector<std::vector<double>> x, v; // two dimensional vector for 3D vector data
+    std::vector<unsigned long> k; // one dimensional vector holding particle keys
+
+    particleHandler->distributionToHost(true, false);
+    keyType *d_keys;
+    gpuErrorcheck(cudaMalloc((void**)&d_keys, numParticlesLocal*sizeof(keyType)));
+
+    TreeNS::Kernel::Launch::getParticleKeys(treeHandler->d_tree, particleHandler->d_particles,
+                                            d_keys, 21, numParticlesLocal);
+
+
+    keyType *h_keys;
+    h_keys = new keyType[numParticlesLocal];
+    gpuErrorcheck(cudaMemcpy(d_keys, h_keys, numParticlesLocal * sizeof(keyType), cudaMemcpyHostToDevice));
+
+    for (int i=0; i<numParticlesLocal; i++) {
+        x.push_back({particleHandler->h_x[i], particleHandler->h_y[i], particleHandler->h_z[i]});
+        v.push_back({particleHandler->h_vx[i], particleHandler->h_vy[i], particleHandler->h_vz[i]});
+        k.push_back(h_keys[i]);
+        //if (i % 1000 == 0) {
+        //    Logger(INFO) << h_keys[i];
+        //}
+        //++nParticles;
+    }
+
+    gpuErrorcheck(cudaFree(d_keys));
+    delete [] h_keys;
+
+    // receive buffer
+    int procN[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+
+    // send buffer
+    int sendProcN[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+    for (int proc=0; proc<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++){
+        sendProcN[proc] = subDomainKeyTreeHandler->h_subDomainKeyTree->rank == proc ? numParticlesLocal : 0;
+    }
+
+    MPI_Allreduce(sendProcN, procN, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses, MPI_INT,
+                  MPI_MAX, MPI_COMM_WORLD);
+
+    std::size_t nOffset = 0;
+    // count total particles on other processes
+    for (int proc = 0; proc < subDomainKeyTreeHandler->h_subDomainKeyTree->rank; proc++){
+        nOffset += procN[proc];
+    }
+    Logger(DEBUG) << "Offset to write to datasets: " << std::to_string(nOffset);
+
+    // write to asscoiated datasets in h5 file
+    // only working when load balancing has been completed and even number of particles
+    pos->select({nOffset, 0},
+                {std::size_t(numParticlesLocal), std::size_t(3)}).write(x);
+    vel->select({nOffset, 0},
+                {std::size_t(numParticlesLocal), std::size_t(3)}).write(v);
+    key->select({nOffset}, {std::size_t(numParticlesLocal)}).write(k);
 
 }

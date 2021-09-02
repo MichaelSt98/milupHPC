@@ -292,9 +292,10 @@ namespace ParticlesNS {
 
             while ((bodyIndex + offset) < n) {
                 if ((bodyIndex + offset) % 100 == 0) {
-                    printf("x[%i] = (%f, %f, %f) mass = %f\n", bodyIndex + offset, particles->x[bodyIndex + offset],
-                           particles->y[bodyIndex + offset],
-                           particles->z[bodyIndex + offset],
+                    printf("x[%i] = (%f, %f, %f) v = (%f, %f, %f) a = (%f, %f, %f) mass = %f\n", bodyIndex + offset,
+                           particles->x[bodyIndex + offset], particles->y[bodyIndex + offset], particles->z[bodyIndex + offset],
+                           particles->vx[bodyIndex + offset], particles->vy[bodyIndex + offset], particles->vz[bodyIndex + offset],
+                           particles->ax[bodyIndex + offset], particles->ay[bodyIndex + offset], particles->az[bodyIndex + offset],
                            particles->mass[bodyIndex + offset]);
                 }
                 offset += stride;

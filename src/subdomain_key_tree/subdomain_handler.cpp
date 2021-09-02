@@ -50,14 +50,21 @@ void SubDomainKeyTreeHandler::toHost() {
                              cudaMemcpyDeviceToHost));
 }
 
+void SubDomainKeyTreeHandler::reset() {
+    gpuErrorcheck(cudaMemset(d_procParticleCounter, 0, h_numProcesses  * sizeof(integer)));
+    for (int i=0; i<h_numProcesses; i++) {
+        h_procParticleCounter[i] = 0;
+    }
+}
+
 DomainListHandler::DomainListHandler(integer domainListSize) : domainListSize(domainListSize) {
 
     gpuErrorcheck(cudaMalloc((void**)&d_domainListIndices, domainListSize * sizeof(integer)));
     gpuErrorcheck(cudaMalloc((void**)&d_domainListLevels, domainListSize * sizeof(integer)));
     gpuErrorcheck(cudaMalloc((void**)&d_domainListIndex, sizeof(integer)));
     gpuErrorcheck(cudaMalloc((void**)&d_domainListCounter, sizeof(integer)));
-    gpuErrorcheck(cudaMalloc((void**)&d_domainListKeys, domainListSize * sizeof(integer)));
-    gpuErrorcheck(cudaMalloc((void**)&d_sortedDomainListKeys, domainListSize * sizeof(integer)));
+    gpuErrorcheck(cudaMalloc((void**)&d_domainListKeys, domainListSize * sizeof(keyType)));
+    gpuErrorcheck(cudaMalloc((void**)&d_sortedDomainListKeys, domainListSize * sizeof(keyType)));
     gpuErrorcheck(cudaMalloc((void**)&d_relevantDomainListIndices, domainListSize * sizeof(integer)));
 
     gpuErrorcheck(cudaMalloc((void**)&d_domainList, sizeof(DomainList)));
@@ -77,5 +84,17 @@ DomainListHandler::~DomainListHandler() {
     gpuErrorcheck(cudaFree(d_relevantDomainListIndices));
     gpuErrorcheck(cudaFree(d_domainList));
 
+}
+
+void DomainListHandler::reset() {
+
+    keyType maxKey = (keyType)KEY_MAX;
+    gpuErrorcheck(cudaMemset(d_domainListIndices, -1, domainListSize * sizeof(integer)));
+    gpuErrorcheck(cudaMemset(d_domainListLevels, -1, domainListSize * sizeof(integer)));
+    gpuErrorcheck(cudaMemset(d_domainListIndex, 0, sizeof(integer)));
+    gpuErrorcheck(cudaMemset(d_domainListCounter, 0, sizeof(integer)));
+    gpuErrorcheck(cudaMemset(d_domainListKeys, maxKey, domainListSize * sizeof(keyType)));
+    gpuErrorcheck(cudaMemset(d_sortedDomainListKeys, maxKey, domainListSize * sizeof(keyType)));
+    gpuErrorcheck(cudaMemset(d_relevantDomainListIndices, -1, domainListSize * sizeof(integer)));
 }
 

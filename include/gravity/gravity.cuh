@@ -6,9 +6,14 @@
 #include "../parameter.h"
 #include "../helper.cuh"
 
+#include <cmath>
+
 namespace Gravity {
 
     namespace Kernel {
+
+        __global__ void zeroDomainListNodes(Particles *particles, DomainList *domainList,
+                                            DomainList *lowestDomainList);
 
         __global__ void prepareLowestDomainExchange(Particles *particles, DomainList *lowestDomainList,
                                                     Helper *helper, Entry::Name entry);
@@ -64,6 +69,8 @@ namespace Gravity {
         __global__ void repairTree(Tree *tree, Particles *particles, DomainList *domainList, int n, int m);
 
         namespace Launch {
+
+            real zeroDomainListNodes(Particles *particles, DomainList *domainList, DomainList *lowestDomainList);
 
             real prepareLowestDomainExchange(Particles *particles, DomainList *lowestDomainList,
                                              Helper *helper, Entry::Name entry);

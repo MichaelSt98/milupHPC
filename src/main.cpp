@@ -124,8 +124,52 @@ int main(int argc, char** argv)
     integer numNodes = 3 * numParticles + 12000;
 
     Miluphpc miluphpc(numParticles, numNodes);
-    //miluphpc.run();
-    miluphpc.barnesHut();
+    miluphpc.initBarnesHut();
+
+    for (int i=0; i<parameters.iterations; i++) {
+
+        Logger(INFO) << "-----------------------------------------------------------------";
+        Logger(INFO) << "STEP: " << i;
+        Logger(INFO) << "-----------------------------------------------------------------";
+
+        std::stringstream stepss;
+        stepss << std::setw(6) << std::setfill('0') << i;
+
+        HighFive::File h5file("output/ts" + stepss.str() + ".h5",
+                              HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate,
+                              HighFive::MPIOFileDriver(MPI_COMM_WORLD, MPI_INFO_NULL));
+
+        std::vector <size_t> dataSpaceDims(2);
+        dataSpaceDims[0] = std::size_t(numParticles);
+        dataSpaceDims[1] = 3;
+
+        HighFive::DataSet ranges = h5file.createDataSet<unsigned long>("/hilbertRanges",
+                                                                       HighFive::DataSpace(numProcesses+1));
+
+        keyType *rangeValues;
+        rangeValues = new keyType[numProcesses+1];
+
+
+        miluphpc.subDomainKeyTreeHandler->toHost();
+        for (int i=0; i<numProcesses+1; i++) {
+            rangeValues[i] = miluphpc.subDomainKeyTreeHandler->h_subDomainKeyTree->range[i];
+            Logger(INFO) << "rangeValues[" << i << "] = " << rangeValues[i];
+        }
+
+        ranges.write(rangeValues);
+
+        delete [] rangeValues;
+
+        HighFive::DataSet pos = h5file.createDataSet<double>("/x", HighFive::DataSpace(dataSpaceDims));
+        HighFive::DataSet vel = h5file.createDataSet<double>("/v", HighFive::DataSpace(dataSpaceDims));
+        HighFive::DataSet key = h5file.createDataSet<unsigned long>("/hilbertKey",
+                                                                    HighFive::DataSpace(numParticles));
+        //miluphpc.run();
+
+        miluphpc.particles2file(&pos, &vel, &key);
+        miluphpc.barnesHut();
+
+    }
 
     Logger(INFO) << "Finished!";
 

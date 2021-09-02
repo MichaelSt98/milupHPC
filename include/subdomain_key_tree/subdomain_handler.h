@@ -36,6 +36,8 @@ public:
     void toDevice();
     void toHost();
 
+    void reset();
+
 };
 
 class DomainListHandler {
@@ -55,6 +57,8 @@ public:
 
     DomainListHandler(integer domainListSize);
     ~DomainListHandler();
+
+    void reset();
 
 };
 

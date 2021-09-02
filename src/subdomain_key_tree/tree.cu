@@ -92,7 +92,7 @@ CUDA_CALLABLE_MEMBER void Tree::reset(integer index, integer n) {
     }
 
     if (index < n) {
-        count[index] = 0;
+        count[index] = 1;
     }
     else {
         count[index] = 0;
@@ -106,14 +106,14 @@ CUDA_CALLABLE_MEMBER keyType Tree::getParticleKey(Particles *particles, integer 
     keyType particleKey = (keyType)0;
 
     integer sonBox;
-    real min_x = *this->minX;
-    real max_x = *this->maxX;
+    real min_x = *minX;
+    real max_x = *maxX;
 #if DIM > 1
-    real min_y = *this->minY;
-    real max_y = *this->maxY;
+    real min_y = *minY;
+    real max_y = *maxY;
 #if DIM == 3
-    real min_z = *this->minZ;
-    real max_z = *this->maxZ;
+    real min_z = *minZ;
+    real max_z = *maxZ;
 #endif
 #endif
 
@@ -121,11 +121,11 @@ CUDA_CALLABLE_MEMBER keyType Tree::getParticleKey(Particles *particles, integer 
     while (level <= maxLevel) {
         sonBox = 0;
         // find insertion point for body
-        if (particles->x[index] < 0.5 * (min_x+max_x)) {
+        if (particles->x[index] < 0.5 * (min_x + max_x)) {
             sonBox += 1;
-            max_x = 0.5 * (min_x+max_x);
+            max_x = 0.5 * (min_x + max_x);
         }
-        else { min_x = 0.5 * (min_x+max_x); }
+        else { min_x = 0.5 * (min_x + max_x); }
 #if DIM > 1
         if (particles->y[index] < 0.5 * (min_y+max_y)) {
             sonBox += 2;
@@ -141,12 +141,13 @@ CUDA_CALLABLE_MEMBER keyType Tree::getParticleKey(Particles *particles, integer 
 #endif
 #endif
         particleKey = particleKey | ((keyType)sonBox << (keyType)(DIM * (maxLevel-level-1)));
-        level ++;
+        level++;
     }
     //TODO: Hilbert change
     if (particleKey == 0UL) {
-        printf("Why key = %lu? x = (%f, %f, %f) min = (%f, %f, %f), max = (%f, %f, %f)\n", particleKey, particles->x[index], particles->y[index],
-               particles->z[index], *this->minX, *this->minY, *this->minZ, *this->maxX, *this->maxY, *this->maxZ);
+        printf("Why key = %lu? x = (%f, %f, %f) min = (%f, %f, %f), max = (%f, %f, %f)\n", particleKey,
+               particles->x[index], particles->y[index], particles->z[index],
+               *minX, *minY, *minZ, *maxX, *maxY, *maxZ);
     }
     return particleKey;
     //return Lebesgue2Hilbert(particleKey, 21);
@@ -580,7 +581,7 @@ __global__ void TreeNS::Kernel::centerOfMass(Tree *tree, Particles *particles, i
         //    printf("centreOfMassKernel: mass = 0 (%i)!\n", bodyIndex + offset);
         //}
 
-        if (particles->mass != 0) {
+        if (particles->mass[bodyIndex + offset] != 0) {
             particles->x[bodyIndex + offset] /= particles->mass[bodyIndex + offset];
 #if DIM > 1
             particles->y[bodyIndex + offset] /= particles->mass[bodyIndex + offset];
@@ -600,13 +601,13 @@ __global__ void TreeNS::Kernel::sort(Tree *tree, integer n, integer m) {
     integer stride = blockDim.x * gridDim.x;
     integer offset = 0;
 
-    /*if (bodyIndex == 0) {
+    if (bodyIndex == 0) {
         integer sumParticles = 0;
         for (integer i=0; i<POW_DIM; i++) {
             sumParticles += tree->count[tree->child[i]];
         }
         printf("sumParticles = %i\n", sumParticles);
-    }*/
+    }
 
     integer s = 0;
     if (threadIdx.x == 0) {

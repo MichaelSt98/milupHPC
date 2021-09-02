@@ -29,6 +29,10 @@
 #include <iomanip>
 #include <random>
 
+#include <highfive/H5File.hpp>
+#include <highfive/H5DataSpace.hpp>
+#include <highfive/H5DataSet.hpp>
+
 struct ParticleDistribution
 {
     enum Type
@@ -46,10 +50,11 @@ private:
 class Miluphpc {
 
 private:
-    void diskModel();
+    void diskModel(Curve::Type curveType=Curve::lebesgue);
 
     void updateRangeApproximately(int aimedParticlesPerProcess, int bins=4000);
-    void newLoadDistribution();
+    void fixedLoadDistribution();
+    void dynamicLoadDistribution();
 
     void compPseudoParticlesParallel();
     void parallelForce();
@@ -76,9 +81,15 @@ public:
     Miluphpc(integer numParticles, integer numNodes);
     ~Miluphpc();
 
-    void initDistribution(ParticleDistribution::Type particleDistribution=ParticleDistribution::disk);
+    void initDistribution(ParticleDistribution::Type particleDistribution=ParticleDistribution::disk,
+                          Curve::Type curveType=Curve::lebesgue);
+    void initBarnesHut();
+
     void barnesHut();
     void run();
+
+
+    void particles2file(HighFive::DataSet *pos, HighFive::DataSet *vel, HighFive::DataSet *key);
 
 };
 

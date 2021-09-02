@@ -141,6 +141,9 @@ namespace DomainListNS {
                             integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
                             keyType *sortedDomainListKeys, integer *relevantDomainListIndices);
 
+        __global__ void info(Particles *particles, DomainList *domainList);
+
+        __global__ void info(Particles *particles, DomainList *domainList, DomainList *lowestDomainList);
 
         __global__ void createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList,
                                          integer maxLevel, Curve::Type curveType = Curve::lebesgue);
@@ -152,6 +155,10 @@ namespace DomainListNS {
             void set(DomainList *domainList, integer *domainListIndices, integer *domainListLevels,
                      integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
                      keyType *sortedDomainListKeys, integer *relevantDomainListIndices);
+
+            real info(Particles *particles, DomainList *domainList);
+
+            real info(Particles *particles, DomainList *domainList, DomainList *lowestDomainList);
 
             real createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList,
                                   integer maxLevel, Curve::Type curveType = Curve::lebesgue);

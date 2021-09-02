@@ -37,6 +37,10 @@ namespace Kernel {
             *tree->maxZ = 0;
 #endif
 #endif
+            tree->toDeleteLeaf[0] = -1;
+            tree->toDeleteLeaf[1] = -1;
+            tree->toDeleteNode[0] = -1;
+            tree->toDeleteNode[1] = -1;
 
         }
     }

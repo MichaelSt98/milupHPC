@@ -3,10 +3,10 @@
 
 typedef float real;
 typedef int integer;
-typedef unsigned long int keyType;
-typedef unsigned long int idInteger;
+typedef unsigned long keyType;
+typedef unsigned long idInteger;
 
-#define theta 0.7
+#define theta 1.5//0.7
 #define KEY_MAX ULONG_MAX
 #define DOMAIN_LIST_SIZE 512
 

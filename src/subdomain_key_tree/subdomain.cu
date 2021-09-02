@@ -381,6 +381,86 @@ namespace DomainListNS {
                             sortedDomainListKeys, relevantDomainListIndices);
         }
 
+        __global__ void info(Particles *particles, DomainList *domainList) {
+
+            integer index = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+
+            integer domainListIndex;
+
+            /*if (index == 0) {
+                printf("domainListIndices = [");
+                for (int i=0; i<*domainList->domainListIndex; i++) {
+                    printf("%i, ", domainList->domainListIndices[i]);
+                }
+                printf("]\n");
+            }*/
+
+            while ((index + offset) < *domainList->domainListIndex) {
+
+                domainListIndex = domainList->domainListIndices[index + offset];
+
+                if (particles->mass[domainListIndex] > 0.f) {
+                    printf("domainListIndices[%i] = %i, x = (%f, %f, %f) mass = %f\n", index + offset,
+                           domainListIndex, particles->x[domainListIndex],
+                           particles->y[domainListIndex], particles->z[domainListIndex],
+                           particles->mass[domainListIndex]);
+                }
+
+                offset += stride;
+            }
+
+        }
+
+        __global__ void info(Particles *particles, DomainList *domainList, DomainList *lowestDomainList) {
+
+            integer index = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+
+            integer domainListIndex;
+
+            /*if (index == 0) {
+                printf("domainListIndices = [");
+                for (int i=0; i<*domainList->domainListIndex; i++) {
+                    printf("%i, ", domainList->domainListIndices[i]);
+                }
+                printf("]\n");
+            }*/
+
+            bool show;
+
+            while ((index + offset) < *domainList->domainListIndex) {
+
+                show = true;
+                domainListIndex = domainList->domainListIndices[index + offset];
+
+                /*for (int i=0; i<*lowestDomainList->domainListIndex; i++) {
+                    if (lowestDomainList->domainListIndices[i] == domainListIndex) {
+                        printf("domainListIndices[%i] = %i, x = (%f, %f, %f) mass = %f\n", index + offset,
+                               domainListIndex, particles->x[domainListIndex],
+                               particles->y[domainListIndex], particles->z[domainListIndex], particles->mass[domainListIndex]);
+                    }
+                }*/
+
+                for (int i=0; i<*lowestDomainList->domainListIndex; i++) {
+                    if (lowestDomainList->domainListIndices[i] == domainListIndex) {
+                        show = false;
+                    }
+                }
+
+                if (show) {
+                    printf("domainListIndices[%i] = %i, x = (%f, %f, %f) mass = %f\n", index + offset,
+                           domainListIndex, particles->x[domainListIndex],
+                           particles->y[domainListIndex], particles->z[domainListIndex], particles->mass[domainListIndex]);
+                }
+
+                offset += stride;
+            }
+
+        }
+
         __global__ void createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList,
                                          integer maxLevel, Curve::Type curveType) {
 
@@ -490,6 +570,16 @@ namespace DomainListNS {
             cuda::launch(false, executionPolicy, ::DomainListNS::Kernel::set, domainList, domainListIndices, domainListLevels,
                          domainListIndex, domainListCounter, domainListKeys, sortedDomainListKeys,
                          relevantDomainListIndices);
+        }
+
+        real Launch::info(Particles *particles, DomainList *domainList) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::DomainListNS::Kernel::info, particles, domainList);
+        }
+
+        real Launch::info(Particles *particles, DomainList *domainList, DomainList *lowestDomainList) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::DomainListNS::Kernel::info, particles, domainList, lowestDomainList);
         }
 
         real Launch::createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList, integer maxLevel,
