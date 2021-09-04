@@ -133,6 +133,10 @@ namespace CudaUtils {
                     for (integer i = 0; i < length; i++) {
                         if (i != (index + offset)) {
                             if (array[i] != -1 &&  array[index + offset] == array[i]) {
+
+                                printf("DUPLICATE: %i vs %i\n",
+                                       array[index + offset], array[i]);
+
                                 maxIndex = max(index + offset, i);
                                 // mark larger index with -1 (thus a duplicate)
                                 array[maxIndex] = -1;
@@ -146,7 +150,7 @@ namespace CudaUtils {
             }
         }
 
-        template<typename T, typename U>
+        /*template<typename T, typename U>
         __global__ void markDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, int length) {
 
             integer index = threadIdx.x + blockIdx.x * blockDim.x;
@@ -161,6 +165,72 @@ namespace CudaUtils {
                         if (i != (index + offset)) {
                             if (array[i] != -1 && (array[index + offset] == array[i] || (entry1[array[i]] == entry1[array[index + offset]] &&
                                     entry2[array[i]] == entry2[array[index + offset]]))) {
+
+                                if (true) { //array[index + offset] == array[i]) {
+                                    printf("DUPLICATE: %i vs %i | (%f, %f) vs (%f, %f):\n",
+                                           array[index + offset], array[i],
+                                           entry1[array[index + offset]], entry2[array[index + offset]],
+                                           entry1[array[i]], entry2[array[i]]);
+
+                                }
+
+                                maxIndex = max(index + offset, i);
+                                // mark larger index with -1 (thus a duplicate)
+                                array[maxIndex] = -1;
+                                atomicAdd(duplicateCounter, 1);
+                            }
+                        }
+
+                    }
+                }
+                offset += stride;
+            }
+        }*/
+
+        template<typename T, typename U>
+        __global__ void markDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, integer *child, int length) {
+
+            integer index = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+            integer maxIndex;
+
+            bool isChild;
+            //remark: check only x, but in principle check all
+            while ((index + offset) < length) {
+                if (array[index + offset] != -1) {
+                    for (integer i = 0; i < length; i++) {
+                        if (i != (index + offset)) {
+                            if (array[i] != -1 && (array[index + offset] == array[i] || (entry1[array[i]] == entry1[array[index + offset]] &&
+                                                                                         entry2[array[i]] == entry2[array[index + offset]]))) {
+                                isChild = false;
+
+                                if (true/*array[index + offset] == array[i]*/) {
+                                    printf("DUPLICATE: %i vs %i | (%f, %f) vs (%f, %f):\n",
+                                           array[index + offset], array[i],
+                                           entry1[array[index + offset]], entry2[array[index + offset]],
+                                           entry1[array[i]], entry2[array[i]]);
+
+                                    for (int k=0; k<8; k++) {
+                                        if (child[8*array[index + offset] + k] == array[i]) {
+                                            printf("index = %i: child %i == i = %i\n", array[index + offset],
+                                                   k, array[i]);
+                                            isChild = true;
+                                        }
+
+                                        if (child[8*array[i] + k] == array[index + offset]) {
+                                            printf("index = %i: child %i == index = %i\n", array[i],
+                                                   k, array[index + offset]);
+                                            isChild = true;
+                                        }
+                                    }
+
+                                    if (!isChild) {
+                                        printf("Duplicate NOT a child!\n");
+                                    }
+
+                                }
+
                                 maxIndex = max(index + offset, i);
                                 // mark larger index with -1 (thus a duplicate)
                                 array[maxIndex] = -1;
@@ -246,13 +316,22 @@ namespace CudaUtils {
         // explicit instantiation for type "real"
         template real Launch::markDuplicates<real>(real *array, integer *duplicateCounter, int length);
 
-        template<typename T, typename U>
+        /*template<typename T, typename U>
         real Launch::markDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, int length) {
             ExecutionPolicy executionPolicy;
             return cuda::launch(true, executionPolicy, ::CudaUtils::Kernel::markDuplicates<T, U>, array, entry1, entry2,
                                 duplicateCounter, length);
         }
         template real Launch::markDuplicates<integer, real>(integer *array, real *entry1, real *entry2, integer *duplicateCounter, int length);
+        */
+        template<typename T, typename U>
+        real Launch::markDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, integer *child, int length) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::CudaUtils::Kernel::markDuplicates<T, U>, array, entry1, entry2,
+                                duplicateCounter, child, length);
+        }
+        template real Launch::markDuplicates<integer, real>(integer *array, real *entry1, real *entry2, integer *duplicateCounter, integer *child, int length);
+
 
         template<typename T>
         real Launch::removeDuplicates(T *array, T *removedArray, integer *duplicateCounter, int length) {

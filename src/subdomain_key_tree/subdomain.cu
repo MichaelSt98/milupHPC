@@ -1,14 +1,10 @@
-//
-// Created by Michael Staneker on 15.08.21.
-//
-
 #include "../../include/subdomain_key_tree/subdomain.cuh"
 #include "../../include/cuda_utils/cuda_launcher.cuh"
 
 CUDA_CALLABLE_MEMBER void KeyNS::key2Char(keyType key, integer maxLevel, char *keyAsChar) {
     int level[21];
     for (int i=0; i<maxLevel; i++) {
-        level[i] = (int)(key >> (maxLevel*3 - 3*(i+1)) & (int)7);
+        level[i] = (int)(key >> (maxLevel*DIM - DIM*(i+1)) & (int)(POW_DIM - 1));
     }
     for (int i=0; i<=maxLevel; i++) {
         keyAsChar[2*i] = level[i] + '0';
@@ -17,8 +13,8 @@ CUDA_CALLABLE_MEMBER void KeyNS::key2Char(keyType key, integer maxLevel, char *k
     keyAsChar[2*maxLevel+3] = '\0';
 }
 
-CUDA_CALLABLE_MEMBER integer KeyNS::key2proc(keyType key, SubDomainKeyTree *subDomainKeyTree, Curve::Type curveType) {
-    return subDomainKeyTree->key2proc(key, curveType);
+CUDA_CALLABLE_MEMBER integer KeyNS::key2proc(keyType key, SubDomainKeyTree *subDomainKeyTree/*, Curve::Type curveType*/) {
+    return subDomainKeyTree->key2proc(key/*, curveType*/);
 }
 
 CUDA_CALLABLE_MEMBER SubDomainKeyTree::SubDomainKeyTree() {
@@ -44,30 +40,58 @@ CUDA_CALLABLE_MEMBER void SubDomainKeyTree::set(integer rank, integer numProcess
     this->procParticleCounter = procParticleCounter;
 }
 
-CUDA_CALLABLE_MEMBER integer SubDomainKeyTree::key2proc(keyType key, Curve::Type curveType) {
-    //if (curveType == 0) {
-    for (integer proc=0; proc<numProcesses; proc++) {
-        if (key >= range[proc] && key < range[proc+1]) {
+CUDA_CALLABLE_MEMBER integer SubDomainKeyTree::key2proc(keyType key/*, Curve::Type curveType*/) {
+
+    for (integer proc = 0; proc < numProcesses; proc++) {
+        if (key >= range[proc] && key < range[proc + 1]) {
             return proc;
         }
     }
-    //}
-    //else {
-    //    unsigned long hilbert = Lebesgue2Hilbert(k, 21);
-    //    for (int proc = 0; proc < s->numProcesses; proc++) {
-    //        if (hilbert >= s->range[proc] && hilbert < s->range[proc + 1]) {
-    //            return proc;
-    //        }
-    //    }
-    //}
-    //printf("ERROR: key2proc(k=%lu): -1!", k);
+    /*switch (curveType) {
+        case Curve::lebesgue: {
+            for (integer proc = 0; proc < numProcesses; proc++) {
+                if (key >= range[proc] && key < range[proc + 1]) {
+                    return proc;
+                }
+            }
+        }
+        case Curve::hilbert: {
+
+            keyType hilbert = Lebesgue2Hilbert(key, 21);
+            for (int proc = 0; proc < s->numProcesses; proc++) {
+                if (hilbert >= s->range[proc] && hilbert < s->range[proc + 1]) {
+                    return proc;
+                }
+            }
+
+        }
+        default: {
+            printf("Curve type not available!\n");
+        }
+
+    }*/
+    printf("ERROR: key2proc(k=%lu): -1!", key);
     return -1; // error
 }
 
 CUDA_CALLABLE_MEMBER bool SubDomainKeyTree::isDomainListNode(keyType key, integer maxLevel, integer level,
                                                              Curve::Type curveType) {
-    int p1 = key2proc(key, curveType);
-    int p2 = key2proc(key | ~(~0UL << DIM*(maxLevel-level)), curveType);
+    integer p1, p2;
+    switch (curveType) {
+        case Curve::lebesgue: {
+            p1 = key2proc(key);
+            p2 = key2proc(key | ~(~0UL << DIM * (maxLevel - level)));
+            break;
+        }
+        case Curve::hilbert: {
+            p1 = key2proc(KeyNS::lebesgue2hilbert(key, maxLevel));
+            p2 = key2proc(KeyNS::lebesgue2hilbert(key | ~(~0UL << DIM * (maxLevel - level)), maxLevel));
+            break;
+        }
+        default: {
+            printf("Curve type not available!\n");
+        }
+    }
     if (p1 != p2) {
         return true;
     }
@@ -244,6 +268,48 @@ namespace SubDomainKeyTreeNS {
             }
         }
 
+        __global__ void getParticleKeys(SubDomainKeyTree *subDomainKeyTree, Tree *tree,
+                                        Particles *particles, keyType *keys, integer maxLevel,
+                                        integer n, Curve::Type curveType) {
+
+            int bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            int stride = blockDim.x * gridDim.x;
+            int offset = 0;
+
+            unsigned long particleKey;
+            unsigned long hilbertParticleKey;
+
+            char keyAsChar[21 * 2 + 3];
+            integer proc;
+
+            while (bodyIndex + offset < n) {
+
+                //particleKey = 0UL;
+                particleKey = tree->getParticleKey(particles, bodyIndex + offset, maxLevel, curveType);
+
+                KeyNS::key2Char(particleKey, 21, keyAsChar);
+                //printf("keyMax: %lu = %s\n", particleKey, keyAsChar);
+
+                proc = subDomainKeyTree->key2proc(particleKey);
+
+                //if ((bodyIndex + offset) % 1000 == 0) {
+                    //printf("[rank %i] particleKey = %lu = %s, proc = %i\n", subDomainKeyTree->rank, particleKey,
+                    //       keyAsChar, proc);
+                    //printf("[rank %i] particleKey = %lu, proc = %i\n", subDomainKeyTree->rank, particleKey,
+                    //       proc);
+                //}
+
+                if (subDomainKeyTree->rank != proc) {
+                    printf("[rank %i] particleKey = %lu, proc = %i\n", subDomainKeyTree->rank, particleKey,
+                           proc);
+                }
+
+                keys[bodyIndex + offset] = particleKey; //hilbertParticleKey;
+
+                offset += stride;
+            }
+        }
+
         __global__ void particlesPerProcess(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                             integer n, integer m, Curve::Type curveType) {
 
@@ -257,10 +323,10 @@ namespace SubDomainKeyTreeNS {
             while ((bodyIndex + offset) < n) {
 
                 // calculate particle key from particle's position
-                key = tree->getParticleKey(particles, bodyIndex + offset, MAX_LEVEL);
+                key = tree->getParticleKey(particles, bodyIndex + offset, MAX_LEVEL, curveType);
 
                 // get corresponding process
-                proc = subDomainKeyTree->key2proc(key, curveType);
+                proc = subDomainKeyTree->key2proc(key);
 
                 // increment corresponding counter
                 atomicAdd(&subDomainKeyTree->procParticleCounter[proc], 1);
@@ -284,10 +350,10 @@ namespace SubDomainKeyTreeNS {
             while ((bodyIndex + offset) < n) {
 
                 // calculate particle key from particle's position
-                key = tree->getParticleKey(particles, bodyIndex + offset, MAX_LEVEL);
+                key = tree->getParticleKey(particles, bodyIndex + offset, MAX_LEVEL, curveType);
 
                 // get corresponding process
-                proc = subDomainKeyTree->key2proc(key, curveType);
+                proc = subDomainKeyTree->key2proc(key);
 
                 // mark particle with corresponding process
                 sortArray[bodyIndex + offset] = proc;
@@ -314,6 +380,14 @@ namespace SubDomainKeyTreeNS {
             ExecutionPolicy executionPolicy(1, 1);
             return cuda::launch(true, executionPolicy, ::SubDomainKeyTreeNS::Kernel::buildDomainTree, tree, particles,
                          domainList, n, m);
+        }
+
+        real Launch::getParticleKeys(SubDomainKeyTree *subDomainKeyTree, Tree *tree,
+                             Particles *particles, keyType *keys, integer maxLevel,
+                             integer n, Curve::Type curveType) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::SubDomainKeyTreeNS::Kernel::getParticleKeys, subDomainKeyTree,
+                                tree, particles, keys, maxLevel, n, curveType);
         }
 
         real Launch::particlesPerProcess(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
@@ -401,7 +475,7 @@ namespace DomainListNS {
 
                 domainListIndex = domainList->domainListIndices[index + offset];
 
-                if (particles->mass[domainListIndex] > 0.f) {
+                if (true/*particles->mass[domainListIndex] > 0.f*/) {
                     printf("domainListIndices[%i] = %i, x = (%f, %f, %f) mass = %f\n", index + offset,
                            domainListIndex, particles->x[domainListIndex],
                            particles->y[domainListIndex], particles->z[domainListIndex],
@@ -481,7 +555,17 @@ namespace DomainListNS {
                 if (subDomainKeyTree->isDomainListNode(key2test & (~0UL << (DIM * (maxLevel - level + 1))),
                                                       maxLevel, level-1, curveType)) {
                     // add domain list key
-                    domainList->domainListKeys[*domainList->domainListIndex] = key2test;
+                    switch (curveType) {
+                        case Curve::lebesgue:
+                            domainList->domainListKeys[*domainList->domainListIndex] = key2test;
+                            break;
+                        case Curve::hilbert:
+                            domainList->domainListKeys[*domainList->domainListIndex] = KeyNS::lebesgue2hilbert(key2test, maxLevel);
+                            break;
+                        default:
+                            printf("Curve type not available!\n");
+
+                    }
                     //printf("[rank %i] Adding domain list with key = %lu\n", subDomainKeyTree->rank, key2test);
                     // add domain list level
                     domainList->domainListLevels[*domainList->domainListIndex] = level;

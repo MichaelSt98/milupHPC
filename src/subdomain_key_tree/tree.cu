@@ -1,11 +1,21 @@
 #include "../../include/subdomain_key_tree/tree.cuh"
 #include "../../include/cuda_utils/cuda_launcher.cuh"
 
-/*void launchBuildTreeKernel(Foo *foo) {
-    ExecutionPolicy executionPolicy(1, 1);
-    cudaLaunch(false, executionPolicy, testKernel, foo);
-    //testKernel<<<1, 1>>>(foo);
-}*/
+CUDA_CALLABLE_MEMBER keyType KeyNS::lebesgue2hilbert(keyType lebesgue, integer maxLevel) {
+
+    keyType hilbert = 0UL;
+    integer dir = 0;
+    for (integer lvl=maxLevel; lvl>0; lvl--) {
+        keyType cell = (lebesgue >> ((lvl-1)*DIM)) & (keyType)((1<<DIM)-1);
+        hilbert = hilbert << DIM;
+        if (lvl > 0) {
+            hilbert += HilbertTable[dir][cell];
+        }
+        dir = DirTable[dir][cell];
+    }
+    return hilbert;
+
+}
 
 CUDA_CALLABLE_MEMBER Tree::Tree() {
 
@@ -86,7 +96,13 @@ CUDA_CALLABLE_MEMBER void Tree::set(integer *count, integer *start, integer *chi
 #endif
 
 CUDA_CALLABLE_MEMBER void Tree::reset(integer index, integer n) {
+#if DIM == 1
+    #pragma unroll 2
+#elif DIM == 2
+    #pragma unroll 4
+#else
     #pragma unroll 8
+#endif
     for (integer i=0; i<POW_DIM; i++) {
         child[index * POW_DIM + i] = -1;
     }
@@ -100,7 +116,8 @@ CUDA_CALLABLE_MEMBER void Tree::reset(integer index, integer n) {
     start[index] = 0;
 }
 
-CUDA_CALLABLE_MEMBER keyType Tree::getParticleKey(Particles *particles, integer index, integer maxLevel) {
+CUDA_CALLABLE_MEMBER keyType Tree::getParticleKey(Particles *particles, integer index, integer maxLevel,
+                                                  Curve::Type curveType) {
 
     integer level = 0;
     keyType particleKey = (keyType)0;
@@ -143,19 +160,31 @@ CUDA_CALLABLE_MEMBER keyType Tree::getParticleKey(Particles *particles, integer 
         particleKey = particleKey | ((keyType)sonBox << (keyType)(DIM * (maxLevel-level-1)));
         level++;
     }
-    //TODO: Hilbert change
+
     if (particleKey == 0UL) {
         printf("Why key = %lu? x = (%f, %f, %f) min = (%f, %f, %f), max = (%f, %f, %f)\n", particleKey,
                particles->x[index], particles->y[index], particles->z[index],
                *minX, *minY, *minZ, *maxX, *maxY, *maxZ);
     }
-    return particleKey;
-    //return Lebesgue2Hilbert(particleKey, 21);
+    switch (curveType) {
+        case Curve::lebesgue: {
+            return particleKey;
+            //break;
+        }
+        case Curve::hilbert: {
+            return KeyNS::lebesgue2hilbert(particleKey, maxLevel);
+            //break;
+        }
+        default:
+            printf("Curve type not available!\n");
+            return (keyType)0;
+    }
 }
 
-CUDA_CALLABLE_MEMBER integer Tree::getTreeLevel(Particles *particles, integer index, integer maxLevel) {
+CUDA_CALLABLE_MEMBER integer Tree::getTreeLevel(Particles *particles, integer index, integer maxLevel,
+                                                Curve::Type curveType) {
 
-    keyType key = getParticleKey(particles, index, maxLevel);
+    keyType key = getParticleKey(particles, index, maxLevel); //, curveType); //TODO: hilbert working for lebesgue: why???
     //printf("key = %lu\n", key);
     integer level = 0; //TODO: initialize level with 0 or 1 for getTreeLevel()?
     integer childIndex;
@@ -186,6 +215,15 @@ CUDA_CALLABLE_MEMBER integer Tree::getTreeLevel(Particles *particles, integer in
     //delete [] path;
 
     return -1;
+}
+
+CUDA_CALLABLE_MEMBER integer Tree::sumParticles() {
+    integer sumParticles = 0;
+    for (integer i=0; i<POW_DIM; i++) {
+        sumParticles += count[child[i]];
+    }
+    printf("sumParticles = %i\n", sumParticles);
+    return sumParticles;
 }
 
 CUDA_CALLABLE_MEMBER Tree::~Tree() {
@@ -306,6 +344,18 @@ __global__ void TreeNS::Kernel::computeBoundingBox(Tree *tree, Particles *partic
         //}
 
         atomicExch(mutex, 0); // unlock
+    }
+}
+
+__global__ void TreeNS::Kernel::sumParticles(Tree *tree) {
+
+    integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+    integer stride = blockDim.x * gridDim.x;
+    integer offset = 0;
+
+    if (bodyIndex == 0) {
+        integer sumParticles = tree->sumParticles();
+        printf("sumParticles = %i\n", sumParticles);
     }
 }
 
@@ -434,13 +484,13 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
             atomicAdd(&particles->mass[temp], particles->mass[bodyIndex + offset]);
             atomicAdd(&tree->count[temp], 1);
 
-            childIndex = tree->child[8*temp + childPath];
+            childIndex = tree->child[POW_DIM * temp + childPath];
         }
 
         // if child is not locked
         if (childIndex != -2) {
 
-            integer locked = temp * 8 + childPath;
+            integer locked = temp * POW_DIM + childPath;
 
             if (atomicCAS(&tree->child[locked], childIndex, -2) == childIndex) {
 
@@ -461,7 +511,7 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
                         patch = min(patch, cell);
 
                         if (patch != cell) {
-                            tree->child[8 * temp + childPath] = cell;
+                            tree->child[POW_DIM * temp + childPath] = cell;
                         }
 
                         // insert old/original particle
@@ -601,14 +651,6 @@ __global__ void TreeNS::Kernel::sort(Tree *tree, integer n, integer m) {
     integer stride = blockDim.x * gridDim.x;
     integer offset = 0;
 
-    if (bodyIndex == 0) {
-        integer sumParticles = 0;
-        for (integer i=0; i<POW_DIM; i++) {
-            sumParticles += tree->count[tree->child[i]];
-        }
-        printf("sumParticles = %i\n", sumParticles);
-    }
-
     integer s = 0;
     if (threadIdx.x == 0) {
 
@@ -642,7 +684,7 @@ __global__ void TreeNS::Kernel::sort(Tree *tree, integer n, integer m) {
 
         if (s >= 0) {
 
-            for (integer i=0; i<8; i++) {
+            for (integer i=0; i<POW_DIM; i++) {
                 integer node = tree->child[POW_DIM*(cell+offset) + i];
                 // not a leaf node
                 if (node >= m) { //m
@@ -661,7 +703,7 @@ __global__ void TreeNS::Kernel::sort(Tree *tree, integer n, integer m) {
 }
 
 __global__ void TreeNS::Kernel::getParticleKeys(Tree *tree, Particles *particles, keyType *keys, integer maxLevel,
-                                integer n) {
+                                integer n, Curve::Type curveType) {
 
     int bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
     int stride = blockDim.x * gridDim.x;
@@ -670,14 +712,20 @@ __global__ void TreeNS::Kernel::getParticleKeys(Tree *tree, Particles *particles
     unsigned long particleKey;
     unsigned long hilbertParticleKey;
 
+    //char keyAsChar[21 * 2 + 3];
 
     while (bodyIndex + offset < n) {
 
         //particleKey = 0UL;
-        particleKey = tree->getParticleKey(particles, bodyIndex + offset, maxLevel);
+        particleKey = tree->getParticleKey(particles, bodyIndex + offset, maxLevel, curveType);
 
-        //TODO: Hilbert key
-        //hilbertParticleKey = Lebesgue2Hilbert(particleKey, 21);
+        //if ((bodyIndex + offset) % 1000 == 0) {
+            //printf("particleKey = %lu\n", particleKey);
+        //}
+
+        //subdomain->key2Char(particleKey, 21, keyAsChar);
+        //printf("keyMax: %lu = %s\n", particleKey, keyAsChar);
+
         keys[bodyIndex + offset] = particleKey; //hilbertParticleKey;
 
         offset += stride;
@@ -746,6 +794,12 @@ namespace TreeNS {
 
 
         namespace Launch {
+
+            real sumParticles(Tree *tree) {
+                ExecutionPolicy executionPolicy;
+                return cuda::launch(true, executionPolicy, ::TreeNS::Kernel::sumParticles, tree);
+            }
+
             real buildTree(Tree *tree, Particles *particles, integer n, integer m, bool time) {
                 ExecutionPolicy executionPolicy;
                 return cuda::launch(time, executionPolicy, ::TreeNS::Kernel::buildTree, tree, particles, n, m);
@@ -770,9 +824,10 @@ namespace TreeNS {
             }
 
             real getParticleKeys(Tree *tree, Particles *particles, keyType *keys, integer maxLevel, integer n,
-                                 bool time) {
+                                 Curve::Type curveType, bool time) {
                 ExecutionPolicy executionPolicy;
-                return cuda::launch(time, executionPolicy, ::TreeNS::Kernel::getParticleKeys, tree, particles, keys, maxLevel, n);
+                return cuda::launch(time, executionPolicy, ::TreeNS::Kernel::getParticleKeys, tree, particles, keys,
+                                    maxLevel, n, curveType);
             }
 
         }

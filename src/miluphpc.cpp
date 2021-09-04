@@ -2,6 +2,11 @@
 
 Miluphpc::Miluphpc(integer numParticles, integer numNodes) : numParticles(numParticles), numNodes(numNodes) {
 
+
+    //curveType = Curve::lebesgue;
+    curveType = Curve::hilbert;
+
+
     //TODO: how to distinguish/intialize numParticlesLocal vs numParticles
     //numParticlesLocal = numParticles/2;
 
@@ -29,11 +34,11 @@ Miluphpc::~Miluphpc() {
 
 }
 
-void Miluphpc::initDistribution(ParticleDistribution::Type particleDistribution, Curve::Type curveType) {
+void Miluphpc::initDistribution(ParticleDistribution::Type particleDistribution) {
 
     switch(particleDistribution) {
         case ParticleDistribution::disk:
-            diskModel(Curve::lebesgue);
+            diskModel();
             break;
         case ParticleDistribution::plummer:
             //
@@ -45,7 +50,7 @@ void Miluphpc::initDistribution(ParticleDistribution::Type particleDistribution,
     particleHandler->distributionToDevice();
 }
 
-void Miluphpc::diskModel(Curve::Type curveType) {
+void Miluphpc::diskModel() {
 
     real a = 1.0;
     real pi = 3.14159265;
@@ -57,7 +62,7 @@ void Miluphpc::diskModel(Curve::Type curveType) {
 
     switch (curveType) {
 
-        case Curve::lebesgue: {
+        case Curve::hilbert: {
             // loop through all particles
             for (int i = 0; i < numParticlesLocal; i++) {
 
@@ -131,7 +136,7 @@ void Miluphpc::diskModel(Curve::Type curveType) {
             }
             break;
         }
-        case Curve::hilbert: {
+        case Curve::lebesgue: {
             // loop through all particles
             for (int i = 0; i < numParticlesLocal; i++) {
 
@@ -416,7 +421,7 @@ void Miluphpc::barnesHut() {
 
     SubDomainKeyTreeNS::Kernel::Launch::particlesPerProcess(subDomainKeyTreeHandler->d_subDomainKeyTree,
                                                             treeHandler->d_tree, particleHandler->d_particles,
-                                                            numParticlesLocal, numNodes);
+                                                            numParticlesLocal, numNodes, curveType);
 
     //subDomainKeyTreeHandler->toHost(); //TODO: needed?
     //for (int proc=0; proc < subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
@@ -427,7 +432,7 @@ void Miluphpc::barnesHut() {
     SubDomainKeyTreeNS::Kernel::Launch::markParticlesProcess(subDomainKeyTreeHandler->d_subDomainKeyTree,
                                                              treeHandler->d_tree, particleHandler->d_particles,
                                                              numParticlesLocal, numNodes,
-                                                             helperHandler->d_integerBuffer);
+                                                             helperHandler->d_integerBuffer, curveType);
 
     float elapsedTimeSorting = 0.f;
     cudaEvent_t start_t_sorting, stop_t_sorting; // used for timing
@@ -447,7 +452,6 @@ void Miluphpc::barnesHut() {
     HelperNS::sortArray(particleHandler->d_z, helperHandler->d_realBuffer, helperHandler->d_integerBuffer,
                         buffer->d_integerBuffer, numParticlesLocal);
     HelperNS::Kernel::Launch::copyArray(particleHandler->d_z, helperHandler->d_realBuffer, numParticlesLocal);
-
 
     // velocity: x
     HelperNS::sortArray(particleHandler->d_vx, helperHandler->d_realBuffer, helperHandler->d_integerBuffer,
@@ -485,8 +489,8 @@ void Miluphpc::barnesHut() {
     receiveLengths[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] = 0;
 
     for (int proc=0; proc < subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
-        printf("[rank %i] subDomainKeyTreeHandler->h_procParticleCounter[%i] = %i\n", subDomainKeyTreeHandler->h_rank,
-               proc, subDomainKeyTreeHandler->h_procParticleCounter[proc]);
+        //printf("[rank %i] subDomainKeyTreeHandler->h_procParticleCounter[%i] = %i\n", subDomainKeyTreeHandler->h_rank,
+        //       proc, subDomainKeyTreeHandler->h_procParticleCounter[proc]);
         if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
             sendLengths[proc] = subDomainKeyTreeHandler->h_procParticleCounter[proc];
         }
@@ -535,11 +539,24 @@ void Miluphpc::barnesHut() {
 #endif
     HelperNS::Kernel::Launch::resetArray(&particleHandler->d_mass[numParticlesLocal], (real)0, numParticles-numParticlesLocal);
 
+    // DEBUG
+    particleHandler->distributionToHost(true, false);
+    keyType *d_keys;
+    gpuErrorcheck(cudaMalloc((void**)&d_keys, numParticlesLocal*sizeof(keyType)));
+
+    SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys(subDomainKeyTreeHandler->d_subDomainKeyTree,
+                                                        treeHandler->d_tree, particleHandler->d_particles,
+                                                        d_keys, 21, numParticlesLocal, curveType);
+    gpuErrorcheck(cudaFree(d_keys));
+    // end: DEBUG
+
+
     Logger(TIME) << "\tSorting for process: " << elapsedTimeSorting << " ms";
 
     Logger(INFO) << "building domain list ...";
     time = DomainListNS::Kernel::Launch::createDomainList(subDomainKeyTreeHandler->d_subDomainKeyTree,
-                                                          domainListHandler->d_domainList, MAX_LEVEL);
+                                                          domainListHandler->d_domainList, MAX_LEVEL,
+                                                          curveType);
     Logger(TIME) << "createDomainList: " << time << " ms";
 
     integer domainListLength;
@@ -556,14 +573,18 @@ void Miluphpc::barnesHut() {
                                              numParticles, true);
     Logger(TIME) << "buildTree: " << time << " ms";
 
-    //integer treeIndex;
-    //gpuErrorcheck(cudaMemcpy(&treeIndex, treeHandler->d_index, sizeof(integer),
-    //                         cudaMemcpyDeviceToHost));
+    integer treeIndex;
+    gpuErrorcheck(cudaMemcpy(&treeIndex, treeHandler->d_index, sizeof(integer),
+                             cudaMemcpyDeviceToHost));
 
-    //Logger(INFO) << "numParticlesLocal: " << numParticlesLocal;
-    //Logger(INFO) << "numParticles: " << numParticles;
-    //Logger(INFO) << "numNodes: " << numNodes;
-    //Logger(INFO) << "treeIndex: " << treeIndex;
+    Logger(INFO) << "numParticlesLocal: " << numParticlesLocal;
+    Logger(INFO) << "numParticles: " << numParticles;
+    Logger(INFO) << "numNodes: " << numNodes;
+    Logger(INFO) << "treeIndex: " << treeIndex;
+    integer numParticlesSum = numParticlesLocal;
+    boost::mpi::communicator comm;
+    all_reduce(comm, boost::mpi::inplace_t<integer*>(&numParticlesSum), 1, std::plus<integer>());
+    Logger(INFO) << "numParticlesSum: " << numParticlesSum;
     //ParticlesNS::Kernel::Launch::info(particleHandler->d_particles, numParticlesLocal, numParticles, treeIndex);
 
     Logger(INFO) << "building domain tree ...";
@@ -613,6 +634,10 @@ void Miluphpc::fixedLoadDistribution() {
     }
     subDomainKeyTreeHandler->h_subDomainKeyTree->range[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses] = KEY_MAX;
 
+    for (int i=0; i<=subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
+        printf("range[%i] = %lu\n", i, subDomainKeyTreeHandler->h_subDomainKeyTree->range[i]);
+    }
+
     subDomainKeyTreeHandler->toDevice();
 }
 
@@ -657,12 +682,12 @@ void Miluphpc::updateRangeApproximately(int aimedParticlesPerProcess, int bins) 
 
     Gravity::Kernel::Launch::keyHistCounter(treeHandler->d_tree, particleHandler->d_particles,
                                             subDomainKeyTreeHandler->d_subDomainKeyTree, helperHandler->d_helper,
-                                            bins, numParticlesLocal);
+                                            bins, numParticlesLocal, curveType);
 
     all_reduce(comm, boost::mpi::inplace_t<integer*>(helperHandler->d_integerBuffer), bins - 1, std::plus<integer>());
 
     Gravity::Kernel::Launch::calculateNewRange(subDomainKeyTreeHandler->d_subDomainKeyTree, helperHandler->d_helper,
-                                               bins, aimedParticlesPerProcess);
+                                               bins, aimedParticlesPerProcess, curveType);
     gpuErrorcheck(cudaMemset(&subDomainKeyTreeHandler->d_range[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses],
                              KEY_MAX, sizeof(keyType)));
     subDomainKeyTreeHandler->toHost();
@@ -769,7 +794,7 @@ integer Miluphpc::sendParticlesEntry(integer *sendLengths, integer *receiveLengt
      //KernelHandler.resetFloatArray(&entry[h_procCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]], 0, numParticles-h_procCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]); //resetFloatArrayKernel(float *array, float value, int n)
     //KernelHandler.copyArray(&entry[h_procCounter[h_subDomainHandler->rank]], d_tempArray, receiveOffset);
 
-    Logger(INFO) << "numParticlesLocal = " << receiveOffset << " + " << subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank];
+    //Logger(INFO) << "numParticlesLocal = " << receiveOffset << " + " << subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank];
     return receiveOffset + subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank];
 }
 
@@ -932,7 +957,7 @@ void Miluphpc::parallelForce() {
     //compTheta
     Gravity::Kernel::Launch::compTheta(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
                                        particleHandler->d_particles, domainListHandler->d_domainList,
-                                       helperHandler->d_helper);
+                                       helperHandler->d_helper, curveType);
 
     integer relevantIndicesCounter;
     gpuErrorcheck(cudaMemcpy(&relevantIndicesCounter, domainListHandler->d_domainListCounter, sizeof(integer),
@@ -980,12 +1005,7 @@ void Miluphpc::parallelForce() {
         Gravity::Kernel::Launch::symbolicForce(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
                                                particleHandler->d_particles, domainListHandler->d_domainList,
                                                helperHandler->d_helper, diam, theta_, numParticles, numNodes,
-                                               relevantIndex);
-
-        //KernelHandler.symbolicForce(relevantIndex, d_x, d_y, d_z, d_mass, d_min_x, d_max_x, d_min_y, d_max_y, d_min_z, d_max_z,
-        //                            d_child, d_domainListIndex, d_domainListKeys, d_domainListIndices, d_domainListLevels,
-        //                            d_domainListCounter, d_sendIndicesTemp, d_index, d_procCounter, d_subDomainHandler,
-        //                            numParticles, numNodes, diam, theta, d_mutex, d_relevantDomainListIndices, false);
+                                               relevantIndex, curveType);
 
         // removing duplicates
         // TODO: remove duplicates by overwriting same array with index of to send and afterwards remove empty entries
@@ -995,13 +1015,14 @@ void Miluphpc::parallelForce() {
 
         gpuErrorcheck(cudaMemset(domainListHandler->d_domainListCounter, 0, sizeof(integer)));
 
-        //CudaUtils::Kernel::Launch::markDuplicates(helperHandler->d_integerBuffer, domainListHandler->d_domainListCounter,
-        //                                          sendCountTemp);
-        CudaUtils::Kernel::Launch::markDuplicates(helperHandler->d_integerBuffer, particleHandler->d_x,
-                                                  particleHandler->d_y, domainListHandler->d_domainListCounter,
+        // CHECK for indices
+        CudaUtils::Kernel::Launch::markDuplicates(helperHandler->d_integerBuffer, domainListHandler->d_domainListCounter,
                                                   sendCountTemp);
-        //KernelHandler.markDuplicates(d_sendIndicesTemp, d_x, d_y, d_z, d_mass, d_subDomainHandler, d_domainListCounter,
-        //                             sendCountTemp, false);
+        // CHECK for indices and entries!
+        //CudaUtils::Kernel::Launch::markDuplicates(helperHandler->d_integerBuffer, particleHandler->d_x,
+        //                                          particleHandler->d_y, domainListHandler->d_domainListCounter,
+        //                                          sendCountTemp);
+
 
         integer duplicatesCounter;
         gpuErrorcheck(cudaMemcpy(&duplicatesCounter, domainListHandler->d_domainListCounter, sizeof(integer),
@@ -1012,7 +1033,6 @@ void Miluphpc::parallelForce() {
         //Logger(INFO) << "now removing duplicates..";
         CudaUtils::Kernel::Launch::removeDuplicates(helperHandler->d_integerBuffer, buffer->d_integerBuffer,
                                                     domainListHandler->d_domainListCounter, sendCountTemp);
-        //KernelHandler.removeDuplicates(d_sendIndicesTemp, d_sendIndices, d_domainListCounter, sendCountTemp, false);
         integer sendCount;
         gpuErrorcheck(cudaMemcpy(&sendCount, domainListHandler->d_domainListCounter, sizeof(integer),
                                  cudaMemcpyDeviceToHost));
@@ -1031,13 +1051,21 @@ void Miluphpc::parallelForce() {
 
     int newSendCount;
     gpuErrorcheck(cudaMemset(domainListHandler->d_domainListCounter, 0, sizeof(integer)));
+
+    DomainListNS::Kernel::Launch::info(particleHandler->d_particles, domainListHandler->d_domainList);
+
+    // CHECK indices
     //CudaUtils::Kernel::Launch::markDuplicates(helperHandler->d_integerBuffer, domainListHandler->d_domainListCounter,
     //                                          sendCountTemp);
+    // CHECK indices and entries
+    //CudaUtils::Kernel::Launch::markDuplicates(helperHandler->d_integerBuffer, particleHandler->d_x,
+    //                                          particleHandler->d_y, domainListHandler->d_domainListCounter,
+    //                                          sendCountTemp);
+    // CHECK indices and entries and DEBUG!
     CudaUtils::Kernel::Launch::markDuplicates(helperHandler->d_integerBuffer, particleHandler->d_x,
                                               particleHandler->d_y, domainListHandler->d_domainListCounter,
-                                              sendCountTemp);
-    //KernelHandler.markDuplicates(d_sendIndicesTemp, d_x, d_y, d_z, d_mass, d_subDomainHandler, d_domainListCounter,
-    //                             sendCountTemp, false);
+                                              treeHandler->d_child, sendCountTemp);
+
     int duplicatesCounter;
     gpuErrorcheck(cudaMemcpy(&duplicatesCounter, domainListHandler->d_domainListCounter, sizeof(integer),
                              cudaMemcpyDeviceToHost));
@@ -1052,22 +1080,16 @@ void Miluphpc::parallelForce() {
     gpuErrorcheck(cudaMemcpy(&sendCount, domainListHandler->d_domainListCounter, sizeof(integer), cudaMemcpyDeviceToHost));
     Logger(INFO) << "sendCount: " << sendCount;
 
-    gpuErrorcheck(cudaMemset(buffer->d_integerVal, 0, sizeof(integer)));
-    CudaUtils::Kernel::Launch::findDuplicates(buffer->d_integerBuffer, particleHandler->d_x,
-                                              particleHandler->d_y, buffer->d_integerVal, sendCount);
+    // DEBUG
+    //gpuErrorcheck(cudaMemset(buffer->d_integerVal, 0, sizeof(integer)));
     //CudaUtils::Kernel::Launch::findDuplicates(buffer->d_integerBuffer, particleHandler->d_x,
     //                                          particleHandler->d_y, buffer->d_integerVal, sendCount);
-    integer duplicates;
-    gpuErrorcheck(cudaMemcpy(&duplicates, buffer->d_integerVal, sizeof(integer), cudaMemcpyDeviceToHost));
-    Logger(INFO) << "duplicates: " << duplicates;
-
-    //debug
-    //gpuErrorcheck(cudaMemset(domainListHandler->d_domainListCounter, 0, sizeof(integer)));
-    //CudaUtils::Kernel::Launch::markDuplicates(buffer->d_integerBuffer, domainListHandler->d_domainListCounter,
-    //                                          sendCount);
-    //gpuErrorcheck(cudaMemcpy(&duplicatesCounter, domainListHandler->d_domainListCounter, sizeof(integer), cudaMemcpyDeviceToHost));
-    //Logger(INFO) << "duplicatesCounter after removing: " << duplicatesCounter;
-    //end:debug
+    //CudaUtils::Kernel::Launch::findDuplicates(buffer->d_integerBuffer, particleHandler->d_x,
+    //                                          particleHandler->d_y, buffer->d_integerVal, sendCount);
+    //integer duplicates;
+    //gpuErrorcheck(cudaMemcpy(&duplicates, buffer->d_integerVal, sizeof(integer), cudaMemcpyDeviceToHost));
+    //Logger(INFO) << "duplicates: " << duplicates;
+    // end: DEBUG
 
     integer *sendLengths;
     sendLengths = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
@@ -1234,14 +1256,14 @@ void Miluphpc::parallelForce() {
     float elapsedTime = 0.f;
 
 
-    TreeNS::Kernel::Launch::sort(treeHandler->d_tree, numParticles, numParticles, false);
+    TreeNS::Kernel::Launch::sort(treeHandler->d_tree, /*treeHandler->h_toDeleteNode[1]*/numParticlesLocal, numParticles, false);
     //KernelHandler.sort(d_count, d_start, d_sorted, d_child, d_index, numParticles, numParticles, false); //TODO: numParticlesLocal or numParticles?
 
     //actual (local) force
     integer warp = 32;
     integer stackSize = 64;
     integer blockSize = 256;
-    Gravity::Kernel::Launch::computeForces(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal, numParticles,
+    Gravity::Kernel::Launch::computeForces(treeHandler->d_tree, particleHandler->d_particles, treeHandler->h_toDeleteNode[1]/*numParticlesLocal*/, numParticles,
                                            blockSize, warp, stackSize);
 
     //elapsedTime = KernelHandler.computeForces(d_x, d_y, d_z, d_vx, d_vy, d_vz, d_ax, d_ay, d_az, d_mass, d_sorted, d_child,
@@ -1277,20 +1299,29 @@ void Miluphpc::particles2file(HighFive::DataSet *pos, HighFive::DataSet *vel, Hi
     gpuErrorcheck(cudaMalloc((void**)&d_keys, numParticlesLocal*sizeof(keyType)));
 
     TreeNS::Kernel::Launch::getParticleKeys(treeHandler->d_tree, particleHandler->d_particles,
-                                            d_keys, 21, numParticlesLocal);
+                                            d_keys, 21, numParticlesLocal, curveType);
+    //SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys(subDomainKeyTreeHandler->d_subDomainKeyTree,
+    //                                                    treeHandler->d_tree, particleHandler->d_particles,
+    //                                                    d_keys, 21, numParticlesLocal, curveType);
 
 
     keyType *h_keys;
     h_keys = new keyType[numParticlesLocal];
     gpuErrorcheck(cudaMemcpy(d_keys, h_keys, numParticlesLocal * sizeof(keyType), cudaMemcpyHostToDevice));
 
+    integer keyProc;
+
     for (int i=0; i<numParticlesLocal; i++) {
         x.push_back({particleHandler->h_x[i], particleHandler->h_y[i], particleHandler->h_z[i]});
         v.push_back({particleHandler->h_vx[i], particleHandler->h_vy[i], particleHandler->h_vz[i]});
         k.push_back(h_keys[i]);
-        //if (i % 1000 == 0) {
-        //    Logger(INFO) << h_keys[i];
-        //}
+        if (true/*i % 1000 == 0*/) {
+            //Logger(INFO) << h_keys[i];
+            keyProc = subDomainKeyTreeHandler->h_subDomainKeyTree->key2proc(h_keys[i]);
+            if (keyProc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
+                //Logger(INFO) << "proc = " << keyProc << " for key: " << h_keys[i];
+            }
+        }
         //++nParticles;
     }
 

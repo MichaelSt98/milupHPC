@@ -1,7 +1,3 @@
-//
-// Created by Michael Staneker on 14.08.21.
-//
-
 #include "../../include/subdomain_key_tree/tree_handler.h"
 
 TreeHandler::TreeHandler(integer numParticles, integer numNodes) : numParticles(numParticles),

@@ -1,7 +1,3 @@
-//
-// Created by Michael Staneker on 12.08.21.
-//
-
 #include "../include/particles.cuh"
 #include "../include/cuda_utils/cuda_launcher.cuh"
 

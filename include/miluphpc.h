@@ -50,7 +50,7 @@ private:
 class Miluphpc {
 
 private:
-    void diskModel(Curve::Type curveType=Curve::lebesgue);
+    void diskModel();
 
     void updateRangeApproximately(int aimedParticlesPerProcess, int bins=4000);
     void fixedLoadDistribution();
@@ -64,6 +64,8 @@ private:
     void exchangeParticleEntry(integer *sendLengths, integer *receiveLengths, real *entry);
 
 public:
+
+    Curve::Type curveType;
 
     integer numParticles;
     integer numParticlesLocal;
@@ -81,8 +83,7 @@ public:
     Miluphpc(integer numParticles, integer numNodes);
     ~Miluphpc();
 
-    void initDistribution(ParticleDistribution::Type particleDistribution=ParticleDistribution::disk,
-                          Curve::Type curveType=Curve::lebesgue);
+    void initDistribution(ParticleDistribution::Type particleDistribution=ParticleDistribution::disk);
     void initBarnesHut();
 
     void barnesHut();

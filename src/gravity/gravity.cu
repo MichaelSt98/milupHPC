@@ -53,8 +53,8 @@ namespace Gravity {
                     switch (entry) {
                         case Entry::x:
                             helper->realBuffer[bodyIndex + offset] = particles->x[lowestDomainIndex];
-                            printf("lowestDomainIndex = %i: realBuffer = %f, x = %f\n", lowestDomainIndex,
-                                   helper->realBuffer[bodyIndex + offset], particles->x[lowestDomainIndex]);
+                            //printf("lowestDomainIndex = %i: realBuffer = %f, x = %f\n", lowestDomainIndex,
+                            //       helper->realBuffer[bodyIndex + offset], particles->x[lowestDomainIndex]);
                             break;
 #if DIM > 1
                         case Entry::y:
@@ -94,10 +94,6 @@ namespace Gravity {
                     if (lowestDomainList->sortedDomainListKeys[bodyIndex + offset] ==
                         lowestDomainList->domainListKeys[i]) {
                         originalIndex = i;
-                        //if (entry == Entry::x) {
-                        //    printf("original lowestDomainIndex = %i\n", originalIndex);
-                        //}
-                        //break;
                     }
                 }
 
@@ -224,9 +220,9 @@ namespace Gravity {
                         for (int i=0; i<POW_DIM; i++) {
                             particles->x[domainIndex] += particles->x[tree->child[POW_DIM*domainIndex + i]] *
                                     particles->mass[tree->child[POW_DIM*domainIndex + i]];
-                            printf("x += %f * %f = %f (%i)\n", particles->x[tree->child[POW_DIM*domainIndex + i]], particles->mass[tree->child[POW_DIM*domainIndex + i]],
-                                   particles->x[tree->child[POW_DIM*domainIndex + i]] * particles->mass[tree->child[POW_DIM*domainIndex + i]],
-                                   tree->child[POW_DIM*domainIndex + i]);
+                            //printf("x += %f * %f = %f (%i)\n", particles->x[tree->child[POW_DIM*domainIndex + i]], particles->mass[tree->child[POW_DIM*domainIndex + i]],
+                            //       particles->x[tree->child[POW_DIM*domainIndex + i]] * particles->mass[tree->child[POW_DIM*domainIndex + i]],
+                            //       tree->child[POW_DIM*domainIndex + i]);
 #if DIM > 1
                             particles->y[domainIndex] += particles->y[tree->child[POW_DIM*domainIndex + i]] *
                                     particles->mass[tree->child[POW_DIM*domainIndex + i]];
@@ -367,11 +363,11 @@ namespace Gravity {
 #endif
 #endif
 
-                            real r = dx*dx + 0.0025;
+                            real r = dx*dx + 0.05; //0.0025; //NEW: TODO: needed for smoothing
 #if DIM > 1
                             r += dy*dy;
 #if DIM == 3
-                            r += dz*dz; /*+ eps_squared*/;
+                            r += dz*dz;
 #endif
 #endif
 
@@ -389,29 +385,33 @@ namespace Gravity {
                                 //end: debug*/
 
                                 // calculate interaction force contribution
-                                if (r > 0.f) { //NEW
+                                if (r > 0.f) { //NEW //TODO: how to avoid r = 0?
                                     r = rsqrt(r);
                                 }
-                                /*if (r == 0.f) {
-                                    printf("r = 0!!! x[%i] = (%f, %f, %f) vs x[%i] = (%f, %f, %f)\n", sortedIndex,
-                                           particles->x[sortedIndex], particles->y[sortedIndex], particles->z[sortedIndex],
-                                           ch, particles->x[ch], particles->y[ch], particles->z[ch]);
-                                }*/
+                                //if (r == 0.f) {
+                                //    printf("r = 0!!! x[%i] = (%f, %f, %f) vs x[%i] = (%f, %f, %f)\n", sortedIndex,
+                                //           particles->x[sortedIndex], particles->y[sortedIndex], particles->z[sortedIndex],
+                                //           ch, particles->x[ch], particles->y[ch], particles->z[ch]);
+                                //}
                                 real f = particles->mass[ch] * r * r * r;// + 0.0025;
 
 
 
                                 acc_x += f*dx; // * 0.0001;
-                                /*if ((bodyIndex + offset) % 10000 == 0) {
-                                    printf("index = %i: acc_x = %f += (%f) f (%f) * dx (%f) | mass[%i] = %f, r = %f (%f = %f - %f, %f, %f) sIndex=%i\n", bodyIndex + offset,
-                                           acc_x, f*dx, f, dx, ch, particles->mass[ch], r, dx, particles->x[ch], pos_x, dy, dz, sortedIndex);
-                                }*/
 #if DIM > 1
                                 acc_y += f*dy; // * 0.0001;
 #if DIM == 3
                                 acc_z += f*dz; // * 0.0001;
 #endif
 #endif
+                                /*if (acc_x > 500000) {
+                                    printf("huge acceleration!!! r = %f acc = (%f, %f, %f) x[%i] = (%f, %f, %f) m = %f vs x[%i] = (%f, %f, %f) m = %f\n",
+                                           r, acc_x, acc_y, acc_z, sortedIndex,
+                                           particles->x[sortedIndex], particles->y[sortedIndex],
+                                           particles->z[sortedIndex], particles->mass[sortedIndex],
+                                           ch, particles->x[ch], particles->y[ch], particles->z[ch],
+                                           particles->mass[ch]);
+                                }*/
                                 //if (particles->mass[ch] > 10000) {
                                 //    printf("mass is huge for ch=%i with node = %i (mass = %f, r = %f, f = %f -> acc = (%f, %f, %f) f = (%f, %f, %f))!\n", ch, node, particles->mass[ch],
                                 //    r, f, acc_x, acc_y, acc_z, f*dx, f*dy, f*dz);
@@ -432,13 +432,7 @@ namespace Gravity {
                     top--;
                 }
                 // update body data
-                //if (std::isnan(acc_x)) {
-                //    printf("sortedIndex = %i\n", sortedIndex);
-                //}
                 particles->ax[sortedIndex] = acc_x;
-                //if ((bodyIndex + offset) % 10000 == 0) {
-                //    printf("acc_x = %f (index = %i, sortedIndex = %i)\n", acc_x, bodyIndex + offset, sortedIndex);
-                //}
 #if DIM > 1
                 particles->ay[sortedIndex] = acc_y;
 #if DIM == 3
@@ -528,10 +522,6 @@ namespace Gravity {
 
             while ((bodyIndex + offset) < *tree->index) {
 
-                //if ((bodyIndex + offset) == 0) {
-                //    printf("relevantIndex: %i\n", relevantDomainListIndices[relevantIndex]);
-                //}
-
                 insert = true;
                 //redo = false;
 
@@ -546,7 +536,6 @@ namespace Gravity {
                 //    insert = false;
                 //}
 
-                // TODO: CHANGED: relevantIndex -> relevantDomainListIndices[relevantIndex]
                 if (insert && (bodyIndex + offset) != domainList->relevantDomainListIndices[relevantIndex] &&
                     ((bodyIndex + offset) < subDomainKeyTree->procParticleCounter[subDomainKeyTree->rank] || (bodyIndex + offset) > n)) {
 
@@ -554,25 +543,27 @@ namespace Gravity {
                     //r = smallestDistance(x, y, z, relevantDomainListIndices[relevantIndex], bodyIndex + offset);
 
                     //calculate tree level by determining the particle's key and traversing the tree until hitting that particle
-                    level = tree->getTreeLevel(particles, bodyIndex + offset, MAX_LEVEL);
+                    level = tree->getTreeLevel(particles, bodyIndex + offset, MAX_LEVEL, curveType);
                     //level = getTreeLevel(bodyIndex + offset, child, x, y, z, minX, maxX, minY, maxY, minZ, maxZ);
 
                     if ((powf(0.5, level) * diam) >= (theta_ * r) && level >= 0) {
                         //TODO: insert cell itself or children?
 
                         /// inserting cell itself
-                        /*//check whether node is a domain list node
-                        for (int i=0; i<*domainListIndex; i++) {
-                            if ((bodyIndex + offset) == domainListIndices[i]) {
+                        /* //check whether node is a domain list node
+                        for (int i=0; i<*domainList->domainListIndex; i++) {
+                            if ((bodyIndex + offset) == domainList->domainListIndices[i]) {
                                 insert = false;
                                 break;
                                 //printf("domain list nodes do not need to be sent!\n");
+
                             }
                         }
                         if (insert) {
                             //add to indices to be sent
-                            insertIndex = atomicAdd(domainListCounter, 1);
-                            sendIndices[insertIndex] = bodyIndex + offset;
+                            insertIndex = atomicAdd(domainList->domainListCounter, 1);
+                            //sendIndices[insertIndex] = bodyIndex + offset;
+                            helper->integerBuffer[insertIndex] = bodyIndex + offset;
                         }
                         else {
 
@@ -580,7 +571,7 @@ namespace Gravity {
 
                         /// inserting children
                         for (int i=0; i<POW_DIM; i++) {
-                            childIndex = tree->child[8*(bodyIndex + offset) + i];
+                            childIndex = tree->child[POW_DIM * (bodyIndex + offset) + i];
                             //check whether node is already within the indices to be sent
                             //check whether node is a domain list node
                             for (int i = 0; i < *domainList->domainListIndex; i++) {
@@ -620,21 +611,15 @@ namespace Gravity {
             while ((index + offset) < *domainList->domainListIndex) {
 
                 bodyIndex = domainList->domainListIndices[index + offset];
-                //printf("[rank %i] relevantIndices compTheta[%i]: x = (%f, %f, %f)\n", subDomainKeyTree->rank,
-                //       index + offset, particles->x[bodyIndex], particles->y[bodyIndex], particles->z[bodyIndex]);
-                //printf("bodyIndex = %i\n", bodyIndex);
                 //calculate key
-                key = tree->getParticleKey(particles, bodyIndex, MAX_LEVEL);
+                key = tree->getParticleKey(particles, bodyIndex, MAX_LEVEL, curveType);
                 //key = getParticleKeyPerParticle(x[bodyIndex], y[bodyIndex], z[bodyIndex], minX, maxX, minY, maxY,
                 //                                minZ, maxZ, 21);
 
                 //if domain list node belongs to other process: add to relevant domain list indices
-                //printf("[rank %i] relevantIndices compTheta[%i]: proc = %i\n", subDomainKeyTree->rank, index + offset, subDomainKeyTree->key2proc(key, curveType));
-                if (subDomainKeyTree->key2proc(key, curveType) != subDomainKeyTree->rank) {
-                    //printf("relevantIndices += 1\n");
+                if (subDomainKeyTree->key2proc(key) != subDomainKeyTree->rank) {
                     domainIndex = atomicAdd(domainList->domainListCounter, 1);
                     domainList->relevantDomainListIndices[domainIndex] = bodyIndex;
-                    //printf("relevant domain list index: %i\n", bodyIndex);
                 }
                 offset += stride;
             }
@@ -654,34 +639,14 @@ namespace Gravity {
 
             while ((bodyIndex + offset) < n) {
 
-                key = tree->getParticleKey(particles, bodyIndex + offset, MAX_LEVEL);
+                key = tree->getParticleKey(particles, bodyIndex + offset, MAX_LEVEL, curveType);
 
-                switch (curveType) {
-                    case Curve::lebesgue: {
-                        for (int i = 0; i < (bins); i++) {
-                            if (key >= helper->keyTypeBuffer[i] && key < helper->keyTypeBuffer[i + 1]) {
-                                //keyHistCounts[i] += 1;
-                                atomicAdd(&helper->integerBuffer[i], 1);
-                                break;
-                            }
-                        }
+                for (int i = 0; i < (bins); i++) {
+                    if (key >= helper->keyTypeBuffer[i] && key < helper->keyTypeBuffer[i + 1]) {
+                        //keyHistCounts[i] += 1;
+                        atomicAdd(&helper->integerBuffer[i], 1);
                         break;
                     }
-                    case Curve::hilbert: {
-                        //TODO: Hilbert change
-                        printf("Attention: not implemented yet!\n");
-                        /*unsigned long hilbert = Lebesgue2Hilbert(key, 21);
-                        for (int i = 0; i < (bins); i++) {
-                            if (hilbert >= keyHistRanges[i] && hilbert < keyHistRanges[i + 1]) {
-                                //keyHistCounts[i] += 1;
-                                atomicAdd(&keyHistCounts[i], 1);
-                                break;
-                            }
-                        }
-                        break;*/
-                    }
-                    default:
-                        printf("Not available!\n");
                 }
 
                 offset += stride;
@@ -754,6 +719,12 @@ namespace Gravity {
             bodyIndex += tree->toDeleteLeaf[0];
 
             while ((bodyIndex + offset) < tree->toDeleteLeaf[1] && (bodyIndex + offset) > tree->toDeleteLeaf[0]) {
+
+                if ((bodyIndex + offset) % 100 == 0) {
+                    printf("Inserting received particle %i: x = (%f, %f, %f) m = %f\n", bodyIndex + offset,
+                           particles->x[bodyIndex + offset], particles->y[bodyIndex + offset],
+                           particles->z[bodyIndex + offset], particles->mass[bodyIndex + offset]);
+                }
 
                 if (newBody) {
 
@@ -868,7 +839,7 @@ namespace Gravity {
                 // if child is not locked
                 if (childIndex != -2) {
 
-                    int locked = temp * 8 + childPath;
+                    int locked = temp * POW_DIM + childPath;
 
                     //lock
                     if (atomicCAS(&tree->child[locked], childIndex, -2) == childIndex) {
@@ -1008,9 +979,9 @@ namespace Gravity {
 
             while ((bodyIndex + offset) < *endIndex) {
 
-                if (particles->mass[bodyIndex + offset] == 0) {
-                    printf("centreOfMassKernel: mass = 0 (%i)!\n", bodyIndex + offset);
-                }
+                //if (particles->mass[bodyIndex + offset] == 0) {
+                //    printf("centreOfMassKernel: mass = 0 (%i)!\n", bodyIndex + offset);
+                //}
 
                 if (particles->mass[bodyIndex + offset] != 0) {
                     particles->x[bodyIndex + offset] /= particles->mass[bodyIndex + offset];

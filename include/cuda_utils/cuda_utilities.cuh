@@ -43,8 +43,11 @@ namespace CudaUtils {
         template<typename T>
         __global__ void markDuplicates(T *array, integer *duplicateCounter, int length);
 
+        //template<typename T, typename U>
+        //__global__ void markDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, int length);
+
         template<typename T, typename U>
-        __global__ void markDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, int length);
+        __global__ void markDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, integer *child, int length);
 
         template<typename T>
         __global__ void removeDuplicates(T *array, T *removedArray, integer *duplicateCounter, int length);
@@ -66,8 +69,11 @@ namespace CudaUtils {
             template<typename T>
             real markDuplicates(T *array, integer *duplicateCounter, int length);
 
+            //template<typename T, typename U>
+            //real markDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, int length);
+
             template<typename T, typename U>
-            real markDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, int length);
+            real markDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, integer *child, int length);
 
             template<typename T>
             real removeDuplicates(T *array, T *removedArray, integer *duplicateCounter, int length);
