@@ -10,6 +10,9 @@ typedef unsigned long idInteger;
 #define KEY_MAX ULONG_MAX
 #define DOMAIN_LIST_SIZE 512
 
+#define MAX_DEPTH 128
+#define MAX_NUM_INTERACTIONS 180
+
 struct Execution
 {
     enum Location
