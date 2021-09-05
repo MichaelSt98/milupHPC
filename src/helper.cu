@@ -84,6 +84,73 @@ namespace HelperNS {
     template real sortArray<keyType , keyType>(keyType *arrayToSort, keyType *sortedArray, keyType *keyIn,
             keyType *keyOut, integer n);
 
+
+    template <typename T>
+    T reduceAndGlobalize(T *d_sml, T *d_aggregate, integer n, Reduction::Type reductionType) {
+
+        // device wide reduction
+        void     *d_temp_storage = NULL;
+        size_t   temp_storage_bytes = 0;
+        switch (reductionType) {
+            case Reduction::min: {
+                cub::DeviceReduce::Min(d_temp_storage, temp_storage_bytes, d_sml, d_aggregate, n);
+                // Allocate temporary storage
+                gpuErrorcheck(cudaMalloc(&d_temp_storage, temp_storage_bytes));
+                // Run max-reduction
+                cub::DeviceReduce::Min(d_temp_storage, temp_storage_bytes, d_sml, d_aggregate, n);
+            } break;
+            case Reduction::max: {
+                cub::DeviceReduce::Max(d_temp_storage, temp_storage_bytes, d_sml, d_aggregate, n);
+                // Allocate temporary storage
+                gpuErrorcheck(cudaMalloc(&d_temp_storage, temp_storage_bytes));
+                // Run max-reduction
+                cub::DeviceReduce::Max(d_temp_storage, temp_storage_bytes, d_sml, d_aggregate, n);
+            } break;
+            case Reduction::sum: {
+                cub::DeviceReduce::Sum(d_temp_storage, temp_storage_bytes, d_sml, d_aggregate, n);
+                // Allocate temporary storage
+                gpuErrorcheck(cudaMalloc(&d_temp_storage, temp_storage_bytes));
+                // Run max-reduction
+                cub::DeviceReduce::Sum(d_temp_storage, temp_storage_bytes, d_sml, d_aggregate, n);
+            }
+            default: {
+                Logger(ERROR) << "Reduction type not available!";
+            }
+        }
+
+        T reduction;
+        gpuErrorcheck(cudaMemcpy(&reduction, d_aggregate, sizeof(T), cudaMemcpyDeviceToHost));
+        Logger(INFO) << "reduction = " << reduction;
+
+        switch (reductionType) {
+            case Reduction::min: {
+                // interprocess reduction
+                boost::mpi::communicator comm;
+                all_reduce(comm, boost::mpi::inplace_t<T *>(&reduction), 1, boost::mpi::minimum<T>());
+            } break;
+            case Reduction::max: {
+                // interprocess reduction
+                boost::mpi::communicator comm;
+                all_reduce(comm, boost::mpi::inplace_t<T *>(&reduction), 1, boost::mpi::maximum<T>());
+            } break;
+            case Reduction::sum: {
+                // interprocess reduction
+                boost::mpi::communicator comm;
+                all_reduce(comm, boost::mpi::inplace_t<T *>(&reduction), 1, std::plus<T>());
+            }
+            default: {
+                Logger(ERROR) << "Reduction type not available!";
+            }
+        }
+        Logger(INFO) << "globalized reduction = " << reduction;
+
+        return reduction;
+
+    }
+
+    template real reduceAndGlobalize<real>(real*, real*, integer, Reduction::Type);
+
+
     namespace Kernel {
 
         template <typename T>

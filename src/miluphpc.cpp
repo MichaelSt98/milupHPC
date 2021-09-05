@@ -47,6 +47,16 @@ void Miluphpc::initDistribution(ParticleDistribution::Type particleDistribution)
             diskModel();
     }
 
+    gpuErrorcheck(cudaMemcpy(particleHandler->d_sml, particleHandler->h_sml, numParticlesLocal*sizeof(real),
+                             cudaMemcpyHostToDevice));
+
+    Logger(INFO) << "reduction: max:";
+    HelperNS::reduceAndGlobalize(particleHandler->d_sml, helperHandler->d_realVal, numParticlesLocal, Reduction::max);
+    Logger(INFO) << "reduction: min:";
+    HelperNS::reduceAndGlobalize(particleHandler->d_sml, helperHandler->d_realVal, numParticlesLocal, Reduction::min);
+    Logger(INFO) << "reduction: sum:";
+    HelperNS::reduceAndGlobalize(particleHandler->d_sml, helperHandler->d_realVal, numParticlesLocal, Reduction::sum);
+
     particleHandler->distributionToDevice();
 }
 
@@ -133,6 +143,11 @@ void Miluphpc::diskModel() {
                 particleHandler->h_particles->ax[i] = 0.0;
                 particleHandler->h_particles->ay[i] = 0.0;
                 particleHandler->h_particles->az[i] = 0.0;
+
+                particleHandler->h_particles->sml[i] = theta_angle + subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+                if (i % 1000 == 0) {
+                    printf("maxSML: particleHandler->h_sml[%i] = %f\n", i, particleHandler->h_sml[i]);
+                }
             }
             break;
         }
@@ -209,6 +224,8 @@ void Miluphpc::diskModel() {
                 particleHandler->h_particles->ax[i] = 0.0;
                 particleHandler->h_particles->ay[i] = 0.0;
                 particleHandler->h_particles->az[i] = 0.0;
+
+                particleHandler->h_particles->sml[i] = theta_angle + subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
             }
             break;
         }

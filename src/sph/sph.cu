@@ -1,4 +1,5 @@
 #include "../../include/sph/sph.cuh"
+#include <cub/cub.cuh>
 
 namespace SPH {
 

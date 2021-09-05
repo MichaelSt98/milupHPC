@@ -1,7 +1,3 @@
-//
-// Created by Michael Staneker on 15.08.21.
-//
-
 #ifndef MILUPHPC_MILUPHPC_H
 #define MILUPHPC_MILUPHPC_H
 
@@ -15,6 +11,7 @@
 #include "integrator/integrator.h"
 #include "helper_handler.h"
 #include "gravity/gravity.cuh"
+#include "sph/sph.cuh"
 
 #include <iostream>
 #include <stdio.h>

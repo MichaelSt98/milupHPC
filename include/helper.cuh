@@ -7,6 +7,22 @@
 
 #include "parameter.h"
 #include "cuda_utils/cuda_utilities.cuh"
+#include <boost/mpi.hpp>
+#include "utils/logger.h"
+
+struct Reduction
+{
+    enum Type
+    {
+        min, max, sum
+    };
+    Type t_;
+    Reduction(Type t) : t_(t) {}
+    operator Reduction () const {return t_;}
+private:
+    template<typename T>
+    operator T () const;
+};
 
 class Helper {
 
@@ -57,6 +73,9 @@ namespace HelperNS {
 
     template <typename A, typename B>
     real sortArray(A *arrayToSort, A *sortedArray, B *keyIn, B *keyOut, integer n);
+
+    template <typename T>
+    T reduceAndGlobalize(T *d_sml, T *d_aggregate, integer n, Reduction::Type reductionType);
 
 }
 
