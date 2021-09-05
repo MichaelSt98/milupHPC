@@ -3,8 +3,8 @@
 Miluphpc::Miluphpc(integer numParticles, integer numNodes) : numParticles(numParticles), numNodes(numNodes) {
 
 
-    //curveType = Curve::lebesgue;
-    curveType = Curve::hilbert;
+    curveType = Curve::lebesgue;
+    //curveType = Curve::hilbert;
 
 
     //TODO: how to distinguish/intialize numParticlesLocal vs numParticles
@@ -557,14 +557,13 @@ void Miluphpc::barnesHut() {
     HelperNS::Kernel::Launch::resetArray(&particleHandler->d_mass[numParticlesLocal], (real)0, numParticles-numParticlesLocal);
 
     // DEBUG
-    particleHandler->distributionToHost(true, false);
-    keyType *d_keys;
-    gpuErrorcheck(cudaMalloc((void**)&d_keys, numParticlesLocal*sizeof(keyType)));
-
-    SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys(subDomainKeyTreeHandler->d_subDomainKeyTree,
-                                                        treeHandler->d_tree, particleHandler->d_particles,
-                                                        d_keys, 21, numParticlesLocal, curveType);
-    gpuErrorcheck(cudaFree(d_keys));
+    //particleHandler->distributionToHost(true, false);
+    //keyType *d_keys;
+    //gpuErrorcheck(cudaMalloc((void**)&d_keys, numParticlesLocal*sizeof(keyType)));
+    //SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys(subDomainKeyTreeHandler->d_subDomainKeyTree,
+    //                                                    treeHandler->d_tree, particleHandler->d_particles,
+    //                                                    d_keys, 21, numParticlesLocal, curveType);
+    //gpuErrorcheck(cudaFree(d_keys));
     // end: DEBUG
 
 
@@ -1378,15 +1377,19 @@ void Miluphpc::parallelForce() {
 
 void Miluphpc::particles2file(HighFive::DataSet *pos, HighFive::DataSet *vel, HighFive::DataSet *key) {
 
-    std::vector<std::vector<double>> x, v; // two dimensional vector for 3D vector data
-    std::vector<unsigned long> k; // one dimensional vector holding particle keys
+    std::vector<std::vector<real>> x, v; // two dimensional vector for 3D vector data
+    std::vector<keyType> k; // one dimensional vector holding particle keys
 
     particleHandler->distributionToHost(true, false);
+
     keyType *d_keys;
     gpuErrorcheck(cudaMalloc((void**)&d_keys, numParticlesLocal*sizeof(keyType)));
 
-    TreeNS::Kernel::Launch::getParticleKeys(treeHandler->d_tree, particleHandler->d_particles,
-                                            d_keys, 21, numParticlesLocal, curveType);
+    //TreeNS::Kernel::Launch::getParticleKeys(treeHandler->d_tree, particleHandler->d_particles,
+    //                                        d_keys, 21, numParticlesLocal, curveType);
+    SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys(subDomainKeyTreeHandler->d_subDomainKeyTree,
+                                                        treeHandler->d_tree, particleHandler->d_particles,
+                                                        d_keys, 21, numParticlesLocal, curveType);
     //SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys(subDomainKeyTreeHandler->d_subDomainKeyTree,
     //                                                    treeHandler->d_tree, particleHandler->d_particles,
     //                                                    d_keys, 21, numParticlesLocal, curveType);
@@ -1394,7 +1397,7 @@ void Miluphpc::particles2file(HighFive::DataSet *pos, HighFive::DataSet *vel, Hi
 
     keyType *h_keys;
     h_keys = new keyType[numParticlesLocal];
-    gpuErrorcheck(cudaMemcpy(d_keys, h_keys, numParticlesLocal * sizeof(keyType), cudaMemcpyHostToDevice));
+    gpuErrorcheck(cudaMemcpy(h_keys, d_keys, numParticlesLocal * sizeof(keyType), cudaMemcpyDeviceToHost));
 
     integer keyProc;
 
@@ -1402,14 +1405,6 @@ void Miluphpc::particles2file(HighFive::DataSet *pos, HighFive::DataSet *vel, Hi
         x.push_back({particleHandler->h_x[i], particleHandler->h_y[i], particleHandler->h_z[i]});
         v.push_back({particleHandler->h_vx[i], particleHandler->h_vy[i], particleHandler->h_vz[i]});
         k.push_back(h_keys[i]);
-        if (true/*i % 1000 == 0*/) {
-            //Logger(INFO) << h_keys[i];
-            keyProc = subDomainKeyTreeHandler->h_subDomainKeyTree->key2proc(h_keys[i]);
-            if (keyProc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
-                //Logger(INFO) << "proc = " << keyProc << " for key: " << h_keys[i];
-            }
-        }
-        //++nParticles;
     }
 
     gpuErrorcheck(cudaFree(d_keys));

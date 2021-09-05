@@ -143,7 +143,7 @@ int main(int argc, char** argv)
         dataSpaceDims[0] = std::size_t(numParticles);
         dataSpaceDims[1] = 3;
 
-        HighFive::DataSet ranges = h5file.createDataSet<unsigned long>("/hilbertRanges",
+        HighFive::DataSet ranges = h5file.createDataSet<keyType>("/hilbertRanges",
                                                                        HighFive::DataSpace(numProcesses+1));
 
         keyType *rangeValues;
@@ -160,15 +160,16 @@ int main(int argc, char** argv)
 
         delete [] rangeValues;
 
-        HighFive::DataSet pos = h5file.createDataSet<double>("/x", HighFive::DataSpace(dataSpaceDims));
-        HighFive::DataSet vel = h5file.createDataSet<double>("/v", HighFive::DataSpace(dataSpaceDims));
-        HighFive::DataSet key = h5file.createDataSet<unsigned long>("/hilbertKey",
+        HighFive::DataSet pos = h5file.createDataSet<real>("/x", HighFive::DataSpace(dataSpaceDims));
+        HighFive::DataSet vel = h5file.createDataSet<real>("/v", HighFive::DataSpace(dataSpaceDims));
+        HighFive::DataSet key = h5file.createDataSet<keyType>("/hilbertKey",
                                                                     HighFive::DataSpace(numParticles));
         //miluphpc.run();
 
+        miluphpc.barnesHut();
+        //miluphpc.sph();
+
         miluphpc.particles2file(&pos, &vel, &key);
-        //miluphpc.barnesHut();
-        miluphpc.sph();
 
     }
 

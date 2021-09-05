@@ -169,11 +169,9 @@ CUDA_CALLABLE_MEMBER keyType Tree::getParticleKey(Particles *particles, integer 
     switch (curveType) {
         case Curve::lebesgue: {
             return particleKey;
-            //break;
         }
         case Curve::hilbert: {
             return KeyNS::lebesgue2hilbert(particleKey, maxLevel);
-            //break;
         }
         default:
             printf("Curve type not available!\n");
@@ -705,12 +703,12 @@ __global__ void TreeNS::Kernel::sort(Tree *tree, integer n, integer m) {
 __global__ void TreeNS::Kernel::getParticleKeys(Tree *tree, Particles *particles, keyType *keys, integer maxLevel,
                                 integer n, Curve::Type curveType) {
 
-    int bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
-    int stride = blockDim.x * gridDim.x;
-    int offset = 0;
+    integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+    integer stride = blockDim.x * gridDim.x;
+    integer offset = 0;
 
-    unsigned long particleKey;
-    unsigned long hilbertParticleKey;
+    keyType particleKey;
+    keyType hilbertParticleKey;
 
     //char keyAsChar[21 * 2 + 3];
 
@@ -720,11 +718,8 @@ __global__ void TreeNS::Kernel::getParticleKeys(Tree *tree, Particles *particles
         particleKey = tree->getParticleKey(particles, bodyIndex + offset, maxLevel, curveType);
 
         //if ((bodyIndex + offset) % 1000 == 0) {
-            //printf("particleKey = %lu\n", particleKey);
+        //    printf("particleKey = %lu\n", particleKey);
         //}
-
-        //subdomain->key2Char(particleKey, 21, keyAsChar);
-        //printf("keyMax: %lu = %s\n", particleKey, keyAsChar);
 
         keys[bodyIndex + offset] = particleKey; //hilbertParticleKey;
 

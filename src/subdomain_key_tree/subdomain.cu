@@ -272,14 +272,14 @@ namespace SubDomainKeyTreeNS {
                                         Particles *particles, keyType *keys, integer maxLevel,
                                         integer n, Curve::Type curveType) {
 
-            int bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
-            int stride = blockDim.x * gridDim.x;
-            int offset = 0;
+            integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
 
-            unsigned long particleKey;
-            unsigned long hilbertParticleKey;
+            keyType particleKey;
+            keyType hilbertParticleKey;
 
-            char keyAsChar[21 * 2 + 3];
+            //char keyAsChar[21 * 2 + 3];
             integer proc;
 
             while (bodyIndex + offset < n) {
@@ -287,22 +287,23 @@ namespace SubDomainKeyTreeNS {
                 //particleKey = 0UL;
                 particleKey = tree->getParticleKey(particles, bodyIndex + offset, maxLevel, curveType);
 
-                KeyNS::key2Char(particleKey, 21, keyAsChar);
+                // DEBUG
+                //KeyNS::key2Char(particleKey, 21, keyAsChar);
                 //printf("keyMax: %lu = %s\n", particleKey, keyAsChar);
-
-                proc = subDomainKeyTree->key2proc(particleKey);
-
+                //proc = subDomainKeyTree->key2proc(particleKey);
+                //if (proc == 0) {
+                //    atomicAdd(tree->index, 1);
+                //}
                 //if ((bodyIndex + offset) % 1000 == 0) {
-                    //printf("[rank %i] particleKey = %lu = %s, proc = %i\n", subDomainKeyTree->rank, particleKey,
-                    //       keyAsChar, proc);
+                //    printf("[rank %i] proc = %i, particleKey = %s = %lu\n", subDomainKeyTree->rank, proc,
+                //           keyAsChar, particleKey);
                     //printf("[rank %i] particleKey = %lu, proc = %i\n", subDomainKeyTree->rank, particleKey,
                     //       proc);
                 //}
-
-                if (subDomainKeyTree->rank != proc) {
-                    printf("[rank %i] particleKey = %lu, proc = %i\n", subDomainKeyTree->rank, particleKey,
-                           proc);
-                }
+                //if (subDomainKeyTree->rank != proc) {
+                //    printf("[rank %i] particleKey = %lu, proc = %i\n", subDomainKeyTree->rank, particleKey,
+                //           proc);
+                //}
 
                 keys[bodyIndex + offset] = particleKey; //hilbertParticleKey;
 
