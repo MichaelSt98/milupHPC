@@ -167,7 +167,8 @@ int main(int argc, char** argv)
         //miluphpc.run();
 
         miluphpc.particles2file(&pos, &vel, &key);
-        miluphpc.barnesHut();
+        //miluphpc.barnesHut();
+        miluphpc.sph();
 
     }
 

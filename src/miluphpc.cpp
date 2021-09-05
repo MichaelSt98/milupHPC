@@ -645,6 +645,76 @@ void Miluphpc::barnesHut() {
 
 }
 
+void Miluphpc::sph() {
+
+    // in order to build tree, domain list, ...
+    barnesHut();
+
+    int sphInsertOffset = 50000;
+
+    integer *d_sphSendCount;
+    integer *d_alreadyInserted;
+    gpuErrorcheck(cudaMalloc((void**)&d_alreadyInserted, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses*sizeof(integer)));
+    gpuErrorcheck(cudaMalloc((void**)&d_sphSendCount, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses*sizeof(integer)));
+
+    gpuErrorcheck(cudaMemset(d_sphSendCount, 0, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses*sizeof(integer)));
+    gpuErrorcheck(cudaMemset(helperHandler->d_integerBuffer, -1, numParticles*sizeof(integer)));
+
+    SPH::Kernel::Launch::particles2Send(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
+                                        particleHandler->d_particles, domainListHandler->d_domainList,
+                                        lowestDomainListHandler->d_domainList, 21, helperHandler->d_integerBuffer,
+                                        d_sphSendCount, d_alreadyInserted, sphInsertOffset,
+                                        numParticlesLocal, numParticles, numNodes, 1e-1, curveType);
+
+    //KernelHandler.sphParticles2Send(numParticlesLocal, numParticles, numNodes, 1e-1,
+    //                                d_x, d_y, d_z, d_min_x, d_max_x, d_min_y, d_max_y, d_min_z, d_max_z,
+    //                                d_subDomainHandler, d_domainListIndex, d_domainListKeys,
+    //                                d_domainListIndices, d_domainListLevels,
+    //                                d_lowestDomainListIndices, d_lowestDomainListIndex,
+    //                                d_lowestDomainListKeys, d_lowestDomainListLevels, 1e-1, 21, parameters.curveType,
+    //                                d_sortArray, d_sphSendCount, d_alreadyInserted, sphInsertOffset, false);
+
+    integer totalSendCount = 0;
+
+    integer *particles2SendSPH;
+    particles2SendSPH = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+    gpuErrorcheck(cudaMemcpy(particles2SendSPH, d_sphSendCount, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses*sizeof(integer),
+                             cudaMemcpyDeviceToHost));
+    for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
+        Logger(INFO) << "particles2SendSPH[" << i << "] = " << particles2SendSPH[i];
+        totalSendCount += particles2SendSPH[i];
+    }
+
+    Logger(INFO) << "totalSendCount: " << totalSendCount;
+
+    int *particles2ReceiveSPH;
+    particles2ReceiveSPH = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+    particles2ReceiveSPH[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] = 0;
+
+    mpi::messageLengths(subDomainKeyTreeHandler->h_subDomainKeyTree, particles2SendSPH, particles2ReceiveSPH);
+
+    int totalReceiveLength = 0;
+    for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
+        Logger(INFO) << "particles2ReceiveSPH[" << i << "]: " << particles2ReceiveSPH[i];
+        totalReceiveLength += particles2ReceiveSPH[i];
+    }
+
+    Logger(INFO) << "SPH: totalReceiveLength: " << totalReceiveLength;
+
+
+    //TODO: real (SPH) particle exchange!
+
+    SPH::Kernel::Launch::fixedRadiusNN(treeHandler->d_tree, particleHandler->d_particles, particleHandler->d_nnl,
+                                       numParticlesLocal, numParticles, numNodes);
+
+    SPH::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, helperHandler->d_helper,
+                              numParticlesLocal, numParticles, numNodes);
+
+    gpuErrorcheck(cudaFree(d_sphSendCount));
+    gpuErrorcheck(cudaFree(d_alreadyInserted));
+
+}
+
 void Miluphpc::fixedLoadDistribution() {
     for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
         subDomainKeyTreeHandler->h_subDomainKeyTree->range[i] = i * (1UL << 63)/(subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);

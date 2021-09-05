@@ -84,6 +84,8 @@ public:
     void initBarnesHut();
 
     void barnesHut();
+    void sph();
+
     void run();
 
 

@@ -22,7 +22,7 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     h_uid = new idInteger[numParticles];
     h_materialId = new integer[numParticles];
     h_sml = new real[numParticles];
-    h_nnl = new integer[numParticles];
+    h_nnl = new integer[numParticles * MAX_NUM_INTERACTIONS];
     h_noi = new integer [numParticles];
     h_e = new real[numParticles];
     h_dedt = new real[numParticles];
@@ -106,7 +106,7 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     gpuErrorcheck(cudaMalloc((void**)&d_uid, numParticles * sizeof(idInteger)));
     gpuErrorcheck(cudaMalloc((void**)&d_materialId, numParticles * sizeof(integer)));
     gpuErrorcheck(cudaMalloc((void**)&d_sml, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_nnl, numParticles * sizeof(integer)));
+    gpuErrorcheck(cudaMalloc((void**)&d_nnl, numParticles * MAX_NUM_INTERACTIONS * sizeof(integer)));
     gpuErrorcheck(cudaMalloc((void**)&d_noi, numParticles * sizeof(integer)));
     gpuErrorcheck(cudaMalloc((void**)&d_e, numParticles * sizeof(real)));
     gpuErrorcheck(cudaMalloc((void**)&d_dedt, numParticles * sizeof(real)));
