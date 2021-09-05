@@ -58,6 +58,7 @@ private:
 
     //functions
     ColorRGB procColor(unsigned long k, const std::vector<unsigned long> &ranges);
+    int procNumber(unsigned long k, const std::vector<unsigned long> &ranges);
     void clearPixelSpace(ColorRGB *pixelSpace);
     int pos2pixel(double pos);
     void particle2PixelXY(double x, double y, const ColorRGB &color, ColorRGB *pixelSpace);
