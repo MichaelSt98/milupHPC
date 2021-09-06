@@ -449,6 +449,43 @@ namespace SPH {
 
         }
 
+        __global__ void collectSendIndices(integer *toSend, integer *toSendCollected, integer count) {
+
+            integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+
+            while ((bodyIndex + offset) < count) {
+                toSendCollected[bodyIndex + offset] = toSend[bodyIndex + offset];
+                offset += stride;
+            }
+        }
+
+        __global__ void collectSendEntries(SubDomainKeyTree *subDomainKeyTree, real *entry, real *toSend,
+                                           integer *sendIndices, integer *sendCount, integer totalSendCount,
+                                           integer insertOffset) {
+
+            integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+
+            integer proc = subDomainKeyTree->rank - 1;
+            if (proc < 0) {
+                proc = 0;
+            }
+
+            if ((bodyIndex + offset) == 0) {
+                printf("[rank %i] sendCount(%i, %i)\n", subDomainKeyTree->rank, sendCount[0], sendCount[1]);
+            }
+
+            bodyIndex += proc*insertOffset;
+
+            while ((bodyIndex + offset) < totalSendCount) {
+                toSend[bodyIndex + offset] = entry[sendIndices[bodyIndex + offset]];
+                offset += stride;
+            }
+        }
+
         __global__ void info(Tree *tree, Particles *particles, Helper *helper,
                              integer numParticlesLocal, integer numParticles, integer numNodes) {
 
@@ -493,6 +530,19 @@ namespace SPH {
                                     particles, domainList, lowestDomainList, maxLevel, toSend, sendCount,
                                     alreadyInserted, insertOffset, numParticlesLocal, numParticles, numNodes,
                                     radius, curveType);
+            }
+
+            real collectSendIndices(integer *toSend, integer *toSendCollected, integer count) {
+                ExecutionPolicy executionPolicy;
+                return cuda::launch(true, executionPolicy, ::SPH::Kernel::collectSendIndices, toSend, toSendCollected,
+                                    count);
+            }
+
+            real collectSendEntries(SubDomainKeyTree *subDomainKeyTree, real *entry, real *toSend, integer *sendIndices,
+                                    integer *sendCount, integer totalSendCount, integer insertOffset) {
+                ExecutionPolicy executionPolicy;
+                return cuda::launch(true, executionPolicy, ::SPH::Kernel::collectSendEntries, subDomainKeyTree,
+                                    entry, toSend, sendIndices, sendCount, totalSendCount, insertOffset);
             }
 
             real info(Tree *tree, Particles *particles, Helper *helper,

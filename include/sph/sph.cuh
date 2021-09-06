@@ -27,6 +27,12 @@ namespace SPH {
                                        integer numParticlesLocal, integer numParticles, integer numNodes, real radius,
                                        Curve::Type curveType = Curve::lebesgue);
 
+        __global__ void collectSendIndices(integer *toSend, integer *toSendCollected, integer count);
+
+        __global__ void collectSendEntries(SubDomainKeyTree *subDomainKeyTree, real *entry, real *toSend,
+                                           integer *sendIndices, integer *sendCount, integer totalSendCount,
+                                           integer insertOffset);
+
         __global__ void info(Tree *tree, Particles *particles, Helper *helper,
                              integer numParticlesLocal, integer numParticles, integer numNodes);
 
@@ -44,6 +50,11 @@ namespace SPH {
                                            integer insertOffset,
                                            integer numParticlesLocal, integer numParticles, integer numNodes, real radius,
                                            Curve::Type curveType = Curve::lebesgue);
+
+            real collectSendIndices(integer *toSend, integer *toSendCollected, integer count);
+
+            real collectSendEntries(SubDomainKeyTree *subDomainKeyTree, real *entry, real *toSend, integer *sendIndices,
+                                    integer *sendCount, integer totalSendCount, integer insertOffset);
 
             real info(Tree *tree, Particles *particles, Helper *helper,
                                  integer numParticlesLocal, integer numParticles, integer numNodes);

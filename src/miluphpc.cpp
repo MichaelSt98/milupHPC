@@ -692,16 +692,32 @@ void Miluphpc::sph() {
 
     mpi::messageLengths(subDomainKeyTreeHandler->h_subDomainKeyTree, particles2SendSPH, particles2ReceiveSPH);
 
-    int totalReceiveLength = 0;
+    integer totalReceiveLength = 0;
     for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
         Logger(INFO) << "particles2ReceiveSPH[" << i << "]: " << particles2ReceiveSPH[i];
         totalReceiveLength += particles2ReceiveSPH[i];
     }
 
+    integer particles2SendOffset = 0;
+    for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
+        SPH::Kernel::Launch::collectSendIndices(&helperHandler->d_integerBuffer[i*sphInsertOffset], &buffer->d_integerBuffer[particles2SendOffset], particles2SendSPH[i]);
+        //KernelHandler.collectSendIndicesSPH(&d_sortArray[i*sphInsertOffset], &d_sortArrayOut[particles2SendOffset], particles2SendSPH[i], false);
+        particles2SendOffset += particles2SendSPH[i];
+    }
+
     Logger(INFO) << "SPH: totalReceiveLength: " << totalReceiveLength;
 
+    treeHandler->h_toDeleteLeaf[0] = numParticlesLocal;
+    treeHandler->h_toDeleteLeaf[1] = numParticlesLocal + totalReceiveLength;
+    gpuErrorcheck(cudaMemcpy(treeHandler->d_toDeleteLeaf, treeHandler->h_toDeleteLeaf, 2*sizeof(integer),
+                             cudaMemcpyHostToDevice));
 
-    //TODO: real (SPH) particle exchange!
+    SPH::Kernel::Launch::collectSendEntries(subDomainKeyTreeHandler->d_subDomainKeyTree, particleHandler->d_x,
+                                            buffer->d_realBuffer, helperHandler->d_integerBuffer, d_sphSendCount,
+                                            totalSendCount, sphInsertOffset);
+
+    //TODO: NEXT: exchange particle entry via MPI
+    // for all entries!
 
     //real time = SPH::Kernel::Launch::fixedRadiusNN(treeHandler->d_tree, particleHandler->d_particles, particleHandler->d_nnl,
     //                                   numParticlesLocal, numParticles, numNodes);
