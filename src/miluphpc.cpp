@@ -144,10 +144,10 @@ void Miluphpc::diskModel() {
                 particleHandler->h_particles->ay[i] = 0.0;
                 particleHandler->h_particles->az[i] = 0.0;
 
-                particleHandler->h_particles->sml[i] = theta_angle + subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
-                if (i % 1000 == 0) {
-                    printf("maxSML: particleHandler->h_sml[%i] = %f\n", i, particleHandler->h_sml[i]);
-                }
+                particleHandler->h_particles->sml[i] = 0.05; //theta_angle + subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+                //if (i % 1000 == 0) {
+                //    printf("maxSML: particleHandler->h_sml[%i] = %f\n", i, particleHandler->h_sml[i]);
+                //}
             }
             break;
         }
@@ -225,7 +225,7 @@ void Miluphpc::diskModel() {
                 particleHandler->h_particles->ay[i] = 0.0;
                 particleHandler->h_particles->az[i] = 0.0;
 
-                particleHandler->h_particles->sml[i] = theta_angle + subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+                particleHandler->h_particles->sml[i] = 0.05; //theta_angle + subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
             }
             break;
         }
@@ -703,8 +703,13 @@ void Miluphpc::sph() {
 
     //TODO: real (SPH) particle exchange!
 
-    SPH::Kernel::Launch::fixedRadiusNN(treeHandler->d_tree, particleHandler->d_particles, particleHandler->d_nnl,
-                                       numParticlesLocal, numParticles, numNodes);
+    //real time = SPH::Kernel::Launch::fixedRadiusNN(treeHandler->d_tree, particleHandler->d_particles, particleHandler->d_nnl,
+    //                                   numParticlesLocal, numParticles, numNodes);
+
+    real time = SPH::Kernel::Launch::fixedRadiusNN_Test(treeHandler->d_tree, particleHandler->d_particles, particleHandler->d_nnl,
+                                                   numParticlesLocal, numParticles, numNodes);
+
+    Logger(TIME) << "SPH: fixedRadiusNN: " << time << " ms";
 
     SPH::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, helperHandler->d_helper,
                               numParticlesLocal, numParticles, numNodes);

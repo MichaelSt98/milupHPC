@@ -1099,7 +1099,9 @@ namespace Gravity {
         real Launch::computeForces(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
                                    integer warp, integer stackSize) {
 
-            size_t sharedMemory = (sizeof(real)+sizeof(integer))*stackSize*blockSize/warp;
+            //TODO: check shared memory size
+            //size_t sharedMemory = (sizeof(real)+sizeof(integer))*stackSize*blockSize/warp;
+            size_t sharedMemory = 2*sizeof(real)*stackSize*blockSize/warp;
             ExecutionPolicy executionPolicy(256, 256, sharedMemory);
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces, tree, particles, n, m,
                                 blockSize, warp, stackSize);

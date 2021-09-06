@@ -16,6 +16,10 @@ namespace SPH {
         fixedRadiusNN(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
                       integer numParticles, integer numNodes);
 
+        __global__ void
+        fixedRadiusNN_Test(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
+                                    integer numParticles, integer numNodes);
+
         __global__ void particles2Send(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                        DomainList *domainList, DomainList *lowestDomainList, integer maxLevel,
                                        integer *toSend, integer *sendCount, integer *alreadyInserted,
@@ -30,6 +34,9 @@ namespace SPH {
 
             real fixedRadiusNN(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
                           integer numParticles, integer numNodes);
+
+            real fixedRadiusNN_Test(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
+                               integer numParticles, integer numNodes);
 
             real particles2Send(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                            DomainList *domainList, DomainList *lowestDomainList, integer maxLevel,

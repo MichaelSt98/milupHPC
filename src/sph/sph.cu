@@ -140,6 +140,147 @@ namespace SPH {
             }
         }
 
+        __global__ void
+        fixedRadiusNN_Test(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
+                           integer numParticles, integer numNodes) {
+
+            integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+
+            integer childNumber, nodeIndex, depth, childIndex;
+
+            real dx, x_radius;
+#if DIM > 1
+            real dy, y_radius;
+#if DIM == 3
+            real dz, z_radius;
+            real r_temp;
+#endif
+#endif
+
+            real d, r, interactionDistance;
+
+            integer noOfInteractions;
+
+            //integer currentNodeIndex[MAX_DEPTH];
+            //integer currentChildNumber[MAX_DEPTH];
+
+            extern __shared__ integer buffer[];
+            integer *currentNodeIndex = (integer*)buffer;
+            integer *currentChildNumber = (integer*)&currentNodeIndex[MAX_DEPTH];
+
+            //__shared__ integer currentNodeIndex[MAX_DEPTH];
+            //__shared__ integer currentChildNumber[MAX_DEPTH];
+
+            while ((bodyIndex + offset) < numParticlesLocal) {
+
+                // resetting
+                for (integer i = 0; i < MAX_NUM_INTERACTIONS; i++) {
+                    interactions[(bodyIndex + offset) * MAX_NUM_INTERACTIONS + i] = -1;
+                }
+                //numberOfInteractions[bodyIndex + offset] = 0;
+                // end: resetting
+
+                depth = 0;
+                currentNodeIndex[depth] = 0; //numNodes - 1;
+                currentChildNumber[depth] = 0;
+                noOfInteractions = 0;
+
+                x_radius = 0.5 * (*tree->maxX - (*tree->minX));
+#if DIM > 1
+                y_radius = 0.5 * (*tree->maxY - (*tree->minY));
+#if DIM == 3
+                z_radius = 0.5 * (*tree->maxZ - (*tree->minZ));
+#endif
+#endif
+
+#if DIM == 1
+                r = x_radius;
+#elif DIM == 2
+                r = fmaxf(x_temp, y_radius);
+#else
+                r_temp = fmaxf(x_radius, y_radius);
+                r = fmaxf(r_temp, z_radius); //TODO: (0.5 * r) or (1.0 * r)
+#endif
+
+                interactionDistance = (r + particles->sml[bodyIndex + offset]);
+
+                do {
+                    childNumber = currentChildNumber[depth];
+                    nodeIndex = currentNodeIndex[depth];
+
+                    while (childNumber < POW_DIM) {
+                        childIndex = tree->child[POW_DIM * nodeIndex + childNumber];
+                        childNumber++;
+
+                        if (childIndex != -1 && childIndex != (bodyIndex + offset)) {
+                            dx = particles->x[bodyIndex + offset] - particles->x[childIndex];
+#if DIM > 1
+                            dy = particles->y[bodyIndex + offset] - particles->y[childIndex];
+#if DIM == 3
+                            dz = particles->z[bodyIndex + offset] - particles->z[childIndex];
+#endif
+#endif
+                            // its a leaf
+                            if (childIndex < numParticles) {
+#if DIM == 1
+                                d = dx*dx;
+#elif DIM == 2
+                                d = dx*dx + dy*dy;
+#else
+                                d = dx * dx + dy * dy + dz * dz;
+#endif
+
+                                if ((bodyIndex + offset) % 1000 == 0) {
+                                    //printf("sph: index = %i, d = %i\n", bodyIndex+offset, d);
+                                }
+
+                                if (d < (particles->sml[bodyIndex + offset] * particles->sml[bodyIndex + offset])) {
+                                    //printf("Adding interaction partner!\n");
+                                    interactions[(bodyIndex + offset) * MAX_NUM_INTERACTIONS +
+                                                 noOfInteractions] = childIndex;
+                                    noOfInteractions++;
+                                }
+                            }
+#if DIM == 1
+                                else if (fabs(dx) < interactionDistance &&) {
+#elif DIM == 2
+                                else if (fabs(dx) < interactionDistance &&
+                                     fabs(dy) < interactionDistance) {
+#else
+                            else if (fabs(dx) < interactionDistance &&
+                                     fabs(dy) < interactionDistance &&
+                                     fabs(dz) < interactionDistance) {
+#endif
+                                // put child on stack
+                                currentChildNumber[depth] = childNumber;
+                                currentNodeIndex[depth] = nodeIndex;
+                                depth++;
+                                r *= 0.5;
+                                interactionDistance = (r + particles->sml[bodyIndex + offset]);
+
+                                if (depth > MAX_DEPTH) {
+                                    printf("ERROR: maximal depth reached! MAX_DEPTH = %i\n", MAX_DEPTH);
+                                    assert(depth < MAX_DEPTH);
+                                }
+                                childNumber = 0;
+                                nodeIndex = childIndex;
+                            }
+                        }
+                    }
+
+                    depth--;
+                    r *= 2.0;
+                    interactionDistance = (r + particles->sml[bodyIndex + offset]);
+
+                } while (depth >= 0);
+
+                particles->noi[bodyIndex + offset] = noOfInteractions;
+                offset += stride;
+            }
+        }
+
         __global__ void particles2Send(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                        DomainList *domainList, DomainList *lowestDomainList, integer maxLevel,
                                        integer *toSend, integer *sendCount, integer *alreadyInserted,
@@ -329,6 +470,14 @@ namespace SPH {
             real fixedRadiusNN(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
                                integer numParticles, integer numNodes) {
                 ExecutionPolicy executionPolicy;
+                return cuda::launch(true, executionPolicy, ::SPH::Kernel::fixedRadiusNN, tree, particles, interactions,
+                                    numParticlesLocal, numParticles, numNodes);
+            }
+
+            real fixedRadiusNN_Test(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
+                               integer numParticles, integer numNodes) {
+                size_t sharedMemory = 2*sizeof(integer)*MAX_DEPTH;
+                ExecutionPolicy executionPolicy(256, 256, sharedMemory);
                 return cuda::launch(true, executionPolicy, ::SPH::Kernel::fixedRadiusNN, tree, particles, interactions,
                                     numParticlesLocal, numParticles, numNodes);
             }

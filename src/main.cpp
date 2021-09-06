@@ -166,8 +166,8 @@ int main(int argc, char** argv)
                                                                     HighFive::DataSpace(numParticles));
         //miluphpc.run();
 
-        miluphpc.barnesHut();
-        //miluphpc.sph();
+        //miluphpc.barnesHut();
+        miluphpc.sph();
 
         miluphpc.particles2file(&pos, &vel, &key);
 
