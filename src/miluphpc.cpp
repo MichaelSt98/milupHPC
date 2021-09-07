@@ -10,7 +10,8 @@ Miluphpc::Miluphpc(integer numParticles, integer numNodes) : numParticles(numPar
     //TODO: how to distinguish/intialize numParticlesLocal vs numParticles
     //numParticlesLocal = numParticles/2;
 
-    gpuErrorcheck(cudaMalloc((void**)&d_mutex, sizeof(integer)));
+    cuda::malloc(d_mutex, 1);
+    //gpuErrorcheck(cudaMalloc((void**)&d_mutex, sizeof(integer)));
     helperHandler = new HelperHandler(numParticles);
     buffer = new HelperHandler(numParticles);
     particleHandler = new ParticleHandler(numParticles, numNodes);
@@ -47,8 +48,10 @@ void Miluphpc::initDistribution(ParticleDistribution::Type particleDistribution)
             diskModel();
     }
 
-    gpuErrorcheck(cudaMemcpy(particleHandler->d_sml, particleHandler->h_sml, numParticlesLocal*sizeof(real),
-                             cudaMemcpyHostToDevice));
+    //gpuErrorcheck(cudaMemcpy(particleHandler->d_sml, particleHandler->h_sml, numParticlesLocal*sizeof(real),
+    //                         cudaMemcpyHostToDevice));
+
+    cuda::copy(particleHandler->h_sml, particleHandler->d_sml, numParticlesLocal, To::device);
 
     Logger(INFO) << "reduction: max:";
     HelperNS::reduceAndGlobalize(particleHandler->d_sml, helperHandler->d_realVal, numParticlesLocal, Reduction::max);
@@ -653,10 +656,12 @@ void Miluphpc::sph() {
 
     integer *d_sphSendCount;
     integer *d_alreadyInserted;
+    //cuda::malloc(d_alreadyInserted, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
     gpuErrorcheck(cudaMalloc((void**)&d_alreadyInserted, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses*sizeof(integer)));
     gpuErrorcheck(cudaMalloc((void**)&d_sphSendCount, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses*sizeof(integer)));
 
-    gpuErrorcheck(cudaMemset(d_sphSendCount, 0, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses*sizeof(integer)));
+    cuda::set(d_sphSendCount, 0, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
+    //gpuErrorcheck(cudaMemset(d_sphSendCount, 0, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses*sizeof(integer)));
     gpuErrorcheck(cudaMemset(helperHandler->d_integerBuffer, -1, numParticles*sizeof(integer)));
 
     SPH::Kernel::Launch::particles2Send(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
@@ -794,10 +799,13 @@ void Miluphpc::sph() {
 
     Logger(TIME) << "SPH: fixedRadiusNN: " << time << " ms";
 
+
+
     SPH::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, helperHandler->d_helper,
                               numParticlesLocal, numParticles, numNodes);
 
-    gpuErrorcheck(cudaFree(d_sphSendCount));
+    cuda::free(d_sphSendCount);
+    //gpuErrorcheck(cudaFree(d_sphSendCount));
     gpuErrorcheck(cudaFree(d_alreadyInserted));
 
 }

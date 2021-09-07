@@ -1,7 +1,3 @@
-//
-// Created by Michael Staneker on 05.08.21.
-//
-
 #ifndef MILUPHPC_CUDALAUNCHER_CUH
 #define MILUPHPC_CUDALAUNCHER_CUH
 

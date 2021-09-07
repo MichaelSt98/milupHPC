@@ -13,6 +13,20 @@ typedef unsigned long idInteger;
 #define MAX_DEPTH 128
 #define MAX_NUM_INTERACTIONS 180
 
+struct To
+{
+    enum Target
+    {
+        host, device
+    };
+    Target t_;
+    To(Target t) : t_(t) {}
+    operator Target () const {return t_;}
+private:
+    template<typename T>
+    operator T () const;
+};
+
 struct Execution
 {
     enum Location

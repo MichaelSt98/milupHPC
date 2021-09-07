@@ -541,7 +541,7 @@ namespace SPH {
             real fixedRadiusNN_Test(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
                                integer numParticles, integer numNodes) {
                 size_t sharedMemory = 2*sizeof(integer)*MAX_DEPTH;
-                ExecutionPolicy executionPolicy(256, 256, sharedMemory);
+                ExecutionPolicy executionPolicy(512, 256, sharedMemory);
                 return cuda::launch(true, executionPolicy, ::SPH::Kernel::fixedRadiusNN, tree, particles, interactions,
                                     numParticlesLocal, numParticles, numNodes);
             }

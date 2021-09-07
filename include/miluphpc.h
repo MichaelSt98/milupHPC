@@ -12,6 +12,7 @@
 #include "helper_handler.h"
 #include "gravity/gravity.cuh"
 #include "sph/sph.cuh"
+#include "cuda_utils/cuda_runtime.h"
 
 #include <iostream>
 #include <stdio.h>
