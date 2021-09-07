@@ -869,12 +869,17 @@ namespace Gravity {
                                     tree->child[POW_DIM * temp + childPath] = cell;
                                 }
 
-                                /*if (particles->x[childIndex] == particles->x[bodyIndex + offset] &&
+                                // TODO: remove!
+                                // debug
+                                if (particles->x[childIndex] == particles->x[bodyIndex + offset] &&
                                         particles->y[childIndex] == particles->y[bodyIndex + offset]) {
-                                    printf("[rank %i]ATTENTION!!! %i vs. %i\n", subDomainKeyTree->rank,
-                                           childIndex, bodyIndex + offset);
+                                    printf("[rank %i] ATTENTION!!! %i vs. %i ((%f, %f, %f) vs (%f, %f, %f))\n", subDomainKeyTree->rank,
+                                           childIndex, bodyIndex + offset,
+                                           particles->x[childIndex], particles->y[childIndex], particles->z[childIndex],
+                                           particles->x[bodyIndex+offset], particles->y[bodyIndex+offset], particles->z[bodyIndex+offset]);
                                     break;
-                                }*/
+                                }
+                                // end: debug
 
                                 // insert old/original particle
                                 childPath = 0;
@@ -999,6 +1004,10 @@ namespace Gravity {
             integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
             integer stride = blockDim.x * gridDim.x;
             integer offset = 0;
+
+            if (bodyIndex + offset == 0) {
+                *tree->index = tree->toDeleteNode[0];
+            }
 
             offset = tree->toDeleteLeaf[0];
             //delete inserted leaves

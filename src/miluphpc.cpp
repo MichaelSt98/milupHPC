@@ -712,12 +712,79 @@ void Miluphpc::sph() {
     gpuErrorcheck(cudaMemcpy(treeHandler->d_toDeleteLeaf, treeHandler->h_toDeleteLeaf, 2*sizeof(integer),
                              cudaMemcpyHostToDevice));
 
+    // x
     SPH::Kernel::Launch::collectSendEntries(subDomainKeyTreeHandler->d_subDomainKeyTree, particleHandler->d_x,
-                                            buffer->d_realBuffer, helperHandler->d_integerBuffer, d_sphSendCount,
+                                            buffer->d_realBuffer, buffer->d_integerBuffer, d_sphSendCount,
                                             totalSendCount, sphInsertOffset);
 
-    //TODO: NEXT: exchange particle entry via MPI
-    // for all entries!
+    SPH::exchangeParticleEntry(subDomainKeyTreeHandler->h_subDomainKeyTree, particleHandler->d_x, buffer->d_realBuffer,
+                               particles2SendSPH, particles2ReceiveSPH, numParticlesLocal);
+
+    // y
+    SPH::Kernel::Launch::collectSendEntries(subDomainKeyTreeHandler->d_subDomainKeyTree, particleHandler->d_y,
+                                            buffer->d_realBuffer, buffer->d_integerBuffer, d_sphSendCount,
+                                            totalSendCount, sphInsertOffset);
+    SPH::exchangeParticleEntry(subDomainKeyTreeHandler->h_subDomainKeyTree, particleHandler->d_y, buffer->d_realBuffer,
+                               particles2SendSPH, particles2ReceiveSPH, numParticlesLocal);
+
+    // z
+    SPH::Kernel::Launch::collectSendEntries(subDomainKeyTreeHandler->d_subDomainKeyTree, particleHandler->d_z,
+                                            buffer->d_realBuffer, buffer->d_integerBuffer, d_sphSendCount,
+                                            totalSendCount, sphInsertOffset);
+    SPH::exchangeParticleEntry(subDomainKeyTreeHandler->h_subDomainKeyTree, particleHandler->d_z, buffer->d_realBuffer,
+                               particles2SendSPH, particles2ReceiveSPH, numParticlesLocal);
+
+    // mass
+    SPH::Kernel::Launch::collectSendEntries(subDomainKeyTreeHandler->d_subDomainKeyTree, particleHandler->d_mass,
+                                            buffer->d_realBuffer, buffer->d_integerBuffer, d_sphSendCount,
+                                            totalSendCount, sphInsertOffset);
+    SPH::exchangeParticleEntry(subDomainKeyTreeHandler->h_subDomainKeyTree, particleHandler->d_mass, buffer->d_realBuffer,
+                               particles2SendSPH, particles2ReceiveSPH, numParticlesLocal);
+    //TODO: exchange particle entry via MPI for all entries!
+    // density, pressure, ...
+    //SPH::Kernel::Launch::collectSendEntries(subDomainKeyTreeHandler->d_subDomainKeyTree, particleHandler->d_x,
+    //                                        buffer->d_realBuffer, helperHandler->d_integerBuffer, d_sphSendCount,
+    //                                        totalSendCount, sphInsertOffset);
+    //SPH::exchangeParticleEntry(subDomainKeyTreeHandler->h_subDomainKeyTree, particleHandler->d_x, buffer->d_realBuffer,
+    //                           particles2SendSPH, particles2ReceiveSPH, numParticlesLocal);
+
+    //TODO: need to update numParticlesLocal?
+
+    delete [] particles2SendSPH;
+    delete [] particles2ReceiveSPH;
+
+    //buffer->reset();
+    //helperHandler->reset();
+
+    //gpuErrorcheck(cudaMemcpy(treeHandler->d_index, &numParticlesLocal, sizeof(integer), cudaMemcpyHostToDevice));
+
+    gpuErrorcheck(cudaMemcpy(&treeHandler->h_toDeleteNode[0], treeHandler->d_index, sizeof(integer),
+                             cudaMemcpyDeviceToHost));
+
+    Logger(INFO) << "SPH: Starting inserting particles...";
+    Logger(INFO) << "SPH: treeHandler->h_toDeleteLeaf[0]: " << treeHandler->h_toDeleteLeaf[0];
+    Logger(INFO) << "SPH: treeHandler->h_toDeleteLeaf[1]: " << treeHandler->h_toDeleteLeaf[1];
+    ParticlesNS::Kernel::Launch::info(particleHandler->d_particles, 0, treeHandler->h_toDeleteLeaf[0], treeHandler->h_toDeleteLeaf[1]);
+    //if (treeHandler->h_toDeleteLeaf[1] > treeHandler->h_toDeleteLeaf[0]) {
+    Gravity::Kernel::Launch::insertReceivedParticles(subDomainKeyTreeHandler->d_subDomainKeyTree,
+                                                     treeHandler->d_tree,
+                                                     particleHandler->d_particles, domainListHandler->d_domainList,
+                                                     lowestDomainListHandler->d_domainList,
+                                                     treeHandler->h_toDeleteLeaf[1],
+                                                     numParticles);
+    //}
+
+
+    //int indexAfterInserting;
+    gpuErrorcheck(cudaMemcpy(&treeHandler->h_toDeleteNode[1], treeHandler->d_index, sizeof(integer), cudaMemcpyDeviceToHost));
+
+    gpuErrorcheck(cudaMemcpy(treeHandler->d_toDeleteNode, treeHandler->h_toDeleteNode, 2*sizeof(integer),
+                             cudaMemcpyHostToDevice));
+
+    Logger(INFO) << "treeHandler->h_toDeleteNode[0]: " << treeHandler->h_toDeleteNode[0];
+    Logger(INFO) << "treeHandler->h_toDeleteNode[1]: " << treeHandler->h_toDeleteNode[1];
+
+
 
     //real time = SPH::Kernel::Launch::fixedRadiusNN(treeHandler->d_tree, particleHandler->d_particles, particleHandler->d_nnl,
     //                                   numParticlesLocal, numParticles, numNodes);
@@ -1383,6 +1450,7 @@ void Miluphpc::parallelForce() {
 
     Gravity::Kernel::Launch::repairTree(treeHandler->d_tree, particleHandler->d_particles,
                                         domainListHandler->d_domainList, numParticlesLocal, numNodes);
+
 
     //KernelHandler.repairTree(d_x, d_y, d_z, d_vx, d_vy, d_vz, d_ax, d_ay, d_az, d_mass, d_count, d_start, d_child,
     //                         d_index, d_min_x, d_max_x, d_min_y, d_max_y, d_min_z, d_max_z, d_to_delete_cell, d_to_delete_leaf,

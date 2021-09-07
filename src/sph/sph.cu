@@ -4,6 +4,28 @@
 
 namespace SPH {
 
+    void exchangeParticleEntry(SubDomainKeyTree *subDomainKeyTree, real *entry, real *toSend, integer *sendLengths,
+                               integer *receiveLengths, integer numParticlesLocal) {
+
+        boost::mpi::communicator comm;
+
+        std::vector<boost::mpi::request> reqParticles;
+        std::vector<boost::mpi::status> statParticles;
+
+        integer reqCounter = 0;
+        integer receiveOffset = 0;
+
+        for (integer proc=0; proc<subDomainKeyTree->numProcesses; proc++) {
+            if (proc != subDomainKeyTree->rank) {
+                reqParticles.push_back(comm.isend(proc, 17, toSend, sendLengths[proc]));
+                statParticles.push_back(comm.recv(proc, 17, &entry[numParticlesLocal] + receiveOffset, receiveLengths[proc]));
+                receiveOffset += receiveLengths[proc];
+            }
+        }
+
+        boost::mpi::wait_all(reqParticles.begin(), reqParticles.end());
+    }
+
     namespace Kernel {
 
         __global__ void
@@ -429,6 +451,8 @@ namespace SPH {
                             }
                             insertIndexOffset = insertOffset * proc; //0;
                             toSend[insertIndexOffset + insertIndex] = bodyIndex + offset;
+                            //printf("[rank %i] toSend[%i] = %i\n", subDomainKeyTree->rank, insertIndexOffset + insertIndex,
+                            //       toSend[insertIndexOffset + insertIndex]);
                             //toSend[proc][insertIndex] = bodyIndex+offset;
                             /*if (insertIndex % 100 == 0) {
                                 printf("[rank %i] Inserting %i into : %i + %i  toSend[%i] = %i\n", s->rank, bodyIndex+offset,
@@ -457,6 +481,7 @@ namespace SPH {
 
             while ((bodyIndex + offset) < count) {
                 toSendCollected[bodyIndex + offset] = toSend[bodyIndex + offset];
+                //printf("toSendCollected[%i] = %i\n", bodyIndex + offset, toSendCollected[bodyIndex + offset]);
                 offset += stride;
             }
         }
@@ -478,10 +503,12 @@ namespace SPH {
                 printf("[rank %i] sendCount(%i, %i)\n", subDomainKeyTree->rank, sendCount[0], sendCount[1]);
             }
 
-            bodyIndex += proc*insertOffset;
+            //bodyIndex += proc*insertOffset;
 
             while ((bodyIndex + offset) < totalSendCount) {
                 toSend[bodyIndex + offset] = entry[sendIndices[bodyIndex + offset]];
+                //printf("toSend[%i] = %f sendIndices = %i (insertOffset = %i)\n", bodyIndex + offset, toSend[bodyIndex + offset],
+                //       sendIndices[bodyIndex + offset], insertOffset);
                 offset += stride;
             }
         }

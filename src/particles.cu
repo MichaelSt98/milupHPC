@@ -299,12 +299,12 @@ namespace ParticlesNS {
 
             offset = m;
             while ((bodyIndex + offset) < k && (bodyIndex + offset) > m) {
-                if ((bodyIndex + offset) % 100 == 0) {
+                //if ((bodyIndex + offset) % 100 == 0) {
                     printf("x[%i] = (%f, %f, %f) mass = %f\n", bodyIndex + offset, particles->x[bodyIndex + offset],
                            particles->y[bodyIndex + offset],
                            particles->z[bodyIndex + offset],
                            particles->mass[bodyIndex + offset]);
-                }
+                //}
                 offset += stride;
             }
 

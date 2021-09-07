@@ -6,10 +6,13 @@
 #include "../parameter.h"
 #include "../helper.cuh"
 
+#include <boost/mpi.hpp>
 #include <assert.h>
 
-
 namespace SPH {
+
+    void exchangeParticleEntry(SubDomainKeyTree *subDomainKeyTree, real *entry, real *toSend, integer *sendLengths,
+                               integer *receiveLengths, integer numParticlesLocal);
 
     namespace Kernel {
         __global__ void
