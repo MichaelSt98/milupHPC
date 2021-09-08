@@ -457,6 +457,8 @@ public:
      */
     CUDA_CALLABLE_MEMBER real distance(integer index_1, integer index_2);
 
+    CUDA_CALLABLE_MEMBER real weightedEntry(integer index, Entry::Name entry);
+
     /**
      * Destructor
      */

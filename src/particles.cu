@@ -253,6 +253,28 @@ CUDA_CALLABLE_MEMBER real Particles::distance(integer index_1, integer index_2) 
 
 }
 
+CUDA_CALLABLE_MEMBER real Particles::weightedEntry(integer index, Entry::Name entry) {
+    switch (entry) {
+        case Entry::x: {
+            return x[index] * mass[index];
+        } break;
+#if DIM > 1
+        case Entry::y: {
+            return y[index] * mass[index];
+        } break;
+#if DIM == 3
+        case Entry::z: {
+            return z[index] * mass[index];
+        }
+#endif
+#endif
+        default: {
+            printf("Entry not available!\n");
+            return (real)0;
+        }
+    }
+}
+
 CUDA_CALLABLE_MEMBER Particles::~Particles() {
 
 }
