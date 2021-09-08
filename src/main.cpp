@@ -7,7 +7,6 @@
 //#include "../include/cuda_utils/cuda_launcher.cuh"
 
 #include "../include/subdomain_key_tree/tree.cuh"
-#include "../include/subdomain_key_tree/sample.cuh"
 #include "../include/particles.cuh"
 #include "../include/particle_handler.h"
 #include "../include/memory_handling.h"
@@ -150,7 +149,8 @@ int main(int argc, char** argv)
         rangeValues = new keyType[numProcesses+1];
 
 
-        miluphpc.subDomainKeyTreeHandler->toHost();
+        //miluphpc.subDomainKeyTreeHandler->toHost();
+        miluphpc.subDomainKeyTreeHandler->copy(To::host, true, false);
         for (int i=0; i<numProcesses+1; i++) {
             rangeValues[i] = miluphpc.subDomainKeyTreeHandler->h_subDomainKeyTree->range[i];
             Logger(INFO) << "rangeValues[" << i << "] = " << rangeValues[i];
@@ -166,8 +166,8 @@ int main(int argc, char** argv)
                                                                     HighFive::DataSpace(numParticles));
         //miluphpc.run();
 
-        //miluphpc.barnesHut();
-        miluphpc.sph();
+        miluphpc.barnesHut();
+        //miluphpc.sph();
 
         miluphpc.particles2file(&pos, &vel, &key);
 

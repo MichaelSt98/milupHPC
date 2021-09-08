@@ -29,7 +29,6 @@ namespace cuda {
 
     template <typename T>
     void malloc(T *&d_var, std::size_t count) {
-        printf("sizeof(T) = %i\n", sizeof(T));
         gpuErrorcheck(cudaMalloc((void**)&d_var, count * sizeof(T)));
     }
 

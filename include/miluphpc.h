@@ -81,6 +81,10 @@ public:
     Miluphpc(integer numParticles, integer numNodes);
     ~Miluphpc();
 
+    /**
+     *
+     * @param particleDistribution
+     */
     void initDistribution(ParticleDistribution::Type particleDistribution=ParticleDistribution::disk);
     void initBarnesHut();
 

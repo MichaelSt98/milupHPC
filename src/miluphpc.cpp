@@ -11,7 +11,6 @@ Miluphpc::Miluphpc(integer numParticles, integer numNodes) : numParticles(numPar
     //numParticlesLocal = numParticles/2;
 
     cuda::malloc(d_mutex, 1);
-    //gpuErrorcheck(cudaMalloc((void**)&d_mutex, sizeof(integer)));
     helperHandler = new HelperHandler(numParticles);
     buffer = new HelperHandler(numParticles);
     particleHandler = new ParticleHandler(numParticles, numNodes);
@@ -60,7 +59,7 @@ void Miluphpc::initDistribution(ParticleDistribution::Type particleDistribution)
     Logger(INFO) << "reduction: sum:";
     HelperNS::reduceAndGlobalize(particleHandler->d_sml, helperHandler->d_realVal, numParticlesLocal, Reduction::sum);
 
-    particleHandler->distributionToDevice();
+    particleHandler->copyDistribution(To::device, true, true);
 }
 
 void Miluphpc::diskModel() {
@@ -278,12 +277,12 @@ void Miluphpc::run() {
                                                            numParticles, 256, true);
     Logger(TIME) << "computeBoundingBox: " << time << " ms";
 
-    treeHandler->toHost();
+    treeHandler->copy(To::host); //treeHandler->toHost();
     printf("min/max: x = (%f, %f), y = (%f, %f), z = (%f, %f)\n", *treeHandler->h_minX, *treeHandler->h_maxX,
            *treeHandler->h_minY, *treeHandler->h_maxY, *treeHandler->h_minZ, *treeHandler->h_maxZ);
 
     treeHandler->globalizeBoundingBox(Execution::device);
-    treeHandler->toHost();
+    treeHandler->copy(To::host); //treeHandler->toHost();
     printf("min/max: x = (%f, %f), y = (%f, %f), z = (%f, %f)\n", *treeHandler->h_minX, *treeHandler->h_maxX,
            *treeHandler->h_minY, *treeHandler->h_maxY, *treeHandler->h_minZ, *treeHandler->h_maxZ);
 
@@ -385,7 +384,7 @@ void Miluphpc::initBarnesHut() {
 
     time = TreeNS::Kernel::Launch::computeBoundingBox(treeHandler->d_tree, particleHandler->d_particles, d_mutex,
                                                       numParticlesLocal, 256, true);
-    treeHandler->toHost();
+    treeHandler->copy(To::host); //treeHandler->toHost();
     printf("min/max: x = (%f, %f), y = (%f, %f), z = (%f, %f)\n", *treeHandler->h_minX, *treeHandler->h_maxX,
            *treeHandler->h_minY, *treeHandler->h_maxY, *treeHandler->h_minZ, *treeHandler->h_maxZ);
     treeHandler->globalizeBoundingBox(Execution::device);
@@ -427,7 +426,7 @@ void Miluphpc::barnesHut() {
     Logger(TIME) << "computeBoundingBox: " << time << " ms";
 
     treeHandler->globalizeBoundingBox(Execution::device);
-    treeHandler->toHost();
+    treeHandler->copy(To::host); //treeHandler->toHost();
 
     printf("bounding box: x = (%f, %f), y = (%f, %f), z = (%f, %f)\n", *treeHandler->h_minX, *treeHandler->h_maxX,
            *treeHandler->h_minY, *treeHandler->h_maxY, *treeHandler->h_minZ, *treeHandler->h_maxZ);
@@ -499,7 +498,7 @@ void Miluphpc::barnesHut() {
     cudaEventDestroy(start_t_sorting);
     cudaEventDestroy(stop_t_sorting);
 
-    subDomainKeyTreeHandler->toHost(); //TODO: needed?
+    subDomainKeyTreeHandler->copy(To::host, true, true); //TODO: needed?
 
     integer *sendLengths;
     sendLengths = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
@@ -656,9 +655,8 @@ void Miluphpc::sph() {
 
     integer *d_sphSendCount;
     integer *d_alreadyInserted;
-    //cuda::malloc(d_alreadyInserted, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
-    gpuErrorcheck(cudaMalloc((void**)&d_alreadyInserted, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses*sizeof(integer)));
-    gpuErrorcheck(cudaMalloc((void**)&d_sphSendCount, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses*sizeof(integer)));
+    cuda::malloc(d_alreadyInserted, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
+    cuda::malloc(d_sphSendCount, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
 
     cuda::set(d_sphSendCount, 0, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
     //gpuErrorcheck(cudaMemset(d_sphSendCount, 0, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses*sizeof(integer)));
@@ -820,7 +818,7 @@ void Miluphpc::fixedLoadDistribution() {
         printf("range[%i] = %lu\n", i, subDomainKeyTreeHandler->h_subDomainKeyTree->range[i]);
     }
 
-    subDomainKeyTreeHandler->toDevice();
+    subDomainKeyTreeHandler->copy(To::device, true, true);
 }
 
 void Miluphpc::dynamicLoadDistribution() {
@@ -872,7 +870,7 @@ void Miluphpc::updateRangeApproximately(int aimedParticlesPerProcess, int bins) 
                                                bins, aimedParticlesPerProcess, curveType);
     gpuErrorcheck(cudaMemset(&subDomainKeyTreeHandler->d_range[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses],
                              KEY_MAX, sizeof(keyType)));
-    subDomainKeyTreeHandler->toHost();
+    subDomainKeyTreeHandler->copy(To::host, true, true);
 
     Logger(INFO) << "numProcesses: " << subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses;
     for(int i=0; i<=subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
@@ -1149,7 +1147,7 @@ void Miluphpc::parallelForce() {
 
     //cudaMemcpy(&domainListIndex, d_relevantDomainListIndices, relevantIndicesCounter*sizeof(int), cudaMemcpyDeviceToHost);
 
-    treeHandler->toHost();
+    treeHandler->copy(To::host); //treeHandler->toHost();
 
     real diam_x = std::abs(*treeHandler->h_maxX) + std::abs(*treeHandler->h_minX);
 #if DIM > 1
@@ -1222,8 +1220,7 @@ void Miluphpc::parallelForce() {
         // end: removing duplicates
     }
 
-
-    subDomainKeyTreeHandler->toHost();
+    subDomainKeyTreeHandler->copy(To::host, true, true);
     //gpuErrorcheck(cudaMemcpy(h_procCounter, d_procCounter, h_subDomainHandler->numProcesses*sizeof(int), cudaMemcpyDeviceToHost));
 
     int sendCountTemp;
@@ -1477,10 +1474,10 @@ void Miluphpc::particles2file(HighFive::DataSet *pos, HighFive::DataSet *vel, Hi
     std::vector<std::vector<real>> x, v; // two dimensional vector for 3D vector data
     std::vector<keyType> k; // one dimensional vector holding particle keys
 
-    particleHandler->distributionToHost(true, false);
+    particleHandler->copyDistribution(To::host, true, false);
 
     keyType *d_keys;
-    gpuErrorcheck(cudaMalloc((void**)&d_keys, numParticlesLocal*sizeof(keyType)));
+    cuda::malloc(d_keys, numParticlesLocal);
 
     //TreeNS::Kernel::Launch::getParticleKeys(treeHandler->d_tree, particleHandler->d_particles,
     //                                        d_keys, 21, numParticlesLocal, curveType);
