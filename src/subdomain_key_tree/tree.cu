@@ -456,7 +456,7 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
 #endif
 #endif
             if (particles->mass[bodyIndex + offset] != 0) {
-                atomicAdd(&particles->x[temp], particles->weightedEntry(bodyIndex + offset), Entry::x);
+                atomicAdd(&particles->x[temp], particles->weightedEntry(bodyIndex + offset, Entry::x));
 #if DIM > 1
                 atomicAdd(&particles->y[temp], particles->weightedEntry(bodyIndex + offset, Entry::y));
 #if DIM == 3

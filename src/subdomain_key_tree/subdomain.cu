@@ -47,29 +47,28 @@ CUDA_CALLABLE_MEMBER integer SubDomainKeyTree::key2proc(keyType key/*, Curve::Ty
             return proc;
         }
     }
-    /*switch (curveType) {
-        case Curve::lebesgue: {
-            for (integer proc = 0; proc < numProcesses; proc++) {
-                if (key >= range[proc] && key < range[proc + 1]) {
-                    return proc;
-                }
-            }
-        }
-        case Curve::hilbert: {
-
-            keyType hilbert = Lebesgue2Hilbert(key, 21);
-            for (int proc = 0; proc < s->numProcesses; proc++) {
-                if (hilbert >= s->range[proc] && hilbert < s->range[proc + 1]) {
-                    return proc;
-                }
-            }
-
-        }
-        default: {
-            printf("Curve type not available!\n");
-        }
-
-    }*/
+    //switch (curveType) {
+    //    case Curve::lebesgue: {
+    //        for (integer proc = 0; proc < numProcesses; proc++) {
+    //            if (key >= range[proc] && key < range[proc + 1]) {
+    //                return proc;
+    //            }
+    //        }
+    //    }
+    //    case Curve::hilbert: {
+    //
+    //        keyType hilbert = Lebesgue2Hilbert(key, 21);
+    //        for (int proc = 0; proc < s->numProcesses; proc++) {
+    //            if (hilbert >= s->range[proc] && hilbert < s->range[proc + 1]) {
+    //                return proc;
+    //            }
+    //        }
+    //
+    //    }
+    //    default: {
+    //        printf("Curve type not available!\n");
+    //    }
+    //}
     printf("ERROR: key2proc(k=%lu): -1!", key);
     return -1; // error
 }
@@ -110,10 +109,6 @@ namespace SubDomainKeyTreeNS {
         __global__ void test(SubDomainKeyTree *subDomainKeyTree) {
             printf("device: subDomainKeyTree->rank = %i\n", subDomainKeyTree->rank);
             printf("device: subDomainKeyTree->numProcesses = %i\n", subDomainKeyTree->numProcesses);
-            //printf("device: subDomainKeyTree->rank = %i\n", *subDomainKeyTree->rank);
-            //printf("device: subDomainKeyTree->numProcesses = %i\n", *subDomainKeyTree->numProcesses);
-            //for (int i=0; i<)
-            //printf("device: subDomainKeyTree->rank = %i\n", subDomainKeyTree->rank);
         }
 
         __global__ void buildDomainTree(Tree *tree, Particles *particles, DomainList *domainList, integer n, integer m) {
@@ -206,33 +201,27 @@ namespace SubDomainKeyTreeNS {
                                 childPath += 1;
                                 //max_x = 0.5 * (min_x + max_x);
                             }
-                            //else {
-                            //    min_x = 0.5 * (min_x + max_x);
-                            //}
+                            //else { min_x = 0.5 * (min_x + max_x); }
 #if DIM > 1
                             if (particles->y[childIndex] < 0.5 * (min_y + max_y)) {
                                 childPath += 2;
                                 //max_y = 0.5 * (min_y + max_y);
                             }
-                            //else {
-                            //    min_y = 0.5 * (min_y + max_y);
-                            //}
+                            //else { min_y = 0.5 * (min_y + max_y); }
 #if DIM == 3
                             if (particles->z[childIndex] < 0.5 * (min_z + max_z)) {
                                 childPath += 4;
                                 //max_z = 0.5 * (min_z + max_z);
                             }
-                            //else {
-                            //    min_z = 0.5 * (min_z + max_z);
-                            //}
+                            //else { min_z = 0.5 * (min_z + max_z); }
 #endif
 #endif
 
-                            particles->x[cell] += particles->mass[childIndex] * particles->x[childIndex];
+                            particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
 #if DIM > 1
-                            particles->y[cell] += particles->mass[childIndex] * particles->y[childIndex];
+                            particles->y[cell] += particles->weightedEntry(childIndex, Entry::y);
 #if DIM == 3
-                            particles->z[cell] += particles->mass[childIndex] * particles->z[childIndex];
+                            particles->z[cell] += particles->weightedEntry(childIndex, Entry::z);
 #endif
 #endif
                             particles->mass[cell] += particles->mass[childIndex];
@@ -325,10 +314,8 @@ namespace SubDomainKeyTreeNS {
 
                 // calculate particle key from particle's position
                 key = tree->getParticleKey(particles, bodyIndex + offset, MAX_LEVEL, curveType);
-
                 // get corresponding process
                 proc = subDomainKeyTree->key2proc(key);
-
                 // increment corresponding counter
                 atomicAdd(&subDomainKeyTree->procParticleCounter[proc], 1);
 
@@ -352,10 +339,8 @@ namespace SubDomainKeyTreeNS {
 
                 // calculate particle key from particle's position
                 key = tree->getParticleKey(particles, bodyIndex + offset, MAX_LEVEL, curveType);
-
                 // get corresponding process
                 proc = subDomainKeyTree->key2proc(key);
-
                 // mark particle with corresponding process
                 sortArray[bodyIndex + offset] = proc;
 
@@ -539,8 +524,7 @@ namespace DomainListNS {
         __global__ void createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList,
                                          integer maxLevel, Curve::Type curveType) {
 
-            char keyAsChar[21 * 2 + 3];
-
+            //char keyAsChar[21 * 2 + 3];
             // workaround for fixing bug... in principle: unsigned long keyMax = (1 << 63) - 1;
             keyType shiftValue = 1;
             keyType toShift = 63;
@@ -579,14 +563,12 @@ namespace DomainListNS {
                     }
                 } else {
                     level--;
-                    // not necessary... 1 = 1
-                    //key2test = keyMaxLevel(key2test & (~0UL << (3 * (maxLevel - level))), maxLevel, level, s) + 1 - (1UL << (3 * (maxLevel - level)));
+                    // not necessary: key2test = keyMaxLevel(key2test & (~0UL << (3 * (maxLevel - level))), maxLevel, level, s) + 1 - (1UL << (3 * (maxLevel - level)));
                 }
             }
             //for (int i=0; i < *index; i++) {
             //    key2Char(domainListKeys[i], 21, keyAsChar);
             //}
-
         }
 
         __global__ void lowestDomainList(SubDomainKeyTree *subDomainKeyTree, Tree *tree, DomainList *domainList,
