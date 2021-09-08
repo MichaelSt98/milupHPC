@@ -4,25 +4,26 @@ TreeHandler::TreeHandler(integer numParticles, integer numNodes) : numParticles(
                                                         numNodes(numNodes) {
 
     printf("POW_DIM: %i\n", POW_DIM);
-    gpuErrorcheck(cudaMalloc((void**)&d_count, numNodes * sizeof(integer)));
-    gpuErrorcheck(cudaMalloc((void**)&d_start, numNodes * sizeof(integer)));
-    gpuErrorcheck(cudaMalloc((void**)&d_sorted, numNodes * sizeof(integer)));
-    gpuErrorcheck(cudaMalloc((void**)&d_child, POW_DIM * numNodes * sizeof(integer)));
-    gpuErrorcheck(cudaMalloc((void**)&d_index, sizeof(integer)));
-    gpuErrorcheck(cudaMalloc((void**)&d_mutex, sizeof(integer)));
+    cuda::malloc(d_count, numNodes);
+    cuda::malloc(d_start, numNodes);
+    cuda::malloc(d_sorted, numNodes);
+    cuda::malloc(d_child, POW_DIM * numNodes);
+    cuda::malloc(d_index, 1);
+    h_index = new integer;
+    cuda::malloc(d_mutex, 1);
 
-    gpuErrorcheck(cudaMalloc((void**)&d_minX, sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_maxX, sizeof(real)));
+    cuda::malloc(d_minX, 1);
+    cuda::malloc(d_maxX, 1);
     h_minX = new real;
     h_maxX = new real;
 #if DIM > 1
-    gpuErrorcheck(cudaMalloc((void**)&d_minY, sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_maxY, sizeof(real)));
+    cuda::malloc(d_minY, 1);
+    cuda::malloc(d_maxY, 1);
     h_minY = new real;
     h_maxY = new real;
 #if DIM == 3
-    gpuErrorcheck(cudaMalloc((void**)&d_minZ, sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_maxZ, sizeof(real)));
+    cuda::malloc(d_minZ, 1);
+    cuda::malloc(d_maxZ, 1);
     h_minZ = new real;
     h_maxZ = new real;
 #endif
@@ -30,10 +31,10 @@ TreeHandler::TreeHandler(integer numParticles, integer numNodes) : numParticles(
 
     h_toDeleteLeaf = new integer[2];
     h_toDeleteNode = new integer[2];
-    gpuErrorcheck(cudaMalloc((void**)&d_toDeleteLeaf, 2*sizeof(integer)));
-    gpuErrorcheck(cudaMalloc((void**)&d_toDeleteNode, 2*sizeof(integer)));
+    cuda::malloc(d_toDeleteLeaf, 2);
+    cuda::malloc(d_toDeleteNode, 2);
 
-    gpuErrorcheck(cudaMalloc((void**)&d_tree, sizeof(Tree)));
+    cuda::malloc(d_tree, 1);
 
 #if DIM == 1
     TreeNS::Kernel::Launch::set(d_tree, d_count, d_start, d_child, d_sorted, d_index, d_toDeleteLeaf, d_toDeleteNode,
@@ -50,25 +51,25 @@ TreeHandler::TreeHandler(integer numParticles, integer numNodes) : numParticles(
 
 TreeHandler::~TreeHandler() {
 
-    gpuErrorcheck(cudaFree(d_count));
-    gpuErrorcheck(cudaFree(d_start));
-    gpuErrorcheck(cudaFree(d_sorted));
-    gpuErrorcheck(cudaFree(d_child));
-    gpuErrorcheck(cudaFree(d_index));
-    gpuErrorcheck(cudaFree(d_mutex));
+    cuda::free(d_count);
+    cuda::free(d_start);
+    cuda::free(d_sorted);
+    cuda::free(d_child);
+    cuda::free(d_index);
+    cuda::free(d_mutex);
 
-    gpuErrorcheck(cudaFree(d_minX));
-    gpuErrorcheck(cudaFree(d_maxX));
+    cuda::free(d_minX);
+    cuda::free(d_maxX);
     delete h_minX;
     delete h_maxX;
 #if DIM > 1
-    gpuErrorcheck(cudaFree(d_minY));
-    gpuErrorcheck(cudaFree(d_maxY));
+    cuda::free(d_minY);
+    cuda::free(d_maxY);
     delete h_minY;
     delete h_maxY;
 #if DIM == 3
-    gpuErrorcheck(cudaFree(d_minZ));
-    gpuErrorcheck(cudaFree(d_maxZ));
+    cuda::free(d_minZ);
+    cuda::free(d_maxZ);
     delete h_minZ;
     delete h_maxZ;
 #endif
@@ -76,37 +77,35 @@ TreeHandler::~TreeHandler() {
 
     delete [] h_toDeleteLeaf;
     delete [] h_toDeleteNode;
-    gpuErrorcheck(cudaFree(d_toDeleteLeaf));
-    gpuErrorcheck(cudaFree(d_toDeleteNode));
+    cuda::free(d_toDeleteLeaf);
+    cuda::free(d_toDeleteNode);
 
-    gpuErrorcheck(cudaFree(d_tree));
+    cuda::free(d_tree);
 
 }
 
-void TreeHandler::toDevice() {
-    gpuErrorcheck(cudaMemcpy(d_minX, h_minX, sizeof(real), cudaMemcpyHostToDevice));
-    gpuErrorcheck(cudaMemcpy(d_maxX, h_maxX, sizeof(real), cudaMemcpyHostToDevice));
-#if DIM > 1
-    gpuErrorcheck(cudaMemcpy(d_minY, h_minY, sizeof(real), cudaMemcpyHostToDevice));
-    gpuErrorcheck(cudaMemcpy(d_maxY, h_maxY, sizeof(real), cudaMemcpyHostToDevice));
-#if DIM == 3
-    gpuErrorcheck(cudaMemcpy(d_minZ, h_minZ, sizeof(real), cudaMemcpyHostToDevice));
-    gpuErrorcheck(cudaMemcpy(d_maxZ, h_maxZ, sizeof(real), cudaMemcpyHostToDevice));
-#endif
-#endif
-}
+void TreeHandler::copy(To::Target target, bool borders, bool index, bool toDelete) {
 
-void TreeHandler::toHost() {
-    gpuErrorcheck(cudaMemcpy(h_minX, d_minX, sizeof(real), cudaMemcpyDeviceToHost));
-    gpuErrorcheck(cudaMemcpy(h_maxX, d_maxX, sizeof(real), cudaMemcpyDeviceToHost));
+    if (borders) {
+        cuda::copy(h_minX, d_minX, 1, target);
+        cuda::copy(h_maxX, d_maxX, 1, target);
 #if DIM > 1
-    gpuErrorcheck(cudaMemcpy(h_minY, d_minY, sizeof(real), cudaMemcpyDeviceToHost));
-    gpuErrorcheck(cudaMemcpy(h_maxY, d_maxY, sizeof(real), cudaMemcpyDeviceToHost));
+        cuda::copy(h_minY, d_minY, 1, target);
+        cuda::copy(h_maxY, d_maxY, 1, target);
 #if DIM == 3
-    gpuErrorcheck(cudaMemcpy(h_minZ, d_minZ, sizeof(real), cudaMemcpyDeviceToHost));
-    gpuErrorcheck(cudaMemcpy(h_maxZ, d_maxZ, sizeof(real), cudaMemcpyDeviceToHost));
+        cuda::copy(h_minZ, d_minZ, 1, target);
+        cuda::copy(h_maxZ, d_maxZ, 1, target);
 #endif
 #endif
+    }
+    if (index) {
+        cuda::copy(h_index, d_index, 1, target);
+    }
+    if (toDelete) {
+        cuda::copy(h_toDeleteLeaf, d_toDeleteLeaf, 2, target);
+        cuda::copy(h_toDeleteNode, d_toDeleteNode, 2, target);
+    }
+
 }
 
 void TreeHandler::globalizeBoundingBox(Execution::Location exLoc) {

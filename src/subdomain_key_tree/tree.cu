@@ -104,15 +104,17 @@ CUDA_CALLABLE_MEMBER void Tree::reset(integer index, integer n) {
     #pragma unroll 8
 #endif
     for (integer i=0; i<POW_DIM; i++) {
+        // reset child indices
         child[index * POW_DIM + i] = -1;
     }
-
+    // reset counter in dependence of being a node or a leaf
     if (index < n) {
         count[index] = 1;
     }
     else {
         count[index] = 0;
     }
+    // reset start
     start[index] = 0;
 }
 
@@ -134,7 +136,7 @@ CUDA_CALLABLE_MEMBER keyType Tree::getParticleKey(Particles *particles, integer 
 #endif
 #endif
 
-    // calculate path to the particle's position assuming an octree with above bounding boxes
+    // calculate path to the particle's position assuming an (oct-)tree with above bounding boxes
     while (level <= maxLevel) {
         sonBox = 0;
         // find insertion point for body
@@ -217,6 +219,7 @@ CUDA_CALLABLE_MEMBER integer Tree::getTreeLevel(Particles *particles, integer in
 
 CUDA_CALLABLE_MEMBER integer Tree::sumParticles() {
     integer sumParticles = 0;
+    // sum over first level tree count values
     for (integer i=0; i<POW_DIM; i++) {
         sumParticles += count[child[i]];
     }
@@ -234,11 +237,6 @@ __global__ void TreeNS::Kernel::computeBoundingBox(Tree *tree, Particles *partic
     integer index = threadIdx.x + blockDim.x * blockIdx.x;
     integer stride = blockDim.x * gridDim.x;
 
-    // initialize local min/max
-    //if (particles->x[index] != 0.f || particles->y[index] != 0.f || particles->z[index] != 0.f) {
-    //    printf("device: x = (%f, %f, %f)\n", particles->x[index], particles->y[index], particles->z[index]);
-    //}
-
     real x_min = particles->x[index];
     real x_max = particles->x[index];
 #if DIM > 1
@@ -249,10 +247,6 @@ __global__ void TreeNS::Kernel::computeBoundingBox(Tree *tree, Particles *partic
     real z_max = particles->z[index];
 #endif
 #endif
-
-    //if (index % 1000 == 0) {
-    //    printf("device: x_min[%i] = %f\n", index, x_min);
-    //}
 
     extern __shared__ real buffer[];
 
@@ -335,12 +329,6 @@ __global__ void TreeNS::Kernel::computeBoundingBox(Tree *tree, Particles *partic
         *tree->maxZ = fmaxf(*tree->maxZ, z_max_buffer[0]);
 #endif
 #endif
-
-        //if (*tree->minX != 0.f || *tree->minX) {
-        //    printf("device: min/max: x = (%f, %f), y = (%f, %f), z = (%f, %f)\n", *tree->minX, *tree->maxX,
-        //           *tree->minY, *tree->maxY, *tree->minZ, *tree->maxZ);
-        //}
-
         atomicExch(mutex, 0); // unlock
     }
 }
@@ -381,7 +369,6 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
 
     integer childPath;
     integer temp;
-    integer tempTemp;
 
     offset = 0;
 
@@ -391,7 +378,7 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
 
             newBody = false;
 
-            // copy bounding box
+            // copy bounding box(es)
             min_x = *tree->minX;
             max_x = *tree->maxX;
 #if DIM > 1
@@ -438,7 +425,6 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
         // traverse tree until hitting leaf node
         while (childIndex >= m) { //n
 
-            tempTemp = temp;
             temp = childIndex;
 
             childPath = 0;
@@ -470,11 +456,11 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
 #endif
 #endif
             if (particles->mass[bodyIndex + offset] != 0) {
-                atomicAdd(&particles->x[temp], particles->mass[bodyIndex + offset] * particles->x[bodyIndex + offset]);
+                atomicAdd(&particles->x[temp], particles->weightedEntry(bodyIndex + offset), Entry::x);
 #if DIM > 1
-                atomicAdd(&particles->y[temp], particles->mass[bodyIndex + offset] * particles->y[bodyIndex + offset]);
+                atomicAdd(&particles->y[temp], particles->weightedEntry(bodyIndex + offset, Entry::y));
 #if DIM == 3
-                atomicAdd(&particles->z[temp], particles->mass[bodyIndex + offset] * particles->z[bodyIndex + offset]);
+                atomicAdd(&particles->z[temp], particles->weightedEntry(bodyIndex + offset, Entry::z));
 #endif
 #endif
             }
@@ -522,11 +508,11 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
 #endif
 #endif
 
-                        particles->x[cell] += particles->mass[childIndex] * particles->x[childIndex];
+                        particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
 #if DIM > 1
-                        particles->y[cell] += particles->mass[childIndex] * particles->y[childIndex];
+                        particles->y[cell] += particles->weightedEntry(childIndex, Entry::y);
 #if DIM == 3
-                        particles->z[cell] += particles->mass[childIndex] * particles->z[childIndex];
+                        particles->z[cell] += particles->weightedEntry(childIndex, Entry::z);
 #endif
 #endif
 
@@ -543,7 +529,6 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
                         tree->start[cell] = -1;
 
                         // insert new particle
-                        tempTemp = temp;
                         temp = cell;
                         childPath = 0;
 
@@ -573,11 +558,11 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
 
                         // COM / preparing for calculation of COM
                         if (particles->mass[bodyIndex + offset] != 0) {
-                            particles->x[cell] += particles->mass[bodyIndex + offset] * particles->x[bodyIndex + offset];
+                            particles->x[cell] += particles->weightedEntry(bodyIndex + offset, Entry::x);
 #if DIM > 1
-                            particles->y[cell] += particles->mass[bodyIndex + offset] * particles->y[bodyIndex + offset];
+                            particles->y[cell] += particles->weightedEntry(bodyIndex + offset, Entry::y);
 #if DIM == 3
-                            particles->z[cell] += particles->mass[bodyIndex + offset] * particles->z[bodyIndex + offset];
+                            particles->z[cell] += particles->weightedEntry(bodyIndex + offset, Entry::z);
 #endif
 #endif
                             particles->mass[cell] += particles->mass[bodyIndex + offset];
@@ -605,26 +590,11 @@ __global__ void TreeNS::Kernel::centerOfMass(Tree *tree, Particles *particles, i
     integer stride = blockDim.x*gridDim.x;
     integer offset = 0;
 
-    //TESTING: getTreeLevel()
-    //if (bodyIndex == 0) {
-    //    int level = tree->getTreeLevel(particles, 10000, 21);
-    //    printf("Testing getTreeLevel: level = %i\n", level);
-    //}
-    //END TESTING
-
-    //TESTING: Particle.distance()
-    //if (bodyIndex == 0) {
-    //    real distance = particles->distance(10, 1000);
-    //    printf("Testing Particle.distance(): %f\n", distance);
-    //}
-    //END TESTING
-
     //note: most of it already done within buildTreeKernel
     bodyIndex += n;
 
     while (bodyIndex + offset < *tree->index) {
 
-        //TODO: check for mass = 0
         //if (particles->mass[bodyIndex + offset] == 0) {
         //    printf("centreOfMassKernel: mass = 0 (%i)!\n", bodyIndex + offset);
         //}
@@ -670,13 +640,7 @@ __global__ void TreeNS::Kernel::sort(Tree *tree, integer n, integer m) {
     integer cell = m + bodyIndex;
     integer ind = *tree->index;
 
-    //integer counter = 0; // for debugging purposes or rather to achieve the kernel to be finished
-    while ((cell + offset) < ind /*&& counter < 100000*/) {
-        //counter++;
-
-        //if (counter > 99998) {
-        //printf("cell + offset = %i\n", cell+offset);
-        //}
+    while ((cell + offset) < ind) {
 
         s = tree->start[cell + offset];
 
@@ -708,20 +672,16 @@ __global__ void TreeNS::Kernel::getParticleKeys(Tree *tree, Particles *particles
     integer offset = 0;
 
     keyType particleKey;
-    keyType hilbertParticleKey;
-
-    //char keyAsChar[21 * 2 + 3];
 
     while (bodyIndex + offset < n) {
 
-        //particleKey = 0UL;
         particleKey = tree->getParticleKey(particles, bodyIndex + offset, maxLevel, curveType);
 
         //if ((bodyIndex + offset) % 1000 == 0) {
         //    printf("particleKey = %lu\n", particleKey);
         //}
 
-        keys[bodyIndex + offset] = particleKey; //hilbertParticleKey;
+        keys[bodyIndex + offset] = particleKey;
 
         offset += stride;
     }
@@ -787,7 +747,6 @@ namespace TreeNS {
 #endif
 #endif
 
-
         namespace Launch {
 
             real sumParticles(Tree *tree) {
@@ -802,10 +761,10 @@ namespace TreeNS {
 
             real computeBoundingBox(Tree *tree, Particles *particles, integer *mutex, integer n, integer blockSize,
                                     bool time) {
-                size_t sharedMemory = 6 * sizeof(real) * blockSize;
-                //ExecutionPolicy executionPolicy(1024, 256, sharedMemory);
+                size_t sharedMemory = 2 * DIM * sizeof(real) * blockSize;
                 ExecutionPolicy executionPolicy(256, 256, sharedMemory);
-                return cuda::launch(time, executionPolicy, ::TreeNS::Kernel::computeBoundingBox, tree, particles, mutex, n, blockSize);
+                return cuda::launch(time, executionPolicy, ::TreeNS::Kernel::computeBoundingBox, tree, particles, mutex,
+                                    n, blockSize);
             }
 
             real centerOfMass(Tree *tree, Particles *particles, integer n, bool time) {
