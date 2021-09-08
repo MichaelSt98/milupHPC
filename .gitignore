@@ -8,6 +8,10 @@
 
 **/log/
 
+docs/*
+doc/html/*
+doc/latex/*
+
 *.numbers
 *.mp4
 *.csv

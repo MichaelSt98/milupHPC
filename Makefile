@@ -118,14 +118,14 @@ else
 	@echo "No $(SRCEXT)-files within $(IDEASDIR)!"
 endif
 
+#@echo FILE_PATTERNS     = "*.md" "*.h" "*.$(SRCEXT)" >> $(DOCDIR)/doxyfile.inc
 doxyfile.inc: #Makefile
 	@echo INPUT            = README.md . $(SRCDIR)/ $(INCDIR)/ $(DOCUMENTSDIR)/ > $(DOCDIR)/doxyfile.inc
-	@echo FILE_PATTERNS     = "*.md" "*.h" "*.$(SRCEXT)" >> $(DOCDIR)/doxyfile.inc
 	@echo OUTPUT_DIRECTORY = $(DOCDIR)/ >> $(DOCDIR)/doxyfile.inc
 
+#@$(MAKE) -C $(DOCDIR)/latex/ &> $(DOCDIR)/latex/latex.log
 doc: doxyfile.inc
 	$(DOXY) $(DOXYFILE) &> $(DOCDIR)/doxygen.log
-	@$(MAKE) -C $(DOCDIR)/latex/ &> $(DOCDIR)/latex/latex.log
 	@mkdir -p "./docs"
 	cp -r "./doc/html/" "./docs/"
 
