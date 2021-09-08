@@ -54,6 +54,8 @@ private:
     void fixedLoadDistribution();
     void dynamicLoadDistribution();
 
+    real reset();
+
     void compPseudoParticlesParallel();
     void parallelForce();
 
@@ -68,6 +70,8 @@ public:
     integer numParticles;
     integer numParticlesLocal;
     integer numNodes;
+
+    Integrator *integrator;
 
     integer *d_mutex;
     HelperHandler *helperHandler; // TODO: more than one is needed: how to name?
