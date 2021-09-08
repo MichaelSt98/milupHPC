@@ -86,89 +86,89 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
 
     h_particles = new Particles();
 
-    gpuErrorcheck(cudaMalloc((void**)&d_numParticles, sizeof(integer)));
-    gpuErrorcheck(cudaMalloc((void**)&d_numNodes, sizeof(integer)));
+    cuda::malloc(d_numParticles, 1);
+    cuda::malloc(d_numNodes, sizeof(integer));
 
-    gpuErrorcheck(cudaMalloc((void**)&d_mass, numNodes * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_x, numNodes * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_vx, numNodes * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_ax, numNodes * sizeof(real)));
+    cuda::malloc(d_mass, numNodes);
+    cuda::malloc(d_x, numNodes);
+    cuda::malloc(d_vx, numNodes);
+    cuda::malloc(d_ax, numNodes);
 #if DIM > 1
-    gpuErrorcheck(cudaMalloc((void**)&d_y, numNodes * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_vy, numNodes * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_ay, numNodes * sizeof(real)));
+    cuda::malloc(d_y, numNodes);
+    cuda::malloc(d_vy, numNodes);
+    cuda::malloc(d_ay, numNodes);
 #if DIM == 3
-    gpuErrorcheck(cudaMalloc((void**)&d_z, numNodes * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_vz, numNodes * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_az, numNodes * sizeof(real)));
+    cuda::malloc(d_z, numNodes);
+    cuda::malloc(d_vz, numNodes);
+    cuda::malloc(d_az, numNodes);
 #endif
 #endif
-    gpuErrorcheck(cudaMalloc((void**)&d_uid, numParticles * sizeof(idInteger)));
-    gpuErrorcheck(cudaMalloc((void**)&d_materialId, numParticles * sizeof(integer)));
-    gpuErrorcheck(cudaMalloc((void**)&d_sml, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_nnl, numParticles * MAX_NUM_INTERACTIONS * sizeof(integer)));
-    gpuErrorcheck(cudaMalloc((void**)&d_noi, numParticles * sizeof(integer)));
-    gpuErrorcheck(cudaMalloc((void**)&d_e, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_dedt, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_cs, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_rho, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_p, numParticles * sizeof(real)));
+    cuda::malloc(d_uid, numParticles);
+    cuda::malloc(d_materialId, numParticles);
+    cuda::malloc(d_sml, numParticles);
+    cuda::malloc(d_nnl, numParticles * MAX_NUM_INTERACTIONS);
+    cuda::malloc(d_noi, numParticles);
+    cuda::malloc(d_e, numParticles);
+    cuda::malloc(d_dedt, numParticles);
+    cuda::malloc(d_cs, numParticles);
+    cuda::malloc(d_rho, numParticles);
+    cuda::malloc(d_p, numParticles);
 
 #if INTEGRATE_DENSITY
-    gpuErrorcheck(cudaMalloc((void**)&d_drhodt, numParticles * sizeof(real)));
+    cuda::malloc(d_drhodt, numParticles);
 #endif
 #if VARIABLE_SML
-    gpuErrorcheck(cudaMalloc((void**)&d_dsmldt, numParticles * sizeof(real)));
+    cuda::malloc(d_dsmldt, numParticles);
 #endif
 #if SOLID
-    gpuErrorcheck(cudaMalloc((void**)&d_S, DIM * DIM *numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_dSdt, DIM * numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_localStrain, numParticles * sizeof(real)));
+    cuda::malloc(d_S, DIM * DIM *numParticles);
+    cuda::malloc(d_dSdt, DIM * numParticles);
+    cuda::malloc(d_localStrain, numParticles);
 #endif
 #if SOLID || NAVIER_STOKES
-    gpuErrorcheck(cudaMalloc((void**)&d_sigma, DIM * DIM * numParticles * sizeof(real)));
+    cuda::malloc(d_sigma, DIM * DIM * numParticles);
 #endif
 #if ARTIFICIAL_STRESS
-    gpuErrorcheck(cudaMalloc((void**)&d_R, DIM * DIM * numParticles * sizeof(real)));
+    cuda::malloc(d_R, DIM * DIM * numParticles);
 #endif
 #if POROSITY
-    gpuErrorcheck(cudaMalloc((void**)&d_pold, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_alpha_jutzi, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_alpha_jutzi_old, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_dalphadt, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_dalphadp, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_dp, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_dalphadrho, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_f, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_delpdelrho, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_delpdele, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_cs_old, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_alpha_epspor, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_dalpha_epspordt, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_epsilon_v, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_depsilon_vdt, numParticles * sizeof(real)));
+    cuda::malloc(d_pold, numParticles);
+    cuda::malloc(d_alpha_jutzi, numParticles);
+    cuda::malloc(d_alpha_jutzi_old, numParticles);
+    cuda::malloc(d_dalphadt, numParticles);
+    cuda::malloc(d_dalphadp, numParticles);
+    cuda::malloc(d_dp, numParticles);
+    cuda::malloc(d_dalphadrho, numParticles);
+    cuda::malloc(d_f, numParticles);
+    cuda::malloc(d_delpdelrho, numParticles);
+    cuda::malloc(d_delpdele, numParticles);
+    cuda::malloc(d_cs_old, numParticles);
+    cuda::malloc(d_alpha_epspor, numParticles);
+    cuda::malloc(d_dalpha_epspordt, numParticles);
+    cuda::malloc(d_epsilon_v, numParticles);
+    cuda::malloc(d_depsilon_vdt, numParticles);
 #endif
 #if ZERO_CONSISTENCY
-    gpuErrorcheck(cudaMalloc((void**)&d_shepardCorrection, numParticles * sizeof(real)));
+    cuda::malloc(d_shepardCorrection, numParticles);
 #endif
 #if LINEAR_CONSISTENCY
-    gpuErrorcheck(cudaMalloc((void**)&d_tensorialCorrectionMatrix, DIM * DIM * numParticles * sizeof(real)));
+    cuda::malloc(d_tensorialCorrectionMatrix, DIM * DIM * numParticles);
 #endif
 #if FRAGMENTATION
-    gpuErrorcheck(cudaMalloc((void**)&d_d, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_damage_total, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_dddt, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_numFlaws, numParticles * sizeof(integer)));
-    gpuErrorcheck(cudaMalloc((void**)&d_maxNumFlaws, numParticles * sizeof(integer)));
-    gpuErrorcheck(cudaMalloc((void**)&d_numActiveFlaws, numParticles * sizeof(integer)));
-    gpuErrorcheck(cudaMalloc((void**)&d_flaws, numParticles * sizeof(real)));
+    cuda::malloc(d_d, numParticles);
+    cuda::malloc(d_damage_total, numParticles);
+    cuda::malloc(d_dddt, numParticles);
+    cuda::malloc(d_numFlaws, numParticles);
+    cuda::malloc(d_maxNumFlaws, numParticles);
+    cuda::malloc(d_numActiveFlaws, numParticles);
+    cuda::malloc(d_flaws, numParticles);
 #if PALPHA_POROSITY
-    gpuErrorcheck(cudaMalloc((void**)&d_damage_porjutzi, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_ddamage_porjutzidt, numParticles * sizeof(real)));
+    cuda::malloc(d_damage_porjutzi, numParticles);
+    cuda::malloc(d_ddamage_porjutzidt, numParticles);
 #endif
 #endif
 
-    gpuErrorcheck(cudaMalloc((void**)&d_particles, sizeof(Particles)));
+    cuda::malloc(d_particles, 1);
 
 #if DIM == 1
     h_particles->set(numParticles, numNodes, h_mass, h_x, h_vx, h_ax, h_uid, h_materialId, h_sml, h_nnl, h_noi, h_e,
@@ -235,10 +235,8 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
 #endif
 #endif
 
-    //gpuErrorcheck(cudaMemset(d_numParticles, numParticles, sizeof(integer)));
-    //gpuErrorcheck(cudaMemset(d_numNodes, numNodes, sizeof(integer)));
-    gpuErrorcheck(cudaMemcpy(d_numParticles, &numParticles, sizeof(integer), cudaMemcpyHostToDevice));
-    gpuErrorcheck(cudaMemcpy(d_numNodes, &numNodes, sizeof(integer), cudaMemcpyHostToDevice));
+    cuda::copy(&numParticles, d_numParticles, 1, To::device);
+    cuda::copy(&numNodes, d_numNodes, 1, To::device);
 
 }
 
@@ -270,228 +268,189 @@ ParticleHandler::~ParticleHandler() {
     delete [] h_p;
 
     // device particle entries
-    gpuErrorcheck(cudaFree(d_numParticles));
-    gpuErrorcheck(cudaFree(d_numNodes));
+    cuda::free(d_numParticles);
+    cuda::free(d_numNodes);
 
-    gpuErrorcheck(cudaFree(d_mass));
-    gpuErrorcheck(cudaFree(d_x));
-    gpuErrorcheck(cudaFree(d_vx));
-    gpuErrorcheck(cudaFree(d_ax));
+    cuda::free(d_mass);
+    cuda::free(d_x);
+    cuda::free(d_vx);
+    cuda::free(d_ax);
 #if DIM > 1
-    gpuErrorcheck(cudaFree(d_y));
-    gpuErrorcheck(cudaFree(d_vy));
-    gpuErrorcheck(cudaFree(d_ay));
+    cuda::free(d_y);
+    cuda::free(d_vy);
+    cuda::free(d_ay);
 #if DIM == 3
-    gpuErrorcheck(cudaFree(d_z));
-    gpuErrorcheck(cudaFree(d_vz));
-    gpuErrorcheck(cudaFree(d_az));
+    cuda::free(d_z);
+    cuda::free(d_vz);
+    cuda::free(d_az);
 #endif
 #endif
-    gpuErrorcheck(cudaFree(d_uid));
-    gpuErrorcheck(cudaFree(d_materialId));
-    gpuErrorcheck(cudaFree(d_sml));
-    gpuErrorcheck(cudaFree(d_nnl));
-    gpuErrorcheck(cudaFree(d_noi));
-    gpuErrorcheck(cudaFree(d_e));
-    gpuErrorcheck(cudaFree(d_dedt));
-    gpuErrorcheck(cudaFree(d_cs));
-    gpuErrorcheck(cudaFree(d_rho));
-    gpuErrorcheck(cudaFree(d_p));
+    cuda::free(d_uid);
+    cuda::free(d_materialId);
+    cuda::free(d_sml);
+    cuda::free(d_nnl);
+    cuda::free(d_noi);
+    cuda::free(d_e);
+    cuda::free(d_dedt);
+    cuda::free(d_cs);
+    cuda::free(d_rho);
+    cuda::free(d_p);
 
 #if INTEGRATE_DENSITY
     delete [] h_drhodt;
-    gpuErrorcheck(cudaFree(d_drhodt));
+    cuda::free(d_drhodt);
 #endif
 #if VARIABLE_SML
     delete [] h_dsmldt;
-    gpuErrorcheck(cudaFree(d_dsmldt));
+    cuda::free(d_dsmldt);
 #endif
 #if SOLID
     delete [] h_S;
-    gpuErrorcheck(cudaFree(d_S));
+    cuda::free(d_S);
     delete [] h_dSdt;
-    gpuErrorcheck(cudaFree(d_dSdt));
+    cuda::free(d_dSdt);
     delete [] h_localStrain;
-    gpuErrorcheck(cudaFree(d_localStrain));
+    cuda::free(d_localStrain);
 #endif
 #if SOLID || NAVIER_STOKES
     delete [] h_sigma;
-    gpuErrorcheck(cudaFree(d_sigma));
+    cuda::free(d_sigma);
 #endif
 #if ARTIFICIAL_STRESS
     delete [] h_R;
-    gpuErrorcheck(cudaFree(d_R));
+    cuda::free(d_R);
 #endif
 #if POROSITY
     delete [] h_pold;
-    gpuErrorcheck(cudaFree(d_pold));
+    cuda::free(d_pold);
     delete [] h_alpha_jutzi;
-    gpuErrorcheck(cudaFree(d_alpha_jutzi));
+    cuda::free(d_alpha_jutzi);
     delete [] h_alpha_jutzi_old;
-    gpuErrorcheck(cudaFree(d_alpha_jutzi_old));
+    cuda::free(d_alpha_jutzi_old);
     delete [] h_dalphadt;
-    gpuErrorcheck(cudaFree(d_dalphadt));
+    cuda::free(d_dalphadt);
     delete [] h_dalphadp;
-    gpuErrorcheck(cudaFree(d_dalphadp));
+    cuda::free(d_dalphadp);
     delete [] h_dp;
-    gpuErrorcheck(cudaFree(d_dp));
+    cuda::free(d_dp);
     delete [] h_dalphadrho;
-    gpuErrorcheck(cudaFree(d_dalphadrho));
+    cuda::free(d_dalphadrho);
     delete [] h_f;
-    gpuErrorcheck(cudaFree(d_f));
+    cuda::free(d_f);
     delete [] h_delpdelrho;
-    gpuErrorcheck(cudaFree(d_delpdelrho));
+    cuda::free(d_delpdelrho);
     delete [] h_delpdele;
-    gpuErrorcheck(cudaFree(d_delpdele));
+    cuda::free(d_delpdele);
     delete [] h_cs_old;
-    gpuErrorcheck(cudaFree(d_cs_old));
+    cuda::free(d_cs_old);
     delete [] h_alpha_epspor;
-    gpuErrorcheck(cudaFree(d_alpha_epspor));
+    cuda::free(d_alpha_epspor);
     delete [] h_dalpha_epspordt;
-    gpuErrorcheck(cudaFree(d_dalpha_epspordt));
+    cuda::free(d_dalpha_epspordt);
     delete [] h_epsilon_v;
-    gpuErrorcheck(cudaFree(d_epsilon_v));
+    cuda::free(d_epsilon_v);
     delete [] h_depsilon_vdt;
-    gpuErrorcheck(cudaFree(d_depsilon_vdt));
+    cuda::free(d_depsilon_vdt);
 #endif
 #if ZERO_CONSISTENCY
     delete [] h_shepardCorrection;
-    gpuErrorcheck(cudaFree(d_shepardCorrection));
+    cuda::free(d_shepardCorrection);
 #endif
 #if LINEAR_CONSISTENCY
     delete [] h_tensorialCorrectionMatrix;
-    gpuErrorcheck(cudaFree(d_tensorialCorrectionMatrix));
+    cuda::free(d_tensorialCorrectionMatrix);
 #endif
 #if FRAGMENTATION
     delete [] h_d;
-    gpuErrorcheck(cudaFree(d_d));
+    cuda::free(d_d);
     delete [] h_damage_total;
-    gpuErrorcheck(cudaFree(d_damage_total));
+    cuda::free(d_damage_total);
     delete [] h_dddt;
-    gpuErrorcheck(cudaFree(d_dddt));
+    cuda::free(d_dddt);
     delete [] h_numFlaws;
-    gpuErrorcheck(cudaFree(d_numFlaws));
+    cuda::free(d_numFlaws);
     delete [] h_maxNumFlaws;
-    gpuErrorcheck(cudaFree(d_maxNumFlaws));
+    cuda::free(d_maxNumFlaws);
     delete [] h_numActiveFlaws;
-    gpuErrorcheck(cudaFree(d_numActiveFlaws));
+    cuda::free(d_numActiveFlaws);
     delete [] h_flaws;
-    gpuErrorcheck(cudaFree(d_flaws));
+    cuda::free(d_flaws);
 #if PALPHA_POROSITY
     delete [] h_damage_porjutzi;
-    gpuErrorcheck(cudaFree(d_damage_porjutzi));
+    cuda::free(d_damage_porjutzi);
     delete [] h_ddamage_porjutzidt;
-    gpuErrorcheck(cudaFree(d_ddamage_porjutzidt));
+    cuda::free(d_ddamage_porjutzidt);
 #endif
 #endif
 
     delete h_particles;
-    gpuErrorcheck(cudaFree(d_particles));
+    cuda::free(d_particles);
 
 }
 
-void ParticleHandler::positionToDevice() {
-    gpuErrorcheck(cudaMemcpy(d_x,  h_x,  numParticles*sizeof(real), cudaMemcpyHostToDevice));
+void ParticleHandler::copyMass(To::Target target) {
+    cuda::copy(h_mass, d_mass, numParticles, target);
+}
+
+void ParticleHandler::copyPosition(To::Target target) {
+    cuda::copy(h_x, d_x, numParticles, target);
 #if DIM > 1
-    gpuErrorcheck(cudaMemcpy(d_y,  h_y,  numParticles*sizeof(real), cudaMemcpyHostToDevice));
+    cuda::copy(h_y, d_y, numParticles, target);
 #if DIM == 3
-    gpuErrorcheck(cudaMemcpy(d_z,  h_z,  numParticles*sizeof(real), cudaMemcpyHostToDevice));
-#endif
-#endif
-}
-void ParticleHandler::velocityToDevice() {
-    gpuErrorcheck(cudaMemcpy(d_vx, h_vx, numParticles*sizeof(real), cudaMemcpyHostToDevice));
-#if DIM > 1
-    gpuErrorcheck(cudaMemcpy(d_vy, h_vy, numParticles*sizeof(real), cudaMemcpyHostToDevice));
-#if DIM == 3
-    gpuErrorcheck(cudaMemcpy(d_vz, h_vz, numParticles*sizeof(real), cudaMemcpyHostToDevice));
-#endif
-#endif
-}
-void ParticleHandler::accelerationToDevice() {
-    gpuErrorcheck(cudaMemcpy(d_ax, h_ax, numParticles*sizeof(real), cudaMemcpyHostToDevice));
-#if DIM > 1
-    gpuErrorcheck(cudaMemcpy(d_ay, h_ay, numParticles*sizeof(real), cudaMemcpyHostToDevice));
-#if DIM == 3
-    gpuErrorcheck(cudaMemcpy(d_az, h_az, numParticles*sizeof(real), cudaMemcpyHostToDevice));
+    cuda::copy(h_z, d_z, numParticles, target);
 #endif
 #endif
 }
 
-void ParticleHandler::distributionToDevice(bool velocity, bool acceleration) {
+void ParticleHandler::copyVelocity(To::Target target) {
+    cuda::copy(h_vx, d_vx, numParticles, target);
+#if DIM > 1
+    cuda::copy(h_vy, d_vy, numParticles, target);
+#if DIM == 3
+    cuda::copy(h_vz, d_vz, numParticles, target);
+#endif
+#endif
+}
 
-    gpuErrorcheck(cudaMemcpy(d_mass,  h_mass,  numParticles*sizeof(real), cudaMemcpyHostToDevice));
-    positionToDevice();
+void ParticleHandler::copyAcceleration(To::Target target) {
+    cuda::copy(h_ax, d_ax, numParticles, target);
+#if DIM > 1
+    cuda::copy(h_ay, d_ay, numParticles, target);
+#if DIM == 3
+    cuda::copy(h_az, d_az, numParticles, target);
+#endif
+#endif
+}
+
+void ParticleHandler::copyDistribution(To::Target target, bool velocity, bool acceleration) {
+    copyMass(target);
+    copyPosition(target);
     if (velocity) {
-        velocityToDevice();
+        copyVelocity(target);
     }
     if (acceleration) {
-        accelerationToDevice();
+        copyAcceleration(target);
     }
-
 }
-
-void ParticleHandler::positionToHost() {
-    gpuErrorcheck(cudaMemcpy(h_x, d_x, numParticles*sizeof(real), cudaMemcpyDeviceToHost));
-#if DIM > 1
-    gpuErrorcheck(cudaMemcpy(h_y, d_y, numParticles*sizeof(real), cudaMemcpyDeviceToHost));
-#if DIM == 3
-    gpuErrorcheck(cudaMemcpy(h_z, d_z, numParticles*sizeof(real), cudaMemcpyDeviceToHost));
-#endif
-#endif
-}
-void ParticleHandler::velocityToHost() {
-    gpuErrorcheck(cudaMemcpy(h_vx, d_vx, numParticles*sizeof(real), cudaMemcpyDeviceToHost));
-#if DIM > 1
-    gpuErrorcheck(cudaMemcpy(h_vy, d_vy, numParticles*sizeof(real), cudaMemcpyDeviceToHost));
-#if DIM == 3
-    gpuErrorcheck(cudaMemcpy(h_vz, d_vz, numParticles*sizeof(real), cudaMemcpyDeviceToHost));
-#endif
-#endif
-}
-void ParticleHandler::accelerationToHost() {
-    gpuErrorcheck(cudaMemcpy(h_x, d_x, numParticles*sizeof(real), cudaMemcpyDeviceToHost));
-#if DIM > 1
-    gpuErrorcheck(cudaMemcpy(h_y, d_y, numParticles*sizeof(real), cudaMemcpyDeviceToHost));
-#if DIM == 3
-    gpuErrorcheck(cudaMemcpy(h_z, d_z, numParticles*sizeof(real), cudaMemcpyDeviceToHost));
-#endif
-#endif
-}
-
-void ParticleHandler::distributionToHost(bool velocity, bool acceleration) {
-
-    gpuErrorcheck(cudaMemcpy(h_mass, d_mass, numParticles*sizeof(real), cudaMemcpyDeviceToHost));
-    positionToHost();
-    if (velocity) {
-        velocityToHost();
-    }
-    if (acceleration) {
-        accelerationToDevice();
-    }
-
-}
-
-
 
 IntegratedParticleHandler::IntegratedParticleHandler(integer numParticles, integer numNodes) :
                                                         numParticles(numParticles), numNodes(numNodes) {
 
-    gpuErrorcheck(cudaMalloc((void**)&d_uid, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_drhodt, numParticles * sizeof(real)));
+    cuda::malloc(d_uid, numParticles);
+    cuda::malloc(d_drhodt, numParticles);
 
-    gpuErrorcheck(cudaMalloc((void**)&d_dxdt, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_dvxdt, numParticles * sizeof(real)));
+    cuda::malloc(d_dxdt, numParticles);
+    cuda::malloc(d_dvxdt, numParticles);
 #if DIM > 1
-    gpuErrorcheck(cudaMalloc((void**)&d_dydt, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_dvydt, numParticles * sizeof(real)));
+    cuda::malloc(d_dydt, numParticles);
+    cuda::malloc(d_dvydt, numParticles);
 #if DIM == 3
-    gpuErrorcheck(cudaMalloc((void**)&d_dzdt, numParticles * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_dvzdt, numParticles * sizeof(real)));
+    cuda::malloc(d_dzdt, numParticles);
+    cuda::malloc(d_dvzdt, numParticles);
 #endif
 #endif
 
-    gpuErrorcheck(cudaMalloc((void**)&d_integratedParticles, sizeof(IntegratedParticles)));
+    cuda::malloc(d_integratedParticles, 1);
 
 #if DIM == 1
     IntegratedParticlesNS::Kernel::Launch::set(d_integratedParticles, d_uid, d_drhodt, d_dxdt, d_dvxdt);
@@ -507,20 +466,20 @@ IntegratedParticleHandler::IntegratedParticleHandler(integer numParticles, integ
 
 IntegratedParticleHandler::~IntegratedParticleHandler() {
 
-    gpuErrorcheck(cudaFree(d_uid));
-    gpuErrorcheck(cudaFree(d_drhodt));
+    cuda::free(d_uid);
+    cuda::free(d_drhodt);
 
-    gpuErrorcheck(cudaFree(d_dxdt));
-    gpuErrorcheck(cudaFree(d_dvxdt));
+    cuda::free(d_dxdt);
+    cuda::free(d_dvxdt);
 #if DIM > 1
-    gpuErrorcheck(cudaFree(d_dydt));
-    gpuErrorcheck(cudaFree(d_dvydt));
+    cuda::free(d_dydt);
+    cuda::free(d_dvydt);
 #if DIM == 3
-    gpuErrorcheck(cudaFree(d_dzdt));
-    gpuErrorcheck(cudaFree(d_dvzdt));
+    cuda::free(d_dzdt);
+    cuda::free(d_dvzdt);
 #endif
 #endif
-    gpuErrorcheck(cudaFree(d_integratedParticles));
+    cuda::free(d_integratedParticles);
 
 }
 
