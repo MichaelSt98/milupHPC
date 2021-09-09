@@ -42,6 +42,7 @@
 * remove pseudo-particle calculations within `buildTree()` for SPH **without** gravity
 	* compiler directive `#GRAVITY`!? 
 * remove `Helper` instance from `compTheta()`
+* *device\_rhs.cuh/cu* needed? move to *helper.cuh/cu*
 
 ### Ideas 
 
