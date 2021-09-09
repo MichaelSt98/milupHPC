@@ -47,8 +47,8 @@ void Miluphpc::initDistribution(ParticleDistribution::Type particleDistribution)
             diskModel();
     }
 
-    //gpuErrorcheck(cudaMemcpy(particleHandler->d_sml, particleHandler->h_sml, numParticlesLocal*sizeof(real),
-    //                         cudaMemcpyHostToDevice));
+    //cuda::copy(particleHandler->h_sml, particleHandler->d_sml, numParticlesLocal, To::device);
+
 
     cuda::copy(particleHandler->h_sml, particleHandler->d_sml, numParticlesLocal, To::device);
 
@@ -449,7 +449,7 @@ void Miluphpc::barnesHut() {
     // DEBUG
     //particleHandler->distributionToHost(true, false);
     //keyType *d_keys;
-    //gpuErrorcheck(cudaMalloc((void**)&d_keys, numParticlesLocal*sizeof(keyType)));
+    //cuda::malloc(d_keys, numParticlesLocal);
     //SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys(subDomainKeyTreeHandler->d_subDomainKeyTree,
     //                                                    treeHandler->d_tree, particleHandler->d_particles,
     //                                                    d_keys, 21, numParticlesLocal, curveType);
@@ -468,14 +468,14 @@ void Miluphpc::barnesHut() {
     Logger(TIME) << "createDomainList: " << time << " ms";
 
     integer domainListLength;
-    cudaMemcpy(&domainListLength, domainListHandler->d_domainListIndex, sizeof(integer), cudaMemcpyDeviceToHost);
+    cuda::copy(&domainListLength, domainListHandler->d_domainListIndex, 1, To::host);
     Logger(INFO) << "domainListLength = " << domainListLength;
     // END: creating domain list
 
     // START: tree construction (including common coarse tree)
     integer treeIndexBeforeBuildingTree;
-    gpuErrorcheck(cudaMemcpy(&treeIndexBeforeBuildingTree, treeHandler->d_index, sizeof(integer),
-                             cudaMemcpyDeviceToHost));
+
+    cuda::copy(&treeIndexBeforeBuildingTree, treeHandler->d_index, 1, To::host);
     Logger(INFO) << "treeIndexBeforeBuildingTree: " << treeIndexBeforeBuildingTree;
 
     Logger(INFO) << "building tree ...";
@@ -484,8 +484,8 @@ void Miluphpc::barnesHut() {
     Logger(TIME) << "buildTree: " << time << " ms";
 
     integer treeIndex;
-    gpuErrorcheck(cudaMemcpy(&treeIndex, treeHandler->d_index, sizeof(integer),
-                             cudaMemcpyDeviceToHost));
+
+    cuda::copy(&treeIndex, treeHandler->d_index, 1, To::host);
 
     // DEBUGGING
     Logger(INFO) << "numParticlesLocal: " << numParticlesLocal;
@@ -533,8 +533,8 @@ void Miluphpc::sph() {
     cuda::malloc(d_sphSendCount, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
 
     cuda::set(d_sphSendCount, 0, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
-    //gpuErrorcheck(cudaMemset(d_sphSendCount, 0, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses*sizeof(integer)));
-    gpuErrorcheck(cudaMemset(helperHandler->d_integerBuffer, -1, numParticles*sizeof(integer)));
+
+    cuda::set(helperHandler->d_integerBuffer, -1, numParticles);
 
     SPH::Kernel::Launch::particles2Send(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
                                         particleHandler->d_particles, domainListHandler->d_domainList,
@@ -546,8 +546,7 @@ void Miluphpc::sph() {
 
     integer *particles2SendSPH;
     particles2SendSPH = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
-    gpuErrorcheck(cudaMemcpy(particles2SendSPH, d_sphSendCount, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses*sizeof(integer),
-                             cudaMemcpyDeviceToHost));
+    cuda::copy(particles2SendSPH, d_sphSendCount, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses, To::host);
     for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
         Logger(INFO) << "particles2SendSPH[" << i << "] = " << particles2SendSPH[i];
         totalSendCount += particles2SendSPH[i];
@@ -578,8 +577,8 @@ void Miluphpc::sph() {
 
     treeHandler->h_toDeleteLeaf[0] = numParticlesLocal;
     treeHandler->h_toDeleteLeaf[1] = numParticlesLocal + totalReceiveLength;
-    gpuErrorcheck(cudaMemcpy(treeHandler->d_toDeleteLeaf, treeHandler->h_toDeleteLeaf, 2*sizeof(integer),
-                             cudaMemcpyHostToDevice));
+    cuda::copy(treeHandler->h_toDeleteLeaf, treeHandler->d_toDeleteLeaf, 2, To::device);
+
 
     // x
     SPH::Kernel::Launch::collectSendEntries(subDomainKeyTreeHandler->d_subDomainKeyTree, particleHandler->d_x,
@@ -626,9 +625,8 @@ void Miluphpc::sph() {
     //helperHandler->reset();
 
     //gpuErrorcheck(cudaMemcpy(treeHandler->d_index, &numParticlesLocal, sizeof(integer), cudaMemcpyHostToDevice));
+    cuda::copy(&treeHandler->h_toDeleteNode[0], treeHandler->d_index, 1, To::host);
 
-    gpuErrorcheck(cudaMemcpy(&treeHandler->h_toDeleteNode[0], treeHandler->d_index, sizeof(integer),
-                             cudaMemcpyDeviceToHost));
 
     Logger(INFO) << "SPH: Starting inserting particles...";
     Logger(INFO) << "SPH: treeHandler->h_toDeleteLeaf[0]: " << treeHandler->h_toDeleteLeaf[0];
@@ -645,10 +643,9 @@ void Miluphpc::sph() {
 
 
     //int indexAfterInserting;
-    gpuErrorcheck(cudaMemcpy(&treeHandler->h_toDeleteNode[1], treeHandler->d_index, sizeof(integer), cudaMemcpyDeviceToHost));
+    cuda::copy(&treeHandler->h_toDeleteNode[1], treeHandler->d_index, 1, To::host);
+    cuda::copy(treeHandler->d_toDeleteNode, treeHandler->h_toDeleteNode, 2, To::device);
 
-    gpuErrorcheck(cudaMemcpy(treeHandler->d_toDeleteNode, treeHandler->h_toDeleteNode, 2*sizeof(integer),
-                             cudaMemcpyHostToDevice));
 
     Logger(INFO) << "treeHandler->h_toDeleteNode[0]: " << treeHandler->h_toDeleteNode[0];
     Logger(INFO) << "treeHandler->h_toDeleteNode[1]: " << treeHandler->h_toDeleteNode[1];
@@ -669,8 +666,7 @@ void Miluphpc::sph() {
                               numParticlesLocal, numParticles, numNodes);
 
     cuda::free(d_sphSendCount);
-    //gpuErrorcheck(cudaFree(d_sphSendCount));
-    gpuErrorcheck(cudaFree(d_alreadyInserted));
+    cuda::free(d_alreadyInserted);
 
 }
 
@@ -734,8 +730,8 @@ void Miluphpc::updateRangeApproximately(int aimedParticlesPerProcess, int bins) 
 
     Gravity::Kernel::Launch::calculateNewRange(subDomainKeyTreeHandler->d_subDomainKeyTree, helperHandler->d_helper,
                                                bins, aimedParticlesPerProcess, curveType);
-    gpuErrorcheck(cudaMemset(&subDomainKeyTreeHandler->d_range[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses],
-                             KEY_MAX, sizeof(keyType)));
+    keyType keyMax = (keyType)KEY_MAX;
+    cuda::set(&subDomainKeyTreeHandler->d_range[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses], keyMax, 1);
     subDomainKeyTreeHandler->copy(To::host, true, true);
 
     Logger(INFO) << "numProcesses: " << subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses;
@@ -744,7 +740,7 @@ void Miluphpc::updateRangeApproximately(int aimedParticlesPerProcess, int bins) 
     }
 
     int h_sum;
-    cudaMemcpy(&h_sum, helperHandler->d_integerVal, sizeof(integer), cudaMemcpyDeviceToHost);
+    cuda::copy(&h_sum, helperHandler->d_integerVal, 1, To::host);
     Logger(INFO) << "h_sum = " << h_sum;
 
     // debug
@@ -860,9 +856,9 @@ void Miluphpc::compPseudoParticlesParallel() {
     integer domainListIndex;
     integer lowestDomainListIndex;
     // x ----------------------------------------------------------------------------------------------
-    cudaMemcpy(&domainListIndex, domainListHandler->d_domainListIndex, sizeof(integer), cudaMemcpyDeviceToHost);
-    cudaMemcpy(&lowestDomainListIndex, lowestDomainListHandler->d_domainListIndex, sizeof(integer),
-               cudaMemcpyDeviceToHost);
+    cuda::copy(&domainListIndex, domainListHandler->d_domainListIndex, 1, To::host);
+    cuda::copy(&lowestDomainListIndex, lowestDomainListHandler->d_domainListIndex, 1, To::host);
+
     Logger(INFO) << "domainListIndex: " << domainListIndex << " | lowestDomainListIndex: " << lowestDomainListIndex;
 
     //KernelHandler.prepareLowestDomainExchange(d_x, d_mass, d_tempArray, d_lowestDomainListIndices,
@@ -871,7 +867,7 @@ void Miluphpc::compPseudoParticlesParallel() {
 
     boost::mpi::communicator comm;
 
-    gpuErrorcheck(cudaMemset(lowestDomainListHandler->d_domainListCounter, 0, sizeof(integer)));
+    cuda::set(lowestDomainListHandler->d_domainListCounter, 0);
     Gravity::Kernel::Launch::prepareLowestDomainExchange(particleHandler->d_particles, lowestDomainListHandler->d_domainList,
                                                          helperHandler->d_helper, Entry::x);
 
@@ -882,11 +878,11 @@ void Miluphpc::compPseudoParticlesParallel() {
 
     // share among processes
     //TODO: domainListIndex or lowestDomainListIndex?
-    MPI_Allreduce(MPI_IN_PLACE, &helperHandler->d_realBuffer[DOMAIN_LIST_SIZE], domainListIndex, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
-    //all_reduce(comm, boost::mpi::inplace_t<real*>(&helperHandler->d_realBuffer[DOMAIN_LIST_SIZE]), domainListIndex,
-    //           std::plus<real>());
+    //MPI_Allreduce(MPI_IN_PLACE, &helperHandler->d_realBuffer[DOMAIN_LIST_SIZE], domainListIndex, MPI_FLOAT, MPI_SUM, MPI_COMM_WORLD);
+    all_reduce(comm, boost::mpi::inplace_t<real*>(&helperHandler->d_realBuffer[DOMAIN_LIST_SIZE]), domainListIndex,
+               std::plus<real>());
 
-    gpuErrorcheck(cudaMemset(lowestDomainListHandler->d_domainListCounter, 0, sizeof(integer)));
+    cuda::set(lowestDomainListHandler->d_domainListCounter, 0);
 
     Gravity::Kernel::Launch::updateLowestDomainListNodes(particleHandler->d_particles, lowestDomainListHandler->d_domainList,
                                                          helperHandler->d_helper, Entry::x);
@@ -897,7 +893,7 @@ void Miluphpc::compPseudoParticlesParallel() {
 
     //cudaMemcpy(&domainListIndex, d_domainListIndex, sizeof(int), cudaMemcpyDeviceToHost);
     //Logger(INFO) << "domainListIndex: " << domainListIndex;
-    gpuErrorcheck(cudaMemset(lowestDomainListHandler->d_domainListCounter, 0, sizeof(integer)));
+    cuda::set(lowestDomainListHandler->d_domainListCounter, 0);
     Gravity::Kernel::Launch::prepareLowestDomainExchange(particleHandler->d_particles, lowestDomainListHandler->d_domainList,
                                                          helperHandler->d_helper, Entry::y);
 
@@ -912,7 +908,7 @@ void Miluphpc::compPseudoParticlesParallel() {
     all_reduce(comm, boost::mpi::inplace_t<real*>(&helperHandler->d_realBuffer[DOMAIN_LIST_SIZE]), domainListIndex,
                std::plus<real>());
 
-    gpuErrorcheck(cudaMemset(lowestDomainListHandler->d_domainListCounter, 0, sizeof(integer)));
+    cuda::set(lowestDomainListHandler->d_domainListCounter, 0);
 
     Gravity::Kernel::Launch::updateLowestDomainListNodes(particleHandler->d_particles, lowestDomainListHandler->d_domainList,
                                                          helperHandler->d_helper, Entry::y);
@@ -921,7 +917,7 @@ void Miluphpc::compPseudoParticlesParallel() {
 
     //cudaMemcpy(&domainListIndex, d_domainListIndex, sizeof(int), cudaMemcpyDeviceToHost);
     //Logger(INFO) << "domainListIndex: " << domainListIndex;
-    gpuErrorcheck(cudaMemset(lowestDomainListHandler->d_domainListCounter, 0, sizeof(integer)));
+    cuda::set(lowestDomainListHandler->d_domainListCounter, 0);
     Gravity::Kernel::Launch::prepareLowestDomainExchange(particleHandler->d_particles, lowestDomainListHandler->d_domainList,
                                                          helperHandler->d_helper, Entry::z);
 
@@ -936,7 +932,7 @@ void Miluphpc::compPseudoParticlesParallel() {
     all_reduce(comm, boost::mpi::inplace_t<real*>(&helperHandler->d_realBuffer[DOMAIN_LIST_SIZE]), domainListIndex,
                std::plus<real>());
 
-    gpuErrorcheck(cudaMemset(lowestDomainListHandler->d_domainListCounter, 0, sizeof(integer)));
+    cuda::set(lowestDomainListHandler->d_domainListCounter, 0);
 
     Gravity::Kernel::Launch::updateLowestDomainListNodes(particleHandler->d_particles, lowestDomainListHandler->d_domainList,
                                                          helperHandler->d_helper, Entry::z);
@@ -945,7 +941,7 @@ void Miluphpc::compPseudoParticlesParallel() {
 
     //cudaMemcpy(&domainListIndex, d_domainListIndex, sizeof(int), cudaMemcpyDeviceToHost);
     //Logger(INFO) << "domainListIndex: " << domainListIndex;
-    gpuErrorcheck(cudaMemset(lowestDomainListHandler->d_domainListCounter, 0, sizeof(integer)));
+    cuda::set(lowestDomainListHandler->d_domainListCounter, 0);
     Gravity::Kernel::Launch::prepareLowestDomainExchange(particleHandler->d_particles, lowestDomainListHandler->d_domainList,
                                                          helperHandler->d_helper, Entry::mass);
 
@@ -960,7 +956,7 @@ void Miluphpc::compPseudoParticlesParallel() {
     all_reduce(comm, boost::mpi::inplace_t<real*>(&helperHandler->d_realBuffer[DOMAIN_LIST_SIZE]), domainListIndex,
                std::plus<real>());
 
-    gpuErrorcheck(cudaMemset(lowestDomainListHandler->d_domainListCounter, 0, sizeof(integer)));
+    cuda::set(lowestDomainListHandler->d_domainListCounter, 0);
 
     Gravity::Kernel::Launch::updateLowestDomainListNodes(particleHandler->d_particles, lowestDomainListHandler->d_domainList,
                                                          helperHandler->d_helper, Entry::mass);
@@ -988,7 +984,7 @@ void Miluphpc::parallelForce() {
     HelperNS::Kernel::Launch::resetArray(helperHandler->d_realBuffer, (real)0, numParticles);
     //KernelHandler.resetFloatArray(d_tempArray, 0.f, 2*numParticles, false);
 
-    gpuErrorcheck(cudaMemset(domainListHandler->d_domainListCounter, 0, sizeof(integer)));
+    cuda::set(domainListHandler->d_domainListCounter, 0);
 
     //compTheta
     Gravity::Kernel::Launch::compTheta(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
@@ -996,8 +992,8 @@ void Miluphpc::parallelForce() {
                                        helperHandler->d_helper, curveType);
 
     integer relevantIndicesCounter;
-    gpuErrorcheck(cudaMemcpy(&relevantIndicesCounter, domainListHandler->d_domainListCounter, sizeof(integer),
-                             cudaMemcpyDeviceToHost));
+
+    cuda::copy(&relevantIndicesCounter, domainListHandler->d_domainListCounter, 1, To::host);
 
     Logger(INFO) << "relevantIndicesCounter: " << relevantIndicesCounter;
 
@@ -1024,18 +1020,18 @@ void Miluphpc::parallelForce() {
 
     real theta_ = theta; //0.5f;
 
-    gpuErrorcheck(cudaMemset(domainListHandler->d_domainListCounter, 0, sizeof(integer)));
+    cuda::set(domainListHandler->d_domainListCounter, 0);
     integer currentDomainListCounter;
     real massOfDomainListNode;
     for (integer relevantIndex=0; relevantIndex</*1*/relevantIndicesCounter; relevantIndex++) {
-        gpuErrorcheck(cudaMemcpy(&currentDomainListCounter, domainListHandler->d_domainListCounter, sizeof(integer),
-                                 cudaMemcpyDeviceToHost));
+
+        cuda::copy(&currentDomainListCounter, domainListHandler->d_domainListCounter, 1, To::host);
         //gpuErrorcheck(cudaMemset(d_mutex, 0, sizeof(int)));
         //Logger(INFO) << "current value of domain list counter: " << currentDomainListCounter;
 
         integer treeIndex;
-        gpuErrorcheck(cudaMemcpy(&treeIndex, treeHandler->d_index, sizeof(integer),
-                                 cudaMemcpyDeviceToHost));
+
+        cuda::copy(&treeIndex, treeHandler->d_index, 1, To::host);
         //Logger(INFO) << "treeIndex = " << treeIndex;
         //Logger(INFO) << "symbolicForce ...";
         Gravity::Kernel::Launch::symbolicForce(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
@@ -1046,10 +1042,10 @@ void Miluphpc::parallelForce() {
         // removing duplicates
         // TODO: remove duplicates by overwriting same array with index of to send and afterwards remove empty entries
         int sendCountTemp;
-        gpuErrorcheck(cudaMemcpy(&sendCountTemp, domainListHandler->d_domainListCounter, sizeof(integer),
-                                 cudaMemcpyDeviceToHost));
 
-        gpuErrorcheck(cudaMemset(domainListHandler->d_domainListCounter, 0, sizeof(integer)));
+        cuda::copy(&sendCountTemp, domainListHandler->d_domainListCounter, 1, To::host);
+
+        cuda::set(domainListHandler->d_domainListCounter, 0);
 
         // CHECK for indices
         CudaUtils::Kernel::Launch::markDuplicates(helperHandler->d_integerBuffer, domainListHandler->d_domainListCounter,
@@ -1061,17 +1057,17 @@ void Miluphpc::parallelForce() {
 
 
         integer duplicatesCounter;
-        gpuErrorcheck(cudaMemcpy(&duplicatesCounter, domainListHandler->d_domainListCounter, sizeof(integer),
-                                 cudaMemcpyDeviceToHost));
+
+        cuda::copy(&duplicatesCounter, domainListHandler->d_domainListCounter, 1, To::host);
         //Logger(INFO) << "duplicatesCounter: " << duplicatesCounter;
         //Logger(INFO) << "now resetting d_domainListCounter..";
-        gpuErrorcheck(cudaMemset(domainListHandler->d_domainListCounter, 0, sizeof(integer)));
+        cuda::set(domainListHandler->d_domainListCounter, 0);
         //Logger(INFO) << "now removing duplicates..";
         CudaUtils::Kernel::Launch::removeDuplicates(helperHandler->d_integerBuffer, buffer->d_integerBuffer,
                                                     domainListHandler->d_domainListCounter, sendCountTemp);
         integer sendCount;
-        gpuErrorcheck(cudaMemcpy(&sendCount, domainListHandler->d_domainListCounter, sizeof(integer),
-                                 cudaMemcpyDeviceToHost));
+
+        cuda::copy(&sendCount, domainListHandler->d_domainListCounter, 1, To::host);
         //Logger(INFO) << "sendCount: " << sendCount;
         // end: removing duplicates
     }
@@ -1080,12 +1076,12 @@ void Miluphpc::parallelForce() {
     //gpuErrorcheck(cudaMemcpy(h_procCounter, d_procCounter, h_subDomainHandler->numProcesses*sizeof(int), cudaMemcpyDeviceToHost));
 
     int sendCountTemp;
-    gpuErrorcheck(cudaMemcpy(&sendCountTemp, domainListHandler->d_domainListCounter, sizeof(integer),
-                             cudaMemcpyDeviceToHost));
+
+    cuda::copy(&sendCountTemp, domainListHandler->d_domainListCounter, 1, To::host);
     Logger(INFO) << "sendCountTemp: " << sendCountTemp;
 
     int newSendCount;
-    gpuErrorcheck(cudaMemset(domainListHandler->d_domainListCounter, 0, sizeof(integer)));
+    cuda::set(domainListHandler->d_domainListCounter, 0);
 
     DomainListNS::Kernel::Launch::info(particleHandler->d_particles, domainListHandler->d_domainList);
 
@@ -1102,17 +1098,17 @@ void Miluphpc::parallelForce() {
                                               treeHandler->d_child, sendCountTemp);
 
     int duplicatesCounter;
-    gpuErrorcheck(cudaMemcpy(&duplicatesCounter, domainListHandler->d_domainListCounter, sizeof(integer),
-                             cudaMemcpyDeviceToHost));
+
+    cuda::copy(&duplicatesCounter, domainListHandler->d_domainListCounter, 1, To::host);
     Logger(INFO) << "duplicatesCounter: " << duplicatesCounter;
     Logger(INFO) << "now resetting d_domainListCounter..";
-    gpuErrorcheck(cudaMemset(domainListHandler->d_domainListCounter, 0, sizeof(integer)));
+    cuda::set(domainListHandler->d_domainListCounter, 0);
     Logger(INFO) << "now removing duplicates..";
     CudaUtils::Kernel::Launch::removeDuplicates(helperHandler->d_integerBuffer, buffer->d_integerBuffer,
                                                 domainListHandler->d_domainListCounter, sendCountTemp);
     //KernelHandler.removeDuplicates(d_sendIndicesTemp, d_sendIndices, d_domainListCounter, sendCountTemp, false);
     int sendCount;
-    gpuErrorcheck(cudaMemcpy(&sendCount, domainListHandler->d_domainListCounter, sizeof(integer), cudaMemcpyDeviceToHost));
+    cuda::copy(&sendCount, domainListHandler->d_domainListCounter, 1, To::host);
     Logger(INFO) << "sendCount: " << sendCount;
 
     // DEBUG
@@ -1155,8 +1151,7 @@ void Miluphpc::parallelForce() {
     //cudaMemcpy(&d_to_delete_leaf[0], &h_procCounter[h_subDomainHandler->rank], sizeof(int), cudaMemcpyHostToDevice);
     //cudaMemcpy(&d_to_delete_leaf[1], &to_delete_leaf_1, sizeof(int),
     //         cudaMemcpyHostToDevice);
-    gpuErrorcheck(cudaMemcpy(treeHandler->d_toDeleteLeaf, treeHandler->h_toDeleteLeaf, 2*sizeof(integer),
-                             cudaMemcpyHostToDevice));
+    cuda::copy(treeHandler->h_toDeleteLeaf, treeHandler->d_toDeleteLeaf, 2, To::device);
     //gpuErrorcheck(cudaMemcpy(&treeHandler->d_toDeleteLeaf[1] &treeHandler->h_toDeleteLeaf[1], sizeof(integer),
     //                         cudaMemcpyHostToDevice));
 
@@ -1225,8 +1220,7 @@ void Miluphpc::parallelForce() {
     //insert into tree // remember within to_delete_cell
     //remember index
     //int indexBeforeInserting;
-    gpuErrorcheck(cudaMemcpy(&treeHandler->h_toDeleteNode[0], treeHandler->d_index, sizeof(integer),
-                             cudaMemcpyDeviceToHost));
+    cuda::copy(&treeHandler->h_toDeleteNode[0], treeHandler->d_index, 1, To::host);
     //gpuErrorcheck(cudaMemcpy(h_min_x, d_min_x, sizeof(float), cudaMemcpyDeviceToHost));
 
 
@@ -1257,7 +1251,7 @@ void Miluphpc::parallelForce() {
     //                       d_sortArrayOut);
 
     //int indexAfterInserting;
-    gpuErrorcheck(cudaMemcpy(&treeHandler->h_toDeleteNode[1], treeHandler->d_index, sizeof(integer), cudaMemcpyDeviceToHost));
+    cuda::copy(&treeHandler->h_toDeleteNode[1], treeHandler->d_index, 1, To::host);
 
     //Logger(INFO) << "to_delete_leaf[0] = " << to_delete_leaf_0
     //             << " | " << "to_delete_leaf[1] = " << to_delete_leaf_1;
@@ -1270,8 +1264,7 @@ void Miluphpc::parallelForce() {
     //gpuErrorcheck(cudaMemcpy(&treeHandler->d_toDeleteNode[1], &indexAfterInserting, sizeof(integer),
     //                         cudaMemcpyHostToDevice));
 
-    gpuErrorcheck(cudaMemcpy(treeHandler->d_toDeleteNode, treeHandler->h_toDeleteNode, 2*sizeof(integer),
-                                                   cudaMemcpyHostToDevice));
+    cuda::copy(treeHandler->h_toDeleteNode, treeHandler->d_toDeleteNode, 2, To::device);
 
     Logger(INFO) << "treeHandler->h_toDeleteNode[0]: " << treeHandler->h_toDeleteNode[0];
     Logger(INFO) << "treeHandler->h_toDeleteNode[1]: " << treeHandler->h_toDeleteNode[1];
@@ -1347,7 +1340,7 @@ void Miluphpc::particles2file(HighFive::DataSet *pos, HighFive::DataSet *vel, Hi
 
     keyType *h_keys;
     h_keys = new keyType[numParticlesLocal];
-    gpuErrorcheck(cudaMemcpy(h_keys, d_keys, numParticlesLocal * sizeof(keyType), cudaMemcpyDeviceToHost));
+    cuda::copy(h_keys, d_keys, numParticlesLocal, To::host);
 
     integer keyProc;
 
@@ -1357,7 +1350,7 @@ void Miluphpc::particles2file(HighFive::DataSet *pos, HighFive::DataSet *vel, Hi
         k.push_back(h_keys[i]);
     }
 
-    gpuErrorcheck(cudaFree(d_keys));
+    cuda::free(d_keys);
     delete [] h_keys;
 
     // receive buffer

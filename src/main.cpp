@@ -9,11 +9,9 @@
 #include "../include/subdomain_key_tree/tree.cuh"
 #include "../include/particles.cuh"
 #include "../include/particle_handler.h"
-#include "../include/memory_handling.h"
 #include "../include/device_rhs.cuh"
 #include "../include/subdomain_key_tree/subdomain_handler.h"*/
 
-#include "../include/rhs.h"
 #include "../include/miluphpc.h"
 
 //#include <mpi.h>
@@ -177,43 +175,3 @@ int main(int argc, char** argv)
 
     return 0;
 }
-
-
-/*
- // host allocation/declaration
-    int *test = new int[5];
-    for (int i=0; i<5; i++) {
-        test[i] = 0;
-    }
-    Foo *foo = new Foo(); //new Foo(test);
-    foo->aMethod(test);
-    for (int i=0; i<5; i++) {
-        Logger(INFO) << "foo->d_test[" << i << "] = " << foo->d_test[i];
-    }
-
-    // device allocation/declaration
-    Foo *d_foo;
-    const size_t sz = sizeof(Foo);
-    int *d_test;
-    cudaMalloc((void**)&d_test, 5 * sizeof(int));
-    cudaMalloc((void**)&d_foo, sz);
-    //set d_test as member for d_foo
-    launchSetKernel(d_foo, d_test);
-    gpuErrorcheck( cudaPeekAtLastError() );
-    gpuErrorcheck( cudaDeviceSynchronize() );
-    // launch a kernel
-    launchTestKernel(d_foo);
-    gpuErrorcheck( cudaPeekAtLastError() );
-    gpuErrorcheck( cudaDeviceSynchronize() );
-
-    //gpuErrorcheck(cudaMemcpy(foo, d_foo, sizeof(Foo) + 5 * sizeof(int), cudaMemcpyDeviceToHost));
-    gpuErrorcheck(cudaMemcpy(foo->d_test, d_test, 5 * sizeof(int), cudaMemcpyDeviceToHost));
-
-    for (int i=0; i<5; i++) {
-    Logger(INFO) << "foo->d_test[" << i << "] = " << foo->d_test[i];
-    }
-
-    delete [] test;
-    gpuErrorcheck( cudaFree(d_test) );
-    gpuErrorcheck( cudaFree(d_foo) );
- */

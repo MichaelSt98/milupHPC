@@ -2,7 +2,6 @@
 #define MILUPHPC_MATERIAL_CUH
 
 #include "../cuda_utils/cuda_utilities.cuh"
-//#include "../cuda_utils/cuda_launcher.cuh"
 #include "../parameter.h"
 
 #include <iostream>
@@ -12,10 +11,13 @@
 
 //TODO: implement missing parameters/variables
 
+/**
+ * Artificial viscosity parameters
+ */
 struct ArtificialViscosity {
 
+    // enable communication via MPI (send instance of struct directly)
     friend class boost::serialization::access;
-
     template<class Archive>
     void serialize(Archive &ar, const unsigned int version) {
         ar & alpha;
@@ -29,12 +31,15 @@ struct ArtificialViscosity {
     CUDA_CALLABLE_MEMBER ArtificialViscosity(real alpha, real beta);
 };
 
+/**
+ * Material parameters
+ */
 class Material {
 
 public:
 
+    // enable communication via MPI (send instance of class directly)
     friend class boost::serialization::access;
-
     template<class Archive>
     void serialize(Archive &ar, const unsigned int version) {
         ar & ID;
@@ -125,8 +130,11 @@ public:
     };*/
 };
 
+
 namespace MaterialNS {
+
     namespace Kernel {
+
         __global__ void info(Material *material);
 
         namespace Launch {

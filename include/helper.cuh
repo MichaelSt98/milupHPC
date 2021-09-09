@@ -1,7 +1,3 @@
-//
-// Created by Michael Staneker on 15.08.21.
-//
-
 #ifndef MILUPHPC_HELPER_CUH
 #define MILUPHPC_HELPER_CUH
 
@@ -9,6 +5,7 @@
 #include "cuda_utils/cuda_utilities.cuh"
 #include <boost/mpi.hpp>
 #include "utils/logger.h"
+#include "cuda_utils/cuda_runtime.h"
 
 struct Reduction
 {

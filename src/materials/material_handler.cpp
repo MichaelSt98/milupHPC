@@ -57,14 +57,12 @@ int LibConfigReader::loadConfigFromFile(char *configFile)
 MaterialHandler::MaterialHandler(integer numMaterials) : numMaterials(numMaterials) {
 
     h_materials = new Material[numMaterials];
-    gpuErrorcheck(cudaMalloc((void**)&d_materials, numMaterials * sizeof(Material)));
+    cuda::malloc(d_materials, numMaterials);
 
     h_materials[0].ID = 0;
     h_materials[0].interactions = 0;
     //h_materials[0].artificialViscosity.alpha = 3.1;
     h_materials[0].artificialViscosity = ArtificialViscosity();
-
-    //gpuErrorcheck(cudaMemcpy(d_materials, h_materials, numMaterials * sizeof(Material), cudaMemcpyHostToDevice));
 
 }
 
@@ -75,7 +73,7 @@ MaterialHandler::MaterialHandler(char *material_cfg) {
     config_setting_t *material;
 
     h_materials = new Material[numMaterials];
-    gpuErrorcheck(cudaMalloc((void**)&d_materials, numMaterials * sizeof(Material)));
+    cuda::malloc(d_materials, numMaterials);
 
     for (int i = 0; i < numMaterials; ++i) {
 
@@ -94,49 +92,36 @@ MaterialHandler::MaterialHandler(integer numMaterials, integer ID, integer inter
                                     numMaterials(numMaterials) {
 
     h_materials = new Material[numMaterials];
-    gpuErrorcheck(cudaMalloc((void**)&d_materials, numMaterials * sizeof(Material)));
+    cuda::malloc(d_materials, numMaterials);
 
     h_materials[0].ID = ID;
     h_materials[0].interactions = interactions;
     //h_materials[0].artificialViscosity.alpha = 3.1;
     h_materials[0].artificialViscosity = ArtificialViscosity(alpha, beta);
 
-    //gpuErrorcheck(cudaMemcpy(d_materials, h_materials, numMaterials * sizeof(Material), cudaMemcpyHostToDevice));
-
 }
 
 MaterialHandler::~MaterialHandler() {
 
     delete [] h_materials;
-    gpuErrorcheck(cudaFree(d_materials));
+    cuda::free(d_materials);
 
 }
 
-void MaterialHandler::toDevice(integer index) {
-    if (index >= 0 && index < numMaterials) {
-        gpuErrorcheck(cudaMemcpy(&d_materials[index], &h_materials[index], sizeof(Material),
-                                 cudaMemcpyHostToDevice));
-    }
-    else {
-        gpuErrorcheck(cudaMemcpy(d_materials, h_materials, numMaterials * sizeof(Material),
-                                 cudaMemcpyHostToDevice));
-    }
-}
+void MaterialHandler::copy(To::Target target, integer index) {
 
-void MaterialHandler::toHost(integer index) {
     if (index >= 0 && index < numMaterials) {
-        gpuErrorcheck(cudaMemcpy(&h_materials[index], &d_materials[index], sizeof(Material),
-                                 cudaMemcpyDeviceToHost));
+        cuda::copy(&h_materials[index], &d_materials[index], target);
     }
     else {
-        gpuErrorcheck(cudaMemcpy(&h_materials[index], &d_materials[index], numMaterials * sizeof(Material),
-                                 cudaMemcpyDeviceToHost));
+        cuda::copy(&h_materials[index], &d_materials[index], target);
     }
+
 }
 
 void MaterialHandler::communicate(int from, int to, bool fromDevice, bool toDevice) {
 
-    if (fromDevice) { this->toHost(); }
+    if (fromDevice) { copy(To::host); }
 
     boost::mpi::environment env;
     boost::mpi::communicator comm;
@@ -156,17 +141,17 @@ void MaterialHandler::communicate(int from, int to, bool fromDevice, bool toDevi
 
     boost::mpi::wait_all(reqParticles.begin(), reqParticles.end());
 
-    if (toDevice) { this->toDevice(); }
+    if (toDevice) { copy(To::device); }
 }
 
 void MaterialHandler::broadcast(int root, bool fromDevice, bool toDevice) {
 
-    if (fromDevice) { this->toHost(); }
+    if (fromDevice) { copy(To::host); }
 
     boost::mpi::environment env;
     boost::mpi::communicator comm;
 
     boost::mpi::broadcast(comm, h_materials, numMaterials, root);
 
-    if (toDevice) { this->toDevice(); }
+    if (toDevice) { copy(To::device); }
 }

@@ -13,6 +13,7 @@
 #include "gravity/gravity.cuh"
 #include "sph/sph.cuh"
 #include "cuda_utils/cuda_runtime.h"
+#include "utils/cxxopts.h"
 
 #include <iostream>
 #include <stdio.h>

@@ -2,12 +2,11 @@
 #define MILUPHPC_MATERIAL_HANDLER_H
 
 #include "material.cuh"
+#include "../cuda_utils/cuda_runtime.h"
 #include "../parameter.h"
 
 #include <fstream>
 #include <libconfig.h>
-//#include "../cuda_utils/cuda_utlities.cuh"
-//#include "../cuda_utils/cuda_launcher.cuh"
 
 class LibConfigReader {
 public:
@@ -29,8 +28,7 @@ public:
     MaterialHandler(integer numMaterials, integer ID, integer interactions, real alpha, real beta);
     ~MaterialHandler();
 
-    void toDevice(integer index = -1);
-    void toHost(integer index = -1);
+    void copy(To::Target target, integer index = -1);
 
     // COMMUNICATING MATERIAL INSTANCES BETWEEN MPI PROCESSES
     // ATTENTION: it is not possible to send it from device to device

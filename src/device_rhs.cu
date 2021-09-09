@@ -1,7 +1,3 @@
-//
-// Created by Michael Staneker on 15.08.21.
-//
-
 #include "../include/device_rhs.cuh"
 #include "../include/cuda_utils/cuda_launcher.cuh"
 

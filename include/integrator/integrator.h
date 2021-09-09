@@ -11,12 +11,14 @@
 class Integrator {
 
 public:
+
     BaseIntegrator *integrator;
 
     Integrator(IntegratorSelection::Type integratorSelection=IntegratorSelection::euler);
     ~Integrator();
 
     void integrate();
+
 };
 
 

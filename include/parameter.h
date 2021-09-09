@@ -6,6 +6,8 @@ typedef int integer;
 typedef unsigned long keyType;
 typedef unsigned long idInteger;
 
+#include <iostream>
+
 #define theta 1.5//0.7
 #define KEY_MAX ULONG_MAX
 #define DOMAIN_LIST_SIZE 512
@@ -50,6 +52,7 @@ struct Curve
     Type t_;
     Curve(Type t) : t_(t) {}
     operator Type () const {return t_;}
+    //friend std::ostream& operator<<(std::ostream& out, const Curve::Type curveType);
 private:
     template<typename T>
     operator T () const;

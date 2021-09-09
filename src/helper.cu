@@ -66,7 +66,7 @@ namespace HelperNS {
         gpuErrorcheck(cub::DeviceRadixSort::SortPairs(d_temp_storage, temp_storage_bytes,
                                                       keyIn, keyOut, arrayToSort, sortedArray, n));
 
-        gpuErrorcheck(cudaFree(d_temp_storage));
+        cuda::free(d_temp_storage);
 
         return 0.f;
     }
@@ -143,6 +143,8 @@ namespace HelperNS {
             }
         }
         Logger(INFO) << "globalized reduction = " << reduction;
+
+        cuda::free(d_temp_storage);
 
         return reduction;
 

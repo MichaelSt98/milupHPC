@@ -2,15 +2,15 @@
 
 HelperHandler::HelperHandler(integer length) : length(length) {
 
-    gpuErrorcheck(cudaMalloc((void**)&d_integerVal, sizeof(integer)));
-    gpuErrorcheck(cudaMalloc((void**)&d_realVal, sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_keyTypeVal, sizeof(keyType)));
+    cuda::malloc(d_integerVal, 1);
+    cuda::malloc(d_realVal, 1);
+    cuda::malloc(d_keyTypeVal, 1);
 
-    gpuErrorcheck(cudaMalloc((void**)&d_integerBuffer, length * sizeof(integer)));
-    gpuErrorcheck(cudaMalloc((void**)&d_realBuffer, length * sizeof(real)));
-    gpuErrorcheck(cudaMalloc((void**)&d_keyTypeBuffer, length * sizeof(keyType)));
+    cuda::malloc(d_integerBuffer, length);
+    cuda::malloc(d_realBuffer, length);
+    cuda::malloc(d_keyTypeBuffer, length);
 
-    gpuErrorcheck(cudaMalloc((void**)&d_helper, sizeof(Helper)));
+    cuda::malloc(d_helper, 1);
     HelperNS::Kernel::Launch::set(d_helper, d_integerVal, d_realVal, d_keyTypeVal, d_integerBuffer,
                                   d_realBuffer, d_keyTypeBuffer);
 
@@ -18,24 +18,24 @@ HelperHandler::HelperHandler(integer length) : length(length) {
 
 HelperHandler::~HelperHandler() {
 
-    gpuErrorcheck(cudaFree(d_integerVal));
-    gpuErrorcheck(cudaFree(d_realVal));
-    gpuErrorcheck(cudaFree(d_keyTypeVal));
+    cuda::free(d_integerVal);
+    cuda::free(d_realVal);
+    cuda::free(d_keyTypeVal);
 
-    gpuErrorcheck(cudaFree(d_integerBuffer));
-    gpuErrorcheck(cudaFree(d_realBuffer));
-    gpuErrorcheck(cudaFree(d_keyTypeBuffer));
+    cuda::free(d_integerBuffer);
+    cuda::free(d_realBuffer);
+    cuda::free(d_keyTypeBuffer);
 
-    gpuErrorcheck(cudaFree(d_helper));
+    cuda::free(d_helper);
 
 }
 
 void HelperHandler::reset() {
-    gpuErrorcheck(cudaMemset(d_integerVal, 0, sizeof(integer)));
-    gpuErrorcheck(cudaMemset(d_realVal, 0., sizeof(real)));
-    gpuErrorcheck(cudaMemset(d_keyTypeVal, 0, sizeof(keyType)));
+    cuda::set(d_integerVal, 0, 1);
+    cuda::set(d_realVal, (real)0, 1);
+    cuda::set(d_keyTypeVal, (keyType)0, 1);
 
-    gpuErrorcheck(cudaMemset(d_integerBuffer, 0, length * sizeof(integer)));
-    gpuErrorcheck(cudaMemset(d_realBuffer, 0., length * sizeof(real)));
-    gpuErrorcheck(cudaMemset(d_keyTypeBuffer, 0, length * sizeof(keyType)));
+    cuda::set(d_integerBuffer, 0, length);
+    cuda::set(d_realBuffer, (real)0, length);
+    cuda::set(d_keyTypeBuffer, (keyType)0, length);
 }
