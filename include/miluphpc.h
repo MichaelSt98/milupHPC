@@ -8,7 +8,7 @@
 #include "cuda_utils/cuda_utilities.cuh"
 #include "utils/logger.h"
 #include "materials/material_handler.h"
-#include "integrator/integrator.h"
+//#include "integrator/integrator.h"
 #include "helper_handler.h"
 #include "gravity/gravity.cuh"
 #include "sph/sph.cuh"
@@ -72,7 +72,8 @@ public:
     integer numParticlesLocal;
     integer numNodes;
 
-    Integrator *integrator;
+    //Integrator *integrator;
+    IntegratedParticles *integratedParticles;
 
     integer *d_mutex;
     HelperHandler *helperHandler; // TODO: more than one is needed: how to name?
@@ -98,6 +99,9 @@ public:
 
     void run();
 
+    void rhs();
+
+    virtual void integrate() {};
 
     void particles2file(HighFive::DataSet *pos, HighFive::DataSet *vel, HighFive::DataSet *key);
 

@@ -13,6 +13,8 @@
 #include "../include/subdomain_key_tree/subdomain_handler.h"*/
 
 #include "../include/miluphpc.h"
+#include "../include/integrator/euler.h"
+#include "../include/integrator/predictor_corrector.h"
 
 //#include <mpi.h>
 #include <fenv.h>
@@ -115,13 +117,25 @@ int main(int argc, char** argv)
     Logger(INFO) << "INFO output";
     Logger(TIME) << "TIME output";
 
-    // ...
-
     integer numParticles = 100000;
     integer numNodes = 3 * numParticles + 12000;
 
-    Miluphpc miluphpc(numParticles, numNodes);
-    miluphpc.initBarnesHut();
+    IntegratorSelection::Type integratorSelection = IntegratorSelection::euler;
+
+    Miluphpc *miluphpc;
+    switch (integratorSelection) {
+        case IntegratorSelection::euler: {
+            miluphpc = new Euler(numParticles, numNodes);
+        } break;
+        case IntegratorSelection::predictor_corrector: {
+            miluphpc = new PredictorCorrector(numParticles, numNodes);
+        } break;
+        default: {
+            printf("Integrator not available!");
+        }
+    }
+
+    miluphpc->initBarnesHut();
 
     for (int i=0; i<parameters.iterations; i++) {
 
@@ -141,16 +155,16 @@ int main(int argc, char** argv)
         dataSpaceDims[1] = 3;
 
         HighFive::DataSet ranges = h5file.createDataSet<keyType>("/hilbertRanges",
-                                                                       HighFive::DataSpace(numProcesses+1));
+                                                                 HighFive::DataSpace(numProcesses+1));
 
         keyType *rangeValues;
         rangeValues = new keyType[numProcesses+1];
 
 
         //miluphpc.subDomainKeyTreeHandler->toHost();
-        miluphpc.subDomainKeyTreeHandler->copy(To::host, true, false);
+        miluphpc->subDomainKeyTreeHandler->copy(To::host, true, false);
         for (int i=0; i<numProcesses+1; i++) {
-            rangeValues[i] = miluphpc.subDomainKeyTreeHandler->h_subDomainKeyTree->range[i];
+            rangeValues[i] = miluphpc->subDomainKeyTreeHandler->h_subDomainKeyTree->range[i];
             Logger(INFO) << "rangeValues[" << i << "] = " << rangeValues[i];
         }
 
@@ -161,13 +175,13 @@ int main(int argc, char** argv)
         HighFive::DataSet pos = h5file.createDataSet<real>("/x", HighFive::DataSpace(dataSpaceDims));
         HighFive::DataSet vel = h5file.createDataSet<real>("/v", HighFive::DataSpace(dataSpaceDims));
         HighFive::DataSet key = h5file.createDataSet<keyType>("/hilbertKey",
-                                                                    HighFive::DataSpace(numParticles));
+                                                              HighFive::DataSpace(numParticles));
         //miluphpc.run();
-
-        miluphpc.barnesHut();
+        //miluphpc.barnesHut();
         //miluphpc.sph();
+        miluphpc->integrate();
 
-        miluphpc.particles2file(&pos, &vel, &key);
+        miluphpc->particles2file(&pos, &vel, &key);
 
     }
 

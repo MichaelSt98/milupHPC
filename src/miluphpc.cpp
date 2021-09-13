@@ -241,14 +241,14 @@ void Miluphpc::diskModel() {
 void Miluphpc::run() {
 
     // TESTING integrator
-    Integrator defaultIntegrator;
-    defaultIntegrator.integrate();
+    //Integrator defaultIntegrator;
+    //defaultIntegrator.integrate();
 
-    Integrator eulerIntegrator(IntegratorSelection::euler);
-    eulerIntegrator.integrate();
+    //Integrator eulerIntegrator(IntegratorSelection::euler);
+    //eulerIntegrator.integrate();
 
-    Integrator predictorCorrectorIntegrator(IntegratorSelection::predictor_corrector);
-    predictorCorrectorIntegrator.integrate();
+    //Integrator predictorCorrectorIntegrator(IntegratorSelection::predictor_corrector);
+    //predictorCorrectorIntegrator.integrate();
 
     // TESTING MaterialHandler
     /*MaterialHandler materialHandler(1, subDomainKeyTreeHandler->h_subDomainKeyTree->rank,
@@ -264,6 +264,11 @@ void Miluphpc::run() {
         materialHandler.h_materials[i].info();
     }
 
+}
+
+void Miluphpc::rhs() {
+    Logger(INFO) << "Miluphpc::rhs()";
+    barnesHut();
 }
 
 void Miluphpc::initBarnesHut() {
