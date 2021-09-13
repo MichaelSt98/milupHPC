@@ -1362,8 +1362,9 @@ void Miluphpc::particles2file(HighFive::DataSet *pos, HighFive::DataSet *vel, Hi
         sendProcN[proc] = subDomainKeyTreeHandler->h_subDomainKeyTree->rank == proc ? numParticlesLocal : 0;
     }
 
-    MPI_Allreduce(sendProcN, procN, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses, MPI_INT,
-                  MPI_MAX, MPI_COMM_WORLD);
+    boost::mpi::communicator comm;
+    all_reduce(comm, sendProcN, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses, procN,
+               boost::mpi::maximum<integer>());
 
     std::size_t nOffset = 0;
     // count total particles on other processes
