@@ -14,6 +14,7 @@
 
 #include "../include/miluphpc.h"
 #include "../include/integrator/euler.h"
+#include "../include/integrator/explicit_euler.h"
 #include "../include/integrator/predictor_corrector.h"
 
 //#include <mpi.h>
@@ -120,10 +121,14 @@ int main(int argc, char** argv)
     integer numParticles = 100000;
     integer numNodes = 3 * numParticles + 12000;
 
-    IntegratorSelection::Type integratorSelection = IntegratorSelection::euler;
+    //IntegratorSelection::Type integratorSelection = IntegratorSelection::euler;
+    IntegratorSelection::Type integratorSelection = IntegratorSelection::explicit_euler;
 
     Miluphpc *miluphpc;
     switch (integratorSelection) {
+        case IntegratorSelection::explicit_euler: {
+            miluphpc = new ExplicitEuler(numParticles, numNodes);
+        } break;
         case IntegratorSelection::euler: {
             miluphpc = new Euler(numParticles, numNodes);
         } break;
@@ -135,7 +140,7 @@ int main(int argc, char** argv)
         }
     }
 
-    miluphpc->initBarnesHut();
+    miluphpc->loadDistribution();
 
     for (int i=0; i<parameters.iterations; i++) {
 

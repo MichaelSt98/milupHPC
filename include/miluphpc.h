@@ -55,7 +55,7 @@ private:
     void fixedLoadDistribution();
     void dynamicLoadDistribution();
 
-    real reset();
+    //real reset();
 
     void compPseudoParticlesParallel();
     void parallelForce();
@@ -63,6 +63,15 @@ private:
     template <typename T>
     integer sendParticlesEntry(integer *sendLengths, integer *receiveLengths, T *entry);
     void exchangeParticleEntry(integer *sendLengths, integer *receiveLengths, real *entry);
+
+
+    real reset();
+    real boundingBox();
+
+    template <typename T>
+    real arrangeParticleEntries(T *entry, T *temp);
+
+    real assignParticles();
 
 public:
 
@@ -72,7 +81,6 @@ public:
     integer numParticlesLocal;
     integer numNodes;
 
-    //Integrator *integrator;
     IntegratedParticles *integratedParticles;
 
     integer *d_mutex;
@@ -92,12 +100,12 @@ public:
      * @param particleDistribution
      */
     void initDistribution(ParticleDistribution::Type particleDistribution=ParticleDistribution::disk);
-    void initBarnesHut();
+    void loadDistribution();
 
-    void barnesHut();
-    void sph();
-
-    void run();
+    real tree();
+    real pseudoParticles();
+    real gravity();
+    real sph();
 
     void rhs();
 

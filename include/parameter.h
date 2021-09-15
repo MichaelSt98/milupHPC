@@ -62,7 +62,7 @@ struct IntegratorSelection
 {
     enum Type
     {
-        euler, predictor_corrector
+        euler, explicit_euler, predictor_corrector
     };
     Type t_;
     IntegratorSelection(Type t) : t_(t) {}
@@ -80,13 +80,14 @@ struct Entry
 {
     enum Name
     {
-#if DIM == 1
-        x, mass
-#elif DIM == 2
-        x, y, mass
-#else
-        x, y, z, mass
+        x,
+#if DIM > 1
+        y
+#if DIM == 3
+        z
 #endif
+#endif
+        mass
     };
     Name t_;
     Entry(Name t) : t_(t) {}
@@ -100,6 +101,8 @@ private:
 #define POW_DIM power_two(DIM)
 
 #define MAX_LEVEL 21
+
+#define GRAVITY 0
 
 #define INTEGRATE_DENSITY 1
 
