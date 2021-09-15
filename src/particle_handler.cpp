@@ -388,6 +388,64 @@ ParticleHandler::~ParticleHandler() {
 
 }
 
+template <typename T>
+T*& ParticleHandler::getEntry(Entry::Name entry, Execution::Location location) {
+    switch (location) {
+        case Execution::device: {
+            switch (entry) {
+                case Entry::x: {
+                    return d_x;
+                }
+#if DIM > 1
+                case Entry::y: {
+                    return d_y;
+                } break;
+#if DIM == 3
+                case Entry::z: {
+                    return d_z;
+                } break;
+#endif
+#endif
+                case Entry::mass: {
+                    return d_mass;
+                } break;
+                default: {
+                    printf("Entry is not available!\n");
+                    return NULL;
+                }
+            }
+        } break;
+        case Execution::host: {
+            switch (entry) {
+                case Entry::x: {
+                    return h_x;
+                }
+#if DIM > 1
+                case Entry::y: {
+                    return h_y;
+                } break;
+#if DIM == 3
+                case Entry::z: {
+                    return h_z;
+                } break;
+#endif
+#endif
+                case Entry::mass: {
+                    return h_mass;
+                } break;
+                default: {
+                    printf("Entry is not available!\n");
+                    return NULL;
+                }
+            }
+        } break;
+        default: {
+            printf("Location is not available!\n");
+            return NULL;
+        }
+    }
+}
+
 void ParticleHandler::copyMass(To::Target target) {
     cuda::copy(h_mass, d_mass, numParticles, target);
 }

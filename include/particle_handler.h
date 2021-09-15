@@ -310,6 +310,9 @@ public:
      */
     ~ParticleHandler();
 
+    template <typename T>
+    T*& getEntry(Entry::Name entry, Execution::Location location = Execution::device);
+
     /**
      * copy particle's mass(es) to target (host/device)
      *
