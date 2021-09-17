@@ -112,7 +112,7 @@ namespace HelperNS {
                 gpuErrorcheck(cudaMalloc(&d_temp_storage, temp_storage_bytes));
                 // Run max-reduction
                 cub::DeviceReduce::Sum(d_temp_storage, temp_storage_bytes, d_sml, d_aggregate, n);
-            }
+            } break;
             default: {
                 Logger(ERROR) << "Reduction type not available!";
             }
@@ -137,7 +137,7 @@ namespace HelperNS {
                 // interprocess reduction
                 boost::mpi::communicator comm;
                 all_reduce(comm, boost::mpi::inplace_t<T *>(&reduction), 1, std::plus<T>());
-            }
+            } break;
             default: {
                 Logger(ERROR) << "Reduction type not available!";
             }
