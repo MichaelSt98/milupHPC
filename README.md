@@ -6,7 +6,9 @@ The successor of [miluphcuda](https://github.com/christophmschaefer/miluphcuda) 
 
 ## Current status
 
-**Not (fully) implemented yet!**
+**Principally working, but not (fully) implemented yet!**
+
+![](documents/sample.gif)
 
 * See [MichaelSt98/SPH](https://github.com/MichaelSt98/SPH) for a proof of concept
 
