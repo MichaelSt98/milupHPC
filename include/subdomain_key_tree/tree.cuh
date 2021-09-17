@@ -11,10 +11,18 @@
 
 namespace KeyNS {
 
-    //TODO: 1D and 2D DirTable
     /**
      * Table needed to convert from Lebesgue to Hilbert keys
      */
+#if DIM == 1
+    CUDA_CALLABLE_MEMBER const unsigned char DirTable[1][1] = {{1}}; //TODO: 1D DirTable?
+#elif DIM == 2
+    CUDA_CALLABLE_MEMBER const unsigned char DirTable[4][4] =
+            {{1,2,0,0},
+             {0,1,3,1},
+             {2,0,2,3},
+             {3,3,1,2}};
+#else DIM == 3
     CUDA_CALLABLE_MEMBER const unsigned char DirTable[12][8] =
             {{8,  10, 3,  3,  4,  5,  4,  5},
              {2,  2,  11, 9,  4,  5,  4,  5},
@@ -28,11 +36,20 @@ namespace KeyNS {
              {1,  1,  8,  5,  3,  3,  8,  6},
              {11, 5,  0,  0,  11, 6,  2,  2},
              {1,  1,  4,  10, 3,  3,  7,  10}};
+#endif
 
-    //TODO: 1D and 2d Hilbert table
     /**
      * Table needed to convert from Lebesgue to Hilbert keys
      */
+#if DIM == 1
+    CUDA_CALLABLE_MEMBER const unsigned char HilbertTable[1][1] = {{1}}; //TODO: 1D HilbertTable?
+#elif DIM == 2
+    CUDA_CALLABLE_MEMBERconst unsigned char HilbertTable[4][4] =
+            {{0,3,1,2},
+             {0,1,3,2},
+             {2,3,1,0},
+             {2,1,3,0}};
+#else
     CUDA_CALLABLE_MEMBER const unsigned char HilbertTable[12][8] = {{0, 7, 3, 4, 1, 6, 2, 5},
                                                                     {4, 3, 7, 0, 5, 2, 6, 1},
                                                                     {6, 1, 5, 2, 7, 0, 4, 3},
@@ -45,6 +62,7 @@ namespace KeyNS {
                                                                     {2, 1, 3, 0, 5, 6, 4, 7},
                                                                     {4, 7, 5, 6, 3, 0, 2, 1},
                                                                     {6, 5, 7, 4, 1, 2, 0, 3}};
+#endif
 
     /**
      * Convert a Lebesgue key to a Hilbert key
