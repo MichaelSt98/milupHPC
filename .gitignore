@@ -3,6 +3,7 @@
 **/build/
 **/bin/
 **/output/
+**/testing/
 
 **/.idea/
 
