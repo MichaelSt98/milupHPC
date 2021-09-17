@@ -1,6 +1,23 @@
 #include "../../include/cuda_utils/cuda_utilities.cuh"
 #include "../../include/cuda_utils/cuda_launcher.cuh"
 
+// see:
+// * [CUDA atomicAdd for doubles definition error](https://stackoverflow.com/questions/37566987/cuda-atomicadd-for-doubles-definition-error)
+// * [Why does atomicAdd not work with doubles as input?](https://forums.developer.nvidia.com/t/why-does-atomicadd-not-work-with-doubles-as-input/56429)
+#if !defined(__CUDA_ARCH__) || __CUDA_ARCH__ >= 600
+#else
+__device__ double atomicAdd(double* address, double val) {
+    unsigned long long int* address_as_ull = (unsigned long long int*)address;
+    unsigned long long int old = *address_as_ull, assumed;
+    do {
+        assumed = old;
+        old = atomicCAS(address_as_ull, assumed,
+                __double_as_longlong(val + __longlong_as_double(assumed)));
+    } while (assumed != old);
+    return __longlong_as_double(old);
+}
+#endif
+
 void gpuAssert(cudaError_t code, const char *file, int line, bool abort)
 {
     if (code != cudaSuccess)

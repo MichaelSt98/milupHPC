@@ -17,6 +17,11 @@
 #define safeCudaCall(call) checkCudaCall(call, #call, __FILE__, __LINE__)
 #define gpuErrorcheck(ans) { gpuAssert((ans), __FILE__, __LINE__); }
 
+#if !defined(__CUDA_ARCH__) || __CUDA_ARCH__ >= 600
+#else
+__device__ double atomicAdd(double* address, double val);
+#endif
+
 void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true);
 void checkCudaCall(cudaError_t command, const char * commandName, const char * fileName, int line);
 

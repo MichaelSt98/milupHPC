@@ -82,9 +82,9 @@ struct Entry
     {
         x,
 #if DIM > 1
-        y
+        y,
 #if DIM == 3
-        z
+        z,
 #endif
 #endif
         mass

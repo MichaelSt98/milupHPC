@@ -208,7 +208,7 @@ CUDA_CALLABLE_MEMBER void Particles::reset(integer index) {
 
 CUDA_CALLABLE_MEMBER real Particles::distance(integer index_1, integer index_2) {
     
-    float dx;
+    real dx;
     if (x[index_1] < x[index_2]) {
         dx = x[index_2] - x[index_1];
     }
@@ -219,7 +219,7 @@ CUDA_CALLABLE_MEMBER real Particles::distance(integer index_1, integer index_2) 
         dx = 0.f;
     }
 #if DIM > 1
-    float dy;
+    real dy;
     if (y[index_1] < y[index_2]) {
         dy = y[index_2] - y[index_1];
     }
@@ -230,7 +230,7 @@ CUDA_CALLABLE_MEMBER real Particles::distance(integer index_1, integer index_2) 
         dy = 0.f;
     }
 #if DIM == 3
-    float dz;
+    real dz;
     if (z[index_1] < z[index_2]) {
         dz = z[index_2] - z[index_1];
     }

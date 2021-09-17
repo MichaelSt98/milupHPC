@@ -27,7 +27,7 @@ namespace cuda {
     real launch(bool timeKernel, const ExecutionPolicy &policy,
                     void (*f)(Arguments...),
                     Arguments... args) {
-        real elapsedTime = 0.f;
+        float elapsedTime = 0.f;
         ExecutionPolicy p = policy;
         //checkCuda(configureGrid(p, f));
         if (timeKernel) {
