@@ -284,6 +284,8 @@ public:
     keyType *sortedDomainListKeys;
     /// concentrate domain list nodes, usable to reduce domain list indices in respect to some criterion
     integer *relevantDomainListIndices;
+    ///
+    integer *relevantDomainListProcess;
 
     /**
      * Constructor
@@ -302,7 +304,7 @@ public:
      */
     CUDA_CALLABLE_MEMBER DomainList(integer *domainListIndices, integer *domainListLevels, integer *domainListIndex,
                                     integer *domainListCounter, keyType *domainListKeys, keyType *sortedDomainListKeys,
-                                    integer *relevantDomainListIndices);
+                                    integer *relevantDomainListIndices, integer *relevantDomainListProcess);
     /**
      * Setter, passing pointer to member variables
      *
@@ -316,7 +318,7 @@ public:
      */
     CUDA_CALLABLE_MEMBER void set(integer *domainListIndices, integer *domainListLevels, integer *domainListIndex,
                                   integer *domainListCounter, keyType *domainListKeys, keyType *sortedDomainListKeys,
-                                  integer *relevantDomainListIndices);
+                                  integer *relevantDomainListIndices, integer *relevantDomainListProcess);
     /**
      * Destructor
      */
@@ -340,7 +342,8 @@ namespace DomainListNS {
          */
         __global__ void set(DomainList *domainList, integer *domainListIndices, integer *domainListLevels,
                             integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
-                            keyType *sortedDomainListKeys, integer *relevantDomainListIndices);
+                            keyType *sortedDomainListKeys, integer *relevantDomainListIndices,
+                            integer *relevantDomainListProcess);
 
         /**
          * Info kernel (for debugging purposes)
@@ -398,7 +401,8 @@ namespace DomainListNS {
              */
             void set(DomainList *domainList, integer *domainListIndices, integer *domainListLevels,
                      integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
-                     keyType *sortedDomainListKeys, integer *relevantDomainListIndices);
+                     keyType *sortedDomainListKeys, integer *relevantDomainListIndices,
+                     integer *relevantDomainListProcess);
 
             /**
              * Wrapped info kernel (for debugging purposes)
@@ -447,6 +451,18 @@ namespace DomainListNS {
         }
     }
 
+}
+
+namespace CudaUtils {
+    namespace Kernel {
+        template<typename T, typename U>
+        __global__ void markDuplicatesTemp(Tree *tree, DomainList *domainList, T *array, U *entry1, U *entry2, U *entry3, integer *duplicateCounter, integer *child, int length);
+
+        namespace Launch {
+            template<typename T, typename U>
+            real markDuplicatesTemp(Tree *tree, DomainList *domainList, T *array, U *entry1, U *entry2, U *entry3, integer *duplicateCounter, integer *child, int length);
+        }
+    }
 }
 
 #endif //MILUPHPC_DOMAIN_CUH

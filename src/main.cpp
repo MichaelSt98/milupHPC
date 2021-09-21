@@ -121,6 +121,9 @@ int main(int argc, char** argv)
     integer numParticles = 100000;
     integer numNodes = 3 * numParticles + 12000;
 
+    //integer numParticles = 7500;
+    //integer numNodes = 3 * numParticles + 12000;
+
     //IntegratorSelection::Type integratorSelection = IntegratorSelection::euler;
     IntegratorSelection::Type integratorSelection = IntegratorSelection::explicit_euler;
 

@@ -10,8 +10,7 @@ namespace Kernel {
         integer offset = 0;
 
         while ((bodyIndex + offset) < m) {
-
-            tree->reset(bodyIndex + offset, n);
+            //tree->reset(bodyIndex + offset, n);
 
             if ((bodyIndex + offset) >= n) {
                 particles->reset(bodyIndex + offset);

@@ -5,6 +5,72 @@ namespace Gravity {
 
     namespace Kernel {
 
+        __global__ void collectSendIndices(Tree *tree, Particles *particles, integer *sendIndices,
+                                           integer *particles2Send, integer *pseudoParticles2Send,
+                                           integer *pseudoParticlesLevel,
+                                           integer *particlesCount, integer *pseudoParticlesCount,
+                                           integer n, integer length, Curve::Type curveType) {
+
+            integer bodyIndex = threadIdx.x + blockIdx.x*blockDim.x;
+            integer stride = blockDim.x*gridDim.x;
+            integer offset = 0;
+
+            integer particleInsertIndex;
+            integer pseudoParticleInsertIndex;
+
+            while ((bodyIndex + offset) < length) {
+                if (sendIndices[bodyIndex + offset] == 1) {
+                    if (bodyIndex + offset < n) { // it is a particle
+                        particleInsertIndex = atomicAdd(particlesCount, 1);
+                        particles2Send[particleInsertIndex] = bodyIndex + offset;
+                        // debug
+                        if ((bodyIndex + offset) % 100 == 0) {
+                            printf("particles2Send[%i] = %i\n", particleInsertIndex, particles2Send[particleInsertIndex]);
+                        }
+                        // debug
+                    }
+                    else { // it is a pseudo-particle
+                        pseudoParticleInsertIndex = atomicAdd(pseudoParticlesCount, 1);
+                        pseudoParticles2Send[pseudoParticleInsertIndex] = bodyIndex + offset;
+                        pseudoParticlesLevel[pseudoParticleInsertIndex] = tree->getTreeLevel(particles, bodyIndex + offset,
+                                                                                             MAX_LEVEL, curveType);
+                        // debug
+                        if ((bodyIndex + offset) % 100 == 0) {
+                            printf("pseudoParticles2Send[%i] = %i\n", pseudoParticleInsertIndex, pseudoParticles2Send[pseudoParticleInsertIndex]);
+                            printf("pseudoParticlesLevel[%i] = %i\n", pseudoParticleInsertIndex, pseudoParticlesLevel[pseudoParticleInsertIndex]);
+                        }
+                        // debug
+                    }
+                }
+                offset += stride;
+            }
+        }
+
+        __global__ void prepareExchange(Tree *tree, Particles *particles, integer *sendIndices, integer *levels,
+                                        integer *nodeTypes, integer *counter,
+                                        integer length, integer n, Curve::Type curveType) {
+
+            integer bodyIndex = threadIdx.x + blockIdx.x*blockDim.x;
+            integer stride = blockDim.x*gridDim.x;
+            integer offset = 0;
+
+            while ((bodyIndex + offset) < length) {
+                //if ((bodyIndex + offset) % 100 == 0) {
+                //    printf("sendIndices[%i] = %i\n", bodyIndex + offset, sendIndices[bodyIndex + offset]);
+                //}
+                if (sendIndices[bodyIndex + offset] > n) {
+                    nodeTypes[bodyIndex + offset] = 2; // pseudo particle
+                } else {
+                    atomicAdd(counter, 1);
+                    nodeTypes[bodyIndex + offset] = 1; // particle
+                }
+                levels[bodyIndex + offset] = tree->getTreeLevel(particles, sendIndices[bodyIndex + offset],
+                                                                MAX_LEVEL, curveType);
+
+                offset += stride;
+            }
+        }
+
         __global__ void zeroDomainListNodes(Particles *particles, DomainList *domainList,
                                             DomainList *lowestDomainList) {
 
@@ -506,8 +572,8 @@ namespace Gravity {
         }
 
         __global__ void symbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
-                                      DomainList *domainList, Helper *helper,
-                                      real diam, real theta_, integer n, integer m, integer relevantIndex,
+                                      DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                      integer n, integer m, integer relevantIndex,
                                       Curve::Type curveType) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
@@ -536,21 +602,22 @@ namespace Gravity {
                 //    insert = false;
                 //}
 
-                if (insert && (bodyIndex + offset) != domainList->relevantDomainListIndices[relevantIndex] &&
+                if (insert && (bodyIndex + offset) != domainList->relevantDomainListIndices[relevantIndex]/*domainList->relevantDomainListIndices[relevantIndex]*/ &&
                     ((bodyIndex + offset) < subDomainKeyTree->procParticleCounter[subDomainKeyTree->rank] || (bodyIndex + offset) > n)) {
 
-                    r = particles->distance(relevantIndex, bodyIndex + offset);
+                    //TODO: not distance between two particles, but from particle to cell/box!!!
+                    r = particles->distance(domainList->relevantDomainListIndices[relevantIndex], bodyIndex + offset);
                     //r = smallestDistance(x, y, z, relevantDomainListIndices[relevantIndex], bodyIndex + offset);
 
                     //calculate tree level by determining the particle's key and traversing the tree until hitting that particle
                     level = tree->getTreeLevel(particles, bodyIndex + offset, MAX_LEVEL, curveType);
                     //level = getTreeLevel(bodyIndex + offset, child, x, y, z, minX, maxX, minY, maxY, minZ, maxZ);
 
-                    if ((powf(0.5, level) * diam) >= (theta_ * r) && level >= 0) {
+                    if ((powf(0.5, level) * diam * 2) >= (theta_ * r) && level >= 0) {
                         //TODO: insert cell itself or children?
 
                         /// inserting cell itself
-                        /* //check whether node is a domain list node
+                        //check whether node is a domain list node
                         for (int i=0; i<*domainList->domainListIndex; i++) {
                             if ((bodyIndex + offset) == domainList->domainListIndices[i]) {
                                 insert = false;
@@ -561,18 +628,20 @@ namespace Gravity {
                         }
                         if (insert) {
                             //add to indices to be sent
-                            insertIndex = atomicAdd(domainList->domainListCounter, 1);
-                            //sendIndices[insertIndex] = bodyIndex + offset;
-                            helper->integerBuffer[insertIndex] = bodyIndex + offset;
+                            //insertIndex = atomicAdd(domainList->domainListCounter, 1);
+                            sendIndices[bodyIndex + offset] = 1;
+                            //helper->integerBuffer[insertIndex] = bodyIndex + offset;
                         }
                         else {
 
-                        }*/
+                        }
 
+                        /*
                         /// inserting children
-                        for (int i=0; i<POW_DIM; i++) {
-                            childIndex = tree->child[POW_DIM * (bodyIndex + offset) + i];
+                        for (int k=0; k<POW_DIM; k++) {
+                            childIndex = tree->child[POW_DIM * (bodyIndex + offset) + k];
                             //check whether node is already within the indices to be sent
+                            // moved outside of function
                             //check whether node is a domain list node
                             for (int i = 0; i < *domainList->domainListIndex; i++) {
                                 if (childIndex == domainList->domainListIndices[i]) {
@@ -581,12 +650,9 @@ namespace Gravity {
                                 }
                             }
                             if (insert && childIndex != -1) {
-                                //add to indices to be sent
-                                insertIndex = atomicAdd(domainList->domainListCounter, 1);
-                                helper->integerBuffer[insertIndex] = childIndex;
-                                //sendIndices[insertIndex] = childIndex;
+                                sendIndices[childIndex] = 1;
                             }
-                        }
+                        }*/
                     }
                 }
                 else {
@@ -606,6 +672,7 @@ namespace Gravity {
             integer bodyIndex;
             keyType key;
             integer domainIndex;
+            integer proc;
 
             //"loop" over domain list nodes
             while ((index + offset) < *domainList->domainListIndex) {
@@ -613,13 +680,13 @@ namespace Gravity {
                 bodyIndex = domainList->domainListIndices[index + offset];
                 //calculate key
                 key = tree->getParticleKey(particles, bodyIndex, MAX_LEVEL, curveType);
-                //key = getParticleKeyPerParticle(x[bodyIndex], y[bodyIndex], z[bodyIndex], minX, maxX, minY, maxY,
-                //                                minZ, maxZ, 21);
 
                 //if domain list node belongs to other process: add to relevant domain list indices
-                if (subDomainKeyTree->key2proc(key) != subDomainKeyTree->rank) {
+                proc = subDomainKeyTree->key2proc(key);
+                if (proc != subDomainKeyTree->rank) {
                     domainIndex = atomicAdd(domainList->domainListCounter, 1);
                     domainList->relevantDomainListIndices[domainIndex] = bodyIndex;
+                    domainList->relevantDomainListProcess[domainIndex] = proc;
                 }
                 offset += stride;
             }
@@ -689,7 +756,257 @@ namespace Gravity {
 
         }
 
+        __global__ void insertReceivedPseudoParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                                      integer *levels, int n, int m) {
+
+            integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset;
+
+            integer childPath;
+            integer temp;
+
+            real min_x, max_x;
+#if DIM > 1
+            real min_y, max_y;
+#if DIM == 3
+            real min_z, max_z;
+#endif
+#endif
+
+            for (int level=0; level < 21; level++) {
+                offset = 0;
+                while ((bodyIndex + offset) < (tree->toDeleteNode[1] - tree->toDeleteNode[0])) {
+
+                    if (levels[bodyIndex + offset] == level) {
+                        //printf("level = %i\n", level);
+
+                        min_x = *tree->minX;
+                        max_x = *tree->maxX;
+#if DIM > 1
+                        min_y = *tree->minY;
+                        max_y = *tree->maxY;
+#if DIM == 3
+                        min_z = *tree->minZ;
+                        max_z = *tree->maxZ;
+#endif
+#endif
+                        temp = 0;
+                        childPath = 0;
+
+                        // find insertion point for body
+                        if (particles->x[tree->toDeleteNode[0] + bodyIndex + offset] < 0.5 * (min_x + max_x)) { // x direction
+                            childPath += 1;
+                            max_x = 0.5 * (min_x + max_x);
+                        }
+                        else {
+                            min_x = 0.5 * (min_x + max_x);
+                        }
+#if DIM > 1
+                        if (particles->y[tree->toDeleteNode[0] + bodyIndex + offset] < 0.5 * (min_y + max_y)) { // y direction
+                            childPath += 2;
+                            max_y = 0.5 * (min_y + max_y);
+                        }
+                        else {
+                            min_y = 0.5 * (min_y + max_y);
+                        }
+#if DIM == 3
+                        if (particles->z[tree->toDeleteNode[0] + bodyIndex + offset] < 0.5 * (min_z + max_z)) {  // z direction
+                            childPath += 4;
+                            max_z = 0.5 * (min_z + max_z);
+                        }
+                        else {
+                            min_z = 0.5 * (min_z + max_z);
+                        }
+#endif
+#endif
+                        int childIndex = tree->child[temp*POW_DIM + childPath];
+
+                        // traverse tree until hitting leaf node
+                        //integer counter = 0; //TODO: is a case possible?
+                        while (childIndex >= m /*&& counter < 25*/) {
+                            //counter++;
+                            //isDomainList = false;
+
+                            temp = childIndex;
+                            childPath = 0;
+
+                            // find insertion point for body
+                            if (particles->x[tree->toDeleteNode[0] + bodyIndex + offset] < 0.5 * (min_x + max_x)) { // x direction
+                                childPath += 1;
+                                max_x = 0.5 * (min_x + max_x);
+                            }
+                            else {
+                                min_x = 0.5 * (min_x + max_x);
+                            }
+#if DIM > 1
+                            if (particles->y[tree->toDeleteNode[0] + bodyIndex + offset] < 0.5 * (min_y + max_y)) { // y direction
+                                childPath += 2;
+                                max_y = 0.5 * (min_y + max_y);
+                            }
+                            else {
+                                min_y = 0.5 * (min_y + max_y);
+                            }
+#if DIM == 3
+                            if (particles->z[tree->toDeleteNode[0] + bodyIndex + offset] < 0.5 * (min_z + max_z)) { // z direction
+                                childPath += 4;
+                                max_z = 0.5 * (min_z + max_z);
+                            }
+                            else {
+                                min_z = 0.5 * (min_z + max_z);
+                            }
+#endif
+#endif
+                            atomicAdd(&tree->count[temp], 1); // do not count, since particles are just temporarily saved on this process
+                            childIndex = tree->child[POW_DIM*temp + childPath];
+                        }
+                        if (childIndex != -1) {
+                            printf("ATTENTION: insertReceivedPseudoParticles(): childIndex = %i\n", childIndex);
+                        }
+                        //if (counter == 24) {//childIndex != -1) {
+                        //    printf("[rank %i] childIndex = %i, level = %i... child[8 * %i + %i] = %i\n", subDomainKeyTree->rank,
+                        //           childIndex, level, temp, childPath, tree->toDeleteNode[0] + bodyIndex + offset);
+                        //}
+                        tree->child[POW_DIM*temp + childPath] = tree->toDeleteNode[0] + bodyIndex + offset;
+                    }
+
+                    offset += stride;
+                }
+            }
+        }
+
         __global__ void insertReceivedParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                                DomainList *domainList, DomainList *lowestDomainList, int n, int m) {
+
+            integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+
+            //note: -1 used as "null pointer"
+            //note: -2 used to lock a child (pointer)
+
+            integer offset;
+
+            real min_x, max_x;
+#if DIM > 1
+            real min_y, max_y;
+#if DIM == 3
+            real min_z, max_z;
+#endif
+#endif
+
+            integer childPath;
+            integer temp;
+
+            offset = 0;
+
+            bodyIndex += tree->toDeleteLeaf[0];
+
+            while ((bodyIndex + offset) < tree->toDeleteLeaf[1] && (bodyIndex + offset) > tree->toDeleteLeaf[0]) {
+
+                if ((bodyIndex + offset) % 100 == 0) {
+                    printf("Inserting received particle %i: x = (%f, %f, %f) m = %f\n", bodyIndex + offset,
+                           particles->x[bodyIndex + offset], particles->y[bodyIndex + offset],
+                           particles->z[bodyIndex + offset], particles->mass[bodyIndex + offset]);
+                }
+
+                min_x = *tree->minX;
+                max_x = *tree->maxX;
+#if DIM > 1
+                min_y = *tree->minY;
+                max_y = *tree->maxY;
+#if DIM == 3
+                min_z = *tree->minZ;
+                max_z = *tree->maxZ;
+#endif
+#endif
+
+                temp = 0;
+                childPath = 0;
+
+                // find insertion point for body
+                if (particles->x[bodyIndex + offset] < 0.5 * (min_x + max_x)) { // x direction
+                    childPath += 1;
+                    max_x = 0.5 * (min_x + max_x);
+                }
+                else {
+                    min_x = 0.5 * (min_x + max_x);
+                }
+#if DIM > 1
+                if (particles->y[bodyIndex + offset] < 0.5 * (min_y + max_y)) { // y direction
+                    childPath += 2;
+                    max_y = 0.5 * (min_y + max_y);
+                }
+                else {
+                    min_y = 0.5 * (min_y + max_y);
+                }
+#if DIM == 3
+                if (particles->z[bodyIndex + offset] < 0.5 * (min_z + max_z)) {  // z direction
+                    childPath += 4;
+                    max_z = 0.5 * (min_z + max_z);
+                }
+                else {
+                    min_z = 0.5 * (min_z + max_z);
+                }
+#endif
+#endif
+
+                int childIndex = tree->child[temp*POW_DIM + childPath];
+
+                // traverse tree until hitting leaf node
+                while (childIndex >= m) { //&& childIndex < (8*m)) { //formerly n
+
+                    temp = childIndex;
+
+                    childPath = 0;
+
+                    // find insertion point for body
+                    if (particles->x[bodyIndex + offset] < 0.5 * (min_x + max_x)) { // x direction
+                        childPath += 1;
+                        max_x = 0.5 * (min_x + max_x);
+                    }
+                    else {
+                        min_x = 0.5 * (min_x + max_x);
+                    }
+#if DIM > 1
+                    if (particles->y[bodyIndex + offset] < 0.5 * (min_y + max_y)) { // y direction
+                        childPath += 2;
+                        max_y = 0.5 * (min_y + max_y);
+                    }
+                    else {
+                        min_y = 0.5 * (min_y + max_y);
+                    }
+#if DIM == 3
+                    if (particles->z[bodyIndex + offset] < 0.5 * (min_z + max_z)) { // z direction
+                        childPath += 4;
+                        max_z = 0.5 * (min_z + max_z);
+                    }
+                    else {
+                        min_z = 0.5 * (min_z + max_z);
+                    }
+#endif
+#endif
+                    atomicAdd(&tree->count[temp], 1); // do not count, since particles are just temporarily saved on this process
+                    childIndex = tree->child[POW_DIM*temp + childPath];
+                }
+
+                if (childIndex != -1) {
+                    printf("ATTENTION: insertReceivedParticles(): childIndex = %i (%i, %i) (%i, %i)\n", childIndex,
+                           tree->toDeleteLeaf[0], tree->toDeleteLeaf[1],
+                           tree->toDeleteNode[0], tree->toDeleteNode[1]);
+                    printf("[rank %i] childIndex = %i,... child[8 * %i + %i] = %i (%f, %f, %f) vs (%f, %f, %f)\n", subDomainKeyTree->rank,
+                               childIndex, temp, childPath, bodyIndex + offset,
+                               particles->x[childIndex], particles->y[childIndex], particles->z[childIndex],
+                               particles->x[bodyIndex + offset], particles->y[bodyIndex + offset], particles->z[bodyIndex + offset]);
+                }
+
+                tree->child[POW_DIM*temp + childPath] = bodyIndex + offset;
+
+                offset += stride;
+            }
+
+        }
+
+        /*__global__ void insertReceivedParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                 DomainList *domainList, DomainList *lowestDomainList, int n, int m) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
@@ -776,7 +1093,7 @@ namespace Gravity {
                 int childIndex = tree->child[temp*POW_DIM + childPath];
 
                 // traverse tree until hitting leaf node
-                while (childIndex >= m /*&& childIndex < (8*m)*/) { //formerly n
+                while (childIndex >= m //&& childIndex < (8*m)) { //formerly n
 
                     isDomainList = false;
 
@@ -819,7 +1136,7 @@ namespace Gravity {
                     }
 
                     //TODO: !!!
-                    if (/*true*/ !isDomainList) {
+                    if (!isDomainList) { //true
                         if (particles->mass[bodyIndex + offset] != 0) {
                             atomicAdd(&particles->x[temp], particles->mass[bodyIndex + offset] * particles->x[bodyIndex + offset]);
 #if DIM > 1
@@ -971,6 +1288,7 @@ namespace Gravity {
             }
 
         }
+        */
 
         __global__ void centreOfMassReceivedParticles(Particles *particles, integer *startIndex,
                                                             integer *endIndex, int n) {
@@ -1065,6 +1383,25 @@ namespace Gravity {
             }
         }
 
+        real Launch::collectSendIndices(Tree *tree, Particles *particles, integer *sendIndices,
+                                integer *particles2Send, integer *pseudoParticles2Send,
+                                integer *pseudoParticlesLevel,
+                                integer *particlesCount, integer *pseudoParticlesCount,
+                                integer n, integer length, Curve::Type curveType) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::collectSendIndices, tree, particles, sendIndices,
+                                particles2Send, pseudoParticles2Send, pseudoParticlesLevel, particlesCount,
+                                pseudoParticlesCount, n, length, curveType);
+        }
+
+        real Launch::prepareExchange(Tree *tree, Particles *particles, integer *sendIndices, integer *levels,
+                                     integer *nodeTypes, integer *counter,
+                                     integer length, integer n, Curve::Type curveType) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::prepareExchange, tree, particles, sendIndices,
+                                levels, nodeTypes, counter, length, n, curveType);
+        }
+
         real Launch::zeroDomainListNodes(Particles *particles, DomainList *domainList, DomainList *lowestDomainList) {
             ExecutionPolicy executionPolicy;
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::zeroDomainListNodes, particles, domainList,
@@ -1122,12 +1459,12 @@ namespace Gravity {
         }
 
         real Launch::symbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
-                           DomainList *domainList, Helper *helper,
+                           DomainList *domainList, integer *sendIndices,
                            real diam, real theta_, integer n, integer m, integer relevantIndex,
                            Curve::Type curveType) {
             ExecutionPolicy executionPolicy;
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::symbolicForce, subDomainKeyTree, tree,
-                                particles, domainList, helper, diam, theta_, n, m, relevantIndex, curveType);
+                                particles, domainList, sendIndices, diam, theta_, n, m, relevantIndex, curveType);
         }
 
         real Launch::compTheta(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
@@ -1154,6 +1491,13 @@ namespace Gravity {
             ExecutionPolicy executionPolicy;
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::calculateNewRange, subDomainKeyTree, helper,
                                 bins, n, curveType);
+        }
+
+        real Launch::insertReceivedPseudoParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                           integer *levels, int n, int m) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::insertReceivedPseudoParticles,
+                                subDomainKeyTree, tree, particles, levels, n, m);
         }
 
         real Launch::insertReceivedParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,

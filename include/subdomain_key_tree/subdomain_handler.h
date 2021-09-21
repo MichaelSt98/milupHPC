@@ -97,6 +97,7 @@ public:
     keyType *d_sortedDomainListKeys;
     /// device relevant domain list indices
     integer *d_relevantDomainListIndices;
+    integer *d_relevantDomainListProcess;
 
     /// device instance of `DomainList` class
     DomainList *d_domainList;

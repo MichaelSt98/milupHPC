@@ -12,12 +12,22 @@ Miluphpc::Miluphpc(integer numParticles, integer numNodes) : numParticles(numPar
 
     cuda::malloc(d_mutex, 1);
     helperHandler = new HelperHandler(numParticles);
-    buffer = new HelperHandler(numParticles);
+    buffer = new HelperHandler(numNodes);
     particleHandler = new ParticleHandler(numParticles, numNodes);
     subDomainKeyTreeHandler = new SubDomainKeyTreeHandler();
     treeHandler = new TreeHandler(numParticles, numNodes);
     domainListHandler = new DomainListHandler(DOMAIN_LIST_SIZE);
     lowestDomainListHandler = new DomainListHandler(DOMAIN_LIST_SIZE);
+
+    // testing
+    cuda::malloc(d_particles2SendIndices, numParticles);
+    cuda::malloc(d_pseudoParticles2SendIndices, numParticles);
+    cuda::malloc(d_pseudoParticles2SendLevels, numParticles);
+    cuda::malloc(d_pseudoParticles2ReceiveLevels, numParticles);
+
+    cuda::malloc(d_particles2SendCount, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
+    cuda::malloc(d_pseudoParticles2SendCount, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
+    // end: testing
 
     numParticlesLocal = numParticles/2; //+ subDomainKeyTreeHandler->h_subDomainKeyTree->rank * 5000;
     Logger(INFO) << "numParticlesLocal = " << numParticlesLocal;
@@ -31,6 +41,16 @@ Miluphpc::~Miluphpc() {
     delete particleHandler;
     delete subDomainKeyTreeHandler;
     delete treeHandler;
+
+    // testing
+    cuda::free(d_particles2SendIndices);
+    cuda::free(d_pseudoParticles2SendIndices);
+    cuda::free(d_pseudoParticles2SendLevels);
+    cuda::free(d_pseudoParticles2ReceiveLevels);
+
+    cuda::free(d_particles2SendCount);
+    cuda::free(d_pseudoParticles2SendCount);
+    // end: testing
 
 }
 
@@ -51,15 +71,25 @@ void Miluphpc::initDistribution(ParticleDistribution::Type particleDistribution)
 
 
     cuda::copy(particleHandler->h_sml, particleHandler->d_sml, numParticlesLocal, To::device);
-
-    Logger(INFO) << "reduction: max:";
-    HelperNS::reduceAndGlobalize(particleHandler->d_sml, helperHandler->d_realVal, numParticlesLocal, Reduction::max);
-    Logger(INFO) << "reduction: min:";
-    HelperNS::reduceAndGlobalize(particleHandler->d_sml, helperHandler->d_realVal, numParticlesLocal, Reduction::min);
-    Logger(INFO) << "reduction: sum:";
-    HelperNS::reduceAndGlobalize(particleHandler->d_sml, helperHandler->d_realVal, numParticlesLocal, Reduction::sum);
-
     particleHandler->copyDistribution(To::device, true, true);
+
+    // TESTING
+    //Logger(INFO) << "reduction: max:";
+    //HelperNS::reduceAndGlobalize(particleHandler->d_sml, helperHandler->d_realVal, numParticlesLocal, Reduction::max);
+    //Logger(INFO) << "reduction: min:";
+    //HelperNS::reduceAndGlobalize(particleHandler->d_sml, helperHandler->d_realVal, numParticlesLocal, Reduction::min);
+    //Logger(INFO) << "reduction: sum:";
+    //HelperNS::reduceAndGlobalize(particleHandler->d_sml, helperHandler->d_realVal, numParticlesLocal, Reduction::sum);
+    // end: TESTING
+
+    // DEBUG
+    //gpuErrorcheck(cudaMemset(buffer->d_integerVal, 0, sizeof(integer)));
+    //CudaUtils::Kernel::Launch::findDuplicateEntries(particleHandler->d_x, particleHandler->d_y, buffer->d_integerVal,
+    //                                          numParticlesLocal);
+    //integer duplicates;
+    //gpuErrorcheck(cudaMemcpy(&duplicates, buffer->d_integerVal, sizeof(integer), cudaMemcpyDeviceToHost));
+    //Logger(INFO) << "duplicates: " << duplicates;
+    // end: DEBUG
 }
 
 void Miluphpc::diskModel() {
@@ -302,6 +332,7 @@ real Miluphpc::reset() {
     lowestDomainListHandler->reset();
     subDomainKeyTreeHandler->reset();
 
+    cuda::set(treeHandler->d_child, -1, POW_DIM * numNodes);
     Logger(TIME) << "resetArrays: " << time << " ms";
     // END: resetting arrays, variables, buffers, ...
     return time;
@@ -734,6 +765,31 @@ void Miluphpc::exchangeParticleEntry(integer *sendLengths, integer *receiveLengt
 
 }
 
+template <typename T>
+integer Miluphpc::sendParticles(T *sendBuffer, T *receiveBuffer, integer *sendLengths, integer *receiveLengths) {
+    boost::mpi::communicator comm;
+
+    std::vector<boost::mpi::request> reqParticles;
+    std::vector<boost::mpi::status> statParticles;
+
+    integer reqCounter = 0;
+    integer receiveOffset = 0;
+    integer sendOffset = 0;
+
+    for (integer proc=0; proc<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
+        if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
+            reqParticles.push_back(comm.isend(proc, 17, &sendBuffer[sendOffset], sendLengths[proc]));
+            statParticles.push_back(comm.recv(proc, 17, &receiveBuffer[receiveOffset], receiveLengths[proc]));
+
+            receiveOffset += receiveLengths[proc];
+            sendOffset += sendLengths[proc];
+        }
+    }
+
+    boost::mpi::wait_all(reqParticles.begin(), reqParticles.end());
+
+}
+
 //TODO: combine and generalize sendParticlesEntry and exchangeParticlesEntry
 template <typename T>
 integer Miluphpc::sendParticlesEntry(integer *sendLengths, integer *receiveLengths, T *entry) {
@@ -937,16 +993,20 @@ void Miluphpc::parallelForce() {
 
     cuda::set(domainListHandler->d_domainListCounter, 0);
 
+    Logger(INFO) << "compTheta()";
+
     //compTheta
     Gravity::Kernel::Launch::compTheta(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
                                        particleHandler->d_particles, domainListHandler->d_domainList,
                                        helperHandler->d_helper, curveType);
 
     integer relevantIndicesCounter;
-
     cuda::copy(&relevantIndicesCounter, domainListHandler->d_domainListCounter, 1, To::host);
-
     Logger(INFO) << "relevantIndicesCounter: " << relevantIndicesCounter;
+
+    integer *h_relevantDomainListProcess;
+    h_relevantDomainListProcess = new integer[relevantIndicesCounter]; //TODO: delete [] h_relevantDomainListProcess;
+    cuda::copy(h_relevantDomainListProcess, domainListHandler->d_relevantDomainListProcess, relevantIndicesCounter, To::host);
 
     //cudaMemcpy(&domainListIndex, d_relevantDomainListIndices, relevantIndicesCounter*sizeof(int), cudaMemcpyDeviceToHost);
 
@@ -972,271 +1032,266 @@ void Miluphpc::parallelForce() {
     real theta_ = theta; //0.5f;
 
     cuda::set(domainListHandler->d_domainListCounter, 0);
-    integer currentDomainListCounter;
-    real massOfDomainListNode;
-    for (integer relevantIndex=0; relevantIndex</*1*/relevantIndicesCounter; relevantIndex++) {
+    // integer currentDomainListCounter;
+    // real massOfDomainListNode;
+    integer *d_markedSendIndices = buffer->d_integerBuffer;
+    real *d_collectedEntries = buffer->d_realBuffer;
 
-        cuda::copy(&currentDomainListCounter, domainListHandler->d_domainListCounter, 1, To::host);
-        //gpuErrorcheck(cudaMemset(d_mutex, 0, sizeof(int)));
-        //Logger(INFO) << "current value of domain list counter: " << currentDomainListCounter;
+    //integer *h_relevantIndicesCounter;
+    //h_relevantIndicesCounter = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
 
-        integer treeIndex;
+    cuda::set(d_particles2SendIndices, -1, numParticles);
+    cuda::set(d_pseudoParticles2SendIndices, -1, numParticles);
+    cuda::set(d_pseudoParticles2SendLevels, -1, numParticles);
+    cuda::set(d_pseudoParticles2ReceiveLevels, -1, numParticles);
 
-        cuda::copy(&treeIndex, treeHandler->d_index, 1, To::host);
-        //Logger(INFO) << "treeIndex = " << treeIndex;
-        //Logger(INFO) << "symbolicForce ...";
-        Gravity::Kernel::Launch::symbolicForce(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
-                                               particleHandler->d_particles, domainListHandler->d_domainList,
-                                               helperHandler->d_helper, diam, theta_, numParticles, numNodes,
-                                               relevantIndex, curveType);
+    cuda::set(d_particles2SendCount, 0, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
+    cuda::set(d_pseudoParticles2SendCount, 0, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
 
-        // removing duplicates
-        // TODO: remove duplicates by overwriting same array with index of to send and afterwards remove empty entries
-        int sendCountTemp;
+    //integer *d_particles2SendCount;
+    //integer *d_pseudoParticles2SendCount;
 
-        cuda::copy(&sendCountTemp, domainListHandler->d_domainListCounter, 1, To::host);
+    integer particlesOffset = 0;
+    integer pseudoParticlesOffset = 0;
 
-        cuda::set(domainListHandler->d_domainListCounter, 0);
+    integer particlesOffsetBuffer;
+    integer pseudoParticlesOffsetBuffer;
 
-        // CHECK for indices
-        CudaUtils::Kernel::Launch::markDuplicates(helperHandler->d_integerBuffer, domainListHandler->d_domainListCounter,
-                                                  sendCountTemp);
-        // CHECK for indices and entries!
-        //CudaUtils::Kernel::Launch::markDuplicates(helperHandler->d_integerBuffer, particleHandler->d_x,
-        //                                          particleHandler->d_y, domainListHandler->d_domainListCounter,
-        //                                          sendCountTemp);
+    integer *h_particles2SendCount = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+    integer *h_pseudoParticles2SendCount = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
 
+    for (integer proc=0; proc<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
+        cuda::set(d_markedSendIndices, 0, numNodes);
+        for (integer relevantIndex = 0; relevantIndex < relevantIndicesCounter; relevantIndex++) {
+            if (h_relevantDomainListProcess[relevantIndex] == proc) {
+                Logger(INFO) << "h_relevantDomainListProcess[" << relevantIndex << "] = " << h_relevantDomainListProcess[relevantIndex];
+                Gravity::Kernel::Launch::symbolicForce(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
+                                                       particleHandler->d_particles, domainListHandler->d_domainList,
+                                                       d_markedSendIndices, diam, theta_, numParticles, numNodes,
+                                                       relevantIndex, curveType);
+            }
+        }
+        Gravity::Kernel::Launch::collectSendIndices(treeHandler->d_tree, particleHandler->d_particles,
+                                                    d_markedSendIndices, &d_particles2SendIndices[particlesOffset],
+                                                    &d_pseudoParticles2SendIndices[pseudoParticlesOffset],
+                                                    &d_pseudoParticles2SendLevels[pseudoParticlesOffset],
+                                                    &d_particles2SendCount[proc],
+                                                    &d_pseudoParticles2SendCount[proc],
+                                                    numParticles, numNodes, curveType);
 
-        integer duplicatesCounter;
-
-        cuda::copy(&duplicatesCounter, domainListHandler->d_domainListCounter, 1, To::host);
-        //Logger(INFO) << "duplicatesCounter: " << duplicatesCounter;
-        //Logger(INFO) << "now resetting d_domainListCounter..";
-        cuda::set(domainListHandler->d_domainListCounter, 0);
-        //Logger(INFO) << "now removing duplicates..";
-        CudaUtils::Kernel::Launch::removeDuplicates(helperHandler->d_integerBuffer, buffer->d_integerBuffer,
-                                                    domainListHandler->d_domainListCounter, sendCountTemp);
-        integer sendCount;
-
-        cuda::copy(&sendCount, domainListHandler->d_domainListCounter, 1, To::host);
-        //Logger(INFO) << "sendCount: " << sendCount;
-        // end: removing duplicates
+        cuda::copy(&particlesOffsetBuffer, &d_particles2SendCount[proc], 1, To::host);
+        cuda::copy(&pseudoParticlesOffsetBuffer, &d_pseudoParticles2SendCount[proc], 1, To::host);
     }
 
-    subDomainKeyTreeHandler->copy(To::host, true, true);
-    //gpuErrorcheck(cudaMemcpy(h_procCounter, d_procCounter, h_subDomainHandler->numProcesses*sizeof(int), cudaMemcpyDeviceToHost));
+    cuda::copy(h_particles2SendCount, d_particles2SendCount, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses, To::host);
+    cuda::copy(h_pseudoParticles2SendCount, d_pseudoParticles2SendCount, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses, To::host);
 
-    int sendCountTemp;
+    integer *particleSendLengths;
+    particleSendLengths = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+    particleSendLengths[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] = 0;
+    integer *particleReceiveLengths;
+    particleReceiveLengths = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+    particleReceiveLengths[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] = 0;
 
-    cuda::copy(&sendCountTemp, domainListHandler->d_domainListCounter, 1, To::host);
-    Logger(INFO) << "sendCountTemp: " << sendCountTemp;
+    integer *pseudoParticleSendLengths;
+    pseudoParticleSendLengths = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+    pseudoParticleSendLengths[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] = 0;
+    integer *pseudoParticleReceiveLengths;
+    pseudoParticleReceiveLengths = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+    pseudoParticleReceiveLengths[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] = 0;
 
-    int newSendCount;
-    cuda::set(domainListHandler->d_domainListCounter, 0);
+    for (int proc=0; proc<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
+        Logger(INFO) << "h_particles2SendCount[" << proc << "] = " << h_particles2SendCount[proc];
+        Logger(INFO) << "h_pseudoParticles2SendCount[" << proc << "] = " << h_pseudoParticles2SendCount[proc];
+        if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
+            particleSendLengths[proc] = h_particles2SendCount[proc];
+            pseudoParticleSendLengths[proc] = h_pseudoParticles2SendCount[proc];
+        }
+    }
 
-    DomainListNS::Kernel::Launch::info(particleHandler->d_particles, domainListHandler->d_domainList);
+    delete [] h_particles2SendCount;
+    delete [] h_pseudoParticles2SendCount;
 
-    // CHECK indices
-    //CudaUtils::Kernel::Launch::markDuplicates(helperHandler->d_integerBuffer, domainListHandler->d_domainListCounter,
-    //                                          sendCountTemp);
-    // CHECK indices and entries
-    //CudaUtils::Kernel::Launch::markDuplicates(helperHandler->d_integerBuffer, particleHandler->d_x,
-    //                                          particleHandler->d_y, domainListHandler->d_domainListCounter,
-    //                                          sendCountTemp);
-    // CHECK indices and entries and DEBUG!
-    CudaUtils::Kernel::Launch::markDuplicates(helperHandler->d_integerBuffer, particleHandler->d_x,
-                                              particleHandler->d_y, domainListHandler->d_domainListCounter,
-                                              treeHandler->d_child, sendCountTemp);
+    mpi::messageLengths(subDomainKeyTreeHandler->h_subDomainKeyTree, particleSendLengths, particleReceiveLengths);
 
-    int duplicatesCounter;
+    integer particleTotalReceiveLength = 0;
+    integer particleTotalSendLength = 0;
+    for (int proc=0; proc<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
+        if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
+            particleTotalReceiveLength += particleReceiveLengths[proc];
+            particleTotalSendLength += particleSendLengths[proc];
+        }
+    }
+    Logger(INFO) << "particleTotalReceiveLength: " << particleTotalReceiveLength;
+    Logger(INFO) << "particleTotalSendLength: " << particleTotalSendLength;
 
-    cuda::copy(&duplicatesCounter, domainListHandler->d_domainListCounter, 1, To::host);
-    Logger(INFO) << "duplicatesCounter: " << duplicatesCounter;
-    Logger(INFO) << "now resetting d_domainListCounter..";
-    cuda::set(domainListHandler->d_domainListCounter, 0);
-    Logger(INFO) << "now removing duplicates..";
-    CudaUtils::Kernel::Launch::removeDuplicates(helperHandler->d_integerBuffer, buffer->d_integerBuffer,
-                                                domainListHandler->d_domainListCounter, sendCountTemp);
-    //KernelHandler.removeDuplicates(d_sendIndicesTemp, d_sendIndices, d_domainListCounter, sendCountTemp, false);
-    int sendCount;
-    cuda::copy(&sendCount, domainListHandler->d_domainListCounter, 1, To::host);
-    Logger(INFO) << "sendCount: " << sendCount;
+    mpi::messageLengths(subDomainKeyTreeHandler->h_subDomainKeyTree, pseudoParticleSendLengths, pseudoParticleReceiveLengths);
+
+    integer pseudoParticleTotalReceiveLength = 0;
+    integer pseudoParticleTotalSendLength = 0;
+    for (int proc=0; proc<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
+        if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
+            pseudoParticleTotalReceiveLength += pseudoParticleReceiveLengths[proc];
+            pseudoParticleTotalSendLength += pseudoParticleSendLengths[proc];
+        }
+    }
+    Logger(INFO) << "pseudoParticleTotalReceiveLength: " << pseudoParticleTotalReceiveLength;
+    Logger(INFO) << "pseudoParticleTotalSendLength: " << pseudoParticleTotalSendLength;
+
+    //integer *d_particles2SendIndices;
+    //integer *d_pseudoParticles2SendIndices;
+    //integer *d_pseudoParticles2SendLevels;
+    //integer *d_pseudoParticles2ReceiveLevels;
+
+    integer treeIndex;
+    cuda::copy(&treeIndex, treeHandler->d_index, 1, To::host);
+
+    // debugging
+    //TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, treeIndex, treeIndex + pseudoParticleTotalReceiveLength);
+    //TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal, numParticlesLocal + particleTotalReceiveLength);
+    // end: debugging
+
+    // x-entry pseudo-particle exchange
+    CudaUtils::Kernel::Launch::collectValues(d_pseudoParticles2SendIndices, particleHandler->d_x, d_collectedEntries,
+                                             pseudoParticleTotalSendLength);
+    sendParticles(d_collectedEntries, &particleHandler->d_x[treeIndex], pseudoParticleSendLengths,
+                  pseudoParticleReceiveLengths);
+    // x-entry particle exchange
+    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_x, d_collectedEntries,
+                                             particleTotalSendLength);
+    sendParticles(d_collectedEntries, &particleHandler->d_x[numParticlesLocal], particleSendLengths,
+                  particleReceiveLengths);
+
+    //Particle velocity and acceleration:
+    // vx-entry particle exchange
+    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_vx, d_collectedEntries,
+                                             particleTotalSendLength);
+    sendParticles(d_collectedEntries, &particleHandler->d_vx[numParticlesLocal], particleSendLengths,
+                  particleReceiveLengths);
+    // ax-entry particle exchange
+    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_ax, d_collectedEntries,
+                                             particleTotalSendLength);
+    sendParticles(d_collectedEntries, &particleHandler->d_ax[numParticlesLocal], particleSendLengths,
+                  particleReceiveLengths);
+#if DIM > 1
+    // y-entry pseudo-particle exchange
+    CudaUtils::Kernel::Launch::collectValues(d_pseudoParticles2SendIndices, particleHandler->d_y, d_collectedEntries,
+                                             pseudoParticleTotalSendLength);
+    sendParticles(d_collectedEntries, &particleHandler->d_y[treeIndex], pseudoParticleSendLengths,
+                  pseudoParticleReceiveLengths);
+    // y-entry particle exchange
+    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_y, d_collectedEntries,
+                                             particleTotalSendLength);
+
+    sendParticles(d_collectedEntries, &particleHandler->d_y[numParticlesLocal], particleSendLengths,
+                  particleReceiveLengths);
+
+    //Particle velocity and acceleration:
+    // vy-entry particle exchange
+    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_vy, d_collectedEntries,
+                                             particleTotalSendLength);
+    sendParticles(d_collectedEntries, &particleHandler->d_vy[numParticlesLocal], particleSendLengths,
+                  particleReceiveLengths);
+    // ay-entry particle exchange
+    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_ay, d_collectedEntries,
+                                             particleTotalSendLength);
+    sendParticles(d_collectedEntries, &particleHandler->d_ay[numParticlesLocal], particleSendLengths,
+                  particleReceiveLengths);
+#if DIM == 3
+    // z-entry pseudo-particle exchange
+    CudaUtils::Kernel::Launch::collectValues(d_pseudoParticles2SendIndices, particleHandler->d_z, d_collectedEntries,
+                                             pseudoParticleTotalSendLength);
+    sendParticles(d_collectedEntries, &particleHandler->d_z[treeIndex], pseudoParticleSendLengths,
+                  pseudoParticleReceiveLengths);
+    // z-entry particle exchange
+    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_z, d_collectedEntries,
+                                             particleTotalSendLength);
+    sendParticles(d_collectedEntries, &particleHandler->d_z[numParticlesLocal], particleSendLengths,
+                  particleReceiveLengths);
+
+    //Particle velocity and acceleration:
+    // vz-entry particle exchange
+    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_vz, d_collectedEntries,
+                                             particleTotalSendLength);
+    sendParticles(d_collectedEntries, &particleHandler->d_vz[numParticlesLocal], particleSendLengths,
+                  particleReceiveLengths);
+    // az-entry particle exchange
+    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_az, d_collectedEntries,
+                                             particleTotalSendLength);
+    sendParticles(d_collectedEntries, &particleHandler->d_az[numParticlesLocal], particleSendLengths,
+                  particleReceiveLengths);
+
+#endif
+#endif
+
+    // mass-entry pseudo-particle exchange
+    CudaUtils::Kernel::Launch::collectValues(d_pseudoParticles2SendIndices, particleHandler->d_mass, d_collectedEntries,
+                                             pseudoParticleTotalSendLength);
+    sendParticles(d_collectedEntries, &particleHandler->d_mass[treeIndex], pseudoParticleSendLengths,
+                  pseudoParticleReceiveLengths);
+    // mass-entry particle exchange
+    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_mass, d_collectedEntries,
+                                             particleTotalSendLength);
+    sendParticles(d_collectedEntries, &particleHandler->d_mass[numParticlesLocal], particleSendLengths,
+                  particleReceiveLengths);
+
+    // PSEUDO-PARTICLE level exchange
+    //integer *d_pseudoParticles2SendLevels;
+    //integer *d_pseudoParticles2ReceiveLevels;
+    //CudaUtils::Kernel::Launch::collectValues(d_pseudoParticles2SendIndices, particleHandler->d_mass, d_collectedEntries,
+    //                                         pseudoParticleTotalSendLength);
+    // TODO: check values for pseudo-particles levels!
+    sendParticles(d_pseudoParticles2SendLevels, d_pseudoParticles2ReceiveLevels, pseudoParticleSendLengths,
+                  pseudoParticleReceiveLengths);
+
+
+    // debugging
+    //Logger(INFO) << "exchanged particle entry: x";
+    //TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, treeIndex, treeIndex + pseudoParticleTotalReceiveLength);
+    //TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal, numParticlesLocal + particleTotalReceiveLength);
+    // end: debugging
+
+    treeHandler->h_toDeleteLeaf[0] = numParticlesLocal;
+    treeHandler->h_toDeleteLeaf[1] = numParticlesLocal + particleTotalReceiveLength;
+    cuda::copy(treeHandler->h_toDeleteLeaf, treeHandler->d_toDeleteLeaf, 2, To::device);
 
     // DEBUG
     //gpuErrorcheck(cudaMemset(buffer->d_integerVal, 0, sizeof(integer)));
-    //CudaUtils::Kernel::Launch::findDuplicates(buffer->d_integerBuffer, particleHandler->d_x,
-    //                                          particleHandler->d_y, buffer->d_integerVal, sendCount);
-    //CudaUtils::Kernel::Launch::findDuplicates(buffer->d_integerBuffer, particleHandler->d_x,
-    //                                          particleHandler->d_y, buffer->d_integerVal, sendCount);
+    //CudaUtils::Kernel::Launch::findDuplicateEntries(&particleHandler->d_x[treeHandler->h_toDeleteLeaf[0]],
+    //                                                &particleHandler->d_y[treeHandler->h_toDeleteLeaf[0]],
+    //                                                buffer->d_integerVal,
+    //                                                particleTotalReceiveLength);
     //integer duplicates;
     //gpuErrorcheck(cudaMemcpy(&duplicates, buffer->d_integerVal, sizeof(integer), cudaMemcpyDeviceToHost));
-    //Logger(INFO) << "duplicates: " << duplicates;
+    //Logger(INFO) << "duplicates: " << duplicates << " between: " << treeHandler->h_toDeleteLeaf[0] << " and " << treeHandler->h_toDeleteLeaf[0] + particleTotalReceiveLength;
     // end: DEBUG
 
-    integer *sendLengths;
-    sendLengths = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
-    sendLengths[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] = 0;
-    integer *receiveLengths;
-    receiveLengths = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
-    receiveLengths[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] = 0;
-
-    for (int proc=0; proc < subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
-        if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
-            sendLengths[proc] = sendCount;
-        }
-    }
-
-    mpi::messageLengths(subDomainKeyTreeHandler->h_subDomainKeyTree, sendLengths, receiveLengths);
-
-    int totalReceiveLength = 0;
-    for (int proc=0; proc<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
-        if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
-            totalReceiveLength += receiveLengths[proc];
-        }
-    }
-
-    Logger(INFO) << "totalReceiveLength = " << totalReceiveLength;
-
-    treeHandler->h_toDeleteLeaf[0] = numParticlesLocal;
-    treeHandler->h_toDeleteLeaf[1] = numParticlesLocal + totalReceiveLength; //+ sendCount;
-    //cudaMemcpy(&d_to_delete_leaf[0], &h_procCounter[h_subDomainHandler->rank], sizeof(int), cudaMemcpyHostToDevice);
-    //cudaMemcpy(&d_to_delete_leaf[1], &to_delete_leaf_1, sizeof(int),
-    //         cudaMemcpyHostToDevice);
-    cuda::copy(treeHandler->h_toDeleteLeaf, treeHandler->d_toDeleteLeaf, 2, To::device);
-    //gpuErrorcheck(cudaMemcpy(&treeHandler->d_toDeleteLeaf[1] &treeHandler->h_toDeleteLeaf[1], sizeof(integer),
-    //                         cudaMemcpyHostToDevice));
-
-    //copy values[indices] into d_tempArray (float)
-
-
-    //CudaUtils::Kernel::Launch::checkValues(buffer->d_integerBuffer, particleHandler->d_x, particleHandler->d_y,
-    //                                       particleHandler->d_z, sendCount);
-
-    // x
-    CudaUtils::Kernel::Launch::collectValues(buffer->d_integerBuffer, particleHandler->d_x, helperHandler->d_realBuffer,
-                                             sendCount);
-    exchangeParticleEntry(sendLengths, receiveLengths, particleHandler->d_x);
-#if DIM > 1
-    // y
-    CudaUtils::Kernel::Launch::collectValues(buffer->d_integerBuffer, particleHandler->d_y, helperHandler->d_realBuffer,
-                                             sendCount);
-    exchangeParticleEntry(sendLengths, receiveLengths, particleHandler->d_y);
-#if DIM == 3
-    // z
-    CudaUtils::Kernel::Launch::collectValues(buffer->d_integerBuffer, particleHandler->d_z, helperHandler->d_realBuffer,
-                                             sendCount);
-    exchangeParticleEntry(sendLengths, receiveLengths, particleHandler->d_z);
-#endif
-#endif
-
-    // vx
-    CudaUtils::Kernel::Launch::collectValues(buffer->d_integerBuffer, particleHandler->d_vx, helperHandler->d_realBuffer,
-                                             sendCount);
-    exchangeParticleEntry(sendLengths, receiveLengths, particleHandler->d_vx);
-#if DIM > 1
-    // vy
-    CudaUtils::Kernel::Launch::collectValues(buffer->d_integerBuffer, particleHandler->d_vy, helperHandler->d_realBuffer,
-                                             sendCount);
-    exchangeParticleEntry(sendLengths, receiveLengths, particleHandler->d_vy);
-#if DIM == 3
-    // vz
-    CudaUtils::Kernel::Launch::collectValues(buffer->d_integerBuffer, particleHandler->d_vz, helperHandler->d_realBuffer,
-                                             sendCount);
-    exchangeParticleEntry(sendLengths, receiveLengths, particleHandler->d_vz);
-#endif
-#endif
-
-    // x
-    CudaUtils::Kernel::Launch::collectValues(buffer->d_integerBuffer, particleHandler->d_ax, helperHandler->d_realBuffer,
-                                             sendCount);
-    exchangeParticleEntry(sendLengths, receiveLengths, particleHandler->d_ax);
-#if DIM > 1
-    // y
-    CudaUtils::Kernel::Launch::collectValues(buffer->d_integerBuffer, particleHandler->d_ay, helperHandler->d_realBuffer,
-                                             sendCount);
-    exchangeParticleEntry(sendLengths, receiveLengths, particleHandler->d_ay);
-#if DIM == 3
-    // z
-    CudaUtils::Kernel::Launch::collectValues(buffer->d_integerBuffer, particleHandler->d_az, helperHandler->d_realBuffer,
-                                             sendCount);
-    exchangeParticleEntry(sendLengths, receiveLengths, particleHandler->d_az);
-#endif
-#endif
-
-    // mass
-    CudaUtils::Kernel::Launch::collectValues(buffer->d_integerBuffer, particleHandler->d_mass, helperHandler->d_realBuffer,
-                                             sendCount);
-    exchangeParticleEntry(sendLengths, receiveLengths, particleHandler->d_mass);
-
-    //insert into tree // remember within to_delete_cell
-    //remember index
-    //int indexBeforeInserting;
-    cuda::copy(&treeHandler->h_toDeleteNode[0], treeHandler->d_index, 1, To::host);
-    //gpuErrorcheck(cudaMemcpy(h_min_x, d_min_x, sizeof(float), cudaMemcpyDeviceToHost));
-
-
-    //Logger(INFO) << "duplicateCounterCounter = " << duplicateCounterCounter;
-
-    //KernelHandler.treeInfo(d_x, d_y, d_z, d_mass, d_count, d_start, d_child, d_index, d_min_x, d_max_x, d_min_y, d_max_y,
-    //                       d_min_z, d_max_z, numParticlesLocal, numNodes, d_procCounter, d_subDomainHandler, d_sortArray,
-    //                       d_sortArrayOut);
-
-    Logger(INFO) << "Starting inserting particles...";
-    Logger(INFO) << "treeHandler->h_toDeleteLeaf[0]: " << treeHandler->h_toDeleteLeaf[0];
-    Logger(INFO) << "treeHandler->h_toDeleteLeaf[1]: " << treeHandler->h_toDeleteLeaf[1];
-    Gravity::Kernel::Launch::insertReceivedParticles(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
-                                                     particleHandler->d_particles, domainListHandler->d_domainList,
-                                                     lowestDomainListHandler->d_domainList, treeHandler->h_toDeleteLeaf[1],
-                                                     numParticles);
-
-
-
-    //KernelHandler.insertReceivedParticles(d_x, d_y, d_z, d_mass, d_count, d_start, d_child, d_index, d_min_x, d_max_x,
-    //                                      d_min_y, d_max_y, d_min_z, d_max_z, d_to_delete_leaf, d_domainListIndices,
-    //                                      d_domainListIndex, d_lowestDomainListIndices, d_lowestDomainListIndex,
-    //        to_delete_leaf_1, numParticles, false);
-
-
-    //KernelHandler.treeInfo(d_x, d_y, d_z, d_mass, d_count, d_start, d_child, d_index, d_min_x, d_max_x, d_min_y, d_max_y,
-    //                       d_min_z, d_max_z, numParticlesLocal, numNodes, d_procCounter, d_subDomainHandler, d_sortArray,
-    //                       d_sortArrayOut);
-
-    //int indexAfterInserting;
-    cuda::copy(&treeHandler->h_toDeleteNode[1], treeHandler->d_index, 1, To::host);
-
-    //Logger(INFO) << "to_delete_leaf[0] = " << to_delete_leaf_0
-    //             << " | " << "to_delete_leaf[1] = " << to_delete_leaf_1;
-
-    //Logger(INFO) << "to_delete_cell[0] = " << indexBeforeInserting << " | " << "to_delete_cell[1] = "
-    //             << indexAfterInserting;
-
-    //gpuErrorcheck(cudaMemcpy(&treeHandler->d_toDeleteNode[0], &indexBeforeInserting, sizeof(integer),
-    //                         cudaMemcpyHostToDevice));
-    //gpuErrorcheck(cudaMemcpy(&treeHandler->d_toDeleteNode[1], &indexAfterInserting, sizeof(integer),
-    //                         cudaMemcpyHostToDevice));
-
+    treeHandler->h_toDeleteNode[0] = treeIndex;
+    treeHandler->h_toDeleteNode[1] = treeIndex + pseudoParticleTotalReceiveLength;
     cuda::copy(treeHandler->h_toDeleteNode, treeHandler->d_toDeleteNode, 2, To::device);
 
-    Logger(INFO) << "treeHandler->h_toDeleteNode[0]: " << treeHandler->h_toDeleteNode[0];
-    Logger(INFO) << "treeHandler->h_toDeleteNode[1]: " << treeHandler->h_toDeleteNode[1];
+    Gravity::Kernel::Launch::insertReceivedPseudoParticles(subDomainKeyTreeHandler->d_subDomainKeyTree,
+                                                           treeHandler->d_tree, particleHandler->d_particles,
+                                                           d_pseudoParticles2ReceiveLevels, numParticles,
+                                                           numParticles);
 
-    Gravity::Kernel::Launch::centreOfMassReceivedParticles(particleHandler->d_particles, &treeHandler->d_toDeleteNode[0],
-                                                           &treeHandler->d_toDeleteNode[1], numParticlesLocal);
-    //KernelHandler.centreOfMassReceivedParticles(d_x, d_y, d_z, d_mass, &d_to_delete_cell[0], &d_to_delete_cell[1],
-    //                                            numParticlesLocal, false);
+    Gravity::Kernel::Launch::insertReceivedParticles(subDomainKeyTreeHandler->d_subDomainKeyTree,
+                                                     treeHandler->d_tree, particleHandler->d_particles,
+                                                     domainListHandler->d_domainList, lowestDomainListHandler->d_domainList,
+                                                     numParticles, numParticles);
+
 
     Logger(INFO) << "Finished inserting received particles!";
 
-    //debug
-
-    //TODO: reset index on device? -> no, not working anymore
-    //gpuErrorcheck(cudaMemset(d_index, indexBeforeInserting, sizeof(int)));
 
     float elapsedTime = 0.f;
 
 
     TreeNS::Kernel::Launch::sort(treeHandler->d_tree, /*treeHandler->h_toDeleteNode[1]*/numParticlesLocal, numParticles, false);
     //KernelHandler.sort(d_count, d_start, d_sorted, d_child, d_index, numParticles, numParticles, false); //TODO: numParticlesLocal or numParticles?
+
+    //Logger(INFO) << "FINISHED!";
+    //exit(0);
 
     //actual (local) force
     integer warp = 32;
@@ -1255,6 +1310,9 @@ void Miluphpc::parallelForce() {
 
     Gravity::Kernel::Launch::repairTree(treeHandler->d_tree, particleHandler->d_particles,
                                         domainListHandler->d_domainList, numParticlesLocal, numNodes);
+
+    //TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, treeIndex, treeIndex + pseudoParticleTotalReceiveLength);
+    //TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal, numParticlesLocal + particleTotalReceiveLength);
 
 
     //KernelHandler.repairTree(d_x, d_y, d_z, d_vx, d_vy, d_vz, d_ax, d_ay, d_az, d_mass, d_count, d_start, d_child,

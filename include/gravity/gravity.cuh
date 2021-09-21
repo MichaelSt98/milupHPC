@@ -5,12 +5,23 @@
 #include "../subdomain_key_tree/subdomain.cuh"
 #include "../parameter.h"
 #include "../helper.cuh"
+#include <boost/mpi.hpp>
 
 #include <cmath>
 
 namespace Gravity {
 
     namespace Kernel {
+
+        __global__ void collectSendIndices(Tree *tree, Particles *particles, integer *sendIndices,
+                                           integer *particles2Send, integer *pseudoParticles2Send,
+                                           integer *pseudoParticlesLevel,
+                                           integer *particlesCount, integer *pseudoParticlesCount,
+                                           integer n, integer length, Curve::Type curveType);
+
+        __global__ void prepareExchange(Tree *tree, Particles *particles, integer *sendIndices, integer *levels,
+                                        integer *nodeTypes, integer *counter,
+                                        integer length, integer n, Curve::Type curveType);
 
         __global__ void zeroDomainListNodes(Particles *particles, DomainList *domainList,
                                             DomainList *lowestDomainList);
@@ -34,8 +45,8 @@ namespace Gravity {
         __global__ void update(Particles *particles, integer n, real dt, real d);
 
         __global__ void symbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
-                                      DomainList *domainList, Helper *helper,
-                                      real diam, real theta_, integer n, integer m, integer relevantIndex,
+                                      DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                      integer n, integer m, integer relevantIndex,
                                       Curve::Type curveType=Curve::lebesgue);
 
         __global__ void compTheta(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
@@ -60,6 +71,9 @@ namespace Gravity {
                                           /*keyType *keyHistRanges, integer *keyHistCounts,*/ int bins, int n,
                                           Curve::Type curveType=Curve::lebesgue);
 
+        __global__ void insertReceivedPseudoParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                                      integer *levels, int n, int m);
+
         __global__ void insertReceivedParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                 DomainList *domainList, DomainList *lowestDomainList, int n, int m);
 
@@ -69,6 +83,16 @@ namespace Gravity {
         __global__ void repairTree(Tree *tree, Particles *particles, DomainList *domainList, int n, int m);
 
         namespace Launch {
+
+            real collectSendIndices(Tree *tree, Particles *particles, integer *sendIndices,
+                                    integer *particles2Send, integer *pseudoParticles2Send,
+                                    integer *pseudoParticlesLevel,
+                                    integer *particlesCount, integer *pseudoParticlesCount,
+                                    integer n, integer length, Curve::Type curveType = Curve::lebesgue);
+
+            real prepareExchange(Tree *tree, Particles *particles, integer *sendIndices, integer *levels,
+                                 integer *nodeTypes, integer *counter,
+                                 integer length, integer n, Curve::Type curveType = Curve::lebesgue);
 
             real zeroDomainListNodes(Particles *particles, DomainList *domainList, DomainList *lowestDomainList);
 
@@ -91,9 +115,9 @@ namespace Gravity {
             real update(Particles *particles, integer n, real dt, real d);
 
             real symbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
-                                          DomainList *domainList, Helper *helper,
-                                          real diam, real theta_, integer n, integer m, integer relevantIndex,
-                                          Curve::Type curveType=Curve::lebesgue);
+                               DomainList *domainList, integer *sendIndices,
+                               real diam, real theta_, integer n, integer m, integer relevantIndex,
+                               Curve::Type curveType=Curve::lebesgue);
 
             real compTheta(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                       DomainList *domainList, Helper *helper, Curve::Type curveType=Curve::lebesgue);
@@ -106,6 +130,9 @@ namespace Gravity {
 
             real calculateNewRange(SubDomainKeyTree *subDomainKeyTree, Helper *helper, int bins, int n,
                                    Curve::Type curveType=Curve::lebesgue);
+
+            real insertReceivedPseudoParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                               integer *levels, int n, int m);
 
             real insertReceivedParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                     DomainList *domainList, DomainList *lowestDomainList, int n, int m);

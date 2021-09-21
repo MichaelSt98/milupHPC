@@ -148,6 +148,8 @@ namespace SubDomainKeyTreeNS {
                             tree->child[POW_DIM * temp + path[j]] = cell;
                             childIndex = cell;
                             domainList->domainListIndices[domainListCounter] = childIndex; //cell;
+                            printf("adding node index %i  cell = %i (childPath = %i,  j = %i)! x = (%f, %f, %f)\n",
+                                   childIndex, cell, childPath, j, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex]);
                             domainListCounter++;
                         } else {
                             // child is a leaf, thus add node in between
@@ -226,8 +228,8 @@ namespace SubDomainKeyTreeNS {
 #endif
                             particles->mass[cell] += particles->mass[childIndex];
 
-                            //printf("adding node in between for index %i  cell = %i (childPath = %i,  j = %i)! x = (%f, %f, %f)\n",
-                            //       childIndex, cell, childPath, j, x[childIndex], y[childIndex], z[childIndex]);
+                            printf("adding node in between for index %i  cell = %i (childPath = %i,  j = %i)! x = (%f, %f, %f)\n",
+                                   childIndex, cell, childPath, j, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex]);
 
 
                             tree->child[POW_DIM * cell + childPath] = childIndex;
@@ -402,11 +404,12 @@ CUDA_CALLABLE_MEMBER DomainList::DomainList() {
 CUDA_CALLABLE_MEMBER DomainList::DomainList(integer *domainListIndices, integer *domainListLevels,
                                             integer *domainListIndex, integer *domainListCounter,
                                             keyType *domainListKeys, keyType *sortedDomainListKeys,
-                                            integer *relevantDomainListIndices) :
+                                            integer *relevantDomainListIndices, integer *relevantDomainListProcess) :
                                             domainListIndices(domainListIndices), domainListLevels(domainListLevels),
                                             domainListIndex(domainListIndex), domainListCounter(domainListCounter),
                                             domainListKeys(domainListKeys), sortedDomainListKeys(sortedDomainListKeys),
-                                            relevantDomainListIndices(relevantDomainListIndices) {
+                                            relevantDomainListIndices(relevantDomainListIndices),
+                                            relevantDomainListProcess(relevantDomainListProcess) {
 
 }
 
@@ -414,9 +417,10 @@ CUDA_CALLABLE_MEMBER DomainList::~DomainList() {
 
 }
 
-CUDA_CALLABLE_MEMBER void DomainList::set(integer *domainListIndices, integer *domainListLevels, integer *domainListIndex,
-                              integer *domainListCounter, keyType *domainListKeys, keyType *sortedDomainListKeys,
-                                          integer *relevantDomainListIndices) {
+CUDA_CALLABLE_MEMBER void DomainList::set(integer *domainListIndices, integer *domainListLevels,
+                                          integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
+                                          keyType *sortedDomainListKeys, integer *relevantDomainListIndices,
+                                          integer *relevantDomainListProcess) {
 
     this->domainListIndices = domainListIndices;
     this->domainListLevels = domainListLevels;
@@ -425,6 +429,7 @@ CUDA_CALLABLE_MEMBER void DomainList::set(integer *domainListIndices, integer *d
     this->domainListKeys = domainListKeys;
     this->sortedDomainListKeys = sortedDomainListKeys;
     this->relevantDomainListIndices = relevantDomainListIndices;
+    this->relevantDomainListProcess = relevantDomainListProcess;
 
     *domainListIndex = 0;
 }
@@ -435,10 +440,11 @@ namespace DomainListNS {
 
         __global__ void set(DomainList *domainList, integer *domainListIndices, integer *domainListLevels,
                             integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
-                            keyType *sortedDomainListKeys, integer *relevantDomainListIndices) {
+                            keyType *sortedDomainListKeys, integer *relevantDomainListIndices,
+                            integer *relevantDomainListProcess) {
 
             domainList->set(domainListIndices, domainListLevels, domainListIndex, domainListCounter, domainListKeys,
-                            sortedDomainListKeys, relevantDomainListIndices);
+                            sortedDomainListKeys, relevantDomainListIndices, relevantDomainListProcess);
         }
 
         __global__ void info(Particles *particles, DomainList *domainList) {
@@ -632,11 +638,12 @@ namespace DomainListNS {
 
         void Launch::set(DomainList *domainList, integer *domainListIndices, integer *domainListLevels,
                              integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
-                             keyType *sortedDomainListKeys, integer *relevantDomainListIndices) {
+                             keyType *sortedDomainListKeys, integer *relevantDomainListIndices,
+                             integer *relevantDomainListProcess) {
             ExecutionPolicy executionPolicy(1, 1);
             cuda::launch(false, executionPolicy, ::DomainListNS::Kernel::set, domainList, domainListIndices, domainListLevels,
                          domainListIndex, domainListCounter, domainListKeys, sortedDomainListKeys,
-                         relevantDomainListIndices);
+                         relevantDomainListIndices, relevantDomainListProcess);
         }
 
         real Launch::info(Particles *particles, DomainList *domainList) {
@@ -665,4 +672,96 @@ namespace DomainListNS {
         }
     }
 
+}
+
+namespace CudaUtils {
+
+    namespace Kernel {
+
+        template<typename T, typename U>
+        __global__ void markDuplicatesTemp(Tree *tree, DomainList *domainList, T *array, U *entry1, U *entry2, U *entry3, integer *duplicateCounter, integer *child, int length) {
+
+            integer index = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+            integer maxIndex;
+
+            bool isChild;
+            //remark: check only x, but in principle check all
+            while ((index + offset) < length) {
+                if (array[index + offset] != -1) {
+                    for (integer i = 0; i < length; i++) {
+                        if (i != (index + offset)) {
+                            if (array[i] != -1 && (array[index + offset] == array[i] || (entry1[array[i]] == entry1[array[index + offset]] &&
+                                                                                         entry2[array[i]] == entry2[array[index + offset]] &&
+                                                                                         entry3[array[i]] == entry3[array[index + offset]]))) {
+                                isChild = false;
+
+                                if (true/*array[index + offset] == array[i]*/) {
+                                    printf("DUPLICATE: %i vs %i | (%f, %f, %f) vs (%f, %f, %f):\n",
+                                           array[index + offset], array[i],
+                                           entry1[array[index + offset]], entry2[array[index + offset]], entry3[array[index + offset]],
+                                           entry1[array[i]], entry2[array[i]], entry3[array[i]]);
+
+                                    for (int k=0; k<*domainList->domainListIndex; k++) {
+                                        if (array[index + offset] == domainList->domainListIndices[k] ||
+                                                array[i] == domainList->domainListIndices[k]) {
+                                            printf("DUPLICATE is domainList!\n");
+                                        }
+                                    }
+
+                                    for (int k=0; k<POW_DIM; k++) {
+                                        if (child[POW_DIM*array[index + offset] + k] == array[i]) {
+                                            printf("isChild: index = %i: child %i == i = %i\n", array[index + offset],
+                                                   k, array[i]);
+                                            isChild = true;
+                                        }
+
+                                        if (child[8*array[i] + k] == array[index + offset]) {
+                                            printf("isChild: index = %i: child %i == index = %i\n", array[i],
+                                                   k, array[index + offset]);
+                                            isChild = true;
+                                        }
+                                    }
+
+                                    if (!isChild) {
+                                        printf("isChild: Duplicate NOT a child: %i vs %i | (%f, %f, %f) vs (%f, %f, %f):\n",
+                                               array[index + offset], array[i],
+                                               entry1[array[index + offset]], entry2[array[index + offset]], entry3[array[index + offset]],
+                                               entry1[array[i]], entry2[array[i]], entry3[array[i]]);
+                                        //for (int k=0; k<POW_DIM; k++) {
+                                        //        printf("isChild: Duplicate NOT a child: children index = %i: child %i == i = %i\n", array[index + offset],
+                                        //               k, array[i]);
+                                        //
+                                        //        printf("isChild: Duplicate NOT a child: children index = %i: child %i == index = %i\n", array[i],
+                                        //               k, array[index + offset]);
+                                        //
+                                        //}
+                                    }
+
+                                }
+
+                                //maxIndex = max(index + offset, i);
+                                // mark larger index with -1 (thus a duplicate)
+                                //array[maxIndex] = -1;
+                                //atomicAdd(duplicateCounter, 1);
+                            }
+                        }
+
+                    }
+                }
+                offset += stride;
+            }
+        }
+
+        namespace Launch {
+            template<typename T, typename U>
+            real markDuplicatesTemp(Tree *tree, DomainList *domainList, T *array, U *entry1, U *entry2, U *entry3, integer *duplicateCounter, integer *child, int length) {
+                ExecutionPolicy executionPolicy;
+                return cuda::launch(true, executionPolicy, ::CudaUtils::Kernel::markDuplicatesTemp<T, U>, tree, domainList, array, entry1, entry2,
+                                    entry3, duplicateCounter, child, length);
+            }
+            template real markDuplicatesTemp<integer, real>(Tree *tree, DomainList *domainList, integer *array, real *entry1, real *entry2, real *entry3, integer *duplicateCounter, integer *child, int length);
+        }
+    }
 }

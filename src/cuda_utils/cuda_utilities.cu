@@ -93,7 +93,7 @@ namespace CudaUtils {
         }
 
         template<typename T>
-        __global__ void findDuplicates(T *array1, T *array2, integer *duplicateCounter, int length) {
+        __global__ void findDuplicateEntries(T *array1, T *array2, integer *duplicateCounter, int length) {
             integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
             integer stride = blockDim.x * gridDim.x;
             integer offset = 0;
@@ -104,7 +104,7 @@ namespace CudaUtils {
                     if (i != (bodyIndex + offset)) {
                         if (array1[bodyIndex + offset] == array1[i] && array2[bodyIndex + offset] == array2[i]) {
                             atomicAdd(duplicateCounter, 1);
-                            printf("duplicate! (%i vs. %i) (x = %f, y = %f)\n", i, bodyIndex + offset, array1[i], array2[i]);
+                            //printf("duplicate! (%i vs. %i) (x = %f, y = %f)\n", i, bodyIndex + offset, array1[i], array2[i]);
                         }
                     }
                 }
@@ -151,8 +151,8 @@ namespace CudaUtils {
                         if (i != (index + offset)) {
                             if (array[i] != -1 &&  array[index + offset] == array[i]) {
 
-                                printf("DUPLICATE: %i vs %i\n",
-                                       array[index + offset], array[i]);
+                                printf("DUPLICATE: %i vs %i (%i vs. %i)\n",
+                                       array[index + offset], array[i], index + offset, i);
 
                                 maxIndex = max(index + offset, i);
                                 // mark larger index with -1 (thus a duplicate)
@@ -205,7 +205,7 @@ namespace CudaUtils {
         }*/
 
         template<typename T, typename U>
-        __global__ void markDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, integer *child, int length) {
+        __global__ void markDuplicates(T *array, U *entry1, U *entry2, U *entry3, integer *duplicateCounter, integer *child, int length) {
 
             integer index = threadIdx.x + blockIdx.x * blockDim.x;
             integer stride = blockDim.x * gridDim.x;
@@ -219,31 +219,43 @@ namespace CudaUtils {
                     for (integer i = 0; i < length; i++) {
                         if (i != (index + offset)) {
                             if (array[i] != -1 && (array[index + offset] == array[i] || (entry1[array[i]] == entry1[array[index + offset]] &&
-                                                                                         entry2[array[i]] == entry2[array[index + offset]]))) {
+                                                                                         entry2[array[i]] == entry2[array[index + offset]] &&
+                                                                                         entry3[array[i]] == entry3[array[index + offset]]))) {
                                 isChild = false;
 
-                                if (true/*array[index + offset] == array[i]*/) {
-                                    printf("DUPLICATE: %i vs %i | (%f, %f) vs (%f, %f):\n",
+                                if (false/*array[index + offset] == array[i]*/) {
+                                    printf("DUPLICATE: %i vs %i | (%f, %f, %f) vs (%f, %f, %f):\n",
                                            array[index + offset], array[i],
-                                           entry1[array[index + offset]], entry2[array[index + offset]],
-                                           entry1[array[i]], entry2[array[i]]);
+                                           entry1[array[index + offset]], entry2[array[index + offset]], entry3[array[index + offset]],
+                                           entry1[array[i]], entry2[array[i]], entry3[array[i]]);
 
-                                    for (int k=0; k<8; k++) {
-                                        if (child[8*array[index + offset] + k] == array[i]) {
-                                            printf("index = %i: child %i == i = %i\n", array[index + offset],
+                                    for (int k=0; k<POW_DIM; k++) {
+                                        if (child[POW_DIM*array[index + offset] + k] == array[i]) {
+                                            printf("isChild: index = %i: child %i == i = %i\n", array[index + offset],
                                                    k, array[i]);
                                             isChild = true;
                                         }
 
                                         if (child[8*array[i] + k] == array[index + offset]) {
-                                            printf("index = %i: child %i == index = %i\n", array[i],
+                                            printf("isChild: index = %i: child %i == index = %i\n", array[i],
                                                    k, array[index + offset]);
                                             isChild = true;
                                         }
                                     }
 
                                     if (!isChild) {
-                                        printf("Duplicate NOT a child!\n");
+                                        printf("isChild: Duplicate NOT a child: %i vs %i | (%f, %f, %f) vs (%f, %f, %f):\n",
+                                               array[index + offset], array[i],
+                                               entry1[array[index + offset]], entry2[array[index + offset]], entry3[array[index + offset]],
+                                               entry1[array[i]], entry2[array[i]], entry3[array[i]]);
+                                        //for (int k=0; k<POW_DIM; k++) {
+                                        //        printf("isChild: Duplicate NOT a child: children index = %i: child %i == i = %i\n", array[index + offset],
+                                        //               k, array[i]);
+                                        //
+                                        //        printf("isChild: Duplicate NOT a child: children index = %i: child %i == index = %i\n", array[i],
+                                        //               k, array[index + offset]);
+                                        //
+                                        //}
                                     }
 
                                 }
@@ -306,12 +318,12 @@ namespace CudaUtils {
         template real Launch::findDuplicates<real>(real *array, integer *duplicateCounter, int length);
 
         template<typename T>
-        real Launch::findDuplicates(T *array1, T *array2, integer *duplicateCounter, int length) {
+        real Launch::findDuplicateEntries(T *array1, T *array2, integer *duplicateCounter, int length) {
             ExecutionPolicy executionPolicy;
-            return cuda::launch(true, executionPolicy, ::CudaUtils::Kernel::findDuplicates<T>, array1,
+            return cuda::launch(true, executionPolicy, ::CudaUtils::Kernel::findDuplicateEntries<T>, array1,
                                 array2, duplicateCounter, length);
         }
-        //template real Launch::findDuplicates<real>(real *array1, real *array2, integer *duplicateCounter, int length);
+        template real Launch::findDuplicateEntries<real>(real *array1, real *array2, integer *duplicateCounter, int length);
 
         template<typename T, typename U>
         real Launch::findDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, int length) {
@@ -342,12 +354,12 @@ namespace CudaUtils {
         template real Launch::markDuplicates<integer, real>(integer *array, real *entry1, real *entry2, integer *duplicateCounter, int length);
         */
         template<typename T, typename U>
-        real Launch::markDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, integer *child, int length) {
+        real Launch::markDuplicates(T *array, U *entry1, U *entry2, U *entry3, integer *duplicateCounter, integer *child, int length) {
             ExecutionPolicy executionPolicy;
             return cuda::launch(true, executionPolicy, ::CudaUtils::Kernel::markDuplicates<T, U>, array, entry1, entry2,
-                                duplicateCounter, child, length);
+                                entry3, duplicateCounter, child, length);
         }
-        template real Launch::markDuplicates<integer, real>(integer *array, real *entry1, real *entry2, integer *duplicateCounter, integer *child, int length);
+        template real Launch::markDuplicates<integer, real>(integer *array, real *entry1, real *entry2, real *entry3, integer *duplicateCounter, integer *child, int length);
 
 
         template<typename T>

@@ -210,7 +210,17 @@ CUDA_CALLABLE_MEMBER integer Tree::getTreeLevel(Particles *particles, integer in
 
     childIndex = 0; //child[path[0]];
     printf("ATTENTION: level = -1 (index = %i x = (%f, %f, %f))\n", index, particles->x[index], particles->y[index],
-           particles->z[index]);
+                                                                        particles->z[index]);
+
+    for (integer i=0; i<maxLevel; i++) {
+        childIndex = child[POW_DIM * childIndex + path[i]];
+        for (int k=0; k<8; k++) {
+            if (child[POW_DIM * childIndex + k] == index) {
+                printf("FOUND index = %i for k = %i\n", index, k);
+            }
+        }
+        //printf("index = %i, path[%i] = %i, childIndex = %i\n", index, i, path[i], childIndex);
+    }
 
     //delete [] path;
 
@@ -344,6 +354,7 @@ __global__ void TreeNS::Kernel::sumParticles(Tree *tree) {
         printf("sumParticles = %i\n", sumParticles);
     }
 }
+
 
 __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, integer n, integer m) {
 
@@ -584,6 +595,7 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
     }
 }
 
+
 __global__ void TreeNS::Kernel::centerOfMass(Tree *tree, Particles *particles, integer n) {
 
     integer bodyIndex = threadIdx.x + blockIdx.x*blockDim.x;
@@ -639,6 +651,7 @@ __global__ void TreeNS::Kernel::sort(Tree *tree, integer n, integer m) {
     }
     integer cell = m + bodyIndex;
     integer ind = *tree->index;
+    //integer ind = tree->toDeleteNode[1];
 
     while ((cell + offset) < ind) {
 
@@ -696,8 +709,26 @@ namespace TreeNS {
             tree->set(count, start, child, sorted, index, toDeleteLeaf, toDeleteNode, minX, maxX);
         }
 
-        __global__ void info(Tree *tree, integer n, integer m) {
+        __global__ void info(Tree *tree, Particles *particles, integer n, integer m) {
+            integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
 
+            /*while (bodyIndex + offset < n) {
+                if ((bodyIndex + offset) % 10000 == 0) {
+                    printf("tree info\n");
+                }
+                offset += stride;
+            }*/
+
+            bodyIndex += n;
+            while (bodyIndex + offset < m) {
+                printf("x[%i] = (%f, %f, %f) mass = %f\n", bodyIndex + offset, particles->x[bodyIndex + offset],
+                       particles->y[bodyIndex + offset], particles->z[bodyIndex + offset],
+                       particles->mass[bodyIndex + offset]);
+
+                offset += stride;
+            }
         }
 
         void Launch::set(Tree *tree, integer *count, integer *start, integer *child, integer *sorted,
@@ -707,8 +738,9 @@ namespace TreeNS {
                          index, toDeleteLeaf, toDeleteNode, minX, maxX);
         }
 
-        real Launch::info(Tree *tree, integer n, integer m) {
-            return 0.f;
+        real Launch::info(Tree *tree, Particles *particles, integer n, integer m) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::TreeNS::Kernel::info, tree, particles, n, m);
         }
 
 #if DIM > 1

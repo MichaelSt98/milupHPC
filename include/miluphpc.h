@@ -64,6 +64,9 @@ private:
     integer sendParticlesEntry(integer *sendLengths, integer *receiveLengths, T *entry);
     void exchangeParticleEntry(integer *sendLengths, integer *receiveLengths, real *entry);
 
+    template <typename T>
+    integer sendParticles(T *sendBuffer, T *receiveBuffer, integer *sendLengths, integer *receiveLengths);
+
 
     real reset();
     real boundingBox();
@@ -91,6 +94,16 @@ public:
     TreeHandler *treeHandler;
     DomainListHandler *domainListHandler;
     DomainListHandler *lowestDomainListHandler;
+
+    // testing
+    integer *d_particles2SendIndices;
+    integer *d_pseudoParticles2SendIndices;
+    integer *d_pseudoParticles2SendLevels;
+    integer *d_pseudoParticles2ReceiveLevels;
+
+    integer *d_particles2SendCount;
+    integer *d_pseudoParticles2SendCount;
+    // end: testing
 
     Miluphpc(integer numParticles, integer numNodes);
     ~Miluphpc();

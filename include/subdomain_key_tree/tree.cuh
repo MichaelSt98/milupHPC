@@ -316,7 +316,7 @@ namespace TreeNS {
          * @param n
          * @param m
          */
-        __global__ void info(Tree *tree, integer n, integer m);
+        __global__ void info(Tree *tree, Particles *particles, integer n, integer m);
 
         namespace Launch {
             /**
@@ -340,7 +340,7 @@ namespace TreeNS {
             /**
              * Wrapped kernel for tree class (for debugging purposes)
              */
-            real info(Tree *tree, integer n, integer m);
+            real info(Tree *tree, Particles *particles, integer n, integer m);
         }
 
 #if DIM > 1

@@ -8,7 +8,7 @@ typedef unsigned long idInteger;
 
 #include <iostream>
 
-#define theta 1.5//0.7
+#define theta 0.5//1.5//0.7
 #define KEY_MAX ULONG_MAX
 #define DOMAIN_LIST_SIZE 512
 
