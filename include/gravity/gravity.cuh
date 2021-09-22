@@ -49,6 +49,11 @@ namespace Gravity {
                                       integer n, integer m, integer relevantIndex,
                                       Curve::Type curveType=Curve::lebesgue);
 
+        __global__ void symbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                      DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                      integer n, integer m, integer relevantIndex, integer level,
+                                      Curve::Type curveType);
+
         __global__ void compTheta(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                   DomainList *domainList, Helper *helper, Curve::Type curveType=Curve::lebesgue);
 
@@ -73,6 +78,9 @@ namespace Gravity {
 
         __global__ void insertReceivedPseudoParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                       integer *levels, int n, int m);
+
+        __global__ void insertReceivedPseudoParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                                      integer *levels, int level, int n, int m);
 
         __global__ void insertReceivedParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                 DomainList *domainList, DomainList *lowestDomainList, int n, int m);
@@ -119,6 +127,11 @@ namespace Gravity {
                                real diam, real theta_, integer n, integer m, integer relevantIndex,
                                Curve::Type curveType=Curve::lebesgue);
 
+            real symbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                               DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                               integer n, integer m, integer relevantIndex, integer level,
+                               Curve::Type curveType);
+
             real compTheta(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                       DomainList *domainList, Helper *helper, Curve::Type curveType=Curve::lebesgue);
 
@@ -133,6 +146,9 @@ namespace Gravity {
 
             real insertReceivedPseudoParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                integer *levels, int n, int m);
+
+            real insertReceivedPseudoParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                                          integer *levels, int level, int n, int m);
 
             real insertReceivedParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                     DomainList *domainList, DomainList *lowestDomainList, int n, int m);

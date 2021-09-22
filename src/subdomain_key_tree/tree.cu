@@ -186,7 +186,7 @@ CUDA_CALLABLE_MEMBER integer Tree::getTreeLevel(Particles *particles, integer in
 
     keyType key = getParticleKey(particles, index, maxLevel); //, curveType); //TODO: hilbert working for lebesgue: why???
     //printf("key = %lu\n", key);
-    integer level = 0; //TODO: initialize level with 0 or 1 for getTreeLevel()?
+    integer level = 1; //TODO: initialize level with 0 or 1 for getTreeLevel()?
     integer childIndex;
 
     //integer *path = new integer[maxLevel];
@@ -650,8 +650,8 @@ __global__ void TreeNS::Kernel::sort(Tree *tree, integer n, integer m) {
         }
     }
     integer cell = m + bodyIndex;
-    integer ind = *tree->index;
-    //integer ind = tree->toDeleteNode[1];
+    //integer ind = *tree->index;
+    integer ind = tree->toDeleteNode[1];
 
     while ((cell + offset) < ind) {
 
@@ -723,9 +723,35 @@ namespace TreeNS {
 
             bodyIndex += n;
             while (bodyIndex + offset < m) {
+
                 printf("x[%i] = (%f, %f, %f) mass = %f\n", bodyIndex + offset, particles->x[bodyIndex + offset],
                        particles->y[bodyIndex + offset], particles->z[bodyIndex + offset],
                        particles->mass[bodyIndex + offset]);
+
+                offset += stride;
+            }
+        }
+
+        __global__ void info(Tree *tree, Particles *particles) {
+
+            integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+
+            while (bodyIndex + offset < POW_DIM) {
+                printf("child[POW_DIM * 0 + %i] = %i, x = (%f, %f, %f) m = %f\n", bodyIndex + offset,
+                       tree->child[bodyIndex + offset], particles->x[tree->child[bodyIndex + offset]],
+                       particles->y[tree->child[bodyIndex + offset]], particles->z[tree->child[bodyIndex + offset]],
+                       particles->mass[tree->child[bodyIndex + offset]]);
+
+                for (int i=0; i<POW_DIM; i++) {
+                    printf("child[POW_DIM * %i + %i] = %i, x = (%f, %f, %f) m = %f\n", tree->child[bodyIndex + offset], i,
+                           tree->child[POW_DIM * tree->child[bodyIndex + offset] + i],
+                           particles->x[tree->child[POW_DIM * tree->child[bodyIndex + offset] + i]],
+                           particles->y[tree->child[POW_DIM * tree->child[bodyIndex + offset] + i]],
+                           particles->z[tree->child[POW_DIM * tree->child[bodyIndex + offset] + i]],
+                           particles->mass[tree->child[POW_DIM * tree->child[bodyIndex + offset] + i]]);
+                }
 
                 offset += stride;
             }
@@ -741,6 +767,11 @@ namespace TreeNS {
         real Launch::info(Tree *tree, Particles *particles, integer n, integer m) {
             ExecutionPolicy executionPolicy;
             return cuda::launch(true, executionPolicy, ::TreeNS::Kernel::info, tree, particles, n, m);
+        }
+
+        real Launch::info(Tree *tree, Particles *particles) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::TreeNS::Kernel::info, tree, particles);
         }
 
 #if DIM > 1

@@ -149,7 +149,7 @@ namespace SubDomainKeyTreeNS {
                             childIndex = cell;
                             domainList->domainListIndices[domainListCounter] = childIndex; //cell;
                             printf("adding node index %i  cell = %i (childPath = %i,  j = %i)! x = (%f, %f, %f)\n",
-                                   childIndex, cell, childPath, j, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex]);
+                                   childIndex, cell, path[j], j, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex]);
                             domainListCounter++;
                         } else {
                             // child is a leaf, thus add node in between

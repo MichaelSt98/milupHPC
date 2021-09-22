@@ -115,6 +115,8 @@ public:
     void initDistribution(ParticleDistribution::Type particleDistribution=ParticleDistribution::disk);
     void loadDistribution();
 
+    void distributionFromFile();
+
     real tree();
     real pseudoParticles();
     real gravity();

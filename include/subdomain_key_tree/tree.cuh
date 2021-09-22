@@ -318,6 +318,8 @@ namespace TreeNS {
          */
         __global__ void info(Tree *tree, Particles *particles, integer n, integer m);
 
+        __global__ void info(Tree *tree, Particles *particles);
+
         namespace Launch {
             /**
              * Wrapped kernel call to setter
@@ -341,6 +343,8 @@ namespace TreeNS {
              * Wrapped kernel for tree class (for debugging purposes)
              */
             real info(Tree *tree, Particles *particles, integer n, integer m);
+
+            real info(Tree *tree, Particles *particles);
         }
 
 #if DIM > 1
