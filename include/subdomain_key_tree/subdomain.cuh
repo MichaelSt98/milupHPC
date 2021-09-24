@@ -285,6 +285,8 @@ public:
     /// concentrate domain list nodes, usable to reduce domain list indices in respect to some criterion
     integer *relevantDomainListIndices;
     ///
+    integer *relevantDomainListLevels;
+    ///
     integer *relevantDomainListProcess;
 
     /**
@@ -304,7 +306,8 @@ public:
      */
     CUDA_CALLABLE_MEMBER DomainList(integer *domainListIndices, integer *domainListLevels, integer *domainListIndex,
                                     integer *domainListCounter, keyType *domainListKeys, keyType *sortedDomainListKeys,
-                                    integer *relevantDomainListIndices, integer *relevantDomainListProcess);
+                                    integer *relevantDomainListIndices, integer *relevantDomainListLevels,
+                                    integer *relevantDomainListProcess);
     /**
      * Setter, passing pointer to member variables
      *
@@ -318,7 +321,8 @@ public:
      */
     CUDA_CALLABLE_MEMBER void set(integer *domainListIndices, integer *domainListLevels, integer *domainListIndex,
                                   integer *domainListCounter, keyType *domainListKeys, keyType *sortedDomainListKeys,
-                                  integer *relevantDomainListIndices, integer *relevantDomainListProcess);
+                                  integer *relevantDomainListIndices, integer *relevantDomainListLevels,
+                                  integer *relevantDomainListProcess);
     /**
      * Destructor
      */
@@ -343,7 +347,7 @@ namespace DomainListNS {
         __global__ void set(DomainList *domainList, integer *domainListIndices, integer *domainListLevels,
                             integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
                             keyType *sortedDomainListKeys, integer *relevantDomainListIndices,
-                            integer *relevantDomainListProcess);
+                            integer *relevantDomainListLevels, integer *relevantDomainListProcess);
 
         /**
          * Info kernel (for debugging purposes)
@@ -402,7 +406,7 @@ namespace DomainListNS {
             void set(DomainList *domainList, integer *domainListIndices, integer *domainListLevels,
                      integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
                      keyType *sortedDomainListKeys, integer *relevantDomainListIndices,
-                     integer *relevantDomainListProcess);
+                     integer *relevantDomainListLevels, integer *relevantDomainListProcess);
 
             /**
              * Wrapped info kernel (for debugging purposes)

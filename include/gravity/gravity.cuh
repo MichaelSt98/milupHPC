@@ -7,6 +7,8 @@
 #include "../helper.cuh"
 #include <boost/mpi.hpp>
 
+#include <assert.h>
+
 #include <cmath>
 
 namespace Gravity {
@@ -18,6 +20,11 @@ namespace Gravity {
                                            integer *pseudoParticlesLevel,
                                            integer *particlesCount, integer *pseudoParticlesCount,
                                            integer n, integer length, Curve::Type curveType);
+
+        __global__ void testSendIndices(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                        integer *sendIndices, integer *markedSendIndices,
+                                        integer *levels, Curve::Type curveType,
+                                        integer length);
 
         __global__ void prepareExchange(Tree *tree, Particles *particles, integer *sendIndices, integer *levels,
                                         integer *nodeTypes, integer *counter,
@@ -44,11 +51,13 @@ namespace Gravity {
 
         __global__ void update(Particles *particles, integer n, real dt, real d);
 
-        __global__ void symbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
-                                      DomainList *domainList, integer *sendIndices, real diam, real theta_,
-                                      integer n, integer m, integer relevantIndex,
-                                      Curve::Type curveType=Curve::lebesgue);
 
+        __global__ void intermediateSymbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                                  DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                                  integer n, integer m, integer relevantIndex, integer level,
+                                                  Curve::Type curveType);
+
+        // Level-wise symbolicForce() to avoid race condition
         __global__ void symbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                       DomainList *domainList, integer *sendIndices, real diam, real theta_,
                                       integer n, integer m, integer relevantIndex, integer level,
@@ -76,8 +85,10 @@ namespace Gravity {
                                           /*keyType *keyHistRanges, integer *keyHistCounts,*/ int bins, int n,
                                           Curve::Type curveType=Curve::lebesgue);
 
-        __global__ void insertReceivedPseudoParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
-                                                      integer *levels, int n, int m);
+        // Version of inserting received pseudo particles, looping over levels within one kernel
+        // problem that __syncthreads() corresponds to blocklevel synchronization!
+        /*__global__ void insertReceivedPseudoParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                                      integer *levels, int n, int m);*/
 
         __global__ void insertReceivedPseudoParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                       integer *levels, int level, int n, int m);
@@ -97,6 +108,11 @@ namespace Gravity {
                                     integer *pseudoParticlesLevel,
                                     integer *particlesCount, integer *pseudoParticlesCount,
                                     integer n, integer length, Curve::Type curveType = Curve::lebesgue);
+
+            real testSendIndices(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                            integer *sendIndices, integer *markedSendIndices,
+                                            integer *levels, Curve::Type curveType,
+                                            integer length);
 
             real prepareExchange(Tree *tree, Particles *particles, integer *sendIndices, integer *levels,
                                  integer *nodeTypes, integer *counter,
@@ -122,10 +138,10 @@ namespace Gravity {
 
             real update(Particles *particles, integer n, real dt, real d);
 
-            real symbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
-                               DomainList *domainList, integer *sendIndices,
-                               real diam, real theta_, integer n, integer m, integer relevantIndex,
-                               Curve::Type curveType=Curve::lebesgue);
+            real intermediateSymbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                                      DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                                      integer n, integer m, integer relevantIndex, integer level,
+                                                      Curve::Type curveType);
 
             real symbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                DomainList *domainList, integer *sendIndices, real diam, real theta_,
@@ -143,9 +159,6 @@ namespace Gravity {
 
             real calculateNewRange(SubDomainKeyTree *subDomainKeyTree, Helper *helper, int bins, int n,
                                    Curve::Type curveType=Curve::lebesgue);
-
-            real insertReceivedPseudoParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
-                                               integer *levels, int n, int m);
 
             real insertReceivedPseudoParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                           integer *levels, int level, int n, int m);

@@ -57,13 +57,14 @@ DomainListHandler::DomainListHandler(integer domainListSize) : domainListSize(do
     cuda::malloc(d_domainListKeys, domainListSize);
     cuda::malloc(d_sortedDomainListKeys, domainListSize);
     cuda::malloc(d_relevantDomainListIndices, domainListSize);
+    cuda::malloc(d_relevantDomainListLevels, domainListSize);
     cuda::malloc(d_relevantDomainListProcess, domainListSize);
 
     cuda::malloc(d_domainList, 1);
     DomainListNS::Kernel::Launch::set(d_domainList, d_domainListIndices, d_domainListLevels,
                                       d_domainListIndex, d_domainListCounter, d_domainListKeys,
                                       d_sortedDomainListKeys, d_relevantDomainListIndices,
-                                      d_relevantDomainListProcess);
+                                      d_relevantDomainListLevels, d_relevantDomainListProcess);
 }
 
 DomainListHandler::~DomainListHandler() {
@@ -75,6 +76,8 @@ DomainListHandler::~DomainListHandler() {
    cuda::free(d_domainListKeys);
    cuda::free(d_sortedDomainListKeys);
    cuda::free(d_relevantDomainListIndices);
+   cuda::free(d_relevantDomainListLevels);
+   cuda::free(d_relevantDomainListProcess);
    cuda::free(d_domainList);
 
 }

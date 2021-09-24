@@ -119,7 +119,7 @@ int main(int argc, char** argv)
     Logger(TIME) << "TIME output";
 
     integer numParticles = 100000;
-    integer numNodes = 3 * numParticles + 12000;
+    integer numNodes = 3 * numParticles + 50000; //12000;
 
     //integer numParticles = 7500;
     //integer numNodes = 3 * numParticles + 12000;

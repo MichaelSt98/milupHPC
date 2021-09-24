@@ -185,8 +185,7 @@ CUDA_CALLABLE_MEMBER integer Tree::getTreeLevel(Particles *particles, integer in
                                                 Curve::Type curveType) {
 
     keyType key = getParticleKey(particles, index, maxLevel); //, curveType); //TODO: hilbert working for lebesgue: why???
-    //printf("key = %lu\n", key);
-    integer level = 1; //TODO: initialize level with 0 or 1 for getTreeLevel()?
+    integer level = 0;
     integer childIndex;
 
     //integer *path = new integer[maxLevel];
@@ -198,29 +197,30 @@ CUDA_CALLABLE_MEMBER integer Tree::getTreeLevel(Particles *particles, integer in
 
     childIndex = 0;
 
-    //TODO: where to put level++ for getTreeLevel()?
     for (integer i=0; i<maxLevel; i++) {
+        level++;
         if (childIndex == index) {
             return level;
         }
         childIndex = child[POW_DIM * childIndex + path[i]];
-        //printf("childIndex (i = %i) = %i\n", i, childIndex);
-        level++;
+        //level++;
     }
 
-    childIndex = 0; //child[path[0]];
-    printf("ATTENTION: level = -1 (index = %i x = (%f, %f, %f))\n", index, particles->x[index], particles->y[index],
-                                                                        particles->z[index]);
+    //childIndex = 0; //child[path[0]];
+    printf("ATTENTION: level = -1 (index = %i x = (%f, %f, %f)) tree index = %i\n",
+           index, particles->x[index], particles->y[index], particles->z[index], *this->index);
 
-    for (integer i=0; i<maxLevel; i++) {
-        childIndex = child[POW_DIM * childIndex + path[i]];
-        for (int k=0; k<8; k++) {
-            if (child[POW_DIM * childIndex + k] == index) {
-                printf("FOUND index = %i for k = %i\n", index, k);
-            }
-        }
-        //printf("index = %i, path[%i] = %i, childIndex = %i\n", index, i, path[i], childIndex);
-    }
+    //for (integer i=0; i<maxLevel; i++) {
+    //    childIndex = child[POW_DIM * childIndex + path[i]];
+    //    for (int k=0; k<8; k++) {
+    //        if (child[POW_DIM * childIndex + k] == index) {
+    //            printf("FOUND index = %i in level %i for child = %i x = (%f, %f, %f) ((%i, %i), (%i, %i))\n", index, i, k,
+    //                   particles->x[index], particles->y[index], particles->z[index],
+    //                   toDeleteLeaf[0], toDeleteLeaf[1], toDeleteNode[0], toDeleteNode[1]);
+    //        }
+    //    }
+    //    //printf("index = %i, path[%i] = %i, childIndex = %i\n", index, i, path[i], childIndex);
+    //}
 
     //delete [] path;
 
@@ -757,6 +757,45 @@ namespace TreeNS {
             }
         }
 
+        __global__ void testTree(Tree *tree, Particles *particles, integer n, integer m) {
+
+            integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+
+            while (bodyIndex + offset < n) {
+
+                if (particles->x[bodyIndex + offset] == 0.f &&
+                    particles->y[bodyIndex + offset] == 0.f &&
+                    particles->z[bodyIndex + offset] == 0.f &&
+                    particles->mass[bodyIndex + offset] == 0.f) {
+
+                    printf("particle ZERO for index = %i: (%f, %f, %f) %f\n", bodyIndex + offset,
+                           particles->x[bodyIndex + offset], particles->y[bodyIndex + offset],
+                           particles->z[bodyIndex + offset], particles->mass[bodyIndex + offset]);
+                }
+
+                offset += stride;
+            }
+
+            offset = m;
+
+            while (bodyIndex + offset < *tree->index) {
+                if (particles->x[bodyIndex + offset] == 0.f &&
+                    particles->y[bodyIndex + offset] == 0.f &&
+                    particles->z[bodyIndex + offset] == 0.f &&
+                    particles->mass[bodyIndex + offset] == 0.f) {
+
+                    printf("particle ZERO for index = %i: (%f, %f, %f) %f\n", bodyIndex + offset,
+                           particles->x[bodyIndex + offset], particles->y[bodyIndex + offset],
+                           particles->z[bodyIndex + offset], particles->mass[bodyIndex + offset]);
+                }
+
+                offset += stride;
+            }
+
+        }
+
         void Launch::set(Tree *tree, integer *count, integer *start, integer *child, integer *sorted,
                              integer *index, integer *toDeleteLeaf, integer *toDeleteNode , real *minX, real *maxX) {
             ExecutionPolicy executionPolicy(1, 1);
@@ -772,6 +811,11 @@ namespace TreeNS {
         real Launch::info(Tree *tree, Particles *particles) {
             ExecutionPolicy executionPolicy;
             return cuda::launch(true, executionPolicy, ::TreeNS::Kernel::info, tree, particles);
+        }
+
+        real Launch::testTree(Tree *tree, Particles *particles, integer n, integer m) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::TreeNS::Kernel::testTree, tree, particles, n, m);
         }
 
 #if DIM > 1

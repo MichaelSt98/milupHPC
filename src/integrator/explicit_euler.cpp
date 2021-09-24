@@ -12,5 +12,5 @@ ExplicitEuler::~ExplicitEuler() {
 void ExplicitEuler::integrate() {
     printf("Euler::integrate()\n");
     rhs();
-    Gravity::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal, 0.01, 1.);
+    Gravity::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal, 0.005, 1.);
 }
