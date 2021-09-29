@@ -11,6 +11,10 @@ ExplicitEuler::~ExplicitEuler() {
 
 void ExplicitEuler::integrate() {
     printf("Euler::integrate()\n");
-    rhs();
-    Gravity::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal, 0.005, 1.);
+    Timer timer;
+    real time = rhs();
+    Logger(TIME) << "rhs: " << time << " ms";
+
+    Logger(TIME) << "rhs elapsed: " << timer.elapsed() << " ms";
+    Gravity::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal, 0.0003, 1.);
 }

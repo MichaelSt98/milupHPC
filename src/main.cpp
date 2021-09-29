@@ -119,7 +119,7 @@ int main(int argc, char** argv)
     Logger(TIME) << "TIME output";
 
     integer numParticles = 100000;
-    integer numNodes = 3 * numParticles + 50000; //12000;
+    integer numNodes = 2 * numParticles + 50000; //12000;
 
     //integer numParticles = 7500;
     //integer numNodes = 3 * numParticles + 12000;
@@ -189,7 +189,8 @@ int main(int argc, char** argv)
         //miluphpc.sph();
         miluphpc->integrate();
 
-        miluphpc->particles2file(&pos, &vel, &key);
+        auto time = miluphpc->particles2file(&pos, &vel, &key);
+        Logger(TIME) << "particles2file: " << time << " ms";
 
     }
 

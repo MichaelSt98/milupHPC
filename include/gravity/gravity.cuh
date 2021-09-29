@@ -26,10 +26,6 @@ namespace Gravity {
                                         integer *levels, Curve::Type curveType,
                                         integer length);
 
-        __global__ void prepareExchange(Tree *tree, Particles *particles, integer *sendIndices, integer *levels,
-                                        integer *nodeTypes, integer *counter,
-                                        integer length, integer n, Curve::Type curveType);
-
         __global__ void zeroDomainListNodes(Particles *particles, DomainList *domainList,
                                             DomainList *lowestDomainList);
 
@@ -47,7 +43,13 @@ namespace Gravity {
                                                       DomainList *lowestDomainList, int n);
 
         __global__ void computeForces(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
-                                      integer warp, integer stackSize);
+                                      integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree);
+
+        __global__ void computeForcesUnsorted(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
+                                       integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree);
+
+        __global__ void computeForcesMiluphcuda(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
+                                    integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree);
 
         __global__ void update(Particles *particles, integer n, real dt, real d);
 
@@ -96,9 +98,6 @@ namespace Gravity {
         __global__ void insertReceivedParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                 DomainList *domainList, DomainList *lowestDomainList, int n, int m);
 
-        __global__ void centreOfMassReceivedParticles(Particles *particles, integer *startIndex,
-                                                            integer *endIndex, int n);
-
         __global__ void repairTree(Tree *tree, Particles *particles, DomainList *domainList, int n, int m);
 
         namespace Launch {
@@ -113,10 +112,6 @@ namespace Gravity {
                                             integer *sendIndices, integer *markedSendIndices,
                                             integer *levels, Curve::Type curveType,
                                             integer length);
-
-            real prepareExchange(Tree *tree, Particles *particles, integer *sendIndices, integer *levels,
-                                 integer *nodeTypes, integer *counter,
-                                 integer length, integer n, Curve::Type curveType = Curve::lebesgue);
 
             real zeroDomainListNodes(Particles *particles, DomainList *domainList, DomainList *lowestDomainList);
 
@@ -134,7 +129,13 @@ namespace Gravity {
                                                DomainList *lowestDomainList, int n);
 
             real computeForces(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
-                               integer warp, integer stackSize);
+                               integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree);
+
+            real computeForcesUnsorted(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
+                                        integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree);
+
+            real computeForcesMiluphcuda(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
+                                        integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree);
 
             real update(Particles *particles, integer n, real dt, real d);
 
@@ -165,9 +166,6 @@ namespace Gravity {
 
             real insertReceivedParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                     DomainList *domainList, DomainList *lowestDomainList, int n, int m);
-
-            real centreOfMassReceivedParticles(Particles *particles, integer *startIndex,
-                                                          integer *endIndex, int n);
 
             real repairTree(Tree *tree, Particles *particles, DomainList *domainList, int n, int m);
 

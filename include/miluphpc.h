@@ -7,6 +7,7 @@
 #include "device_rhs.cuh"
 #include "cuda_utils/cuda_utilities.cuh"
 #include "utils/logger.h"
+#include "utils/timer.h"
 #include "materials/material_handler.h"
 //#include "integrator/integrator.h"
 #include "helper_handler.h"
@@ -57,8 +58,18 @@ private:
 
     //real reset();
 
-    void compPseudoParticlesParallel();
+    real compPseudoParticlesParallel();
     void parallelForce();
+
+    //real serial_tree();
+    //real serial_pseudoParticles();
+    //real serial_gravity();
+    //real serial_sph();
+
+    real parallel_tree();
+    real parallel_pseudoParticles();
+    real parallel_gravity();
+    real parallel_sph();
 
     template <typename T>
     integer sendParticlesEntry(integer *sendLengths, integer *receiveLengths, T *entry);
@@ -122,11 +133,11 @@ public:
     real gravity();
     real sph();
 
-    void rhs();
+    real rhs();
 
     virtual void integrate() {};
 
-    void particles2file(HighFive::DataSet *pos, HighFive::DataSet *vel, HighFive::DataSet *key);
+    float particles2file(HighFive::DataSet *pos, HighFive::DataSet *vel, HighFive::DataSet *key);
 
 };
 
