@@ -118,7 +118,9 @@ public:
     integer *d_pseudoParticles2SendCount;
     // end: testing
 
-    Miluphpc(integer numParticles, integer numNodes);
+    SimulationParameters simulationParameters;
+
+    Miluphpc(SimulationParameters simulationParameters, integer numParticles, integer numNodes);
     ~Miluphpc();
 
     /**

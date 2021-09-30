@@ -69,17 +69,14 @@ int main(int argc, char** argv)
     bool loadBalancing = false;
 
     options.add_options()
-            //("r,render", "render simulation", cxxopts::value<bool>(render))
             ("i,iterations", "number of iterations", cxxopts::value<int>()->default_value("100"))
-            ("n,particles", "number of particles", cxxopts::value<int>()->default_value("524288")) //"524288"
-            //("b,blocksize", "block size", cxxopts::value<int>()->default_value("256"))
-            //("g,gridsize", "grid size", cxxopts::value<int>()->default_value("1024"))
-            //("R,renderinterval", "render interval", cxxopts::value<int>()->default_value("10"))
-            //("l,loadbalancing", "load balancing", cxxopts::value<bool>(loadBalancing))
-            //("L,loadbalancinginterval", "load balancing interval", cxxopts::value<int>()->default_value("10"))
-            ("m,material", "material config file", cxxopts::value<std::string>()->default_value("config/material.cfg"))
-            ("c,curvetype", "curve type (Lebesgue/Hilbert)", cxxopts::value<int>()->default_value("0"))
-            ("v,verbosity", "Verbosity level")
+            //("n,particles", "number of particles", cxxopts::value<int>()->default_value("524288")) //"524288"
+            ("t,timestep", "time step", cxxopts::value<float>()->default_value("0.001"))
+            ("l,loadbalancing", "load balancing", cxxopts::value<bool>(loadBalancing))
+            ("L,loadbalancinginterval", "load balancing interval", cxxopts::value<int>()->default_value("10"))
+            //("m,material", "material config file", cxxopts::value<std::string>()->default_value("config/material.cfg"))
+            ("c,curvetype", "curve type (Lebesgue: 0/Hilbert: 1)", cxxopts::value<int>()->default_value("0"))
+            //("v,verbosity", "Verbosity level")
             ("h,help", "Show this help");
 
     auto result = options.parse(argc, argv);
@@ -93,16 +90,12 @@ int main(int argc, char** argv)
     SimulationParameters parameters;
 
     parameters.iterations = result["iterations"].as<int>(); //500;
-    parameters.numberOfParticles = result["particles"].as<int>(); //512*256*4;
-    parameters.timestep = 0.001;
-    parameters.gravity = 1.0;
+    //parameters.numberOfParticles = result["particles"].as<int>(); //512*256*4;
+    parameters.timestep = result["timestep"].as<float>();
     parameters.dampening = 1.0;
-    //parameters.gridSize = result["gridsize"].as<int>(); //1024;
-    //parameters.blockSize = result["blocksize"].as<int>(); //256;
-    //parameters.warp = 32;
-    //parameters.stackSize = 64;
-    //parameters.renderInterval = result["renderinterval"].as<int>(); //10;
     parameters.timeKernels = true;
+    parameters.loadBalancing = loadBalancing;
+    parameters.loadBalancingInterval = result["loadbalancinginterval"].as<int>();
     //parameters.loadBalancing = loadBalancing;
     //parameters.loadBalancingInterval = result["loadbalancinginterval"].as<int>();
     parameters.curveType = result["curvetype"].as<int>();
@@ -118,6 +111,13 @@ int main(int argc, char** argv)
     Logger(INFO) << "INFO output";
     Logger(TIME) << "TIME output";
 
+#ifdef SINGLE_PRECISION
+    Logger(INFO) << "typedef float real";
+#else
+    Logger(INFO) << "typedef double real";
+#endif
+
+
     integer numParticles = 100000;
     integer numNodes = 2 * numParticles + 50000; //12000;
 
@@ -130,13 +130,13 @@ int main(int argc, char** argv)
     Miluphpc *miluphpc;
     switch (integratorSelection) {
         case IntegratorSelection::explicit_euler: {
-            miluphpc = new ExplicitEuler(numParticles, numNodes);
+            miluphpc = new ExplicitEuler(parameters, numParticles, numNodes);
         } break;
         case IntegratorSelection::euler: {
-            miluphpc = new Euler(numParticles, numNodes);
+            miluphpc = new Euler(parameters, numParticles, numNodes);
         } break;
         case IntegratorSelection::predictor_corrector: {
-            miluphpc = new PredictorCorrector(numParticles, numNodes);
+            miluphpc = new PredictorCorrector(parameters, numParticles, numNodes);
         } break;
         default: {
             printf("Integrator not available!");

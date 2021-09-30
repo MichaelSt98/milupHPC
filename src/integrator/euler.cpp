@@ -1,8 +1,11 @@
 #include "../../include/integrator/euler.h"
 
-Euler::Euler(integer numParticles, integer numNodes) : Miluphpc(numParticles, numNodes) {
+Euler::Euler(SimulationParameters simulationParameters, integer numParticles,
+             integer numNodes) : Miluphpc(simulationParameters, numParticles, numNodes) {
+
     integratedParticles = new IntegratedParticles[1];
     printf("Euler()\n");
+
 }
 
 Euler::~Euler() {

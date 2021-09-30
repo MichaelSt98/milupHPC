@@ -6,7 +6,7 @@
 class PredictorCorrector : public Miluphpc {
 
 public:
-    PredictorCorrector(integer numParticles, integer numNodes);
+    PredictorCorrector(SimulationParameters simulationParameters, integer numParticles, integer numNodes);
     ~PredictorCorrector();
 
     void integrate();

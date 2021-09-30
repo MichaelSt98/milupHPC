@@ -76,7 +76,10 @@ CUDA_CALLABLE_MEMBER integer SubDomainKeyTree::key2proc(keyType key/*, Curve::Ty
 CUDA_CALLABLE_MEMBER bool SubDomainKeyTree::isDomainListNode(keyType key, integer maxLevel, integer level,
                                                              Curve::Type curveType) {
     integer p1, p2;
-    switch (curveType) {
+    p1 = key2proc(key);
+    p2 = key2proc(key | ~(~0UL << DIM * (maxLevel - level)));
+    //TODO: necessary? always lebesgue key?
+    /*switch (curveType) {
         case Curve::lebesgue: {
             p1 = key2proc(key);
             p2 = key2proc(key | ~(~0UL << DIM * (maxLevel - level)));
@@ -90,7 +93,7 @@ CUDA_CALLABLE_MEMBER bool SubDomainKeyTree::isDomainListNode(keyType key, intege
         default: {
             printf("Curve type not available!\n");
         }
-    }
+    }*/
     if (p1 != p2) {
         return true;
     }
@@ -549,18 +552,19 @@ namespace DomainListNS {
             while (key2test < keyMax) {
                 if (subDomainKeyTree->isDomainListNode(key2test & (~0UL << (DIM * (maxLevel - level + 1))),
                                                       maxLevel, level-1, curveType)) {
+                    domainList->domainListKeys[*domainList->domainListIndex] = key2test;
+                    // TODO: which key to save (always lebesgue???)
                     // add domain list key
-                    switch (curveType) {
-                        case Curve::lebesgue:
-                            domainList->domainListKeys[*domainList->domainListIndex] = key2test;
-                            break;
-                        case Curve::hilbert:
-                            domainList->domainListKeys[*domainList->domainListIndex] = KeyNS::lebesgue2hilbert(key2test, maxLevel);
-                            break;
-                        default:
-                            printf("Curve type not available!\n");
-
-                    }
+                    //switch (curveType) {
+                    //    case Curve::lebesgue:
+                    //        domainList->domainListKeys[*domainList->domainListIndex] = key2test;
+                    //        break;
+                    //    case Curve::hilbert:
+                    //        domainList->domainListKeys[*domainList->domainListIndex] = KeyNS::lebesgue2hilbert(key2test, maxLevel);
+                    //        break;
+                    //    default:
+                    //        printf("Curve type not available!\n");
+                    //}
                     //printf("[rank %i] Adding domain list with key = %lu\n", subDomainKeyTree->rank, key2test);
                     // add domain list level
                     domainList->domainListLevels[*domainList->domainListIndex] = level;

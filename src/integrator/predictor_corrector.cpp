@@ -1,9 +1,11 @@
 #include "../../include/integrator/predictor_corrector.h"
 
-PredictorCorrector::PredictorCorrector(integer numParticles, integer numNodes) :
-                                        Miluphpc(numParticles, numNodes) {
+PredictorCorrector::PredictorCorrector(SimulationParameters simulationParameters, integer numParticles,
+                                       integer numNodes) : Miluphpc(simulationParameters, numParticles, numNodes) {
+
     integratedParticles = new IntegratedParticles[2];
     printf("PredictorCorrector()\n");
+
 }
 
 PredictorCorrector::~PredictorCorrector() {

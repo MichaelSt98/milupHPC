@@ -1,5 +1,5 @@
 #Compiler/Linker
-CXX            := mpic++#g++
+CXX            := mpic++
 NVCC           := /usr/local/cuda-11.4/bin/nvcc
 
 #Target binary
@@ -25,7 +25,7 @@ OBJEXT         := o
 #Flags, Libraries and Includes
 CXXFLAGS       += -std=c++11 -w -I/usr/include/hdf5/openmpi#-O3
 NVFLAGS        := --std=c++11 -x cu -c -dc -w -Xcompiler "-pthread" -Wno-deprecated-gpu-targets -O3 -I/opt/openmpi-4.1.0/include -I/usr/include/hdf5/openmpi
-LFLAGS         += -g -lm -L$(CUDADIR)/lib64 -lcudart -lpthread -lconfig -L/usr/local/cuda-11.4/lib64 -L/opt/openmpi-4.1.0/lib -L/usr/lib/x86_64-linux-gnu/hdf5/openmpi -lmpi -lhdf5 -lboost_filesystem -lboost_system
+LFLAGS         += -lm -L$(CUDADIR)/lib64 -lcudart -lpthread -lconfig -L/usr/local/cuda-11.4/lib64 -L/opt/openmpi-4.1.0/lib -L/usr/lib/x86_64-linux-gnu/hdf5/openmpi -lmpi -lhdf5 -lboost_filesystem -lboost_system
 GPU_ARCH       := -arch=sm_52
 CUDALFLAGS     := -dlink
 CUDALINKOBJ    := cuLink.o #needed?
@@ -45,6 +45,10 @@ DOXYFILE       := $(DOCDIR)/Doxyfile
 
 #default make (all)
 all:  tester ideas $(TARGET)
+
+single-precision: CXXFLAGS += -DSINGLE_PRECISION
+single-precision: NVFLAGS += -DSINGLE_PRECISION
+single-precision: all
 
 debug: CXXFLAGS += -g
 debug: NVFLAGS  += -g -G

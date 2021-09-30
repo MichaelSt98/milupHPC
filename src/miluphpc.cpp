@@ -1,10 +1,13 @@
 #include "../include/miluphpc.h"
 
-Miluphpc::Miluphpc(integer numParticles, integer numNodes) : numParticles(numParticles), numNodes(numNodes) {
+Miluphpc::Miluphpc(SimulationParameters simulationParameters,
+                   integer numParticles, integer numNodes) : numParticles(numParticles), numNodes(numNodes) {
 
 
-    curveType = Curve::lebesgue;
+    this->simulationParameters = simulationParameters;
+    //curveType = Curve::lebesgue;
     //curveType = Curve::hilbert;
+    curveType = Curve::Type(simulationParameters.curveType);
 
     cuda::malloc(d_mutex, 1);
     helperHandler = new HelperHandler(numNodes);
@@ -144,15 +147,16 @@ void Miluphpc::diskModel() {
                 // set mass and position of particle
                 if (subDomainKeyTreeHandler->h_subDomainKeyTree->rank == 0) {
                     if (i == 0) {
-                        particleHandler->h_particles->mass[i] = solarMass; //
-                                //2 * solarMass / numParticlesLocal; //solarMass; //100000; 2 * solarMass / numParticles;
+                        particleHandler->h_particles->mass[i] = solarMass; //0.01 * solarMass / numParticlesLocal; //solarMass; //2 * solarMass / numParticlesLocal; //solarMass; //100000; 2 * solarMass / numParticles;
                         particleHandler->h_particles->x[i] = 0;
                         particleHandler->h_particles->y[i] = 0;
                         particleHandler->h_particles->z[i] = 0;
                     } else {
-                        particleHandler->h_particles->mass[i] = 2 * solarMass / numParticlesLocal;
+                        particleHandler->h_particles->mass[i] = 0.01 * solarMass / numParticlesLocal;
                         particleHandler->h_particles->x[i] = r * cos(theta_angle);
+                        //y[i] = r * sin(theta);
                         particleHandler->h_particles->y[i] = r * sin(theta_angle);
+
                         if (i % 2 == 0) {
                             particleHandler->h_particles->z[i] = i * 1e-7;//z[i] = i * 1e-7;
                         } else {
@@ -160,27 +164,27 @@ void Miluphpc::diskModel() {
                         }
                     }
                 } else {
-                    particleHandler->h_particles->mass[i] = 2 * solarMass / numParticlesLocal;
+                    particleHandler->h_particles->mass[i] = 0.01 * solarMass / numParticlesLocal;
                     particleHandler->h_particles->x[i] =
                             (r + subDomainKeyTreeHandler->h_subDomainKeyTree->rank * 1.1e-1) *
                             cos(theta_angle) +
-                            5.0e-2 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+                            1.0e-2 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
                     //y[i] = (r + h_subDomainHandler->rank * 1.3e-1) * sin(theta) + 1.1e-2*h_subDomainHandler->rank;
                     particleHandler->h_particles->y[i] =
                             (r + subDomainKeyTreeHandler->h_subDomainKeyTree->rank * 1.3e-1) *
                             sin(theta_angle) +
-                            5.1e-2 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+                            1.1e-2 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
 
                     if (i % 2 == 0) {
                         //z[i] = i * 1e-7 * h_subDomainHandler->rank + 0.5e-7*h_subDomainHandler->rank;
                         particleHandler->h_particles->z[i] =
-                                i * 1e-3 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank +
-                                0.5e-5 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+                                i * 1e-7 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank +
+                                0.5e-7 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
                     } else {
                         //z[i] = i * -1e-7 * h_subDomainHandler->rank + 0.4e-7*h_subDomainHandler->rank;
                         particleHandler->h_particles->z[i] =
-                                i * -1e-3 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank
-                                + 0.4e-5 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+                                i * -1e-7 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank
+                                + 0.4e-7 * subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
                     }
                 }
 
@@ -194,9 +198,9 @@ void Miluphpc::diskModel() {
                     particleHandler->h_particles->vy[0] = 0.0;
                     particleHandler->h_particles->vz[0] = 0.0;
                 } else {
-                    particleHandler->h_particles->vx[i] = rotation * v * sin(theta_angle);
+                    particleHandler->h_particles->vx[i] = rotation * v * sin(theta_angle); //v * sin(theta_angle);
                     //y_vel[i] = -rotation*v*cos(theta);
-                    particleHandler->h_particles->vy[i] = -rotation * v * cos(theta_angle);
+                    particleHandler->h_particles->vy[i] = -rotation * v * cos(theta_angle); //v * cos(theta_angle);
                     //z_vel[i] = 0.0;
                     particleHandler->h_particles->vz[i] = 0.0;
                 }
@@ -207,9 +211,6 @@ void Miluphpc::diskModel() {
                 particleHandler->h_particles->az[i] = 0.0;
 
                 particleHandler->h_particles->sml[i] = 0.01; //theta_angle + subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
-                //if (i % 1000 == 0) {
-                //    printf("maxSML: particleHandler->h_sml[%i] = %f\n", i, particleHandler->h_sml[i]);
-                //}
             }
             break;
         }
@@ -302,6 +303,10 @@ real Miluphpc::rhs() {
     real time;
     real totalTime = 0;
 
+    if (simulationParameters.loadBalancing) {
+        dynamicLoadDistribution();
+    }
+
     Logger(INFO) << "Miluphpc::rhs()";
 
     Logger(INFO) << "rhs:: reset()";
@@ -341,10 +346,10 @@ real Miluphpc::rhs() {
     totalTime += time;
     Logger(TIME) << "Miluphpc::gravity(): " << time << " ms";
 
-    Logger(INFO) << "rhs: sph()";
-    time = sph();
-    Logger(TIME) << "Miluphpc::sph(): " << time << " ms";
-    totalTime += time;
+    //Logger(INFO) << "rhs: sph()";
+    //time = sph();
+    //Logger(TIME) << "Miluphpc::sph(): " << time << " ms";
+    //totalTime += time;
 
     return totalTime;
 
@@ -365,12 +370,12 @@ void Miluphpc::loadDistribution() {
     treeHandler->globalizeBoundingBox(Execution::device);
     treeHandler->copy(To::host);
 
-    if (false/*parameters.loadBalancing*/) {
-        dynamicLoadDistribution();
-    }
-    else {
-        fixedLoadDistribution();
-    }
+    //if (false/*parameters.loadBalancing*/) {
+    //    dynamicLoadDistribution();
+    //}
+    //else {
+    fixedLoadDistribution();
+    //}
 }
 
 real Miluphpc::reset() {
@@ -532,14 +537,19 @@ real Miluphpc::sph() {
 }
 
 void Miluphpc::fixedLoadDistribution() {
-    for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
-        subDomainKeyTreeHandler->h_subDomainKeyTree->range[i] = i * (1UL << 63)/(subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
-    }
-    subDomainKeyTreeHandler->h_subDomainKeyTree->range[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses] = KEY_MAX;
 
-    /*subDomainKeyTreeHandler->h_subDomainKeyTree->range[0] = 0UL;
-    subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = 3458764513820540928;
-    subDomainKeyTreeHandler->h_subDomainKeyTree->range[2] = 9223372036854775808;*/
+    //for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
+    //    subDomainKeyTreeHandler->h_subDomainKeyTree->range[i] = i * (1UL << 63)/(subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
+    //}
+    //subDomainKeyTreeHandler->h_subDomainKeyTree->range[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses] = KEY_MAX;
+
+    // FOR TESTING PURPOSES:
+    // 1, 0, 0, 0, ...: 1152921504606846976
+    // 2, 0, 0, 0, ...: 2305843009213693952;
+    // 3, 0, 0, 0, ...: 3458764513820540928;
+    subDomainKeyTreeHandler->h_subDomainKeyTree->range[0] = 0UL;
+    subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = 2305843009213693952; //1152921504606846976; //3458764513820540928;
+    subDomainKeyTreeHandler->h_subDomainKeyTree->range[2] = 9223372036854775808;
 
     for (int i=0; i<=subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
         printf("range[%i] = %lu\n", i, subDomainKeyTreeHandler->h_subDomainKeyTree->range[i]);

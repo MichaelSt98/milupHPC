@@ -1,7 +1,13 @@
 #ifndef MILUPHPC_PARAMETER_H
 #define MILUPHPC_PARAMETER_H
 
-typedef float real;
+#ifdef SINGLE_PRECISION
+    typedef float real;
+#else
+    typedef double real;
+#endif
+//typedef float real;
+//typedef double real;
 typedef int integer;
 typedef unsigned long keyType;
 typedef unsigned long idInteger;

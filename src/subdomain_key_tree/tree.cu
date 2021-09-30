@@ -767,9 +767,8 @@ namespace TreeNS {
             integer stride = blockDim.x * gridDim.x;
             integer offset = 0;
 
-            float mass;
-            float masses[POW_DIM];
-
+            real mass;
+            real masses[POW_DIM];
 
             while (bodyIndex + offset < POW_DIM) {
 

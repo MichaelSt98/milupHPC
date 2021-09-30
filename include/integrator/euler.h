@@ -7,7 +7,7 @@ class Euler : public Miluphpc {
 
 public:
 
-    Euler(integer numParticles, integer numNodes);
+    Euler(SimulationParameters simulationParameters, integer numParticles, integer numNodes);
     ~Euler();
 
     void integrate();
