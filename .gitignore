@@ -4,6 +4,7 @@
 **/bin/
 **/output/
 **/testing/
+**/movies/
 
 **/.idea/
 
@@ -13,6 +14,7 @@ docs/*
 doc/html/*
 doc/latex/*
 
+*.h5
 *.numbers
 *.mp4
 *.csv

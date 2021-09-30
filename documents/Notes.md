@@ -37,8 +37,10 @@
 
 ## TODO
 
-* `barnesHut()`, `sph()` -> `rhs()`
-	* `integrator/*.cuh/cu` -> `integrator/*.h/cpp` ? 
+* compile time
+* compiler directive constants as varialbles!?
+* overloaded `atomicAdd()` for double input
+	* [atomicAdd with doubles](https://forums.developer.nvidia.com/t/why-does-atomicadd-not-work-with-doubles-as-input/56429) 	
 * remove pseudo-particle calculations within `buildTree()` for SPH **without** gravity
 	* compiler directive `#GRAVITY`!? 
 * remove `Helper` instance from `compTheta()`
@@ -125,11 +127,6 @@ while (condition) {
 * Performance:
 	* kernel call `buildDomainTree()` with more than one thread
 	* kernel call `createDomainList()` with more than one thread
-* Structure
-	* how to structure `main` function/functionality?
-	* generalize functionality
-	* naming (conventions)
-	* where to put which function
 
 
 ## Generalizing functions/functionality
