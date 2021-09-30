@@ -206,7 +206,7 @@ void Miluphpc::diskModel() {
                 particleHandler->h_particles->ay[i] = 0.0;
                 particleHandler->h_particles->az[i] = 0.0;
 
-                particleHandler->h_particles->sml[i] = 0.05; //theta_angle + subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+                particleHandler->h_particles->sml[i] = 0.01; //theta_angle + subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
                 //if (i % 1000 == 0) {
                 //    printf("maxSML: particleHandler->h_sml[%i] = %f\n", i, particleHandler->h_sml[i]);
                 //}
@@ -286,7 +286,7 @@ void Miluphpc::diskModel() {
                 particleHandler->h_particles->ay[i] = 0.0;
                 particleHandler->h_particles->az[i] = 0.0;
 
-                particleHandler->h_particles->sml[i] = 0.05; //theta_angle + subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
+                particleHandler->h_particles->sml[i] = 0.01; //theta_angle + subDomainKeyTreeHandler->h_subDomainKeyTree->rank;
             }
             break;
         }
@@ -333,8 +333,18 @@ real Miluphpc::rhs() {
 
     Logger(INFO) << "rhs: gravity()";
     time = gravity();
+    //integer blockSize = 0;
+    //integer warp = 0;
+    //integer stackSize = 0;
+    //time = Gravity::Kernel::Launch::computeForcesMiluphcuda(treeHandler->d_tree, particleHandler->d_particles, numParticles, numParticles,
+    //                                                               blockSize, warp, stackSize, subDomainKeyTreeHandler->d_subDomainKeyTree);
     totalTime += time;
     Logger(TIME) << "Miluphpc::gravity(): " << time << " ms";
+
+    Logger(INFO) << "rhs: sph()";
+    time = sph();
+    Logger(TIME) << "Miluphpc::sph(): " << time << " ms";
+    totalTime += time;
 
     return totalTime;
 
@@ -1011,6 +1021,9 @@ real Miluphpc::parallel_gravity() {
 
             cuda::copy(&particlesOffsetBuffer, &d_particles2SendCount[proc], 1, To::host);
             cuda::copy(&pseudoParticlesOffsetBuffer, &d_pseudoParticles2SendCount[proc], 1, To::host);
+
+            particlesOffset += particlesOffsetBuffer;
+            pseudoParticlesOffset += pseudoParticlesOffsetBuffer;
         }
     }
 
@@ -1045,8 +1058,8 @@ real Miluphpc::parallel_gravity() {
         }
     }
 
-    delete [] h_particles2SendCount;
-    delete [] h_pseudoParticles2SendCount;
+    //delete [] h_particles2SendCount;
+    //delete [] h_pseudoParticles2SendCount;
 
     mpi::messageLengths(subDomainKeyTreeHandler->h_subDomainKeyTree, particleSendLengths, particleReceiveLengths);
 
@@ -1258,7 +1271,7 @@ real Miluphpc::parallel_gravity() {
     //float elapsedTime = 0.f;
 
     time = 0;
-    //time = TreeNS::Kernel::Launch::sort(treeHandler->d_tree, numParticlesLocal, numParticles, true);
+    time = TreeNS::Kernel::Launch::sort(treeHandler->d_tree, numParticlesLocal, numParticles, true);
 
     Logger(TIME) << "sorting: " << time << " ms";
 
@@ -1266,14 +1279,15 @@ real Miluphpc::parallel_gravity() {
 
     //actual (local) force
     integer warp = 32;
-    integer stackSize = 128; //64;
+    integer stackSize = 64; //128; //64;
     integer blockSize = 256;
     //time = Gravity::Kernel::Launch::computeForces(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal, numParticles,
     //                                                      blockSize, warp, stackSize, subDomainKeyTreeHandler->d_subDomainKeyTree);
     //time = Gravity::Kernel::Launch::computeForcesUnsorted(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal, numParticles,
     //                                       blockSize, warp, stackSize, subDomainKeyTreeHandler->d_subDomainKeyTree);
-    time = Gravity::Kernel::Launch::computeForcesMiluphcuda(treeHandler->d_tree, particleHandler->d_particles, numParticles, numParticles,
-                                                            blockSize, warp, stackSize, subDomainKeyTreeHandler->d_subDomainKeyTree);
+    time = Gravity::Kernel::Launch::computeForcesMiluphcuda(treeHandler->d_tree, particleHandler->d_particles,
+                                                            numParticles, numParticles,
+                                                            subDomainKeyTreeHandler->d_subDomainKeyTree);
 
     totalTime += time;
     Logger(TIME) << "computeForces: " << time << " ms";
@@ -1282,17 +1296,213 @@ real Miluphpc::parallel_gravity() {
     // repairTree
     //TODO: necessary? Tree is build for every iteration
 
-    //Gravity::Kernel::Launch::repairTree(treeHandler->d_tree, particleHandler->d_particles,
-    //                                    domainListHandler->d_domainList, numParticlesLocal, numNodes);
+    Gravity::Kernel::Launch::repairTree(treeHandler->d_tree, particleHandler->d_particles,
+                                        domainListHandler->d_domainList, numParticlesLocal, numNodes);
 
     //TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, treeIndex, treeIndex + pseudoParticleTotalReceiveLength);
     //TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal, numParticlesLocal + particleTotalReceiveLength);
+
+    delete [] h_relevantDomainListProcess;
+    delete [] h_particles2SendCount;
+    delete [] h_pseudoParticles2SendCount;
 
 
     return totalTime;
 }
 
 real Miluphpc::parallel_sph() {
+
+    real time;
+    real totalTime = 0;
+
+    cuda::set(d_particles2SendIndices, -1, numParticles);
+    cuda::set(d_particles2SendCount, 0, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
+
+    cuda::set(lowestDomainListHandler->d_domainListCounter, 0, 1);
+
+    time = SPH::Kernel::Launch::compTheta(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
+                                          particleHandler->d_particles,
+                                          lowestDomainListHandler->d_domainList, curveType);
+
+    totalTime += time;
+    Logger(TIME) << "sph: compTheta: " << time << " ms";
+
+    integer relevantIndicesCounter;
+    cuda::copy(&relevantIndicesCounter, lowestDomainListHandler->d_domainListCounter, 1, To::host);
+    Logger(INFO) << "relevantIndicesCounter: " << relevantIndicesCounter;
+
+    integer particlesOffset = 0;
+    integer particlesOffsetBuffer;
+
+    integer *h_relevantDomainListProcess;
+    h_relevantDomainListProcess = new integer[relevantIndicesCounter]; //TODO: delete [] h_relevantDomainListProcess;
+    cuda::copy(h_relevantDomainListProcess, lowestDomainListHandler->d_relevantDomainListProcess,
+               relevantIndicesCounter, To::host);
+
+    integer *d_markedSendIndices = buffer->d_integerBuffer;
+    real *d_collectedEntries = buffer->d_realBuffer;
+    integer *h_particles2SendCount = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+    integer *h_pseudoParticles2SendCount = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+
+    time = 0;
+    for (integer proc=0; proc<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
+        if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
+            cuda::set(d_markedSendIndices, -1, numParticles); //numParticlesLocal should be sufficient
+            for (integer relevantIndex = 0; relevantIndex < relevantIndicesCounter; relevantIndex++) {
+                if (h_relevantDomainListProcess[relevantIndex] == proc) {
+                    Logger(INFO) << "h_relevantDomainListProcess[" << relevantIndex << "] = "
+                                 << h_relevantDomainListProcess[relevantIndex];
+
+                    time += SPH::Kernel::Launch::symbolicForce(subDomainKeyTreeHandler->d_subDomainKeyTree,
+                                                       treeHandler->d_tree, particleHandler->d_particles,
+                                                       lowestDomainListHandler->d_domainList,
+                                                       d_markedSendIndices, numParticlesLocal, numParticles,
+                                                       relevantIndex, curveType);
+
+                }
+            }
+            time += SPH::Kernel::Launch::collectSendIndices(treeHandler->d_tree, particleHandler->d_particles,
+                                                    d_markedSendIndices, &d_particles2SendIndices[particlesOffset],
+                                                    &d_particles2SendCount[proc], numParticles, numParticles, curveType);
+
+            cuda::copy(&particlesOffsetBuffer, &d_particles2SendCount[proc], 1, To::host);
+            particlesOffset += particlesOffsetBuffer;
+        }
+    }
+
+    totalTime += time;
+    Logger(TIME) << "sph: symbolicForce: " << time << " ms";
+
+    cuda::copy(h_particles2SendCount, d_particles2SendCount, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses, To::host);
+
+    Timer timer;
+
+    integer *particleSendLengths;
+    particleSendLengths = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+    particleSendLengths[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] = 0;
+    integer *particleReceiveLengths;
+    particleReceiveLengths = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+    particleReceiveLengths[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] = 0;
+
+
+    for (int proc=0; proc<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
+        Logger(INFO) << "sph: h_particles2SendCount[" << proc << "] = " << h_particles2SendCount[proc];
+        if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
+            particleSendLengths[proc] = h_particles2SendCount[proc];
+        }
+    }
+
+    mpi::messageLengths(subDomainKeyTreeHandler->h_subDomainKeyTree, particleSendLengths, particleReceiveLengths);
+
+    integer particleTotalReceiveLength = 0;
+    integer particleTotalSendLength = 0;
+    for (int proc=0; proc<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
+        if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
+            particleTotalReceiveLength += particleReceiveLengths[proc];
+            particleTotalSendLength += particleSendLengths[proc];
+        }
+    }
+
+    Logger(INFO) << "sph: particleTotalReceiveLength: " << particleTotalReceiveLength;
+    Logger(INFO) << "sph: particleTotalSendLength: " << particleTotalSendLength;
+
+
+    delete [] h_relevantDomainListProcess;
+    delete [] h_particles2SendCount;
+    delete [] h_pseudoParticles2SendCount;
+
+    treeHandler->h_toDeleteLeaf[0] = numParticlesLocal;
+    treeHandler->h_toDeleteLeaf[1] = numParticlesLocal + particleTotalReceiveLength;
+    cuda::copy(treeHandler->h_toDeleteLeaf, treeHandler->d_toDeleteLeaf, 2, To::device);
+
+    // x-entry particle exchange
+    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_x, d_collectedEntries,
+                                             particleTotalSendLength);
+    sendParticles(d_collectedEntries, &particleHandler->d_x[numParticlesLocal], particleSendLengths,
+                  particleReceiveLengths);
+
+    // y-entry particle exchange
+    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_y, d_collectedEntries,
+                                             particleTotalSendLength);
+    sendParticles(d_collectedEntries, &particleHandler->d_y[numParticlesLocal], particleSendLengths,
+                  particleReceiveLengths);
+
+    // z-entry particle exchange
+    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_z, d_collectedEntries,
+                                             particleTotalSendLength);
+    sendParticles(d_collectedEntries, &particleHandler->d_z[numParticlesLocal], particleSendLengths,
+                  particleReceiveLengths);
+
+    // mass-entry particle exchange
+    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_mass, d_collectedEntries,
+                                             particleTotalSendLength);
+    sendParticles(d_collectedEntries, &particleHandler->d_mass[numParticlesLocal], particleSendLengths,
+                  particleReceiveLengths);
+
+    // sml-entry particle exchange
+    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_sml, d_collectedEntries,
+                                             particleTotalSendLength);
+    sendParticles(d_collectedEntries, &particleHandler->d_sml[numParticlesLocal], particleSendLengths,
+                  particleReceiveLengths);
+
+    //TODO: all entries...
+
+    time = timer.elapsed();
+    totalTime += time;
+    Logger(TIME) << "sph: sending particles: " << time;
+
+    cuda::copy(&treeHandler->h_toDeleteNode[0], treeHandler->d_index, 1, To::host);
+
+
+
+    //if (treeHandler->h_toDeleteLeaf[1] > treeHandler->h_toDeleteLeaf[0]) {
+    time = SPH::Kernel::Launch::insertReceivedParticles(subDomainKeyTreeHandler->d_subDomainKeyTree,
+                                                 treeHandler->d_tree,
+                                                 particleHandler->d_particles, domainListHandler->d_domainList,
+                                                 lowestDomainListHandler->d_domainList,
+                                                 treeHandler->h_toDeleteLeaf[1],
+                                                 numParticles);
+    //}
+
+    totalTime += time;
+    Logger(TIME) << "sph: inserting received particles: " << time << " ms";
+
+    cuda::copy(&treeHandler->h_toDeleteNode[1], treeHandler->d_index, 1, To::host);
+    cuda::copy(treeHandler->h_toDeleteNode, treeHandler->d_toDeleteNode, 2, To::device);
+
+
+    Logger(INFO) << "treeHandler->h_toDeleteNode[0]: " << treeHandler->h_toDeleteNode[0];
+    Logger(INFO) << "treeHandler->h_toDeleteNode[1]: " << treeHandler->h_toDeleteNode[1];
+
+
+    time = SPH::Kernel::Launch::fixedRadiusNN(treeHandler->d_tree, particleHandler->d_particles, particleHandler->d_nnl,
+                                       numParticlesLocal, numParticles, numNodes);
+
+    totalTime += time;
+    Logger(TIME) << "fixedRadiusNN: " << time << " ms";
+
+    //SPH::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, helperHandler->d_helper,
+    //                          numParticlesLocal, numParticles, numNodes);
+
+
+
+    //TODO: reset noi and nnl
+    cuda::set(particleHandler->d_noi, 0, numParticles);
+    cuda::set(particleHandler->d_nnl, -1, MAX_NUM_INTERACTIONS * numParticles);
+
+    Gravity::Kernel::Launch::repairTree(treeHandler->d_tree, particleHandler->d_particles,
+                                        domainListHandler->d_domainList, numParticlesLocal, numNodes);
+
+    Logger(TIME) << "sph: totalTime: " << totalTime << " ms";
+    return totalTime;
+
+}
+
+real Miluphpc::parallel_sph_backup() {
+
+    real time;
+    real totalTime = 0;
+
     int sphInsertOffset = 50000;
 
     integer *d_sphSendCount;
@@ -1304,11 +1514,16 @@ real Miluphpc::parallel_sph() {
 
     cuda::set(helperHandler->d_integerBuffer, -1, numParticles);
 
-    SPH::Kernel::Launch::particles2Send(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
-                                        particleHandler->d_particles, domainListHandler->d_domainList,
-                                        lowestDomainListHandler->d_domainList, 21, helperHandler->d_integerBuffer,
-                                        d_sphSendCount, d_alreadyInserted, sphInsertOffset,
-                                        numParticlesLocal, numParticles, numNodes, 1e-1, curveType);
+    time = SPH::Kernel::Launch::particles2Send(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
+                                               particleHandler->d_particles, domainListHandler->d_domainList,
+                                               lowestDomainListHandler->d_domainList, 21, helperHandler->d_integerBuffer,
+                                               d_sphSendCount, d_alreadyInserted, sphInsertOffset,
+                                               numParticlesLocal, numParticles, numNodes, 1e-1, curveType);
+
+    Logger(TIME) << "sph: particles2Send: " << time << " ms";
+    totalTime += time;
+
+    Timer timer;
 
     integer totalSendCount = 0;
 
@@ -1336,7 +1551,7 @@ real Miluphpc::parallel_sph() {
 
     integer particles2SendOffset = 0;
     for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
-        SPH::Kernel::Launch::collectSendIndices(&helperHandler->d_integerBuffer[i*sphInsertOffset], &buffer->d_integerBuffer[particles2SendOffset], particles2SendSPH[i]);
+        SPH::Kernel::Launch::collectSendIndicesBackup(&helperHandler->d_integerBuffer[i*sphInsertOffset], &buffer->d_integerBuffer[particles2SendOffset], particles2SendSPH[i]);
         //KernelHandler.collectSendIndicesSPH(&d_sortArray[i*sphInsertOffset], &d_sortArrayOut[particles2SendOffset], particles2SendSPH[i], false);
         particles2SendOffset += particles2SendSPH[i];
     }
@@ -1347,9 +1562,8 @@ real Miluphpc::parallel_sph() {
     treeHandler->h_toDeleteLeaf[1] = numParticlesLocal + totalReceiveLength;
     cuda::copy(treeHandler->h_toDeleteLeaf, treeHandler->d_toDeleteLeaf, 2, To::device);
 
-
     // x
-    SPH::Kernel::Launch::collectSendEntries(subDomainKeyTreeHandler->d_subDomainKeyTree, particleHandler->d_x,
+    SPH::Kernel::Launch::collectSendEntriesBackup(subDomainKeyTreeHandler->d_subDomainKeyTree, particleHandler->d_x,
                                             buffer->d_realBuffer, buffer->d_integerBuffer, d_sphSendCount,
                                             totalSendCount, sphInsertOffset);
 
@@ -1357,21 +1571,21 @@ real Miluphpc::parallel_sph() {
                                particles2SendSPH, particles2ReceiveSPH, numParticlesLocal);
 
     // y
-    SPH::Kernel::Launch::collectSendEntries(subDomainKeyTreeHandler->d_subDomainKeyTree, particleHandler->d_y,
+    SPH::Kernel::Launch::collectSendEntriesBackup(subDomainKeyTreeHandler->d_subDomainKeyTree, particleHandler->d_y,
                                             buffer->d_realBuffer, buffer->d_integerBuffer, d_sphSendCount,
                                             totalSendCount, sphInsertOffset);
     SPH::exchangeParticleEntry(subDomainKeyTreeHandler->h_subDomainKeyTree, particleHandler->d_y, buffer->d_realBuffer,
                                particles2SendSPH, particles2ReceiveSPH, numParticlesLocal);
 
     // z
-    SPH::Kernel::Launch::collectSendEntries(subDomainKeyTreeHandler->d_subDomainKeyTree, particleHandler->d_z,
+    SPH::Kernel::Launch::collectSendEntriesBackup(subDomainKeyTreeHandler->d_subDomainKeyTree, particleHandler->d_z,
                                             buffer->d_realBuffer, buffer->d_integerBuffer, d_sphSendCount,
                                             totalSendCount, sphInsertOffset);
     SPH::exchangeParticleEntry(subDomainKeyTreeHandler->h_subDomainKeyTree, particleHandler->d_z, buffer->d_realBuffer,
                                particles2SendSPH, particles2ReceiveSPH, numParticlesLocal);
 
     // mass
-    SPH::Kernel::Launch::collectSendEntries(subDomainKeyTreeHandler->d_subDomainKeyTree, particleHandler->d_mass,
+    SPH::Kernel::Launch::collectSendEntriesBackup(subDomainKeyTreeHandler->d_subDomainKeyTree, particleHandler->d_mass,
                                             buffer->d_realBuffer, buffer->d_integerBuffer, d_sphSendCount,
                                             totalSendCount, sphInsertOffset);
     SPH::exchangeParticleEntry(subDomainKeyTreeHandler->h_subDomainKeyTree, particleHandler->d_mass, buffer->d_realBuffer,
@@ -1395,13 +1609,22 @@ real Miluphpc::parallel_sph() {
     //gpuErrorcheck(cudaMemcpy(treeHandler->d_index, &numParticlesLocal, sizeof(integer), cudaMemcpyHostToDevice));
     cuda::copy(&treeHandler->h_toDeleteNode[0], treeHandler->d_index, 1, To::host);
 
+    time = timer.elapsed();
+    totalTime += time;
+    Logger(TIME) << "sph: exchanging particles: " << time << " ms";
+
 
     Logger(INFO) << "SPH: Starting inserting particles...";
     Logger(INFO) << "SPH: treeHandler->h_toDeleteLeaf[0]: " << treeHandler->h_toDeleteLeaf[0];
     Logger(INFO) << "SPH: treeHandler->h_toDeleteLeaf[1]: " << treeHandler->h_toDeleteLeaf[1];
-    ParticlesNS::Kernel::Launch::info(particleHandler->d_particles, 0, treeHandler->h_toDeleteLeaf[0], treeHandler->h_toDeleteLeaf[1]);
+
+    //TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, treeHandler->h_toDeleteLeaf[0], treeHandler->h_toDeleteLeaf[1]);
+    //ParticlesNS::Kernel::Launch::info(particleHandler->d_particles, 0, treeHandler->h_toDeleteLeaf[0], treeHandler->h_toDeleteLeaf[1]);
+
+    cuda::copy(treeHandler->h_toDeleteLeaf, treeHandler->d_toDeleteLeaf, 2, To::device);
+
     if (treeHandler->h_toDeleteLeaf[1] > treeHandler->h_toDeleteLeaf[0]) {
-        Gravity::Kernel::Launch::insertReceivedParticles(subDomainKeyTreeHandler->d_subDomainKeyTree,
+        time = SPH::Kernel::Launch::insertReceivedParticles(subDomainKeyTreeHandler->d_subDomainKeyTree,
                                                          treeHandler->d_tree,
                                                          particleHandler->d_particles, domainListHandler->d_domainList,
                                                          lowestDomainListHandler->d_domainList,
@@ -1409,6 +1632,10 @@ real Miluphpc::parallel_sph() {
                                                          numParticles);
     }
 
+
+    Logger(TIME) << "sph: insertReceivedParticles: " << time << " ms";
+
+    /*
 
     //int indexAfterInserting;
     cuda::copy(&treeHandler->h_toDeleteNode[1], treeHandler->d_index, 1, To::host);
@@ -1434,7 +1661,9 @@ real Miluphpc::parallel_sph() {
                               numParticlesLocal, numParticles, numNodes);
 
     cuda::free(d_sphSendCount);
-    cuda::free(d_alreadyInserted);
+    cuda::free(d_alreadyInserted);*/
+
+    return time;
 }
 
 float Miluphpc::particles2file(HighFive::DataSet *pos, HighFive::DataSet *vel, HighFive::DataSet *key) {

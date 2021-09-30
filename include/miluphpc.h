@@ -71,6 +71,8 @@ private:
     real parallel_gravity();
     real parallel_sph();
 
+    real parallel_sph_backup();
+
     template <typename T>
     integer sendParticlesEntry(integer *sendLengths, integer *receiveLengths, T *entry);
     void exchangeParticleEntry(integer *sendLengths, integer *receiveLengths, real *entry);

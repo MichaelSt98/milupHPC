@@ -48,8 +48,8 @@ namespace Gravity {
         __global__ void computeForcesUnsorted(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
                                        integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree);
 
-        __global__ void computeForcesMiluphcuda(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
-                                    integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree);
+        __global__ void computeForcesMiluphcuda(Tree *tree, Particles *particles, integer n, integer m,
+                                                SubDomainKeyTree *subDomainKeyTree);
 
         __global__ void update(Particles *particles, integer n, real dt, real d);
 
@@ -134,8 +134,8 @@ namespace Gravity {
             real computeForcesUnsorted(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
                                         integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree);
 
-            real computeForcesMiluphcuda(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
-                                        integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree);
+            real computeForcesMiluphcuda(Tree *tree, Particles *particles, integer n, integer m,
+                                         SubDomainKeyTree *subDomainKeyTree);
 
             real update(Particles *particles, integer n, real dt, real d);
 

@@ -722,16 +722,15 @@ namespace TreeNS {
             bodyIndex += n;
             while (bodyIndex + offset < m) {
 
-                if (particles->mass[bodyIndex + offset] > 99900) {
-                    printf("particles->mass[%i] = %f (%f, %f, %f) (%i, %i)\n", bodyIndex + offset,
-                           particles->mass[bodyIndex + offset],
-                           particles->x[bodyIndex + offset],
-                           particles->y[bodyIndex + offset],
-                           particles->z[bodyIndex + offset], n, m);
-                }
-                //printf("x[%i] = (%f, %f, %f) mass = %f\n", bodyIndex + offset, particles->x[bodyIndex + offset],
-                //       particles->y[bodyIndex + offset], particles->z[bodyIndex + offset],
-                //       particles->mass[bodyIndex + offset]);
+                //printf("particles->mass[%i] = %f (%f, %f, %f) (%i, %i)\n", bodyIndex + offset,
+                //       particles->mass[bodyIndex + offset],
+                //       particles->x[bodyIndex + offset],
+                //       particles->y[bodyIndex + offset],
+                //       particles->z[bodyIndex + offset], n, m);
+
+                printf("x[%i] = (%f, %f, %f) mass = %f\n", bodyIndex + offset, particles->x[bodyIndex + offset],
+                       particles->y[bodyIndex + offset], particles->z[bodyIndex + offset],
+                       particles->mass[bodyIndex + offset]);
 
                 offset += stride;
             }

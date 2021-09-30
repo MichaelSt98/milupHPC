@@ -41,6 +41,7 @@ namespace Gravity {
                         // end: debug
                     }
                 }
+                __threadfence();
                 offset += stride;
             }
         }
@@ -740,8 +741,8 @@ namespace Gravity {
 
         }
 
-        __global__ void computeForcesMiluphcuda(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
-                                        integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree) {
+        __global__ void computeForcesMiluphcuda(Tree *tree, Particles *particles, integer n, integer m,
+                                                SubDomainKeyTree *subDomainKeyTree) {
 
             integer i, child, nodeIndex, childNumber, depth;
             real px, ax, dx, f, distance;
@@ -783,6 +784,7 @@ namespace Gravity {
             }
 
             __syncthreads();
+            //__threadfence();
 
             for (i = threadIdx.x + blockIdx.x * blockDim.x; i < n; i += blockDim.x * gridDim.x) {
                 px = particles->x[i];
@@ -1781,13 +1783,13 @@ namespace Gravity {
                                 blockSize, warp, stackSize, subDomainKeyTree);
         }
 
-        real Launch::computeForcesMiluphcuda(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
-                         integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree) {
+        real Launch::computeForcesMiluphcuda(Tree *tree, Particles *particles, integer n, integer m,
+                                             SubDomainKeyTree *subDomainKeyTree) {
             size_t sharedMemory = sizeof(real) * MAX_DEPTH;
             ExecutionPolicy executionPolicy(256, 256, sharedMemory);
             //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForcesMiluphcuda, tree, particles, n, m,
-                                blockSize, warp, stackSize, subDomainKeyTree);
+                                subDomainKeyTree);
         }
 
 
