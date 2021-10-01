@@ -127,6 +127,11 @@ while (condition) {
 * Performance:
 	* kernel call `buildDomainTree()` with more than one thread
 	* kernel call `createDomainList()` with more than one thread
+* Structure
+	* how to structure `main` function/functionality?
+	* generalize functionality
+	* naming (conventions)
+	* where to put which function
 
 
 ## Generalizing functions/functionality
