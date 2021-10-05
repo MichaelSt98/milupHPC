@@ -12,8 +12,8 @@ PredictorCorrector::~PredictorCorrector() {
     printf("~PredictorCorrector()\n");
 }
 
-void PredictorCorrector::integrate() {
+void PredictorCorrector::integrate(int step) {
     printf("PredictorCorrector::integrate()\n");
-    rhs();
+    rhs(step);
     //rhs();
 }

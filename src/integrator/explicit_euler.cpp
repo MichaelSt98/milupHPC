@@ -10,10 +10,10 @@ ExplicitEuler::~ExplicitEuler() {
     printf("~ExplicitEuler()\n");
 }
 
-void ExplicitEuler::integrate() {
+void ExplicitEuler::integrate(int step) {
     printf("Euler::integrate()\n");
     Timer timer;
-    real time = rhs();
+    real time = rhs(step);
     Logger(TIME) << "rhs: " << time << " ms";
 
     Logger(TIME) << "rhs elapsed: " << timer.elapsed() << " ms";

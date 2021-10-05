@@ -987,6 +987,9 @@ namespace Gravity {
                 if (sendIndices[bodyIndex + offset] == 2) {
                     sendIndices[bodyIndex + offset] = 0;
                 }
+                if (sendIndices[bodyIndex + offset] == 3) {
+                    sendIndices[bodyIndex + offset] = 1;
+                }
 
                 offset += stride;
             }
@@ -1022,15 +1025,23 @@ namespace Gravity {
 #endif
             real r;
 
-
             // IDEA: sendIndices = [-1, -1, -1, ..., -1, -1]
             // mark to be tested indices with 2's: e.g.: sendIndices = [-1, 2, -1, ..., 2, -1]
             // the 2's are converted within a separate kernel to zeros (which will be tested within this kernel)
             //  separate kernel necessary to avoid race conditions
-            // mark to be sent indices/particles with ones: e.g.: sendIndices = [-1, 0, 1, ..., 1, 1]
+            // mark to be sent indices/particles with 3's: e.g.: sendIndices = [-1, 0, 3, ..., 3, 3]
+            //  the 3's are converted within a separate kernel to ones
 
             if (level == 0) { // mark first level children as starting point
                 while ((bodyIndex + offset) < POW_DIM) {
+                    //if ((bodyIndex + offset) == 0) {
+                    //    printf("symbolicForce: [rank %i] relevantDomainListIndices[%i] = %i (%f, %f, %f)\n",
+                    //           subDomainKeyTree->rank,
+                    //           relevantIndex, domainList->relevantDomainListIndices[relevantIndex],
+                    //           particles->x[domainList->relevantDomainListIndices[relevantIndex]],
+                    //           particles->y[domainList->relevantDomainListIndices[relevantIndex]],
+                    //           particles->z[domainList->relevantDomainListIndices[relevantIndex]]);
+                    //}
                     if (tree->child[bodyIndex + offset] != -1) {
                         sendIndices[tree->child[bodyIndex + offset]] = 0;
                     }
@@ -1043,7 +1054,7 @@ namespace Gravity {
                     insert = true;
                     isDomainListNode = false;
 
-                    if (sendIndices[bodyIndex + offset] == 0 && ((bodyIndex + offset) < n || (bodyIndex + offset) >= m )) {
+                    if (sendIndices[bodyIndex + offset] == 0 || sendIndices[bodyIndex + offset] == 3 && ((bodyIndex + offset) < n || (bodyIndex + offset) >= m )) {
 
                         // TODO: this is probably not necessary, since only domain list indices can correspond to another process
                         if (subDomainKeyTree->key2proc(tree->getParticleKey(particles, bodyIndex + offset, MAX_LEVEL, curveType)) != subDomainKeyTree->rank) {
@@ -1061,7 +1072,7 @@ namespace Gravity {
                         }
 
                         if (insert) {
-                            sendIndices[bodyIndex + offset] = 1;
+                            sendIndices[bodyIndex + offset] = 3;
                         }
                         else {
                             sendIndices[bodyIndex + offset] = -1;
@@ -1070,7 +1081,7 @@ namespace Gravity {
                         // get the particle's level
                         particleLevel = tree->getTreeLevel(particles, bodyIndex + offset, MAX_LEVEL, curveType);
                         if (particleLevel == -1) {
-                            printf("particleLevel == -1 !!!!!!!!\n");
+                            printf("particleLevel == -1 for index = %i!!!!!!!!\n", bodyIndex + offset);
                         }
 
                         // get the domain list node's level
@@ -1078,6 +1089,7 @@ namespace Gravity {
                         //                                     domainList->relevantDomainListIndices[relevantIndex],
                         //                                     MAX_LEVEL, curveType);
                         domainListLevel = domainList->relevantDomainListLevels[relevantIndex];
+                        //printf("domainListLevel = %i\n", domainListLevel);
                         if (domainListLevel == -1) {
                             printf("symbolicForce(): domainListLevel == -1 for (relevant) index: %i\n", relevantIndex);
                             assert(0);
@@ -1093,9 +1105,27 @@ namespace Gravity {
                         max_z = *tree->maxZ;
 #endif
 #endif
+                        //printf("(%f, %f), (%f, %f), (%f, %f)\n", min_x, max_x, min_y, max_y, min_z, max_z);
 
                         // determine domain list node's bounding box (in order to determine the distance)
+                        if (domainListLevel != 1) {
+                            printf("domainListLevel = %i\n", domainListLevel);
+                            assert(0);
+                        }
                         for (int j = 0; j < domainListLevel; j++) {
+
+                            if (particles->x[domainList->relevantDomainListIndices[relevantIndex]] < max_x && particles->x[domainList->relevantDomainListIndices[relevantIndex]] > min_x &&
+                                    particles->y[domainList->relevantDomainListIndices[relevantIndex]] < max_y && particles->y[domainList->relevantDomainListIndices[relevantIndex]] > min_y &&
+                                particles->z[domainList->relevantDomainListIndices[relevantIndex]] < max_z && particles->z[domainList->relevantDomainListIndices[relevantIndex]] > min_z) {
+
+                            }
+                            else {
+                                printf("not within box %i (%f, %f, %f) box (%f, %f), (%f, %f), (%f, %f)!\n", domainList->relevantDomainListIndices[relevantIndex],
+                                       particles->x[domainList->relevantDomainListIndices[relevantIndex]], particles->y[domainList->relevantDomainListIndices[relevantIndex]],
+                                       particles->z[domainList->relevantDomainListIndices[relevantIndex]],
+                                       min_x, max_x, min_y, max_y, min_z, max_z);
+                                assert(0);
+                            }
                             childPath = 0;
                             if (particles->x[domainList->relevantDomainListIndices[relevantIndex]] < 0.5 * (min_x + max_x)) {
                                 childPath += 1;
@@ -1120,52 +1150,20 @@ namespace Gravity {
 #endif
 #endif
                         }
-                        // debug
-                        //tempChildIndex = tree->child[POW_DIM * tempChildIndex + path[j]];
-                        //temp = tempChildIndex;
-                        //tempChildIndex = tree->child[POW_DIM * tempChildIndex + childPath];
-                        // end: debug
-
-                        // debug
-                        //if (tempChildIndex == domainList->relevantDomainListIndices[relevantIndex]) {
-                        //    //printf("Found domain list path[%i] = %i within symbolicForce() (domainListLevel %i)\n",
-                        //    //       j, path[j], domainListLevel);
-                        //    found = true;
-                        //}
-                        //else {
-                        //    printf("child[8 * %i + %i] = %i !== %i\n", tempChildIndex, childPath, tree->child[POW_DIM * tempChildIndex + childPath], domainList->relevantDomainListIndices[relevantIndex]);
-                        //}
-                        // end: debug
-                        // debug
-                        //if (!found) {
-                        //    printf("Did not found domain list node within symbolicForce()\n");
-                        //}
-                        // end: debug
 
                         // determine (smallest) distance between domain list box and (pseudo-) particle
-                        if (particles->x[bodyIndex + offset] < min_x) {
-                            dx = min_x - particles->x[bodyIndex + offset];
-                        } else if (particles->x[bodyIndex + offset] > max_x) {
-                            dx = particles->x[bodyIndex + offset] - max_x;
-                        } else {
-                            dx = 0.f;
-                        }
+                        if (particles->x[bodyIndex + offset] < min_x) { dx = particles->x[bodyIndex + offset] - min_x;
+                        } else if (particles->x[bodyIndex + offset] > max_x) { dx = particles->x[bodyIndex + offset] - max_x;
+                        } else { dx = 0.f; }
 #if DIM > 1
-                        if (particles->y[bodyIndex + offset] < min_y) {
-                            dy = min_y - particles->y[bodyIndex + offset];
-                        } else if (particles->y[bodyIndex + offset] > max_y) {
-                            dy = particles->y[bodyIndex + offset] - max_y;
-                        } else {
-                            dy = 0.f;
-                        }
+                        if (particles->y[bodyIndex + offset] < min_y) { dy = particles->y[bodyIndex + offset] - min_y;
+                        } else if (particles->y[bodyIndex + offset] > max_y) { dy = particles->y[bodyIndex + offset] - max_y;
+                        } else { dy = 0.f; }
 #if DIM == 3
-                        if (particles->z[bodyIndex + offset] < min_z) {
-                            dz = min_z - particles->z[bodyIndex + offset];
-                        } else if (particles->z[bodyIndex + offset] > min_z) {
-                            dz = particles->z[bodyIndex + offset] - min_z;
-                        } else {
-                            dz = 0.f;
-                        }
+                        if (particles->z[bodyIndex + offset] < min_z) { dz = particles->z[bodyIndex + offset] - min_z;
+                        } else if (particles->z[bodyIndex + offset] > max_z) { dz = particles->z[bodyIndex + offset] - max_z;
+                        } else { dz = 0.f; }
+
 #endif
 #endif
 
@@ -1174,26 +1172,23 @@ namespace Gravity {
 #elif DIM == 2
                         r = sqrtf(dx*dx + dy*dy);
 #else
-                        r = sqrtf(dx * dx + dy * dy + dz * dz);
+                        r = sqrtf(dx*dx + dy*dy + dz*dz);
 #endif
-                        //printf("%f >= %f\n", powf(0.5, particleLevel) * 2 * diam, (theta_ * r));
-                        if (particleLevel >= -1 && ((powf(0.5, particleLevel - 1) /* 2*/ * diam) >= (theta_ * r))) {
+
+                        //printf("%f >= %f (particleLevel = %i, theta = %f, r = %f)\n", powf(0.5, particleLevel-1) /* * 2*/ * diam, (theta_ * r), particleLevel, theta_, r);
+                        if (particleLevel != -1 && ((powf(0.5, particleLevel-1) * 2 * diam) >= (theta_ * r))) {
 
                             for (int i = 0; i < POW_DIM; i++) {
-                                // mark children as to be tested
-                                //if (sendIndices[tree->child[POW_DIM * (bodyIndex + offset) + i]] == 2) {
-                                //    printf("[rank %i] mistakenly marked: %i (%i) level = %i\n", subDomainKeyTree->rank, tree->child[POW_DIM * (bodyIndex + offset) + i], sendIndices[tree->child[POW_DIM * (bodyIndex + offset) + i]],
-                                //           level);
-                                //    assert(0);
-                                //}
+
                                 if (sendIndices[tree->child[POW_DIM * (bodyIndex + offset) + i]] != 1 && tree->child[POW_DIM * (bodyIndex + offset) + i] != -1) {
                                     sendIndices[tree->child[POW_DIM * (bodyIndex + offset) + i]] = 2;
                                 }
+
                             }
                         }
                     }
 
-                    //__threadfence();
+                    __threadfence();
                     offset += stride;
                 }
 
@@ -1218,10 +1213,10 @@ namespace Gravity {
                 bodyIndex = domainList->domainListIndices[index + offset];
                 //calculate key
                 key = tree->getParticleKey(particles, bodyIndex, MAX_LEVEL, curveType);
-
                 //if domain list node belongs to other process: add to relevant domain list indices
                 proc = subDomainKeyTree->key2proc(key);
-                if (proc != subDomainKeyTree->rank) {
+                if (proc != subDomainKeyTree->rank && proc >= 0 && particles->mass[bodyIndex] > 0.f) {
+                    //printf("[rank = %i] proc = %i, key = %lu for x = (%f, %f, %f)\n", subDomainKeyTree->rank, proc, key, particles->x[bodyIndex], particles->y[bodyIndex], particles->z[bodyIndex]);
                     domainIndex = atomicAdd(domainList->domainListCounter, 1);
                     domainList->relevantDomainListIndices[domainIndex] = bodyIndex;
                     domainList->relevantDomainListLevels[domainIndex] = domainList->domainListLevels[index + offset];

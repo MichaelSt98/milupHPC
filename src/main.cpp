@@ -1,17 +1,3 @@
-/*#include "../include/constants.h"
-#include "../include/utils/logger.h"
-#include "../include/utils/timer.h"
-#include "../include/utils/cxxopts.h"
-#include "../include/utils/config_parser.h"
-#include "../include/cuda_utils/cuda_utilities.cuh"
-//#include "../include/cuda_utils/cuda_launcher.cuh"
-
-#include "../include/subdomain_key_tree/tree.cuh"
-#include "../include/particles.cuh"
-#include "../include/particle_handler.h"
-#include "../include/device_rhs.cuh"
-#include "../include/subdomain_key_tree/subdomain_handler.h"*/
-
 #include "../include/miluphpc.h"
 #include "../include/integrator/euler.h"
 #include "../include/integrator/explicit_euler.h"
@@ -128,6 +114,7 @@ int main(int argc, char** argv)
     IntegratorSelection::Type integratorSelection = IntegratorSelection::explicit_euler;
 
     Miluphpc *miluphpc;
+    // miluphpc = new Miluphpc(parameters, numParticles, numNodes); // not possible since abstract class
     switch (integratorSelection) {
         case IntegratorSelection::explicit_euler: {
             miluphpc = new ExplicitEuler(parameters, numParticles, numNodes);
@@ -145,14 +132,14 @@ int main(int argc, char** argv)
 
     miluphpc->loadDistribution();
 
-    for (int i=0; i<parameters.iterations; i++) {
+    for (int i_step=0; i_step<parameters.iterations; i_step++) {
 
         Logger(INFO) << "-----------------------------------------------------------------";
-        Logger(INFO) << "STEP: " << i;
+        Logger(INFO) << "STEP: " << i_step;
         Logger(INFO) << "-----------------------------------------------------------------";
 
         std::stringstream stepss;
-        stepss << std::setw(6) << std::setfill('0') << i;
+        stepss << std::setw(6) << std::setfill('0') << i_step;
 
         HighFive::File h5file("output/ts" + stepss.str() + ".h5",
                               HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate,
@@ -187,7 +174,7 @@ int main(int argc, char** argv)
         //miluphpc.run();
         //miluphpc.barnesHut();
         //miluphpc.sph();
-        miluphpc->integrate();
+        miluphpc->integrate(i_step);
 
         auto time = miluphpc->particles2file(&pos, &vel, &key);
         Logger(TIME) << "particles2file: " << time << " ms";

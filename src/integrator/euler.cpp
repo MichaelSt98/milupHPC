@@ -12,8 +12,8 @@ Euler::~Euler() {
     printf("~Euler()\n");
 }
 
-void Euler::integrate() {
+void Euler::integrate(int step) {
     printf("Euler::integrate()\n");
-    rhs();
+    rhs(step);
     //rhs();
 }

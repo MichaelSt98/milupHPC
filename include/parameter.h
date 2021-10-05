@@ -14,7 +14,7 @@ typedef unsigned long idInteger;
 
 #include <iostream>
 
-#define theta 0.5//1.5//0.7
+#define theta 0.5
 #define KEY_MAX ULONG_MAX
 #define DOMAIN_LIST_SIZE 512
 
@@ -107,6 +107,8 @@ private:
 #define POW_DIM power_two(DIM)
 
 #define MAX_LEVEL 21
+
+#define CUBIC_DOMAINS 1
 
 #define GRAVITY 0
 

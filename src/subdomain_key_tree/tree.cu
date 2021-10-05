@@ -336,14 +336,50 @@ __global__ void TreeNS::Kernel::computeBoundingBox(Tree *tree, Particles *partic
 #if DIM > 1
         *tree->minY = fminf(*tree->minY, y_min_buffer[0]);
         *tree->maxY = fmaxf(*tree->maxY, y_max_buffer[0]);
+
+#if CUBIC_DOMAINS
+        if (*tree->minY < *tree->minX) {
+            *tree->minX = *tree->minY;
+        }
+        else {
+            *tree->minY = *tree->minX;
+        }
+        if (*tree->maxY > *tree->maxX) {
+            *tree->maxX = *tree->maxY;
+        }
+        else {
+            *tree->maxY = *tree->maxX;
+        }
+#endif
+
 #if DIM == 3
         *tree->minZ = fminf(*tree->minZ, z_min_buffer[0]);
         *tree->maxZ = fmaxf(*tree->maxZ, z_max_buffer[0]);
+
+#if CUBIC_DOMAINS
+        if (*tree->minZ < *tree->minX) {
+            *tree->minX = *tree->minZ;
+            *tree->minY = *tree->minZ;
+        }
+        else {
+            *tree->minZ = *tree->minX;
+        }
+        if (*tree->maxZ > *tree->maxX) {
+            *tree->maxX = *tree->maxZ;
+            *tree->maxY = *tree->maxZ;
+        }
+        else {
+            *tree->maxZ = *tree->maxX;
+        }
+#endif
+
 #endif
 #endif
         atomicExch(mutex, 0); // unlock
     }
 }
+
+
 
 __global__ void TreeNS::Kernel::sumParticles(Tree *tree) {
 
@@ -728,9 +764,11 @@ namespace TreeNS {
                 //       particles->y[bodyIndex + offset],
                 //       particles->z[bodyIndex + offset], n, m);
 
-                printf("x[%i] = (%f, %f, %f) mass = %f\n", bodyIndex + offset, particles->x[bodyIndex + offset],
-                       particles->y[bodyIndex + offset], particles->z[bodyIndex + offset],
-                       particles->mass[bodyIndex + offset]);
+                //printf("x[%i] = (%f, %f, %f) mass = %f\n", bodyIndex + offset, particles->x[bodyIndex + offset],
+                //       particles->y[bodyIndex + offset], particles->z[bodyIndex + offset],
+                //       particles->mass[bodyIndex + offset]);
+                printf("(%f, %f, %f), \n", particles->x[bodyIndex + offset],
+                               particles->y[bodyIndex + offset], particles->z[bodyIndex + offset]);
 
                 offset += stride;
             }

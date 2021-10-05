@@ -51,6 +51,7 @@ class Miluphpc {
 
 private:
     void diskModel();
+    void plummerModel();
 
     void updateRangeApproximately(int aimedParticlesPerProcess, int bins=4000);
     void fixedLoadDistribution();
@@ -137,9 +138,10 @@ public:
     real gravity();
     real sph();
 
-    real rhs();
+    real rhs(int step);
 
-    virtual void integrate() {};
+    //virtual void integrate() {};
+    virtual void integrate(int step = 0) = 0;
 
     float particles2file(HighFive::DataSet *pos, HighFive::DataSet *vel, HighFive::DataSet *key);
 

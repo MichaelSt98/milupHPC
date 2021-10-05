@@ -10,7 +10,7 @@ public:
     Euler(SimulationParameters simulationParameters, integer numParticles, integer numNodes);
     ~Euler();
 
-    void integrate();
+    void integrate(int step);
 
 };
 

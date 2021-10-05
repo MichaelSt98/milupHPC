@@ -59,8 +59,7 @@ namespace HelperNS {
         gpuErrorcheck(cub::DeviceRadixSort::SortPairs(d_temp_storage, temp_storage_bytes,
                                                       keyIn, keyOut, arrayToSort, sortedArray, n));
         // Allocate temporary storage
-        gpuErrorcheck(cudaMalloc(&d_temp_storage, temp_storage_bytes));
-        gpuErrorcheck(cudaMalloc((void**)&d_temp_storage, temp_storage_bytes));
+        cuda::malloc(d_temp_storage, temp_storage_bytes);
 
         // Run sorting operation
         gpuErrorcheck(cub::DeviceRadixSort::SortPairs(d_temp_storage, temp_storage_bytes,
@@ -95,21 +94,21 @@ namespace HelperNS {
             case Reduction::min: {
                 cub::DeviceReduce::Min(d_temp_storage, temp_storage_bytes, d_sml, d_aggregate, n);
                 // Allocate temporary storage
-                gpuErrorcheck(cudaMalloc(&d_temp_storage, temp_storage_bytes));
+                cuda::malloc(d_temp_storage, temp_storage_bytes);
                 // Run max-reduction
                 cub::DeviceReduce::Min(d_temp_storage, temp_storage_bytes, d_sml, d_aggregate, n);
             } break;
             case Reduction::max: {
                 cub::DeviceReduce::Max(d_temp_storage, temp_storage_bytes, d_sml, d_aggregate, n);
                 // Allocate temporary storage
-                gpuErrorcheck(cudaMalloc(&d_temp_storage, temp_storage_bytes));
+                cuda::malloc(d_temp_storage, temp_storage_bytes);
                 // Run max-reduction
                 cub::DeviceReduce::Max(d_temp_storage, temp_storage_bytes, d_sml, d_aggregate, n);
             } break;
             case Reduction::sum: {
                 cub::DeviceReduce::Sum(d_temp_storage, temp_storage_bytes, d_sml, d_aggregate, n);
                 // Allocate temporary storage
-                gpuErrorcheck(cudaMalloc(&d_temp_storage, temp_storage_bytes));
+                cuda::malloc(d_temp_storage, temp_storage_bytes);
                 // Run max-reduction
                 cub::DeviceReduce::Sum(d_temp_storage, temp_storage_bytes, d_sml, d_aggregate, n);
             } break;

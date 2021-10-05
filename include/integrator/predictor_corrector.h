@@ -9,7 +9,7 @@ public:
     PredictorCorrector(SimulationParameters simulationParameters, integer numParticles, integer numNodes);
     ~PredictorCorrector();
 
-    void integrate();
+    void integrate(int step);
 
 };
 
