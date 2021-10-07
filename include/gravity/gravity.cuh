@@ -35,9 +35,12 @@ namespace Gravity {
         __global__ void updateLowestDomainListNodes(Particles *particles, DomainList *lowestDomainList,
                                                     Helper *helper, Entry::Name entry);
 
-        __global__ void compLowestDomainListNodes(Particles *particles, DomainList *lowestDomainList);
+        __global__ void compLowestDomainListNodes(Tree *tree, Particles *particles, DomainList *lowestDomainList);
 
         __global__ void compLocalPseudoParticles(Tree *tree, Particles *particles, DomainList *domainList, int n);
+
+        __global__ void compDomainListPseudoParticlesPerLevel(Tree *tree, Particles *particles, DomainList *domainList,
+                                                              DomainList *lowestDomainList, int n, int level);
 
         __global__ void compDomainListPseudoParticles(Tree *tree, Particles *particles, DomainList *domainList,
                                                       DomainList *lowestDomainList, int n);
@@ -121,9 +124,12 @@ namespace Gravity {
             real updateLowestDomainListNodes(Particles *particles, DomainList *lowestDomainList,
                                              Helper *helper, Entry::Name entry);
 
-            real compLowestDomainListNodes(Particles *particles, DomainList *lowestDomainList);
+            real compLowestDomainListNodes(Tree *tree, Particles *particles, DomainList *lowestDomainList);
 
             real compLocalPseudoParticles(Tree *tree, Particles *particles, DomainList *domainList, int n);
+
+            real compDomainListPseudoParticlesPerLevel(Tree *tree, Particles *particles, DomainList *domainList,
+                                                                  DomainList *lowestDomainList, int n, int level);
 
             real compDomainListPseudoParticles(Tree *tree, Particles *particles, DomainList *domainList,
                                                DomainList *lowestDomainList, int n);

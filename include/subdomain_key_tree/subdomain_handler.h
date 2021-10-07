@@ -38,6 +38,7 @@ public:
     integer *d_numProcesses;
     /// device range(s)
     keyType *d_range;
+    //keyType *d_hilberRange;
     /// host counter for particles in dependence of MPI process belonging
     integer *d_procParticleCounter;
 

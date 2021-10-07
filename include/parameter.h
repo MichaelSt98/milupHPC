@@ -78,9 +78,14 @@ private:
     operator T () const;
 };
 
+#define DEBUGGING 0
+
+#define SAFE 0
 
 // Dimension of the problem
 #define DIM 3
+
+#define SPH_SIM 0
 
 struct Entry
 {
@@ -108,7 +113,7 @@ private:
 
 #define MAX_LEVEL 21
 
-#define CUBIC_DOMAINS 1
+#define CUBIC_DOMAINS 0
 
 #define GRAVITY 0
 

@@ -48,6 +48,7 @@ public:
     integer numProcesses;
     /// Space-filling curve ranges, mapping key ranges/borders to MPI processes
     keyType *range;
+    //keyType *hilbertRange;
     /// particle counter in dependence of MPI process(es)
     integer *procParticleCounter;
 

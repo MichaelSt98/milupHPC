@@ -73,6 +73,8 @@ namespace KeyNS {
      */
     CUDA_CALLABLE_MEMBER keyType lebesgue2hilbert(keyType lebesgue, integer maxLevel);
 
+    CUDA_CALLABLE_MEMBER keyType lebesgue2hilbert(keyType lebesgue, int maxLevel, int level);
+
 }
 
 /**

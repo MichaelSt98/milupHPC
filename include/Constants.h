@@ -4,6 +4,8 @@
 #define KEY_MAX ULONG_MAX
 #define DOMAIN_LIST_SIZE 512
 
+#include <string>
+
 typedef struct SimulationParameters
 {
 
@@ -13,6 +15,8 @@ typedef struct SimulationParameters
     bool timeKernels;
     int iterations;
     int numberOfParticles;
+    int numParticles;
+    int numNodes;
     float timestep;
     //float gravity;
     float dampening;
@@ -24,6 +28,7 @@ typedef struct SimulationParameters
     bool loadBalancing;
     int loadBalancingInterval;
     int curveType;
+    std::string filename;
 
 } SimulationParameters;
 

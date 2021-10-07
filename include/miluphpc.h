@@ -9,7 +9,6 @@
 #include "utils/logger.h"
 #include "utils/timer.h"
 #include "materials/material_handler.h"
-//#include "integrator/integrator.h"
 #include "helper_handler.h"
 #include "gravity/gravity.cuh"
 #include "sph/sph.cuh"
@@ -28,6 +27,7 @@
 #include <fstream>
 #include <iomanip>
 #include <random>
+#include <fstream>
 
 #include <highfive/H5File.hpp>
 #include <highfive/H5DataSpace.hpp>
@@ -50,12 +50,10 @@ private:
 class Miluphpc {
 
 private:
-    void diskModel();
-    void plummerModel();
 
-    void updateRangeApproximately(int aimedParticlesPerProcess, int bins=4000);
-    void fixedLoadDistribution();
-    void dynamicLoadDistribution();
+    void fixedLoadBalancing();
+    void dynamicLoadBalancing(int bins=5000);
+    void updateRangeApproximately(int aimedParticlesPerProcess, int bins=5000);
 
     //real reset();
 
@@ -121,17 +119,21 @@ public:
 
     SimulationParameters simulationParameters;
 
-    Miluphpc(SimulationParameters simulationParameters, integer numParticles, integer numNodes);
+    //Miluphpc(SimulationParameters simulationParameters, integer numParticles, integer numNodes);
+    //Miluphpc(SimulationParameters simulationParameters, const std::string& filename);
+    Miluphpc(SimulationParameters simulationParameters);
+
     ~Miluphpc();
 
     /**
      *
      * @param particleDistribution
      */
-    void initDistribution(ParticleDistribution::Type particleDistribution=ParticleDistribution::disk);
-    void loadDistribution();
+    //void initDistribution(ParticleDistribution::Type particleDistribution=ParticleDistribution::disk);
+    void prepareSimulation();
 
-    void distributionFromFile();
+    void numParticlesFromFile(const std::string& filename);
+    void distributionFromFile(const std::string& filename);
 
     real tree();
     real pseudoParticles();

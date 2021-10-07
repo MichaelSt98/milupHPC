@@ -7,7 +7,8 @@ class ExplicitEuler : public Miluphpc {
 
 public:
 
-    ExplicitEuler(SimulationParameters simulationParameters, integer numParticles, integer numNodes);
+    //ExplicitEuler(SimulationParameters simulationParameters, integer numParticles, integer numNodes);
+    ExplicitEuler(SimulationParameters simulationParameters);
     ~ExplicitEuler();
 
     void integrate(int step);
