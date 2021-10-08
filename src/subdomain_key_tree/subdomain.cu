@@ -76,24 +76,35 @@ CUDA_CALLABLE_MEMBER integer SubDomainKeyTree::key2proc(keyType key/*, Curve::Ty
 CUDA_CALLABLE_MEMBER bool SubDomainKeyTree::isDomainListNode(keyType key, integer maxLevel, integer level,
                                                              Curve::Type curveType) {
     integer p1, p2;
-    p1 = key2proc(key);
-    p2 = key2proc(key | ~(~0UL << DIM * (maxLevel - level)));
+    //p1 = key2proc(key);
+    //p2 = key2proc(key | ~(~0UL << DIM * (maxLevel - level)));
     //TODO: necessary? always lebesgue key?
-    /*switch (curveType) {
+    switch (curveType) {
         case Curve::lebesgue: {
             p1 = key2proc(key);
             p2 = key2proc(key | ~(~0UL << DIM * (maxLevel - level)));
             break;
         }
         case Curve::hilbert: {
-            p1 = key2proc(KeyNS::lebesgue2hilbert(key, maxLevel));
-            p2 = key2proc(KeyNS::lebesgue2hilbert(key | ~(~0UL << DIM * (maxLevel - level)), maxLevel));
+            //p1 = key2proc(KeyNS::lebesgue2hilbert(key, maxLevel));
+            //p2 = key2proc(KeyNS::lebesgue2hilbert(key | ~(~0UL << DIM * (maxLevel - level)), maxLevel));
+
+            p1 = key2proc(KeyNS::lebesgue2hilbert(key, maxLevel, level));
+            //p2 = key2proc(KeyNS::lebesgue2hilbert(key | ~(~0UL << DIM * (maxLevel - level)), maxLevel, maxLevel));
+            keyType hilbert = KeyNS::lebesgue2hilbert(key, maxLevel, level);
+            p2 = key2proc(hilbert | (KEY_MAX >> (DIM*level+1)));
+
+            //printf("lebesgue: %lu vs %lu < ? : %i\n", key, key | ~(~0UL << DIM * (maxLevel - level)), key < (key | ~(~0UL << DIM * (maxLevel - level))));
+            //printf("hilbert: %lu vs %lu < ? : %i\n", KeyNS::lebesgue2hilbert(key, maxLevel, maxLevel), hilbert | (KEY_MAX >> (DIM*level+1)),
+                   //KeyNS::lebesgue2hilbert(key, maxLevel, maxLevel) < (hilbert | (KEY_MAX >> (DIM*level+1))));
+
             break;
         }
         default: {
             printf("Curve type not available!\n");
         }
-    }*/
+    }
+    //printf("p1 = %i, p2 = %i\n", p1, p2);
     if (p1 != p2) {
         return true;
     }
@@ -474,15 +485,21 @@ namespace DomainListNS {
 
                 domainListIndex = domainList->domainListIndices[index + offset];
 
-                if (true/*particles->mass[domainListIndex] > 0.f*/) {
-                    printf("domainListIndices[%i] = %i, x = (%f, %f, %f) mass = %f\n", index + offset,
-                           domainListIndex, particles->x[domainListIndex],
+                if (true) {
+                    printf("domainListIndices[%i] = %i, level = %i, x = (%f, %f, %f) mass = %f\n", index + offset,
+                           domainListIndex, domainList->domainListLevels[index + offset], particles->x[domainListIndex],
                            particles->y[domainListIndex], particles->z[domainListIndex],
                            particles->mass[domainListIndex]);
                 }
 
                 offset += stride;
             }
+
+            /*if (index == 0) {
+                while ((index + offset) < *domainList->domainListIndex) {
+                    domainListIndex = domainList->domainListIndices[index + offset];
+                }
+            }*/
 
         }
 
@@ -537,7 +554,7 @@ namespace DomainListNS {
         __global__ void createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList,
                                          integer maxLevel, Curve::Type curveType) {
 
-            //char keyAsChar[21 * 2 + 3];
+            char keyAsChar[21 * 2 + 3];
             // workaround for fixing bug... in principle: unsigned long keyMax = (1 << 63) - 1;
             keyType shiftValue = 1;
             keyType toShift = 63;
@@ -583,6 +600,8 @@ namespace DomainListNS {
             //for (int i=0; i < *index; i++) {
             //    key2Char(domainListKeys[i], 21, keyAsChar);
             //}
+            //KeyNS::key2Char(key2test, 21, keyAsChar);
+            //printf("key2test = %s = %lu\n", keyAsChar, key2test);
         }
 
         __global__ void lowestDomainList(SubDomainKeyTree *subDomainKeyTree, Tree *tree, DomainList *domainList,

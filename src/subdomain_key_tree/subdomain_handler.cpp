@@ -15,6 +15,7 @@ SubDomainKeyTreeHandler::SubDomainKeyTreeHandler() {
     cuda::malloc(d_rank, 1);
     cuda::malloc(d_numProcesses, 1);
     cuda::malloc(d_range, h_numProcesses + 1);
+    //cuda::malloc(d_hilberRange, h_numProcesses + 1);
     cuda::malloc(d_procParticleCounter, h_numProcesses);
 
     cuda::malloc(d_subDomainKeyTree, 1);

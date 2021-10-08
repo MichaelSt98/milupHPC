@@ -3,7 +3,7 @@
 
 CUDA_CALLABLE_MEMBER keyType KeyNS::lebesgue2hilbert(keyType lebesgue, integer maxLevel) {
 
-    keyType hilbert = 0UL;
+    /*keyType hilbert = 0UL;
     integer dir = 0;
     for (integer lvl=maxLevel; lvl>0; lvl--) {
         keyType cell = (lebesgue >> ((lvl-1)*DIM)) & (keyType)((1<<DIM)-1);
@@ -13,8 +13,52 @@ CUDA_CALLABLE_MEMBER keyType KeyNS::lebesgue2hilbert(keyType lebesgue, integer m
         }
         dir = DirTable[dir][cell];
     }
+    return hilbert;*/
+
+    keyType hilbert = 1UL;
+    int level = 0, dir = 0;
+    //int rememberLevel;
+    for (keyType tmp=lebesgue; tmp>1; level++) {
+        tmp>>=DIM;
+    }
+    //rememberLevel = level;
+    if (level == 0) {
+        hilbert = 0UL;
+    }
+    for (; level>0; level--) {
+        int cell = (lebesgue >> ((level-1)*DIM)) & ((1<<DIM)-1);
+        hilbert = (hilbert<<DIM) + HilbertTable[dir][cell];
+        dir = DirTable[dir][cell];
+    }
+    //if (lebesgue == 0UL) {
+    //    printf("HERE: lebesgue = %lu --> level = %i, hilbert = %lu\n", lebesgue, rememberLevel, hilbert);
+    //}
     return hilbert;
 
+}
+
+CUDA_CALLABLE_MEMBER keyType KeyNS::lebesgue2hilbert(keyType lebesgue, int maxLevel, int level) {
+    keyType hilbert = 0UL; // 0UL is our root, placeholder bit omitted
+    //int level = 0, dir = 0;
+    int dir = 0;
+    //for (keytype tmp=lebesgue; tmp>0UL; tmp>>=DIM, level++); // obtain of key
+    //if (level != 21) {
+    //    Logger(DEBUG) << "Lebesgue2Hilbert: level = " << level << ", key" << lebesgue;
+    //}
+    //Logger(DEBUG) << "Lebesgue2Hilbert(): lebesgue = " << lebesgue << ", level = " << level;
+    for (int lvl=maxLevel; lvl>0; lvl--) {
+        //int cell = lebesgue >> ((level-1)*DIM) & (keytype)((1<<DIM)-1);
+        int cell = (lebesgue >> ((lvl-1)*DIM)) & (keyType)((1<<DIM)-1);
+        hilbert = hilbert<<DIM;
+        if (lvl>maxLevel-level) {
+            //Logger(DEBUG) << "Lebesgue2Hilbert(): cell = " << cell << ", dir = " << dir;
+            hilbert += HilbertTable[dir][cell];
+        }
+        dir = DirTable[dir][cell];
+    }
+    //Logger(DEBUG) << "Lebesgue2Hilbert(): hilbert  = " << hilbert;
+    //Logger(DEBUG) << "==============================";
+    return hilbert;
 }
 
 CUDA_CALLABLE_MEMBER Tree::Tree() {
@@ -137,6 +181,9 @@ CUDA_CALLABLE_MEMBER keyType Tree::getParticleKey(Particles *particles, integer 
 #endif
 #endif
 
+    integer particleLevel;
+    integer particleLevelTemp = 0;
+    integer childIndex = 0;
     // calculate path to the particle's position assuming an (oct-)tree with above bounding boxes
     while (level <= maxLevel) {
         sonBox = 0;
@@ -162,7 +209,24 @@ CUDA_CALLABLE_MEMBER keyType Tree::getParticleKey(Particles *particles, integer 
 #endif
         particleKey = particleKey | ((keyType)sonBox << (keyType)(DIM * (maxLevel-level-1)));
         level++;
+
+        particleLevelTemp++;
+        if (childIndex == index) {
+            particleLevel = particleLevelTemp;
+        }
+        /*for (int i_child = 0; i_child < POW_DIM; i_child++) {
+            if (child[POW_DIM * childIndex + i_child] == index) {
+                printf("found index = %i for child[8 * %i + %i] = %i\n", index, childIndex, i_child, child[POW_DIM * childIndex + i_child]);
+                break;
+            }
+        }*/
+        childIndex = child[POW_DIM * childIndex + sonBox];
     }
+
+    /*if (particleLevel == 0) {
+        printf("particleLevel = %i particleLevelTemp = %i index = %i (%f, %f, %f)\n", particleLevel, particleLevelTemp, index,
+               particles->x[index], particles->y[index], particles->z[index]);
+    }*/
 
     //if (particleKey == 0UL) {
     //    printf("Why key = %lu? x = (%f, %f, %f) min = (%f, %f, %f), max = (%f, %f, %f)\n", particleKey,
@@ -172,9 +236,11 @@ CUDA_CALLABLE_MEMBER keyType Tree::getParticleKey(Particles *particles, integer 
 
     switch (curveType) {
         case Curve::lebesgue: {
+            //keyType hilbert = KeyNS::lebesgue2hilbert(particleKey, maxLevel);
             return particleKey;
         }
         case Curve::hilbert: {
+            return KeyNS::lebesgue2hilbert(particleKey, maxLevel, maxLevel);
             return KeyNS::lebesgue2hilbert(particleKey, maxLevel);
         }
         default:
@@ -209,8 +275,8 @@ CUDA_CALLABLE_MEMBER integer Tree::getTreeLevel(Particles *particles, integer in
     }
 
     //childIndex = 0; //child[path[0]];
-    printf("ATTENTION: level = -1 (index = %i x = (%f, %f, %f)) tree index = %i\n",
-           index, particles->x[index], particles->y[index], particles->z[index], *this->index);
+    printf("ATTENTION: level = -1 (index = %i x = (%f, %f, %f) %f) tree index = %i\n",
+           index, particles->x[index], particles->y[index], particles->z[index], particles->mass[index], *this->index);
 
     //for (integer i=0; i<maxLevel; i++) {
     //    childIndex = child[POW_DIM * childIndex + path[i]];
@@ -308,6 +374,7 @@ __global__ void TreeNS::Kernel::computeBoundingBox(Tree *tree, Particles *partic
     __syncthreads();
 
     integer i = blockDim.x/2; // assuming blockDim.x is a power of 2!
+    //printf("blockDim.x = %i\n", blockDim.x);
 
     // reduction within block
     while (i != 0) {
@@ -333,9 +400,13 @@ __global__ void TreeNS::Kernel::computeBoundingBox(Tree *tree, Particles *partic
 
         *tree->minX = fminf(*tree->minX, x_min_buffer[0]);
         *tree->maxX = fmaxf(*tree->maxX, x_max_buffer[0]);
+        //*tree->minX -= 0.001;
+        //*tree->maxX += 0.001;
 #if DIM > 1
         *tree->minY = fminf(*tree->minY, y_min_buffer[0]);
         *tree->maxY = fmaxf(*tree->maxY, y_max_buffer[0]);
+        //*tree->minY -= 0.001;
+        //*tree->maxY += 0.001;
 
 #if CUBIC_DOMAINS
         if (*tree->minY < *tree->minX) {
@@ -355,6 +426,8 @@ __global__ void TreeNS::Kernel::computeBoundingBox(Tree *tree, Particles *partic
 #if DIM == 3
         *tree->minZ = fminf(*tree->minZ, z_min_buffer[0]);
         *tree->maxZ = fmaxf(*tree->maxZ, z_max_buffer[0]);
+        //*tree->minZ -= 0.001;
+        //*tree->maxZ += 0.001;
 
 #if CUBIC_DOMAINS
         if (*tree->minZ < *tree->minX) {
@@ -629,7 +702,7 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
                 newBody = true;
             }
         }
-        __syncthreads();
+        //__syncthreads(); //TODO: needed?
     }
 }
 
@@ -727,6 +800,10 @@ __global__ void TreeNS::Kernel::getParticleKeys(Tree *tree, Particles *particles
     while (bodyIndex + offset < n) {
 
         particleKey = tree->getParticleKey(particles, bodyIndex + offset, maxLevel, curveType);
+        if (particleKey == 1UL) {
+            printf("particleKey = %lu (%f, %f, %f)\n", particleKey, particles->x[bodyIndex + offset],
+                   particles->y[bodyIndex + offset], particles->z[bodyIndex + offset]);
+        }
 
         keys[bodyIndex + offset] = particleKey;
 

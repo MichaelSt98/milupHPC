@@ -14,6 +14,7 @@
 #include "sph/sph.cuh"
 #include "cuda_utils/cuda_runtime.h"
 #include "utils/cxxopts.h"
+#include "../include/utils/h5profiler.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -70,11 +71,11 @@ private:
     real parallel_gravity();
     real parallel_sph();
 
-    real parallel_sph_backup();
+    //real parallel_sph_backup();
 
     template <typename T>
     integer sendParticlesEntry(integer *sendLengths, integer *receiveLengths, T *entry);
-    void exchangeParticleEntry(integer *sendLengths, integer *receiveLengths, real *entry);
+    //void exchangeParticleEntry(integer *sendLengths, integer *receiveLengths, real *entry);
 
     template <typename T>
     integer sendParticles(T *sendBuffer, T *receiveBuffer, integer *sendLengths, integer *receiveLengths);
@@ -93,6 +94,7 @@ public:
     Curve::Type curveType;
 
     integer numParticles;
+    integer sumParticles;
     integer numParticlesLocal;
     integer numNodes;
 
@@ -145,7 +147,7 @@ public:
     //virtual void integrate() {};
     virtual void integrate(int step = 0) = 0;
 
-    float particles2file(HighFive::DataSet *pos, HighFive::DataSet *vel, HighFive::DataSet *key);
+    real particles2file(int step);
 
 };
 

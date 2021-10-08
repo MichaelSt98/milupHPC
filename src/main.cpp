@@ -2,8 +2,8 @@
 #include "../include/integrator/euler.h"
 #include "../include/integrator/explicit_euler.h"
 #include "../include/integrator/predictor_corrector.h"
+#include "../include/utils/config_parser.h"
 
-//#include <mpi.h>
 #include <fenv.h>
 #include <iostream>
 #include <fstream>
@@ -42,12 +42,20 @@ int main(int argc, char** argv)
     int rank = comm.rank();
     int numProcesses = comm.size();
 
+#if DEBUGGING
     printf("Hello World from proc %i out of %i\n", rank, numProcesses);
+#endif
 
     //cudaSetDevice(rank);
     int device;
     cudaGetDevice(&device);
-    Logger(INFO) << "Set device to " << device;
+
+    ConfigParser confP{ConfigParser("config/config.info")};
+    real timeStep = confP.getVal<real>("timeStep");
+    Logger(INFO) << "timeStep from config file: " << timeStep;
+
+    //MPI_Finalize();
+    //exit(0);
 
     cxxopts::Options options("HPC NBody", "Multi-GPU CUDA Barnes-Hut NBody code");
 
@@ -62,6 +70,7 @@ int main(int argc, char** argv)
             ("L,loadbalancinginterval", "load balancing interval", cxxopts::value<int>()->default_value("10"))
             //("m,material", "material config file", cxxopts::value<std::string>()->default_value("config/material.cfg"))
             ("c,curvetype", "curve type (Lebesgue: 0/Hilbert: 1)", cxxopts::value<int>()->default_value("0"))
+            ("f,filename", "File name", cxxopts::value<std::string>()->default_value("-"))
             //("v,verbosity", "Verbosity level")
             ("h,help", "Show this help");
 
@@ -85,103 +94,79 @@ int main(int argc, char** argv)
     //parameters.loadBalancing = loadBalancing;
     //parameters.loadBalancingInterval = result["loadbalancinginterval"].as<int>();
     parameters.curveType = result["curvetype"].as<int>();
+    std::string filename = result["filename"].as<std::string>();
+    parameters.filename = filename;
 
     LOGCFG.headers = true;
     LOGCFG.level = DEBUG;
     LOGCFG.myrank = rank;
     //LOGCFG.outputRank = 0;
 
-    Logger(DEBUG) << "DEBUG output";
-    Logger(WARN) << "WARN output";
-    Logger(ERROR) << "ERROR output";
-    Logger(INFO) << "INFO output";
-    Logger(TIME) << "TIME output";
+    //Logger(DEBUG) << "DEBUG output";
+    //Logger(WARN) << "WARN output";
+    //Logger(ERROR) << "ERROR output";
+    //Logger(INFO) << "INFO output";
+    //Logger(TIME) << "TIME output";
 
+#if DEBUGGING
 #ifdef SINGLE_PRECISION
     Logger(INFO) << "typedef float real";
 #else
     Logger(INFO) << "typedef double real";
 #endif
+#endif
 
 
-    integer numParticles = 100000;
+    /*integer numParticles = 100000;
     integer numNodes = 2 * numParticles + 50000; //12000;
+    parameters.numParticles = numParticles;
+    parameters.numNodes = numNodes;*/
 
-    //integer numParticles = 7500;
-    //integer numNodes = 3 * numParticles + 12000;
-
-    //IntegratorSelection::Type integratorSelection = IntegratorSelection::euler;
     IntegratorSelection::Type integratorSelection = IntegratorSelection::explicit_euler;
 
     Miluphpc *miluphpc;
     // miluphpc = new Miluphpc(parameters, numParticles, numNodes); // not possible since abstract class
+
     switch (integratorSelection) {
         case IntegratorSelection::explicit_euler: {
-            miluphpc = new ExplicitEuler(parameters, numParticles, numNodes);
+            miluphpc = new ExplicitEuler(parameters);
         } break;
         case IntegratorSelection::euler: {
-            miluphpc = new Euler(parameters, numParticles, numNodes);
+            miluphpc = new Euler(parameters);
         } break;
         case IntegratorSelection::predictor_corrector: {
-            miluphpc = new PredictorCorrector(parameters, numParticles, numNodes);
+            miluphpc = new PredictorCorrector(parameters);
         } break;
         default: {
             printf("Integrator not available!");
         }
     }
 
-    miluphpc->loadDistribution();
+    H5Profiler &profiler = H5Profiler::getInstance("log/performance.h5");
+    profiler.setRank(comm.rank());
+    profiler.setNumProcs(comm.size());
+    profiler.createValueDataSet<int>("/general/numParticles", 1);
+    profiler.createValueDataSet<int>("/general/numParticlesLocal", 1);
+    profiler.createVectorDataSet<keyType>("/general/ranges", 1, comm.size() + 1);
+    profiler.createValueDataSet<real>("/time/rhs", 1);
+    profiler.createValueDataSet<real>("/time/rhs_elapsed", 1);
 
     for (int i_step=0; i_step<parameters.iterations; i_step++) {
+
+        profiler.setStep(i_step);
 
         Logger(INFO) << "-----------------------------------------------------------------";
         Logger(INFO) << "STEP: " << i_step;
         Logger(INFO) << "-----------------------------------------------------------------";
 
-        std::stringstream stepss;
-        stepss << std::setw(6) << std::setfill('0') << i_step;
-
-        HighFive::File h5file("output/ts" + stepss.str() + ".h5",
-                              HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate,
-                              HighFive::MPIOFileDriver(MPI_COMM_WORLD, MPI_INFO_NULL));
-
-        std::vector <size_t> dataSpaceDims(2);
-        dataSpaceDims[0] = std::size_t(numParticles);
-        dataSpaceDims[1] = 3;
-
-        HighFive::DataSet ranges = h5file.createDataSet<keyType>("/hilbertRanges",
-                                                                 HighFive::DataSpace(numProcesses+1));
-
-        keyType *rangeValues;
-        rangeValues = new keyType[numProcesses+1];
-
-
-        //miluphpc.subDomainKeyTreeHandler->toHost();
-        miluphpc->subDomainKeyTreeHandler->copy(To::host, true, false);
-        for (int i=0; i<numProcesses+1; i++) {
-            rangeValues[i] = miluphpc->subDomainKeyTreeHandler->h_subDomainKeyTree->range[i];
-            Logger(INFO) << "rangeValues[" << i << "] = " << rangeValues[i];
-        }
-
-        ranges.write(rangeValues);
-
-        delete [] rangeValues;
-
-        HighFive::DataSet pos = h5file.createDataSet<real>("/x", HighFive::DataSpace(dataSpaceDims));
-        HighFive::DataSet vel = h5file.createDataSet<real>("/v", HighFive::DataSpace(dataSpaceDims));
-        HighFive::DataSet key = h5file.createDataSet<keyType>("/hilbertKey",
-                                                              HighFive::DataSpace(numParticles));
-        //miluphpc.run();
-        //miluphpc.barnesHut();
-        //miluphpc.sph();
         miluphpc->integrate(i_step);
 
-        auto time = miluphpc->particles2file(&pos, &vel, &key);
+        auto time = miluphpc->particles2file(i_step);
         Logger(TIME) << "particles2file: " << time << " ms";
 
     }
 
-    Logger(INFO) << "Finished!";
+    Logger(INFO) << "---------------FINISHED---------------";
 
     return 0;
 }
