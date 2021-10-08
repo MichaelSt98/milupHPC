@@ -41,6 +41,10 @@ Miluphpc::Miluphpc(SimulationParameters simulationParameters) {
     cuda::malloc(d_particles2SendCount, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
     cuda::malloc(d_pseudoParticles2SendCount, subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
 
+    cuda::malloc(d_particles2removeBuffer, numParticles);
+    cuda::malloc(d_particles2removeVal, 1);
+    // end: testing
+
     prepareSimulation();
 
 }
@@ -61,6 +65,9 @@ Miluphpc::~Miluphpc() {
 
     cuda::free(d_particles2SendCount);
     cuda::free(d_pseudoParticles2SendCount);
+
+    cuda::free(d_particles2removeBuffer);
+    cuda::free(d_particles2removeVal);
     // end: testing
 }
 
@@ -234,6 +241,8 @@ void Miluphpc::prepareSimulation() {
 
     //cuda::copy(particleHandler->h_sml, particleHandler->d_sml, numParticlesLocal, To::device);
     particleHandler->copyDistribution(To::device, true, true);
+
+    //removeParticles();
 
     Logger(INFO) << "compute bounding box ...";
     TreeNS::Kernel::Launch::computeBoundingBox(treeHandler->d_tree, particleHandler->d_particles, d_mutex,
@@ -1335,6 +1344,57 @@ void Miluphpc::updateRangeApproximately(int aimedParticlesPerProcess, int bins) 
     for (int i=0; i<=subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
         Logger(INFO) << "range[" << i << "] = " << subDomainKeyTreeHandler->h_subDomainKeyTree->range[i];
     }
+}
+
+real Miluphpc::removeParticles() {
+
+    int *d_particles2remove = d_particles2removeBuffer; //&buffer->d_integerBuffer[0];
+    int *d_particles2remove_counter = d_particles2removeVal; //buffer->d_integerVal;
+
+    real *d_temp = &buffer->d_realBuffer[0];
+
+    cuda::set(d_particles2remove_counter, 0, 1);
+
+    auto time = ParticlesNS::Kernel::Launch::mark2remove(subDomainKeyTreeHandler->d_subDomainKeyTree,
+                                                         treeHandler->d_tree, particleHandler->d_particles,
+                                                         d_particles2remove, d_particles2remove_counter,
+                                                         numParticlesLocal);
+
+    int h_particles2remove_counter;
+    cuda::copy(&h_particles2remove_counter, d_particles2remove_counter, 1, To::host);
+    Logger(INFO) << "#particles to be removed: " << h_particles2remove_counter;
+
+    time += HelperNS::sortArray(particleHandler->d_x, d_temp, d_particles2remove, buffer->d_integerBuffer, numParticlesLocal);
+    time += HelperNS::Kernel::Launch::copyArray(particleHandler->d_x, d_temp, numParticlesLocal);
+#if DIM > 1
+    time += HelperNS::sortArray(particleHandler->d_y, d_temp, d_particles2remove, buffer->d_integerBuffer, numParticlesLocal);
+    time += HelperNS::Kernel::Launch::copyArray(particleHandler->d_y, d_temp, numParticlesLocal);
+#if DIM == 3
+    time += HelperNS::sortArray(particleHandler->d_z, d_temp, d_particles2remove, buffer->d_integerBuffer, numParticlesLocal);
+    time += HelperNS::Kernel::Launch::copyArray(particleHandler->d_z, d_temp, numParticlesLocal);
+#endif
+#endif
+    time += HelperNS::sortArray(particleHandler->d_mass, d_temp, d_particles2remove, buffer->d_integerBuffer, numParticlesLocal);
+    time += HelperNS::Kernel::Launch::copyArray(particleHandler->d_mass, d_temp, numParticlesLocal);
+
+    time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_x[numParticlesLocal-h_particles2remove_counter],
+                                                 (real)0, h_particles2remove_counter);
+#if DIM > 1
+    time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_y[numParticlesLocal-h_particles2remove_counter],
+                                                 (real)0, h_particles2remove_counter);
+#if DIM == 3
+    time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_z[numParticlesLocal-h_particles2remove_counter],
+                                                 (real)0, h_particles2remove_counter);
+#endif
+#endif
+    time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_mass[numParticlesLocal-h_particles2remove_counter],
+                                                 (real)0, h_particles2remove_counter);
+
+    //TODO: all entries (removing particles)
+
+    numParticlesLocal -= h_particles2remove_counter;
+
+    return time;
 }
 
 

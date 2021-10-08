@@ -458,6 +458,21 @@ namespace DomainListNS {
 
 }
 
+namespace ParticlesNS {
+
+    __device__ bool applyCriterion(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, int index);
+
+    namespace Kernel {
+        __global__ void mark2remove(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                    int *particles2remove, int *counter, int numParticles);
+
+        namespace Launch {
+            real mark2remove(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                             int *particles2remove, int *counter, int numParticles);
+        }
+    }
+}
+
 namespace CudaUtils {
     namespace Kernel {
         template<typename T, typename U>

@@ -701,6 +701,51 @@ namespace DomainListNS {
 
 }
 
+namespace ParticlesNS {
+    __device__ bool applyCriterion(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, int index) {
+
+        if (sqrtf(particles->x[index] * particles->x[index] +
+                  particles->y[index] * particles->y[index] +
+                  particles->z[index] * particles->z[index]) < 0.95) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    namespace Kernel {
+
+        __global__ void mark2remove(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                    int *particles2remove, int *counter, int numParticles) {
+
+            int bodyIndex = threadIdx.x + blockDim.x * blockIdx.x;
+            int stride = blockDim.x * gridDim.x;
+            int offset = 0;
+
+            while (bodyIndex + offset < numParticles) {
+
+                if (::ParticlesNS::applyCriterion(subDomainKeyTree, tree, particles, bodyIndex + offset)) {
+                    particles2remove[bodyIndex + offset] = 1;
+                    atomicAdd(counter, 1);
+                } else {
+                    particles2remove[bodyIndex + offset] = 0;
+                }
+
+                offset += stride;
+            }
+
+        }
+
+        real Launch::mark2remove(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                 int *particles2remove, int *counter, int numParticles) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::ParticlesNS::Kernel::mark2remove, subDomainKeyTree,
+                                tree, particles, particles2remove, counter, numParticles);
+        }
+
+    }
+}
+
 namespace CudaUtils {
 
     namespace Kernel {

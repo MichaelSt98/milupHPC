@@ -56,6 +56,8 @@ private:
     void dynamicLoadBalancing(int bins=5000);
     void updateRangeApproximately(int aimedParticlesPerProcess, int bins=5000);
 
+    real removeParticles();
+
     //real reset();
 
     real compPseudoParticlesParallel();
@@ -117,6 +119,9 @@ public:
 
     integer *d_particles2SendCount;
     integer *d_pseudoParticles2SendCount;
+
+    int *d_particles2removeBuffer;
+    int *d_particles2removeVal;
     // end: testing
 
     SimulationParameters simulationParameters;
