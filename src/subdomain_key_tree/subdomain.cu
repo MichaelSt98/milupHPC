@@ -162,8 +162,10 @@ namespace SubDomainKeyTreeNS {
                             tree->child[POW_DIM * temp + path[j]] = cell;
                             childIndex = cell;
                             domainList->domainListIndices[domainListCounter] = childIndex; //cell;
+#if DIM == 3
                             printf("adding node index %i  cell = %i (childPath = %i,  j = %i)! x = (%f, %f, %f)\n",
                                    childIndex, cell, path[j], j, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex]);
+#endif
                             domainListCounter++;
                         } else {
                             // child is a leaf, thus add node in between
@@ -241,10 +243,10 @@ namespace SubDomainKeyTreeNS {
 #endif
 #endif
                             particles->mass[cell] += particles->mass[childIndex];
-
+#if DIM == 3
                             printf("adding node in between for index %i  cell = %i (childPath = %i,  j = %i)! x = (%f, %f, %f)\n",
                                    childIndex, cell, childPath, j, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex]);
-
+#endif
 
                             tree->child[POW_DIM * cell + childPath] = childIndex;
                             //printf("child[8 * %i + %i] = %i\n", cell, childPath, childIndex);
@@ -284,7 +286,7 @@ namespace SubDomainKeyTreeNS {
             keyType particleKey;
             keyType hilbertParticleKey;
 
-            //char keyAsChar[21 * 2 + 3];
+            char keyAsChar[21 * 2 + 3];
             integer proc;
 
             while (bodyIndex + offset < n) {
@@ -311,6 +313,11 @@ namespace SubDomainKeyTreeNS {
                 //}
 
                 keys[bodyIndex + offset] = particleKey; //hilbertParticleKey;
+
+                //if ((bodyIndex + offset) % 100 == 0) {
+                //    KeyNS::key2Char(particleKey, 21, keyAsChar);
+                //    printf("key = %s = %lu\n", keyAsChar, particleKey);
+                //}
 
                 offset += stride;
             }
@@ -481,6 +488,7 @@ namespace DomainListNS {
                 printf("]\n");
             }*/
 
+#if DIM == 3
             while ((index + offset) < *domainList->domainListIndex) {
 
                 domainListIndex = domainList->domainListIndices[index + offset];
@@ -494,6 +502,7 @@ namespace DomainListNS {
 
                 offset += stride;
             }
+#endif
 
             /*if (index == 0) {
                 while ((index + offset) < *domainList->domainListIndex) {
@@ -541,9 +550,18 @@ namespace DomainListNS {
                 }
 
                 if (show) {
+#if DIM == 1
+                    printf("domainListIndices[%i] = %i, x = (%f) mass = %f\n", index + offset,
+                           domainListIndex, particles->x[domainListIndex], particles->mass[domainListIndex]);
+#elif DIM == 2
+                    printf("domainListIndices[%i] = %i, x = (%f, %f) mass = %f\n", index + offset,
+                           domainListIndex, particles->x[domainListIndex],
+                           particles->y[domainListIndex], particles->mass[domainListIndex]);
+#else
                     printf("domainListIndices[%i] = %i, x = (%f, %f, %f) mass = %f\n", index + offset,
                            domainListIndex, particles->x[domainListIndex],
                            particles->y[domainListIndex], particles->z[domainListIndex], particles->mass[domainListIndex]);
+#endif
                 }
 
                 offset += stride;
@@ -556,9 +574,19 @@ namespace DomainListNS {
 
             char keyAsChar[21 * 2 + 3];
             // workaround for fixing bug... in principle: unsigned long keyMax = (1 << 63) - 1;
+#if DIM == 1
+            keyType shiftValue = 1;
+            keyType toShift = 21;
+            keyType keyMax = (shiftValue << toShift) - 1; // 1 << 63 not working!
+#elif DIM == 2
+            keyType shiftValue = 1;
+            keyType toShift = 42;
+            keyType keyMax = (shiftValue << toShift) - 1; // 1 << 63 not working!
+#else
             keyType shiftValue = 1;
             keyType toShift = 63;
             keyType keyMax = (shiftValue << toShift) - 1; // 1 << 63 not working!
+#endif
             //key2Char(keyMax, 21, keyAsChar); //printf("keyMax: %lu = %s\n", keyMax, keyAsChar);
 
             keyType key2test = 0UL;
@@ -566,7 +594,9 @@ namespace DomainListNS {
             //level++;
 
             // in principle: traversing a (non-existent) octree by walking the 1D spacefilling curve (keys of the tree nodes)
+            //int counter = 0;
             while (key2test < keyMax) {
+                //counter++;
                 if (subDomainKeyTree->isDomainListNode(key2test & (~0UL << (DIM * (maxLevel - level + 1))),
                                                       maxLevel, level-1, curveType)) {
                     domainList->domainListKeys[*domainList->domainListIndex] = key2test;
@@ -596,6 +626,9 @@ namespace DomainListNS {
                     level--;
                     // not necessary: key2test = keyMaxLevel(key2test & (~0UL << (3 * (maxLevel - level))), maxLevel, level, s) + 1 - (1UL << (3 * (maxLevel - level)));
                 }
+                //if (counter == 100) {
+                //    break;
+                //}
             }
             //for (int i=0; i < *index; i++) {
             //    key2Char(domainListKeys[i], 21, keyAsChar);
@@ -704,9 +737,15 @@ namespace DomainListNS {
 namespace ParticlesNS {
     __device__ bool applyCriterion(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, int index) {
 
+#if DIM == 1
+        if (sqrtf(particles->x[index] * particles->x[index]) < 0.95) {
+#elif DIM == 2
         if (sqrtf(particles->x[index] * particles->x[index] +
-                  particles->y[index] * particles->y[index] +
+                particles->y[index] * particles->y[index]) < 0.95) {
+#else
+        if (sqrtf(particles->x[index] * particles->x[index] + particles->y[index] * particles->y[index] +
                   particles->z[index] * particles->z[index]) < 0.95) {
+#endif
             return false;
         } else {
             return true;

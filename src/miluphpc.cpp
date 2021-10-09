@@ -190,12 +190,15 @@ void Miluphpc::distributionFromFile(const std::string& filename) {
 
         particleHandler->h_particles->mass[i] = m[j];
         particleHandler->h_particles->x[i] = x[j][0];
-        particleHandler->h_particles->y[i] = x[j][1];
-        particleHandler->h_particles->z[i] = x[j][2];
         particleHandler->h_particles->vx[i] = v[j][0];
+#if DIM > 1
+        particleHandler->h_particles->y[i] = x[j][1];
         particleHandler->h_particles->vy[i] = v[j][1];
+#if DIM == 3
+        particleHandler->h_particles->z[i] = x[j][2];
         particleHandler->h_particles->vz[i] = v[j][2];
-
+#endif
+#endif
         //Logger(INFO) << "Reading: x[" << i << "] = (" << particleHandler->h_particles->x[i] << ", " << particleHandler->h_particles->y[i]
         //                    << ", " <<particleHandler->h_particles->z[i] << ")";
 
@@ -370,7 +373,7 @@ real Miluphpc::boundingBox() {
 
 #if DIM == 1
     Logger(INFO) << "Bounding box: x = (" << *treeHandler->h_minX << ", " << *treeHandler->h_maxX << ")";
-#elseif DIM == 2
+#elif DIM == 2
     Logger(INFO) << "Bounding box: x = (" << *treeHandler->h_minX << ", " << *treeHandler->h_maxX << ")" << "y = ("
                  << *treeHandler->h_minY << ", " << *treeHandler->h_maxY << ")";
 #else
@@ -592,6 +595,7 @@ real Miluphpc::parallel_pseudoParticles() {
     time += Gravity::Kernel::Launch::updateLowestDomainListNodes(particleHandler->d_particles, lowestDomainListHandler->d_domainList,
                                                                  helperHandler->d_helper, Entry::x);
 
+#if DIM > 1
     // y ----------------------------------------------------------------------------------------------
 
     cuda::set(lowestDomainListHandler->d_domainListCounter, 0);
@@ -610,6 +614,7 @@ real Miluphpc::parallel_pseudoParticles() {
     time += Gravity::Kernel::Launch::updateLowestDomainListNodes(particleHandler->d_particles, lowestDomainListHandler->d_domainList,
                                                                  helperHandler->d_helper, Entry::y);
 
+#if DIM == 3
     // z ----------------------------------------------------------------------------------------------
 
     cuda::set(lowestDomainListHandler->d_domainListCounter, 0);
@@ -628,6 +633,8 @@ real Miluphpc::parallel_pseudoParticles() {
     time += Gravity::Kernel::Launch::updateLowestDomainListNodes(particleHandler->d_particles, lowestDomainListHandler->d_domainList,
                                                                  helperHandler->d_helper, Entry::z);
 
+#endif
+#endif
     // m ----------------------------------------------------------------------------------------------
 
     cuda::set(lowestDomainListHandler->d_domainListCounter, 0);
@@ -1174,19 +1181,20 @@ real Miluphpc::parallel_sph() {
                                              particleTotalSendLength);
     sendParticles(d_collectedEntries, &particleHandler->d_x[numParticlesLocal], particleSendLengths,
                   particleReceiveLengths);
-
+#if DIM > 1
     // y-entry particle exchange
     CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_y, d_collectedEntries,
                                              particleTotalSendLength);
     sendParticles(d_collectedEntries, &particleHandler->d_y[numParticlesLocal], particleSendLengths,
                   particleReceiveLengths);
-
+#if DIM == 3
     // z-entry particle exchange
     CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_z, d_collectedEntries,
                                              particleTotalSendLength);
     sendParticles(d_collectedEntries, &particleHandler->d_z[numParticlesLocal], particleSendLengths,
                   particleReceiveLengths);
-
+#endif
+#endif
     // mass-entry particle exchange
     CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_mass, d_collectedEntries,
                                              particleTotalSendLength);
@@ -1257,7 +1265,7 @@ void Miluphpc::fixedLoadBalancing() {
     Logger(INFO) << "fixedLoadBalancing()";
 
     for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
-        subDomainKeyTreeHandler->h_subDomainKeyTree->range[i] = i * (1UL << 63)/(subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
+        subDomainKeyTreeHandler->h_subDomainKeyTree->range[i] = i * (1UL << (21 * DIM))/(subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
     }
     subDomainKeyTreeHandler->h_subDomainKeyTree->range[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses] = KEY_MAX;
 
@@ -1266,7 +1274,7 @@ void Miluphpc::fixedLoadBalancing() {
     // 2, 0, 0, 0, ...: 2305843009213693952;
     // 3, 0, 0, 0, ...: 3458764513820540928;
     //subDomainKeyTreeHandler->h_subDomainKeyTree->range[0] = 0UL;
-    //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = 3458764513820540928; //  + (4UL << 57); // + (3UL << 54) + (1UL << 42) + (2UL << 18) + (1UL << 3) + (4);
+    //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = 1048576; //2199023255552;//4194304; //  + (4UL << 57); // + (3UL << 54) + (1UL << 42) + (2UL << 18) + (1UL << 3) + (4);
     // // |4 (60)|0 (57)|0 (54)|4 (51)|0 (48)|6 (45)|1 (42)|1 (39)|1 (36)|5 (33)|6 (30)|4 (27)|5 (24)|7 (21)|0 (18)|6 (15)|5 (12)|1 (9)|1 (6)|4 (3)|3 (0)|
     // //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = (4UL << 60) + (4UL << 51) + (6UL << 45) + (1UL << 42) + (1UL << 39) + (1UL << 36) + (5UL << 33)
     // //        + (6UL << 30) + (4UL << 27) + (5UL << 24) + (7UL << 21) + (6UL << 15) + (5UL << 12) + (1UL << 9) + (1UL << 6) + (4UL << 3);
@@ -1692,7 +1700,7 @@ real Miluphpc::particles2file(int step) {
 
     std::vector <size_t> dataSpaceDims(2);
     dataSpaceDims[0] = std::size_t(sumParticles);
-    dataSpaceDims[1] = 3;
+    dataSpaceDims[1] = DIM;
 
     HighFive::DataSet ranges = h5file.createDataSet<keyType>("/hilbertRanges",
                                                              HighFive::DataSpace(subDomainKeyTreeHandler->h_numProcesses + 1));
@@ -1741,8 +1749,16 @@ real Miluphpc::particles2file(int step) {
     integer keyProc;
 
     for (int i=0; i<numParticlesLocal; i++) {
+#if DIM == 1
+        x.push_back({particleHandler->h_x[i]});
+        v.push_back({particleHandler->h_vx[i]});
+#elif DIM == 2
+        x.push_back({particleHandler->h_x[i], particleHandler->h_y[i]});
+        v.push_back({particleHandler->h_vx[i], particleHandler->h_vy[i]});
+#else
         x.push_back({particleHandler->h_x[i], particleHandler->h_y[i], particleHandler->h_z[i]});
         v.push_back({particleHandler->h_vx[i], particleHandler->h_vy[i], particleHandler->h_vz[i]});
+#endif
         k.push_back(h_keys[i]);
     }
 
@@ -1771,9 +1787,9 @@ real Miluphpc::particles2file(int step) {
     // write to associated datasets in h5 file
     // only working when load balancing has been completed and even number of particles
     pos.select({nOffset, 0},
-                {std::size_t(numParticlesLocal), std::size_t(3)}).write(x);
+                {std::size_t(numParticlesLocal), std::size_t(DIM)}).write(x);
     vel.select({nOffset, 0},
-                {std::size_t(numParticlesLocal), std::size_t(3)}).write(v);
+                {std::size_t(numParticlesLocal), std::size_t(DIM)}).write(v);
     key.select({nOffset}, {std::size_t(numParticlesLocal)}).write(k);
 
     return timer.elapsed();

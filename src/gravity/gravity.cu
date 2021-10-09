@@ -208,8 +208,12 @@ namespace Gravity {
 
                 if (zero) {
                     particles->x[domainIndex] = 0.f;
+#if DIM > 1
                     particles->y[domainIndex] = 0.f;
+#if DIM == 3
                     particles->z[domainIndex] = 0.f;
+#endif
+#endif
 
                     particles->mass[domainIndex] = 0.f;
                 }
@@ -1053,7 +1057,7 @@ namespace Gravity {
             integer stride = blockDim.x * gridDim.x;
             integer offset = 0;
 
-            keyType max_key = 1UL << 63;
+            keyType max_key = 1UL << (DIM * 21);//1UL << 63;
 
             while ((bodyIndex + offset) < bins) {
 
@@ -1254,6 +1258,7 @@ namespace Gravity {
                         //}
                         for (int j = 0; j < domainListLevel; j++) {
 
+#if DIM == 3
                             if (particles->x[domainList->relevantDomainListIndices[relevantIndex]] <= max_x && particles->x[domainList->relevantDomainListIndices[relevantIndex]] >= min_x &&
                                 particles->y[domainList->relevantDomainListIndices[relevantIndex]] <= max_y && particles->y[domainList->relevantDomainListIndices[relevantIndex]] >= min_y &&
                                 particles->z[domainList->relevantDomainListIndices[relevantIndex]] <= max_z && particles->z[domainList->relevantDomainListIndices[relevantIndex]] >= min_z) {
@@ -1266,6 +1271,7 @@ namespace Gravity {
                                        min_x, max_x, min_y, max_y, min_z, max_z);
                                 //assert(0);
                             }
+#endif
                             childPath = 0;
                             if (particles->x[domainList->relevantDomainListIndices[relevantIndex]] < 0.5 * (min_x + max_x)) {
                                 childPath += 1;
@@ -1613,6 +1619,7 @@ namespace Gravity {
                         childIndex = tree->child[POW_DIM*temp + childPath];
 
                     }
+#if DIM == 3
                     if (childIndex != -1) {
                         printf("ATTENTION: insertReceivedPseudoParticles(): childIndex = %i temp = %i\n", childIndex, temp);
                         printf("[rank %i] (%f, %f, %f) vs (%f, %f, %f)\n", subDomainKeyTree->rank,
@@ -1624,6 +1631,7 @@ namespace Gravity {
                                particles->z[childIndex]);
                         assert(0);
                     }
+#endif
 
                     insertionLevel++;
 

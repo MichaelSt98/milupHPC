@@ -275,8 +275,10 @@ CUDA_CALLABLE_MEMBER integer Tree::getTreeLevel(Particles *particles, integer in
     }
 
     //childIndex = 0; //child[path[0]];
+#if DIM == 3
     printf("ATTENTION: level = -1 (index = %i x = (%f, %f, %f) %f) tree index = %i\n",
            index, particles->x[index], particles->y[index], particles->z[index], particles->mass[index], *this->index);
+#endif
 
     //for (integer i=0; i<maxLevel; i++) {
     //    childIndex = child[POW_DIM * childIndex + path[i]];
@@ -800,11 +802,16 @@ __global__ void TreeNS::Kernel::getParticleKeys(Tree *tree, Particles *particles
     while (bodyIndex + offset < n) {
 
         particleKey = tree->getParticleKey(particles, bodyIndex + offset, maxLevel, curveType);
+#if DIM == 3
         if (particleKey == 1UL) {
             printf("particleKey = %lu (%f, %f, %f)\n", particleKey, particles->x[bodyIndex + offset],
                    particles->y[bodyIndex + offset], particles->z[bodyIndex + offset]);
         }
+#endif
 
+        if ((bodyIndex + offset) % 100 == 0) {
+            printf("key = %lu\n", particleKey);
+        }
         keys[bodyIndex + offset] = particleKey;
 
         offset += stride;
@@ -844,8 +851,15 @@ namespace TreeNS {
                 //printf("x[%i] = (%f, %f, %f) mass = %f\n", bodyIndex + offset, particles->x[bodyIndex + offset],
                 //       particles->y[bodyIndex + offset], particles->z[bodyIndex + offset],
                 //       particles->mass[bodyIndex + offset]);
+#if DIM == 1
+                printf("(%f), \n", particles->x[bodyIndex + offset]);
+#elif DIM == 2
+                printf("(%f, %f), \n", particles->x[bodyIndex + offset],
+                       particles->y[bodyIndex + offset]);
+#else
                 printf("(%f, %f, %f), \n", particles->x[bodyIndex + offset],
                                particles->y[bodyIndex + offset], particles->z[bodyIndex + offset]);
+#endif
 
                 offset += stride;
             }
@@ -858,6 +872,7 @@ namespace TreeNS {
             integer offset = 0;
 
             while (bodyIndex + offset < POW_DIM) {
+#if DIM == 3
                 printf("child[POW_DIM * 0 + %i] = %i, x = (%f, %f, %f) m = %f\n", bodyIndex + offset,
                        tree->child[bodyIndex + offset], particles->x[tree->child[bodyIndex + offset]],
                        particles->y[tree->child[bodyIndex + offset]], particles->z[tree->child[bodyIndex + offset]],
@@ -871,6 +886,7 @@ namespace TreeNS {
                            particles->z[tree->child[POW_DIM * tree->child[bodyIndex + offset] + i]],
                            particles->mass[tree->child[POW_DIM * tree->child[bodyIndex + offset] + i]]);
                 }
+#endif
 
                 offset += stride;
             }

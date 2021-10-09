@@ -308,6 +308,11 @@ namespace ParticlesNS {
             int stride = blockDim.x * gridDim.x;
             int offset = 0;
 
+#if DIM == 1
+            printf("not implemented yet for DIM == 1...\n");
+#elif DIM == 2
+            printf("not implemented yet for DIM == 2...\n");
+#else
             while ((bodyIndex + offset) < n) {
                 if ((bodyIndex + offset) % 100 == 0) {
                     printf("x[%i] = (%f, %f, %f) v = (%f, %f, %f) a = (%f, %f, %f) mass = %f\n", bodyIndex + offset,
@@ -329,6 +334,7 @@ namespace ParticlesNS {
                 //}
                 offset += stride;
             }
+#endif
 
         }
 
@@ -509,6 +515,11 @@ namespace ParticlesNS {
                 printf("device: numParticles = %i\n", *particles->numParticles);
             }
 
+#if DIM == 1
+            printf("not implemented yet for DIM == 1...\n");
+#elif DIM == 2
+            printf("not implemented yet for DIM == 2...\n");
+#else
             while ((bodyIndex + offset) < *particles->numParticles) {
                 if ((bodyIndex + offset) % 10000 == 0) {
                     printf("device: x[%i] = (%f, %f, %f)\n", bodyIndex + offset, particles->x[bodyIndex + offset],
@@ -517,6 +528,7 @@ namespace ParticlesNS {
                 }
                 offset += stride;
             }
+#endif
 
 
         }

@@ -171,12 +171,12 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     cuda::malloc(d_particles, 1);
 
 #if DIM == 1
-    h_particles->set(numParticles, numNodes, h_mass, h_x, h_vx, h_ax, h_uid, h_materialId, h_sml, h_nnl, h_noi, h_e,
+    h_particles->set(&numParticles, &numNodes, h_mass, h_x, h_vx, h_ax, h_uid, h_materialId, h_sml, h_nnl, h_noi, h_e,
                      h_dedt, h_cs, h_rho, h_p);
     ParticlesNS::Kernel::Launch::set(d_particles, d_numParticles, d_numNodes, d_mass, d_x, d_vx, d_ax, d_uid,
                                      d_materialId, d_sml, d_nnl, d_noi, d_e, d_dedt, d_cs, d_rho, d_p);
 #elif DIM == 2
-    h_particles->set(numParticles, numNodes, h_mass, h_x, h_y, h_vx, h_vy, h_ax, h_ay, h_uid, h_materialId, h_sml,
+    h_particles->set(&numParticles, &numNodes, h_mass, h_x, h_y, h_vx, h_vy, h_ax, h_ay, h_uid, h_materialId, h_sml,
                      h_nnl, h_noi, h_e, h_dedt, h_cs, h_rho, h_p);
     ParticlesNS::Kernel::Launch::set(d_particles, d_numParticles, d_numNodes, d_mass, d_x, d_y, d_vx, d_vy, d_ax, d_ay,
                                      d_uid, d_materialId, d_sml, d_nnl, d_noi, d_e, d_dedt, d_cs, d_rho, d_p);

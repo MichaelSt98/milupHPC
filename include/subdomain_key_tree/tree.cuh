@@ -44,7 +44,7 @@ namespace KeyNS {
 #if DIM == 1
     CUDA_CALLABLE_MEMBER const unsigned char HilbertTable[1][1] = {{1}}; //TODO: 1D HilbertTable?
 #elif DIM == 2
-    CUDA_CALLABLE_MEMBERconst unsigned char HilbertTable[4][4] =
+    CUDA_CALLABLE_MEMBER const unsigned char HilbertTable[4][4] =
             {{0,3,1,2},
              {0,1,3,2},
              {2,3,1,0},

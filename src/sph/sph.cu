@@ -64,7 +64,7 @@ namespace SPH {
 #if DIM == 1
                 r = x_radius;
 #elif DIM == 2
-                r = fmaxf(x_temp, y_radius);
+                r = fmaxf(x_radius, y_radius);
 #else
                 r_temp = fmaxf(x_radius, y_radius);
                 r = fmaxf(r_temp, z_radius); //TODO: (0.5 * r) or (1.0 * r)
@@ -226,7 +226,7 @@ namespace SPH {
 #if DIM == 1
                 r = x_radius;
 #elif DIM == 2
-                r = fmaxf(x_temp, y_radius);
+                r = fmaxf(x_radius, y_radius);
 #else
                 r_temp = fmaxf(x_radius, y_radius);
                 r = fmaxf(r_temp, z_radius); //TODO: (0.5 * r) or (1.0 * r)
@@ -272,7 +272,7 @@ namespace SPH {
                                 }
                             }
 #if DIM == 1
-                                else if (fabs(dx) < interactionDistance &&) {
+                                else if (fabs(dx) < interactionDistance) {
 #elif DIM == 2
                                 else if (fabs(dx) < interactionDistance &&
                                      fabs(dy) < interactionDistance) {
@@ -369,7 +369,7 @@ namespace SPH {
 #if DIM == 1
                 r = x_radius;
 #elif DIM == 2
-                r = fmaxf(x_temp, y_radius);
+                r = fmaxf(x_radius, y_radius);
 #else
                 r_temp = fmaxf(x_radius, y_radius);
                 r = fmaxf(r_temp, z_radius); //TODO: (0.5 * r) or (1.0 * r)
@@ -415,7 +415,7 @@ namespace SPH {
                                 }
                             }
 #if DIM == 1
-                                else if (fabs(dx) < interactionDistance &&) {
+                                else if (fabs(dx) < interactionDistance) {
 #elif DIM == 2
                                 else if (fabs(dx) < interactionDistance &&
                                      fabs(dy) < interactionDistance) {

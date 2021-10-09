@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include "color.h"
+#include "../parameter.h"
 
 namespace Color {
     class Modifier {
@@ -50,7 +51,7 @@ public:
         if (msglevel >= LOGCFG.level && (LOGCFG.myrank == LOGCFG.outputRank || LOGCFG.outputRank == -1)) {
             int levels [level];
             for (int i = 0; i<level; i++) {
-                levels[i] = (key >> 3*i) & (unsigned long)7;
+                levels[i] = (key >> DIM*i) & (unsigned long)(POW_DIM - 1);
             }
             std::string msg = "#|";
             for (int i = level-1; i>=0; i--) {

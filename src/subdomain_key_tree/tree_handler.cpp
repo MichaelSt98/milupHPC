@@ -40,7 +40,7 @@ TreeHandler::TreeHandler(integer numParticles, integer numNodes) : numParticles(
     TreeNS::Kernel::Launch::set(d_tree, d_count, d_start, d_child, d_sorted, d_index, d_toDeleteLeaf, d_toDeleteNode,
                                 d_minX, d_maxX);
 #elif DIM == 2
-    TreeNS:Kernel::Launch::set(d_tree, d_count, d_start, d_child, d_sorted, d_index, d_toDeleteLeaf, d_toDeleteNode,
+    TreeNS::Kernel::Launch::set(d_tree, d_count, d_start, d_child, d_sorted, d_index, d_toDeleteLeaf, d_toDeleteNode,
                                d_minX, d_maxX, d_minY, d_maxY);
 #else
     TreeNS::Kernel::Launch::set(d_tree, d_count, d_start, d_child, d_sorted, d_index, d_toDeleteLeaf, d_toDeleteNode,
