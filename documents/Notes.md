@@ -48,68 +48,7 @@
 
 ### Ideas 
 
-* `Miluphpc` as `BaseIntegrator`
-
-```cpp
-
-namespace miluph {
-	// miluphpc.h/.cpp
-	class Miluphpc {
-	public:
-		ParticleHandler *particleHandler;
-    		SubDomainKeyTreeHandler *subDomainKeyTreeHandler;
-    		TreeHandler *treeHandler;
-    		DomainListHandler *domainListHandler;
-    		DomainListHandler *lowestDomainListHandler;
-    		// ...
-		IntegratedParticles *integratedParticles();
-		Miluphpc() {
-			...
-		}
-		virtual void integrate() {};
-		void rhs() {
-			//(parallel) tree construction
-			//(parallel) pseudo-particles
-			//(parallel) gravitational force
-			//(parallel) SPH forces
-			...
-		}
-	} 
-	
-	// euler.h/.cpp
-	class Euler : public Miluphpc {
-	public:
-		Euler() {
-			integratedParticles = new IntegratedParticles[1];
-		}
-		void integrate() {
-			rhs();
-			// save information in integratedParticles
-			rhs();
-			...
-		}
-	}
-	
-	// ...
-}
-// main.cpp
-miluph::Miluphpc *miluphpc;
-
-switch(integratorSelection) {
-    case IntegratorSelection::euler: {
-        miluphpc = new miluph::Euler();
-    } break;
-    case IntegratorSelection::predictor_corrector: {
-        miluphpc = new miluph::PredictorCorrector();
-    } break;
-    default: { }
-}
-
-while (condition) {
-	miluphpc.integrate();
-}
-
-```
+* ...
 
 ### Problems, Challenges, Improvements, ...
 
@@ -117,12 +56,6 @@ while (condition) {
 	* how to avoid $r = 0$
 	* how to avoid $r \approx 0$ 
 * `symbolicForce`: insert cell itself or children
-* **?bug?** removing duplicates for `symbolicForce()`
-	* not sufficient to remove duplicate indices: Why?
-	* leading to seg fault in `insertReceivedParticles()`
-* **?bug?** (someties) duplicates in SPH send entries
-	* leading to seg fault in `insertReceivedParticles()`
-* Hilbert keys: `getTreeLevel()`
 * 1D Space filling curve
 * Performance:
 	* kernel call `buildDomainTree()` with more than one thread
@@ -141,27 +74,36 @@ while (condition) {
 
 ## Buffers
 
-| id   | description                                       | Function                         | type     | size                | Location | Intersection |
-| ---- | ------------------------------------------------- | -------------------------------- | -------- | ------------------- | -------- | ------------ |
-| 1    | mutex/lock                                        | `computeBoundingBox()`           | int      | 1                   | device   | -            |
-| 2    | mark particles with correspondent process         | `markParticlesProcess()`         | int      | `numParticlesLocal` | device   | 3            |
-| 3    | sorting particle array and copying back           | `sortArray()` & `copyArray()`    | float    | `numParticlesLocal` | device   | 2            |
-| 4    | send lengths                                      | -                                | int      | `numProcesses`      | host     | 5            |
-| 5    | receive lengths                                   | -                                | int      | `numProcesses`      | host     | 4            |
-| 6    | sorting lowest domain list array and copying back | `sortArray()` & `copyArray()`    | float    | domain list length  | device   | -            |
-| 7    | buffer send indices for parallel grav. force      | `symbolicForce()`                | int      | (up to) `numPLocal` | device   | 8            |
-| 8    | buffer removing duplicates in sent indices        | `removeDuplicates()`             | int      | (up to) `numPLocal` | device   | 7            |
-| 9    | collecting values to be (temporarily) sent        | `collectValues()`                | float    | (up to) `numPLocal` | device   | 8            |
-| 10   | sph: already inserted                             | `particles2Send()`               | int      | `numProcesses`      | device   | 11, 12       |
-| 11   | sph: send count                                   | `particles2Send()`               | int      | `numProcesses`      | device   | 10, 12       |
-| 12   | sph: send indices for parallel sph force(s)       | `particles2Send()`               | int      | (up to) `numPLocal` | device   | 10, 11       |
-| 13   | sph: collecting values to be (temp.) sent         | `collectSendIndices()`           | int      | (up to) `numPLocal` | device   | 12           |
-| 14   | sph: collecting send entries                      | `collectSendEntries()`, `exchangeParticleEntry()` | float    | (up to) `numPLocal` | device   | 13 (or 12)   |
-| 15   | key histogram y-axis                              | `createKeyHistRanges()`, `keyHistCounter()`, `calculateNewRange()` | int      | bins (up to 10000)  | device   | 16 |
-| 16   | key histogram x-axis                              | `keyHistCounter()`, `calculateNewRange()`                          | key type | bins (up to 10000)  | device   | 15 |
-| 17   | buffers for file I/O                              | `particles2file()`               | -        | `numParticlesLocal`  | host (device for keys) |  |
-
-* is `13` really necessary? Or is it possible to remove by changing `SPH::Kernel::Launch::collectSendEntrie()`?
+| **id** |**description** |**functions** |**type** |**size** |**location** |**intersection** |
+|--- | --- | --- | --- | --- | --- | --- | 
+|1 | mutex/lock | `computeBoundingBox` | int | 1 | device |  | 
+ |  |  |  |  |  |  | 
+2 | arranging particle (entries) particles process | `arrangeParticleEntries` | int  | numParticlesLocal | device |  | 
+3 | arranging particle (entries) particles process sorted | `arrangeParticleEntries` | int  | numParticlesLocal | device |  | 
+4 | arranging particle (entries) sorted entries | `arrangeParticleEntries` | float | numParticlesLocal | device |  | 
+5 | arranging particle (entries) sorted entries | `arrangeParticleEntries` | int | numParticlesLocal | device |  | 
+ |  |  |  |  |  |  | 
+6 | sorting domain list (entries) unsorted entries | `sortArray()` within `parallel_pseudoParticles()` | float | domainListSize | device |  | 
+7 | sorting domain list (entries) sorted entries | `sortArray()` within `parallel_pseudoParticles()` | float | domainListSize | device |  | 
+ |  |  |  |  |  |  | 
+8 | symbolic force: mark send indices | *Gravity::* `intermediateSymbolicForce()`, `symbolicForce()`, `collectSendIndices()` | int | numNodes | device |  | 
+9 | symbolic force: collected collected particle (entries) | `collectValues()`, `sendParticles()` | float | up to 50% of numNodes | device |  | 
+10 | **???** symbolic force: collected particle (entries) | `collectValues()`, `sendParticles()` | int | up to 50% of numNodes | device |  | 
+11 | symbolic force: send indices (particles) | `collectSendIndices()`, `sendParticles()` | int | up to 50% of numParticles | device |  | 
+12 | symbolic force: send indices (pseudo-particles) | `collectSendIndices()`, `sendParticles()` | int | up to 50% of numNodes | device |  | 
+13 | symbolic force: send levels (pseudo-particles) | `collectSendIndices()`, `sendParticles()` | int | up to 50% of numNodes | device |  | 
+14 | symbolic force: receive levels (pseudo-particles) | `collectSendIndices()`, `sendParticles()` | int | up to 50% of numNodes | device |  | 
+15 | symbolic force: send count (particles) | `collectSendIndices()` | int | numProcesses | device |  | 
+16 | symbolic force: send count (pseudo-particles) | `collectSendIndices()` | int | numProcesses | device |  | 
+ |  |  |  |  |  |  | 
+17 | sph symbolic force: mark send indices | *SPH::* `intermediateSymbolicForce()`, `symbolicForce()`, `collectSendIndices()` | int | numParticles | device |  | 
+18 | sph symbolic force: send indices | `collectSendIndices()`, `sendParticles()` | int | up to 50% of numParticles | device |  | 
+19 | sph symbolic force: collected particle (entries) | `collectValues()`, `sendParticles()` | float | up to 50% of numParticles | device |  | 
+20 | sph symbolic force: collected particle (entries) | `collectValues()`, `sendParticles()` | int | up to 50% of numParticles | device |  | 
+21 | sph symbolic force: send count (particles) | `collectSendIndices()` | int | numProcesses | device |  | 
+22 | sph symbolic force: send count (pseudo-particles) | `collectSendIndices()` | int | numProcesses | device |  | 
+ |  |  |  |  |  |  | 
+23 | file I/O | `particles2file()` | keyType/unsigned long | numParticlesLocal | device |  | 
       
 
 
