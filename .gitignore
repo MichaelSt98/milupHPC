@@ -15,8 +15,10 @@ doc/html/*
 doc/latex/*
 
 *.h5
+!examples/*.h5
 *.numbers
 *.mp4
 *.csv
+!documents/*.csv
 # ignore MPI-debug lldb pipe
 *.lldb
