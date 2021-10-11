@@ -28,6 +28,7 @@ typedef struct SimulationParameters
     bool loadBalancing;
     int loadBalancingInterval;
     int curveType;
+    float sml;
     std::string filename;
 
 } SimulationParameters;

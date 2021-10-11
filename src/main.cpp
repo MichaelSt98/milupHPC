@@ -57,7 +57,7 @@ int main(int argc, char** argv)
     //MPI_Finalize();
     //exit(0);
 
-    cxxopts::Options options("HPC NBody", "Multi-GPU CUDA Barnes-Hut NBody code");
+    cxxopts::Options options("HPC NBody", "Multi-GPU CUDA Barnes-Hut NBody/SPH code");
 
     bool render = false;
     bool loadBalancing = false;
@@ -96,6 +96,8 @@ int main(int argc, char** argv)
     parameters.curveType = result["curvetype"].as<int>();
     std::string filename = result["filename"].as<std::string>();
     parameters.filename = filename;
+
+    parameters.sml = confP.getVal<real>("sml");
 
     LOGCFG.headers = true;
     LOGCFG.level = DEBUG;

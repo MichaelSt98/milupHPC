@@ -69,6 +69,15 @@ namespace Gravity {
 #endif
 #endif
 
+            while ((bodyIndex + offset) < length) {
+
+                printf("x[%i] = (%f, %f, %f) %f\n", sendIndices[bodyIndex + offset], particles->x[sendIndices[bodyIndex + offset]],
+                       particles->y[sendIndices[bodyIndex + offset]], particles->z[sendIndices[bodyIndex + offset]],
+                       particles->mass[sendIndices[bodyIndex + offset]]);
+
+                offset += stride;
+            }
+
             //while ((bodyIndex + offset) < length) {
             //    if (particles->x[sendIndices[bodyIndex + offset]] == 0.f &&
             //        particles->y[sendIndices[bodyIndex + offset]] == 0.f &&
@@ -97,7 +106,7 @@ namespace Gravity {
             //    }
             //}
 
-            while ((bodyIndex + offset) < length) {
+            /*while ((bodyIndex + offset) < length) {
 
                 //printf("index = %i sendIndex = %i level = %i\n", bodyIndex + offset, sendIndices[bodyIndex + offset],
                 //       levels[bodyIndex + offset]);
@@ -185,7 +194,7 @@ namespace Gravity {
                 }
 
                 offset += stride;
-            }
+            }*/
         }
 
         __global__ void zeroDomainListNodes(Particles *particles, DomainList *domainList,
@@ -238,25 +247,24 @@ namespace Gravity {
                 lowestDomainIndex = lowestDomainList->domainListIndices[bodyIndex + offset];
                 if (lowestDomainIndex >= 0) {
                     switch (entry) {
-                        case Entry::x:
+                        case Entry::x: {
                             helper->realBuffer[bodyIndex + offset] = particles->x[lowestDomainIndex];
-                            break;
+                        } break;
 #if DIM > 1
-                        case Entry::y:
+                        case Entry::y: {
                             helper->realBuffer[bodyIndex + offset] = particles->y[lowestDomainIndex];
-                            break;
+                        } break;
 #if DIM == 3
-                        case Entry::z:
+                        case Entry::z: {
                             helper->realBuffer[bodyIndex + offset] = particles->z[lowestDomainIndex];
-                            break;
+                        } break;
 #endif
 #endif
-                        case Entry::mass:
+                        case Entry::mass: {
                             helper->realBuffer[bodyIndex + offset] = particles->mass[lowestDomainIndex];
-                            break;
+                        } break;
                         default:
-                            helper->realBuffer[bodyIndex + offset] = particles->mass[lowestDomainIndex];
-                            break;
+                            printf("prepareLowestDomainExchange(): Not available!\n");
                     }
                 }
                 offset += stride;

@@ -318,25 +318,25 @@ public:
      *
      * @param target host/device
      */
-    void copyMass(To::Target target=To::device);
+    void copyMass(To::Target target=To::device, bool includePseudoParticles = false);
     /**
      * copy particle's position(s) to target (host/device)
      *
      * @param target host/device
      */
-    void copyPosition(To::Target target=To::device);
+    void copyPosition(To::Target target=To::device, bool includePseudoParticles = false);
     /**
     * copy particle's velocities to target (host/device)
     *
     * @param target host/device
     */
-    void copyVelocity(To::Target target=To::device);
+    void copyVelocity(To::Target target=To::device, bool includePseudoParticles = false);
     /**
      * copy particle's acceleration(s) to target (host/device)
      *
      * @param target host/device
      */
-    void copyAcceleration(To::Target target=To::device);
+    void copyAcceleration(To::Target target=To::device, bool includePseudoParticles = false);
     /**
      * copy particle's information to target (host/device)
      *
@@ -344,7 +344,8 @@ public:
      * @param velocity flag whether velocities should be copied
      * @param acceleration flag whether accelerations should be copied
      */
-    void copyDistribution(To::Target target=To::device, bool velocity=true, bool acceleration=true);
+    void copyDistribution(To::Target target=To::device, bool velocity=true, bool acceleration=true,
+                          bool includePseudoParticles = false);
 
 };
 

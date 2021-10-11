@@ -446,48 +446,76 @@ T*& ParticleHandler::getEntry(Entry::Name entry, Execution::Location location) {
     }
 }
 
-void ParticleHandler::copyMass(To::Target target) {
-    cuda::copy(h_mass, d_mass, numParticles, target);
+void ParticleHandler::copyMass(To::Target target, bool includePseudoParticles) {
+    int length;
+    if (includePseudoParticles) {
+        length = numNodes;
+    }
+    else {
+        length = numParticles;
+    }
+    cuda::copy(h_mass, d_mass, length, target);
 }
 
-void ParticleHandler::copyPosition(To::Target target) {
-    cuda::copy(h_x, d_x, numParticles, target);
+void ParticleHandler::copyPosition(To::Target target, bool includePseudoParticles) {
+    int length;
+    if (includePseudoParticles) {
+        length = numNodes;
+    }
+    else {
+        length = numParticles;
+    }
+    cuda::copy(h_x, d_x, length, target);
 #if DIM > 1
-    cuda::copy(h_y, d_y, numParticles, target);
+    cuda::copy(h_y, d_y, length, target);
 #if DIM == 3
-    cuda::copy(h_z, d_z, numParticles, target);
+    cuda::copy(h_z, d_z, length, target);
 #endif
 #endif
 }
 
-void ParticleHandler::copyVelocity(To::Target target) {
-    cuda::copy(h_vx, d_vx, numParticles, target);
+void ParticleHandler::copyVelocity(To::Target target, bool includePseudoParticles) {
+    int length;
+    if (includePseudoParticles) {
+        length = numNodes;
+    }
+    else {
+        length = numParticles;
+    }
+    cuda::copy(h_vx, d_vx, length, target);
 #if DIM > 1
-    cuda::copy(h_vy, d_vy, numParticles, target);
+    cuda::copy(h_vy, d_vy, length, target);
 #if DIM == 3
-    cuda::copy(h_vz, d_vz, numParticles, target);
+    cuda::copy(h_vz, d_vz, length, target);
 #endif
 #endif
 }
 
-void ParticleHandler::copyAcceleration(To::Target target) {
-    cuda::copy(h_ax, d_ax, numParticles, target);
+void ParticleHandler::copyAcceleration(To::Target target, bool includePseudoParticles) {
+    int length;
+    if (includePseudoParticles) {
+        length = numNodes;
+    }
+    else {
+        length = numParticles;
+    }
+    cuda::copy(h_ax, d_ax, length, target);
 #if DIM > 1
-    cuda::copy(h_ay, d_ay, numParticles, target);
+    cuda::copy(h_ay, d_ay, length, target);
 #if DIM == 3
-    cuda::copy(h_az, d_az, numParticles, target);
+    cuda::copy(h_az, d_az, length, target);
 #endif
 #endif
 }
 
-void ParticleHandler::copyDistribution(To::Target target, bool velocity, bool acceleration) {
-    copyMass(target);
-    copyPosition(target);
+void ParticleHandler::copyDistribution(To::Target target, bool velocity, bool acceleration, bool includePseudoParticles) {
+    copyMass(target, includePseudoParticles);
+    copyPosition(target, includePseudoParticles);
     if (velocity) {
-        copyVelocity(target);
+        copyVelocity(target, includePseudoParticles);
     }
     if (acceleration) {
-        copyAcceleration(target);
+        copyAcceleration(target, includePseudoParticles);
     }
 }
 

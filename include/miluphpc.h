@@ -15,6 +15,10 @@
 #include "cuda_utils/cuda_runtime.h"
 #include "utils/cxxopts.h"
 #include "../include/utils/h5profiler.h"
+#include "../include/sph/kernel.cuh"
+#include "../include/sph/kernel_handler.cuh"
+#include "../include/sph/density.cuh"
+#include "../include/sph/pressure.cuh"
 
 #include <iostream>
 #include <stdio.h>
@@ -89,11 +93,16 @@ private:
     template <typename T>
     real arrangeParticleEntries(T *entry, T *temp);
 
+    template <typename U, typename T>
+    real arrangeParticleEntries(U *sortArray, U *sortedArray, T *entry, T *temp);
+
     real assignParticles();
 
 public:
 
     Curve::Type curveType;
+
+    SPH::KernelHandler kernelHandler;
 
     integer numParticles;
     integer sumParticles;
@@ -110,6 +119,8 @@ public:
     TreeHandler *treeHandler;
     DomainListHandler *domainListHandler;
     DomainListHandler *lowestDomainListHandler;
+
+    MaterialHandler *materialHandler;
 
     // testing
     integer *d_particles2SendIndices;
@@ -153,6 +164,8 @@ public:
     virtual void integrate(int step = 0) = 0;
 
     real particles2file(int step);
+
+    real particles2file(const std::string& filename, int *particleIndices, int length);
 
 };
 

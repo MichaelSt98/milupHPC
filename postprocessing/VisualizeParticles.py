@@ -14,9 +14,9 @@ def particleDistribution(file):
     ranges = list(f['hilbertRanges'].value)
     keys = np.array(list(f['hilbertKey'].value))
     indices = keys.argsort()
-    keys = keys[indices][::100].copy()
-    pos = np.array(list(f['x'].value))[indices][::100].copy()
-    #vel = np.array(list(f['v'].value))[indices][::100].copy()
+    keys = keys[indices].copy()
+    pos = np.array(list(f['x'].value))[indices].copy()
+    #vel = np.array(list(f['v'].value))[indices].copy()
 
     """
     keys = np.array(list(f['hilbertKey'].value))
@@ -75,7 +75,5 @@ def particleDistribution(file):
 
 if __name__ == '__main__':
 
-    file = 'ts000002.h5'
+    file = '../log/test.h5'
     particleDistribution(file)
-
-
