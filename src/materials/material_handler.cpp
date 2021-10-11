@@ -70,19 +70,25 @@ MaterialHandler::MaterialHandler(char *material_cfg) {
     LibConfigReader libConfigReader;
     numMaterials = libConfigReader.loadConfigFromFile(material_cfg);
 
-    config_setting_t *material;
+    config_setting_t *material, *subset;
 
     h_materials = new Material[numMaterials];
     cuda::malloc(d_materials, numMaterials);
 
     for (int i = 0; i < numMaterials; ++i) {
 
+        // general
         material = config_setting_get_elem(libConfigReader.materials, i);
         int id;
         config_setting_lookup_int(material, "ID", &id);
         h_materials[id].ID = id;
         fprintf(stdout, "Reading information about material ID %d out of %d in total...\n", id, numMaterials);
         config_setting_lookup_int(material, "interactions", &h_materials[id].interactions);
+
+        // eos
+        subset = config_setting_get_member(material, "eos");
+        config_setting_lookup_float(subset, "polytropic_K", &h_materials[id].eos.polytropic_K);
+        config_setting_lookup_float(subset, "polytropic_gamma", &h_materials[id].eos.polytropic_gamma);
     }
 
 
@@ -111,10 +117,10 @@ MaterialHandler::~MaterialHandler() {
 void MaterialHandler::copy(To::Target target, integer index) {
 
     if (index >= 0 && index < numMaterials) {
-        cuda::copy(&h_materials[index], &d_materials[index], target);
+        cuda::copy(&h_materials[index], &d_materials[index], 1, target);
     }
     else {
-        cuda::copy(&h_materials[index], &d_materials[index], target);
+        cuda::copy(h_materials, d_materials, numMaterials, target);
     }
 
 }

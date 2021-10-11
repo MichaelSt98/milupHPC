@@ -1,4 +1,4 @@
-
+sml 0.05
 numParticles 200
 systemSize 5.
 timeStep .15

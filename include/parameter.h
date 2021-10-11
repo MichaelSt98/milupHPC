@@ -35,6 +35,20 @@ private:
     operator T () const;
 };
 
+struct Smoothing
+{
+    enum Kernel
+    {
+        spiky, cubic_spline, wendlandc2, wendlandc4, wendlandc6
+    };
+    Kernel t_;
+    Smoothing(Kernel t) : t_(t) {}
+    operator Smoothing () const {return t_;}
+private:
+    template<typename T>
+    operator T () const;
+};
+
 struct Execution
 {
     enum Location
@@ -85,7 +99,7 @@ private:
 // Dimension of the problem
 #define DIM 3
 
-#define SPH_SIM 0
+#define SPH_SIM 1
 
 struct Entry
 {

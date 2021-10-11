@@ -7,32 +7,46 @@
 
 //#include <boost/mpi.hpp>
 #include <assert.h>
+#include "../parameter.h"
+#include "../cuda_utils/linalg.cuh"
 
-class Kernel {
+namespace SPH {
 
-public:
-    virtual CUDA_CALLABLE_MEMBER void kernel(real *W, real dWdx[DIM], real *dWdr, real dx[DIM], real sml) = 0;
+
+    typedef void (*SPH_kernel)(real *W, real dWdx[DIM], real *dWdr, real dx[DIM], real h);
+
+    namespace SmoothingKernel {
+
+        __device__ void spiky(real *W, real dWdx[DIM], real *dWdr, real dx[DIM], real sml);
+
+        __device__ void cubicSpline(real *W, real dWdx[DIM], real *dWdr, real dx[DIM], real sml);
+
+        __device__ void wendlandc2(real *W, real dWdx[DIM], real *dWdr, real dx[DIM], real sml);
+
+        __device__ void wendlandc4(real *W, real dWdx[DIM], real *dWdr, real dx[DIM], real sml);
+
+        __device__ void wendlandc6(real *W, real dWdx[DIM], real *dWdr, real dx[DIM], real sml);
+    }
+
 
     //TODO: implement:
-    CUDA_CALLABLE_MEMBER real fixTensileInstability(Particles *particles, int p1, int p2);
-    //__global__ void tensorialCorrection(int *interactions);
-    //__global__ void shepardCorrection(int *interactions);
-    //__global__ void CalcDivvandCurlv(int *interactions);
+    CUDA_CALLABLE_MEMBER real fixTensileInstability(SPH_kernel kernel, Particles *particles, int p1, int p2);
 
-};
+#if (NAVIER_STOKES || BALSARA_SWITCH || INVISCID_SPH || INTEGRATE_ENERGY)
+    __global__ void CalcDivvandCurlv(SPH_kernel kernel, Particles *particles, int *interactions, int numParticles);
+#endif
 
-class Spiky : public Kernel {
+#if ZERO_CONSISTENCY //SHEPARD_CORRECTION
+    // this adds zeroth order consistency but needs one more loop over all neighbours
+    __global__ void shepardCorrection(SPH_kernel kernel, Particles *particles, int *interactions, int numParticles)
+#endif
 
-public:
-    CUDA_CALLABLE_MEMBER void kernel(real *W, real dWdx[DIM], real *dWdr, real dx[DIM], real sml);
+#if LINEAR_CONSISTENCY //TENSORIAL_CORRECTION
+// this adds first order consistency but needs one more loop over all neighbours
+__global__ void tensorialCorrection(SPH_kernel kernel, Particles *particles, int *interactions, int numParticles)
+#endif
 
-};
-
-class CubicSpline : public Kernel {
-
-public:
-    CUDA_CALLABLE_MEMBER void kernel(real *W, real dWdx[DIM], real *dWdr, real dx[DIM], real sml);
-};
+}
 
 
 #endif //MILUPHPC_KERNEL_CUH

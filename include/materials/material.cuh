@@ -31,6 +31,25 @@ struct ArtificialViscosity {
     CUDA_CALLABLE_MEMBER ArtificialViscosity(real alpha, real beta);
 };
 
+struct EqOfSt {
+
+    friend class boost::serialization::access;
+    template<class Archive>
+    void serialize(Archive &ar, const unsigned int version) {
+        ar & type;
+        ar & polytropic_K;
+        ar & polytropic_gamma;
+    }
+
+    int type;
+    real polytropic_K;
+    real polytropic_gamma;
+
+    CUDA_CALLABLE_MEMBER EqOfSt();
+    CUDA_CALLABLE_MEMBER EqOfSt(int type, real polytropic_K, real polytropic_gamma);
+
+};
+
 /**
  * Material parameters
  */
@@ -45,12 +64,14 @@ public:
         ar & ID;
         ar & interactions;
         ar & artificialViscosity;
+        ar & eos;
     }
 
     integer ID;
     integer interactions;
 
     ArtificialViscosity artificialViscosity;
+    EqOfSt eos;
 
     CUDA_CALLABLE_MEMBER Material();
     CUDA_CALLABLE_MEMBER ~Material();

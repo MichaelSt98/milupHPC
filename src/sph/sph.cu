@@ -1483,11 +1483,11 @@ namespace SPH {
                 if ((bodyIndex + offset) % 1000 == 0) {
                     i = 0;
                     printf("particles->noi[%i] = %i\n", bodyIndex + offset, particles->noi[bodyIndex + offset]);
-                    while (particles->nnl[(bodyIndex + offset) * MAX_NUM_INTERACTIONS + i] != -1 && i < MAX_NUM_INTERACTIONS) {
-                        printf("particles->nnl[%i * %i + %i] = %i\n", bodyIndex + offset, MAX_NUM_INTERACTIONS, i,
-                               particles->nnl[(bodyIndex + offset) * MAX_NUM_INTERACTIONS + i]);
-                        i++;
-                    }
+                    //while (particles->nnl[(bodyIndex + offset) * MAX_NUM_INTERACTIONS + i] != -1 && i < MAX_NUM_INTERACTIONS) {
+                    //    printf("particles->nnl[%i * %i + %i] = %i\n", bodyIndex + offset, MAX_NUM_INTERACTIONS, i,
+                    //           particles->nnl[(bodyIndex + offset) * MAX_NUM_INTERACTIONS + i]);
+                    //    i++;
+                    //}
                 }
 
                 offset += stride;
