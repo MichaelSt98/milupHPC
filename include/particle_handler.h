@@ -59,6 +59,8 @@ public:
     real *h_e; // internal energy
     /// host time derivative of internal energy
     real *h_dedt;
+    /// energy
+    real *h_u;
     /// host speed of sound
     real *h_cs; // soundspeed
     /// host density
@@ -198,6 +200,8 @@ public:
     real *d_e; // internal energy
     /// device time derivative of internal energy
     real *d_dedt;
+    /// energy
+    real *d_u;
     /// device speed of sound
     real *d_cs; // soundspeed
     /// device density

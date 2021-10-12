@@ -1,5 +1,6 @@
 #include "../../include/subdomain_key_tree/subdomain.cuh"
 #include "../../include/cuda_utils/cuda_launcher.cuh"
+#include <cub/cub.cuh>
 
 CUDA_CALLABLE_MEMBER void KeyNS::key2Char(keyType key, integer maxLevel, char *keyAsChar) {
     int level[21];
@@ -744,7 +745,7 @@ namespace ParticlesNS {
                 particles->y[index] * particles->y[index]) < 0.95) {
 #else
         if (sqrtf(particles->x[index] * particles->x[index] + particles->y[index] * particles->y[index] +
-                  particles->z[index] * particles->z[index]) < 0.95) {
+                  particles->z[index] * particles->z[index]) < 30.) {
 #endif
             return false;
         } else {
@@ -865,6 +866,77 @@ namespace CudaUtils {
             }
         }
 
+        template <typename T, unsigned int blockSize>
+        __global__ void reduceBlockwise(T *array, T *outputData, int n) {
+
+            extern __shared__ T sdata[];
+
+            unsigned int tid = threadIdx.x;
+            unsigned int i = blockIdx.x*(blockSize*2) + tid;
+            unsigned int gridSize = blockSize*2*gridDim.x;
+
+            sdata[tid] = 0;
+
+            while (i < n)
+            {
+                sdata[tid] += array[i] + array[i+blockSize];
+                i += gridSize;
+            }
+
+            __syncthreads();
+
+            if (blockSize >= 512) {
+                if (tid < 256) {
+                    array[tid] += array[tid + 256];
+                }
+                __syncthreads();
+            }
+            if (blockSize >= 256) {
+                if (tid < 128) {
+                    array[tid] += array[tid + 128];
+                }
+                __syncthreads();
+            }
+            if (blockSize >= 128) {
+                if (tid < 64) {
+                    array[tid] += array[tid + 64];
+                }
+                __syncthreads();
+            }
+
+            if (tid < 32)
+            {
+                if (blockSize >= 64) array[tid] += array[tid + 32];
+                if (blockSize >= 32) array[tid] += array[tid + 16];
+                if (blockSize >= 16) array[tid] += array[tid + 8];
+                if (blockSize >= 8) array[tid] += array[tid + 4];
+                if (blockSize >= 4) array[tid] += array[tid + 2];
+                if (blockSize >= 2) array[tid] += array[tid + 1];
+            }
+
+            if (tid == 0) {
+                outputData[blockIdx.x] = array[0];
+            }
+        }
+
+        //template __global__ void reduceBlockwise<real, 256>(real *array, real *outputData, int n);
+
+        template <typename T, unsigned int blockSize>
+        __global__ void blockReduction(const T *indata, T *outdata) {
+            integer index = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+
+            //extern __shared__ real *buff;
+
+            while ((index + offset) < blockSize) {
+                atomicAdd(&outdata[0], indata[index + offset]);
+                __threadfence();
+                offset += stride;
+            }
+
+        }
+
         namespace Launch {
             template<typename T, typename U>
             real markDuplicatesTemp(Tree *tree, DomainList *domainList, T *array, U *entry1, U *entry2, U *entry3, integer *duplicateCounter, integer *child, int length) {
@@ -873,6 +945,249 @@ namespace CudaUtils {
                                     entry3, duplicateCounter, child, length);
             }
             template real markDuplicatesTemp<integer, real>(Tree *tree, DomainList *domainList, integer *array, real *entry1, real *entry2, real *entry3, integer *duplicateCounter, integer *child, int length);
+
+            template <typename T, unsigned int blockSize>
+            real reduceBlockwise(T *array, T *outputData, int n) {
+                ExecutionPolicy executionPolicy(256, blockSize, blockSize * sizeof(T));
+                return cuda::launch(true, executionPolicy, ::CudaUtils::Kernel::reduceBlockwise<T, blockSize>, array, outputData, n);
+            }
+            template real reduceBlockwise<real, 256>(real *array, real *outputData, int n);
+
+            template <typename T, unsigned int blockSize>
+            real blockReduction(const T *indata, T *outdata) {
+                ExecutionPolicy executionPolicy(256, blockSize);
+                return cuda::launch(true, executionPolicy, ::CudaUtils::Kernel::blockReduction<T, blockSize>,
+                                    indata, outdata);
+            }
+            template real blockReduction<real, 256>(const real *indata, real *outdata);
+
+        }
+    }
+}
+
+namespace Physics {
+    namespace Kernel {
+
+        // see: https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf
+        template <unsigned int blockSize>
+        __global__ void calculateAngularMomentumBlockwise(Particles *particles, real *outputData, int n) {
+
+            extern __shared__ real sdata[];
+            real *lx = sdata;
+#if DIM > 1
+            real *ly = &sdata[blockSize];
+#if DIM > 2
+            real *lz = &sdata[2 * blockSize];
+#endif
+#endif
+            unsigned int tid = threadIdx.x;
+            unsigned int i = blockIdx.x*(blockSize*2) + tid;
+            unsigned int gridSize = blockSize*2*gridDim.x;
+            //sdata[tid] = 0.;
+
+            while (i < n)
+            {
+                lx[tid] = particles->mass[i] * (particles->y[i]*particles->vz[i] - particles->z[i]*particles->vy[i]) +
+                            particles->mass[i+blockSize] * (particles->y[i+blockSize]*particles->vz[i+blockSize] - particles->z[i+blockSize]*particles->vy[i+blockSize]);
+#if DIM > 1
+                ly[tid] = particles->mass[i] * (particles->z[i]*particles->vx[i] - particles->x[i]*particles->vz[i]) +
+                            particles->mass[i+blockSize] * (particles->z[i+blockSize]*particles->vx[i+blockSize] - particles->x[i+blockSize]*particles->vz[i+blockSize]);
+#if DIM > 2
+                lz[tid] = particles->mass[i] * (particles->x[i]*particles->vy[i] - particles->y[i]*particles->vx[i]) +
+                            particles->mass[i+blockSize] * (particles->x[i+blockSize]*particles->vy[i+blockSize] - particles->y[i+blockSize]*particles->vx[i+blockSize]);
+#endif
+#endif
+
+                //sdata[tid] += g_idata[i] + g_idata[i+blockSize];
+                i += gridSize;
+            }
+
+            __syncthreads();
+
+            if (blockSize >= 512) {
+                if (tid < 256) {
+                    lx[tid] += lx[tid + 256];
+#if DIM > 1
+                    ly[tid] += ly[tid + 256];
+#if DIM > 2
+                    lz[tid] += lz[tid + 256];
+#endif
+#endif
+                    //sdata[tid] += sdata[tid + 256];
+                }
+                __syncthreads();
+            }
+            if (blockSize >= 256) {
+                if (tid < 128) {
+                    lx[tid] += lx[tid + 128];
+#if DIM > 1
+                    ly[tid] += ly[tid + 128];
+#if DIM > 2
+                    lz[tid] += lz[tid + 128];
+#endif
+#endif
+                    //sdata[tid] += sdata[tid + 128];
+                }
+                __syncthreads();
+            }
+            if (blockSize >= 128) {
+                if (tid < 64) {
+                    lx[tid] += lx[tid + 64];
+#if DIM > 1
+                    ly[tid] += ly[tid + 64];
+#if DIM > 2
+                    lz[tid] += lz[tid + 64];
+#endif
+#endif
+                    //sdata[tid] += sdata[tid + 64];
+                }
+                __syncthreads();
+            }
+
+            if (tid < 32)
+            {
+                if (blockSize >= 64) {
+                    lx[tid] += lx[tid + 32];
+#if DIM > 1
+                    ly[tid] += ly[tid + 32];
+#if DIM > 2
+                    lz[tid] += lz[tid + 32];
+#endif
+#endif
+                    //sdata[tid] += sdata[tid + 32];
+                }
+                if (blockSize >= 32) {
+                    lx[tid] += lx[tid + 16];
+#if DIM > 1
+                    ly[tid] += ly[tid + 16];
+#if DIM > 2
+                    lz[tid] += lz[tid + 16];
+#endif
+#endif
+                    //sdata[tid] += sdata[tid + 16];
+                }
+                if (blockSize >= 16) {
+                    lx[tid] += lx[tid + 8];
+#if DIM > 1
+                    ly[tid] += ly[tid + 8];
+#if DIM > 2
+                    lz[tid] += lz[tid + 8];
+#endif
+#endif
+                    //sdata[tid] += sdata[tid + 8];
+                }
+                if (blockSize >= 8) {
+                    lx[tid] += lx[tid + 4];
+#if DIM > 1
+                    ly[tid] += ly[tid + 4];
+#if DIM > 2
+                    lz[tid] += lz[tid + 4];
+#endif
+#endif
+                    //sdata[tid] += sdata[tid + 4];
+                }
+                if (blockSize >= 4) {
+                    lx[tid] += lx[tid + 2];
+#if DIM > 1
+                    ly[tid] += ly[tid + 2];
+#if DIM > 2
+                    lz[tid] += lz[tid + 2];
+#endif
+#endif
+                    //sdata[tid] += sdata[tid + 2];
+                }
+                if (blockSize >= 2) {
+                    lx[tid] += lx[tid + 1];
+#if DIM > 1
+                    ly[tid] += ly[tid + 1];
+#if DIM > 2
+                    lz[tid] += lz[tid + 1];
+#endif
+#endif
+                    //sdata[tid] += sdata[tid + 1];
+                }
+            }
+
+            if (tid == 0) {
+                outputData[blockIdx.x] = lx[0];
+#if DIM > 1
+                outputData[blockSize + blockIdx.x] = ly[0];
+#if DIM > 2
+                outputData[2* blockSize + blockIdx.x] = lz[0];
+                //g_odata[blockIdx.x] = sdata[0];
+#endif
+#endif
+            }
+        }
+
+        template <unsigned int blockSize>
+        __global__ void sumAngularMomentum(const real *indata, real *outdata) {
+
+            integer index = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+
+            //extern __shared__ real *buff;
+
+            while ((index + offset) < blockSize) {
+                atomicAdd(&outdata[0], indata[index + offset]);
+#if DIM > 1
+                atomicAdd(&outdata[1], indata[blockSize + index + offset]);
+#if DIM > 2
+                atomicAdd(&outdata[2], indata[2 * blockSize + index + offset]);
+#endif
+#endif
+                __threadfence();
+                offset += stride;
+            }
+
+        }
+
+        __global__ void kineticEnergy(Particles *particles, int n) {
+            integer index = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+            real vel;
+
+            while ((index + offset) < n) {
+#if DIM == 1
+                vel = abs(particles->vx[index + offset]);
+#elif DIM == 2
+                vel = sqrtf(particles->vx[index + offset] * particles->vx[index + offset] +
+                        particles->vy[index + offset] * particles->vy[index + offset]);
+#else
+                vel = sqrtf(particles->vx[index + offset] * particles->vx[index + offset] +
+                            particles->vy[index + offset] * particles->vy[index + offset] +
+                            particles->vz[index + offset] * particles->vz[index + offset]);
+#endif
+
+                particles->u[index + offset] += 0.5 * particles->mass[index + offset] * vel * vel;
+
+                offset += stride;
+            }
+        }
+
+        namespace Launch {
+            template <unsigned int blockSize>
+            real calculateAngularMomentumBlockwise(Particles *particles, real *outputData, int n) {
+                ExecutionPolicy executionPolicy(256, blockSize, DIM * blockSize * sizeof(real));
+                return cuda::launch(true, executionPolicy, ::Physics::Kernel::calculateAngularMomentumBlockwise<blockSize>,
+                                    particles, outputData, n);
+            }
+            template real calculateAngularMomentumBlockwise<256>(Particles *particles, real *outputData, int n);
+
+            template <unsigned int blockSize>
+            real sumAngularMomentum(const real *indata, real *outdata) {
+                ExecutionPolicy executionPolicy(256, blockSize); //, DIM * sizeof(real));
+                return cuda::launch(true, executionPolicy, ::Physics::Kernel::sumAngularMomentum<blockSize>,
+                        indata, outdata);
+            }
+            template real sumAngularMomentum<256>(const real *indata, real *outdata);
+
+            real kineticEnergy(Particles *particles, int n) {
+                ExecutionPolicy executionPolicy;
+                return cuda::launch(true, executionPolicy, ::Physics::Kernel::kineticEnergy, particles, n);
+            }
         }
     }
 }

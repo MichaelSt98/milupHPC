@@ -98,6 +98,10 @@ private:
 
     real assignParticles();
 
+
+    real angularMomentum();
+    real energy();
+
 public:
 
     Curve::Type curveType;

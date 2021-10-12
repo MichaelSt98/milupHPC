@@ -950,6 +950,9 @@ namespace Gravity {
                                 az += f*dz;
 #endif
 #endif
+                                // gravitational potential energy
+                                particles->u[i] -= (particles->mass[child] * particles->mass[i])/distance;
+                                // end: gravitational potential energy
                             } else {
                                 // put child on stack
                                 currentChildNumber[depth] = childNumber;

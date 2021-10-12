@@ -56,6 +56,9 @@ public:
     /// (pointer to) time derivative of internal energy (array)
     real *dedt;
 
+    /// energy (kinetic + gravitational for now)
+    real *u;
+
     /// (pointer to) sound of speed (array)
     real *cs; // soundspeed
 
@@ -332,6 +335,8 @@ public:
                                   real *cs, real *rho, real *p);
 #endif
 #endif
+
+    CUDA_CALLABLE_MEMBER void setU(real *u);
 
 #if INTEGRATE_DENSITY
     /**
@@ -674,6 +679,11 @@ namespace ParticlesNS {
 
 #endif
 #endif
+
+        __global__ void setU(Particles *particles, real *u);
+        namespace Launch {
+            void setU(Particles *particles, real *u);
+        }
 
 #if INTEGRATE_DENSITY
         /**

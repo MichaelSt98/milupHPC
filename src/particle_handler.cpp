@@ -26,6 +26,7 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     h_noi = new integer [numParticles];
     h_e = new real[numParticles];
     h_dedt = new real[numParticles];
+    h_u = new real[numParticles];
     h_cs = new real[numParticles];
     h_rho = new real[numParticles];
     h_p = new real[numParticles];
@@ -110,6 +111,7 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     cuda::malloc(d_noi, numParticles);
     cuda::malloc(d_e, numParticles);
     cuda::malloc(d_dedt, numParticles);
+    cuda::malloc(d_u, numParticles);
     cuda::malloc(d_cs, numParticles);
     cuda::malloc(d_rho, numParticles);
     cuda::malloc(d_p, numParticles);
@@ -187,6 +189,9 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
                                      d_ax, d_ay, d_az, d_uid, d_materialId, d_sml, d_nnl, d_noi, d_e, d_dedt, d_cs,
                                      d_rho, d_p);
 #endif
+
+    h_particles->setU(h_u);
+    ParticlesNS::Kernel::Launch::setU(d_particles, d_u);
 
 #if INTEGRATE_DENSITY
     h_particles->setIntegrateDensity(h_drhodt);

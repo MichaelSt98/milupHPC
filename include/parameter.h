@@ -99,7 +99,7 @@ private:
 // Dimension of the problem
 #define DIM 3
 
-#define SPH_SIM 1
+#define SPH_SIM 0
 
 struct Entry
 {

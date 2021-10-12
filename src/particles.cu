@@ -117,6 +117,10 @@ CUDA_CALLABLE_MEMBER void Particles::set(integer *numParticles, integer *numNode
 #endif
 #endif
 
+CUDA_CALLABLE_MEMBER void Particles::setU(real *u) {
+    this->u = u;
+}
+
 #if INTEGRATE_DENSITY
     CUDA_CALLABLE_MEMBER void Particles::setIntegrateDensity(real *drhodt) {
         this->drhodt = drhodt;
@@ -393,6 +397,17 @@ namespace ParticlesNS {
 
 #endif
 #endif
+
+        __global__ void setU(Particles *particles, real *u) {
+            particles->setU(u);
+        }
+
+        namespace Launch {
+            void setU(Particles *particles, real *u) {
+                ExecutionPolicy executionPolicy(1, 1);
+                cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::setU, particles, u);
+            }
+        }
 
 #if INTEGRATE_DENSITY
         __global__ void setIntegrateDensity(Particles *particles, real *drhodt) {

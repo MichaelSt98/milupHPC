@@ -260,7 +260,7 @@ void Miluphpc::prepareSimulation() {
     cuda::copy(particleHandler->h_materialId, particleHandler->d_materialId, numParticlesLocal, To::device);
     particleHandler->copyDistribution(To::device, true, true);
 
-    //removeParticles();
+    removeParticles();
 
     Logger(INFO) << "compute bounding box ...";
     TreeNS::Kernel::Launch::computeBoundingBox(treeHandler->d_tree, particleHandler->d_particles, d_mutex,
@@ -352,7 +352,98 @@ real Miluphpc::rhs(int step) {
     totalTime += time;
 #endif
 
+    angularMomentum();
+    energy();
+
     return totalTime;
+
+}
+
+real Miluphpc::angularMomentum() {
+    real time;
+
+    boost::mpi::communicator comm;
+
+    const unsigned int blockSizeReduction = 256;
+    real *d_outputData;
+    cuda::malloc(d_outputData, blockSizeReduction * DIM);
+    cuda::set(d_outputData, (real)0., blockSizeReduction * DIM);
+    time = Physics::Kernel::Launch::calculateAngularMomentumBlockwise<blockSizeReduction>(particleHandler->d_particles, d_outputData, numParticlesLocal);
+    real *d_intermediateAngularMomentum;
+    cuda::malloc(d_intermediateAngularMomentum, DIM);
+    cuda::set(d_intermediateAngularMomentum, (real)0., DIM);
+    time += Physics::Kernel::Launch::sumAngularMomentum<blockSizeReduction>(d_outputData, d_intermediateAngularMomentum);
+
+    all_reduce(comm, boost::mpi::inplace_t<real*>(d_intermediateAngularMomentum), DIM, std::plus<real>());
+
+    real *h_intermediateResult = new real[DIM];
+    cuda::copy(h_intermediateResult, d_intermediateAngularMomentum, DIM, To::host);
+
+    //Logger(INFO) << "angular momentum: (" << h_intermediateResult[0] << ", " << h_intermediateResult[1] << ", " << h_intermediateResult[2] << ")";
+
+    real angularMomentum;
+#if DIM == 1
+    angularMomentum = abs(h_intermediateResult[0]);
+#elif DIM == 2
+    angularMomentum = sqrt(h_intermediateResult[0] * h_intermediateResult[0] + h_intermediateResult[1] * h_intermediateResult[1]);
+#else
+    angularMomentum = sqrt(h_intermediateResult[0] * h_intermediateResult[0] + h_intermediateResult[1] * h_intermediateResult[1] +
+                           h_intermediateResult[2] * h_intermediateResult[2]);
+#endif
+
+    Logger(INFO) << "angular momentum: " << angularMomentum;
+
+    delete [] h_intermediateResult;
+    cuda::free(d_outputData);
+    cuda::free(d_intermediateAngularMomentum);
+    Logger(TIME) << "angular momentum: " << time << " ms";
+    return time;
+}
+
+real Miluphpc::energy() {
+
+    real time = 0;
+
+    time = Physics::Kernel::Launch::kineticEnergy(particleHandler->d_particles, numParticlesLocal);
+
+    boost::mpi::communicator comm;
+
+    const unsigned int blockSizeReduction = 256;
+    real *d_outputData;
+    cuda::malloc(d_outputData, blockSizeReduction);
+    cuda::set(d_outputData, (real)0., blockSizeReduction);
+    time += CudaUtils::Kernel::Launch::reduceBlockwise<real, blockSizeReduction>(particleHandler->d_u, d_outputData,
+                                                                                 numParticlesLocal);
+    real *d_intermediateResult;
+    cuda::malloc(d_intermediateResult, 1);
+    cuda::set(d_intermediateResult, (real)0., 1);
+    time += CudaUtils::Kernel::Launch::blockReduction<real, blockSizeReduction>(d_outputData, d_intermediateResult);
+
+    real h_intermediateResult;
+    //cuda::copy(&h_intermediateResult, d_intermediateResult, 1, To::host);
+    //Logger(INFO) << "local energy: " << h_intermediateResult;
+
+    all_reduce(comm, boost::mpi::inplace_t<real*>(d_intermediateResult), 1, std::plus<real>());
+
+    cuda::copy(&h_intermediateResult, d_intermediateResult, 1, To::host);
+    real energy = h_intermediateResult;
+
+    cuda::free(d_outputData);
+    cuda::free(d_intermediateResult);
+
+    Logger(INFO) << "energy: " << energy;
+    Logger(TIME) << "energy: " << time << " ms";
+
+    //cuda::copy(particleHandler->h_u, particleHandler->d_u, numParticlesLocal, To::host);
+    //cuda::copy(particleHandler->h_mass, particleHandler->d_mass, numParticlesLocal, To::host);
+    //for (int i=0; i<numParticlesLocal; i++) {
+    //    if (i % 100 == 0 || particleHandler->h_mass[i] > 0.0001) {
+    //        Logger(INFO) << "u[" << i << "] = " << particleHandler->h_u[i] << "( mass = " << particleHandler->h_mass[i] << ")";
+    //    }
+    //}
+
+
+    return time;
 
 }
 
@@ -362,6 +453,9 @@ real Miluphpc::reset() {
     Logger(INFO) << "resetting (device) arrays ...";
     time = Kernel::Launch::resetArrays(treeHandler->d_tree, particleHandler->d_particles, d_mutex, numParticles,
                                        numNodes, true);
+
+    cuda::set(particleHandler->d_u, 0., numParticlesLocal);
+
     helperHandler->reset();
     buffer->reset();
     domainListHandler->reset();

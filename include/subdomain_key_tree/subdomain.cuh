@@ -478,9 +478,44 @@ namespace CudaUtils {
         template<typename T, typename U>
         __global__ void markDuplicatesTemp(Tree *tree, DomainList *domainList, T *array, U *entry1, U *entry2, U *entry3, integer *duplicateCounter, integer *child, int length);
 
+        template <typename T, unsigned int blockSize>
+        __global__ void reduceBlockwise(T *array, T *outputData, int n);
+
+        template <typename T, unsigned int blockSize>
+        __global__ void blockReduction(const T *indata, T *outdata);
+
         namespace Launch {
             template<typename T, typename U>
             real markDuplicatesTemp(Tree *tree, DomainList *domainList, T *array, U *entry1, U *entry2, U *entry3, integer *duplicateCounter, integer *child, int length);
+
+            template <typename T, unsigned int blockSize>
+            real reduceBlockwise(T *array, T *outputData, int n);
+
+            template <typename T, unsigned int blockSize>
+            real blockReduction(const T *indata, T *outdata);
+        }
+    }
+}
+
+namespace Physics {
+    namespace Kernel {
+
+        template <unsigned int blockSize>
+        __global__ void calculateAngularMomentumBlockwise(Particles *particles, real *outputData, int n);
+
+        template <unsigned int blockSize>
+        __global__ void sumAngularMomentum(const real *indata, real *outdata);
+
+        __global__ void kineticEnergy(Particles *particles, int n);
+
+        namespace Launch {
+            template <unsigned int blockSize>
+            real calculateAngularMomentumBlockwise(Particles *particles, real *outputData, int n);
+
+            template <unsigned int blockSize>
+            real sumAngularMomentum(const real *indata, real *outdata);
+
+            real kineticEnergy(Particles *particles, int n);
         }
     }
 }
