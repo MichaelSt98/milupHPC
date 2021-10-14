@@ -22,6 +22,8 @@ ____
 
 **Principally working, but not (fully) implemented yet!**
 
+* some samples:
+	* each color represents a process, thus a GPU
 * one GPU
 
 ![](documents/movie_lebesgue_001_1proc.gif)
@@ -37,6 +39,10 @@ ____
 * two GPUs unequal load distribution (hilbert curve)
 
 ![](documents/movie_hilbert_001_2proc_fixedload.gif)
+
+* four GPUs (hilbert curve)
+
+![](documents/kepler_hilbert_4proc.gif)
 
 
 * See [MichaelSt98/SPH](https://github.com/MichaelSt98/SPH) for a proof of concept
