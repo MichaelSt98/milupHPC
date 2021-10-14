@@ -38,12 +38,12 @@ namespace SPH {
 
 #if ZERO_CONSISTENCY //SHEPARD_CORRECTION
     // this adds zeroth order consistency but needs one more loop over all neighbours
-    __global__ void shepardCorrection(SPH_kernel kernel, Particles *particles, int *interactions, int numParticles)
+    __global__ void shepardCorrection(SPH_kernel kernel, Particles *particles, int *interactions, int numParticles);
 #endif
 
 #if LINEAR_CONSISTENCY //TENSORIAL_CORRECTION
 // this adds first order consistency but needs one more loop over all neighbours
-__global__ void tensorialCorrection(SPH_kernel kernel, Particles *particles, int *interactions, int numParticles)
+    __global__ void tensorialCorrection(SPH_kernel kernel, Particles *particles, int *interactions, int numParticles);
 #endif
 
 }

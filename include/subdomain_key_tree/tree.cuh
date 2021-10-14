@@ -9,6 +9,9 @@
 #include <stdio.h>
 #include <cuda.h>
 
+//TODO: compiling on binac:
+// src/gravity/../../include/gravity/../subdomain_key_tree/tree.cuh(26): error: attribute "__host__" does not apply here
+// src/gravity/../../include/gravity/../subdomain_key_tree/tree.cuh(53): error: attribute "__host__" does not apply here
 namespace KeyNS {
 
     /**

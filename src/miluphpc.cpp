@@ -212,6 +212,11 @@ void Miluphpc::distributionFromFile(const std::string& filename) {
         particleHandler->h_particles->sml[i] = simulationParameters.sml;
         particleHandler->h_particles->materialId[i] = 0;
 
+        if (i < 5) {
+            Logger(INFO) << "reading x = (" << particleHandler->h_particles->x[i] << ", " << particleHandler->h_particles->y[i] << ", " <<
+                                particleHandler->h_particles->z[i] << ")";
+        }
+
         //Logger(INFO) << "Reading: x[" << i << "] = (" << particleHandler->h_particles->x[i] << ", " << particleHandler->h_particles->y[i]
         //                    << ", " <<particleHandler->h_particles->z[i] << ")";
 
@@ -352,8 +357,8 @@ real Miluphpc::rhs(int step) {
     totalTime += time;
 #endif
 
-    angularMomentum();
-    energy();
+    //angularMomentum();
+    //energy();
 
     return totalTime;
 
@@ -817,9 +822,15 @@ real Miluphpc::parallel_gravity() {
     integer relevantIndicesCounter;
     cuda::copy(&relevantIndicesCounter, domainListHandler->d_domainListCounter, 1, To::host);
 
+    Logger(INFO) << "relevantIndicesCounter: " << relevantIndicesCounter;
+
     integer *h_relevantDomainListProcess;
     h_relevantDomainListProcess = new integer[relevantIndicesCounter]; //TODO: delete [] h_relevantDomainListProcess;
     cuda::copy(h_relevantDomainListProcess, domainListHandler->d_relevantDomainListProcess, relevantIndicesCounter, To::host);
+
+    for (int i=0; i<relevantIndicesCounter; i++) {
+        Logger(INFO) << "relevantDomainListProcess[" << i << "] = " << h_relevantDomainListProcess[i];
+    }
 
     treeHandler->copy(To::host);
 
@@ -947,6 +958,8 @@ real Miluphpc::parallel_gravity() {
         if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
             particleSendLengths[proc] = h_particles2SendCount[proc];
             pseudoParticleSendLengths[proc] = h_pseudoParticles2SendCount[proc];
+            Logger(INFO) << "particleSendLengths[" << proc << "] = " << particleSendLengths[proc];
+            Logger(INFO) << "pseudoParticleSendLengths[" << proc << "] = " << pseudoParticleSendLengths[proc];
         }
     }
 
@@ -972,11 +985,46 @@ real Miluphpc::parallel_gravity() {
         if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
             pseudoParticleTotalReceiveLength += pseudoParticleReceiveLengths[proc];
             pseudoParticleTotalSendLength += pseudoParticleSendLengths[proc];
+            Logger(INFO) << "particleReceiveLengths[" << proc << "] = " << particleReceiveLengths[proc];
+            Logger(INFO) << "pseudoParticleReceiveLengths[" << proc << "] = " << pseudoParticleReceiveLengths[proc];
         }
     }
+
+    //Gravity::Kernel::Launch::testSendIndices(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
+    //                                         particleHandler->d_particles, d_pseudoParticles2SendIndices,
+    //                                         d_markedSendIndices,
+    //                                         d_pseudoParticles2SendLevels, curveType, pseudoParticleTotalSendLength);
+
+    // debug
+    //particleHandler->copyDistribution(To::host, false, false, true);
+    //int *h_pseudoParticlesSendIndices = new int[pseudoParticleTotalSendLength];
+    //cuda::copy(h_pseudoParticlesSendIndices, d_pseudoParticles2SendIndices, pseudoParticleTotalSendLength, To::host);
+    //int debug_offset = 0;
+    //for (int proc=0; proc<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
+    //    if (proc != proc < subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
+    //        for (int i = 0; i < pseudoParticleSendLengths[proc]; i++) {
+    //            for (int j = 0; j < pseudoParticleSendLengths[proc]; j++) {
+    //                if (i != j) {
+    //                    if (h_pseudoParticlesSendIndices[i + debug_offset] == h_pseudoParticlesSendIndices[j + debug_offset] ||
+    //                            (particleHandler->h_x[h_pseudoParticlesSendIndices[i + debug_offset]] == particleHandler->h_x[h_pseudoParticlesSendIndices[j + debug_offset]] &&
+    //                            particleHandler->h_y[h_pseudoParticlesSendIndices[i + debug_offset]] == particleHandler->h_y[h_pseudoParticlesSendIndices[j + debug_offset]])) {
+    //                        Logger(INFO) << "found duplicate regarding proc " << proc << ": index: i: " << i << " = "
+    //                                     << h_pseudoParticlesSendIndices[i + debug_offset]
+    //                                     << ", j: " << j << " = " << h_pseudoParticlesSendIndices[j + debug_offset] <<
+    //                                     " (" <<  particleHandler->h_x[h_pseudoParticlesSendIndices[i + debug_offset]]
+    //                                     << ", " << particleHandler->h_x[h_pseudoParticlesSendIndices[j + debug_offset]] << ")";
+    //                    }
+    //                }
+    //            }
+    //        }
+    //        debug_offset += pseudoParticleSendLengths[proc];
+    //    }
+    //}
+    //delete [] h_pseudoParticlesSendIndices;
+    // end: debug
+
     Logger(INFO) << "pseudoParticleTotalReceiveLength: " << pseudoParticleTotalReceiveLength;
     Logger(INFO) << "pseudoParticleTotalSendLength: " << pseudoParticleTotalSendLength;
-
 
     integer treeIndex;
     cuda::copy(&treeIndex, treeHandler->d_index, 1, To::host);
@@ -985,7 +1033,7 @@ real Miluphpc::parallel_gravity() {
     // writing particles
     //int *h_particles2SendIndices = new int[particleTotalSendLength];
     //cuda::copy(h_particles2SendIndices, d_particles2SendIndices, particleTotalSendLength, To::host);
-    //std::string filename = "test";
+    //std::string filename = "Gravity2SendParticles";
     //particles2file(filename, h_particles2SendIndices, particleTotalSendLength);
     //delete [] h_particles2SendIndices;
     // end: writing particles
@@ -993,18 +1041,18 @@ real Miluphpc::parallel_gravity() {
     // writing pseudo-particles
     //int *h_pseudoParticles2SendIndices = new int[pseudoParticleTotalSendLength];
     //cuda::copy(h_pseudoParticles2SendIndices, d_pseudoParticles2SendIndices, pseudoParticleTotalSendLength, To::host);
-    //std::string filename = "test";
+    //std::string filename = "Gravity2SendPseudoParticles";
     //particles2file(filename, h_pseudoParticles2SendIndices, pseudoParticleTotalSendLength);
     //delete [] h_pseudoParticles2SendIndices;
     // end: writing pseudo-particles
 
     // writing both: particles and pseudo-particles
-    //int *h_particles2SendIndices = new int[particleTotalSendLength + pseudoParticleTotalSendLength];
-    //cuda::copy(&h_particles2SendIndices[0], d_particles2SendIndices, particleTotalSendLength, To::host);
-    //cuda::copy(&h_particles2SendIndices[particleTotalSendLength], d_pseudoParticles2SendIndices, pseudoParticleTotalSendLength, To::host);
-    //std::string filename = "test";
-    //particles2file(filename, h_particles2SendIndices, particleTotalSendLength + pseudoParticleTotalSendLength);
-    //delete [] h_particles2SendIndices;
+    //int *h_sendIndices = new int[particleTotalSendLength + pseudoParticleTotalSendLength];
+    //cuda::copy(&h_sendIndices[0], d_particles2SendIndices, particleTotalSendLength, To::host);
+    //cuda::copy(&h_sendIndices[particleTotalSendLength], d_pseudoParticles2SendIndices, pseudoParticleTotalSendLength, To::host);
+    //std::string filename = "Gravity2SendBoth";
+    //particles2file(filename, h_sendIndices, particleTotalSendLength + pseudoParticleTotalSendLength);
+    //delete [] h_sendIndices;
     // end: writing both: particles and pseudo-particles
     // END: WRITING PARTICLES TO SEND TO H5 FILE
 
@@ -1121,6 +1169,20 @@ real Miluphpc::parallel_gravity() {
     treeHandler->h_toDeleteLeaf[1] = numParticlesLocal + particleTotalReceiveLength;
     cuda::copy(treeHandler->h_toDeleteLeaf, treeHandler->d_toDeleteLeaf, 2, To::device);
 
+    //int debugOffset = 0;
+    //for (int proc=0; proc<subDomainKeyTreeHandler->h_numProcesses; proc++) {
+    //    gpuErrorcheck(cudaMemset(buffer->d_integerVal, 0, sizeof(integer)));
+    //    CudaUtils::Kernel::Launch::findDuplicateEntries(&particleHandler->d_x[treeIndex + debugOffset],
+    //                                                    &particleHandler->d_y[treeIndex + debugOffset],
+    //                                                    buffer->d_integerVal,
+    //                                                    particleReceiveLengths[proc]);
+    //    integer duplicates;
+    //    gpuErrorcheck(cudaMemcpy(&duplicates, buffer->d_integerVal, sizeof(integer), cudaMemcpyDeviceToHost));
+    //    Logger(INFO) << "duplicates: " << duplicates << " between: " << treeIndex + debugOffset << " and " << treeIndex + particleReceiveLengths[proc] + debugOffset;
+    //
+    //    debugOffset += particleReceiveLengths[proc];
+    //}
+
 
 #if DEBUGGING
     //gpuErrorcheck(cudaMemset(buffer->d_integerVal, 0, sizeof(integer)));
@@ -1135,9 +1197,18 @@ real Miluphpc::parallel_gravity() {
 
     //DomainListNS::Kernel::Launch::info(particleHandler->d_particles, domainListHandler->d_domainList);
 
+    //if (subDomainKeyTreeHandler->h_subDomainKeyTree->rank == 2) {
+    //    TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, treeIndex,
+    //                                 treeIndex + pseudoParticleReceiveLengths[0]/*pseudoParticleTotalReceiveLength*/);
+    //}
+
     treeHandler->h_toDeleteNode[0] = treeIndex;
     treeHandler->h_toDeleteNode[1] = treeIndex + pseudoParticleTotalReceiveLength;
     cuda::copy(treeHandler->h_toDeleteNode, treeHandler->d_toDeleteNode, 2, To::device);
+
+    //MPI_Finalize();
+    //assert(0);
+    //exit(0);
 
 #if DEBUGGING
     Logger(INFO) << "toDeleteLeaf: " << treeHandler->h_toDeleteLeaf[0] << " : " << treeHandler->h_toDeleteLeaf[1];
@@ -1312,12 +1383,11 @@ real Miluphpc::parallel_sph() {
     }
 
     // writing particles to send to h5 file
-    //int *h_particles2SendIndices = new int[particleTotalSendLength];
-    //cuda::copy(h_particles2SendIndices, d_particles2SendIndices, particleTotalSendLength, To::host);
-    //
-    //std::string filename = "test";
-    //particles2file(filename, h_particles2SendIndices, particleTotalSendLength);
-    //delete [] h_particles2SendIndices;
+    int *h_particles2SendIndices = new int[particleTotalSendLength];
+    cuda::copy(h_particles2SendIndices, d_particles2SendIndices, particleTotalSendLength, To::host);
+    std::string filename = "SPH2Send";
+    particles2file(filename, h_particles2SendIndices, particleTotalSendLength);
+    delete [] h_particles2SendIndices;
     // end: writing particles to send to h5 file
 
     Logger(INFO) << "sph: particleTotalReceiveLength: " << particleTotalReceiveLength;
@@ -1424,8 +1494,10 @@ void Miluphpc::fixedLoadBalancing() {
 
     Logger(INFO) << "fixedLoadBalancing()";
 
+    keyType rangePerProc = (1UL << (21 * DIM))/(subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
+    Logger(INFO) << "rangePerProc: " << rangePerProc;
     for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
-        subDomainKeyTreeHandler->h_subDomainKeyTree->range[i] = i * (1UL << (21 * DIM))/(subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses);
+        subDomainKeyTreeHandler->h_subDomainKeyTree->range[i] = (keyType)i * rangePerProc;
     }
     subDomainKeyTreeHandler->h_subDomainKeyTree->range[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses] = KEY_MAX;
 
@@ -1602,21 +1674,31 @@ integer Miluphpc::sendParticlesEntry(integer *sendLengths, integer *receiveLengt
 
     integer reqCounter = 0;
     integer receiveOffset = 0;
+    integer sendOffset = 0;
 
     for (int proc=0; proc<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
         if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
             if (proc == 0) {
                 reqParticles.push_back(comm.isend(proc, 17, &entry[0], sendLengths[proc]));
+                //Logger(INFO) << "Sending from: " << 0 << " to proc: " << proc;
             }
             else {
                 reqParticles.push_back(comm.isend(proc, 17,
-                                                  &entry[subDomainKeyTreeHandler->h_procParticleCounter[proc-1]],
+                                                  &entry[subDomainKeyTreeHandler->h_procParticleCounter[proc-1] + sendOffset],
                                                   sendLengths[proc]));
+
+                //Logger(INFO) << "Sending from: " << subDomainKeyTreeHandler->h_procParticleCounter[proc-1] + sendOffset << " to proc: " << proc;
             }
+            //reqParticles.push_back(comm.isend(proc, 17,&entry[sendOffset], sendLengths[proc]));
             statParticles.push_back(comm.recv(proc, 17, &helperHandler->d_realBuffer[0] + receiveOffset,
                                               receiveLengths[proc]));
+
+            //Logger(INFO) << "Receiving at " << receiveOffset << " from proc: " << proc;
+
+            //sendOffset += subDomainKeyTreeHandler->h_procParticleCounter[proc-1]; //sendLengths[proc];
             receiveOffset += receiveLengths[proc];
         }
+        sendOffset += subDomainKeyTreeHandler->h_procParticleCounter[proc-1]; //sendLengths[proc];
     }
 
     boost::mpi::wait_all(reqParticles.begin(), reqParticles.end());
@@ -1628,13 +1710,15 @@ integer Miluphpc::sendParticlesEntry(integer *sendLengths, integer *receiveLengt
 
     if (subDomainKeyTreeHandler->h_subDomainKeyTree->rank != 0) {
         if (offset > 0 && (subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] - offset) > 0) {
-            HelperNS::Kernel::Launch::copyArray(&entry[0], &entry[subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] - offset], offset);
+            //TODO: following line needed? (probably not)
+            //HelperNS::Kernel::Launch::copyArray(&entry[0], &entry[subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] - offset], offset);
             //KernelHandler.copyArray(&entry[0], &entry[h_procCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] - offset], offset);
         }
         HelperNS::Kernel::Launch::copyArray(&buffer->d_realBuffer[0], &entry[offset], subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]);
         HelperNS::Kernel::Launch::copyArray(&entry[0], &buffer->d_realBuffer[0], subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]);
         //KernelHandler.copyArray(&d_tempArray_2[0], &entry[offset], subDomainKeyTreeHandler->d_h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]);
         //KernelHandler.copyArray(&entry[0], &d_tempArray_2[0], subDomainKeyTreeHandler->d_h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]);
+        //Logger(INFO) << "moving from offet: " << offset << " length: " << subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank];
     }
 
     HelperNS::Kernel::Launch::resetArray(&entry[subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]],

@@ -42,13 +42,39 @@ int main(int argc, char** argv)
     int rank = comm.rank();
     int numProcesses = comm.size();
 
-#if DEBUGGING
-    printf("Hello World from proc %i out of %i\n", rank, numProcesses);
-#endif
+    LOGCFG.headers = true;
+    LOGCFG.level = DEBUG;
+    LOGCFG.myrank = rank;
 
-    //cudaSetDevice(rank);
+    printf("Hello World from proc %i out of %i\n", rank, numProcesses);
+
+    cudaSetDevice(rank);
     int device;
     cudaGetDevice(&device);
+    int numDevices;
+    cudaGetDeviceCount(&numDevices);
+    Logger(INFO) << "device: " << device << " | num devices: " << numDevices;
+
+    cudaDeviceSynchronize();
+
+    int *test;
+    Logger(INFO) << "Allocating memory...";
+    cuda::malloc(test, 100);
+    Logger(INFO) << "Setting memory...";
+    cuda::set(test, 10, 100);
+    Logger(INFO) << "Copying to host...";
+    int *h_test = new int[100];
+    cuda::copy(h_test, test, 100, To::host);
+    Logger(INFO) << "test[0] = " << h_test[0] << " test[10] = " << h_test[10];
+    Logger(INFO) << "Freeing memory ...";
+    cuda::free(test);
+    delete[] h_test;
+    //MPI_Finalize();
+    //exit(0);
+
+    int mpi_test = rank;
+    all_reduce(comm, boost::mpi::inplace_t<int*>(&mpi_test), 1, std::plus<int>());
+    Logger(INFO) << "mpi_test = " << mpi_test;
 
     ConfigParser confP{ConfigParser("config/config.info")};
     real timeStep = confP.getVal<real>("timeStep");
@@ -99,9 +125,6 @@ int main(int argc, char** argv)
 
     parameters.sml = confP.getVal<real>("sml");
 
-    LOGCFG.headers = true;
-    LOGCFG.level = DEBUG;
-    LOGCFG.myrank = rank;
     //LOGCFG.outputRank = 0;
 
     //Logger(DEBUG) << "DEBUG output";

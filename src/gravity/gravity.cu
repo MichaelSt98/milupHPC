@@ -69,14 +69,14 @@ namespace Gravity {
 #endif
 #endif
 
-            while ((bodyIndex + offset) < length) {
+            /*while ((bodyIndex + offset) < length) {
 
                 printf("x[%i] = (%f, %f, %f) %f\n", sendIndices[bodyIndex + offset], particles->x[sendIndices[bodyIndex + offset]],
                        particles->y[sendIndices[bodyIndex + offset]], particles->z[sendIndices[bodyIndex + offset]],
                        particles->mass[sendIndices[bodyIndex + offset]]);
 
                 offset += stride;
-            }
+            }*/
 
             //while ((bodyIndex + offset) < length) {
             //    if (particles->x[sendIndices[bodyIndex + offset]] == 0.f &&
@@ -106,7 +106,7 @@ namespace Gravity {
             //    }
             //}
 
-            /*while ((bodyIndex + offset) < length) {
+            while ((bodyIndex + offset) < length) {
 
                 //printf("index = %i sendIndex = %i level = %i\n", bodyIndex + offset, sendIndices[bodyIndex + offset],
                 //       levels[bodyIndex + offset]);
@@ -194,7 +194,7 @@ namespace Gravity {
                 }
 
                 offset += stride;
-            }*/
+            }
         }
 
         __global__ void zeroDomainListNodes(Particles *particles, DomainList *domainList,
@@ -1176,11 +1176,11 @@ namespace Gravity {
 
                         if (sendIndices[bodyIndex + offset] == 0) {
                             // TODO: this is probably not necessary, since only domain list indices can correspond to another process
-                            //if (subDomainKeyTree->key2proc(
-                            //        tree->getParticleKey(particles, bodyIndex + offset, MAX_LEVEL, curveType)) !=
-                            //    subDomainKeyTree->rank) {
-                            //    insert = false;
-                            //}
+                            if (subDomainKeyTree->key2proc(
+                                    tree->getParticleKey(particles, bodyIndex + offset, MAX_LEVEL, curveType)) !=
+                                subDomainKeyTree->rank) {
+                                insert = false;
+                            }
                             // check whether to be inserted index corresponds to a domain list
                             if (insert) {
                                 for (int i_domain = 0; i_domain < *domainList->domainListIndex; i_domain++) {
@@ -1340,6 +1340,13 @@ namespace Gravity {
                                 //if (sendIndices[tree->child[POW_DIM * (bodyIndex + offset) + i]] != 1 && tree->child[POW_DIM * (bodyIndex + offset) + i] != -1) {
                                 //    sendIndices[tree->child[POW_DIM * (bodyIndex + offset) + i]] = 2;
                                 //}
+
+                                if (insert && tree->child[POW_DIM * (bodyIndex + offset) + i] != -1 && particles->x[tree->child[POW_DIM * (bodyIndex + offset) + i]] == particles->x[bodyIndex + offset] &&
+                                        particles->y[tree->child[POW_DIM * (bodyIndex + offset) + i]] == particles->y[bodyIndex + offset]) {
+                                    printf("[rank %i] index = %i == child = %i ^= %i (%f, %f, %f) vs (%f, %f, %f)\n", subDomainKeyTree->rank, bodyIndex + offset, i, tree->child[POW_DIM * (bodyIndex + offset) + i],
+                                           particles->x[bodyIndex + offset], particles->y[bodyIndex + offset], particles->z[bodyIndex + offset],
+                                           particles->x[tree->child[POW_DIM * (bodyIndex + offset) + i]], particles->y[tree->child[POW_DIM * (bodyIndex + offset) + i]], particles->z[tree->child[POW_DIM * (bodyIndex + offset) + i]]);
+                                }
 
                                 if (tree->child[POW_DIM * (bodyIndex + offset) + i] != -1) {
                                     if (sendIndices[tree->child[POW_DIM * (bodyIndex + offset) + i]] != 1) {
