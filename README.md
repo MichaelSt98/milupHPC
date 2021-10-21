@@ -24,25 +24,29 @@ ____
 
 * some samples:
 	* each color represents a process, thus a GPU
-* one GPU
+* Kepler disk: one GPU
 
 ![](documents/movie_lebesgue_001_1proc.gif)
 
-* two GPUs (lebesgue curve)
+* Kepler disk: two GPUs (lebesgue curve)
 
 ![](documents/movie_lebesgue_001_2proc.gif)
 
-* two GPUs (hilbert curve)
+* Kepler disk: two GPUs (hilbert curve)
 
 ![](documents/movie_hilbert_001_2proc.gif)
 
-* two GPUs unequal load distribution (hilbert curve)
+* Kepler disk: two GPUs unequal load distribution (hilbert curve)
 
 ![](documents/movie_hilbert_001_2proc_fixedload.gif)
 
-* four GPUs (hilbert curve)
+* Kepler disk: four GPUs (hilbert curve)
 
 ![](documents/kepler_hilbert_4proc.gif)
+
+* Plummer model: four GPUs with dynamic load balancing every 10th step (top: lebesgue, bottom: hilbert)
+
+![](documents/4proc_plummer_dynamic.gif)
 
 
 * See [MichaelSt98/SPH](https://github.com/MichaelSt98/SPH) for a proof of concept
