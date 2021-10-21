@@ -57,18 +57,18 @@ int main(int argc, char** argv)
 
     cudaDeviceSynchronize();
 
-    int *test;
-    Logger(INFO) << "Allocating memory...";
-    cuda::malloc(test, 100);
-    Logger(INFO) << "Setting memory...";
-    cuda::set(test, 10, 100);
-    Logger(INFO) << "Copying to host...";
-    int *h_test = new int[100];
-    cuda::copy(h_test, test, 100, To::host);
-    Logger(INFO) << "test[0] = " << h_test[0] << " test[10] = " << h_test[10];
-    Logger(INFO) << "Freeing memory ...";
-    cuda::free(test);
-    delete[] h_test;
+    //int *test;
+    //Logger(INFO) << "Allocating memory...";
+    //cuda::malloc(test, 100);
+    //Logger(INFO) << "Setting memory...";
+    //cuda::set(test, 10, 100);
+    //Logger(INFO) << "Copying to host...";
+    //int *h_test = new int[100];
+    //cuda::copy(h_test, test, 100, To::host);
+    //Logger(INFO) << "test[0] = " << h_test[0] << " test[10] = " << h_test[10];
+    //Logger(INFO) << "Freeing memory ...";
+    //cuda::free(test);
+    //delete[] h_test;
     //MPI_Finalize();
     //exit(0);
 
@@ -79,9 +79,6 @@ int main(int argc, char** argv)
     ConfigParser confP{ConfigParser("config/config.info")};
     real timeStep = confP.getVal<real>("timeStep");
     Logger(INFO) << "timeStep from config file: " << timeStep;
-
-    //MPI_Finalize();
-    //exit(0);
 
     cxxopts::Options options("HPC NBody", "Multi-GPU CUDA Barnes-Hut NBody/SPH code");
 
@@ -142,10 +139,10 @@ int main(int argc, char** argv)
 #endif
 
 
-    /*integer numParticles = 100000;
-    integer numNodes = 2 * numParticles + 50000; //12000;
-    parameters.numParticles = numParticles;
-    parameters.numNodes = numNodes;*/
+    //integer numParticles = 100000;
+    //integer numNodes = 2 * numParticles + 50000; //12000;
+    //parameters.numParticles = numParticles;
+    //parameters.numNodes = numNodes;
 
     IntegratorSelection::Type integratorSelection = IntegratorSelection::explicit_euler;
 
@@ -167,6 +164,7 @@ int main(int argc, char** argv)
         }
     }
 
+    // profiling
     H5Profiler &profiler = H5Profiler::getInstance("log/performance.h5");
     profiler.setRank(comm.rank());
     profiler.setNumProcs(comm.size());

@@ -137,6 +137,8 @@ namespace SubDomainKeyTreeNS {
          */
         __global__ void buildDomainTree(Tree *tree, Particles *particles, DomainList *domainList, integer n, integer m);
 
+        __global__ void buildDomainTree(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, DomainList *domainList, integer n, integer m, integer level);
+
         /**
          * Kernel to get all particle keys (and additional information for debugging purposes)
          *
@@ -212,6 +214,8 @@ namespace SubDomainKeyTreeNS {
              * @return
              */
             real buildDomainTree(Tree *tree, Particles *particles, DomainList *domainList, integer n, integer m);
+
+            real buildDomainTree(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, DomainList *domainList, integer n, integer m, integer level);
 
             /**
              * Wrapped kernel to get all particle keys (and additional information for debugging purposes)

@@ -265,7 +265,7 @@ void Miluphpc::prepareSimulation() {
     cuda::copy(particleHandler->h_materialId, particleHandler->d_materialId, numParticlesLocal, To::device);
     particleHandler->copyDistribution(To::device, true, true);
 
-    removeParticles();
+    //removeParticles();
 
     Logger(INFO) << "compute bounding box ...";
     TreeNS::Kernel::Launch::computeBoundingBox(treeHandler->d_tree, particleHandler->d_particles, d_mutex,
@@ -364,7 +364,7 @@ real Miluphpc::rhs(int step) {
 
 }
 
-real Miluphpc::angularMomentum() {
+/*real Miluphpc::angularMomentum() {
     real time;
 
     boost::mpi::communicator comm;
@@ -450,7 +450,7 @@ real Miluphpc::energy() {
 
     return time;
 
-}
+}*/
 
 real Miluphpc::reset() {
     real time;
@@ -459,7 +459,7 @@ real Miluphpc::reset() {
     time = Kernel::Launch::resetArrays(treeHandler->d_tree, particleHandler->d_particles, d_mutex, numParticles,
                                        numNodes, true);
 
-    cuda::set(particleHandler->d_u, 0., numParticlesLocal);
+    //cuda::set(particleHandler->d_u, 0., numParticlesLocal);
 
     helperHandler->reset();
     buffer->reset();
@@ -656,9 +656,27 @@ real Miluphpc::parallel_tree() {
 #endif
 
     Logger(INFO) << "building domain tree ...";
-    time = SubDomainKeyTreeNS::Kernel::Launch::buildDomainTree(treeHandler->d_tree, particleHandler->d_particles,
-                                                               domainListHandler->d_domainList, numParticlesLocal,
-                                                               numNodes);
+    cuda::set(domainListHandler->d_domainListCounter, 0, 1);
+    if (false) {
+        time = SubDomainKeyTreeNS::Kernel::Launch::buildDomainTree(treeHandler->d_tree, particleHandler->d_particles,
+                                                                   domainListHandler->d_domainList, numParticlesLocal,
+                                                                   numNodes);
+    }
+    else {
+        time = 0;
+        for (int level = 0; level <= MAX_LEVEL; level++) {
+            time += SubDomainKeyTreeNS::Kernel::Launch::buildDomainTree(subDomainKeyTreeHandler->d_subDomainKeyTree,
+                                                                        treeHandler->d_tree,
+                                                                        particleHandler->d_particles,
+                                                                        domainListHandler->d_domainList,
+                                                                        numParticlesLocal,
+                                                                        numNodes, level);
+        }
+        int domainListCounterAfterwards;
+        cuda::copy(&domainListCounterAfterwards, domainListHandler->d_domainListCounter, 1, To::host);
+        Logger(INFO) << "domain list counter afterwards : " << domainListCounterAfterwards;
+    }
+    cuda::set(domainListHandler->d_domainListCounter, 0, 1);
     // END: tree construction (including common coarse tree)
 
     totalTime += time;
@@ -917,6 +935,9 @@ real Miluphpc::parallel_gravity() {
 
             cuda::copy(&particlesOffsetBuffer, &d_particles2SendCount[proc], 1, To::host);
             cuda::copy(&pseudoParticlesOffsetBuffer, &d_pseudoParticles2SendCount[proc], 1, To::host);
+
+            Logger(INFO) << "particles2SendCount[" << proc << "] = " << particlesOffsetBuffer;
+            Logger(INFO) << "pseudoParticles2SendCount[" << proc << "] = " << pseudoParticlesOffsetBuffer;
 
             particlesOffset += particlesOffsetBuffer;
             pseudoParticlesOffset += pseudoParticlesOffsetBuffer;
@@ -1242,7 +1263,7 @@ real Miluphpc::parallel_gravity() {
     Logger(INFO) << "Finished inserting received particles!";
 
     time = 0;
-    time = TreeNS::Kernel::Launch::sort(treeHandler->d_tree, numParticlesLocal, numParticles, true);
+    //time = TreeNS::Kernel::Launch::sort(treeHandler->d_tree, numParticlesLocal, numParticles, true);
 
     Logger(TIME) << "sorting: " << time << " ms";
 
@@ -1501,6 +1522,11 @@ void Miluphpc::fixedLoadBalancing() {
     }
     subDomainKeyTreeHandler->h_subDomainKeyTree->range[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses] = KEY_MAX;
 
+    //subDomainKeyTreeHandler->h_subDomainKeyTree->range[0] = 0UL;
+    //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = (2UL << 60) + (4UL << 57);
+    //subDomainKeyTreeHandler->h_subDomainKeyTree->range[2] = (4UL << 60) + (2UL << 57);
+    //subDomainKeyTreeHandler->h_subDomainKeyTree->range[3] = (6UL << 60) + (1UL << 57);
+    //subDomainKeyTreeHandler->h_subDomainKeyTree->range[4] = KEY_MAX;
     // FOR TESTING PURPOSES:
     // 1, 0, 0, 0, ...: 1152921504606846976
     // 2, 0, 0, 0, ...: 2305843009213693952;
@@ -1531,7 +1557,7 @@ void Miluphpc::dynamicLoadBalancing(int bins) {
 
     boost::mpi::communicator comm;
 
-    Logger(INFO) << "fixedLoadBalancing()";
+    Logger(INFO) << "dynamicLoadBalancing()";
 
     int *processParticleCounts = new int[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
 

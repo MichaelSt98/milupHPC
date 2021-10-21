@@ -2,7 +2,7 @@
 #define CONSTANTS_H_
 
 #define KEY_MAX ULONG_MAX
-#define DOMAIN_LIST_SIZE 512
+//#define DOMAIN_LIST_SIZE 512
 
 #include <string>
 

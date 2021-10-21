@@ -281,6 +281,7 @@ namespace Gravity {
             integer originalIndex = -1;
 
             while ((bodyIndex + offset) < *lowestDomainList->domainListIndex) {
+                originalIndex = -1;
                 for (int i = 0; i < *lowestDomainList->domainListIndex; i++) {
                     if (lowestDomainList->sortedDomainListKeys[bodyIndex + offset] ==
                         lowestDomainList->domainListKeys[i]) {
@@ -291,6 +292,7 @@ namespace Gravity {
                 if (originalIndex == -1) {
                     printf("ATTENTION: originalIndex = -1 (index = %i)!\n",
                            lowestDomainList->sortedDomainListKeys[bodyIndex + offset]);
+                    assert(0);
                 }
 
                 switch (entry) {
@@ -329,12 +331,29 @@ namespace Gravity {
             integer stride = blockDim.x*gridDim.x;
             integer offset = 0;
             integer lowestDomainIndex;
+            bool divide;
 
             while ((bodyIndex + offset) < *lowestDomainList->domainListIndex) {
 
+                divide = false;
                 lowestDomainIndex = lowestDomainList->domainListIndices[bodyIndex + offset];
 
-                if (particles->mass[lowestDomainIndex] != 0) {
+                for (int child=0; child<POW_DIM; child++) {
+                    if (tree->child[POW_DIM * lowestDomainIndex + child] != -1) {
+                        printf("lowestDomainIndex: tree->child[8 * %i + %i] = %i\n", lowestDomainIndex, child,
+                               tree->child[POW_DIM * lowestDomainIndex + child]);
+                        divide = true;
+                        break;
+                    }
+                }
+
+                //if (particles->mass[lowestDomainIndex] != (real)0) {
+                //if (particles->mass[lowestDomainIndex] > (real)0) {
+                if (divide && particles->mass[lowestDomainIndex] > (real)0) {
+
+                    printf("lowestDomainIndex: %i (%f, %f, %f) %f\n", lowestDomainIndex, particles->x[lowestDomainIndex],
+                           particles->y[lowestDomainIndex], particles->z[lowestDomainIndex], particles->mass[lowestDomainIndex]);
+
                     particles->x[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
 #if DIM > 1
                     particles->y[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
@@ -342,6 +361,9 @@ namespace Gravity {
                     particles->z[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
 #endif
 #endif
+                    printf("lowestDomainIndex: %i (%f, %f, %f) %f\n", lowestDomainIndex, particles->x[lowestDomainIndex],
+                           particles->y[lowestDomainIndex], particles->z[lowestDomainIndex], particles->mass[lowestDomainIndex]);
+
                 }
 
                 //printf("lowestDomainIndex = %i (%f, %f, %f) %f\n", lowestDomainIndex, particles->x[lowestDomainIndex],
@@ -382,7 +404,7 @@ namespace Gravity {
                     }
                 }
 
-                if (particles->mass[bodyIndex + offset] != 0 && !isDomainList) {
+                if (/*particles->mass[bodyIndex + offset] != 0 && */!isDomainList) {
                     particles->x[bodyIndex + offset] /= particles->mass[bodyIndex + offset];
 #if DIM > 1
                     particles->y[bodyIndex + offset] /= particles->mass[bodyIndex + offset];
@@ -433,6 +455,7 @@ namespace Gravity {
                         particles->mass[domainIndex] += particles->mass[tree->child[POW_DIM*domainIndex + i]];
                     }
 
+                    // TODO: replace floating point comparison
                     if (particles->mass[domainIndex] != 0.f) {
                         particles->x[domainIndex] /= particles->mass[domainIndex];
 #if DIM > 1
@@ -1276,10 +1299,12 @@ namespace Gravity {
 
                             }
                             else {
-                                printf("not within box %i, %i (%f, %f, %f) box (%f, %f), (%f, %f), (%f, %f)!\n", relevantIndex, domainList->relevantDomainListIndices[relevantIndex],
+                                printf("not within box %i, %i  level: %i (%f, %f, %f) box (%f, %f), (%f, %f), (%f, %f)!\n", relevantIndex, domainList->relevantDomainListIndices[relevantIndex],
+                                       domainList->relevantDomainListLevels[relevantIndex],
                                        particles->x[domainList->relevantDomainListIndices[relevantIndex]], particles->y[domainList->relevantDomainListIndices[relevantIndex]],
                                        particles->z[domainList->relevantDomainListIndices[relevantIndex]],
                                        min_x, max_x, min_y, max_y, min_z, max_z);
+
                                 //assert(0);
                             }
 #endif
@@ -1343,9 +1368,10 @@ namespace Gravity {
 
                                 if (insert && tree->child[POW_DIM * (bodyIndex + offset) + i] != -1 && particles->x[tree->child[POW_DIM * (bodyIndex + offset) + i]] == particles->x[bodyIndex + offset] &&
                                         particles->y[tree->child[POW_DIM * (bodyIndex + offset) + i]] == particles->y[bodyIndex + offset]) {
-                                    printf("[rank %i] index = %i == child = %i ^= %i (%f, %f, %f) vs (%f, %f, %f)\n", subDomainKeyTree->rank, bodyIndex + offset, i, tree->child[POW_DIM * (bodyIndex + offset) + i],
-                                           particles->x[bodyIndex + offset], particles->y[bodyIndex + offset], particles->z[bodyIndex + offset],
-                                           particles->x[tree->child[POW_DIM * (bodyIndex + offset) + i]], particles->y[tree->child[POW_DIM * (bodyIndex + offset) + i]], particles->z[tree->child[POW_DIM * (bodyIndex + offset) + i]]);
+                                    //printf("[rank %i] index = %i == child = %i ^= %i (%f, %f, %f) vs (%f, %f, %f)\n", subDomainKeyTree->rank, bodyIndex + offset, i, tree->child[POW_DIM * (bodyIndex + offset) + i],
+                                    //       particles->x[bodyIndex + offset], particles->y[bodyIndex + offset], particles->z[bodyIndex + offset],
+                                    //
+                                    //       particles->x[tree->child[POW_DIM * (bodyIndex + offset) + i]], particles->y[tree->child[POW_DIM * (bodyIndex + offset) + i]], particles->z[tree->child[POW_DIM * (bodyIndex + offset) + i]]);
                                 }
 
                                 if (tree->child[POW_DIM * (bodyIndex + offset) + i] != -1) {
@@ -1460,7 +1486,7 @@ namespace Gravity {
                     if ((sum + helper->integerBuffer[bodyIndex + offset]) >= (i*n) && sum < (i*n)) {
                         printf("[rank %i] new range: %lu\n", subDomainKeyTree->rank,
                                helper->keyTypeBuffer[bodyIndex + offset]);
-                        subDomainKeyTree->range[i] = helper->keyTypeBuffer[bodyIndex + offset];
+                        subDomainKeyTree->range[i] = (helper->keyTypeBuffer[bodyIndex + offset] >> 6) << 6;
                     }
                 }
 
