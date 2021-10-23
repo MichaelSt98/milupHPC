@@ -104,6 +104,7 @@ private:
 
 public:
 
+    H5Profiler &profiler = H5Profiler::getInstance("log/performance.h5");
     Curve::Type curveType;
 
     SPH::KernelHandler kernelHandler;

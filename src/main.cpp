@@ -57,21 +57,6 @@ int main(int argc, char** argv)
 
     cudaDeviceSynchronize();
 
-    //int *test;
-    //Logger(INFO) << "Allocating memory...";
-    //cuda::malloc(test, 100);
-    //Logger(INFO) << "Setting memory...";
-    //cuda::set(test, 10, 100);
-    //Logger(INFO) << "Copying to host...";
-    //int *h_test = new int[100];
-    //cuda::copy(h_test, test, 100, To::host);
-    //Logger(INFO) << "test[0] = " << h_test[0] << " test[10] = " << h_test[10];
-    //Logger(INFO) << "Freeing memory ...";
-    //cuda::free(test);
-    //delete[] h_test;
-    //MPI_Finalize();
-    //exit(0);
-
     int mpi_test = rank;
     all_reduce(comm, boost::mpi::inplace_t<int*>(&mpi_test), 1, std::plus<int>());
     Logger(INFO) << "mpi_test = " << mpi_test;
@@ -123,7 +108,6 @@ int main(int argc, char** argv)
     parameters.sml = confP.getVal<real>("sml");
 
     //LOGCFG.outputRank = 0;
-
     //Logger(DEBUG) << "DEBUG output";
     //Logger(WARN) << "WARN output";
     //Logger(ERROR) << "ERROR output";
@@ -137,12 +121,6 @@ int main(int argc, char** argv)
     Logger(INFO) << "typedef double real";
 #endif
 #endif
-
-
-    //integer numParticles = 100000;
-    //integer numNodes = 2 * numParticles + 50000; //12000;
-    //parameters.numParticles = numParticles;
-    //parameters.numNodes = numNodes;
 
     IntegratorSelection::Type integratorSelection = IntegratorSelection::explicit_euler;
 
@@ -168,11 +146,31 @@ int main(int argc, char** argv)
     H5Profiler &profiler = H5Profiler::getInstance("log/performance.h5");
     profiler.setRank(comm.rank());
     profiler.setNumProcs(comm.size());
-    profiler.createValueDataSet<int>("/general/numParticles", 1);
-    profiler.createValueDataSet<int>("/general/numParticlesLocal", 1);
-    profiler.createVectorDataSet<keyType>("/general/ranges", 1, comm.size() + 1);
-    profiler.createValueDataSet<real>("/time/rhs", 1);
-    profiler.createValueDataSet<real>("/time/rhs_elapsed", 1);
+
+    profiler.createValueDataSet<int>(ProfilerIds::numParticles, 1);
+    profiler.createValueDataSet<int>(ProfilerIds::numParticlesLocal, 1);
+    profiler.createVectorDataSet<keyType>(ProfilerIds::ranges, 1, comm.size() + 1);
+
+    profiler.createValueDataSet<real>(ProfilerIds::Time::rhs, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::rhsElapsed, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::reset, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::boundingBox, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::assignParticles, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::tree, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::pseudoParticle, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::gravity, 1);
+#if SPH_SIM
+    profiler.createValueDataSet<real>(ProfilerIds::Time::sph, 1);
+#endif
+    profiler.createValueDataSet<real>(ProfilerIds::Time::Tree::createDomain, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::Tree::tree, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::Tree::buildDomain, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::Gravity::compTheta, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::Gravity::symbolicForce, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::Gravity::sending, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::Gravity::insertReceivedPseudoParticles, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::Gravity::insertReceivedParticles, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::Gravity::force, 1);
 
     for (int i_step=0; i_step<parameters.iterations; i_step++) {
 

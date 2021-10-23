@@ -15,6 +15,63 @@
 
 #include "logger.h"
 
+namespace ProfilerIds {
+
+    const char* const numParticles      { "/general/numParticles" };
+    const char* const numParticlesLocal { "/general/numParticlesLocal" };
+    const char* const ranges            { "/general/ranges" };
+
+    namespace Time {
+
+        const char *const rhs             { "/time/rhs" };
+        const char *const rhsElapsed      { "/time/rhsElapsed" };
+        const char *const reset           { "/time/reset" };
+        const char *const boundingBox     { "/time/boundingBox" };
+        const char *const assignParticles { "/time/assignParticles" };
+        const char *const tree            { "/time/tree" };
+        const char *const pseudoParticle  { "/time/pseudoParticle "};
+        const char *const gravity         { "/time/gravity" };
+        const char *const sph             { "/time/sph" };
+
+        namespace Reset {
+
+        }
+
+        namespace BoundingBox {
+
+        }
+
+        namespace AssignParticles {
+
+        }
+
+        namespace Tree {
+            const char *const createDomain    { "/time/createDomainList" };
+            const char *const tree            { "/time/buildTree" };
+            const char *const buildDomain     { "/time/buildDomainTree" };
+        }
+
+        namespace PseudoParticles {
+
+        }
+
+        namespace Gravity {
+            const char *const compTheta      { "/time/compTheta" };
+            const char *const symbolicForce  { "/time/symbolicForce" };
+            const char *const sending        { "/time/gravitySendingParticles" };
+            const char *const insertReceivedPseudoParticles { "/time/gravityInsertReceivedPseudoParticles" };
+            const char *const insertReceivedParticles       { "/time/gravityInsertReceivedParticles" };
+            const char *const force          { "/time/gravityForce" };
+        }
+
+        namespace SPH {
+
+        }
+
+    }
+
+}
+
 // Singleton
 class H5Profiler {
 public:
