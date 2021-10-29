@@ -4,6 +4,7 @@
 #include "parameter.h"
 #include "cuda_utils/cuda_utilities.cuh"
 
+
 /**
  * Particle(s) class based on SoA (Structur of Arrays).
  */
@@ -39,6 +40,18 @@ public:
 #endif
 #endif
 
+    /// (pointer to) x gravitational acceleration (array)
+    real *g_ax;
+#if DIM > 1
+    /// (pointer to) y gravitational acceleration (array)
+    real *g_ay;
+#if DIM == 3
+    /// (pointer to) z gravitational acceleration (array)
+    real *g_az;
+#endif
+#endif
+
+    integer *level;
     /// (pointer to) unique identifier (array)
     idInteger *uid; // unique identifier (unsigned int/long?)
     /// (pointer to) material identifier (array)
@@ -68,13 +81,21 @@ public:
     /// (pointer to) pressure (array)
     real *p; // pressure
 
+    /// (pointer) to max(mu_ij) (array) needed for artificial viscosity and determining timestp
+    real *muijmax;
+
+#if NAVIER_STOKES
+    real *Tshear;
+    real *eta;
+#endif
+
 #if INTEGRATE_DENSITY
     // integrated density
     /// (pointer to) time derivative of density (array)
     real *drhodt;
 #endif
 
-#if VARIABLE_SML
+#if VARIABLE_SML || INTEGRATE_SML
     // integrate/variable smoothing length
     /// (pointer to) time derivative of smoothing length (array)
     real *dsmldt;
@@ -88,6 +109,7 @@ public:
     /// (pointer to) local strain (array)
     real *localStrain; // local strain
 #endif
+
 #if SOLID || NAVIER_STOKES
     /// (pointer to) sigma/stress tensor (array)
     real *sigma; // stress tensor (DIM * DIM)
@@ -170,173 +192,55 @@ public:
      */
     CUDA_CALLABLE_MEMBER Particles();
 
-    /**
-     * Constructor, passing pointer to member variables
-     *
-     * @param numParticles number of Particles
-     * @param numNodes number of nodes
-     * @param mass mass
-     * @param x x-position
-     * @param vx x-velocity
-     * @param ax x-acceleration
-     * @param uid unique identifier
-     * @param materialId material identifier
-     * @param sml smoothing length
-     * @param nnl near neighbour list
-     * @param noi number of interaction
-     * @param e energy
-     * @param dedt time derivative of energy
-     * @param cs speed of sound
-     * @param rho density
-     * @param p pressure
-     */
-    CUDA_CALLABLE_MEMBER Particles(integer *numParticles, integer *numNodes, real *mass, real *x, real *vx, real *ax,
-                                   idInteger *uid, integer *materialId, real *sml, integer *nnl, integer *noi, real *e,
-                                   real *dedt, real *cs, real *rho, real *p);
+    //TODO: constructors and setter only for specific dimension (#if , #else if, #else)
+#if DIM == 1
 
-    /**
-     * Setter, passing pointer to member variables
-     *
-     * @param numParticles number of Particles
-     * @param numNodes number of nodes
-     * @param mass mass
-     * @param x x-position
-     * @param vx x-velocity
-     * @param ax x-acceleration
-     * @param uid unique identifier
-     * @param materialId material identifier
-     * @param sml smoothing length
-     * @param nnl near neighbour list
-     * @param noi number of interaction
-     * @param e energy
-     * @param dedt time derivative of energy
-     * @param cs speed of sound
-     * @param rho density
-     * @param p pressure
-     */
-    CUDA_CALLABLE_MEMBER void set(integer *numParticles, integer *numNodes, real *mass, real *x, real *vx, real *ax,
-                                  idInteger *uid, integer *materialId, real *sml, integer *nnl, integer *noi, real *e,
-                                  real *dedt, real *cs, real *rho, real *p);
-#if DIM > 1
-    /**
-     * Constructor, passing pointer to member variables
-     *
-     * @param numParticles number of Particles
-     * @param numNodes number of nodes
-     * @param mass mass
-     * @param x x-position
-     * @param y y-position
-     * @param vx x-velocity
-     * @param vy y-velocity
-     * @param ax x-acceleration
-     * @param ay y-acceleration
-     * @param uid unique identifier
-     * @param materialId material identifier
-     * @param sml smoothing length
-     * @param nnl near neighbour list
-     * @param noi number of interaction
-     * @param e energy
-     * @param dedt time derivative of energy
-     * @param cs speed of sound
-     * @param rho density
-     * @param p pressure
-     */
-    CUDA_CALLABLE_MEMBER Particles(integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *vx,
-                                   real *vy, real *ax, real *ay, idInteger *uid, integer *materialId, real *sml,
+    CUDA_CALLABLE_MEMBER Particles(integer *numParticles, integer *numNodes, real *mass, real *x, real *vx, real *ax,
+                                   integer *level, idInteger *uid, integer *materialId, real *sml,
                                    integer *nnl, integer *noi, real *e, real *dedt, real *cs, real *rho, real *p);
 
-    /**
-     * Setter, passing pointer to member variables
-     *
-     * @param numParticles number of Particles
-     * @param numNodes number of nodes
-     * @param mass mass
-     * @param x x-position
-     * @param y y-position
-     * @param vx x-velocity
-     * @param vy y-velocity
-     * @param ax x-acceleration
-     * @param ay y-acceleration
-     * @param uid unique identifier
-     * @param materialId material identifier
-     * @param sml smoothing length
-     * @param nnl near neighbour list
-     * @param noi number of interaction
-     * @param e energy
-     * @param dedt time derivative of energy
-     * @param cs speed of sound
-     * @param rho density
-     * @param p pressure
-     */
-    CUDA_CALLABLE_MEMBER void set(integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *vx,
-                                  real *vy, real *ax, real *ay, idInteger *uid, integer *materialId, real *sml,
+    CUDA_CALLABLE_MEMBER void set(integer *numParticles, integer *numNodes, real *mass, real *x, real *vx, real *ax,
+                                  integer *level, idInteger *uid, integer *materialId, real *sml,
                                   integer *nnl, integer *noi, real *e, real *dedt, real *cs, real *rho, real *p);
-#if DIM == 3
-    /**
-     * Constructor, passing pointer to member variables
-     *
-     * @param numParticles number of Particles
-     * @param numNodes number of nodes
-     * @param mass mass
-     * @param x x-position
-     * @param y y-position
-     * @param z z-position
-     * @param vx x-velocity
-     * @param vy y-velocity
-     * @param vz z-velocity
-     * @param ax x-acceleration
-     * @param ay y-acceleration
-     * @param az z-acceleration
-     * @param uid unique identifier
-     * @param materialId material identifier
-     * @param sml smoothing length
-     * @param nnl near neighbour list
-     * @param noi number of interaction
-     * @param e energy
-     * @param dedt time derivative of energy
-     * @param cs speed of sound
-     * @param rho density
-     * @param p pressure
-     */
-    CUDA_CALLABLE_MEMBER Particles(integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *z,
-                                   real *vx, real *vy, real *vz, real *ax, real *ay, real *az, idInteger *uid,
+#elif DIM == 2
+
+    CUDA_CALLABLE_MEMBER Particles(integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *vx,
+                                   real *vy, real *ax, real *ay, idInteger *uid,
                                    integer *materialId, real *sml, integer *nnl, integer *noi, real *e, real *dedt,
                                    real *cs, real *rho, real *p);
 
-    /**
-    * Setter, passing pointer to member variables
-    *
-    * @param numParticles number of Particles
-    * @param numNodes number of nodes
-    * @param mass mass
-    * @param x x-position
-    * @param y y-position
-    * @param z z-position
-    * @param vx x-velocity
-    * @param vy y-velocity
-    * @param vz z-velocity
-    * @param ax x-acceleration
-    * @param ay y-acceleration
-    * @param az z-acceleration
-    * @param uid unique identifier
-    * @param materialId material identifier
-    * @param sml smoothing length
-    * @param nnl near neighbour list
-    * @param noi number of interaction
-    * @param e energy
-    * @param dedt time derivative of energy
-    * @param cs speed of sound
-    * @param rho density
-    * @param p pressure
-    */
-    CUDA_CALLABLE_MEMBER void set(integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *z,
-                                  real *vx, real *vy, real *vz, real *ax, real *ay, real *az, idInteger *uid,
+
+    CUDA_CALLABLE_MEMBER void set(integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *vx,
+                                  real *vy, real *ax, real *ay, integer *level, idInteger *uid,
                                   integer *materialId, real *sml, integer *nnl, integer *noi, real *e, real *dedt,
                                   real *cs, real *rho, real *p);
+#else
+
+    CUDA_CALLABLE_MEMBER Particles(integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *z,
+                                   real *vx, real *vy, real *vz, real *ax, real *ay, real *az,
+                                   idInteger *uid, integer *materialId, real *sml,
+                                   integer *nnl, integer *noi, real *e, real *dedt,
+                                   real *cs, real *rho, real *p);
+
+
+    CUDA_CALLABLE_MEMBER void set(integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *z,
+                                  real *vx, real *vy, real *vz, real *ax, real *ay, real *az,
+                                  integer *level, idInteger *uid, integer *materialId,
+                                  real *sml, integer *nnl, integer *noi, real *e, real *dedt, real *cs,
+                                  real *rho, real *p);
 #endif
+
+#if DIM == 1
+    CUDA_CALLABLE_MEMBER void setGravity(real *g_ax);
+#elif DIM == 2
+    CUDA_CALLABLE_MEMBER void setGravity(real *g_ax, real *g_ay);
+#else
+    CUDA_CALLABLE_MEMBER void setGravity(real *g_ax, real *g_ay, real *g_az);
 #endif
 
     CUDA_CALLABLE_MEMBER void setU(real *u);
+
+    CUDA_CALLABLE_MEMBER void setArtificialViscosity(real *muijmax);
 
 #if INTEGRATE_DENSITY
     /**
@@ -346,13 +250,16 @@ public:
      */
     CUDA_CALLABLE_MEMBER void setIntegrateDensity(real *drhodt);
 #endif
-#if VARIABLE_SML
+#if VARIABLE_SML || INTEGRATE_SML
     /**
      * Setter, in dependence of `VARIABLE_SML`
      *
      * @param dsmldt time derivative of smoothing length
      */
     CUDA_CALLABLE_MEMBER void setVariableSML(real *dsmldt);
+#endif
+#if NAVIER_STOKES
+    CUDA_CALLABLE_MEMBER void setNavierStokes(real *Tshear, real *eta);
 #endif
 #if SOLID
     /**
@@ -370,7 +277,7 @@ public:
      *
      * @param sigma
      */
-    CUDA_CALLABLE_MEMBER void setNavierStokes(real *sigma);
+    CUDA_CALLABLE_MEMBER void setSolidNavierStokes(real *sigma);
 #endif
 #if ARTIFICIAL_STRESS
     /**
@@ -476,58 +383,6 @@ namespace ParticlesNS {
     namespace Kernel {
 
         /**
-         * Kernel call to setter
-         *
-         * @param particles
-         * @param numParticles
-         * @param numNodes
-         * @param mass
-         * @param x
-         * @param vx
-         * @param ax
-         * @param uid
-         * @param materialId
-         * @param sml
-         * @param nnl
-         * @param noi
-         * @param e
-         * @param dedt
-         * @param cs
-         * @param rho
-         * @param p
-         */
-        __global__ void set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x,
-                            real *vx, real *ax, idInteger *uid, integer *materialId, real *sml, integer *nnl,
-                            integer *noi, real *e, real *dedt, real *cs, real *rho, real *p);
-
-        namespace Launch {
-            /**
-             * Wrapped Kernel call to setter
-             *
-             * @param particles
-             * @param numParticles
-             * @param numNodes
-             * @param mass
-             * @param x
-             * @param vx
-             * @param ax
-             * @param uid
-             * @param materialId
-             * @param sml
-             * @param nnl
-             * @param noi
-             * @param e
-             * @param dedt
-             * @param cs
-             * @param rho
-             * @param p
-             */
-            void set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *vx,
-                     real *ax, idInteger *uid, integer *materialId, real *sml, integer *nnl, integer *noi, real *e,
-                     real *dedt, real *cs, real *rho, real *p);
-        }
-
-        /**
          * Info Kernel (for debugging purposes)
          *
          * @param particles
@@ -550,139 +405,81 @@ namespace ParticlesNS {
             real info(Particles *particles, integer n, integer m, integer k);
         }
 
-#if DIM > 1
-        /**
-         * Kernel call to setter
-         *
-         * @param particles
-         * @param numParticles
-         * @param numNodes
-         * @param mass
-         * @param x
-         * @param y
-         * @param vx
-         * @param vy
-         * @param ax
-         * @param ay
-         * @param uid
-         * @param materialId
-         * @param sml
-         * @param nnl
-         * @param noi
-         * @param e
-         * @param dedt
-         * @param cs
-         * @param rho
-         * @param p
-         */
+#if DIM == 1
+
         __global__ void set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x,
-                            real *y, real *vx, real *vy, real *ax, real *ay, idInteger *uid, integer *materialId,
+                            real *vx, real *ax, integer *level, idInteger *uid, integer *materialId,
                             real *sml, integer *nnl, integer *noi, real *e, real *dedt, real *cs, real *rho, real *p);
 
         namespace Launch {
-            /**
-             * Wrapped kernel call to setter
-             *
-             * @param particles
-             * @param numParticles
-             * @param numNodes
-             * @param mass
-             * @param x
-             * @param y
-             * @param vx
-             * @param vy
-             * @param ax
-             * @param ay
-             * @param id
-             * @param materialId
-             * @param sml
-             * @param nnl
-             * @param noi
-             * @param e
-             * @param dedt
-             * @param cs
-             * @param rho
-             * @param p
-             */
-            void set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *y,
-                     real *vx, real *vy, real *ax, real *ay, idInteger *id, integer *materialId, real *sml, integer *nnl,
+
+            void set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *vx,
+                     real *ax, integer *level, idInteger *uid, integer *materialId, real *sml, integer *nnl,
                      integer *noi, real *e, real *dedt, real *cs, real *rho, real *p);
         }
 
-#if DIM == 3
+#elif DIM == 2
 
-        /**
-         * Kernel call to setter
-         *
-         * @param particles
-         * @param numParticles
-         * @param numNodes
-         * @param mass
-         * @param x
-         * @param y
-         * @param z
-         * @param vx
-         * @param vy
-         * @param vz
-         * @param ax
-         * @param ay
-         * @param az
-         * @param uid
-         * @param materialId
-         * @param sml
-         * @param nnl
-         * @param noi
-         * @param e
-         * @param dedt
-         * @param cs
-         * @param rho
-         * @param p
-         */
         __global__ void set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x,
-                            real *y, real *z, real *vx, real *vy, real *vz, real *ax, real *ay, real *az,
+                            real *y, real *vx, real *vy, real *ax, real *ay, integer *level,
                             idInteger *uid, integer *materialId, real *sml, integer *nnl, integer *noi, real *e,
                             real *dedt, real *cs, real *rho, real *p);
 
         namespace Launch {
-            /**
-             * Wrapped kernel call to setter
-             *
-             * @param particles
-             * @param numParticles
-             * @param numNodes
-             * @param mass
-             * @param x
-             * @param y
-             * @param z
-             * @param vx
-             * @param vy
-             * @param vz
-             * @param ax
-             * @param ay
-             * @param az
-             * @param id
-             * @param materialId
-             * @param sml
-             * @param nnl
-             * @param noi
-             * @param e
-             * @param dedt
-             * @param cs
-             * @param rho
-             * @param p
-             */
+
             void set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *y,
-                     real *z, real *vx, real *vy, real *vz, real *ax, real *ay, real *az, idInteger *id,
+                     real *vx, real *vy, real *ax, real *ay, integer *level, idInteger *id,
                      integer *materialId, real *sml, integer *nnl, integer *noi, real *e, real *dedt, real *cs,
                      real *rho, real *p);
         }
 
+#else
+
+        __global__ void set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x,
+                            real *y, real *z, real *vx, real *vy, real *vz, real *ax, real *ay, real *az,
+                            integer *level, idInteger *uid, integer *materialId, real *sml,
+                            integer *nnl, integer *noi, real *e,
+                            real *dedt, real *cs, real *rho, real *p);
+
+        namespace Launch {
+
+            void set(Particles *particles, integer *numParticles, integer *numNodes, real *mass, real *x, real *y,
+                     real *z, real *vx, real *vy, real *vz, real *ax, real *ay, real *az,
+                     integer *level, idInteger *uid, integer *materialId, real *sml,
+                     integer *nnl, integer *noi, real *e, real *dedt, real *cs, real *rho, real *p);
+        }
+
 #endif
+
+#if DIM == 1
+        __global__ void setGravity(Particles *particles, real *g_ax);
+
+        namespace Launch {
+            void setGravity(Particles *particles, real *g_ax);
+        }
+
+#elif DIM == 2
+        __global__ void setGravity(Particles *particles, real *g_ax, real *g_ay);
+
+        namespace Launch {
+            void setGravity(Particles *particles, real *g_ax, real *g_ay);
+        }
+#else
+        __global__ void setGravity(Particles *particles, real *g_ax, real *g_ay, real *g_az);
+
+        namespace Launch {
+            void setGravity(Particles *particles, real *g_ax, real *g_ay, real *g_az);
+        }
 #endif
 
         __global__ void setU(Particles *particles, real *u);
         namespace Launch {
             void setU(Particles *particles, real *u);
+        }
+
+        __global__ void setArtificialViscosity(Particles *particles, real *muijmax);
+        namespace Launch {
+            void setArtificialViscosity(Particles *particles, real *muijmax);
         }
 
 #if INTEGRATE_DENSITY
@@ -703,7 +500,7 @@ namespace ParticlesNS {
             void setIntegrateDensity(Particles *particles, real *drhodt);
         }
 #endif
-#if VARIABLE_SML
+#if VARIABLE_SML || INTEGRATE_SML
         /**
          * Kernel call to setter, in dependence of `VARIABLE_SML`
          *
@@ -719,6 +516,12 @@ namespace ParticlesNS {
             * @param dsmldt
             */
             void setVariableSML(Particles *particles, real *dsmldt);
+        }
+#endif
+#if NAVIER_STOKES
+        __global__ void setNavierStokes(Particles *particles, real *Tshear, real *eta);
+        namespace Launch {
+            void setNavierStokes(Particles *particles, real *Tshear, real *eta);
         }
 #endif
 #if SOLID
@@ -750,7 +553,7 @@ namespace ParticlesNS {
          * @param particles
          * @param sigma
          */
-        __global__ void setNavierStokes(Particles *particles, real *sigma);
+        __global__ void setSolidNavierStokes(Particles *particles, real *sigma);
         namespace Launch {
             /**
              * Wrapped kernel call to setter, in dependence of `SOLID` or `NAVIER_STOKES`
@@ -758,7 +561,7 @@ namespace ParticlesNS {
              * @param particles
              * @param sigma
              */
-            void setNavierStokes(Particles *particles, real *sigma);
+            void setSolidNavierStokes(Particles *particles, real *sigma);
         }
 #endif
 #if ARTIFICIAL_STRESS
@@ -949,20 +752,40 @@ class IntegratedParticles {
 public:
 
     /// unique identifier
-    integer *uid;
+    idInteger *uid;
 
-    /// time derivative of the density
-    real *drhodt;
-
-    /// time derivative of the x position and velocity
-    real *dxdt, *dvxdt;
+    ///
+    real *x;
+    real *vx;
+    real *ax;
 #if DIM > 1
-    /// time derivative of the y position and velocity
-    real *dydt, *dvydt;
+    ///
+    real *y;
+    real *vy;
+    real *ay;
 #if DIM == 3
-    /// time derivative of the z position and velocity
-    real *dzdt, *dvzdt;
+    ///
+    real *z;
+    real *vz;
+    real *az;
 #endif
+#endif
+
+    ///
+    real *rho;
+    real *e;
+    real *dedt;
+    real *p;
+    real *cs;
+
+    real *sml;
+
+#if INTEGRATE_DENSITY
+    real *drhodt;
+#endif
+
+#if VARIABLE_SML || INTEGRATE_SML
+    real *dsmldt;
 #endif
 
     /**
@@ -970,86 +793,42 @@ public:
      */
     CUDA_CALLABLE_MEMBER IntegratedParticles();
 
-    /**
-     * Constructor
-     *
-     * @param uid unique identifier
-     * @param drhodt time derivative of density
-     * @param dxdt time derivative of the x position
-     * @param dvxdt time derivative of the x velocity
-     */
-    CUDA_CALLABLE_MEMBER IntegratedParticles(integer *uid, real *drhodt, real *dxdt, real *dvxdt);
+#if DIM == 1
 
-    /**
-     * Setter
-     *
-     * @param uid unique identifier
-     * @param drhodt time derivative of density
-     * @param dxdt time derivative of the x position
-     * @param dvxdt time derivative of the y velocity
-     */
-    CUDA_CALLABLE_MEMBER void set(integer *uid, real *drhodt, real *dxdt, real *dvxdt);
+    CUDA_CALLABLE_MEMBER IntegratedParticles(idInteger *uid, real *rho, real *e, real *dedt, real *p, real *cs, real *x,
+                                             real *vx, real *ax);
 
-#if DIM > 1
-    /**
-     * Constructor
-     *
-     * @param uid unique identifier
-     * @param drhodt time derivative of density
-     * @param dxdt time derivative of the x position
-     * @param dydt time derivative of the y position
-     * @param dvxdt time derivative of the x velocity
-     * @param dvydt time derivative of the y velocity
-     */
-    CUDA_CALLABLE_MEMBER IntegratedParticles(integer *uid, real *drhodt, real *dxdt, real *dydt, real *dvxdt,
-                                             real *dvydt);
+    CUDA_CALLABLE_MEMBER void set(idInteger *uid, real *rho, real *e, real *dedt, real *p, real *cs, real *x,
+                                  real *vx, real *ax);
 
-    /**
-     * Setter
-     *
-     * @param uid unique identifier
-     * @param drhodt time derivative of density
-     * @param dxdt time derivative of the x position
-     * @param dydt time derivative of the y position
-     * @param dvxdt time derivative of the x velocity
-     * @param dvydt time derivative of the y velocity
-     */
-    CUDA_CALLABLE_MEMBER void set(integer *uid, real *drhodt, real *dxdt, real *dydt, real *dvxdt,
-                                  real *dvydt);
+#elif DIM == 2
 
-#if DIM == 3
+    CUDA_CALLABLE_MEMBER IntegratedParticles(idInteger *uid, real *rho, real *e, real *dedt, real *p, real *cs, real *x,
+                                             real *y, real *vx, real *vy, real *ax, real *ay);
 
-    /**
-     * Constructor
-     *
-     * @param uid unique identifier
-     * @param drhodt time derivative of density
-     * @param dxdt time derivative of the x position
-     * @param dydt time derivative of the y position
-     * @param dzdt time derivative of the z position
-     * @param dvxdt time derivative of the x velocity
-     * @param dvydt time derivative of the y velocity
-     * @param dvzdt time derivative of the z velocity
-     */
-    CUDA_CALLABLE_MEMBER IntegratedParticles(integer *uid, real *drhodt, real *dxdt, real *dydt, real *dzdt,
-                                             real *dvxdt, real *dvydt, real *dvzdt);
+    CUDA_CALLABLE_MEMBER void set(integer *uid, real *rho, real *e, real *dedt, real *p, real *cs, real *x,
+                                  real *y, real *vx, real *vy, real *ax, real *ay);
 
-    /**
-     * Setter
-     *
-     * @param uid unique identifier
-     * @param drhodt time derivative of density
-     * @param dxdt time derivative of the x position
-     * @param dydt time derivative of the y position
-     * @param dzdt time derivative of the z position
-     * @param dvxdt time derivative of the x velocity
-     * @param dvydt time derivative of the y velocity
-     * @param dvzdt time derivative of the z velocity
-     */
-    CUDA_CALLABLE_MEMBER void set(integer *uid, real *drhodt, real *dxdt, real *dydt, real *dzdt,
-                                  real *dvxdt, real *dvydt, real *dvzdt);
+#else
+
+    CUDA_CALLABLE_MEMBER IntegratedParticles(idInteger *uid, real *rho, real *e, real *dedt, real *p, real *cs, real *x,
+                                             real *y, real *z, real *vx, real *vy, real *vz, real *ax,
+                                             real *ay, real *az);
+
+    CUDA_CALLABLE_MEMBER void set(idInteger *uid, real *rho, real *e, real *dedt, real *p, real *cs, real *x,
+                                  real *y, real *z, real *vx, real *vy, real *vz, real *ax,
+                                  real *ay, real *az);
 
 #endif
+
+    CUDA_CALLABLE_MEMBER void setSML(real *sml);
+
+#if INTEGRATE_DENSITY
+    CUDA_CALLABLE_MEMBER void setIntegrateDensity(real *drhodt);
+#endif
+
+#if VARIABLE_SML || INTEGRATE_SML
+    CUDA_CALLABLE_MEMBER void setIntegrateSML(real *dsmldt);
 #endif
 
     /**
@@ -1069,100 +848,67 @@ public:
 namespace IntegratedParticlesNS {
 
     namespace Kernel {
-        /**
-         * Kernel call to setter
-         *
-         * @param integratedParticles
-         * @param uid
-         * @param drhodt
-         * @param dxdt
-         * @param dvxdt
-         */
-        __global__ void set(IntegratedParticles *integratedParticles, integer *uid, real *drhodt, real *dxdt,
-                            real *dvxdt);
+
+#if DIM == 1
+
+        __global__ void set(IntegratedParticles *integratedParticles, idInteger *uid, real *rho, real *e, real *dedt,
+                            real *p, real *cs, real *x, real *vx, real *ax);
 
         namespace Launch {
-            /**
-            * Wrapped kernel call to setter
-            *
-            * @param integratedParticles
-            * @param uid
-            * @param drhodt
-            * @param dxdt
-            * @param dvxdt
-            */
-            void set(IntegratedParticles *integratedParticles, integer *uid, real *drhodt, real *dxdt,
-                     real *dvxdt);
+
+            void set(IntegratedParticles *integratedParticles, idInteger *uid, real *rho, real *e, real *dedt,
+                     real *p, real *cs, real *x, real *vx, real *ax);
         }
 
-#if DIM > 1
-        /**
-         * Kernel call to setter
-         *
-         * @param integratedParticles
-         * @param uid
-         * @param drhodt
-         * @param dxdt
-         * @param dydt
-         * @param dvxdt
-         * @param dvydt
-         */
-        __global__ void set(IntegratedParticles *integratedParticles, integer *uid, real *drhodt, real *dxdt,
-                            real *dydt, real *dvxdt, real *dvydt);
+#elif DIM == 2
+
+        __global__ void set(IntegratedParticles *integratedParticles, idInteger *uid, real *rho, real *e, real *dedt,
+                            real *p, real *cs, real *x, real *y, real *vx, real *vy, real *ax, real *ay);
 
         namespace Launch {
-            /**
-             * Wrapped kernel call to setter
-             *
-             * @param integratedParticles
-             * @param uid
-             * @param drhodt
-             * @param dxdt
-             * @param dydt
-             * @param dvxdt
-             * @param dvydt
-             */
-            void set(IntegratedParticles *integratedParticles, integer *uid, real *drhodt, real *dxdt,
-                     real *dydt, real *dvxdt, real *dvydt);
+
+            void set(IntegratedParticles *integratedParticles, idInteger *uid, real *rho, real *e, real *dedt,
+                     real *p, real *cs, real *x, real *y, real *vx, real *vy, real *ax, real *ay);
         }
 
-#if DIM == 3
+#else
 
-        /**
-         * Kernel call to setter
-         *
-         * @param integratedParticles
-         * @param uid
-         * @param drhodt
-         * @param dxdt
-         * @param dydt
-         * @param dzdt
-         * @param dvxdt
-         * @param dvydt
-         * @param dvzdt
-         */
-        __global__ void set(IntegratedParticles *integratedParticles, integer *uid, real *drhodt, real *dxdt,
-                            real *dydt, real *dzdt, real *dvxdt, real *dvydt, real *dvzdt);
+
+        __global__ void set(IntegratedParticles *integratedParticles, idInteger *uid, real *rho, real *e, real *dedt,
+                            real *p, real *cs, real *x, real *y, real *z, real *vx, real *vy, real *vz, real *ax,
+                            real *ay, real *az);
 
         namespace Launch {
-            /**
-             * Wrapped kernel call to setter
-             *
-             * @param integratedParticles
-             * @param uid
-             * @param drhodt
-             * @param dxdt
-             * @param dydt
-             * @param dzdt
-             * @param dvxdt
-             * @param dvydt
-             * @param dvzdt
-             */
-            void set(IntegratedParticles *integratedParticles, integer *uid, real *drhodt, real *dxdt,
-                     real *dydt, real *dzdt, real *dvxdt, real *dvydt, real *dvzdt);
+
+            void set(IntegratedParticles *integratedParticles, idInteger *uid, real *rho, real *e, real *dedt,
+                     real *p, real *cs, real *x, real *y, real *z, real *vx, real *vy, real *vz, real *ax,
+                     real *ay, real *az);
         }
 
 #endif
+
+        __global__ void setSML(IntegratedParticles *integratedParticles, real *sml);
+
+        namespace Launch {
+            void setSML(IntegratedParticles *integratedParticles, real *sml);
+        }
+
+#if INTEGRATE_DENSITY
+        __global__ void setIntegrateDensity(IntegratedParticles *integratedParticles, real *drhodt);
+
+        namespace Launch {
+
+            void setIntegrateDensity(IntegratedParticles *integratedParticles, real *drhodt);
+
+        }
+#endif
+
+#if VARIABLE_SML || INTEGRATE_SML
+        __global__ void setIntegrateSML(IntegratedParticles *integratedParticles, real *dsmldt);
+
+        namespace Launch {
+            void setIntegrateSML(IntegratedParticles *integratedParticles, real *dsmldt);
+        }
 #endif
 
     }

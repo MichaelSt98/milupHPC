@@ -6,6 +6,8 @@
 #include "utils/logger.h"
 #include "cuda_utils/cuda_runtime.h"
 
+class IntegratedParticleHandler;
+
 /**
  * Handling `Particles` class
  *
@@ -23,58 +25,68 @@ public:
     /// host mass
     real *h_mass;
     /// host x position
-    real *h_x;
+    real *h_x, *_h_x;
     /// host x velocity
-    real *h_vx;
+    real *h_vx, *_h_vx;
     /// host x acceleration
-    real *h_ax;
+    real *h_ax, *_h_ax;
+    real *h_g_ax;
 #if DIM > 1
     /// host y position
-    real *h_y;
+    real *h_y, *_h_y;
     /// host y velocity
-    real *h_vy;
+    real *h_vy, *_h_vy;
     /// host y acceleration
-    real *h_ay;
+    real *h_ay, *_h_ay;
+    real *h_g_ay;
 #if DIM == 3
     /// host z position
-    real *h_z;
+    real *h_z, *_h_z;
     /// host z velocity
-    real *h_vz;
+    real *h_vz, *_h_vz;
     /// host z acceleration
-    real *h_az;
+    real *h_az, *_h_az;
+    real *h_g_az;
 #endif
 #endif
 
+    integer *h_level;
     /// host unique identifier
-    idInteger *h_uid; // unique identifier (unsigned int/long?)
+    idInteger *h_uid, *_h_uid; // unique identifier (unsigned int/long?)
     /// host material identifier
     integer *h_materialId; // material identfier (e.g.: ice, basalt, ...)
     /// host smoothing length
-    real *h_sml; // smoothing length
+    real *h_sml, *_h_sml; // smoothing length
     /// host near(est) neighbor list
     integer *h_nnl; // max(number of interactions)
     /// host number of interactions
     integer *h_noi; // number of interactions (alternatively initialize nnl with -1, ...)
     /// host internal energy
-    real *h_e; // internal energy
+    real *h_e, *_h_e; // internal energy
     /// host time derivative of internal energy
-    real *h_dedt;
+    real *h_dedt, *_h_dedt;
     /// energy
     real *h_u;
     /// host speed of sound
-    real *h_cs; // soundspeed
+    real *h_cs, *_h_cs; // soundspeed
     /// host density
-    real *h_rho; // density
+    real *h_rho, *_h_rho; // density
     /// host pressure
-    real *h_p; // pressure
+    real *h_p, *_h_p; // pressure
+    /// host max(mu_ij)
+    real *h_muijmax;
 
 #if INTEGRATE_DENSITY
     /// host time derivative of density
-    real *h_drhodt;
+    real *h_drhodt, *_h_drhodt;
 #endif
-#if VARIABLE_SML
+#if VARIABLE_SML || INTEGRATE_SML
     /// host time derivative of smoothing length
-    real *h_dsmldt;
+    real *h_dsmldt, *_h_dsmldt;
+#endif
+#if NAVIER_STOKES
+    real *h_Tshear;
+    real *h_eta;
 #endif
 #if SOLID
     /// host deviatoric stress tensor
@@ -164,58 +176,68 @@ public:
     /// device mass array
     real *d_mass;
     /// device x position
-    real *d_x;
+    real *d_x, *_d_x;
     /// device x velocity
-    real *d_vx;
+    real *d_vx, *_d_vx;
     /// device x acceleration
-    real *d_ax;
+    real *d_ax, *_d_ax;
+    real *d_g_ax;
 #if DIM > 1
     /// device y position
-    real *d_y;
+    real *d_y, *_d_y;
     /// device y velocity
-    real *d_vy;
+    real *d_vy, *_d_vy;
     /// device y acceleration
-    real *d_ay;
+    real *d_ay, *_d_ay;
+    real *d_g_ay;
 #if DIM == 3
     /// device z position
-    real *d_z;
+    real *d_z, *_d_z;
     /// device z velocity
-    real *d_vz;
+    real *d_vz, *_d_vz;
     /// device z acceleration
-    real *d_az;
+    real *d_az, *_d_az;
+    real *d_g_az;
 #endif
 #endif
 
+    integer *d_level;
     /// device unique identifier
-    idInteger *d_uid; // unique identifier (unsigned int/long?)
+    idInteger *d_uid, *_d_uid; // unique identifier (unsigned int/long?)
     /// device material identifier
     integer *d_materialId; // material identfier (e.g.: ice, basalt, ...)
     /// device smoothing length
-    real *d_sml; // smoothing length
+    real *d_sml, *_d_sml; // smoothing length
     /// device near(est) neighbor list
     integer *d_nnl; // max(number of interactions)
     /// device number of interaction
     integer *d_noi; // number of interactions (alternatively initialize nnl with -1, ...)
     /// device internal energy
-    real *d_e; // internal energy
+    real *d_e, *_d_e; // internal energy
     /// device time derivative of internal energy
-    real *d_dedt;
+    real *d_dedt, *_d_dedt;
     /// energy
     real *d_u;
     /// device speed of sound
-    real *d_cs; // soundspeed
+    real *d_cs, *_d_cs; // soundspeed
     /// device density
-    real *d_rho; // density
+    real *d_rho, *_d_rho; // density
     /// device pressure
-    real *d_p; // pressure
+    real *d_p, *_d_p; // pressure
+    /// device max(mu_ij)
+    real *d_muijmax;
 
 #if INTEGRATE_DENSITY
     /// device time derivative of density
-    real *d_drhodt;
+    real *d_drhodt, *_d_drhodt;
 #endif
-#if VARIABLE_SML
+#if VARIABLE_SML || INTEGRATE_SML
     /// device time derivaive of smoothing length
-    real *d_dsmldt;
+    real *d_dsmldt, *_d_dsmldt;
+#endif
+#if NAVIER_STOKES
+    real *d_Tshear;
+    real *d_eta;
 #endif
 #if SOLID
     /// device deviatoric stress tensor
@@ -317,12 +339,19 @@ public:
     template <typename T>
     T*& getEntry(Entry::Name entry, Execution::Location location = Execution::device);
 
+    void setPointer(IntegratedParticleHandler *integratedParticleHandler);
+
+    void resetPointer();
+
     /**
      * copy particle's mass(es) to target (host/device)
      *
      * @param target host/device
      */
     void copyMass(To::Target target=To::device, bool includePseudoParticles = false);
+
+    void copyUid(To::Target target=To::device);
+
     /**
      * copy particle's position(s) to target (host/device)
      *
@@ -368,25 +397,42 @@ public:
     integer numNodes;
 
     /// device unique identifier
-    integer *d_uid;
-    /// device time derivate of density
-    real *d_drhodt;
+    idInteger *d_uid;
 
+    real *d_x;
     /// device time derivative of particle's x position
-    real *d_dxdt;
+    real *d_vx;
     /// device time derivative of particle's x velocity
-    real *d_dvxdt;
+    real *d_ax;
 #if DIM > 1
+    real *d_y;
     /// device time derivative of particle's y position
-    real *d_dydt;
+    real *d_vy;
     /// device time derivative of particle's y velocity
-    real *d_dvydt;
+    real *d_ay;
 #if DIM == 3
+    real *d_z;
     /// device time derivative of particle's z position
-    real *d_dzdt;
+    real *d_vz;
     /// device time derivative of particle's z velocity
-    real *d_dvzdt;
+    real *d_az;
 #endif
+#endif
+
+    real *d_rho;
+    real *d_e;
+    real *d_dedt;
+    real *d_p;
+    real *d_cs;
+
+    real *d_sml;
+
+#if INTEGRATE_DENSITY
+    real *d_drhodt;
+#endif
+
+#if VARIABLE_SML || INTEGRATE_SML
+    real *d_dsmldt;
 #endif
 
     /// device instance of `IntegratedParticles` class
