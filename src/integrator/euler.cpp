@@ -9,7 +9,7 @@
 }*/
 
 Euler::Euler(SimulationParameters simulationParameters) : Miluphpc(simulationParameters) {
-    integratedParticles = new IntegratedParticles[1];
+
     printf("Euler()\n");
 }
 

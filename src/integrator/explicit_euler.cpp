@@ -16,15 +16,28 @@ ExplicitEuler::~ExplicitEuler() {
 
 void ExplicitEuler::integrate(int step) {
 
-    printf("Euler::integrate()\n");
     Timer timer;
-    real time = rhs(step);
-    Logger(TIME) << "rhs: " << time << " ms";
 
+    Logger(INFO) << "rhs::loadBalancing()";
+    timer.reset();
+    if (simulationParameters.loadBalancing && step != 0 && step % simulationParameters.loadBalancingInterval == 0) {
+        dynamicLoadBalancing();
+    }
+    real elapsed = timer.elapsed();
+    //totalTime += elapsed;
+    Logger(TIME) << "rhs::loadBalancing(): " << elapsed << " ms";
+    profiler.value2file(ProfilerIds::Time::loadBalancing, elapsed);
+
+    printf("ExplicitEuler::integrate()\n");
+    timer.reset();
+    real time;
+    time = rhs(step, true);
     real time_elapsed = timer.elapsed();
+    Logger(TIME) << "rhs: " << time << " ms";
     Logger(TIME) << "rhs elapsed: " << time_elapsed  << " ms";
-    Gravity::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal,
-                                    (real)simulationParameters.timestep, (real)simulationParameters.dampening);
+
+    ExplicitEulerNS::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal,
+                                    (real)simulationParameters.timestep);
 
     //H5Profiler &profiler = H5Profiler::getInstance("log/performance.h5");
     profiler.value2file(ProfilerIds::Time::rhs, time);

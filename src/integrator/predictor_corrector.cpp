@@ -9,7 +9,7 @@
 }*/
 
 PredictorCorrector::PredictorCorrector(SimulationParameters simulationParameters) : Miluphpc(simulationParameters) {
-    integratedParticles = new IntegratedParticles[2];
+
     printf("PredictorCorrector()\n");
 }
 

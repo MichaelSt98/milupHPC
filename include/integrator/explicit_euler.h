@@ -2,6 +2,7 @@
 #define MILUPHPC_EXPLICIT_EULER_H
 
 #include "../miluphpc.h"
+#include "device_explicit_euler.cuh"
 
 class ExplicitEuler : public Miluphpc {
 
