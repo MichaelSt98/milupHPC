@@ -209,22 +209,33 @@ namespace Gravity {
             while ((bodyIndex + offset) < *domainList->domainListIndex) {
                 zero = true;
                 domainIndex = domainList->domainListIndices[bodyIndex + offset];
-                for (int i=0; i<*lowestDomainList->domainListIndex-1; i++) {
-                    if (domainIndex = lowestDomainList->domainListIndices[i]) {
+                for (int i=0; i<*lowestDomainList->domainListIndex; i++) {
+                    if (domainIndex == lowestDomainList->domainListIndices[i]) {
                         zero = false;
                     }
                 }
 
                 if (zero) {
-                    particles->x[domainIndex] = 0.f;
+                    //printf("zero %i\n", domainIndex);
+                    particles->x[domainIndex] = (real)0;
 #if DIM > 1
-                    particles->y[domainIndex] = 0.f;
+                    particles->y[domainIndex] = (real)0;
 #if DIM == 3
-                    particles->z[domainIndex] = 0.f;
+                    particles->z[domainIndex] = (real)0;
 #endif
 #endif
 
-                    particles->mass[domainIndex] = 0.f;
+                    particles->mass[domainIndex] = (real)0;
+                }
+                else {
+                    //printf("domainIndex = %i *= mass = %f\n", domainIndex, particles->mass[domainIndex]);
+                    particles->x[domainIndex] *= particles->mass[domainIndex];
+#if DIM > 1
+                    particles->y[domainIndex] *= particles->mass[domainIndex];
+#if DIM == 3
+                    particles->z[domainIndex] *= particles->mass[domainIndex];
+#endif
+#endif
                 }
 
                 offset += stride;
@@ -338,21 +349,24 @@ namespace Gravity {
                 divide = false;
                 lowestDomainIndex = lowestDomainList->domainListIndices[bodyIndex + offset];
 
-                for (int child=0; child<POW_DIM; child++) {
+                divide = true;
+                /*for (int child=0; child<POW_DIM; child++) {
                     if (tree->child[POW_DIM * lowestDomainIndex + child] != -1) {
                         printf("lowestDomainIndex: tree->child[8 * %i + %i] = %i\n", lowestDomainIndex, child,
                                tree->child[POW_DIM * lowestDomainIndex + child]);
                         divide = true;
                         break;
                     }
-                }
+                }*/
 
                 //if (particles->mass[lowestDomainIndex] != (real)0) {
                 //if (particles->mass[lowestDomainIndex] > (real)0) {
                 if (divide && particles->mass[lowestDomainIndex] > (real)0) {
 
+#if DIM == 3
                     printf("lowestDomainIndex: %i (%f, %f, %f) %f\n", lowestDomainIndex, particles->x[lowestDomainIndex],
                            particles->y[lowestDomainIndex], particles->z[lowestDomainIndex], particles->mass[lowestDomainIndex]);
+#endif
 
                     particles->x[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
 #if DIM > 1
@@ -361,9 +375,11 @@ namespace Gravity {
                     particles->z[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
 #endif
 #endif
+
+#if DIM == 3
                     printf("lowestDomainIndex: %i (%f, %f, %f) %f\n", lowestDomainIndex, particles->x[lowestDomainIndex],
                            particles->y[lowestDomainIndex], particles->z[lowestDomainIndex], particles->mass[lowestDomainIndex]);
-
+#endif
                 }
 
                 //printf("lowestDomainIndex = %i (%f, %f, %f) %f\n", lowestDomainIndex, particles->x[lowestDomainIndex],
@@ -922,16 +938,19 @@ namespace Gravity {
                 pz = particles->z[i];
 #endif
 #endif
-                particles->ax[i] = 0.0;
+                //particles->ax[i] = 0.0;
+                particles->g_ax[i] = 0.0;
 #if DIM > 1
-                particles->ay[i] = 0.0;
+                //particles->ay[i] = 0.0;
+                particles->g_ay[i] = 0.0;
 #endif
                 ax = 0.0;
 #if DIM > 1
                 ay = 0.0;
 #if DIM == 3
                 az = 0.0;
-                particles->az[i] = 0.0;
+                //particles->az[i] = 0.0;
+                particles->g_az[i] = 0.0;
 #endif
 #endif
 
@@ -974,7 +993,7 @@ namespace Gravity {
 #endif
 #endif
                                 // gravitational potential energy
-                                particles->u[i] -= (particles->mass[child] * particles->mass[i])/distance;
+                                particles->u[i] -= 0.5 * (particles->mass[child] * particles->mass[i])/distance;
                                 // end: gravitational potential energy
                             } else {
                                 // put child on stack
@@ -993,95 +1012,16 @@ namespace Gravity {
                     depth--;
                 } while(depth > 0);
 
-                particles->ax[i] = ax;
+                //particles->ax[i] = ax;
+                particles->g_ax[i] = ax;
 #if DIM > 1
-                particles->ay[i] = ay;
+                //particles->ay[i] = ay;
+                particles->g_ay[i] = ay;
 #if DIM == 3
-                particles->az[i] = az;
+                //particles->az[i] = az;
+                particles->g_az[i] = az;
 #endif
 #endif
-            }
-        }
-
-        __global__ void update(Particles *particles, integer n, real dt, real d) {
-
-            integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
-            integer stride = blockDim.x * gridDim.x;
-            integer offset = 0;
-
-            while (bodyIndex + offset < n) {
-
-               // calculating/updating the velocities
-                particles->vx[bodyIndex + offset] += dt * particles->ax[bodyIndex + offset];
-#if DIM > 1
-                particles->vy[bodyIndex + offset] += dt * particles->ay[bodyIndex + offset];
-#if DIM == 3
-                particles->vz[bodyIndex + offset] += dt * particles->az[bodyIndex + offset];
-#endif
-#endif
-
-                // calculating/updating the positions
-                particles->x[bodyIndex + offset] += d * dt * particles->vx[bodyIndex + offset];
-#if DIM > 1
-                particles->y[bodyIndex + offset] += d * dt * particles->vy[bodyIndex + offset];
-#if DIM == 3
-                particles->z[bodyIndex + offset] += d * dt * particles->vz[bodyIndex + offset];
-#endif
-#endif
-
-                // debug
-                //if (bodyIndex + offset == n - 1 || bodyIndex + offset == 0) {
-                // //if ((bodyIndex + offset) % 100 == 0) {
-                //    printf("update: %i (%f, %f, %f) x += (%f, %f, %f)\n", bodyIndex + offset, particles->x[bodyIndex + offset],
-                //           particles->y[bodyIndex + offset], particles->z[bodyIndex + offset], d * dt * particles->vx[bodyIndex + offset],
-                //           d * dt * particles->vy[bodyIndex + offset], d * dt * particles->vz[bodyIndex + offset]);
-                //    printf("update: %i (%f, %f, %f) %f (%f, %f, %f) (%f, %f, %f) %f\n", bodyIndex + offset,
-                //           particles->x[bodyIndex + offset],
-                //           particles->y[bodyIndex + offset],
-                //           particles->z[bodyIndex + offset],
-                //           particles->mass[bodyIndex + offset],
-                //           particles->vx[bodyIndex + offset],
-                //           particles->vy[bodyIndex + offset],
-                //           particles->vz[bodyIndex + offset],
-                //           particles->ax[bodyIndex + offset],
-                //           particles->ay[bodyIndex + offset],
-                //           particles->az[bodyIndex + offset],
-                //           particles->ax[bodyIndex + offset] * particles->ax[bodyIndex + offset] +
-                //           particles->ay[bodyIndex + offset] * particles->ay[bodyIndex + offset] +
-                //           particles->az[bodyIndex + offset] * particles->az[bodyIndex + offset]);
-                //}
-                //if (abs(particles->x[bodyIndex + offset]) < 3 && abs(particles->y[bodyIndex + offset]) < 3 &&
-                //        abs(particles->z[bodyIndex + offset]) < 3) {
-                //    printf("centered: index = %i (%f, %f, %f) %f\n", bodyIndex + offset,
-                //           particles->x[bodyIndex + offset],
-                //           particles->y[bodyIndex + offset],
-                //           particles->z[bodyIndex + offset],
-                //           particles->mass[bodyIndex + offset]);
-                //    if (particles->mass[bodyIndex + offset] < 1) {
-                //        //assert(0);
-                //    }
-                //}
-                //if (abs(particles->ax[bodyIndex + offset]) < 10 && abs(particles->ay[bodyIndex + offset]) < 10 &&
-                //    abs(particles->az[bodyIndex + offset]) < 10) {
-                //if (true) {
-                //    printf("ACCELERATION tiny! centered: index = %i (%f, %f, %f) %f (%f, %f, %f) (%f, %f, %f)\n", bodyIndex + offset,
-                //           particles->x[bodyIndex + offset],
-                //           particles->y[bodyIndex + offset],
-                //           particles->z[bodyIndex + offset],
-                //           particles->mass[bodyIndex + offset],
-                //           particles->vx[bodyIndex + offset],
-                //           particles->vy[bodyIndex + offset],
-                //           particles->vz[bodyIndex + offset],
-                //           particles->ax[bodyIndex + offset],
-                //           particles->ay[bodyIndex + offset],
-                //           particles->az[bodyIndex + offset]);
-                //    if (particles->mass[bodyIndex + offset] < 1) {
-                //        assert(0);
-                //    }
-                //}
-                // end: debug
-
-                offset += stride;
             }
         }
 
@@ -1366,13 +1306,13 @@ namespace Gravity {
                                 //    sendIndices[tree->child[POW_DIM * (bodyIndex + offset) + i]] = 2;
                                 //}
 
-                                if (insert && tree->child[POW_DIM * (bodyIndex + offset) + i] != -1 && particles->x[tree->child[POW_DIM * (bodyIndex + offset) + i]] == particles->x[bodyIndex + offset] &&
-                                        particles->y[tree->child[POW_DIM * (bodyIndex + offset) + i]] == particles->y[bodyIndex + offset]) {
+                                //if (insert && tree->child[POW_DIM * (bodyIndex + offset) + i] != -1 && particles->x[tree->child[POW_DIM * (bodyIndex + offset) + i]] == particles->x[bodyIndex + offset] &&
+                                //        particles->y[tree->child[POW_DIM * (bodyIndex + offset) + i]] == particles->y[bodyIndex + offset]) {
                                     //printf("[rank %i] index = %i == child = %i ^= %i (%f, %f, %f) vs (%f, %f, %f)\n", subDomainKeyTree->rank, bodyIndex + offset, i, tree->child[POW_DIM * (bodyIndex + offset) + i],
                                     //       particles->x[bodyIndex + offset], particles->y[bodyIndex + offset], particles->z[bodyIndex + offset],
                                     //
                                     //       particles->x[tree->child[POW_DIM * (bodyIndex + offset) + i]], particles->y[tree->child[POW_DIM * (bodyIndex + offset) + i]], particles->z[tree->child[POW_DIM * (bodyIndex + offset) + i]]);
-                                }
+                                //}
 
                                 if (tree->child[POW_DIM * (bodyIndex + offset) + i] != -1) {
                                     if (sendIndices[tree->child[POW_DIM * (bodyIndex + offset) + i]] != 1) {
@@ -1866,14 +1806,17 @@ namespace Gravity {
                 particles->x[bodyIndex + offset] = 0.;
                 particles->vx[bodyIndex + offset] = 0.;
                 particles->ax[bodyIndex + offset] = 0.;
+                particles->g_ax[bodyIndex + offset] = 0.;
 #if DIM > 1
                 particles->y[bodyIndex + offset] = 0.;
                 particles->vy[bodyIndex + offset] = 0.;
                 particles->ay[bodyIndex + offset] = 0.;
+                particles->g_ay[bodyIndex + offset] = 0.;
 #if DIM == 3
                 particles->z[bodyIndex + offset] = 0.;
                 particles->vz[bodyIndex + offset] = 0.;
                 particles->az[bodyIndex + offset] = 0.;
+                particles->g_az[bodyIndex + offset] = 0.;
 #endif
 #endif
                 particles->mass[bodyIndex + offset] = 0.;
@@ -2006,12 +1949,6 @@ namespace Gravity {
             //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForcesMiluphcuda, tree, particles, n, m,
                                 subDomainKeyTree);
-        }
-
-
-        real Launch::update(Particles *particles, integer n, real dt, real d) {
-            ExecutionPolicy executionPolicy;
-            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::update, particles, n, dt, d);
         }
 
         //real Launch::symbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,

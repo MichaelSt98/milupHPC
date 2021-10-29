@@ -469,6 +469,10 @@ namespace TreeNS {
          */
         __global__ void buildTree(Tree *tree, Particles *particles, integer n, integer m);
 
+        __global__ void buildTreeMiluphcuda(Tree *tree, Particles *particles, integer n, integer m);
+
+        __global__ void calculateCentersOfMass(Tree *tree, Particles *particles, integer n, integer level);
+
         /**
          * Kernel to compute the bounding box/borders of the tree or rather the particles within the tree
          *
@@ -548,6 +552,10 @@ namespace TreeNS {
              * @return
              */
             real buildTree(Tree *tree, Particles *particles, integer n, integer m, bool time=false);
+
+            real buildTreeMiluphcuda(Tree *tree, Particles *particles, integer n, integer m, bool time=false);
+
+            real calculateCentersOfMass(Tree *tree, Particles *particles, integer n, integer level, bool time=false);
 
             /**
              * Wrapped kernel call to compute bounding box(es)/borders

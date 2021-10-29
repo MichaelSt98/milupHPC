@@ -2,7 +2,18 @@
 
 namespace CudaUtils {
 
-    __device__ void copyMatrix(double src[DIM][DIM], double dst[DIM][DIM]) {
+    __device__ int sign(real x) {
+        if (x < 0) { return -1; }
+        else if (x > 0) { return  1; }
+        else { return 0; }
+    }
+
+    __device__ int stressIndex(int particleIndex, int row, int col)
+    {
+        return particleIndex*DIM*DIM+row*DIM+col;
+    }
+
+    __device__ void copyMatrix(real src[DIM][DIM], real dst[DIM][DIM]) {
         int i, j;
 
         for (i = 0; i < DIM; i++) {
@@ -13,9 +24,9 @@ namespace CudaUtils {
 
     }
 
-    __device__ void transposeMatrix(double m[DIM][DIM]) {
+    __device__ void transposeMatrix(real m[DIM][DIM]) {
         int i, j;
-        double mt[DIM][DIM];
+        real mt[DIM][DIM];
         for (i = 0; i < DIM; i++) {
             for (j = 0; j < DIM; j++) {
                 mt[j][i] = m[i][j];
@@ -29,10 +40,10 @@ namespace CudaUtils {
     }
 
     // calculates C = A B and stores in C
-    __device__  void multiplyMatrix(double A[DIM][DIM], double B[DIM][DIM], double C[DIM][DIM]) {
+    __device__  void multiplyMatrix(real A[DIM][DIM], real B[DIM][DIM], real C[DIM][DIM]) {
         int i, j, k;
 
-        double vprime[DIM][DIM];
+        real vprime[DIM][DIM];
 
         for (i = 0; i < DIM; i++) {
             for (j = 0; j < DIM; j++) {
@@ -55,7 +66,18 @@ namespace CudaUtils {
 
     }
 
-    __device__ void identityMatrix(double A[DIM][DIM]) {
+    __device__ void multiply(real A[][DIM], real B[][DIM], real C[][DIM]) {
+        int i, j, k;
+        for (i = 0; i < DIM; i++) {
+            for (j = 0; j < DIM; j++) {
+                for (k = 0; k < DIM; k++) {
+                    C[i][j] += A[i][k]*B[k][j];
+                }
+            }
+        }
+    }
+
+    __device__ void identityMatrix(real A[DIM][DIM]) {
         int i, j;
         for (i = 0; i < DIM; i++) {
             for (j = 0; j < DIM; j++) {
@@ -67,9 +89,9 @@ namespace CudaUtils {
 
 
     // returns the indices of the greatest non-diagonal element of M
-    __device__ int maxMatrix(double M[DIM][DIM], int *e, int *f, double *elmax) {
+    __device__ int maxMatrix(real M[DIM][DIM], int *e, int *f, real *elmax) {
         int i, j;
-        double max = 0.0;
+        real max = 0.0;
         int ierror = 1;
 
         for (i = 0; i < DIM; i++) {
@@ -93,10 +115,10 @@ namespace CudaUtils {
     // help function for the jacobi method
     // returns: M' = A^T M A, and A_ef = s = -A_ef, A_ee = A_ff = c
     //
-    __device__ void rotateMatrix(volatile double m[DIM][DIM], volatile double c, volatile double s, volatile int e,
+    __device__ void rotateMatrix(volatile real m[DIM][DIM], volatile real c, volatile real s, volatile int e,
                                   volatile int f) {
         int i, j;
-        volatile double mprime[DIM][DIM];
+        volatile real mprime[DIM][DIM];
 
         // first copy the matrix
         for (i = 0; i < DIM; i++)
@@ -134,15 +156,15 @@ namespace CudaUtils {
     //
     // returns the number of iterations
     //
-    __device__ int calculateAllEigenvalues(double M[DIM][DIM], double eigenvalues[DIM], double v[DIM][DIM]) {
+    __device__ int calculateAllEigenvalues(real M[DIM][DIM], real eigenvalues[DIM], real v[DIM][DIM]) {
         int i, j;
-        double diagM[DIM][DIM] = {0.0,};
-        double c, s, t, thta;
-        double A[DIM][DIM];
-        double vtmp[DIM][DIM];
+        real diagM[DIM][DIM] = {0.0,};
+        real c, s, t, thta;
+        real A[DIM][DIM];
+        real vtmp[DIM][DIM];
         int e, f;
         int error;
-        double max = -1e300;
+        real max = -1e300;
         int nit = 0;
         i = j = e = f = 0;
         c = s = t = thta = 0.0;
@@ -199,14 +221,14 @@ namespace CudaUtils {
     // using the jacobi method
     // returns the greatest eigenvalue
     //
-    __device__ double calculateMaxEigenvalue(double M[DIM][DIM]) {
+    __device__ real calculateMaxEigenvalue(real M[DIM][DIM]) {
         int i, j;
-        double diagM[DIM][DIM] = {0.0,};
-        double c, s, t, thta;
+        real diagM[DIM][DIM] = {0.0,};
+        real c, s, t, thta;
         int e, f;
         int error;
-        double max;
-        double max_ev;
+        real max;
+        real max_ev;
         int nit = 0;
         i = j = e = f = 0;
         c = s = t = thta = 0.0;
@@ -250,14 +272,14 @@ namespace CudaUtils {
         return max_ev;
     }
 
-    __device__ double det2x2(double a, double b, double c, double d) {
+    __device__ real det2x2(real a, real b, real c, real d) {
         return a * d - c * b;
     }
 
-    __device__ int invertMatrix(double *m, double *inverted) {
-        double det;
+    __device__ int invertMatrix(real *m, real *inverted) {
+        real det;
 #if (DIM == 2)
-        double a, b, c, d;
+        real a, b, c, d;
         a = m[0*DIM+0];
         b = m[0*DIM+1];
         c = m[1*DIM+0];

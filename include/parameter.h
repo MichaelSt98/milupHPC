@@ -10,7 +10,7 @@
 //typedef double real;
 typedef int integer;
 typedef unsigned long keyType;
-typedef unsigned long idInteger;
+typedef int idInteger;
 
 #include <iostream>
 
@@ -20,6 +20,8 @@ typedef unsigned long idInteger;
 
 #define MAX_DEPTH 256//128
 #define MAX_NUM_INTERACTIONS 180
+
+#define NUM_THREADS_CALC_CENTER_OF_MASS 256
 
 struct To
 {
@@ -82,7 +84,7 @@ struct IntegratorSelection
 {
     enum Type
     {
-        euler, explicit_euler, predictor_corrector
+        euler, explicit_euler, predictor_corrector, predictor_corrector_euler
     };
     Type t_;
     IntegratorSelection(Type t) : t_(t) {}
@@ -90,6 +92,26 @@ struct IntegratorSelection
 private:
     template<typename T>
     operator T () const;
+};
+
+/// implemented equation of states
+enum EquationOfStates {
+    //EOS_TYPE_ACCRETED = -2, /// special flag for particles that got accreted by a gravitating point mass
+    //EOS_TYPE_IGNORE = -1, /// particle is ignored
+    EOS_TYPE_POLYTROPIC_GAS = 0, /// polytropic EOS for gas, needs polytropic_K and polytropic_gamma in material.cfg file
+    //EOS_TYPE_MURNAGHAN = 1, /// Murnaghan EOS for solid bodies, see Melosh "Impact Cratering", needs in material.cfg: rho_0, bulk_modulus, n
+    //EOS_TYPE_TILLOTSON = 2, /// Tillotson EOS for solid bodies, see Melosh "Impact Cratering", needs in material.cfg: till_rho_0, till_A, till_B, till_E_0, till_E_iv, till_E_cv, till_a, till_b, till_alpha, till_beta; bulk_modulus and shear_modulus are needed to calculate the sound speed and crack growth speed for FRAGMENTATION
+    EOS_TYPE_ISOTHERMAL_GAS = 3, /// this is pure molecular hydrogen at 10 K
+    //EOS_TYPE_REGOLITH = 4, /// The Bui et al. 2008 soil model
+    //EOS_TYPE_JUTZI = 5, /// Tillotson EOS with p-alpha model by Jutzi et al.
+    //EOS_TYPE_JUTZI_MURNAGHAN = 6, /// Murnaghan EOS with p-alpha model by Jutzi et al.
+    //EOS_TYPE_ANEOS = 7, /// ANEOS (or tabulated EOS in ANEOS format)
+    //EOS_TYPE_VISCOUS_REGOLITH = 8, /// describe regolith as a viscous material -> EXPERIMENTAL DO NOT USE
+    //EOS_TYPE_IDEAL_GAS = 9, /// ideal gas equation, set polytropic_gamma in material.cfg
+    //EOS_TYPE_SIRONO = 10, /// Sirono EOS modifed by Geretshauser in 2009/10
+    //EOS_TYPE_EPSILON = 11, /// Tillotson EOS with epsilon-alpha model by Wuennemann, Collins et al.
+    EOS_TYPE_LOCALLY_ISOTHERMAL_GAS = 12, /// locally isothermal gas: \f$ p = c_s^2 \times \varrho \f$
+    //EOS_TYPE_JUTZI_ANEOS = 13/// ANEOS EOS with p-alpha model by Jutzi et al.
 };
 
 #define DEBUGGING 0
@@ -129,27 +151,40 @@ private:
 
 #define CUBIC_DOMAINS 0
 
-#define GRAVITY 0
+#define GRAVITY_SIM 1
+
+#define INTEGRATE_ENERGY 1
 
 #define INTEGRATE_DENSITY 1
 
+#define INTEGRATE_SML 1
+
 #define VARIABLE_SML 1
 
-#define SOLID 1
+#define SOLID 0
 
-#define NAVIER_STOKES 1
+#define NAVIER_STOKES 0
 
-#define ARTIFICIAL_STRESS 1
+#define ARTIFICIAL_STRESS 0
 
-#define POROSITY 1
+#define POROSITY 0
 
-#define ZERO_CONSISTENCY 1
+#define ZERO_CONSISTENCY 0
 
-#define LINEAR_CONSISTENCY 1
+#define LINEAR_CONSISTENCY 0
 
-#define FRAGMENTATION 1
+#define FRAGMENTATION 0
 
-#define PALPHA_POROSITY 1
+#define PALPHA_POROSITY 0
+
+// Choose the SPH representation to solve the momentum and energy equation:
+// SPH_EQU_VERSION 1: original version with HYDRO dv_a/dt ~ - (p_a/rho_a**2 + p_b/rho_b**2)  \nabla_a W_ab
+//                                     SOLID dv_a/dt ~ (sigma_a/rho_a**2 + sigma_b/rho_b**2) \nabla_a W_ab
+// SPH_EQU_VERSION 2: slighty different version with
+//                                     HYDRO dv_a/dt ~ - (p_a+p_b)/(rho_a*rho_b)  \nabla_a W_ab
+//                                     SOLID dv_a/dt ~ (sigma_a+sigma_b)/(rho_a*rho_b)  \nabla_a W_ab
+// If you do not know what to do, choose SPH_EQU_VERSION 1.
+#define SPH_EQU_VERSION 1
 
 //#define SOLID
 // ideal hydro, navier stokes

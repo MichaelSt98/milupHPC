@@ -54,9 +54,6 @@ namespace Gravity {
         __global__ void computeForcesMiluphcuda(Tree *tree, Particles *particles, integer n, integer m,
                                                 SubDomainKeyTree *subDomainKeyTree);
 
-        __global__ void update(Particles *particles, integer n, real dt, real d);
-
-
         __global__ void intermediateSymbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                   DomainList *domainList, integer *sendIndices, real diam, real theta_,
                                                   integer n, integer m, integer relevantIndex, integer level,
@@ -142,8 +139,6 @@ namespace Gravity {
 
             real computeForcesMiluphcuda(Tree *tree, Particles *particles, integer n, integer m,
                                          SubDomainKeyTree *subDomainKeyTree);
-
-            real update(Particles *particles, integer n, real dt, real d);
 
             real intermediateSymbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                       DomainList *domainList, integer *sendIndices, real diam, real theta_,

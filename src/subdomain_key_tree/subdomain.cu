@@ -1138,20 +1138,30 @@ namespace Physics {
             unsigned int gridSize = blockSize*2*gridDim.x;
             //sdata[tid] = 0.;
 
-            while (i < n)
-            {
-                lx[tid] = particles->mass[i] * (particles->y[i]*particles->vz[i] - particles->z[i]*particles->vy[i]) +
-                            particles->mass[i+blockSize] * (particles->y[i+blockSize]*particles->vz[i+blockSize] - particles->z[i+blockSize]*particles->vy[i+blockSize]);
+            lx[tid] = 0.;
 #if DIM > 1
-                ly[tid] = particles->mass[i] * (particles->z[i]*particles->vx[i] - particles->x[i]*particles->vz[i]) +
-                            particles->mass[i+blockSize] * (particles->z[i+blockSize]*particles->vx[i+blockSize] - particles->x[i+blockSize]*particles->vz[i+blockSize]);
+            ly[tid] = 0.;
 #if DIM > 2
-                lz[tid] = particles->mass[i] * (particles->x[i]*particles->vy[i] - particles->y[i]*particles->vx[i]) +
-                            particles->mass[i+blockSize] * (particles->x[i+blockSize]*particles->vy[i+blockSize] - particles->y[i+blockSize]*particles->vx[i+blockSize]);
+            lz[tid] = 0.;
 #endif
 #endif
 
+            while (i < n)
+            {
+// TODO: implementation for DIM == 2
+#if DIM == 3
+                lx[tid] += particles->mass[i] * (particles->y[i]*particles->vz[i] - particles->z[i]*particles->vy[i]) +
+                            particles->mass[i+blockSize] * (particles->y[i+blockSize]*particles->vz[i+blockSize] - particles->z[i+blockSize]*particles->vy[i+blockSize]);
+
+                ly[tid] += particles->mass[i] * (particles->z[i]*particles->vx[i] - particles->x[i]*particles->vz[i]) +
+                            particles->mass[i+blockSize] * (particles->z[i+blockSize]*particles->vx[i+blockSize] - particles->x[i+blockSize]*particles->vz[i+blockSize]);
+
+                lz[tid] += particles->mass[i] * (particles->x[i]*particles->vy[i] - particles->y[i]*particles->vx[i]) +
+                            particles->mass[i+blockSize] * (particles->x[i+blockSize]*particles->vy[i+blockSize] - particles->y[i+blockSize]*particles->vx[i+blockSize]);
+#endif
+
                 //sdata[tid] += g_idata[i] + g_idata[i+blockSize];
+                //printf("l[%i] = (%f, %f, %f)\n", tid, lx[tid], ly[tid], lz[tid]);
                 i += gridSize;
             }
 
@@ -1266,7 +1276,7 @@ namespace Physics {
 #if DIM > 1
                 outputData[blockSize + blockIdx.x] = ly[0];
 #if DIM > 2
-                outputData[2* blockSize + blockIdx.x] = lz[0];
+                outputData[2 * blockSize + blockIdx.x] = lz[0];
                 //g_odata[blockIdx.x] = sdata[0];
 #endif
 #endif

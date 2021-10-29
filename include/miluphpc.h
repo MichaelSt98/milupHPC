@@ -14,11 +14,12 @@
 #include "sph/sph.cuh"
 #include "cuda_utils/cuda_runtime.h"
 #include "utils/cxxopts.h"
-#include "../include/utils/h5profiler.h"
-#include "../include/sph/kernel.cuh"
-#include "../include/sph/kernel_handler.cuh"
-#include "../include/sph/density.cuh"
-#include "../include/sph/pressure.cuh"
+#include "utils/h5profiler.h"
+#include "sph/kernel.cuh"
+#include "sph/kernel_handler.cuh"
+#include "sph/density.cuh"
+#include "sph/pressure.cuh"
+#include "sph/internal_forces.cuh"
 
 #include <iostream>
 #include <stdio.h>
@@ -56,10 +57,6 @@ class Miluphpc {
 
 private:
 
-    void fixedLoadBalancing();
-    void dynamicLoadBalancing(int bins=5000);
-    void updateRangeApproximately(int aimedParticlesPerProcess, int bins=5000);
-
     real removeParticles();
 
     //real reset();
@@ -80,7 +77,7 @@ private:
     //real parallel_sph_backup();
 
     template <typename T>
-    integer sendParticlesEntry(integer *sendLengths, integer *receiveLengths, T *entry);
+    integer sendParticlesEntry(integer *sendLengths, integer *receiveLengths, T *entry, T *entryBuffer, T *copyBuffer);
     //void exchangeParticleEntry(integer *sendLengths, integer *receiveLengths, real *entry);
 
     template <typename T>
@@ -104,6 +101,10 @@ private:
 
 public:
 
+    void fixedLoadBalancing();
+    void dynamicLoadBalancing(int bins=5000);
+    void updateRangeApproximately(int aimedParticlesPerProcess, int bins=5000);
+
     H5Profiler &profiler = H5Profiler::getInstance("log/performance.h5");
     Curve::Type curveType;
 
@@ -114,7 +115,7 @@ public:
     integer numParticlesLocal;
     integer numNodes;
 
-    IntegratedParticles *integratedParticles;
+    IntegratedParticleHandler *integratedParticles;
 
     integer *d_mutex;
     HelperHandler *helperHandler; // TODO: more than one is needed: how to name?
@@ -138,6 +139,9 @@ public:
 
     int *d_particles2removeBuffer;
     int *d_particles2removeVal;
+
+    idInteger *d_idIntegerBuffer;
+    idInteger *d_idIntegerCopyBuffer;
     // end: testing
 
     SimulationParameters simulationParameters;
@@ -163,7 +167,7 @@ public:
     real gravity();
     real sph();
 
-    real rhs(int step);
+    real rhs(int step, bool selfGravity=true);
 
     //virtual void integrate() {};
     virtual void integrate(int step = 0) = 0;

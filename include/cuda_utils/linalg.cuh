@@ -9,26 +9,32 @@ class linalg {
 
 namespace CudaUtils {
 
-    __device__ void copyMatrix(double src[DIM][DIM], double dst[DIM][DIM]);
+    __device__ int sign(real x);
 
-    __device__ void transposeMatrix(double m[DIM][DIM]);
+    // map [i][j] to [i*DIM*DIM+j] for the tensors
+    __device__ int stressIndex(int particleIndex, int row, int col);
 
-    __device__  void multiplyMatrix(double A[DIM][DIM], double B[DIM][DIM], double C[DIM][DIM]);
+    __device__ void copyMatrix(real src[DIM][DIM], real dst[DIM][DIM]);
 
-    __device__ void identityMatrix(double A[DIM][DIM]);
+    __device__ void transposeMatrix(real m[DIM][DIM]);
 
-    __device__ int maxMatrix(double M[DIM][DIM], int *e, int *f, double *elmax);
+    __device__  void multiplyMatrix(real A[DIM][DIM], real B[DIM][DIM], real C[DIM][DIM]);
+    __device__ void multiply(real A[][DIM], real B[][DIM], real C[][DIM]);
 
-    __device__ void rotateMatrix(volatile double m[DIM][DIM], volatile double c, volatile double s, volatile int e,
+    __device__ void identityMatrix(real A[DIM][DIM]);
+
+    __device__ int maxMatrix(real M[DIM][DIM], int *e, int *f, real *elmax);
+
+    __device__ void rotateMatrix(volatile real m[DIM][DIM], volatile real c, volatile real s, volatile int e,
                                   volatile int f);
 
-    __device__ int calculateAllEigenvalues(double M[DIM][DIM], double eigenvalues[DIM], double v[DIM][DIM]);
+    __device__ int calculateAllEigenvalues(real M[DIM][DIM], real eigenvalues[DIM], real v[DIM][DIM]);
 
-    __device__ double calculateMaxEigenvalue(double M[DIM][DIM]);
+    __device__ real calculateMaxEigenvalue(real M[DIM][DIM]);
 
-    __device__ double det2x2(double a, double b, double c, double d);
+    __device__ real det2x2(real a, real b, real c, real d);
 
-    __device__ int invertMatrix(double *m, double *inverted);
+    __device__ int invertMatrix(real *m, real *inverted);
 }
 
 

@@ -195,6 +195,7 @@ namespace HelperNS {
                 return cuda::launch(true, executionPolicy, ::HelperNS::Kernel::resetArray, array, value, n);
             }
             template real resetArray<integer>(integer *array, integer value, integer n);
+            //template real resetArray<idInteger>(idInteger *array, idInteger value, integer n);
             template real resetArray<real>(real *array, real value, integer n);
             template real resetArray<keyType>(keyType *array, keyType value, integer n);
 

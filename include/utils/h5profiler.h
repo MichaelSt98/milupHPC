@@ -25,11 +25,12 @@ namespace ProfilerIds {
 
         const char *const rhs             { "/time/rhs" };
         const char *const rhsElapsed      { "/time/rhsElapsed" };
+        const char *const loadBalancing   { "/time/loadBalancing" };
         const char *const reset           { "/time/reset" };
         const char *const boundingBox     { "/time/boundingBox" };
         const char *const assignParticles { "/time/assignParticles" };
         const char *const tree            { "/time/tree" };
-        const char *const pseudoParticle  { "/time/pseudoParticle "};
+        const char *const pseudoParticle  { "/time/pseudoParticle"};
         const char *const gravity         { "/time/gravity" };
         const char *const sph             { "/time/sph" };
 

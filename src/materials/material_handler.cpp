@@ -75,6 +75,8 @@ MaterialHandler::MaterialHandler(char *material_cfg) {
     h_materials = new Material[numMaterials];
     cuda::malloc(d_materials, numMaterials);
 
+    double temp;
+
     for (int i = 0; i < numMaterials; ++i) {
 
         // general
@@ -87,8 +89,14 @@ MaterialHandler::MaterialHandler(char *material_cfg) {
 
         // eos
         subset = config_setting_get_member(material, "eos");
-        config_setting_lookup_float(subset, "polytropic_K", &h_materials[id].eos.polytropic_K);
-        config_setting_lookup_float(subset, "polytropic_gamma", &h_materials[id].eos.polytropic_gamma);
+        //config_setting_lookup_float(subset, "polytropic_K", &h_materials[id].eos.polytropic_K);
+        //config_setting_lookup_float(subset, "polytropic_gamma", &h_materials[id].eos.polytropic_gamma);
+
+        config_setting_lookup_float(subset, "polytropic_K", &temp);
+        printf("temp = %f\n", temp);
+        h_materials[id].eos.polytropic_K = temp;
+        config_setting_lookup_float(subset, "polytropic_gamma", &temp);
+        h_materials[id].eos.polytropic_gamma = temp;
     }
 
 

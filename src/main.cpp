@@ -2,6 +2,7 @@
 #include "../include/integrator/euler.h"
 #include "../include/integrator/explicit_euler.h"
 #include "../include/integrator/predictor_corrector.h"
+#include "../include/integrator/predictor_corrector_euler.h"
 #include "../include/utils/config_parser.h"
 
 #include <fenv.h>
@@ -123,6 +124,7 @@ int main(int argc, char** argv)
 #endif
 
     IntegratorSelection::Type integratorSelection = IntegratorSelection::explicit_euler;
+    //IntegratorSelection::Type integratorSelection = IntegratorSelection::predictor_corrector_euler;
 
     Miluphpc *miluphpc;
     // miluphpc = new Miluphpc(parameters, numParticles, numNodes); // not possible since abstract class
@@ -136,6 +138,9 @@ int main(int argc, char** argv)
         } break;
         case IntegratorSelection::predictor_corrector: {
             miluphpc = new PredictorCorrector(parameters);
+        } break;
+        case IntegratorSelection::predictor_corrector_euler: {
+            miluphpc = new PredictorCorrectorEuler(parameters);
         } break;
         default: {
             printf("Integrator not available!");
@@ -153,6 +158,7 @@ int main(int argc, char** argv)
 
     profiler.createValueDataSet<real>(ProfilerIds::Time::rhs, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::rhsElapsed, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::loadBalancing, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::reset, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::boundingBox, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::assignParticles, 1);
@@ -172,6 +178,7 @@ int main(int argc, char** argv)
     profiler.createValueDataSet<real>(ProfilerIds::Time::Gravity::insertReceivedParticles, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::Gravity::force, 1);
 
+    int fileCounter = 0;
     for (int i_step=0; i_step<parameters.iterations; i_step++) {
 
         profiler.setStep(i_step);
@@ -182,8 +189,11 @@ int main(int argc, char** argv)
 
         miluphpc->integrate(i_step);
 
-        auto time = miluphpc->particles2file(i_step);
-        Logger(TIME) << "particles2file: " << time << " ms";
+        if (i_step == 0 || i_step % 10 == 0) {
+            auto time = miluphpc->particles2file(fileCounter);
+            fileCounter++;
+            Logger(TIME) << "particles2file: " << time << " ms";
+        }
 
     }
 

@@ -468,6 +468,7 @@ __global__ void TreeNS::Kernel::sumParticles(Tree *tree) {
     }
 }
 
+#define COMPUTE_DIRECTLY 0
 
 __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, integer n, integer m) {
 
@@ -478,14 +479,18 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
     //note: -2 used to lock a child (pointer)
 
     integer offset;
+    int level;
     bool newBody = true;
 
     real min_x;
     real max_x;
+    real x;
 #if DIM > 1
+    real y;
     real min_y;
     real max_y;
 #if DIM == 3
+    real z;
     real min_z;
     real max_z;
 #endif
@@ -501,14 +506,18 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
         if (newBody) {
 
             newBody = false;
+            level = 0;
 
             // copy bounding box(es)
             min_x = *tree->minX;
             max_x = *tree->maxX;
+            x = particles->x[bodyIndex + offset];
 #if DIM > 1
+            y = particles->y[bodyIndex + offset];
             min_y = *tree->minY;
             max_y = *tree->maxY;
 #if DIM == 3
+            z = particles->z[bodyIndex + offset];
             min_z = *tree->minZ;
             max_z = *tree->maxZ;
 #endif
@@ -517,7 +526,8 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
             childPath = 0;
 
             // find insertion point for body
-            if (particles->x[bodyIndex + offset] < 0.5 * (min_x + max_x)) { // x direction
+            //if (particles->x[bodyIndex + offset] < 0.5 * (min_x + max_x)) { // x direction
+            if (x < 0.5 * (min_x + max_x)) { // x direction
                 childPath += 1;
                 max_x = 0.5 * (min_x + max_x);
             }
@@ -525,7 +535,8 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
                 min_x = 0.5 * (min_x + max_x);
             }
 #if DIM > 1
-            if (particles->y[bodyIndex + offset] < 0.5 * (min_y + max_y)) { // y direction
+            //if (particles->y[bodyIndex + offset] < 0.5 * (min_y + max_y)) { // y direction
+            if (y < 0.5 * (min_y + max_y)) { // y direction
                 childPath += 2;
                 max_y = 0.5 * (min_y + max_y);
             }
@@ -533,7 +544,8 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
                 min_y = 0.5 * (min_y + max_y);
             }
 #if DIM == 3
-            if (particles->z[bodyIndex + offset] < 0.5 * (min_z + max_z)) {  // z direction
+            //if (particles->z[bodyIndex + offset] < 0.5 * (min_z + max_z)) {  // z direction
+            if (z < 0.5 * (min_z + max_z)) {  // z direction
                 childPath += 4;
                 max_z = 0.5 * (min_z + max_z);
             }
@@ -550,11 +562,13 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
         while (childIndex >= m) { //n
 
             temp = childIndex;
+            level++;
 
             childPath = 0;
 
             // find insertion point for body
-            if (particles->x[bodyIndex + offset] < 0.5 * (min_x + max_x)) { // x direction
+            //if (particles->x[bodyIndex + offset] < 0.5 * (min_x + max_x)) { // x direction
+            if (x < 0.5 * (min_x + max_x)) { // x direction
                 childPath += 1;
                 max_x = 0.5 * (min_x + max_x);
             }
@@ -562,7 +576,8 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
                 min_x = 0.5 * (min_x + max_x);
             }
 #if DIM > 1
-            if (particles->y[bodyIndex + offset] < 0.5 * (min_y + max_y)) { // y direction
+            //if (particles->y[bodyIndex + offset] < 0.5 * (min_y + max_y)) { // y direction
+            if (y < 0.5 * (min_y + max_y)) { // y direction
                 childPath += 2;
                 max_y = 0.5 * (min_y + max_y);
             }
@@ -570,7 +585,8 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
                 min_y = 0.5 * (min_y + max_y);
             }
 #if DIM == 3
-            if (particles->z[bodyIndex + offset] < 0.5 * (min_z + max_z)) { // z direction
+            //if (particles->z[bodyIndex + offset] < 0.5 * (min_z + max_z)) { // z direction
+            if (z < 0.5 * (min_z + max_z)) { // z direction
                 childPath += 4;
                 max_z = 0.5 * (min_z + max_z);
             }
@@ -579,17 +595,24 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
             }
 #endif
 #endif
+#if COMPUTE_DIRECTLY
             if (particles->mass[bodyIndex + offset] != 0) {
+                //particles->x[temp] += particles->weightedEntry(bodyIndex + offset, Entry::x);
                 atomicAdd(&particles->x[temp], particles->weightedEntry(bodyIndex + offset, Entry::x));
 #if DIM > 1
+                //particles->y[temp] += particles->weightedEntry(bodyIndex + offset, Entry::y);
                 atomicAdd(&particles->y[temp], particles->weightedEntry(bodyIndex + offset, Entry::y));
 #if DIM == 3
+                //particles->z[temp] += particles->weightedEntry(bodyIndex + offset, Entry::z);
                 atomicAdd(&particles->z[temp], particles->weightedEntry(bodyIndex + offset, Entry::z));
 #endif
 #endif
             }
 
+            //particles->mass[temp] += particles->mass[bodyIndex + offset];
             atomicAdd(&particles->mass[temp], particles->mass[bodyIndex + offset]);
+#endif // COMPUTE_DIRECTLY
+
             atomicAdd(&tree->count[temp], 1);
 
             childIndex = tree->child[POW_DIM * temp + childPath];
@@ -606,6 +629,8 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
                 if (childIndex == -1) {
                     //insert body and release lock
                     tree->child[locked] = bodyIndex + offset;
+                    particles->level[bodyIndex + offset] = level + 1;
+
                 }
                 else {
                     if (childIndex >= n) {
@@ -622,6 +647,9 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
                             tree->child[POW_DIM * temp + childPath] = cell;
                         }
 
+                        particles->level[temp] = level;
+                        level++;
+
                         // insert old/original particle
                         childPath = 0;
                         if (particles->x[childIndex] < 0.5 * (min_x + max_x)) { childPath += 1; }
@@ -632,11 +660,15 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
 #endif
 #endif
 
+#if COMPUTE_DIRECTLY
                         particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
+                        //particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
 #if DIM > 1
                         particles->y[cell] += particles->weightedEntry(childIndex, Entry::y);
+                        //particles->y[cell] += particles->weightedEntry(childIndex, Entry::y);
 #if DIM == 3
                         particles->z[cell] += particles->weightedEntry(childIndex, Entry::z);
+                        //particles->z[cell] += particles->weightedEntry(childIndex, Entry::z);
 #endif
 #endif
 
@@ -647,9 +679,12 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
                         //}
 
                         particles->mass[cell] += particles->mass[childIndex];
+#endif // COMPUTE_DIRECTLY
                         tree->count[cell] += tree->count[childIndex];
+                        //level++;
 
                         tree->child[POW_DIM * cell + childPath] = childIndex;
+                        particles->level[cell] = level;
                         tree->start[cell] = -1;
 
                         // insert new particle
@@ -657,21 +692,24 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
                         childPath = 0;
 
                         // find insertion point for body
-                        if (particles->x[bodyIndex + offset] < 0.5 * (min_x + max_x)) {
+                        //if (particles->x[bodyIndex + offset] < 0.5 * (min_x + max_x)) {
+                        if (x < 0.5 * (min_x + max_x)) {
                             childPath += 1;
                             max_x = 0.5 * (min_x + max_x);
                         } else {
                             min_x = 0.5 * (min_x + max_x);
                         }
 #if DIM > 1
-                        if (particles->y[bodyIndex + offset] < 0.5 * (min_y + max_y)) {
+                        //if (particles->y[bodyIndex + offset] < 0.5 * (min_y + max_y)) {
+                        if (y < 0.5 * (min_y + max_y)) {
                             childPath += 2;
                             max_y = 0.5 * (min_y + max_y);
                         } else {
                             min_y = 0.5 * (min_y + max_y);
                         }
 #if DIM == 3
-                        if (particles->z[bodyIndex + offset] < 0.5 * (min_z + max_z)) {
+                        //if (particles->z[bodyIndex + offset] < 0.5 * (min_z + max_z)) {
+                        if (z < 0.5 * (min_z + max_z)) {
                             childPath += 4;
                             max_z = 0.5 * (min_z + max_z);
                         } else {
@@ -679,23 +717,28 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
                         }
 #endif
 #endif
-
+#if COMPUTE_DIRECTLY
                         // COM / preparing for calculation of COM
                         if (particles->mass[bodyIndex + offset] != 0) {
+                            //particles->x[cell] += particles->weightedEntry(bodyIndex + offset, Entry::x);
                             particles->x[cell] += particles->weightedEntry(bodyIndex + offset, Entry::x);
 #if DIM > 1
+                            //particles->y[cell] += particles->weightedEntry(bodyIndex + offset, Entry::y);
                             particles->y[cell] += particles->weightedEntry(bodyIndex + offset, Entry::y);
 #if DIM == 3
+                            //particles->z[cell] += particles->weightedEntry(bodyIndex + offset, Entry::z);
                             particles->z[cell] += particles->weightedEntry(bodyIndex + offset, Entry::z);
 #endif
 #endif
                             particles->mass[cell] += particles->mass[bodyIndex + offset];
                         }
+#endif // COMPUTE_DIRECTLY
                         tree->count[cell] += tree->count[bodyIndex + offset];
                         childIndex = tree->child[POW_DIM * temp + childPath];
                     }
 
                     tree->child[POW_DIM * temp + childPath] = bodyIndex + offset;
+                    particles->level[bodyIndex + offset] = level + 1;
 
                     __threadfence();  // written to global memory arrays (child, x, y, mass) thus need to fence
                     tree->child[locked] = patch;
@@ -708,6 +751,217 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
     }
 }
 
+
+__global__ void TreeNS::Kernel::buildTreeMiluphcuda(Tree *tree, Particles *particles, integer n, integer m) {
+
+}
+
+
+__global__ void TreeNS::Kernel::calculateCentersOfMass(Tree *tree, Particles *particles, integer n, integer level) {
+
+    integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+    integer stride = blockDim.x * gridDim.x;
+
+    integer offset = n;
+
+    //int counter[21];
+    //for (int i=0; i<21;i++) {
+    //    counter[i] = 0;
+    //}
+
+    integer index;
+
+    while ((bodyIndex + offset) < *tree->index) {
+
+        if (particles->level[bodyIndex + offset] == level) {
+
+            if (particles->level[bodyIndex + offset] == -1 || particles->level[bodyIndex + offset] > 21) {
+                printf("level[%i] = %i!!!\n", bodyIndex + offset, particles->level[bodyIndex + offset]);
+            }
+
+            particles->mass[bodyIndex + offset] = 0.;
+            particles->x[bodyIndex + offset] = 0.;
+#if DIM > 1
+            particles->y[bodyIndex + offset] = 0.;
+#if DIM == 3
+            particles->z[bodyIndex + offset] = 0.;
+#endif
+#endif
+
+            for (int child = 0; child < POW_DIM; ++child) {
+                index = POW_DIM * (bodyIndex + offset) + child;
+                if (tree->child[index] != -1) {
+                    particles->x[bodyIndex + offset] += particles->weightedEntry(tree->child[index], Entry::x);
+#if DIM > 1
+                    particles->y[bodyIndex + offset] += particles->weightedEntry(tree->child[index], Entry::y);
+#if DIM == 3
+                    particles->z[bodyIndex + offset] += particles->weightedEntry(tree->child[index], Entry::z);
+#endif
+#endif
+                    particles->mass[bodyIndex + offset] += particles->mass[tree->child[index]];
+                }
+            }
+
+            if (particles->mass[bodyIndex + offset] > 0.) {
+                particles->x[bodyIndex + offset] /= particles->mass[bodyIndex + offset];
+#if DIM > 1
+                particles->y[bodyIndex + offset] /= particles->mass[bodyIndex + offset];
+#if DIM == 3
+                particles->z[bodyIndex + offset] /= particles->mass[bodyIndex + offset];
+#endif
+#endif
+            }
+
+
+            //counter[particles->level[bodyIndex + offset]] += 1;
+
+        }
+        offset += stride;
+    }
+
+    //for (int i=0; i<21;i++) {
+    //    printf("counter[%i] = %i\n", i, counter[i]);
+    //}
+
+}
+
+/*
+__global__
+void SummarizationKernel(const int nnodesd, const int nbodiesd, volatile int* const __restrict__ countd, const int* const __restrict__ childd, volatile float4* const __restrict__ posMassd)
+{
+    int i, j, k, ch, inc, cnt, bottom;
+    float m, cm, px, py, pz;
+    __shared__ int child[THREADS3 * 8];
+    __shared__ float mass[THREADS3 * 8];
+
+    bottom = bottomd;
+    inc = blockDim.x * gridDim.x;
+    k = (bottom & (-WARPSIZE)) + threadIdx.x + blockIdx.x * blockDim.x;  // align to warp size
+    if (k < bottom) k += inc;
+
+    int restart = k;
+    for (j = 0; j < 3; j++) {  // wait-free pre-passes
+        // iterate over all cells assigned to thread
+        while (k <= nnodesd) {
+            if (posMassd[k].w < 0.0f) {
+                for (i = 0; i < POW_DIM; i++) {
+                    ch = childd[k*POW_DIM+i];
+                    child[i*THREADS3+threadIdx.x] = ch;  // cache children
+                    if ((ch >= nbodiesd) && ((mass[i*THREADS3+threadIdx.x] = posMassd[ch].w) < 0.0f)) {
+                        break;
+                    }
+                }
+                if (i == 8) {
+                    // all children are ready
+                    cm = 0.0f;
+                    px = 0.0f;
+                    py = 0.0f;
+                    pz = 0.0f;
+                    cnt = 0;
+                    for (i = 0; i < 8; i++) {
+                        ch = child[i*THREADS3+threadIdx.x];
+                        if (ch >= 0) {
+                            // four reads due to missing copy constructor for "volatile float4"
+                            const float chx = posMassd[ch].x;
+                            const float chy = posMassd[ch].y;
+                            const float chz = posMassd[ch].z;
+                            const float chw = posMassd[ch].w;
+                            if (ch >= nbodiesd) {  // count bodies (needed later)
+                                m = mass[i*THREADS3+threadIdx.x];
+                                cnt += countd[ch];
+                            } else {
+                                m = chw;
+                                cnt++;
+                            }
+                            // add child's contribution
+                            cm += m;
+                            px += chx * m;
+                            py += chy * m;
+                            pz += chz * m;
+                        }
+                    }
+                    countd[k] = cnt;
+                    m = 1.0f / cm;
+                    // four writes due to missing copy constructor for "volatile float4"
+                    posMassd[k].x = px * m;
+                    posMassd[k].y = py * m;
+                    posMassd[k].z = pz * m;
+                    __threadfence();
+                    posMassd[k].w = cm;
+                }
+            }
+            k += inc;  // move on to next cell
+        }
+        k = restart;
+    }
+
+    j = 0;
+    // iterate over all cells assigned to thread
+    while (k <= nnodesd) {
+        if (posMassd[k].w >= 0.0f) {
+            k += inc;
+        } else {
+            if (j == 0) {
+                j = 8;
+                for (i = 0; i < 8; i++) {
+                    ch = childd[k*8+i];
+                    child[i*THREADS3+threadIdx.x] = ch;  // cache children
+                    if ((ch < nbodiesd) || ((mass[i*THREADS3+threadIdx.x] = posMassd[ch].w) >= 0.0f)) {
+                        j--;
+                    }
+                }
+            } else {
+                j = 8;
+                for (i = 0; i < 8; i++) {
+                    ch = child[i*THREADS3+threadIdx.x];
+                    if ((ch < nbodiesd) || (mass[i*THREADS3+threadIdx.x] >= 0.0f) || ((mass[i*THREADS3+threadIdx.x] = posMassd[ch].w) >= 0.0f)) {
+                        j--;
+                    }
+                }
+            }
+
+            if (j == 0) {
+                // all children are ready
+                cm = 0.0f;
+                px = 0.0f;
+                py = 0.0f;
+                pz = 0.0f;
+                cnt = 0;
+                for (i = 0; i < 8; i++) {
+                    ch = child[i*THREADS3+threadIdx.x];
+                    if (ch >= 0) {
+                        // four reads due to missing copy constructor for "volatile float4"
+                        const float chx = posMassd[ch].x;
+                        const float chy = posMassd[ch].y;
+                        const float chz = posMassd[ch].z;
+                        const float chw = posMassd[ch].w;
+                        if (ch >= nbodiesd) {  // count bodies (needed later)
+                            m = mass[i*THREADS3+threadIdx.x];
+                            cnt += countd[ch];
+                        } else {
+                            m = chw;
+                            cnt++;
+                        }
+                        // add child's contribution
+                        cm += m;
+                        px += chx * m;
+                        py += chy * m;
+                        pz += chz * m;
+                    }
+                }
+                countd[k] = cnt;
+                m = 1.0f / cm;
+                // four writes due to missing copy constructor for "volatile float4"
+                posMassd[k].x = px * m;
+                posMassd[k].y = py * m;
+                posMassd[k].z = pz * m;
+                __threadfence();
+                posMassd[k].w = cm;
+                k += inc;
+            }
+        }
+    }
+}*/
 
 __global__ void TreeNS::Kernel::centerOfMass(Tree *tree, Particles *particles, integer n) {
 
@@ -1014,6 +1268,17 @@ namespace TreeNS {
             real buildTree(Tree *tree, Particles *particles, integer n, integer m, bool time) {
                 ExecutionPolicy executionPolicy;
                 return cuda::launch(time, executionPolicy, ::TreeNS::Kernel::buildTree, tree, particles, n, m);
+            }
+
+            real buildTreeMiluphcuda(Tree *tree, Particles *particles, integer n, integer m, bool time) {
+                ExecutionPolicy executionPolicy;
+                return cuda::launch(time, executionPolicy, ::TreeNS::Kernel::buildTreeMiluphcuda, tree, particles, n, m);
+            }
+
+            real calculateCentersOfMass(Tree *tree, Particles *particles, integer n, integer level, bool time) {
+                //size_t sharedMemory = NUM_THREADS_CALC_CENTER_OF_MASS * POW_DIM * sizeof(int);
+                ExecutionPolicy executionPolicy; //(1, NUM_THREADS_CALC_CENTER_OF_MASS, sharedMemory);
+                return cuda::launch(time, executionPolicy, ::TreeNS::Kernel::calculateCentersOfMass, tree, particles, n, level);
             }
 
             real computeBoundingBox(Tree *tree, Particles *particles, integer *mutex, integer n, integer blockSize,
