@@ -175,8 +175,7 @@ namespace SPH {
             }
         }
 
-        __global__ void
-        fixedRadiusNN(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
+        __global__ void fixedRadiusNN(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
                       integer numParticles, integer numNodes) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
@@ -291,6 +290,7 @@ namespace SPH {
                                 r *= 0.5;
                                 interactionDistance = (r + particles->sml[bodyIndex + offset]);
                                 if (depth > MAX_DEPTH) {
+                                    // TODO: why not here redoNeighborSearch() ???
                                     printf("ERROR: maximal depth reached! depth = %i > MAX_DEPTH = %i\n", depth, MAX_DEPTH);
                                     assert(depth < MAX_DEPTH);
                                 }
@@ -450,6 +450,124 @@ namespace SPH {
                 particles->noi[bodyIndex + offset] = noOfInteractions;
                 offset += stride;
             }
+        }
+
+        __device__ void redoNeighborSearch(Tree *tree, Particles *particles, int particleId,
+                                             int *interactions, real radius, integer numParticles, integer numNodes) {
+
+            register int i, inc, nodeIndex, depth, childNumber, child;
+            i = particleId;
+            register real x, dx, interactionDistance, r, d;
+            x = particles->x[i];
+#if DIM > 1
+            register real y, dy;
+            y = particles->y[i];
+#if DIM == 3
+            register real z, dz;
+            z = particles->z[i];
+#endif
+#endif
+            register int currentNodeIndex[MAX_DEPTH];
+            register int currentChildNumber[MAX_DEPTH];
+            register int numberOfInteractions;
+
+            //printf("1) sml_new > h: noi: %d\n", p.noi[i]);
+
+            real sml; // smoothing length of particle
+            real smlj; // smoothing length of potential interaction partner
+
+            // start at root
+            depth = 0;
+            currentNodeIndex[depth] = 0; //numNodes - 1;
+            currentChildNumber[depth] = 0;
+            numberOfInteractions = 0;
+            r = radius * 0.5; // because we start with root children
+            sml = particles->sml[i];
+            particles->noi[i] = 0;
+            interactionDistance = (r + sml);
+
+            do {
+                childNumber = currentChildNumber[depth];
+                nodeIndex = currentNodeIndex[depth];
+                while (childNumber < POW_DIM) {
+                    child = tree->child[POW_DIM * nodeIndex + childNumber];
+                    childNumber++;
+                    if (child != -1 && child != i) {
+                        dx = x - particles->x[child];
+#if DIM > 1
+                        dy = y - particles->y[child];
+#if DIM == 3
+                        dz = z - particles->z[child];
+#endif
+#endif
+
+                        if (child < numParticles) {
+                            //if (p_rhs.materialId[child] == EOS_TYPE_IGNORE) {
+                            //    continue;
+                            //}
+                            d = dx * dx;
+#if DIM > 1
+                            d += dy * dy;
+#if DIM == 3
+                            d += dz * dz;
+#endif
+#endif
+                            smlj = particles->sml[child];
+
+                            if (d < sml*sml && d < smlj*smlj) {
+                                interactions[i * MAX_NUM_INTERACTIONS + numberOfInteractions] = child;
+                                numberOfInteractions++;
+//#if TOO_MANY_INTERACTIONS_KILL_PARTICLE
+//                                if (numberOfInteractions >= MAX_NUM_INTERACTIONS) {
+//                            printf("setting the smoothing length for particle %d to 0!\n", i);
+//                            p.h[i] = 0.0;
+//                            p.noi[i] = 0;
+//                            sml = 0.0;
+//                            interactionDistance = 0.0;
+//                            p_rhs.materialId[i] = EOS_TYPE_IGNORE;
+//                            // continue with next particle by setting depth to -1
+//                            // cms 2018-01-19
+//                            depth = -1;
+//                            break;
+//                        }
+//#endif
+                            }
+                        } else if (fabs(dx) < interactionDistance
+#if DIM > 1
+                                   && fabs(dy) < interactionDistance
+#if DIM == 3
+                                   && fabs(dz) < interactionDistance
+#endif
+#endif
+                                ) {
+                            // put child on stack
+                            currentChildNumber[depth] = childNumber;
+                            currentNodeIndex[depth] = nodeIndex;
+                            depth++;
+                            r *= 0.5;
+                            interactionDistance = (r + sml);
+                            if (depth >= MAX_DEPTH) {
+                                printf("wtf, maxdepth reached!");
+                                assert(depth < MAX_DEPTH);
+                            }
+                            childNumber = 0;
+                            nodeIndex = child;
+                        }
+                    }
+                }
+
+                depth--;
+                r *= 2.0;
+                interactionDistance = (r + sml);
+            } while (depth >= 0);
+
+            if (numberOfInteractions >= MAX_NUM_INTERACTIONS) {
+                printf("ERROR: Maximum number of interactions exceeded: %d / %d\n", numberOfInteractions, MAX_NUM_INTERACTIONS);
+//#if !TOO_MANY_INTERACTIONS_KILL_PARTICLE
+//                // assert(numberOfInteractions < MAX_NUM_INTERACTIONS);
+//#endif
+            }
+            particles->noi[i] = numberOfInteractions;
         }
 
         __global__ void compTheta(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,

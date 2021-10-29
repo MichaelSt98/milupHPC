@@ -226,14 +226,14 @@ namespace SPH {
 
         int i, inc, j, k, m, d, dd;
         // absolute values of div v and curl v */
-        double divv;
-        double curlv[DIM];
-        double W, dWdr;
-        double Wj, dWdrj, dWdxj[DIM];
-        double dWdx[DIM], dx[DIM];
-        double sml;
-        double vi[DIM], vj[DIM];
-        double r;
+        real divv;
+        real curlv[DIM];
+        real W, dWdr;
+        real Wj, dWdrj, dWdxj[DIM];
+        real dWdx[DIM], dx[DIM];
+        real sml;
+        real vi[DIM], vj[DIM];
+        real r;
         inc = blockDim.x * gridDim.x;
         for (i = threadIdx.x + blockIdx.x * blockDim.x; i < numParticles; i += inc) {
             //if (EOS_TYPE_IGNORE == matEOS[p_rhs.materialId[i]] || p_rhs.materialId[i] == EOS_TYPE_IGNORE) {
@@ -345,11 +345,11 @@ namespace SPH {
 __global__ void shepardCorrection(SPH_kernel kernel, Particles *particles, int *interactions, int numParticles) {
 
     register int i, inc, j, m;
-    register double dr[DIM], h, dWdr;
+    register real dr[DIM], h, dWdr;
     inc = blockDim.x * gridDim.x;
-    double W, dWdx[DIM], Wj;
+    real W, dWdx[DIM], Wj;
     for (i = threadIdx.x + blockIdx.x * blockDim.x; i < numParticles; i += inc) {
-        double shepard_correction;
+        real shepard_correction;
         W = 0;
         for (m = 0; m < DIM; m++) {
             dr[m] = 0.0;
@@ -399,13 +399,13 @@ __global__ void tensorialCorrection(SPH_kernel kernel, Particles *particles, int
     register int d, dd;
     int rv = 0;
     inc = blockDim.x * gridDim.x;
-    register double r, dr[DIM], h, dWdr, tmp, f1, f2;
-    double W, dWdx[DIM];
-    double Wj, dWdxj[DIM];
-    double wend_f, wend_sml, q, distance;
+    register real r, dr[DIM], h, dWdr, tmp, f1, f2;
+    real W, dWdx[DIM];
+    real Wj, dWdxj[DIM];
+    real wend_f, wend_sml, q, distance;
     for (i = threadIdx.x + blockIdx.x * blockDim.x; i < numParticles; i += inc) {
-        register double corrmatrix[DIM*DIM];
-        register double matrix[DIM*DIM];
+        register real corrmatrix[DIM*DIM];
+        register real matrix[DIM*DIM];
         for (d = 0; d < DIM*DIM; d++) {
             corrmatrix[d] = 0;
             matrix[d] = 0;

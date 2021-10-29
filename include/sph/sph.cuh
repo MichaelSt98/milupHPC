@@ -26,6 +26,9 @@ namespace SPH {
         fixedRadiusNN_Test(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
                                     integer numParticles, integer numNodes);
 
+        __device__ void redoNeighborSearch(Tree *tree, Particles *particles, int particleId,
+                                             int *interactions, real radius, integer numParticles, integer numNodes);
+
         __global__ void compTheta(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                   DomainList *lowestDomainList, Curve::Type curveType);
 
