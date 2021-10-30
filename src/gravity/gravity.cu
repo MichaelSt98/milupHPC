@@ -686,7 +686,11 @@ namespace Gravity {
                                     r = rsqrt(r);
                                 }
 
+#if SI_UNITS
+                                real f = Constants::G * particles->mass[ch] * r * r * r;
+#else
                                 real f = particles->mass[ch] * r * r * r;
+#endif
 
                                 acc_x += f*dx;
 #if DIM > 1
@@ -844,7 +848,11 @@ namespace Gravity {
                                     r = rsqrt(r);
                                 }
 
+#if SI_UNITS
+                                real f = Constants::G * particles->mass[ch] * r * r * r;
+#else
                                 real f = particles->mass[ch] * r * r * r;
+#endif
 
                                 acc_x += f*dx;
 #if DIM > 1
@@ -968,7 +976,7 @@ namespace Gravity {
                             child = tree->child[POW_DIM * nodeIndex + childNumber]; //childList[childListIndex(nodeIndex, childNumber)];
                             childNumber++;
                         } while(child == -1 && childNumber < POW_DIM);
-                        if (child != -1 && child != i) { // dont do selfgravity with yourself!
+                        if (child != -1 && child != i) { // dont do self-gravity with yourself!
                             dx = particles->x[child] - px;
                             distance = dx*dx + 0.025;
 #if DIM > 1
@@ -983,7 +991,11 @@ namespace Gravity {
                             if (child < n || distance * thetasq > cellsize[depth]) {
                                 distance = sqrt(distance);
                                 //distance += 1e10;
+#if SI_UNITS
+                                f = Constants::G * particles->mass[child] / (distance * distance * distance);
+#else
                                 f = particles->mass[child] / (distance * distance * distance);
+#endif
 
                                 ax += f*dx;
 #if DIM > 1
