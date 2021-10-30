@@ -38,6 +38,7 @@ CUDA_CALLABLE_MEMBER keyType KeyNS::lebesgue2hilbert(keyType lebesgue, integer m
 }
 
 CUDA_CALLABLE_MEMBER keyType KeyNS::lebesgue2hilbert(keyType lebesgue, int maxLevel, int level) {
+
     keyType hilbert = 0UL; // 0UL is our root, placeholder bit omitted
     //int level = 0, dir = 0;
     int dir = 0;

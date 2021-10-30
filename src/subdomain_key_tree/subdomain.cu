@@ -93,7 +93,21 @@ CUDA_CALLABLE_MEMBER bool SubDomainKeyTree::isDomainListNode(keyType key, intege
             p1 = key2proc(KeyNS::lebesgue2hilbert(key, maxLevel, level));
             //p2 = key2proc(KeyNS::lebesgue2hilbert(key | ~(~0UL << DIM * (maxLevel - level)), maxLevel, maxLevel));
             keyType hilbert = KeyNS::lebesgue2hilbert(key, maxLevel, level);
-            p2 = key2proc(hilbert | (KEY_MAX >> (DIM*level+1)));
+#if DIM == 1
+            keyType shiftValue = 1;
+            keyType toShift = 21;
+            keyType keyMax = (shiftValue << toShift);
+#elif DIM == 2
+            keyType shiftValue = 1;
+            keyType toShift = 42;
+            keyType keyMax = (shiftValue << toShift);
+#else
+            keyType shiftValue = 1;
+            keyType toShift = 63;
+            keyType keyMax = (shiftValue << toShift);
+#endif
+            //p2 = key2proc(hilbert | (KEY_MAX >> (DIM*level+1)));
+            p2 = key2proc(hilbert | (keyMax >> (DIM*level+1)));
 
             //printf("lebesgue: %lu vs %lu < ? : %i\n", key, key | ~(~0UL << DIM * (maxLevel - level)), key < (key | ~(~0UL << DIM * (maxLevel - level))));
             //printf("hilbert: %lu vs %lu < ? : %i\n", KeyNS::lebesgue2hilbert(key, maxLevel, maxLevel), hilbert | (KEY_MAX >> (DIM*level+1)),
@@ -768,7 +782,7 @@ namespace DomainListNS {
             integer level = 1;
 
             // in principle: traversing a (non-existent) octree by walking the 1D spacefilling curve (keys of the tree nodes)
-            while (key2test <= keyMax) {
+            while (key2test < keyMax) { //TODO: < or <=
                 if (subDomainKeyTree->isDomainListNode(key2test & (~0UL << (DIM * (maxLevel - level + 1))),
                                                        maxLevel, level-1, curveType)) {
                     domainList->domainListKeys[*domainList->domainListIndex] = key2test;
