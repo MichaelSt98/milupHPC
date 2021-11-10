@@ -113,6 +113,30 @@ namespace CudaUtils {
             }
         }
 
+        template<typename T>
+        __global__ void findDuplicateEntries(T *array1, T *array2, T *array3, integer *duplicateCounter, int length) {
+            integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+
+            while ((bodyIndex + offset) < length) {
+
+                for (int i=0; i<length; i++) {
+                    if (i != (bodyIndex + offset)) {
+                        if (array1[bodyIndex + offset] == array1[i] && array2[bodyIndex + offset] == array2[i] &&
+                                array3[bodyIndex + offset] == array3[i]) {
+
+                            atomicAdd(duplicateCounter, 1);
+
+                            //printf("duplicate! (%i vs. %i) (x = %f, y = %f)\n", i, bodyIndex + offset, array1[i], array2[i]);
+                        }
+                    }
+                }
+
+                offset += stride;
+            }
+        }
+
         template<typename T, typename U>
         __global__ void findDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, int length) {
             integer index = threadIdx.x + blockIdx.x * blockDim.x;
@@ -325,6 +349,14 @@ namespace CudaUtils {
         }
         template real Launch::findDuplicateEntries<real>(real *array1, real *array2, integer *duplicateCounter, int length);
 
+        template<typename T>
+        real Launch::findDuplicateEntries(T *array1, T *array2, T *array3, integer *duplicateCounter, int length) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::CudaUtils::Kernel::findDuplicateEntries<T>, array1,
+                                array2, array3, duplicateCounter, length);
+        }
+        template real Launch::findDuplicateEntries<real>(real *array1, real *array2, real *array3, integer *duplicateCounter, int length);
+
         template<typename T, typename U>
         real Launch::findDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, int length) {
             ExecutionPolicy executionPolicy;
@@ -376,4 +408,66 @@ namespace CudaUtils {
                 integer *duplicateCounter, int length);
     }
 
+}
+
+namespace cuda {
+    namespace math {
+        __device__ real min(real a, real b) {
+#if SINGLE_PRECISION
+            return fminf(a, b);
+#else
+            return fmin(a, b);
+#endif
+        }
+
+        __device__ real min(real a, real b, real c) {
+            real temp = min(a, b);
+#if SINGLE_PRECISION
+            return fminf(temp, c);
+#else
+            return fmin(temp, c);
+#endif
+        }
+
+        __device__ real max(real a, real b) {
+#if SINGLE_PRECISION
+            return fmaxf(a, b);
+#else
+            return fmax(a, b);
+#endif
+        }
+
+        __device__ real max(real a, real b, real c) {
+            real temp = max(a, b);
+#if SINGLE_PRECISION
+            return fmaxf(temp, c);
+#else
+            return fmax(temp, c);
+#endif
+        }
+
+        __device__ real abs(real a) {
+#if SINGLE_PRECISION
+            return fabsf(a);
+#else
+            return fabs(a);
+#endif
+        }
+
+        __device__ real sqrt(real a) {
+#if SINGLE_PRECISION
+            return sqrtf(a);
+#else
+            return ::sqrt(a);
+#endif
+        }
+
+        __device__ real rsqrt(real a) {
+#if SINGLE_PRECISION
+            return rsqrtf(a);
+#else
+            return ::rsqrt(a);
+#endif
+        }
+    }
 }

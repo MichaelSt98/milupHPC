@@ -54,6 +54,10 @@ void H5Renderer::createImages(std::string outDir){
         std::vector<unsigned long> k;
         key.read(k);
 
+        for (int i = 0; i < ranges.size(); ++i) {
+            printf("ranges[%i] = %lu\n", i, ranges[i]);
+        }
+
         // reading particle positions
         HighFive::DataSet pos = file.getDataSet("/x");
         std::vector<std::vector<double>> x; // container for particle positions
@@ -64,6 +68,7 @@ void H5Renderer::createImages(std::string outDir){
 
         for (int i = 0; i < x.size(); ++i) {
             particles.push_back(Particle(x[i][0], x[i][1], x[i][2], k[i]));
+            //particles.push_back(Particle(x[i][0], x[i][1], 0., k[i]));
         }
         Logger(DEBUG) << "    ... done.";
 
@@ -84,6 +89,7 @@ void H5Renderer::createImages(std::string outDir){
         }
         Logger(DEBUG) << "    ... done.";
 
+
         Logger(DEBUG) << "    Sorting by y-coordinate  ...";
         std::sort(particles.begin(), particles.end(), Particle::yComp);
         Logger(DEBUG) << "    ... drawing pixels in x-z-plane ...";
@@ -93,6 +99,7 @@ void H5Renderer::createImages(std::string outDir){
             particle2PixelXZ(particles[i].x, particles[i].z, color, pixelSpace);
         }
         Logger(DEBUG) << "    ... done.";
+
 
         std::string outFile = outDir + "/" + h5PathIt->stem().string() + ".ppm";
         Logger(INFO) << "... writing to file '" << outFile << "' ...";

@@ -8,7 +8,7 @@ __global__ void SPH::Kernel::calculate_shear_stress_tensor(::SPH::SPH_kernel ker
     //Particle Loop
     for (i = threadIdx.x + blockIdx.x * blockDim.x; i < numRealParticles; i += inc) {
 //#if SHAKURA_SUNYAEV_ALPHA
-//        double R = sqrt(p.x[i]*p.x[i] + p.y[i]*p.y[i]);
+//        double R = cuda::math::sqrt(p.x[i]*p.x[i] + p.y[i]*p.y[i]);
 //	    p_rhs.eta[i] = matalpha_shakura[p_rhs.materialId[i]] * p.cs[i] * p.rho[i] * scale_height * R ;
 //#elif CONSTANT_KINEMATIC_VISCOSITY
         // TODO: matnu
@@ -69,7 +69,7 @@ __global__ void SPH::Kernel::calculate_kinematic_viscosity(::SPH::SPH_kernel ker
             }
             W = 0.0;
             dWdr = 0.0;
-            r = sqrt(r);
+            r = cuda::math::sqrt(r);
 
             sml = particles->sml[i];
 

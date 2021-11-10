@@ -20,6 +20,8 @@
 #include "sph/density.cuh"
 #include "sph/pressure.cuh"
 #include "sph/internal_forces.cuh"
+#include "sph/soundspeed.cuh"
+#include "simulation_time_handler.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -56,8 +58,6 @@ private:
 class Miluphpc {
 
 private:
-
-    real removeParticles();
 
     //real reset();
 
@@ -101,6 +101,8 @@ private:
 
 public:
 
+    real removeParticles();
+
     void fixedLoadBalancing();
     void dynamicLoadBalancing(int bins=5000);
     void updateRangeApproximately(int aimedParticlesPerProcess, int bins=5000);
@@ -109,6 +111,7 @@ public:
     Curve::Type curveType;
 
     SPH::KernelHandler kernelHandler;
+    SimulationTimeHandler *simulationTimeHandler;
 
     integer numParticles;
     integer sumParticles;
@@ -173,6 +176,8 @@ public:
     virtual void integrate(int step = 0) = 0;
 
     real particles2file(int step);
+
+    real particles2file(int step, real com[DIM], real t);
 
     real particles2file(const std::string& filename, int *particleIndices, int length);
 

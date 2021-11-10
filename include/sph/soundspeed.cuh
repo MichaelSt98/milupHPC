@@ -15,6 +15,11 @@ namespace SPH {
         __global__ void initializeSoundSpeed(Particles *particles, Material *materials, int numParticles);
 
         __global__ void calculateSoundSpeed(Particles *particles, Material *materials, int numParticles);
+
+        namespace Launch {
+            real initializeSoundSpeed(Particles *particles, Material *materials, int numParticles);
+            real calculateSoundSpeed(Particles *particles, Material *materials, int numParticles);
+        }
     }
 }
 

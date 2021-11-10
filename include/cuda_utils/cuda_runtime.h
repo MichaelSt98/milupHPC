@@ -37,7 +37,6 @@ namespace cuda {
         gpuErrorcheck(cudaFree(d_var));
     }
 
-
 }
 
 

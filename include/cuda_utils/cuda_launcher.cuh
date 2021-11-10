@@ -57,6 +57,7 @@ namespace cuda {
     real launch(bool timeKernel, void(*f)(Arguments... args), Arguments... args) {
         cudaLaunch(ExecutionPolicy(), f, args...);
     }
+
 }
 
 //#elseif

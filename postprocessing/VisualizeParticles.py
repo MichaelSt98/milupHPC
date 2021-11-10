@@ -75,5 +75,9 @@ def particleDistribution(file):
 
 if __name__ == '__main__':
 
-    file = '../log/test.h5'
+    #file = '../log/Gravity2SendParticles.h5'
+    #file = '../log/Gravity2SendPseudoParticles.h5'
+    #file = '../log/Gravity2SendBoth.h5'
+    file = '../log/SPH2Send.h5'
+
     particleDistribution(file)

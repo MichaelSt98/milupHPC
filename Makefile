@@ -34,6 +34,10 @@ INC            := -I$(INCDIR) -I/usr/include -I$(CUDADIR)/include -I/opt/openmpi
 INCDEP         := -I$(INCDIR)
 
 #Source and Object files
+#find ./src -type f -name "*.cu" -not -path "./src/gravity/*"
+#find ./src -type f -name "*.cu" -not -path "*/gravity/*"
+#find . -type d \( -path ./src/sph -o -path ./src/gravity -o -path ./dir3 \) -prune -o -name '*.cu' -print
+#find . -type d \( -name sph -o -name gravity -o -name dir3 \) -prune -o -name '*.cu' -print
 SOURCES        := $(shell find $(SRCDIR) -type f -name "*.$(SRCEXT)")
 CUDA_SOURCES   := $(shell find $(SRCDIR) -type f -name "*.$(CUDASRCEXT)")
 OBJECTS        := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.$(OBJEXT)))
@@ -51,7 +55,9 @@ single-precision: NVFLAGS += -DSINGLE_PRECISION
 single-precision: all
 
 debug: CXXFLAGS += -g
+debug: NVFLAGS := ${filter-out -O3, $(NVFLAGS)}
 debug: NVFLAGS  += -g -G
+debug: LFALGS += -g -G
 debug: tester ideas $(TARGET)
 
 #make regarding source files

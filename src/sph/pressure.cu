@@ -4,6 +4,7 @@
 
 namespace EOS {
     __device__ void polytropicGas(Material *materials, Particles *particles, int index) {
+        //printf("polytropicGas...\n");
         particles->p[index] = materials[particles->materialId[index]].eos.polytropic_K *
                 pow(particles->rho[index], materials[particles->materialId[index]].eos.polytropic_gamma);
         //if (true /*particles->p[index] > 0.*/) {
@@ -14,10 +15,12 @@ namespace EOS {
     }
 
     __device__ void isothermalGas(Material *materials, Particles *particles, int index) {
+        //printf("isothermalGas...\n");
         particles->p[index] = 41255.407 * particles->rho[index];
     }
 
     __device__ void locallyIsothermalGas(Material *materials, Particles *particles, int index) {
+        //printf("locallyIsothermalGas...\n");
         particles->p[index] = particles->cs[index] * particles->cs[index] * particles->rho[index];
     }
 }
@@ -36,7 +39,8 @@ namespace SPH {
 
                 pressure = 0.0;
 
-                switch (materials[particles->materialId[i]].ID) {
+                //printf("calculatePressure: %i\n", materials[particles->materialId[i]].eos.type);
+                switch (materials[particles->materialId[i]].eos.type) {
                     case EquationOfStates::EOS_TYPE_POLYTROPIC_GAS: {
                         ::EOS::polytropicGas(materials, particles, i);
                     }

@@ -4,6 +4,7 @@
 #endif //MILUPHPC_DEVICE_EXPLICIT_EULER_CUH
 
 #include "../particles.cuh"
+#include <assert.h>
 
 namespace ExplicitEulerNS {
 

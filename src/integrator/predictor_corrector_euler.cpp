@@ -3,11 +3,39 @@
 PredictorCorrectorEuler::PredictorCorrectorEuler(SimulationParameters simulationParameters) : Miluphpc(simulationParameters) {
     printf("PredictorCorrectorEuler()\n");
     integratedParticles = new IntegratedParticleHandler(numParticles, numNodes);
+
+
+    cudaGetDevice(device);
+    cudaGetDeviceProperties(prop, *device);
+    cuda::malloc(d_blockCount, 1);
+    cuda::set(d_blockCount, 0, 1);
+
+    cuda::malloc(d_block_forces, prop->multiProcessorCount);
+    cuda::malloc(d_block_courant, prop->multiProcessorCount);
+    cuda::malloc(d_block_artVisc, prop->multiProcessorCount);
+    cuda::malloc(d_block_e, prop->multiProcessorCount);
+    cuda::malloc(d_block_rho, prop->multiProcessorCount);
+
+    cuda::malloc(d_blockShared, 1);
+
+    PredictorCorrectorEulerNS::BlockSharedNS::set(d_blockShared, d_block_forces, d_block_courant,
+                                                  d_block_courant);
+    PredictorCorrectorEulerNS::BlockSharedNS::setE(d_blockShared, d_block_e);
+    PredictorCorrectorEulerNS::BlockSharedNS::setRho(d_blockShared, d_block_rho);
+
 }
 
 PredictorCorrectorEuler::~PredictorCorrectorEuler() {
     delete [] integratedParticles;
     printf("~PredictorCorrectorEuler()\n");
+
+    cuda::free(d_block_forces);
+    cuda::free(d_block_courant);
+    cuda::free(d_block_artVisc);
+    cuda::free(d_block_e);
+    cuda::free(d_block_rho);
+
+    cuda::free(d_blockShared);
 }
 
 void PredictorCorrectorEuler::integrate(int step) {

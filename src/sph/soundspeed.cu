@@ -1,5 +1,5 @@
 #include "../../include/sph/soundspeed.cuh"
-#include "../include/cuda_utils/cuda_launcher.cuh"
+#include "../../include/cuda_utils/cuda_launcher.cuh"
 
 __global__ void SPH::Kernel::initializeSoundSpeed(Particles *particles, Material *materials, int numParticles) {
 
@@ -9,12 +9,15 @@ __global__ void SPH::Kernel::initializeSoundSpeed(Particles *particles, Material
     for (i = threadIdx.x + blockIdx.x * blockDim.x; i < numParticles; i += inc) {
         matId = particles->materialId[i];
 
-        switch (materials[matId].ID) {
+        switch (materials[matId].eos.type) {
             case EquationOfStates::EOS_TYPE_POLYTROPIC_GAS: {
                 particles->cs[i] = 0.0; // for gas this will be calculated each step by kernel calculateSoundSpeed
             } break;
             case EquationOfStates::EOS_TYPE_ISOTHERMAL_GAS: {
                 particles->cs[i] = 203.0; // this is pure molecular hydrogen at 10 K
+#if !SI_UNITS
+                particles->cs[i] /= 2.998e8; // speed of light
+#endif
             } break;
             case EquationOfStates::EOS_TYPE_LOCALLY_ISOTHERMAL_GAS: {
                 //TODO: initial sound speed for EOS_TYPE_LOCALLY_ISOTHERMAL_GAS?
@@ -41,9 +44,9 @@ __global__ void SPH::Kernel::calculateSoundSpeed(Particles *particles, Material 
 
         matId = particles->materialId[i];
 
-        switch (materials[matId].ID) {
+        switch (materials[matId].eos.type) {
             case EquationOfStates::EOS_TYPE_POLYTROPIC_GAS: {
-                particles->cs[i] = sqrt(materials[matId].eos.polytropic_K *
+                particles->cs[i] = cuda::math::sqrt(materials[matId].eos.polytropic_K *
                                         pow(particles->rho[i], materials[matId].eos.polytropic_gamma-1.0));
             } break;
             //case EquationOfStates::EOS_TYPE_ISOTHERMAL_GAS: {
@@ -58,19 +61,30 @@ __global__ void SPH::Kernel::calculateSoundSpeed(Particles *particles, Material 
                 distance += particles->z[i] * particles->z[i];
 #endif
 #endif
-                distance = sqrt(distance);
+                distance = cuda::math::sqrt(distance);
                 m_com = 0;
                 //TODO: how to calculate cs for EOS_TYPE_ISOTHERMAL_GAS
                 //for (j = 0; j < numPointmasses; j++) {
                 //    m_com += pointmass.m[j];
                 //}
-                //double vkep = sqrt(gravConst * m_com/distance);
+                //double vkep = cuda::math::sqrt(gravConst * m_com/distance);
                 //p.cs[i] = vkep * scale_height;
                 particles->cs[i] = 0;
             } break;
-            default:
-                printf("not implemented!\n");
+            //default:
+                //printf("not implemented!\n");
         }
     }
 
 }
+
+real SPH::Kernel::Launch::initializeSoundSpeed(Particles *particles, Material *materials, int numParticles) {
+    ExecutionPolicy executionPolicy;
+    return cuda::launch(true, executionPolicy, ::SPH::Kernel::initializeSoundSpeed, particles, materials, numParticles);
+}
+
+real SPH::Kernel::Launch::calculateSoundSpeed(Particles *particles, Material *materials, int numParticles) {
+    ExecutionPolicy executionPolicy;
+    return cuda::launch(true, executionPolicy, ::SPH::Kernel::calculateSoundSpeed, particles, materials, numParticles);
+}
+

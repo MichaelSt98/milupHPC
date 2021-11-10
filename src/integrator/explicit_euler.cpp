@@ -18,6 +18,8 @@ void ExplicitEuler::integrate(int step) {
 
     Timer timer;
 
+    removeParticles();
+
     Logger(INFO) << "rhs::loadBalancing()";
     timer.reset();
     if (simulationParameters.loadBalancing && step != 0 && step % simulationParameters.loadBalancingInterval == 0) {
@@ -27,6 +29,9 @@ void ExplicitEuler::integrate(int step) {
     //totalTime += elapsed;
     Logger(TIME) << "rhs::loadBalancing(): " << elapsed << " ms";
     profiler.value2file(ProfilerIds::Time::loadBalancing, elapsed);
+
+    //Logger(INFO) << "checking for nans before update() ..";
+    //ParticlesNS::Kernel::Launch::check4nans(particleHandler->d_particles, numParticlesLocal);
 
     printf("ExplicitEuler::integrate()\n");
     timer.reset();
@@ -38,6 +43,13 @@ void ExplicitEuler::integrate(int step) {
 
     ExplicitEulerNS::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal,
                                     (real)simulationParameters.timestep);
+
+#if INTEGRATE_SML
+    cuda::set(particleHandler->d_dsmldt, (real)0, numParticles);
+#endif
+
+    //Logger(INFO) << "checking for nans after update()...";
+    //ParticlesNS::Kernel::Launch::check4nans(particleHandler->d_particles, numParticlesLocal);
 
     //H5Profiler &profiler = H5Profiler::getInstance("log/performance.h5");
     profiler.value2file(ProfilerIds::Time::rhs, time);

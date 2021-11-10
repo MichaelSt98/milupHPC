@@ -98,8 +98,8 @@ namespace CudaUtils {
             for (j = 0; j < DIM; j++) {
                 if (i == j)
                     continue;
-                if (fabs(M[i][j]) >= max) {
-                    max = fabs(M[i][j]);
+                if (cuda::math::abs(M[i][j]) >= max) {
+                    max = cuda::math::abs(M[i][j]);
                     *e = i;
                     *f = j;
                     ierror = 0;
@@ -190,11 +190,11 @@ namespace CudaUtils {
                 // rotate matrix
                 thta = (diagM[f][f] - diagM[e][e]) / (2 * diagM[e][f]);
                 if (thta < 0)
-                    t = -1. / (fabs(thta) + sqrt(thta * thta + 1));
+                    t = -1. / (cuda::math::abs(thta) + cuda::math::sqrt(thta * thta + 1));
                 else
-                    t = 1. / (fabs(thta) + sqrt(thta * thta + 1));
+                    t = 1. / (cuda::math::abs(thta) + cuda::math::sqrt(thta * thta + 1));
                 // the elements of the rotation matrix
-                c = 1. / (sqrt(t * t + 1));
+                c = 1. / (cuda::math::sqrt(t * t + 1));
                 s = t * c;
                 // do diagM' = A^T diagM A
                 rotateMatrix(diagM, c, s, e, f);
@@ -252,11 +252,11 @@ namespace CudaUtils {
                 // rotate matrix
                 thta = (diagM[f][f] - diagM[e][e]) / (2 * diagM[e][f]);
                 if (thta < 0)
-                    t = -1. / (fabs(thta) + sqrt(thta * thta + 1));
+                    t = -1. / (cuda::math::abs(thta) + cuda::math::sqrt(thta * thta + 1));
                 else
-                    t = 1. / (fabs(thta) + sqrt(thta * thta + 1));
+                    t = 1. / (cuda::math::abs(thta) + cuda::math::sqrt(thta * thta + 1));
                 // the elements of the rotation matrix
-                c = 1. / (sqrt(t * t + 1));
+                c = 1. / (cuda::math::sqrt(t * t + 1));
                 s = t * c;
                 // do diagM' = A^T diagM A
                 rotateMatrix(diagM, c, s, e, f);

@@ -15,6 +15,8 @@ namespace Gravity {
 
     namespace Kernel {
 
+        __global__ void globalCOM(Tree *tree, Particles *particles, real com[DIM]);
+
         __global__ void collectSendIndices(Tree *tree, Particles *particles, integer *sendIndices,
                                            integer *particles2Send, integer *pseudoParticles2Send,
                                            integer *pseudoParticlesLevel,
@@ -98,9 +100,12 @@ namespace Gravity {
         __global__ void insertReceivedParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                 DomainList *domainList, DomainList *lowestDomainList, int n, int m);
 
-        __global__ void repairTree(Tree *tree, Particles *particles, DomainList *domainList, int n, int m);
+        __global__ void repairTree(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                   DomainList *lowestDomainList, int n, int m, Curve::Type curveType);
 
         namespace Launch {
+
+            real globalCOM(Tree *tree, Particles *particles, real com[DIM]);
 
             real collectSendIndices(Tree *tree, Particles *particles, integer *sendIndices,
                                     integer *particles2Send, integer *pseudoParticles2Send,
@@ -168,7 +173,8 @@ namespace Gravity {
             real insertReceivedParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                     DomainList *domainList, DomainList *lowestDomainList, int n, int m);
 
-            real repairTree(Tree *tree, Particles *particles, DomainList *domainList, int n, int m);
+            real repairTree(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                            DomainList *lowestDomainList, int n, int m, Curve::Type curveType);
 
         }
     }

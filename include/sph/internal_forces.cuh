@@ -9,6 +9,11 @@ namespace SPH {
     namespace Kernel {
         __global__ void internalForces(::SPH::SPH_kernel kernel, Material *materials, Tree *tree, Particles *particles,
                                        int *interactions, int numRealParticles);
+
+        namespace Launch {
+            real internalForces(::SPH::SPH_kernel kernel, Material *materials, Tree *tree, Particles *particles,
+                                int *interactions, int numRealParticles);
+        }
     }
 }
 

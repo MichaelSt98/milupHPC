@@ -52,13 +52,16 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     h_p = _h_p;
     h_muijmax = new real[numParticles];
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
     _h_drhodt = new real[numParticles];
     h_drhodt = _h_drhodt;
-#endif
+//#endif
 #if VARIABLE_SML || INTEGRATE_SML
     _h_dsmldt = new real[numParticles];
     h_dsmldt = _h_dsmldt;
+#endif
+#if SML_CORRECTION
+    h_sml_omega = new real[numParticles];
 #endif
 #if NAVIER_STOKES
     h_Tshear = new real[DIM * DIM * numParticles];
@@ -158,11 +161,14 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     cuda::malloc(d_p, numParticles);
     cuda::malloc(d_muijmax, numParticles);
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
     cuda::malloc(d_drhodt, numParticles);
-#endif
+//#endif
 #if VARIABLE_SML || INTEGRATE_SML
     cuda::malloc(d_dsmldt, numParticles);
+#endif
+#if SML_CORRECTION
+    cuda::malloc(d_sml_omega, numParticles);
 #endif
 #if NAVIER_STOKES
     cuda::malloc(d_Tshear, DIM * DIM * numParticles);
@@ -254,13 +260,17 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     h_particles->setArtificialViscosity(h_muijmax);
     ParticlesNS::Kernel::Launch::setArtificialViscosity(d_particles, d_muijmax);
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
     h_particles->setIntegrateDensity(h_drhodt);
     ParticlesNS::Kernel::Launch::setIntegrateDensity(d_particles, d_drhodt);
-#endif
+//#endif
 #if VARIABLE_SML || INTEGRATE_SML
     h_particles->setVariableSML(h_dsmldt);
     ParticlesNS::Kernel::Launch::setVariableSML(d_particles, d_dsmldt);
+#endif
+#if SML_CORRECTION
+    h_particles->setSMLCorrection(h_sml_omega);
+    ParticlesNS::Kernel::Launch::setSMLCorrection(d_particles, d_sml_omega);
 #endif
 #if NAVIER_STOKES
     h_particles->setNavierStokes(h_Tshear, h_eta);
@@ -377,13 +387,17 @@ ParticleHandler::~ParticleHandler() {
     delete [] h_muijmax;
     cuda::free(d_muijmax);
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
     delete [] _h_drhodt;
     cuda::free(_d_drhodt);
-#endif
+//#endif
 #if VARIABLE_SML || INTEGRATE_SML
     delete [] _h_dsmldt;
     cuda::free(_d_dsmldt);
+#endif
+#if SML_CORRECTION
+    delete [] h_sml_omega;
+    cuda::free(d_sml_omega);
 #endif
 #if NAVIER_STOKES
     delete [] h_Tshear;
@@ -557,9 +571,9 @@ void ParticleHandler::setPointer(IntegratedParticleHandler *integratedParticleHa
     d_cs = integratedParticleHandler->d_cs;
     d_sml = integratedParticleHandler->d_sml;
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
     d_drhodt = integratedParticleHandler->d_drhodt;
-#endif
+//#endif
 
 #if VARIABLE_SML || INTEGRATE_SML
     d_dsmldt = integratedParticleHandler->d_dsmldt;
@@ -648,6 +662,16 @@ void ParticleHandler::copyUid(To::Target target) {
     cuda::copy(h_uid, d_uid, length, target);
 }
 
+void ParticleHandler::copyMatId(To::Target target) {
+    int length = numParticles;
+    cuda::copy(h_materialId, d_materialId, length, target);
+}
+
+void ParticleHandler::copySML(To::Target target) {
+    int length = numParticles;
+    cuda::copy(h_sml, d_sml, length, target);
+}
+
 void ParticleHandler::copyPosition(To::Target target, bool includePseudoParticles) {
     int length;
     if (includePseudoParticles) {
@@ -703,12 +727,23 @@ void ParticleHandler::copyDistribution(To::Target target, bool velocity, bool ac
     copyUid(target);
     copyMass(target, includePseudoParticles);
     copyPosition(target, includePseudoParticles);
+    copyMatId(target);
+    copySML(target);
     if (velocity) {
         copyVelocity(target, includePseudoParticles);
     }
     if (acceleration) {
         copyAcceleration(target, includePseudoParticles);
     }
+}
+
+void ParticleHandler::copySPH(To::Target target) {
+    int length = numParticles;
+    cuda::copy(h_rho, d_rho, length, target);
+    cuda::copy(h_p, d_p, length, target);
+    cuda::copy(h_e, d_e, length, target);
+    cuda::copy(h_sml, d_sml, length, target);
+    cuda::copy(h_noi, d_noi, length, target);
 }
 
 IntegratedParticleHandler::IntegratedParticleHandler(integer numParticles, integer numNodes) :
@@ -738,9 +773,9 @@ IntegratedParticleHandler::IntegratedParticleHandler(integer numParticles, integ
 
     cuda::malloc(d_sml, numParticles);
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
     cuda::malloc(d_drhodt, numParticles);
-#endif
+//#endif
 
 #if VARIABLE_SML || INTEGRATE_SML
     cuda::malloc(d_dsmldt, numParticles);
@@ -761,9 +796,9 @@ IntegratedParticleHandler::IntegratedParticleHandler(integer numParticles, integ
 
     IntegratedParticlesNS::Kernel::Launch::setSML(d_integratedParticles, d_sml);
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
     IntegratedParticlesNS::Kernel::Launch::setIntegrateDensity(d_integratedParticles, d_drhodt);
-#endif
+//#endif
 
 #if VARIABLE_SML || INTEGRATE_SML
     IntegratedParticlesNS::Kernel::Launch::setIntegrateSML(d_integratedParticles, d_dsmldt);
@@ -797,9 +832,9 @@ IntegratedParticleHandler::~IntegratedParticleHandler() {
 
     cuda::free(d_sml);
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
     cuda::free(d_drhodt);
-#endif
+//#endif
 
 #if VARIABLE_SML || INTEGRATE_SML
     cuda::free(d_dsmldt);

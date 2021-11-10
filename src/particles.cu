@@ -151,14 +151,19 @@ CUDA_CALLABLE_MEMBER void Particles::setArtificialViscosity(real *muijmax) {
     this->muijmax = muijmax;
 }
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
     CUDA_CALLABLE_MEMBER void Particles::setIntegrateDensity(real *drhodt) {
         this->drhodt = drhodt;
     }
-#endif
+//#endif
 #if VARIABLE_SML || INTEGRATE_SML
     CUDA_CALLABLE_MEMBER void Particles::setVariableSML(real *dsmldt) {
         this->dsmldt = dsmldt;
+    }
+#endif
+#if SML_CORRECTION
+    CUDA_CALLABLE_MEMBER void Particles::setSMLCorrection(real *sml_omega) {
+        this->sml_omega = sml_omega;
     }
 #endif
 #if NAVIER_STOKES
@@ -285,11 +290,11 @@ CUDA_CALLABLE_MEMBER real Particles::distance(integer index_1, integer index_2) 
 #endif
 
 #if DIM == 1
-    return sqrtf(dx*dx);
+    return sqrt(dx*dx);
 #elif DIM == 2
-    return sqrtf(dx*dx + dy*dy);
+    return sqrt(dx*dx + dy*dy);
 #else
-    return sqrtf(dx*dx + dy*dy + dz*dz);
+    return sqrt(dx*dx + dy*dy + dz*dz);
 #endif
 
 }
@@ -325,6 +330,158 @@ namespace ParticlesNS {
 
     namespace Kernel {
 
+        /*__global__ void check4nans(Particles *particles, integer n) {
+            int bodyIndex = threadIdx.x + blockDim.x * blockIdx.x;
+            int stride = blockDim.x * gridDim.x;
+            int offset = 0;
+
+            while ((bodyIndex + offset) < n) {
+                if (std::isnan(particles->x[bodyIndex + offset]) || std::isnan(particles->mass[bodyIndex + offset])
+#if DIM > 1
+                    || std::isnan(particles->y[bodyIndex + offset])
+#if DIM == 3
+                    || std::isnan(particles->z[bodyIndex + offset])
+#endif
+#endif
+                ) {
+#if DIM == 1
+                    printf("NAN for index: %i (%f) %f\n", bodyIndex + offset,
+                           particles->x[bodyIndex + offset],
+                           particles->mass[bodyIndex + offset]);
+#elif DIM == 2
+                    printf("NAN for index: %i (%f, %f) %f\n", bodyIndex + offset,
+                           particles->x[bodyIndex + offset],
+                           particles->y[bodyIndex + offset],
+                           particles->mass[bodyIndex + offset]);
+#else
+                    printf("NAN for index: %i (%f, %f, %f) %f\n", bodyIndex + offset,
+                           particles->x[bodyIndex + offset],
+                           particles->y[bodyIndex + offset],
+                           particles->z[bodyIndex + offset],
+                           particles->mass[bodyIndex + offset]);
+#endif
+                    assert(0);
+
+
+                }
+
+                if (particles->mass[bodyIndex + offset] == 0. || particles->sml[bodyIndex + offset] == 0.) {
+#if DIM == 1
+                    printf("ATTENTION for index: %i (%f) %f\n", bodyIndex + offset,
+                           particles->x[bodyIndex + offset],
+                           particles->mass[bodyIndex + offset]);
+#elif DIM == 2
+                    printf("ATTENTION for index: %i (%f, %f) %f\n", bodyIndex + offset,
+                           particles->x[bodyIndex + offset],
+                           particles->y[bodyIndex + offset],
+                           particles->mass[bodyIndex + offset]);
+#else
+                    printf("ATTENTION for index: %i (%e, %e, %e) %e sml = %e\n", bodyIndex + offset,
+                           particles->x[bodyIndex + offset],
+                           particles->y[bodyIndex + offset],
+                           particles->z[bodyIndex + offset],
+                           particles->mass[bodyIndex + offset],
+                           particles->sml[bodyIndex + offset]);
+#endif
+                    assert(0);
+                }
+
+
+
+                offset += stride;
+            }
+        }*/
+
+        __global__ void check4nans(Particles *particles, integer n) {
+            int bodyIndex = threadIdx.x + blockDim.x * blockIdx.x;
+            int stride = blockDim.x * gridDim.x;
+            int offset = 0;
+
+            while ((bodyIndex + offset) < n) {
+                if (std::isnan(particles->x[bodyIndex + offset]) || std::isnan(particles->mass[bodyIndex + offset])
+                    #if DIM > 1
+                    || std::isnan(particles->y[bodyIndex + offset])
+                    #if DIM == 3
+                    || std::isnan(particles->z[bodyIndex + offset])
+#endif
+#endif
+                        ) {
+#if DIM == 1
+                    printf("NAN for index: %i (%f) %f\n", bodyIndex + offset,
+                           particles->x[bodyIndex + offset],
+                           particles->mass[bodyIndex + offset]);
+#elif DIM == 2
+                    printf("NAN for index: %i (%f, %f) %f\n", bodyIndex + offset,
+                           particles->x[bodyIndex + offset],
+                           particles->y[bodyIndex + offset],
+                           particles->mass[bodyIndex + offset]);
+#else
+                    printf("NAN for index: %i (%f, %f, %f) %f\n", bodyIndex + offset,
+                           particles->x[bodyIndex + offset],
+                           particles->y[bodyIndex + offset],
+                           particles->z[bodyIndex + offset],
+                           particles->mass[bodyIndex + offset]);
+#endif
+                    assert(0);
+
+
+                }
+
+                if (particles->mass[bodyIndex + offset] == 0. || particles->sml[bodyIndex + offset] == 0.) {
+#if DIM == 1
+                    printf("ATTENTION for index: %i (%f) %f\n", bodyIndex + offset,
+                           particles->x[bodyIndex + offset],
+                           particles->mass[bodyIndex + offset]);
+#elif DIM == 2
+                    printf("ATTENTION for index: %i (%f, %f) %f\n", bodyIndex + offset,
+                           particles->x[bodyIndex + offset],
+                           particles->y[bodyIndex + offset],
+                           particles->mass[bodyIndex + offset]);
+#else
+                    printf("ATTENTION for index: %i (%e, %e, %e) %e sml = %e\n", bodyIndex + offset,
+                           particles->x[bodyIndex + offset],
+                           particles->y[bodyIndex + offset],
+                           particles->z[bodyIndex + offset],
+                           particles->mass[bodyIndex + offset],
+                           particles->sml[bodyIndex + offset]);
+#endif
+                    assert(0);
+                }
+
+                if (particles->x[bodyIndex + offset] > 1.e250
+                    #if DIM > 1
+                    || particles->y[bodyIndex + offset] > 1.e250
+                    #if DIM == 3
+                    || particles->z[bodyIndex + offset] > 1.e250
+#endif
+#endif
+                        ) {
+                    printf("HUGE entry for index: %i (%e, %e, %e) %e\n", bodyIndex + offset,
+                           particles->x[bodyIndex + offset],
+                           particles->y[bodyIndex + offset],
+                           particles->z[bodyIndex + offset],
+                           particles->mass[bodyIndex + offset]);
+                    assert(0);
+                }
+
+                /*if (bodyIndex + offset == 128121) {
+                    printf("INFO for index: %i (%e, %e, %e) %e sml = %e\n", bodyIndex + offset,
+                           particles->x[bodyIndex + offset],
+                           particles->y[bodyIndex + offset],
+                           particles->z[bodyIndex + offset],
+                           particles->mass[bodyIndex + offset],
+                           particles->sml[bodyIndex + offset]);
+                }*/
+
+                /*if (particles->sml[bodyIndex + offset] < 1.e-20) {
+                    printf("sml = %e\n", particles->sml[bodyIndex + offset]);
+                    assert(0);
+                }*/
+
+                offset += stride;
+            }
+        }
+
         __global__ void info(Particles *particles, integer n, integer m, integer k) {
             int bodyIndex = threadIdx.x + blockDim.x * blockIdx.x;
             int stride = blockDim.x * gridDim.x;
@@ -358,6 +515,11 @@ namespace ParticlesNS {
             }
 #endif
 
+        }
+
+        real Launch::check4nans(Particles *particles, integer n) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::ParticlesNS::Kernel::check4nans, particles, n);
         }
 
         real Launch::info(Particles *particles, integer n, integer m, integer k) {
@@ -499,7 +661,7 @@ namespace ParticlesNS {
             }
         }
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
         __global__ void setIntegrateDensity(Particles *particles, real *drhodt) {
             particles->setIntegrateDensity(drhodt);
         }
@@ -507,7 +669,7 @@ namespace ParticlesNS {
             ExecutionPolicy executionPolicy(1, 1);
             cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::setIntegrateDensity, particles, drhodt);
         }
-#endif
+//#endif
 #if VARIABLE_SML || INTEGRATE_SML
         __global__ void setVariableSML(Particles *particles, real *dsmldt) {
             particles->setVariableSML(dsmldt);
@@ -515,6 +677,16 @@ namespace ParticlesNS {
         void Launch::setVariableSML(Particles *particles, real *dsmldt) {
             ExecutionPolicy executionPolicy(1, 1);
             cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::setVariableSML, particles, dsmldt);
+        }
+#endif
+#if SML_CORRECTION
+        __global__ void setSMLCorrection(Particles *particles, real *sml_omega) {
+            particles->setSMLCorrection(sml_omega);
+        }
+
+        void Launch::setSMLCorrection(Particles *particles, real *sml_omega) {
+            ExecutionPolicy executionPolicy(1, 1);
+            cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::setSMLCorrection, particles, sml_omega);
         }
 #endif
 #if NAVIER_STOKES
@@ -748,11 +920,11 @@ CUDA_CALLABLE_MEMBER void IntegratedParticles::setSML(real *sml) {
     this->sml = sml;
 }
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
 CUDA_CALLABLE_MEMBER void IntegratedParticles::setIntegrateDensity(real *drhodt) {
     this->drhodt = drhodt;
 }
-#endif
+//#endif
 
 #if VARIABLE_SML || INTEGRATE_SML
 CUDA_CALLABLE_MEMBER void IntegratedParticles::setIntegrateSML(real *dsmldt) {
@@ -842,7 +1014,7 @@ namespace IntegratedParticlesNS {
             }
         }
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
         __global__ void setIntegrateDensity(IntegratedParticles *integratedParticles, real *drhodt) {
             integratedParticles->setIntegrateDensity(drhodt);
         }
@@ -856,7 +1028,7 @@ namespace IntegratedParticlesNS {
             }
 
         }
-#endif
+//#endif
 
 #if VARIABLE_SML || INTEGRATE_SML
         __global__ void setIntegrateSML(IntegratedParticles *integratedParticles, real *dsmldt) {

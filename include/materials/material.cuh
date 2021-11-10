@@ -63,12 +63,14 @@ public:
     void serialize(Archive &ar, const unsigned int version) {
         ar & ID;
         ar & interactions;
+        ar & sml;
         ar & artificialViscosity;
         ar & eos;
     }
 
     integer ID;
     integer interactions;
+    real sml;
 
     ArtificialViscosity artificialViscosity;
     EqOfSt eos;

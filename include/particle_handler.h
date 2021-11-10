@@ -76,13 +76,16 @@ public:
     /// host max(mu_ij)
     real *h_muijmax;
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
     /// host time derivative of density
     real *h_drhodt, *_h_drhodt;
-#endif
+//#endif
 #if VARIABLE_SML || INTEGRATE_SML
     /// host time derivative of smoothing length
     real *h_dsmldt, *_h_dsmldt;
+#endif
+#if SML_CORRECTION
+    real *h_sml_omega;
 #endif
 #if NAVIER_STOKES
     real *h_Tshear;
@@ -227,13 +230,16 @@ public:
     /// device max(mu_ij)
     real *d_muijmax;
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
     /// device time derivative of density
     real *d_drhodt, *_d_drhodt;
-#endif
+//#endif
 #if VARIABLE_SML || INTEGRATE_SML
     /// device time derivaive of smoothing length
     real *d_dsmldt, *_d_dsmldt;
+#endif
+#if SML_CORRECTION
+    real *d_sml_omega;
 #endif
 #if NAVIER_STOKES
     real *d_Tshear;
@@ -352,6 +358,10 @@ public:
 
     void copyUid(To::Target target=To::device);
 
+    void copyMatId(To::Target target=To::device);
+
+    void copySML(To::Target target=To::device);
+
     /**
      * copy particle's position(s) to target (host/device)
      *
@@ -379,6 +389,8 @@ public:
      */
     void copyDistribution(To::Target target=To::device, bool velocity=true, bool acceleration=true,
                           bool includePseudoParticles = false);
+
+    void copySPH(To::Target target);
 
 };
 
@@ -427,9 +439,9 @@ public:
 
     real *d_sml;
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
     real *d_drhodt;
-#endif
+//#endif
 
 #if VARIABLE_SML || INTEGRATE_SML
     real *d_dsmldt;

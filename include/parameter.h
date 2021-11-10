@@ -1,11 +1,19 @@
 #ifndef MILUPHPC_PARAMETER_H
 #define MILUPHPC_PARAMETER_H
 
+#include <limits>
+
 #ifdef SINGLE_PRECISION
     typedef float real;
 #else
     typedef double real;
 #endif
+
+constexpr real dbl_max = std::numeric_limits<real>::max();
+#define DBL_MAX dbl_max;
+
+#define FORCES_FACT 0.2
+
 //typedef float real;
 //typedef double real;
 typedef int integer;
@@ -21,7 +29,12 @@ typedef int idInteger;
 #define MAX_DEPTH 256//128
 #define MAX_NUM_INTERACTIONS 180
 
+#define NUM_THREADS_LIMIT_TIME_STEP 256
+
 #define NUM_THREADS_CALC_CENTER_OF_MASS 256
+
+// Courant (CFL) number (note that our sml is defined up to the zero of the kernel, not half of it)
+#define COURANT_FACT 0.4
 
 struct To
 {
@@ -121,13 +134,13 @@ enum EquationOfStates {
 // Dimension of the problem
 #define DIM 3
 
-#define SI_UNITS 0
+#define SI_UNITS 1
 
 namespace Constants {
     constexpr real G = 6.67430e-11;
 }
 
-#define SPH_SIM 0
+#define SPH_SIM 1
 
 struct Entry
 {
@@ -153,17 +166,27 @@ private:
 #define power_two(x) (1 << (x))
 #define POW_DIM power_two(DIM)
 
+#define SOLID 0
+#define FRAGMENTATION 0
+#define PLASTICITY 0
+#define DEAL_WITH_TOO_MANY_INTERACTIONS 0
+#define KLEY_VISCOSITY 0
+#define ARTIFICIAL_VISCOSITY 1
+
 #define MAX_LEVEL 21
 
 #define CUBIC_DOMAINS 0
 
 #define GRAVITY_SIM 1
 
-#define INTEGRATE_ENERGY 1
+#define INTEGRATE_ENERGY 0
 
-#define INTEGRATE_DENSITY 1
+#define INTEGRATE_DENSITY 0
 
-#define INTEGRATE_SML 1
+#define INTEGRATE_SML 0
+#define DECOUPLE_SML 0
+
+#define SML_CORRECTION 0
 
 #define VARIABLE_SML 1
 

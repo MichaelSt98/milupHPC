@@ -3,6 +3,8 @@
 
 #include "parameter.h"
 #include "cuda_utils/cuda_utilities.cuh"
+#include <cmath>
+#include <assert.h>
 
 
 /**
@@ -89,16 +91,20 @@ public:
     real *eta;
 #endif
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
     // integrated density
     /// (pointer to) time derivative of density (array)
     real *drhodt;
-#endif
+//#endif
 
 #if VARIABLE_SML || INTEGRATE_SML
     // integrate/variable smoothing length
     /// (pointer to) time derivative of smoothing length (array)
     real *dsmldt;
+#endif
+
+#if SML_CORRECTION
+    real *sml_omega;
 #endif
 
 #if SOLID
@@ -242,14 +248,14 @@ public:
 
     CUDA_CALLABLE_MEMBER void setArtificialViscosity(real *muijmax);
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
     /**
      * Setter in dependence of `INTEGRATE_DENSITY`
      *
      * @param drhodt time derivative of density
      */
     CUDA_CALLABLE_MEMBER void setIntegrateDensity(real *drhodt);
-#endif
+//#endif
 #if VARIABLE_SML || INTEGRATE_SML
     /**
      * Setter, in dependence of `VARIABLE_SML`
@@ -257,6 +263,9 @@ public:
      * @param dsmldt time derivative of smoothing length
      */
     CUDA_CALLABLE_MEMBER void setVariableSML(real *dsmldt);
+#endif
+#if SML_CORRECTION
+    CUDA_CALLABLE_MEMBER void setSMLCorrection(real *sml_omega);
 #endif
 #if NAVIER_STOKES
     CUDA_CALLABLE_MEMBER void setNavierStokes(real *Tshear, real *eta);
@@ -382,6 +391,8 @@ namespace ParticlesNS {
 
     namespace Kernel {
 
+        __global__ void check4nans(Particles *particles, integer n);
+
         /**
          * Info Kernel (for debugging purposes)
          *
@@ -393,6 +404,9 @@ namespace ParticlesNS {
         __global__ void info(Particles *particles, integer n, integer m, integer k);
 
         namespace Launch {
+
+            real check4nans(Particles *particles, integer n);
+
             /**
              * Info Kernel Wrapper (for debugging purposes)
              *
@@ -482,7 +496,7 @@ namespace ParticlesNS {
             void setArtificialViscosity(Particles *particles, real *muijmax);
         }
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
         /**
          * Kernel call setter, in dependence of `INTEGRATE_DENSITY`
          *
@@ -499,7 +513,7 @@ namespace ParticlesNS {
              */
             void setIntegrateDensity(Particles *particles, real *drhodt);
         }
-#endif
+//#endif
 #if VARIABLE_SML || INTEGRATE_SML
         /**
          * Kernel call to setter, in dependence of `VARIABLE_SML`
@@ -516,6 +530,13 @@ namespace ParticlesNS {
             * @param dsmldt
             */
             void setVariableSML(Particles *particles, real *dsmldt);
+        }
+#endif
+#if SML_CORRECTION
+        __global__ void setSMLCorrection(Particles *particles, real *sml_omega);
+
+        namespace Launch {
+            void setSMLCorrection(Particles *particles, real *sml_omega);
         }
 #endif
 #if NAVIER_STOKES
@@ -780,9 +801,9 @@ public:
 
     real *sml;
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
     real *drhodt;
-#endif
+//#endif
 
 #if VARIABLE_SML || INTEGRATE_SML
     real *dsmldt;
@@ -823,9 +844,9 @@ public:
 
     CUDA_CALLABLE_MEMBER void setSML(real *sml);
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
     CUDA_CALLABLE_MEMBER void setIntegrateDensity(real *drhodt);
-#endif
+//#endif
 
 #if VARIABLE_SML || INTEGRATE_SML
     CUDA_CALLABLE_MEMBER void setIntegrateSML(real *dsmldt);
@@ -893,7 +914,7 @@ namespace IntegratedParticlesNS {
             void setSML(IntegratedParticles *integratedParticles, real *sml);
         }
 
-#if INTEGRATE_DENSITY
+//#if INTEGRATE_DENSITY
         __global__ void setIntegrateDensity(IntegratedParticles *integratedParticles, real *drhodt);
 
         namespace Launch {
@@ -901,7 +922,7 @@ namespace IntegratedParticlesNS {
             void setIntegrateDensity(IntegratedParticles *integratedParticles, real *drhodt);
 
         }
-#endif
+//#endif
 
 #if VARIABLE_SML || INTEGRATE_SML
         __global__ void setIntegrateSML(IntegratedParticles *integratedParticles, real *dsmldt);

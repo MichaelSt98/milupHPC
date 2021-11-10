@@ -86,14 +86,23 @@ MaterialHandler::MaterialHandler(char *material_cfg) {
         h_materials[id].ID = id;
         fprintf(stdout, "Reading information about material ID %d out of %d in total...\n", id, numMaterials);
         config_setting_lookup_int(material, "interactions", &h_materials[id].interactions);
+        config_setting_lookup_float(material, "sml", &temp);
+        h_materials[id].sml = temp;
+
+        // artificial viscosity
+        subset = config_setting_get_member(material, "artificial_viscosity");
+        config_setting_lookup_float(subset, "alpha", &temp);
+        h_materials[id].artificialViscosity.alpha = temp;
+        config_setting_lookup_float(subset, "beta", &temp);
+        h_materials[id].artificialViscosity.beta = temp;
 
         // eos
         subset = config_setting_get_member(material, "eos");
+        config_setting_lookup_int(subset, "type", &h_materials[id].eos.type);
         //config_setting_lookup_float(subset, "polytropic_K", &h_materials[id].eos.polytropic_K);
         //config_setting_lookup_float(subset, "polytropic_gamma", &h_materials[id].eos.polytropic_gamma);
-
         config_setting_lookup_float(subset, "polytropic_K", &temp);
-        printf("temp = %f\n", temp);
+        //printf("temp = %f\n", temp);
         h_materials[id].eos.polytropic_K = temp;
         config_setting_lookup_float(subset, "polytropic_gamma", &temp);
         h_materials[id].eos.polytropic_gamma = temp;

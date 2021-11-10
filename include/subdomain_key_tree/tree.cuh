@@ -8,6 +8,8 @@
 #include <iostream>
 #include <stdio.h>
 #include <cuda.h>
+#include <assert.h>
+#include <cmath>
 
 //TODO: compiling on binac:
 // src/gravity/../../include/gravity/../subdomain_key_tree/tree.cuh(26): error: attribute "__host__" does not apply here
@@ -89,6 +91,7 @@ class Tree {
 
 public:
 
+    //TODO: count, start, sorted currently unused (since sort() and computeForces() described by Griebel not used!)
     /// accumulated nodes/leaves beneath
     integer *count;
     /// TODO: describe start

@@ -38,6 +38,9 @@ namespace CudaUtils {
         template<typename T>
         __global__ void findDuplicateEntries(T *array1, T *array2, integer *duplicateCounter, int length);
 
+        template<typename T>
+        __global__ void findDuplicateEntries(T *array1, T *array2, T *array3, integer *duplicateCounter, int length);
+
         template<typename T, typename U>
         __global__ void findDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, int length);
 
@@ -64,6 +67,9 @@ namespace CudaUtils {
             template<typename T>
             real findDuplicateEntries(T *array1, T *array2, integer *duplicateCounter, int length);
 
+            template<typename T>
+            real findDuplicateEntries(T *array1, T *array2, T *array3, integer *duplicateCounter, int length);
+
             template<typename T, typename U>
             real findDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, int length);
 
@@ -80,6 +86,25 @@ namespace CudaUtils {
             real removeDuplicates(T *array, T *removedArray, integer *duplicateCounter, int length);
 
         }
+    }
+
+}
+
+namespace cuda {
+    namespace math {
+        __device__ real min(real a, real b);
+
+        __device__ real min(real a, real b, real c);
+
+        __device__ real max(real a, real b);
+
+        __device__ real max(real a, real b, real c);
+
+        __device__ real abs(real a);
+
+        __device__ real sqrt(real a);
+
+        __device__ real rsqrt(real a);
     }
 }
 

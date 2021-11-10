@@ -3,25 +3,23 @@
 
 CUDA_CALLABLE_MEMBER keyType KeyNS::lebesgue2hilbert(keyType lebesgue, integer maxLevel) {
 
-    /*keyType hilbert = 0UL;
-    integer dir = 0;
-    for (integer lvl=maxLevel; lvl>0; lvl--) {
-        keyType cell = (lebesgue >> ((lvl-1)*DIM)) & (keyType)((1<<DIM)-1);
-        hilbert = hilbert << DIM;
-        if (lvl > 0) {
-            hilbert += HilbertTable[dir][cell];
-        }
-        dir = DirTable[dir][cell];
-    }
-    return hilbert;*/
+    //keyType hilbert = 0UL;
+    //integer dir = 0;
+    //for (integer lvl=maxLevel; lvl>0; lvl--) {
+    //    keyType cell = (lebesgue >> ((lvl-1)*DIM)) & (keyType)((1<<DIM)-1);
+    //    hilbert = hilbert << DIM;
+    //    if (lvl > 0) {
+    //        hilbert += HilbertTable[dir][cell];
+    //    }
+    //    dir = DirTable[dir][cell];
+    //}
+    //return hilbert;
 
     keyType hilbert = 1UL;
     int level = 0, dir = 0;
-    //int rememberLevel;
     for (keyType tmp=lebesgue; tmp>1; level++) {
         tmp>>=DIM;
     }
-    //rememberLevel = level;
     if (level == 0) {
         hilbert = 0UL;
     }
@@ -40,25 +38,15 @@ CUDA_CALLABLE_MEMBER keyType KeyNS::lebesgue2hilbert(keyType lebesgue, integer m
 CUDA_CALLABLE_MEMBER keyType KeyNS::lebesgue2hilbert(keyType lebesgue, int maxLevel, int level) {
 
     keyType hilbert = 0UL; // 0UL is our root, placeholder bit omitted
-    //int level = 0, dir = 0;
     int dir = 0;
-    //for (keytype tmp=lebesgue; tmp>0UL; tmp>>=DIM, level++); // obtain of key
-    //if (level != 21) {
-    //    Logger(DEBUG) << "Lebesgue2Hilbert: level = " << level << ", key" << lebesgue;
-    //}
-    //Logger(DEBUG) << "Lebesgue2Hilbert(): lebesgue = " << lebesgue << ", level = " << level;
     for (int lvl=maxLevel; lvl>0; lvl--) {
-        //int cell = lebesgue >> ((level-1)*DIM) & (keytype)((1<<DIM)-1);
         int cell = (lebesgue >> ((lvl-1)*DIM)) & (keyType)((1<<DIM)-1);
         hilbert = hilbert<<DIM;
         if (lvl>maxLevel-level) {
-            //Logger(DEBUG) << "Lebesgue2Hilbert(): cell = " << cell << ", dir = " << dir;
             hilbert += HilbertTable[dir][cell];
         }
         dir = DirTable[dir][cell];
     }
-    //Logger(DEBUG) << "Lebesgue2Hilbert(): hilbert  = " << hilbert;
-    //Logger(DEBUG) << "==============================";
     return hilbert;
 }
 
@@ -215,19 +203,19 @@ CUDA_CALLABLE_MEMBER keyType Tree::getParticleKey(Particles *particles, integer 
         if (childIndex == index) {
             particleLevel = particleLevelTemp;
         }
-        /*for (int i_child = 0; i_child < POW_DIM; i_child++) {
-            if (child[POW_DIM * childIndex + i_child] == index) {
-                printf("found index = %i for child[8 * %i + %i] = %i\n", index, childIndex, i_child, child[POW_DIM * childIndex + i_child]);
-                break;
-            }
-        }*/
+        //for (int i_child = 0; i_child < POW_DIM; i_child++) {
+        //    if (child[POW_DIM * childIndex + i_child] == index) {
+        //        printf("found index = %i for child[8 * %i + %i] = %i\n", index, childIndex, i_child, child[POW_DIM * childIndex + i_child]);
+        //        break;
+        //    }
+        //}
         childIndex = child[POW_DIM * childIndex + sonBox];
     }
 
-    /*if (particleLevel == 0) {
-        printf("particleLevel = %i particleLevelTemp = %i index = %i (%f, %f, %f)\n", particleLevel, particleLevelTemp, index,
-               particles->x[index], particles->y[index], particles->z[index]);
-    }*/
+    //if (particleLevel == 0) {
+    //    printf("particleLevel = %i particleLevelTemp = %i index = %i (%f, %f, %f)\n", particleLevel, particleLevelTemp, index,
+    //           particles->x[index], particles->y[index], particles->z[index]);
+    //}
 
     //if (particleKey == 0UL) {
     //    printf("Why key = %lu? x = (%f, %f, %f) min = (%f, %f, %f), max = (%f, %f, %f)\n", particleKey,
@@ -237,12 +225,11 @@ CUDA_CALLABLE_MEMBER keyType Tree::getParticleKey(Particles *particles, integer 
 
     switch (curveType) {
         case Curve::lebesgue: {
-            //keyType hilbert = KeyNS::lebesgue2hilbert(particleKey, maxLevel);
             return particleKey;
         }
         case Curve::hilbert: {
             return KeyNS::lebesgue2hilbert(particleKey, maxLevel, maxLevel);
-            return KeyNS::lebesgue2hilbert(particleKey, maxLevel);
+            //return KeyNS::lebesgue2hilbert(particleKey, maxLevel);
         }
         default:
             printf("Curve type not available!\n");
@@ -272,10 +259,8 @@ CUDA_CALLABLE_MEMBER integer Tree::getTreeLevel(Particles *particles, integer in
             return level;
         }
         childIndex = child[POW_DIM * childIndex + path[i]];
-        //level++;
     }
 
-    //childIndex = 0; //child[path[0]];
 #if DIM == 3
     printf("ATTENTION: level = -1 (index = %i x = (%f, %f, %f) %f) tree index = %i\n",
            index, particles->x[index], particles->y[index], particles->z[index], particles->mass[index], *this->index);
@@ -298,6 +283,7 @@ CUDA_CALLABLE_MEMBER integer Tree::getTreeLevel(Particles *particles, integer in
     return -1;
 }
 
+//TODO: is this still working, since count only used within buildTree (probably yes)
 CUDA_CALLABLE_MEMBER integer Tree::sumParticles() {
     integer sumParticles = 0;
     // sum over first level tree count values
@@ -347,16 +333,21 @@ __global__ void TreeNS::Kernel::computeBoundingBox(Tree *tree, Particles *partic
     // find (local) min/max
     while (index + offset < n) {
 
-        x_min = fminf(x_min, particles->x[index + offset]);
-        x_max = fmaxf(x_max, particles->x[index + offset]);
+        x_min = cuda::math::min(x_min, particles->x[index + offset]);
+        x_max = cuda::math::max(x_max, particles->x[index + offset]);
 #if DIM > 1
-        y_min = fminf(y_min, particles->y[index + offset]);
-        y_max = fmaxf(y_max, particles->y[index + offset]);
+        y_min = cuda::math::min(y_min, particles->y[index + offset]);
+        y_max = cuda::math::max(y_max, particles->y[index + offset]);
 #if DIM == 3
-        z_min = fminf(z_min, particles->z[index + offset]);
-        z_max = fmaxf(z_max, particles->z[index + offset]);
+        z_min = cuda::math::min(z_min, particles->z[index + offset]);
+        z_max = cuda::math::max(z_max, particles->z[index + offset]);
 #endif
 #endif
+
+        //if (std::isinf(particles->x[index + offset]) || std::isinf(particles->y[index + offset]) || std::isinf(particles->z[index + offset])) {
+        //    printf("x[%i]= (%e, %e, %e)\n", index + offset, particles->x[index + offset], particles->y[index + offset], particles->z[index + offset]);
+        //    assert(0);
+        //}
 
         offset += stride;
     }
@@ -377,21 +368,28 @@ __global__ void TreeNS::Kernel::computeBoundingBox(Tree *tree, Particles *partic
     __syncthreads();
 
     integer i = blockDim.x/2; // assuming blockDim.x is a power of 2!
-    //printf("blockDim.x = %i\n", blockDim.x);
 
     // reduction within block
     while (i != 0) {
         if (threadIdx.x < i) {
-            x_min_buffer[threadIdx.x] = fminf(x_min_buffer[threadIdx.x], x_min_buffer[threadIdx.x + i]);
-            x_max_buffer[threadIdx.x] = fmaxf(x_max_buffer[threadIdx.x], x_max_buffer[threadIdx.x + i]);
+            x_min_buffer[threadIdx.x] = cuda::math::min(x_min_buffer[threadIdx.x], x_min_buffer[threadIdx.x + i]);
+            x_max_buffer[threadIdx.x] = cuda::math::max(x_max_buffer[threadIdx.x], x_max_buffer[threadIdx.x + i]);
 #if DIM > 1
-            y_min_buffer[threadIdx.x] = fminf(y_min_buffer[threadIdx.x], y_min_buffer[threadIdx.x + i]);
-            y_max_buffer[threadIdx.x] = fmaxf(y_max_buffer[threadIdx.x], y_max_buffer[threadIdx.x + i]);
+            y_min_buffer[threadIdx.x] = cuda::math::min(y_min_buffer[threadIdx.x], y_min_buffer[threadIdx.x + i]);
+            y_max_buffer[threadIdx.x] = cuda::math::max(y_max_buffer[threadIdx.x], y_max_buffer[threadIdx.x + i]);
 #if DIM == 3
-            z_min_buffer[threadIdx.x] = fminf(z_min_buffer[threadIdx.x], z_min_buffer[threadIdx.x + i]);
-            z_max_buffer[threadIdx.x] = fmaxf(z_max_buffer[threadIdx.x], z_max_buffer[threadIdx.x + i]);
+            z_min_buffer[threadIdx.x] = cuda::math::min(z_min_buffer[threadIdx.x], z_min_buffer[threadIdx.x + i]);
+            z_max_buffer[threadIdx.x] = cuda::math::max(z_max_buffer[threadIdx.x], z_max_buffer[threadIdx.x + i]);
 #endif
 #endif
+            //if (std::isinf(x_min_buffer[threadIdx.x]) || std::isinf(x_max_buffer[threadIdx.x]) ||
+            //        std::isinf(y_min_buffer[threadIdx.x]) || std::isinf(y_max_buffer[threadIdx.x]) ||
+            //        std::isinf(z_min_buffer[threadIdx.x]) || std::isinf(z_max_buffer[threadIdx.x])) {
+            //    printf("%i: min_buffer= (%e, %e, %e) max_buffer = (%e, %e, %e)\n", threadIdx.x,
+            //           x_min_buffer[threadIdx.x], y_min_buffer[threadIdx.x], z_min_buffer[threadIdx.x],
+            //           x_max_buffer[threadIdx.x], y_max_buffer[threadIdx.x], z_max_buffer[threadIdx.x]);
+            //    assert(0);
+            //}
         }
         __syncthreads();
         i /= 2;
@@ -401,15 +399,11 @@ __global__ void TreeNS::Kernel::computeBoundingBox(Tree *tree, Particles *partic
     if (threadIdx.x == 0) {
         while (atomicCAS(mutex, 0 ,1) != 0); // lock
 
-        *tree->minX = fminf(*tree->minX, x_min_buffer[0]);
-        *tree->maxX = fmaxf(*tree->maxX, x_max_buffer[0]);
-        //*tree->minX -= 0.001;
-        //*tree->maxX += 0.001;
+        *tree->minX = cuda::math::min(*tree->minX, x_min_buffer[0]);
+        *tree->maxX = cuda::math::max(*tree->maxX, x_max_buffer[0]);
 #if DIM > 1
-        *tree->minY = fminf(*tree->minY, y_min_buffer[0]);
-        *tree->maxY = fmaxf(*tree->maxY, y_max_buffer[0]);
-        //*tree->minY -= 0.001;
-        //*tree->maxY += 0.001;
+        *tree->minY = cuda::math::min(*tree->minY, y_min_buffer[0]);
+        *tree->maxY = cuda::math::max(*tree->maxY, y_max_buffer[0]);
 
 #if CUBIC_DOMAINS
         if (*tree->minY < *tree->minX) {
@@ -427,10 +421,8 @@ __global__ void TreeNS::Kernel::computeBoundingBox(Tree *tree, Particles *partic
 #endif
 
 #if DIM == 3
-        *tree->minZ = fminf(*tree->minZ, z_min_buffer[0]);
-        *tree->maxZ = fmaxf(*tree->maxZ, z_max_buffer[0]);
-        //*tree->minZ -= 0.001;
-        //*tree->maxZ += 0.001;
+        *tree->minZ = cuda::math::min(*tree->minZ, z_min_buffer[0]);
+        *tree->maxZ = cuda::math::max(*tree->maxZ, z_max_buffer[0]);
 
 #if CUBIC_DOMAINS
         if (*tree->minZ < *tree->minX) {
@@ -449,14 +441,21 @@ __global__ void TreeNS::Kernel::computeBoundingBox(Tree *tree, Particles *partic
         }
 #endif
 
+        //if (std::isinf(*tree->minX) || std::isinf(*tree->maxX) ||
+        //        std::isinf(*tree->minY) || std::isinf(*tree->maxY) ||
+        //        std::isinf(*tree->minZ) ||std::isinf(*tree->maxZ)) {
+        //    printf("tree->minX = %e | tree->maxX = %e\n", *tree->minX, *tree->maxX);
+        //    printf("tree->minY = %e | tree->maxY = %e\n", *tree->minY, *tree->maxY);
+        //    printf("tree->minZ = %e | tree->maxZ = %e\n", *tree->minZ, *tree->maxZ);
+        //    assert(0);
+        //}
 #endif
 #endif
         atomicExch(mutex, 0); // unlock
     }
 }
 
-
-
+// just a wrapper for the member function
 __global__ void TreeNS::Kernel::sumParticles(Tree *tree) {
 
     integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
@@ -568,7 +567,6 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
             childPath = 0;
 
             // find insertion point for body
-            //if (particles->x[bodyIndex + offset] < 0.5 * (min_x + max_x)) { // x direction
             if (x < 0.5 * (min_x + max_x)) { // x direction
                 childPath += 1;
                 max_x = 0.5 * (min_x + max_x);
@@ -577,7 +575,6 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
                 min_x = 0.5 * (min_x + max_x);
             }
 #if DIM > 1
-            //if (particles->y[bodyIndex + offset] < 0.5 * (min_y + max_y)) { // y direction
             if (y < 0.5 * (min_y + max_y)) { // y direction
                 childPath += 2;
                 max_y = 0.5 * (min_y + max_y);
@@ -586,7 +583,6 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
                 min_y = 0.5 * (min_y + max_y);
             }
 #if DIM == 3
-            //if (particles->z[bodyIndex + offset] < 0.5 * (min_z + max_z)) { // z direction
             if (z < 0.5 * (min_z + max_z)) { // z direction
                 childPath += 4;
                 max_z = 0.5 * (min_z + max_z);
@@ -596,23 +592,6 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
             }
 #endif
 #endif
-#if COMPUTE_DIRECTLY
-            if (particles->mass[bodyIndex + offset] != 0) {
-                //particles->x[temp] += particles->weightedEntry(bodyIndex + offset, Entry::x);
-                atomicAdd(&particles->x[temp], particles->weightedEntry(bodyIndex + offset, Entry::x));
-#if DIM > 1
-                //particles->y[temp] += particles->weightedEntry(bodyIndex + offset, Entry::y);
-                atomicAdd(&particles->y[temp], particles->weightedEntry(bodyIndex + offset, Entry::y));
-#if DIM == 3
-                //particles->z[temp] += particles->weightedEntry(bodyIndex + offset, Entry::z);
-                atomicAdd(&particles->z[temp], particles->weightedEntry(bodyIndex + offset, Entry::z));
-#endif
-#endif
-            }
-
-            //particles->mass[temp] += particles->mass[bodyIndex + offset];
-            atomicAdd(&particles->mass[temp], particles->mass[bodyIndex + offset]);
-#endif // COMPUTE_DIRECTLY
 
             atomicAdd(&tree->count[temp], 1);
 
@@ -650,6 +629,12 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
 
                         particles->level[temp] = level;
                         level++;
+                        if (level > MAX_LEVEL) {
+                            printf("level = %i for index %i (%f, %f, %f)\n", level,
+                                   bodyIndex + offset, particles->x[bodyIndex + offset],
+                                   particles->y[bodyIndex + offset], particles->z[bodyIndex + offset]);
+                            assert(0);
+                        }
 
                         // insert old/original particle
                         childPath = 0;
@@ -660,29 +645,15 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
                         if (particles->z[childIndex] < 0.5 * (min_z + max_z)) { childPath += 4; }
 #endif
 #endif
-
-#if COMPUTE_DIRECTLY
-                        particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
-                        //particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
+                        particles->x[cell] = particles->x[childIndex]; //0.5 * (min_x + max_x);
 #if DIM > 1
-                        particles->y[cell] += particles->weightedEntry(childIndex, Entry::y);
-                        //particles->y[cell] += particles->weightedEntry(childIndex, Entry::y);
+                        particles->y[cell] = particles->y[childIndex]; //0.5 * (min_y + max_y);
 #if DIM == 3
-                        particles->z[cell] += particles->weightedEntry(childIndex, Entry::z);
-                        //particles->z[cell] += particles->weightedEntry(childIndex, Entry::z);
+                        particles->z[cell] = particles->z[childIndex]; //0.5 * (min_z + max_z);
 #endif
 #endif
 
-                        //if (cell % 1000 == 0) {
-                        //    printf("buildTree: x[%i] = (%f, %f, %f) from x[%i] = (%f, %f, %f) m = %f\n", cell, particles->x[cell], particles->y[cell],
-                        //           particles->z[cell], childIndex, particles->x[childIndex], particles->y[childIndex],
-                        //           particles->z[childIndex], particles->mass[childIndex]);
-                        //}
-
-                        particles->mass[cell] += particles->mass[childIndex];
-#endif // COMPUTE_DIRECTLY
                         tree->count[cell] += tree->count[childIndex];
-                        //level++;
 
                         tree->child[POW_DIM * cell + childPath] = childIndex;
                         particles->level[cell] = level;
@@ -718,22 +689,6 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
                         }
 #endif
 #endif
-#if COMPUTE_DIRECTLY
-                        // COM / preparing for calculation of COM
-                        if (particles->mass[bodyIndex + offset] != 0) {
-                            //particles->x[cell] += particles->weightedEntry(bodyIndex + offset, Entry::x);
-                            particles->x[cell] += particles->weightedEntry(bodyIndex + offset, Entry::x);
-#if DIM > 1
-                            //particles->y[cell] += particles->weightedEntry(bodyIndex + offset, Entry::y);
-                            particles->y[cell] += particles->weightedEntry(bodyIndex + offset, Entry::y);
-#if DIM == 3
-                            //particles->z[cell] += particles->weightedEntry(bodyIndex + offset, Entry::z);
-                            particles->z[cell] += particles->weightedEntry(bodyIndex + offset, Entry::z);
-#endif
-#endif
-                            particles->mass[cell] += particles->mass[bodyIndex + offset];
-                        }
-#endif // COMPUTE_DIRECTLY
                         tree->count[cell] += tree->count[bodyIndex + offset];
                         childIndex = tree->child[POW_DIM * temp + childPath];
                     }
@@ -748,7 +703,7 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
                 newBody = true;
             }
         }
-        //__syncthreads(); //TODO: needed?
+        //__syncthreads(); //TODO: __syncthreads() needed?
     }
 }
 
@@ -765,11 +720,6 @@ __global__ void TreeNS::Kernel::calculateCentersOfMass(Tree *tree, Particles *pa
 
     integer offset = n;
 
-    //int counter[21];
-    //for (int i=0; i<21;i++) {
-    //    counter[i] = 0;
-    //}
-
     integer index;
 
     while ((bodyIndex + offset) < *tree->index) {
@@ -778,8 +728,10 @@ __global__ void TreeNS::Kernel::calculateCentersOfMass(Tree *tree, Particles *pa
 
             if (particles->level[bodyIndex + offset] == -1 || particles->level[bodyIndex + offset] > 21) {
                 printf("level[%i] = %i!!!\n", bodyIndex + offset, particles->level[bodyIndex + offset]);
+                //assert(0);
             }
 
+            // reset entries
             particles->mass[bodyIndex + offset] = 0.;
             particles->x[bodyIndex + offset] = 0.;
 #if DIM > 1
@@ -789,6 +741,7 @@ __global__ void TreeNS::Kernel::calculateCentersOfMass(Tree *tree, Particles *pa
 #endif
 #endif
 
+            // loop over children and add contribution (*=position(child) * mass(child))
             for (int child = 0; child < POW_DIM; ++child) {
                 index = POW_DIM * (bodyIndex + offset) + child;
                 if (tree->child[index] != -1) {
@@ -803,6 +756,7 @@ __global__ void TreeNS::Kernel::calculateCentersOfMass(Tree *tree, Particles *pa
                 }
             }
 
+            // finish center of mass calculation by dividing with mass
             if (particles->mass[bodyIndex + offset] > 0.) {
                 particles->x[bodyIndex + offset] /= particles->mass[bodyIndex + offset];
 #if DIM > 1
@@ -813,157 +767,20 @@ __global__ void TreeNS::Kernel::calculateCentersOfMass(Tree *tree, Particles *pa
 #endif
             }
 
-
-            //counter[particles->level[bodyIndex + offset]] += 1;
+            //if (std::isnan(particles->x[bodyIndex + offset])) {
+            //    printf("NAN! within calculateCenterOfMasses for %i: x = %f, m = %f\n", bodyIndex + offset, particles->x[bodyIndex + offset],
+            //           particles->mass[bodyIndex + offset]);
+            //    assert(0);
+            //}
 
         }
         offset += stride;
     }
 
-    //for (int i=0; i<21;i++) {
-    //    printf("counter[%i] = %i\n", i, counter[i]);
-    //}
-
 }
 
-/*
-__global__
-void SummarizationKernel(const int nnodesd, const int nbodiesd, volatile int* const __restrict__ countd, const int* const __restrict__ childd, volatile float4* const __restrict__ posMassd)
-{
-    int i, j, k, ch, inc, cnt, bottom;
-    float m, cm, px, py, pz;
-    __shared__ int child[THREADS3 * 8];
-    __shared__ float mass[THREADS3 * 8];
-
-    bottom = bottomd;
-    inc = blockDim.x * gridDim.x;
-    k = (bottom & (-WARPSIZE)) + threadIdx.x + blockIdx.x * blockDim.x;  // align to warp size
-    if (k < bottom) k += inc;
-
-    int restart = k;
-    for (j = 0; j < 3; j++) {  // wait-free pre-passes
-        // iterate over all cells assigned to thread
-        while (k <= nnodesd) {
-            if (posMassd[k].w < 0.0f) {
-                for (i = 0; i < POW_DIM; i++) {
-                    ch = childd[k*POW_DIM+i];
-                    child[i*THREADS3+threadIdx.x] = ch;  // cache children
-                    if ((ch >= nbodiesd) && ((mass[i*THREADS3+threadIdx.x] = posMassd[ch].w) < 0.0f)) {
-                        break;
-                    }
-                }
-                if (i == 8) {
-                    // all children are ready
-                    cm = 0.0f;
-                    px = 0.0f;
-                    py = 0.0f;
-                    pz = 0.0f;
-                    cnt = 0;
-                    for (i = 0; i < 8; i++) {
-                        ch = child[i*THREADS3+threadIdx.x];
-                        if (ch >= 0) {
-                            // four reads due to missing copy constructor for "volatile float4"
-                            const float chx = posMassd[ch].x;
-                            const float chy = posMassd[ch].y;
-                            const float chz = posMassd[ch].z;
-                            const float chw = posMassd[ch].w;
-                            if (ch >= nbodiesd) {  // count bodies (needed later)
-                                m = mass[i*THREADS3+threadIdx.x];
-                                cnt += countd[ch];
-                            } else {
-                                m = chw;
-                                cnt++;
-                            }
-                            // add child's contribution
-                            cm += m;
-                            px += chx * m;
-                            py += chy * m;
-                            pz += chz * m;
-                        }
-                    }
-                    countd[k] = cnt;
-                    m = 1.0f / cm;
-                    // four writes due to missing copy constructor for "volatile float4"
-                    posMassd[k].x = px * m;
-                    posMassd[k].y = py * m;
-                    posMassd[k].z = pz * m;
-                    __threadfence();
-                    posMassd[k].w = cm;
-                }
-            }
-            k += inc;  // move on to next cell
-        }
-        k = restart;
-    }
-
-    j = 0;
-    // iterate over all cells assigned to thread
-    while (k <= nnodesd) {
-        if (posMassd[k].w >= 0.0f) {
-            k += inc;
-        } else {
-            if (j == 0) {
-                j = 8;
-                for (i = 0; i < 8; i++) {
-                    ch = childd[k*8+i];
-                    child[i*THREADS3+threadIdx.x] = ch;  // cache children
-                    if ((ch < nbodiesd) || ((mass[i*THREADS3+threadIdx.x] = posMassd[ch].w) >= 0.0f)) {
-                        j--;
-                    }
-                }
-            } else {
-                j = 8;
-                for (i = 0; i < 8; i++) {
-                    ch = child[i*THREADS3+threadIdx.x];
-                    if ((ch < nbodiesd) || (mass[i*THREADS3+threadIdx.x] >= 0.0f) || ((mass[i*THREADS3+threadIdx.x] = posMassd[ch].w) >= 0.0f)) {
-                        j--;
-                    }
-                }
-            }
-
-            if (j == 0) {
-                // all children are ready
-                cm = 0.0f;
-                px = 0.0f;
-                py = 0.0f;
-                pz = 0.0f;
-                cnt = 0;
-                for (i = 0; i < 8; i++) {
-                    ch = child[i*THREADS3+threadIdx.x];
-                    if (ch >= 0) {
-                        // four reads due to missing copy constructor for "volatile float4"
-                        const float chx = posMassd[ch].x;
-                        const float chy = posMassd[ch].y;
-                        const float chz = posMassd[ch].z;
-                        const float chw = posMassd[ch].w;
-                        if (ch >= nbodiesd) {  // count bodies (needed later)
-                            m = mass[i*THREADS3+threadIdx.x];
-                            cnt += countd[ch];
-                        } else {
-                            m = chw;
-                            cnt++;
-                        }
-                        // add child's contribution
-                        cm += m;
-                        px += chx * m;
-                        py += chy * m;
-                        pz += chz * m;
-                    }
-                }
-                countd[k] = cnt;
-                m = 1.0f / cm;
-                // four writes due to missing copy constructor for "volatile float4"
-                posMassd[k].x = px * m;
-                posMassd[k].y = py * m;
-                posMassd[k].z = pz * m;
-                __threadfence();
-                posMassd[k].w = cm;
-                k += inc;
-            }
-        }
-    }
-}*/
-
+// TODO: not needed anymore and ATTENTION! requires preparation within buildTree (using atomicAdd)
+//  therefore moved to calculateCenterOfMass(), since atomicOperations for 64-bit values VERY expensive
 __global__ void TreeNS::Kernel::centerOfMass(Tree *tree, Particles *particles, integer n) {
 
     integer bodyIndex = threadIdx.x + blockIdx.x*blockDim.x;
@@ -974,10 +791,6 @@ __global__ void TreeNS::Kernel::centerOfMass(Tree *tree, Particles *particles, i
     bodyIndex += n;
 
     while (bodyIndex + offset < *tree->index) {
-
-        //if (particles->mass[bodyIndex + offset] == 0) {
-        //    printf("centreOfMassKernel: mass = 0 (%i)!\n", bodyIndex + offset);
-        //}
 
         if (particles->mass[bodyIndex + offset] != 0) {
             particles->x[bodyIndex + offset] /= particles->mass[bodyIndex + offset];
@@ -993,6 +806,7 @@ __global__ void TreeNS::Kernel::centerOfMass(Tree *tree, Particles *particles, i
     }
 }
 
+// TODO: currently unused if (computeForces() used this need to be done before)
 __global__ void TreeNS::Kernel::sort(Tree *tree, integer n, integer m) {
 
     integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
@@ -1064,9 +878,10 @@ __global__ void TreeNS::Kernel::getParticleKeys(Tree *tree, Particles *particles
         }
 #endif
 
-        if ((bodyIndex + offset) % 100 == 0) {
-            printf("key = %lu\n", particleKey);
-        }
+        //if ((bodyIndex + offset) % 100 == 0) {
+        //    printf("key = %lu\n", particleKey);
+        //}
+
         keys[bodyIndex + offset] = particleKey;
 
         offset += stride;
@@ -1087,6 +902,26 @@ namespace TreeNS {
             integer stride = blockDim.x * gridDim.x;
             integer offset = 0;
 
+            offset = tree->toDeleteLeaf[0];
+            while ((bodyIndex + offset) < n && (bodyIndex + offset)) {
+                for (int i=0; i<POW_DIM; i++) {
+                    if (tree->child[POW_DIM * (bodyIndex + offset) + i] != -1) {
+                        printf("tree->child[POW_DIM * %i + %i] = %i\n", bodyIndex + offset, i, tree->child[POW_DIM * (bodyIndex + offset) + i]);
+                        assert(0);
+                    }
+                }
+                offset += stride;
+            }
+            offset = tree->toDeleteNode[0];
+            while ((bodyIndex + offset) < m && (bodyIndex + offset)) {
+                for (int i=0; i<POW_DIM; i++) {
+                    if (tree->child[POW_DIM * (bodyIndex + offset) + i] != -1) {
+                        printf("tree->child[POW_DIM * %i + %i] = %i\n", bodyIndex + offset, i, tree->child[POW_DIM * (bodyIndex + offset) + i]);
+                        assert(0);
+                    }
+                }
+                offset += stride;
+            }
             //while (bodyIndex + offset < n) {
             //    if ((bodyIndex + offset) % 10000 == 0) {
             //        printf("tree info\n");
@@ -1094,8 +929,8 @@ namespace TreeNS {
             //    offset += stride;
             //}
 
-            bodyIndex += n;
-            while (bodyIndex + offset < m) {
+            //bodyIndex += n;
+            //while (bodyIndex + offset < m) {
 
                 //printf("particles->mass[%i] = %f (%f, %f, %f) (%i, %i)\n", bodyIndex + offset,
                 //       particles->mass[bodyIndex + offset],
@@ -1106,18 +941,18 @@ namespace TreeNS {
                 //printf("x[%i] = (%f, %f, %f) mass = %f\n", bodyIndex + offset, particles->x[bodyIndex + offset],
                 //       particles->y[bodyIndex + offset], particles->z[bodyIndex + offset],
                 //       particles->mass[bodyIndex + offset]);
-#if DIM == 1
-                printf("(%f), \n", particles->x[bodyIndex + offset]);
-#elif DIM == 2
-                printf("(%f, %f), \n", particles->x[bodyIndex + offset],
-                       particles->y[bodyIndex + offset]);
-#else
-                printf("(%f, %f, %f), \n", particles->x[bodyIndex + offset],
-                               particles->y[bodyIndex + offset], particles->z[bodyIndex + offset]);
-#endif
+//#if DIM == 1
+                //printf("(%f), \n", particles->x[bodyIndex + offset]);
+//#elif DIM == 2
+                //printf("(%f, %f), \n", particles->x[bodyIndex + offset],
+                //       particles->y[bodyIndex + offset]);
+//#else
+                //printf("(%f, %f, %f), \n", particles->x[bodyIndex + offset],
+                //               particles->y[bodyIndex + offset], particles->z[bodyIndex + offset]);
+//#endif
 
-                offset += stride;
-            }
+                //offset += stride;
+            //}
         }
 
         __global__ void info(Tree *tree, Particles *particles) {
@@ -1277,15 +1112,14 @@ namespace TreeNS {
             }
 
             real calculateCentersOfMass(Tree *tree, Particles *particles, integer n, integer level, bool time) {
-                //size_t sharedMemory = NUM_THREADS_CALC_CENTER_OF_MASS * POW_DIM * sizeof(int);
-                ExecutionPolicy executionPolicy; //(1, NUM_THREADS_CALC_CENTER_OF_MASS, sharedMemory);
+                ExecutionPolicy executionPolicy;
                 return cuda::launch(time, executionPolicy, ::TreeNS::Kernel::calculateCentersOfMass, tree, particles, n, level);
             }
 
             real computeBoundingBox(Tree *tree, Particles *particles, integer *mutex, integer n, integer blockSize,
                                     bool time) {
                 size_t sharedMemory = 2 * DIM * sizeof(real) * blockSize;
-                ExecutionPolicy executionPolicy(256, 256, sharedMemory);
+                ExecutionPolicy executionPolicy(4, 256, sharedMemory);
                 return cuda::launch(time, executionPolicy, ::TreeNS::Kernel::computeBoundingBox, tree, particles, mutex,
                                     n, blockSize);
             }
@@ -1306,7 +1140,6 @@ namespace TreeNS {
                 return cuda::launch(time, executionPolicy, ::TreeNS::Kernel::getParticleKeys, tree, particles, keys,
                                     maxLevel, n, curveType);
             }
-
         }
     }
 }

@@ -2,6 +2,7 @@
 #define MILUPHPC_LINALG_CUH
 
 #include "../parameter.h"
+#include "../../include/cuda_utils/cuda_utilities.cuh"
 
 class linalg {
 

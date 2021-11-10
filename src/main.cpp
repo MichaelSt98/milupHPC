@@ -179,6 +179,7 @@ int main(int argc, char** argv)
     profiler.createValueDataSet<real>(ProfilerIds::Time::Gravity::force, 1);
 
     int fileCounter = 0;
+    real t = 0;
     for (int i_step=0; i_step<parameters.iterations; i_step++) {
 
         profiler.setStep(i_step);
@@ -189,11 +190,23 @@ int main(int argc, char** argv)
 
         miluphpc->integrate(i_step);
 
-        if (i_step == 0 || i_step % 10 == 0) {
+        if (i_step == 0 || i_step % 100 == 0) {
+            real *d_com;
+            cuda::malloc(d_com, DIM);
+            real *h_com = new real[DIM];
+            Gravity::Kernel::Launch::globalCOM(miluphpc->treeHandler->d_tree, miluphpc->particleHandler->d_particles,
+                                               d_com);
+            cuda::copy(h_com, d_com, DIM, To::host);
+            for (int i=0; i<DIM; i++) {
+                Logger(INFO) << "com[" << i << "] = " << h_com[i];
+            }
             auto time = miluphpc->particles2file(fileCounter);
+            //auto time = miluphpc->particles2file(fileCounter, h_com, t);
             fileCounter++;
             Logger(TIME) << "particles2file: " << time << " ms";
         }
+
+        t += parameters.timestep;
 
     }
 

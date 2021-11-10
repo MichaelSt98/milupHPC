@@ -55,11 +55,11 @@ if __name__ == '__main__':
     bar = []
     labels = []
 
-    #relevantKeys = ["time/reset", "time/boundingBox", "time/assignParticles", "time/tree",
+    #relevantKeys = ["time/loadBalancing", "time/reset", "time/boundingBox", "time/assignParticles", "time/tree",
     #                "time/pseudoParticle ", "time/gravity"]  # , "time/sph"]
 
     relevantKeys = ["time/tree", "time/gravity", "time/reset", "time/boundingBox", "time/assignParticles",
-                    "time/pseudoParticle "]
+                    "time/pseudoParticle", "time/loadBalancing"]
 
     offset = 0
     for i_key, key in enumerate(relevantKeys):
@@ -82,3 +82,6 @@ if __name__ == '__main__':
         offset += bar[i_key]
     ax.legend(loc='best')
     plt.show()
+
+    rhsElapsed = performance["time/rhsElapsed"].get_data_average()
+    print("average rhs elapsed: {}".format(mean(rhsElapsed)))

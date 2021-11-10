@@ -19,7 +19,7 @@ namespace SPH {
             r += dx[d] * dx[d];
             dWdx[d] = 0;
         }
-        r = sqrt(r);
+        r = cuda::math::sqrt(r);
         *dWdr = 0;
         *W = 0;
         q = r/sml;
@@ -55,7 +55,7 @@ namespace SPH {
             r += dx[d] * dx[d];
             dWdx[d] = 0;
         }
-        r = sqrt(r);
+        r = cuda::math::sqrt(r);
         *dWdr = 0;
         *W = 0;
         q = r/sml;
@@ -91,7 +91,7 @@ namespace SPH {
             r += dx[d]*dx[d];
             dWdx[d] = 0;
         }
-        r = sqrt(r);
+        r = cuda::math::sqrt(r);
         *dWdr = 0;
         *W = 0;
         if (r > sml) {
@@ -123,7 +123,7 @@ namespace SPH {
             r += dx[d]*dx[d];
             dWdx[d] = 0;
         }
-        r = sqrt(r);
+        r = cuda::math::sqrt(r);
         *dWdr = 0;
         *W = 0;
 
@@ -157,7 +157,7 @@ namespace SPH {
             r += dx[d]*dx[d];
             dWdx[d] = 0;
         }
-        r = sqrt(r);
+        r = cuda::math::sqrt(r);
         *dWdr = 0;
         *W = 0;
         if (r > sml) {
@@ -302,7 +302,7 @@ namespace SPH {
                 for (d = 0; d < DIM; d++) {
                     r += dx[d]*dx[d];
                 }
-                r = sqrt(r);
+                r = cuda::math::sqrt(r);
                 // divv
                 for (d = 0; d < DIM; d++) {
 #if TENSORIAL_CORRECTION
@@ -428,9 +428,9 @@ __global__ void tensorialCorrection(SPH_kernel kernel, Particles *particles, int
 #if DIM == 3
             dr[2] = particles->z[i] - particles->z[j];
 
-            r = sqrt(dr[0]*dr[0]+dr[1]*dr[1]+dr[2]*dr[2]);
+            r = cuda::math::sqrt(dr[0]*dr[0]+dr[1]*dr[1]+dr[2]*dr[2]);
 #elif DIM == 2
-            r = sqrt(dr[0]*dr[0]+dr[1]*dr[1]);
+            r = cuda::math::sqrt(dr[0]*dr[0]+dr[1]*dr[1]);
 #endif
 #endif
 
