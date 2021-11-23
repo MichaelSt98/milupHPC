@@ -1760,6 +1760,11 @@ namespace Gravity {
 
         }
 
+        //TODO: do not delete children of lowest domain list nodes belonging to another process
+        // but instead: delete the children of (lowest) domain list nodes if
+        //  - toDeleteLeaf[0] < child < numParticles
+        //  - child > toDeleteNode[0]
+        // since problem for predictor-corrector decoupled gravity (having particles belonging to another process)
         __global__ void repairTree(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                    DomainList *lowestDomainList, int n, int m, Curve::Type curveType) {
 
@@ -1777,12 +1782,17 @@ namespace Gravity {
 
             while ((bodyIndex + offset) < *lowestDomainList->domainListIndex) {
                 domainIndex = lowestDomainList->domainListIndices[bodyIndex + offset];
-                key = tree->getParticleKey(particles, domainIndex, MAX_LEVEL, curveType); // working version
+                /*key = tree->getParticleKey(particles, domainIndex, MAX_LEVEL, curveType); // working version
                 proc = subDomainKeyTree->key2proc(key);
                 //printf("[rank %i] deleting: proc = %i\n", subDomainKeyTree->rank, proc);
                 if (proc != subDomainKeyTree->rank) {
                     for (int i=0; i<POW_DIM; i++) {
                         //printf("[rank %i] deleting: POWDIM * %i + %i = %i\n", subDomainKeyTree->rank, domainIndex, i, tree->child[POW_DIM * domainIndex + i]);
+                        tree->child[POW_DIM * domainIndex + i] = -1;
+                    }
+                }*/
+                for (int i=0; i<POW_DIM; i++) {
+                    if (tree->child[POW_DIM * domainIndex + i] >= tree->toDeleteNode[0]) {
                         tree->child[POW_DIM * domainIndex + i] = -1;
                     }
                 }

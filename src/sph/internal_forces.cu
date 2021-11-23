@@ -187,7 +187,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
         }
 #endif
         // TODO: ?
-        //particles->drhodt[i] = 0.0;
+        particles->drhodt[i] = 0.0;
 #if INTEGRATE_ENERGY
         particles->dedt[i] = 0.0;
 #endif
@@ -340,7 +340,9 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             for (e = 0; e < DIM; e++) {
                 rr += dr[e]*dr[e];
                 vr += dv[e]*dr[e];
+                //printf("vr += %e * %e\n", dv[e], dr[e]);
             }
+            //printf("pij: vr = %e\n", vr);
 #endif
 
 #if SOLID
@@ -452,6 +454,9 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             // artificial viscosity force only if v_ij * r_ij < 0
             if (vr < 0) {
                 csbar = 0.5*(particles->cs[i] + particles->cs[j]);
+                if (std::isnan(csbar)) {
+                    printf("csbar = %e, cs[%i] = %e, cs[%i] = %e\n", csbar, i, particles->cs[i], j, particles->cs[j]);
+                }
                 smooth = 0.5*(sml1 + particles->sml[j]);
 
                 const double eps_artvisc = 1e-2;
@@ -471,6 +476,9 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
                 mu *= (fi+fj)/2.;
 # endif
                 pij = (beta*mu - alpha*csbar) * mu/rhobar;
+                if (std::isnan(pij)) {
+                    printf("pij = (%e * %e - %e * %e) * (%e/%e)\n", beta, mu, alpha, csbar, mu, rhobar);
+                }
 # if INVISCID_SPH
                 pij =  ((2 * mu - csbar) * p.beta[i] * mu) / rhobar;
 # endif
@@ -601,7 +609,19 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 #  else
             for (d = 0; d < DIM; d++) {
                 accelsj[d] =  -particles->mass[j] * (particles->p[i]/(particles->rho[i]*particles->rho[i]) + particles->p[j]/(particles->rho[j]*particles->rho[j])) * dWdx[d];
+                //if (cuda::math::abs(accelsj[d]) > 1e3) {
+                //    printf("accelsj[%i] = %e m = %e p = %e rho = %e dWdx = %e\n", d, accelsj[d], particles->mass[j],
+                //           particles->p[i], particles->rho[i], dWdx[d]);
+                //}
+                if (std::isnan(accelsj[d])) {
+                    printf("accelsj[%i] = %e\n", d, accelsj[d]);
+                    assert(0);
+                }
                 accels[d] += accelsj[d];
+                if (std::isnan(accels[d])) {
+                    printf("accels[%i] = %e (accelsj = %e)\n", d, accels[d], accelsj[d]);
+                    assert(0);
+                }
             }
 #  endif // SML_CORRECTION
 # elif (SPH_EQU_VERSION == 2)
@@ -633,6 +653,11 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 #   if DIM > 2
             accels[2] += particles->mass[j]*(-pij)*dWdx[2];
 #   endif
+            if (std::isnan(accels[0]) || std::isnan(accels[1]) || std::isnan(accels[2])) {
+                printf("accels = (%e, %e, %e), mass = %e, pij = %e dWdx = (%e, %e, %e)\n", accels[0], accels[1], accels[2],
+                       particles->mass[j], pij, dWdx[0], dWdx[1], dWdx[2]);
+                assert(0);
+            }
 # endif
 # endif
 
@@ -686,12 +711,15 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 #endif // INTEGRATE_SML
 
 #if INTEGRATE_ENERGY
-            # if ARTIFICIAL_VISCOSITY
+# if ARTIFICIAL_VISCOSITY
             if (true/*!isRelaxationRun*/) {
 #  if SML_CORRECTION
                 dedt += particles->mass[j] * vvnablaW;
 #  else
                 dedt += 0.5 * particles->mass[j] * pij * vvnablaW;
+                /*if (dedt < 0.) {
+                    printf("dedt (= %e) += 0.5 * %e * %e * %e (= %e)\n", dedt, particles->mass[j], pij, vvnablaW, particles->mass[j] * pij * vvnablaW);
+                }*/
 #  endif // SML_CORRECTION
             }
 # endif
@@ -725,6 +753,10 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 #  if DIM > 2
             dedt += 0.5 * accelsj[2] * -dvz;
 #  endif
+            /*if (dedt < 0.) {
+                printf("dedt (= %e) += (%e + %e + %e) = %e dv (%e, %e, %e)\n", dedt, 0.5 * accelsj[0] * -dvx, 0.5 * accelsj[1] * -dvy, 0.5 * accelsj[2] * -dvz,
+                       0.5 * accelsj[0] * -dvx + 0.5 * accelsj[1] * -dvy + 0.5 * accelsj[2] * -dvz, dvx, dvy, dvz);
+            }*/
 # endif // SOLID
 
 #endif // INTEGRATE ENERGY
@@ -768,6 +800,10 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
         ptmp = particles->p[i];
 #  endif
         dedt -= ptmp / particles->rho[i] * particles->divv[i];
+        if (std::isnan(dedt)) {
+            printf("dedt = %e\n", dedt);
+            assert(0);
+        }
         // symmetrize edot
         for (d = 0; d < DIM; d++) {
             for (dd = 0; dd < d; dd++) {

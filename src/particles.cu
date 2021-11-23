@@ -936,15 +936,28 @@ CUDA_CALLABLE_MEMBER void IntegratedParticles::reset(integer index) {
 
     //TODO: what to reset?
     uid[index] = 0;
+    x[index] = 0.;
     vx[index] = 0.;
     ax[index] = 0.;
 #if DIM > 1
+    y[index] = 0.;
     vy[index] = 0.;
     ay[index] = 0.;
 #if DIM == 3
+    z[index] = 0.;
     vz[index] = 0.;
     az[index] = 0.;
 #endif
+#endif
+
+#if SPH_SIM
+    e[index] = 0.;
+    dedt[index] = 0.;
+    p[index] = 0.;
+    rho[index] = 0.;
+    drhodt[index] = 0.;
+    cs[index] = 0.;
+    sml[index] = 0.;
 #endif
 }
 

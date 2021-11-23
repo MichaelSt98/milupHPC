@@ -123,8 +123,8 @@ int main(int argc, char** argv)
 #endif
 #endif
 
-    IntegratorSelection::Type integratorSelection = IntegratorSelection::explicit_euler;
-    //IntegratorSelection::Type integratorSelection = IntegratorSelection::predictor_corrector_euler;
+    //IntegratorSelection::Type integratorSelection = IntegratorSelection::explicit_euler;
+    IntegratorSelection::Type integratorSelection = IntegratorSelection::predictor_corrector_euler;
 
     Miluphpc *miluphpc;
     // miluphpc = new Miluphpc(parameters, numParticles, numNodes); // not possible since abstract class
@@ -188,9 +188,14 @@ int main(int argc, char** argv)
         Logger(INFO) << "STEP: " << i_step;
         Logger(INFO) << "-----------------------------------------------------------------";
 
+        real endTime = 0.06;
+
+        *miluphpc->simulationTimeHandler->h_endTime += (endTime/(real)parameters.iterations);
+        miluphpc->simulationTimeHandler->copy(To::device);
+
         miluphpc->integrate(i_step);
 
-        if (i_step == 0 || i_step % 100 == 0) {
+        if (i_step == 0 || i_step % 1 == 0) {
             real *d_com;
             cuda::malloc(d_com, DIM);
             real *h_com = new real[DIM];
@@ -200,6 +205,7 @@ int main(int argc, char** argv)
             for (int i=0; i<DIM; i++) {
                 Logger(INFO) << "com[" << i << "] = " << h_com[i];
             }
+            //TODO: fileCounter vs step (regarding current time)
             auto time = miluphpc->particles2file(fileCounter);
             //auto time = miluphpc->particles2file(fileCounter, h_com, t);
             fileCounter++;

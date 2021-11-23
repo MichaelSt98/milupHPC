@@ -57,9 +57,11 @@ Miluphpc::Miluphpc(SimulationParameters simulationParameters) {
     prepareSimulation();
 
     //kernelHandler = SPH::KernelHandler(Smoothing::spiky);
-
     kernelHandler = SPH::KernelHandler(Smoothing::cubic_spline);
-    simulationTimeHandler = new SimulationTimeHandler(simulationParameters.timestep, 100., 1.e12);
+    //kernelHandler = SPH::KernelHandler(Smoothing::wendlandc6);
+
+    simulationTimeHandler = new SimulationTimeHandler(simulationParameters.timestep, 0., simulationParameters.timestep);
+    simulationTimeHandler->copy(To::device);
 
 }
 
@@ -141,7 +143,7 @@ void Miluphpc::distributionFromFile(const std::string& filename) {
     HighFive::File file(filename.c_str(), HighFive::File::ReadOnly);
 
     // containers to be filled
-    std::vector<real> m;
+    std::vector<real> m, u;
     std::vector<std::vector<real>> x, v;
     std::vector<integer> materialId;
 
@@ -151,6 +153,7 @@ void Miluphpc::distributionFromFile(const std::string& filename) {
     HighFive::DataSet vel = file.getDataSet("/v");
 #if SPH_SIM
     HighFive::DataSet matId = file.getDataSet("/materialId");
+    HighFive::DataSet h5_u = file.getDataSet("/u");
 #endif
 
     // read data
@@ -159,6 +162,7 @@ void Miluphpc::distributionFromFile(const std::string& filename) {
     vel.read(v);
 #if SPH_SIM
     matId.read(materialId);
+    h5_u.read(u);
 #endif
 
     integer ppp = m.size()/subDomainKeyTreeHandler->h_numProcesses;
@@ -187,6 +191,7 @@ void Miluphpc::distributionFromFile(const std::string& filename) {
 #endif
 #endif
 #if SPH_SIM
+        particleHandler->h_particles->e[i] = u[j];
         particleHandler->h_particles->materialId[i] = materialId[j];
         //particleHandler->h_particles->sml[i] = simulationParameters.sml;
         particleHandler->h_particles->sml[i] = materialHandler->h_materials[materialId[j]].sml;
@@ -223,6 +228,7 @@ void Miluphpc::prepareSimulation() {
     cuda::copy(particleHandler->h_sml, particleHandler->d_sml, numParticlesLocal, To::device);
     cuda::copy(particleHandler->h_materialId, particleHandler->d_materialId, numParticlesLocal, To::device);
     particleHandler->copyDistribution(To::device, true, true);
+    particleHandler->copySPH(To::device);
 
     removeParticles();
 
@@ -258,7 +264,7 @@ void Miluphpc::prepareSimulation() {
 
 }
 
-real Miluphpc::rhs(int step, bool selfGravity) {
+real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
 
     // TESTING
     //Logger(INFO) << "reduction: max:";
@@ -314,14 +320,16 @@ real Miluphpc::rhs(int step, bool selfGravity) {
     Logger(INFO) << "checking for nans before assigning particles...";
     //ParticlesNS::Kernel::Launch::check4nans(particleHandler->d_particles, numParticlesLocal);
 
-    if (subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses > 1) {
-        Logger(INFO) << "rhs::assignParticles()";
-        timer.reset();
-        time = assignParticles();
-        elapsed = timer.elapsed();
-        totalTime += time;
-        Logger(TIME) << "rhs::assignParticles(): " << time << " ms";
-        profiler.value2file(ProfilerIds::Time::assignParticles, *profilerTime);
+    if (assignParticlesToProcess) {
+        if (subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses > 1) {
+            Logger(INFO) << "rhs::assignParticles()";
+            timer.reset();
+            time = assignParticles();
+            elapsed = timer.elapsed();
+            totalTime += time;
+            Logger(TIME) << "rhs::assignParticles(): " << time << " ms";
+            profiler.value2file(ProfilerIds::Time::assignParticles, *profilerTime);
+        }
     }
 
     Logger(INFO) << "checking for nans after assigning particles...";
@@ -358,6 +366,7 @@ real Miluphpc::rhs(int step, bool selfGravity) {
     Logger(TIME) << "rhs::pseudoParticles(): " << time << " ms";
     profiler.value2file(ProfilerIds::Time::pseudoParticle, *profilerTime);
 
+#if GRAVITY_SIM
     if (selfGravity) {
         Logger(INFO) << "rhs::gravity()";
         timer.reset();
@@ -367,6 +376,7 @@ real Miluphpc::rhs(int step, bool selfGravity) {
         Logger(TIME) << "rhs::gravity(): " << time << " ms";
         profiler.value2file(ProfilerIds::Time::gravity, *profilerTime);
     }
+#endif
 
     //Logger(INFO) << "checking for nans before SPH...";
     //ParticlesNS::Kernel::Launch::check4nans(particleHandler->d_particles, numParticlesLocal);
@@ -1509,7 +1519,7 @@ real Miluphpc::parallel_sph() {
     // determine search radius
 
     boost::mpi::communicator comm;
-    real h_searchRadius;
+    //real h_searchRadius;
 
     /*const unsigned int blockSizeReduction = 256;
     real *d_searchRadii;
@@ -2196,6 +2206,11 @@ real Miluphpc::particles2file(int step) {
     delete [] rangeValues;
 
     // TODO: add uid (and other entries?)
+    std::vector<real> time;
+    simulationTimeHandler->copy(To::host);
+    time.push_back(*simulationTimeHandler->h_currentTime); //step*simulationParameters.timestep);
+    HighFive::DataSet h5_time = h5file.createDataSet<real>("/time", HighFive::DataSpace::From(time));
+
     HighFive::DataSet pos = h5file.createDataSet<real>("/x", HighFive::DataSpace(dataSpaceDims));
     HighFive::DataSet vel = h5file.createDataSet<real>("/v", HighFive::DataSpace(dataSpaceDims));
     HighFive::DataSet key = h5file.createDataSet<keyType>("/hilbertKey", HighFive::DataSpace(sumParticles));
@@ -2206,23 +2221,28 @@ real Miluphpc::particles2file(int step) {
     HighFive::DataSet h5_e = h5file.createDataSet<real>("/e", HighFive::DataSpace(sumParticles));
     HighFive::DataSet h5_sml = h5file.createDataSet<real>("/sml", HighFive::DataSpace(sumParticles));
     HighFive::DataSet h5_noi = h5file.createDataSet<integer>("/noi", HighFive::DataSpace(sumParticles));
+    HighFive::DataSet h5_cs = h5file.createDataSet<real>("/cs", HighFive::DataSpace(sumParticles));
 #endif
 
+    Logger(INFO) << "creating datasets ...";
     // ----------
 
     std::vector<std::vector<real>> x, v; // two dimensional vector for 3D vector data
     std::vector<keyType> k; // one dimensional vector holding particle keys
     std::vector<real> mass;
 #if SPH_SIM
-    std::vector<real> rho, p, e, sml;
+    std::vector<real> rho, p, e, sml, cs;
     std::vector<integer> noi;
 #endif
+
+    Logger(INFO) << "copying particles ...";
 
     particleHandler->copyDistribution(To::host, true, false);
 #if SPH_SIM
     particleHandler->copySPH(To::host);
 #endif
 
+    Logger(INFO) << "getting particle keys ...";
     keyType *d_keys;
     cuda::malloc(d_keys, numParticlesLocal);
 
@@ -2241,6 +2261,8 @@ real Miluphpc::particles2file(int step) {
     cuda::copy(h_keys, d_keys, numParticlesLocal, To::host);
 
     integer keyProc;
+
+    Logger(INFO) << "filling vectors ...";
 
     for (int i=0; i<numParticlesLocal; i++) {
 #if DIM == 1
@@ -2262,6 +2284,7 @@ real Miluphpc::particles2file(int step) {
         e.push_back(particleHandler->h_e[i]);
         sml.push_back(particleHandler->h_sml[i]);
         noi.push_back(particleHandler->h_noi[i]);
+        cs.push_back(particleHandler->h_cs[i]);
 #endif
     }
 
@@ -2287,6 +2310,9 @@ real Miluphpc::particles2file(int step) {
     }
     Logger(DEBUG) << "Offset to write to datasets: " << std::to_string(nOffset);
 
+    Logger(INFO) << "writing to h5 ...";
+
+    h5_time.write(time);
     // write to associated datasets in h5 file
     // only working when load balancing has been completed and even number of particles
     pos.select({nOffset, 0},
@@ -2301,6 +2327,7 @@ real Miluphpc::particles2file(int step) {
     h5_e.select({nOffset}, {std::size_t(numParticlesLocal)}).write(e);
     h5_sml.select({nOffset}, {std::size_t(numParticlesLocal)}).write(sml);
     h5_noi.select({nOffset}, {std::size_t(numParticlesLocal)}).write(noi);
+    h5_cs.select({nOffset}, {std::size_t(numParticlesLocal)}).write(cs);
 #endif
 
     return timer.elapsed();

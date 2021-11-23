@@ -5,35 +5,41 @@ PredictorCorrectorEuler::PredictorCorrectorEuler(SimulationParameters simulation
     integratedParticles = new IntegratedParticleHandler(numParticles, numNodes);
 
 
-    cudaGetDevice(device);
-    cudaGetDeviceProperties(prop, *device);
+    cudaGetDevice(&device);
+    printf("Device: %i\n", device);
+    cudaGetDeviceProperties(&prop, device);
+    //printf("prop.multiProcessorCount: %i\n", prop.multiProcessorCount);
     cuda::malloc(d_blockCount, 1);
     cuda::set(d_blockCount, 0, 1);
 
-    cuda::malloc(d_block_forces, prop->multiProcessorCount);
-    cuda::malloc(d_block_courant, prop->multiProcessorCount);
-    cuda::malloc(d_block_artVisc, prop->multiProcessorCount);
-    cuda::malloc(d_block_e, prop->multiProcessorCount);
-    cuda::malloc(d_block_rho, prop->multiProcessorCount);
+    cuda::malloc(d_block_forces, prop.multiProcessorCount);
+    cuda::malloc(d_block_courant, prop.multiProcessorCount);
+    cuda::malloc(d_block_artVisc, prop.multiProcessorCount);
+    cuda::malloc(d_block_e, prop.multiProcessorCount);
+    cuda::malloc(d_block_rho, prop.multiProcessorCount);
+    cuda::malloc(d_block_vmax, prop.multiProcessorCount);
 
     cuda::malloc(d_blockShared, 1);
 
-    PredictorCorrectorEulerNS::BlockSharedNS::set(d_blockShared, d_block_forces, d_block_courant,
+    PredictorCorrectorEulerNS::BlockSharedNS::Launch::set(d_blockShared, d_block_forces, d_block_courant,
                                                   d_block_courant);
-    PredictorCorrectorEulerNS::BlockSharedNS::setE(d_blockShared, d_block_e);
-    PredictorCorrectorEulerNS::BlockSharedNS::setRho(d_blockShared, d_block_rho);
+    PredictorCorrectorEulerNS::BlockSharedNS::Launch::setE(d_blockShared, d_block_e);
+    PredictorCorrectorEulerNS::BlockSharedNS::Launch::setRho(d_blockShared, d_block_rho);
+    PredictorCorrectorEulerNS::BlockSharedNS::Launch::setVmax(d_blockShared, d_block_vmax);
 
 }
 
 PredictorCorrectorEuler::~PredictorCorrectorEuler() {
-    delete [] integratedParticles;
     printf("~PredictorCorrectorEuler()\n");
+
+    delete [] integratedParticles;
 
     cuda::free(d_block_forces);
     cuda::free(d_block_courant);
     cuda::free(d_block_artVisc);
     cuda::free(d_block_e);
     cuda::free(d_block_rho);
+    cuda::free(d_block_vmax);
 
     cuda::free(d_blockShared);
 }
@@ -45,26 +51,79 @@ void PredictorCorrectorEuler::integrate(int step) {
     Timer timer;
     real time = 0.;
 
-    time += rhs(step, true);
-    Logger(INFO) << "PREDICTOR!";
-    time += PredictorCorrectorEulerNS::Kernel::Launch::predictor(particleHandler->d_particles,
-                                                                 integratedParticles[0].d_integratedParticles,
-                                                                 (real)simulationParameters.timestep, numParticlesLocal);
+    real time_elapsed;
 
-    particleHandler->setPointer(&integratedParticles[0]);
+    while (*simulationTimeHandler->h_currentTime < *simulationTimeHandler->h_endTime) {
 
-    time += rhs(step, false);
-    Logger(INFO) << "CORRECTOR!";
-    time += PredictorCorrectorEulerNS::Kernel::Launch::corrector(particleHandler->d_particles,
-                                                                 integratedParticles[0].d_integratedParticles,
-                                                                 (real)simulationParameters.timestep, numParticlesLocal);
+        printf("removing particles...\n");
 
-     particleHandler->resetPointer();
+        removeParticles();
 
-    Logger(TIME) << "rhs: " << time << " ms";
+        printf("removed particles...\n");
 
-    real time_elapsed = timer.elapsed();
-    Logger(TIME) << "rhs elapsed: " << time_elapsed  << " ms";
+        Logger(INFO) << "rhs::loadBalancing()";
+        if (simulationParameters.loadBalancing && step != 0 && step % simulationParameters.loadBalancingInterval == 0) {
+            dynamicLoadBalancing();
+        }
+
+        time += rhs(step, true, true);
+
+        // ------------------------------------------------------------------------------------------------------------
+        //simulationTimeHandler->copy(To::host);
+        //Logger(INFO) << "h_dt = " << *simulationTimeHandler->h_dt;
+        //Logger(INFO) << "h_startTime = " << *simulationTimeHandler->h_startTime;
+        //Logger(INFO) << "h_endTime = " << *simulationTimeHandler->h_endTime;
+        //Logger(INFO) << "h_currentTime = " << *simulationTimeHandler->h_currentTime;
+        //Logger(INFO) << "h_dt_max = " << *simulationTimeHandler->h_dt_max;
+
+        Logger(INFO) << "setTimeStep: search radius: " << h_searchRadius;
+        PredictorCorrectorEulerNS::Kernel::Launch::setTimeStep(prop.multiProcessorCount,
+                                                               simulationTimeHandler->d_simulationTime,
+                                                               materialHandler->d_materials,
+                                                               particleHandler->d_particles,
+                                                               d_blockShared, d_blockCount, h_searchRadius,
+                                                               numParticlesLocal);
+
+        simulationTimeHandler->globalize(Execution::device);
+        simulationTimeHandler->copy(To::host);
+        Logger(INFO) << "h_dt = " << *simulationTimeHandler->h_dt << "  | h_dt_max = "
+                     << *simulationTimeHandler->h_dt_max;;
+        Logger(INFO) << "h_startTime = " << *simulationTimeHandler->h_startTime;
+        Logger(INFO) << "h_endTime = " << *simulationTimeHandler->h_endTime;
+        Logger(INFO) << "h_currentTime = " << *simulationTimeHandler->h_currentTime;
+        //Logger(INFO) << "h_dt_max = " << *simulationTimeHandler->h_dt_max;
+        // ------------------------------------------------------------------------------------------------------------
+        Logger(INFO) << "PREDICTOR!";
+        time += PredictorCorrectorEulerNS::Kernel::Launch::predictor(particleHandler->d_particles,
+                                                                     integratedParticles[0].d_integratedParticles,
+                                                                     *simulationTimeHandler->h_dt, //(real) simulationParameters.timestep,
+                                                                     numParticlesLocal);
+
+        Logger(INFO) << "setPointer()...";
+        particleHandler->setPointer(&integratedParticles[0]);
+
+        time += rhs(step, false, false);
+
+        Logger(INFO) << "resetPointer()...";
+        particleHandler->resetPointer();
+
+        Logger(INFO) << "CORRECTOR!";
+        time += PredictorCorrectorEulerNS::Kernel::Launch::corrector(particleHandler->d_particles,
+                                                                     integratedParticles[0].d_integratedParticles,
+                                                                     *simulationTimeHandler->h_dt, //(real) simulationParameters.timestep,
+                                                                     numParticlesLocal);
+
+        Logger(TIME) << "rhs: " << time << " ms";
+
+        time_elapsed = timer.elapsed();
+        Logger(TIME) << "rhs elapsed: " << time_elapsed << " ms";
+
+        *simulationTimeHandler->h_currentTime += *simulationTimeHandler->h_dt;
+        simulationTimeHandler->copy(To::device);
+
+        Logger(INFO) << "simulation time: " << *simulationTimeHandler->h_currentTime << "( STEP: " << step << ", endTime = " << *simulationTimeHandler->h_endTime << ")";
+
+    }
 
     //Gravity::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal,
     //                                (real)simulationParameters.timestep, (real)simulationParameters.dampening);

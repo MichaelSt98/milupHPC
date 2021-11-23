@@ -19,6 +19,19 @@ namespace EOS {
         particles->p[index] = 41255.407 * particles->rho[index];
     }
 
+    __device__ void idealGas(Material *materials, Particles *particles, int index) {
+        //printf("idealGas...\n");
+        //if (index % 1000 == 0) {
+        //    printf("polytropic gamma: %e\n", materials[particles->materialId[index]].eos.polytropic_gamma);
+        //}
+        particles->p[index] = (materials[particles->materialId[index]].eos.polytropic_gamma - 1) *
+                        particles->rho[index] * particles->e[index];
+        if (particles->p[index] < 0) {
+            printf("negative pressure! p[%i] = %e, rho = %e, e = %e\n", index, particles->p[index], particles->rho[index], particles->e[index]);
+        }
+        //particles->p[index] = particles->cs[index] * particles->cs[index] * particles->rho[index];
+    }
+
     __device__ void locallyIsothermalGas(Material *materials, Particles *particles, int index) {
         //printf("locallyIsothermalGas...\n");
         particles->p[index] = particles->cs[index] * particles->cs[index] * particles->rho[index];
@@ -47,6 +60,10 @@ namespace SPH {
                         break;
                     case EquationOfStates::EOS_TYPE_ISOTHERMAL_GAS: {
                         ::EOS::isothermalGas(materials, particles, i);
+                    }
+                        break;
+                    case EquationOfStates::EOS_TYPE_IDEAL_GAS: {
+                        ::EOS::idealGas(materials, particles, i);
                     }
                         break;
                     case EquationOfStates::EOS_TYPE_LOCALLY_ISOTHERMAL_GAS: {

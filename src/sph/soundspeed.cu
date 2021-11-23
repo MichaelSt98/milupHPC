@@ -22,8 +22,8 @@ __global__ void SPH::Kernel::initializeSoundSpeed(Particles *particles, Material
             case EquationOfStates::EOS_TYPE_LOCALLY_ISOTHERMAL_GAS: {
                 //TODO: initial sound speed for EOS_TYPE_LOCALLY_ISOTHERMAL_GAS?
             } break;
-            default:
-                printf("not implemented!\n");
+            //default:
+            //    printf("not implemented!\n");
         }
     }
 
@@ -52,6 +52,15 @@ __global__ void SPH::Kernel::calculateSoundSpeed(Particles *particles, Material 
             //case EquationOfStates::EOS_TYPE_ISOTHERMAL_GAS: {
             //    // do nothing since constant
             //} break;
+            case EquationOfStates::EOS_TYPE_IDEAL_GAS: {
+                particles->cs[i] = cuda::math::sqrt(materials[matId].eos.polytropic_gamma * particles->p[i] /
+                                        particles->rho[i]);
+                if (std::isnan(particles->cs[i])) {
+                    printf("particles->cs[%i] = %e, gamma = %e, p = %e, rho = %e\n", i, particles->cs[i],
+                           materials[matId].eos.polytropic_gamma, particles->p[i], particles->rho[i]);
+                    assert(0);
+                }
+            } break;
             case EquationOfStates::EOS_TYPE_LOCALLY_ISOTHERMAL_GAS: {
                 real distance = 0.0;
                 distance = particles->x[i] * particles->x[i];

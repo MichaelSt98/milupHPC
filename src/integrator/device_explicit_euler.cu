@@ -104,7 +104,11 @@ __global__ void ExplicitEulerNS::Kernel::update(Particles *particles, integer n,
         //particles->drhodt[i] = 0.5 * (predictor->drhodt[i] + particles->drhodt[i]);
 #endif
 #if INTEGRATE_ENERGY
-        particles->e[bodyIndex + offset] = particles->e[bodyIndex + offset] + dt * particles->dedt[bodyIndex + offset];
+        particles->e[bodyIndex + offset] += dt * particles->dedt[bodyIndex + offset];
+        if (particles->e[bodyIndex + offset] < 1e-50) {
+            particles->e[bodyIndex + offset] = 1e-50;
+        }
+        //printf("e = %e + (%e * %e)\n", particles->e[bodyIndex + offset], dt, particles->dedt[bodyIndex + offset]);
         //particles->dedt[i] = 0.5 * (predictor->dedt[i] + particles->dedt[i]);
 #endif
 #if INTEGRATE_SML

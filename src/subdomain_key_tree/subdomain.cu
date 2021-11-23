@@ -917,7 +917,7 @@ namespace ParticlesNS {
             //printf("distance: %e\n", cuda::math::sqrt(particles->x[index] * particles->x[index] + particles->y[index] * particles->y[index] +
             //                                          particles->z[index] * particles->z[index]));
         if (cuda::math::sqrt(particles->x[index] * particles->x[index] + particles->y[index] * particles->y[index] +
-                  particles->z[index] * particles->z[index]) < 3.2e14) {//150597870700.) {//3.25e14) {
+                  particles->z[index] * particles->z[index]) < 10.) { //3.5e14) {//150597870700.) {//3.25e14) {
 #endif
             return false;
         } else {

@@ -55,3 +55,19 @@ void SimulationTimeHandler::copy(To::Target target) {
     cuda::copy(h_dt_max, d_dt_max, 1, target);
 
 }
+
+void SimulationTimeHandler::globalize(Execution::Location exLoc) {
+
+    boost::mpi::communicator comm;
+    switch (exLoc) {
+
+        case Execution::host: {
+            all_reduce(comm, boost::mpi::inplace_t<real*>(h_dt), 1, boost::mpi::minimum<real>());
+        } break;
+        case Execution::device: {
+            all_reduce(comm, boost::mpi::inplace_t<real*>(d_dt), 1, boost::mpi::minimum<real>());
+        } break;
+
+    }
+
+}
