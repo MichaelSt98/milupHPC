@@ -15,6 +15,8 @@ namespace EOS {
     __device__ void polytropicGas(Material *materials, Particles *particles, int index);
 
     __device__ void isothermalGas(Material *materials, Particles *particles, int index);
+
+    __device__ void idealGas(Material *materials, Particles *particles, int index);
 }
 
 namespace SPH {

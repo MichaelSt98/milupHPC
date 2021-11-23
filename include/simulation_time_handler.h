@@ -3,6 +3,7 @@
 
 #include "simulation_time.cuh"
 #include "cuda_utils/cuda_runtime.h"
+#include <boost/mpi.hpp>
 
 class SimulationTimeHandler {
 
@@ -28,6 +29,8 @@ public:
     ~SimulationTimeHandler();
 
     void copy(To::Target target);
+
+    void globalize(Execution::Location exLoc);
 
 };
 

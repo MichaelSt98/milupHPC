@@ -3,14 +3,18 @@
 
 #include "../miluphpc.h"
 #include "device_predictor_corrector_euler.cuh"
+#include "device_explicit_euler.cuh"
 
 
 class PredictorCorrectorEuler : public Miluphpc {
 
 private:
 
-    int *device;
-    struct cudaDeviceProp *prop;
+
+public:
+
+    int device;
+    struct cudaDeviceProp prop;
     int *d_blockCount;
 
     real *d_block_forces;
@@ -18,8 +22,7 @@ private:
     real *d_block_artVisc;
     real *d_block_e;
     real *d_block_rho;
-
-public:
+    real *d_block_vmax;
 
     PredictorCorrectorEulerNS::BlockShared *d_blockShared;
 

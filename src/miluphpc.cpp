@@ -792,19 +792,26 @@ real Miluphpc::parallel_tree() {
     cuda::set(domainListHandler->d_domainListCounter, 0, 1);
 
     // serial version
-    //time = SubDomainKeyTreeNS::Kernel::Launch::buildDomainTree(treeHandler->d_tree, particleHandler->d_particles,
-    //                                                           domainListHandler->d_domainList, numParticlesLocal,
-    //                                                           numNodes);
+    /*
+    time = SubDomainKeyTreeNS::Kernel::Launch::buildDomainTree(treeHandler->d_tree, particleHandler->d_particles,
+                                                               domainListHandler->d_domainList, numParticlesLocal,
+                                                               numNodes);
+    */
 
     time = 0;
-    for (int level = 0; level <= MAX_LEVEL; level++) {
-        time += SubDomainKeyTreeNS::Kernel::Launch::buildDomainTree(subDomainKeyTreeHandler->d_subDomainKeyTree,
-                                                                    treeHandler->d_tree,
-                                                                    particleHandler->d_particles,
-                                                                    domainListHandler->d_domainList,
-                                                                    numParticlesLocal,
-                                                                    numNodes, level);
+    // TODO: serial version (above) working for one process, "parallel" version not working for one process, thus
+    //  if statement introduced
+    if (subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses > 1) {
+        for (int level = 0; level <= MAX_LEVEL; level++) {
+            time += SubDomainKeyTreeNS::Kernel::Launch::buildDomainTree(subDomainKeyTreeHandler->d_subDomainKeyTree,
+                                                                        treeHandler->d_tree,
+                                                                        particleHandler->d_particles,
+                                                                        domainListHandler->d_domainList,
+                                                                        numParticlesLocal,
+                                                                        numNodes, level);
+        }
     }
+
     int domainListCounterAfterwards;
     cuda::copy(&domainListCounterAfterwards, domainListHandler->d_domainListCounter, 1, To::host);
     Logger(INFO) << "domain list counter afterwards : " << domainListCounterAfterwards;

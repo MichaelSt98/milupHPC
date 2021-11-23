@@ -447,7 +447,7 @@ namespace PredictorCorrectorEulerNS {
                     printf("courant: dt = %e (courant = %e)\n", COURANT_FACT*courant, courant);
                     printf("force  : dt = %e (forces = %e)\n", FORCES_FACT*forces, forces);
 
-                    if (vmax > 0.) {
+                    if (vmax > 0. && searchRadius > 0.) { // TODO: searchRadius = 0 for 1 process
                         *simulationTime->dt = cuda::math::min(*simulationTime->dt, searchRadius / (2 * vmax));
                         printf("search : dt = %e (vmax = %e)\n", searchRadius / (2 * vmax), vmax);
                     }

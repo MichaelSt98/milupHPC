@@ -23,6 +23,8 @@
 #include "sph/soundspeed.cuh"
 #include "simulation_time_handler.h"
 
+#include "processing/kernels.cuh"
+
 #include <iostream>
 #include <stdio.h>
 #include <cuda.h>
@@ -101,6 +103,8 @@ private:
 
 public:
 
+    real h_searchRadius;
+
     real removeParticles();
 
     void fixedLoadBalancing();
@@ -170,7 +174,7 @@ public:
     real gravity();
     real sph();
 
-    real rhs(int step, bool selfGravity=true);
+    real rhs(int step, bool selfGravity=true, bool assignParticlesToProcess=true);
 
     //virtual void integrate() {};
     virtual void integrate(int step = 0) = 0;
