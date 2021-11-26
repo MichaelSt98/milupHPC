@@ -118,10 +118,13 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     h_particles = new Particles();
 
     cuda::malloc(d_numParticles, 1);
-    cuda::malloc(d_numNodes, sizeof(integer));
+    cuda::malloc(d_numNodes, 1);
 
+    //real *d_positions;
+    //cuda::malloc(d_positions, DIM * numNodes);
     cuda::malloc(d_mass, numNodes);
     cuda::malloc(_d_x, numNodes);
+    //_d_x = &d_positions[0];
     d_x = _d_x;
     cuda::malloc(_d_vx, numNodes);
     d_vx = _d_vx;
@@ -130,6 +133,7 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     cuda::malloc(d_g_ax, numParticles);
 #if DIM > 1
     cuda::malloc(_d_y, numNodes);
+    //_d_y = &d_positions[numNodes];
     d_y = _d_y;
     cuda::malloc(_d_vy, numNodes);
     d_vy = _d_vy;
@@ -138,6 +142,7 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     cuda::malloc(d_g_ay, numParticles);
 #if DIM == 3
     cuda::malloc(_d_z, numNodes);
+    //_d_z = &d_positions[2 * numNodes];
     d_z = _d_z;
     cuda::malloc(_d_vz, numNodes);
     d_vz = _d_vz;
@@ -611,7 +616,7 @@ void ParticleHandler::setPointer(IntegratedParticleHandler *integratedParticleHa
                                      d_nnl, d_noi, d_e, d_dedt, d_cs, d_rho, d_p);
     ParticlesNS::Kernel::Launch::setIntegrateDensity(d_particles, d_drhodt);
 #if VARIABLE_SML || INTEGRATE_SML
-    ParticlesNS::Kernel::Launch::setVariableSML(d_particles, d_smldt);
+    ParticlesNS::Kernel::Launch::setVariableSML(d_particles, d_dsmldt);
 #endif
 #endif
 
@@ -673,7 +678,7 @@ void ParticleHandler::resetPointer() {
                                      d_nnl, d_noi, d_e, d_dedt, d_cs, d_rho, d_p);
     ParticlesNS::Kernel::Launch::setIntegrateDensity(d_particles, d_drhodt);
 #if VARIABLE_SML || INTEGRATE_SML
-    ParticlesNS::Kernel::Launch::setVariableSML(d_particles, d_smldt);
+    ParticlesNS::Kernel::Launch::setVariableSML(d_particles, d_dsmldt);
 #endif
 #endif
 

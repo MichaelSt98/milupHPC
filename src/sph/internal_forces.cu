@@ -7,98 +7,98 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
     int i, k, inc, j, numInteractions;
     int f, kk;
 
-    double W;
-    double tmp;
-    double ax, ay;
-    double sml;
+    real W;
+    real tmp;
+    real ax, ay;
+    real sml;
 #if DIM == 3
-    double az;
+    real az;
 #endif
 
     int matId;
     int matIdj;
-    double sml1;
+    real sml1;
 
-    double vxj, vyj, vzj, Sj[DIM*DIM];
+    real vxj, vyj, vzj, Sj[DIM*DIM];
 
 #if FRAGMENTATION
-    double di, di_tensile;  // both are directly the damage (not DIM-root of it)
+    real di, di_tensile;  // both are directly the damage (not DIM-root of it)
 #endif
 
 #if ARTIFICIAL_VISCOSITY
-    double vr; // vr = v_ij * r_ij
-    double rr;
-    double rhobar; // rhobar = 0.5*(rho_i + rho_j)
-    double mu;
-    double muijmax;
-    double smooth;
-    double csbar;
-    double alpha, beta;
+    real vr; // vr = v_ij * r_ij
+    real rr;
+    real rhobar; // rhobar = 0.5*(rho_i + rho_j)
+    real mu;
+    real muijmax;
+    real smooth;
+    real csbar;
+    real alpha, beta;
 
 #if BALSARA_SWITCH
-    double fi, fj;
-    double curli, curlj;
-    const double eps_balsara = 1e-4;
+    real fi, fj;
+    real curli, curlj;
+    const real eps_balsara = 1e-4;
 #endif
 #endif
 
 #if ARTIFICIAL_STRESS
-    double artf = 0;
+    real artf = 0;
 #endif
 
     int d;
     int dd;
     int e;
 #if SOLID
-    double sigma_i[DIM][DIM], sigma_j[DIM][DIM];
-    double edot[DIM][DIM], rdot[DIM][DIM];
-    double S_i[DIM][DIM];
-    double sqrt_J2, I1, alpha_phi, kc;
-    double lambda_dot, tr_edot;
+    real sigma_i[DIM][DIM], sigma_j[DIM][DIM];
+    real edot[DIM][DIM], rdot[DIM][DIM];
+    real S_i[DIM][DIM];
+    real sqrt_J2, I1, alpha_phi, kc;
+    real lambda_dot, tr_edot;
 #endif
 
-    double dr[DIM];
-    double dv[DIM];
+    real dr[DIM];
+    real dv[DIM];
 
-    double x, vx;
+    real x, vx;
 #if DIM > 1
-    double y, vy;
+    real y, vy;
 #endif
     int boundia = 0;
 #if DIM == 3
-    double z, vz;
+    real z, vz;
 #endif
 
-    double drhodt;
+    real drhodt;
 
 #if INTEGRATE_ENERGY
-    double dedt;
+    real dedt;
 #endif
 
-    double dvx;
+    real dvx;
 #if DIM > 1
-    double dvy;
+    real dvy;
 #endif
 #if DIM > 2
-    double dvz;
+    real dvz;
 #endif
 
 #if NAVIER_STOKES
-    double eta;
-    double zetaij;
+    real eta;
+    real zetaij;
 #endif
 
-    double vvnablaW;
-    double dWdr;
-    double dWdrj;
-    double dWdx[DIM];
-    double Wj;
-    double dWdxj[DIM];
-    double pij = 0;
-    double r;
-    double accels[DIM];
-    double accelsj[DIM];
-    double accelshearj[DIM];
+    real vvnablaW;
+    real dWdr;
+    real dWdrj;
+    real dWdx[DIM];
+    real Wj;
+    real dWdxj[DIM];
+    real pij = 0;
+    real r;
+    real accels[DIM];
+    real accelsj[DIM];
+    real accelshearj[DIM];
 
     inc = blockDim.x * gridDim.x;
     for (i = threadIdx.x + blockIdx.x * blockDim.x; i < numRealParticles; i += inc) {
@@ -142,6 +142,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             }
         }
 #endif
+        #pragma unroll
         for (d = 0; d < DIM; d++) {
             accels[d] = 0.0;
             accelsj[d] = 0.0;
@@ -232,6 +233,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             //    continue;
             //}
 
+            #pragma unroll
             for (d = 0; d < DIM; d++) {
                 accelsj[d] = 0.0;
             }
@@ -272,6 +274,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 #endif
 #endif
             r = 0;
+            #pragma unroll
             for (e = 0; e < DIM; e++) {
                 r += dr[e]*dr[e];
                 dWdx[e] = 0.0;
@@ -337,6 +340,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 #if ARTIFICIAL_VISCOSITY || KLEY_VISCOSITY
             rr = 0.0;
             vr = 0.0;
+            #pragma unroll
             for (e = 0; e < DIM; e++) {
                 rr += dr[e]*dr[e];
                 vr += dv[e]*dr[e];
@@ -454,12 +458,12 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             // artificial viscosity force only if v_ij * r_ij < 0
             if (vr < 0) {
                 csbar = 0.5*(particles->cs[i] + particles->cs[j]);
-                if (std::isnan(csbar)) {
-                    printf("csbar = %e, cs[%i] = %e, cs[%i] = %e\n", csbar, i, particles->cs[i], j, particles->cs[j]);
-                }
+                //if (std::isnan(csbar)) {
+                //    printf("csbar = %e, cs[%i] = %e, cs[%i] = %e\n", csbar, i, particles->cs[i], j, particles->cs[j]);
+                //}
                 smooth = 0.5*(sml1 + particles->sml[j]);
 
-                const double eps_artvisc = 1e-2;
+                const real eps_artvisc = 1e-2;
                 mu = smooth*vr/(rr + smooth*smooth*eps_artvisc);
 
                 if (mu > muijmax) {
@@ -476,9 +480,9 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
                 mu *= (fi+fj)/2.;
 # endif
                 pij = (beta*mu - alpha*csbar) * mu/rhobar;
-                if (std::isnan(pij)) {
-                    printf("pij = (%e * %e - %e * %e) * (%e/%e)\n", beta, mu, alpha, csbar, mu, rhobar);
-                }
+                //if (std::isnan(pij)) {
+                //    printf("pij = (%e * %e - %e * %e) * (%e/%e)\n", beta, mu, alpha, csbar, mu, rhobar);
+                //}
 # if INVISCID_SPH
                 pij =  ((2 * mu - csbar) * p.beta[i] * mu) / rhobar;
 # endif
@@ -527,9 +531,11 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             # if ARTIFICIAL_STRESS
             artf = fixTensileInstability(i, j);
             artf =  pow(artf, matexponent_tensor[matId]);
-# endif
+            # endif
+            #pragma unroll
             for (d = 0; d < DIM; d++) {
                 accelsj[d] = 0;
+                #pragma unroll
                 for (dd = 0; dd < DIM; dd++) {
                     // this is stable for rotating rod with two different densities, tested cms July 2018
                     //accelsj[d] = p.m[j] * (sigma_j[d][dd]+sigma_i[d][dd])/(p.rho[i]*p.rho[j]) *dWdx[dd];
@@ -566,7 +572,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 
 // Correction for tensile instability fix according to Monaghan, jcp 159 (2000)
 # if ARTIFICIAL_STRESS
-                    double arts_rij;
+                    real arts_rij;
 #  if (SPH_EQU_VERSION == 1)
                     arts_rij = p_rhs.R[stressIndex(i,d,dd)]/(p.rho[i]*p.rho[i])
                               + p_rhs.R[stressIndex(j,d,dd)]/(p.rho[j]*p.rho[j]);
@@ -580,7 +586,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
                     // bs...
                    // accels[d] += p.m[j] * (sigma_j[d][dd]/pow(p.rho[j],2) + sigma_i[d][dd]/pow(p.rho[i],2)) * dWdr/r * (-dr[dd]) * (-dr[d]) * p_rhs.tensorialCorrectionMatrix[i*DIM*DIM+d*DIM+dd];
 
-                   if (std::isnan(particles->mass[j]*(-pij)*dWdx[0])
+                   /*if (std::isnan(particles->mass[j]*(-pij)*dWdx[0])
 #if DIM > 1
                 || std::isnan(particles->mass[j]*(-pij)*dWdx[1])
 #if DIM == 3
@@ -594,7 +600,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
                        particles->mass[j], pij, dWdx[0], dWdx[1], dWdx[2]);
 #endif
                 assert(0);
-            }
+            }*/
 
                     accels[d] += accelsj[d];
                 }
@@ -602,26 +608,28 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 #else // NOT SOLID
 # if (SPH_EQU_VERSION == 1)
 #  if SML_CORRECTION
+            #pragma unroll
             for (d = 0; d < DIM; d++) {
                 accelsj[d] =  -particles->mass[j] * (particles->p[i]/(particles->sml_omega[i]*particles->rho[i]*particles->rho[i]) + particles->p[j]/(particles->sml_omega[j]*particles->rho[j]*particles->rho[j])) * dWdx[d];
                 accels[d] += accelsj[d];
             }
 #  else
+            #pragma unroll
             for (d = 0; d < DIM; d++) {
                 accelsj[d] =  -particles->mass[j] * (particles->p[i]/(particles->rho[i]*particles->rho[i]) + particles->p[j]/(particles->rho[j]*particles->rho[j])) * dWdx[d];
                 //if (cuda::math::abs(accelsj[d]) > 1e3) {
                 //    printf("accelsj[%i] = %e m = %e p = %e rho = %e dWdx = %e\n", d, accelsj[d], particles->mass[j],
                 //           particles->p[i], particles->rho[i], dWdx[d]);
                 //}
-                if (std::isnan(accelsj[d])) {
-                    printf("accelsj[%i] = %e\n", d, accelsj[d]);
-                    assert(0);
-                }
+                //if (std::isnan(accelsj[d])) {
+                //    printf("accelsj[%i] = %e\n", d, accelsj[d]);
+                //    assert(0);
+                //}
                 accels[d] += accelsj[d];
-                if (std::isnan(accels[d])) {
-                    printf("accels[%i] = %e (accelsj = %e)\n", d, accels[d], accelsj[d]);
-                    assert(0);
-                }
+                //if (std::isnan(accels[d])) {
+                //    printf("accels[%i] = %e (accelsj = %e)\n", d, accels[d], accelsj[d]);
+                //    assert(0);
+                //}
             }
 #  endif // SML_CORRECTION
 # elif (SPH_EQU_VERSION == 2)
@@ -653,11 +661,11 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 #   if DIM > 2
             accels[2] += particles->mass[j]*(-pij)*dWdx[2];
 #   endif
-            if (std::isnan(accels[0]) || std::isnan(accels[1]) || std::isnan(accels[2])) {
-                printf("accels = (%e, %e, %e), mass = %e, pij = %e dWdx = (%e, %e, %e)\n", accels[0], accels[1], accels[2],
-                       particles->mass[j], pij, dWdx[0], dWdx[1], dWdx[2]);
-                assert(0);
-            }
+            //if (std::isnan(accels[0]) || std::isnan(accels[1]) || std::isnan(accels[2])) {
+            //    printf("accels = (%e, %e, %e), mass = %e, pij = %e dWdx = (%e, %e, %e)\n", accels[0], accels[1], accels[2],
+            //           particles->mass[j], pij, dWdx[0], dWdx[1], dWdx[2]);
+            //    assert(0);
+            //}
 # endif
 # endif
 
@@ -788,8 +796,8 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 
 #if INTEGRATE_ENERGY
         # if SOLID
-        double ptmp = 0;
-        double edottmp = 0;
+        real ptmp = 0;
+        real edottmp = 0;
 #  if FRAGMENTATION
         if (p.p[i] < 0) {
             ptmp = (1.0-di) * p.p[i];
@@ -800,10 +808,10 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
         ptmp = particles->p[i];
 #  endif
         dedt -= ptmp / particles->rho[i] * particles->divv[i];
-        if (std::isnan(dedt)) {
-            printf("dedt = %e\n", dedt);
-            assert(0);
-        }
+        //if (std::isnan(dedt)) {
+        //    printf("dedt = %e\n", dedt);
+        //    assert(0);
+        //}
         // symmetrize edot
         for (d = 0; d < DIM; d++) {
             for (dd = 0; dd < d; dd++) {
@@ -814,7 +822,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
         }
         for (d = 0; d < DIM; d++) {
             for (dd = 0; dd < DIM; dd++) {
-                double Stmp = p.S[stressIndex(i,d,dd)];
+                real Stmp = p.S[stressIndex(i,d,dd)];
 #  if FRAGMENTATION && DAMAGE_ACTS_ON_S
                 Stmp *= (1.0-di);
 #  endif
@@ -856,14 +864,14 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 #if EPSALPHA_POROSITY
         /* calculate the change in epsilon and alpha per time */
         if (matEOS[matId] == EOS_TYPE_EPSILON) {
-            double dalpha_epspordeps = 0.0;
+            real dalpha_epspordeps = 0.0;
             p.depsilon_vdt[i] = 0.0;
             int f;
-            double kappa = matporepsilon_kappa[matId];
-            double alpha_0 = matporepsilon_alpha_0[matId];
-            double eps_e = matporepsilon_epsilon_e[matId];
-            double eps_x = matporepsilon_epsilon_x[matId];
-            double eps_c = matporepsilon_epsilon_c[matId];
+            real kappa = matporepsilon_kappa[matId];
+            real alpha_0 = matporepsilon_alpha_0[matId];
+            real eps_e = matporepsilon_epsilon_e[matId];
+            real eps_x = matporepsilon_epsilon_x[matId];
+            real eps_c = matporepsilon_epsilon_c[matId];
             for (f = 0; f < DIM; f++) {
                 p.depsilon_vdt[i] += edot[f][f];
             }
@@ -897,12 +905,12 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 
 #if SOLID
         // now we can find the change of the stress tensor components
-        double shear = matShearmodulus[matId];
-        double bulk = matBulkmodulus[matId];
-        double young = matYoungModulus[matId];
+        real shear = matShearmodulus[matId];
+        real bulk = matBulkmodulus[matId];
+        real young = matYoungModulus[matId];
         int f;
 # if JC_PLASTICITY
-	    double edotp[DIM][DIM]; // plastic strain rate
+	    real edotp[DIM][DIM]; // plastic strain rate
 # endif
 # if SIRONO_POROSITY
         if (matEOS[matId] == EOS_TYPE_SIRONO) {
@@ -949,7 +957,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 
 # if JC_PLASTICITY
             /* calculate plastic strain rate tensor from dSdt */
-            double K2 = 0;
+            real K2 = 0;
             for (d = 0; d < DIM; d++) {
                 for (e = 0; e < DIM; e++) {
                     K2 += 0.5*edotp[d][e]*edotp[d][e];
@@ -958,7 +966,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             p.edotp[i] = 2./3. * cuda::math::sqrt(3*K2);
 
             /* change of temperature due to plastic deformation */
-            double work = 0;
+            real work = 0;
             for (d = 0; d < DIM; d++) {
                 for (e = 0; e < DIM; e++) {
                     work += sigma_i[d][e] * edotp[d][e];
@@ -985,7 +993,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             particles->muijmax[i] = muijmax;
 # endif
 
-            double tensileMax = 0.0;
+            real tensileMax = 0.0;
             tensileMax = calculateMaxEigenvalue(sigma_i);
             p.local_strain[i] = tensileMax/young;
 
@@ -1001,7 +1009,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
                 // note: d(d**1/DIM)/dt is calculated
                 // speed of a longitudinal elastic wave, see eg. Melosh, Impact Cratering
                 // crack growth velocity = 0.4 times c_elast
-                double c_g = 0.4 * cuda::math::sqrt((bulk + 4.0 * shear * (1.0 - di_tensile) / 3.0) * 1.0 / p.rho[i]);
+                real c_g = 0.4 * cuda::math::sqrt((bulk + 4.0 * shear * (1.0 - di_tensile) / 3.0) * 1.0 / p.rho[i]);
 
                 // find number of active flaws
                 int n_active = 0;
@@ -1027,8 +1035,8 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             }
 #  if PALPHA_POROSITY
             if (matEOS[matId] == EOS_TYPE_JUTZI || matEOS[matId] == EOS_TYPE_JUTZI_MURNAGHAN || matEOS[matId] == EOS_TYPE_JUTZI_ANEOS) {
-                double deld = 0.01; 	/* variation in the damage to avoid infinity problem */
-                double alpha_0 = matporjutzi_alpha_0[matId];
+                real deld = 0.01; 	/* variation in the damage to avoid infinity problem */
+                real alpha_0 = matporjutzi_alpha_0[matId];
                 if (alpha_0 > 1) {
                     p.ddamage_porjutzidt[i] = - 1.0/DIM * (pow(1.0 - (p.alpha_jutzi[i] - 1.0) / (alpha_0 - 1.0) + deld, 1.0/DIM - 1.0))
                                             / (pow(1.0 + deld, 1.0/DIM) - pow(deld, 1.0/DIM)) * 1.0/(alpha_0 - 1.0) * p.dalphadt[i];
@@ -1045,7 +1053,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
                 tr_edot += edot[d][d];
             }
 # if DIM == 2
-            double poissons_ratio = (3*bulk - 2*shear) / (2*(3*bulk + shear));
+            real poissons_ratio = (3*bulk - 2*shear) / (2*(3*bulk + shear));
             I1 = (1 + poissons_ratio) * (p.S[stressIndex(i, 0, 0)] + p.S[stressIndex(i, 1, 1)]);
 # else
             I1 = p.S[stressIndex(i,0,0)] + p.S[stressIndex(i,1,1)] + p.S[stressIndex(i,2,2)];
@@ -1058,7 +1066,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
                 S_i[d][d] -= I1/3.0;
             }
 # if DIM == 2
-            double sz = poissons_ratio*(S_i[0][0] + S_i[1][1]);
+            real sz = poissons_ratio*(S_i[0][0] + S_i[1][1]);
 # endif
             //calculate cuda::math::sqrt(J2)
             sqrt_J2 = 0.0;
@@ -1182,8 +1190,8 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 #endif // INTEGRATE_ENERGY
 
 #if NAVIER_STOKES
-    double eta;
-    double zetaij;
+    real eta;
+    real zetaij;
 #endif // NAVIER_STOKES
 
     real vvnablaW;
@@ -1373,7 +1381,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
                 csbar = 0.5 * (particles->cs[i] + particles->cs[j]);
                 smooth = 0.5 * (sml1 + particles->sml[j]);
 
-                const double eps_artvisc = 1e-2;
+                const real eps_artvisc = 1e-2;
                 mu = smooth * vr/(rr + smooth * smooth * eps_artvisc);
 
                 if (mu > muijmax) {

@@ -1,5 +1,6 @@
 #include "../../include/cuda_utils/cuda_launcher.cuh"
 
+
 ExecutionPolicy::ExecutionPolicy() : gridSize(256), blockSize(256), sharedMemBytes(0) {};
 
 ExecutionPolicy::ExecutionPolicy(dim3 _gridSize, dim3 _blockSize, size_t _sharedMemBytes)

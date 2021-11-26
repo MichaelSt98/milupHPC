@@ -14,6 +14,7 @@
 
 #define ENV_LOCAL_RANK "OMPI_COMM_WORLD_LOCAL_RANK"
 
+// see: http://fargo.in2p3.fr/manuals/html/communications.html#mpicuda
 void SetDeviceBeforeInit()
 {
     char * localRankStr = NULL;

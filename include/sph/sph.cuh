@@ -21,7 +21,11 @@ namespace SPH {
         __global__ void nearNeighbourSearch(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
                                             integer numParticles, integer numNodes);
         __global__ void
-        fixedRadiusNN(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
+        fixedRadiusNN(Tree *tree, Particles *particles, integer *interactions, real radius, integer numParticlesLocal,
+                      integer numParticles, integer numNodes);
+
+        __global__ void
+        fixedRadiusNN_New(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
                       integer numParticles, integer numNodes);
 
         __global__ void
@@ -74,8 +78,11 @@ namespace SPH {
 
         namespace Launch {
 
-            real fixedRadiusNN(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
-                          integer numParticles, integer numNodes);
+            real fixedRadiusNN(Tree *tree, Particles *particles, integer *interactions, real radius,
+                               integer numParticlesLocal, integer numParticles, integer numNodes);
+
+            real fixedRadiusNN_New(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
+                               integer numParticles, integer numNodes);
 
             real fixedRadiusNN_Test(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
                                integer numParticles, integer numNodes);

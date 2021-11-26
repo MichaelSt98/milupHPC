@@ -26,7 +26,7 @@ typedef int idInteger;
 #define KEY_MAX ULONG_MAX
 #define DOMAIN_LIST_SIZE 512
 
-#define MAX_DEPTH 256//128
+#define MAX_DEPTH 128
 #define MAX_NUM_INTERACTIONS 180
 
 #define NUM_THREADS_LIMIT_TIME_STEP 256
@@ -177,9 +177,9 @@ private:
 
 #define CUBIC_DOMAINS 0
 
-#define GRAVITY_SIM 1
+#define GRAVITY_SIM 0
 
-#define INTEGRATE_ENERGY 0
+#define INTEGRATE_ENERGY 1
 
 #define INTEGRATE_DENSITY 0
 
@@ -188,7 +188,7 @@ private:
 
 #define SML_CORRECTION 0
 
-#define VARIABLE_SML 1
+#define VARIABLE_SML 0
 
 #define SOLID 0
 

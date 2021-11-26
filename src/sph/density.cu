@@ -163,23 +163,17 @@ namespace SPH {
                 } while (tolerance > 1e-3 && cnt < 10);
                 // write to global memory
                 particles->rho[i] = rho;
-                if (particles->rho[i] < 0.) {
-                    printf("negative rho! rho[%i] = %e\n", i, particles->rho[i]);
+
+                if (particles->rho[i] <= 0.) {
+                    printf("negative or zero rho! rho[%i] = %e\n", i, particles->rho[i]);
                     assert(0);
                 }
-                //if (i % 100 == 0) {
-                //    printf("rho[%i] = %e!\n", i, particles->rho[i]);
-                //}
-                if (particles->rho[i] == 0.) {
-                    printf("density rho[%i] = %f\n", i, particles->rho[i]);
-                }
-                //if (particles->rho[i] > 0.) {
-                //    printf("density: rho[%i] = %f\n", i, particles->rho[i]);
-                //}
             }
         }
 
         real Launch::calculateDensity(::SPH::SPH_kernel kernel, Tree *tree, Particles *particles, int *interactions, int numParticles) {
+            //ExecutionPolicy executionPolicy(numParticles, ::SPH::Kernel::calculateDensity, kernel, tree, particles,
+            //                                interactions, numParticles);
             ExecutionPolicy executionPolicy;
             return cuda::launch(true, executionPolicy, ::SPH::Kernel::calculateDensity, kernel, tree, particles, interactions, numParticles);
         }

@@ -703,7 +703,7 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
                 newBody = true;
             }
         }
-        //__syncthreads(); //TODO: __syncthreads() needed?
+        __syncthreads(); //TODO: __syncthreads() needed?
     }
 }
 

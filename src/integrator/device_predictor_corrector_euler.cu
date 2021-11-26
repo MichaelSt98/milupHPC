@@ -155,19 +155,19 @@ namespace PredictorCorrectorEulerNS {
 // end: just for debugging purposes!!!
 
                 particles->x[i] = particles->x[i] + dt/2 * (predictor->vx[i] + particles->vx[i]);
-                if (i == 12) { //(i % 1000 == 0) {
-                    printf("corrector: x[%i] = %e + %e/2 * (%e + %e)\n", i, particles->x[i], dt, predictor->vx[i],
-                           particles->vx[i]);
-                }
+                //if (i == 12) { //(i % 1000 == 0) {
+                //    printf("corrector: x[%i] = %e + %e/2 * (%e + %e)\n", i, particles->x[i], dt, predictor->vx[i],
+                //           particles->vx[i]);
+                //}
                 particles->vx[i] = particles->vx[i] + dt/2 * (predictor->ax[i] + particles->ax[i] + 2 * particles->g_ax[i]);
-                if (i == 12) { //(i % 1000 == 0) {
-                    printf("corrector: vx[%i] = %e + %e/2 * (%e + %e + 2 * %e)\n", i, particles->vx[i], dt, predictor->ax[i],
-                           particles->ax[i], particles->g_ax);
-                }
+                //if (i == 12) { //(i % 1000 == 0) {
+                //    printf("corrector: vx[%i] = %e + %e/2 * (%e + %e + 2 * %e)\n", i, particles->vx[i], dt, predictor->ax[i],
+                //           particles->ax[i], particles->g_ax);
+                //}
                 particles->ax[i] = 0.5 * (predictor->ax[i] + particles->ax[i]) + particles->g_ax[i];
-                if (i == 12) { //(i % 1000 == 0) {
-                    printf("corrector: ax[%i] = 1/2 * (%e + %e) + %e)\n", i, predictor->ax[i], particles->ax[i], particles->g_ax);
-                }
+                //if (i == 12) { //(i % 1000 == 0) {
+                //    printf("corrector: ax[%i] = 1/2 * (%e + %e) + %e)\n", i, predictor->ax[i], particles->ax[i], particles->g_ax);
+                //}
 #if DIM > 1
                 particles->y[i] = particles->y[i] + dt/2 * (predictor->vy[i] + particles->vy[i]);
                 particles->vy[i] = particles->vy[i] + dt/2 * (predictor->ay[i] + particles->ay[i] + 2 * particles->g_ay[i]);
@@ -243,6 +243,7 @@ namespace PredictorCorrectorEulerNS {
 #endif
 #if INTEGRATE_ENERGY
                 predictor->e[i] = particles->e[i] + dt * particles->dedt[i];
+                // TODO: in principle there should not be a energy floor (but needed for sedov)
                 if (predictor->e[i] < 1e-6) {
                     predictor->e[i] = 1e-6;
                 }
@@ -352,9 +353,9 @@ namespace PredictorCorrectorEulerNS {
 #endif
 #endif
 
-                if (i % 10000 == 0) {
-                    printf("i: %i ax = %e, ay = %e, az = %e\n", i, ax, ay, az);
-                }
+                //if (i % 10000 == 0) {
+                //    printf("i: %i ax = %e, ay = %e, az = %e\n", i, ax, ay, az);
+                //}
 
                 sml = particles->sml[i];
                 temp = cuda::math::sqrt(sml / cuda::math::sqrt(temp));
@@ -376,9 +377,9 @@ namespace PredictorCorrectorEulerNS {
                                         particles->vy[i] * particles->vy[i] +
                                         particles->vz[i] * particles->vz[i]);
 #endif
-                if (i % 10000 == 0) {
-                    printf("i: %i vx = %e, vy = %e, vz = %e\n", i, particles->vx[i], particles->vy[i], particles->vz[i]);
-                }
+                //if (i % 10000 == 0) {
+                //    printf("i: %i vx = %e, vy = %e, vz = %e\n", i, particles->vx[i], particles->vy[i], particles->vz[i]);
+                //}
 
                 vmax = cuda::math::max(temp, vmax);
 
@@ -444,12 +445,12 @@ namespace PredictorCorrectorEulerNS {
                     }
                     // set new timestep
                     *simulationTime->dt = dtx = cuda::math::min(COURANT_FACT*courant, FORCES_FACT*forces);
-                    printf("courant: dt = %e (courant = %e)\n", COURANT_FACT*courant, courant);
-                    printf("force  : dt = %e (forces = %e)\n", FORCES_FACT*forces, forces);
+                    //printf("courant: dt = %e (courant = %e)\n", COURANT_FACT*courant, courant);
+                    //printf("force  : dt = %e (forces = %e)\n", FORCES_FACT*forces, forces);
 
                     if (vmax > 0. && searchRadius > 0.) { // TODO: searchRadius = 0 for 1 process
                         *simulationTime->dt = cuda::math::min(*simulationTime->dt, searchRadius / (2 * vmax));
-                        printf("search : dt = %e (vmax = %e)\n", searchRadius / (2 * vmax), vmax);
+                        //printf("search : dt = %e (vmax = %e)\n", searchRadius / (2 * vmax), vmax);
                     }
 #if INTEGRATE_ENERGY
                     *simulationTime->dt = cuda::math::min(*simulationTime->dt, dte);
@@ -459,13 +460,13 @@ namespace PredictorCorrectorEulerNS {
 #endif
 
                     *simulationTime->dt = cuda::math::min(*simulationTime->dt, dtartvisc);
-                    printf("viscos : dt = %e\n", dtartvisc);
+                    //printf("viscos : dt = %e\n", dtartvisc);
 
                     *simulationTime->dt = cuda::math::min(*simulationTime->dt, *simulationTime->endTime - *simulationTime->currentTime);
                     if (*simulationTime->dt > *simulationTime->dt_max) {
                         *simulationTime->dt = *simulationTime->dt_max;
                     }
-                    printf("max    : dt = %e\n", *simulationTime->dt_max);
+                    //printf("max    : dt = %e\n", *simulationTime->dt_max);
 
                     //printf("Time Step Information: dt(v and x): %.17e dtS: %.17e dte: %.17e dtrho: %.17e dtdamage: %.17e dtalpha: %.17e dtalpha_epspor: %.17e dtepsilon_v: %.17e\n", dtx, dtS, dte, dtrho, dtdamage, dtalpha, dtalpha_epspor, dtepsilon_v);
                     //printf("time: %.17e timestep set to %.17e, integrating until %.17e \n", currentTimeD, dt, endTimeD);

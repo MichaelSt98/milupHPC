@@ -53,6 +53,8 @@ void PredictorCorrectorEuler::integrate(int step) {
 
     real time_elapsed;
 
+    Timer timerRhs;
+
     while (*simulationTimeHandler->h_currentTime < *simulationTimeHandler->h_endTime) {
 
         printf("removing particles...\n");
@@ -66,7 +68,9 @@ void PredictorCorrectorEuler::integrate(int step) {
             dynamicLoadBalancing();
         }
 
+        timerRhs.reset();
         time += rhs(step, true, true);
+        Logger(TIME) << "rhsElapsed: " << timerRhs.elapsed();
 
         // ------------------------------------------------------------------------------------------------------------
         //simulationTimeHandler->copy(To::host);
@@ -102,7 +106,10 @@ void PredictorCorrectorEuler::integrate(int step) {
         Logger(INFO) << "setPointer()...";
         particleHandler->setPointer(&integratedParticles[0]);
 
+        timerRhs.reset();
         time += rhs(step, false, false);
+        Logger(TIME) << "rhsElapsed: " << timerRhs.elapsed();
+        //Logger(TIME) << "rhs: " << time << " ms";
 
         Logger(INFO) << "resetPointer()...";
         particleHandler->resetPointer();
@@ -113,10 +120,6 @@ void PredictorCorrectorEuler::integrate(int step) {
                                                                      *simulationTimeHandler->h_dt, //(real) simulationParameters.timestep,
                                                                      numParticlesLocal);
 
-        Logger(TIME) << "rhs: " << time << " ms";
-
-        time_elapsed = timer.elapsed();
-        Logger(TIME) << "rhs elapsed: " << time_elapsed << " ms";
 
         *simulationTimeHandler->h_currentTime += *simulationTimeHandler->h_dt;
         simulationTimeHandler->copy(To::device);
@@ -124,6 +127,9 @@ void PredictorCorrectorEuler::integrate(int step) {
         Logger(INFO) << "simulation time: " << *simulationTimeHandler->h_currentTime << "( STEP: " << step << ", endTime = " << *simulationTimeHandler->h_endTime << ")";
 
     }
+
+    time_elapsed = timer.elapsed();
+    Logger(TIME) << "integration step elapsed: " << time_elapsed << " ms";
 
     //Gravity::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal,
     //                                (real)simulationParameters.timestep, (real)simulationParameters.dampening);
