@@ -12,6 +12,74 @@ namespace SPH {
             int inc;
             int ip;
             int d;
+            real W, Wj, dx[DIM], dWdx[DIM], dWdr;
+            real rho, sml;
+            real x;
+#if DIM > 1
+            real y;
+#if DIM == 3
+            real z;
+#endif
+#endif
+
+            inc = blockDim.x * gridDim.x;
+            for (i = threadIdx.x + blockIdx.x * blockDim.x; i < numParticles; i += inc) {
+
+                x = particles->x[i];
+#if DIM > 1
+                y = particles->y[i];
+#if DIM == 3
+                z = particles->z[i];
+#endif
+#endif
+
+                sml = particles->sml[i];
+
+                #pragma unroll
+                for (d = 0; d < DIM; d++) {
+                    dx[d] = 0;
+                }
+
+                kernel(&W, dWdx, &dWdr, dx, sml);
+                // "self-density"
+                rho = particles->mass[i] * W;
+
+                // sph sum for particle i
+                for (j = 0; j < particles->noi[i]; j++) {
+                    ip = interactions[i * MAX_NUM_INTERACTIONS + j];
+
+#if (VARIABLE_SML || INTEGRATE_SML)
+                    sml = 0.5 * (particles->sml[i] + particles->sml[ip]);
+#endif
+
+                    dx[0] = x - particles->x[ip];
+#if DIM > 1
+                    dx[1] = y - particles->y[ip];
+#if DIM > 2
+                    dx[2] = z - particles->z[ip];
+#endif
+#endif
+
+                    kernel(&W, dWdx, &dWdr, dx, sml);
+                    rho += particles->mass[ip] * W;
+                }
+
+                particles->rho[i] = rho;
+
+                if (particles->rho[i] <= 0.) {
+                    printf("negative or zero rho! rho[%i] = %e\n", i, particles->rho[i]);
+                    assert(0);
+                }
+            }
+        }
+
+        /*__global__ void calculateDensity(::SPH::SPH_kernel kernel, Tree *tree, Particles *particles, int *interactions, int numParticles) {
+
+            int i;
+            int j;
+            int inc;
+            int ip;
+            int d;
             real W;
             real Wj;
             real dx[DIM];
@@ -29,9 +97,7 @@ namespace SPH {
 
             inc = blockDim.x * gridDim.x;
             for (i = threadIdx.x + blockIdx.x * blockDim.x; i < numParticles; i += inc) {
-                //if (EOS_TYPE_IGNORE == matEOS[p_rhs.materialId[i]] || p_rhs.materialId[i] == EOS_TYPE_IGNORE) {
-                //    continue;
-                //}
+
                 tolerance = 0.0;
                 int cnt = 0;
 
@@ -51,14 +117,13 @@ namespace SPH {
                     sml = particles->sml[i];
 
                     // self density is m_i W_ii
+                    #pragma unroll
                     for (d = 0; d < DIM; d++) {
                         dx[d] = 0;
                     }
 
                     kernel(&W, dWdx, &dWdr, dx, sml);
-//#if SHEPARD_CORRECTION
-//            W /= p_rhs.shepard_correction[i];
-//#endif
+
                     rho = particles->mass[i] * W;
                     if (rho == 0.0) {
                         printf("%i: rho is %f W: %e m: %e x = (%e, %e, %e) sml = %e\n", i, rho, W, particles->mass[i],
@@ -91,22 +156,19 @@ namespace SPH {
                 r = cuda::math::sqrt(r);
 #endif // SML_CORRECTION
 
-//#if AVERAGE_KERNELS
-//                kernel(&W, dWdx, &dWdr, dx, p.h[i]);
-//                Wj = 0;
-//                kernel(&Wj, dWdx, &dWdr, dx, p.h[j]);
-//# if SHEPARD_CORRECTION
-//                W /= p_rhs.shepard_correction[i];
-//                Wj /= p_rhs.shepard_correction[j];
-//# endif
-//                W = 0.5 * (W + Wj);
-//#else
+#if AVERAGE_KERNELS
+                kernel(&W, dWdx, &dWdr, dx, p.h[i]);
+                Wj = 0;
+                kernel(&Wj, dWdx, &dWdr, dx, p.h[j]);
+#if SHEPARD_CORRECTION
+                W /= p_rhs.shepard_correction[i];
+                Wj /= p_rhs.shepard_correction[j];
+#endif
+                W = 0.5 * (W + Wj);
+#else
                         kernel(&W, dWdx, &dWdr, dx, sml);
-//# if SHEPARD_CORRECTION
-//                W /= p_rhs.shepard_correction[i];
-//# endif
-//                // contribution of interaction
-//#endif // AVERAGE_KERNELS
+                // contribution of interaction
+#endif // AVERAGE_KERNELS
 
 #if SML_CORRECTION
                 sml_omega_sum += particles->mass[ip] * (-1) * (DIM * W/sml + (r / sml) * dWdr);
@@ -154,8 +216,7 @@ namespace SPH {
                 real r_temp = cuda::math::max(x_radius, y_radius);
                 r = cuda::math::max(r_temp, z_radius); //TODO: (0.5 * r) or (1.0 * r)
 #endif
-                ::SPH::Kernel::redoNeighborSearch(tree, particles, i,
-                        interactions, r, numParticles, 0);
+                ::SPH::Kernel::redoNeighborSearch(tree, particles, i, interactions, r, numParticles, 0);
                 cnt++;
             }
 #endif // SML_CORRECTION
@@ -169,7 +230,7 @@ namespace SPH {
                     assert(0);
                 }
             }
-        }
+        }*/
 
         real Launch::calculateDensity(::SPH::SPH_kernel kernel, Tree *tree, Particles *particles, int *interactions, int numParticles) {
             //ExecutionPolicy executionPolicy(numParticles, ::SPH::Kernel::calculateDensity, kernel, tree, particles,

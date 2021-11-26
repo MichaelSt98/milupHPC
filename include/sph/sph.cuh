@@ -18,19 +18,17 @@ namespace SPH {
 
     namespace Kernel {
 
-        __global__ void nearNeighbourSearch(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
-                                            integer numParticles, integer numNodes);
-        __global__ void
-        fixedRadiusNN(Tree *tree, Particles *particles, integer *interactions, real radius, integer numParticlesLocal,
-                      integer numParticles, integer numNodes);
+        __global__ void fixedRadiusNN_bruteForce(Tree *tree, Particles *particles, integer *interactions,
+                                                 integer numParticlesLocal, integer numParticles, integer numNodes);
 
-        __global__ void
-        fixedRadiusNN_New(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
-                      integer numParticles, integer numNodes);
+        __global__ void fixedRadiusNN(Tree *tree, Particles *particles, integer *interactions, real radius,
+                                      integer numParticlesLocal, integer numParticles, integer numNodes);
 
-        __global__ void
-        fixedRadiusNN_Test(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
-                                    integer numParticles, integer numNodes);
+        __global__ void fixedRadiusNN_withinBox(Tree *tree, Particles *particles, integer *interactions,
+                                                integer numParticlesLocal, integer numParticles, integer numNodes);
+
+        __global__ void fixedRadiusNN_sharedMemory(Tree *tree, Particles *particles, integer *interactions,
+                                                   integer numParticlesLocal, integer numParticles, integer numNodes);
 
         __global__ void fixedRadiusNN_variableSML(Material *materials, Tree *tree, Particles *particles, integer *interactions,
                                                   integer numParticlesLocal, integer numParticles,
@@ -78,14 +76,17 @@ namespace SPH {
 
         namespace Launch {
 
+            real fixedRadiusNN_bruteForce(Tree *tree, Particles *particles, integer *interactions,
+                                          integer numParticlesLocal, integer numParticles, integer numNodes);
+
             real fixedRadiusNN(Tree *tree, Particles *particles, integer *interactions, real radius,
                                integer numParticlesLocal, integer numParticles, integer numNodes);
 
-            real fixedRadiusNN_New(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
-                               integer numParticles, integer numNodes);
+            real fixedRadiusNN_sharedMemory(Tree *tree, Particles *particles, integer *interactions,
+                                            integer numParticlesLocal, integer numParticles, integer numNodes);
 
-            real fixedRadiusNN_Test(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
-                               integer numParticles, integer numNodes);
+            real fixedRadiusNN_withinBox(Tree *tree, Particles *particles, integer *interactions,
+                                         integer numParticlesLocal, integer numParticles, integer numNodes);
 
             real fixedRadiusNN_variableSML(Material *materials, Tree *tree, Particles *particles, integer *interactions,
                                            integer numParticlesLocal, integer numParticles,

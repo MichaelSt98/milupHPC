@@ -9,6 +9,457 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 
     real W;
     real tmp;
+
+    real ax;
+#if DIM > 1
+    real ay;
+#if DIM == 3
+    real az;
+#endif
+#endif
+
+    real sml;
+
+    int matId, matIdj;
+    real sml1;
+
+    real vxj, vyj, vzj;
+
+    real vr;
+    real rr;
+    real rhobar;
+    real mu;
+    real muijmax;
+    real smooth;
+    real csbar;
+    real alpha, beta;
+
+#if BALSARA_SWITCH
+    real fi, fj;
+    real curli, curlj;
+    const real eps_balsara = 1e-4;
+#endif
+
+#if ARTIFICIAL_STRESS
+    real artf = 0;
+#endif
+
+    int d;
+    int dd;
+    int e;
+
+    real dr[DIM];
+    real dv[DIM];
+
+    real x, vx;
+#if DIM > 1
+    real y, vy;
+#if DIM == 3
+    real z, vz;
+#endif
+#endif
+
+    real drhodt;
+
+#if INTEGRATE_ENERGY
+    real dedt;
+#endif
+
+    real dvx;
+#if DIM > 1
+    real dvy;
+#if DIM == 3
+    real dvz;
+#endif
+#endif
+
+#if NAVIER_STOKES
+    real eta;
+    real zetaij;
+#endif
+
+    real vvnablaW;
+    real dWdr;
+    real dWdrj;
+    real dWdx[DIM];
+    real Wj;
+    real dWdxj[DIM];
+    real pij = 0;
+    real r;
+    real accels[DIM];
+    real accelsj[DIM];
+    real accelshearj[DIM];
+
+    inc = blockDim.x * gridDim.x;
+    for (i = threadIdx.x + blockIdx.x * blockDim.x; i < numRealParticles; i += inc) {
+
+        matId = particles->materialId[i];
+
+        numInteractions = particles->noi[i];
+
+        ax = 0;
+#if DIM > 1
+        ay = 0;
+#if DIM == 3
+        az = 0;
+#endif
+#endif
+
+        alpha = materials[matId].artificialViscosity.alpha; //matAlpha[matId];
+        beta = materials[matId].artificialViscosity.beta; //matBeta[matId];
+        muijmax = 0;
+
+        sml1 = particles->sml[i];
+
+        drhodt = 0;
+#if INTEGRATE_ENERGY
+        dedt = 0;
+#endif
+#if INTEGRATE_SML
+        particles->dsmldt[i] = 0.0;
+#endif
+
+        #pragma unroll
+        for (d = 0; d < DIM; d++) {
+            accels[d] = 0.0;
+            accelsj[d] = 0.0;
+            accelshearj[d] = 0.0;
+        }
+        sml = particles->sml[i];
+
+        x = particles->x[i];
+#if DIM > 1
+        y = particles->y[i];
+#if DIM > 2
+        z = particles->z[i];
+#endif
+#endif
+        vx = particles->vx[i];
+#if DIM > 1
+        vy = particles->vy[i];
+#if DIM > 2
+        vz = particles->vz[i];
+#endif
+#endif
+
+
+        //particles->dxdt[i] = 0;
+        particles->ax[i] = 0;
+#if DIM > 1
+        //p.dydt[i] = 0;
+        particles->ay[i] = 0;
+#if DIM > 2
+        //p.dzdt[i] = 0;
+        particles->az[i] = 0;
+#endif
+#endif
+
+        particles->drhodt[i] = 0.0;
+#if INTEGRATE_ENERGY
+        particles->dedt[i] = 0.0;
+#endif
+#if INTEGRATE_SML
+        particles->dsmldt[i] = 0.0;
+#endif
+
+        // if particle has no interactions continue and set all derivs to zero
+        // but not the accels (these are handled in the tree for gravity)
+        if (numInteractions < 1) {
+            // finally continue
+            continue;
+        }
+
+#if BALSARA_SWITCH
+        curli = 0;
+        for (d = 0; d < DIM; d++) {
+            curli += p_rhs.curlv[i*DIM+d]*p_rhs.curlv[i*DIM+d];
+        }
+        curli = cuda::math::sqrt(curli);
+        fi = cuda::math::abs(p_rhs.divv[i]) / (cuda::math::abs(p_rhs.divv[i]) + curli + eps_balsara*p.cs[i]/p.h[i]);
+#endif
+
+        // THE MAIN SPH LOOP FOR ALL INTERNAL FORCES
+        // loop over interaction partners for SPH sums
+        for (k = 0; k < numInteractions; k++) {
+            //matIdj = EOS_TYPE_IGNORE;
+            // the interaction partner
+            j = interactions[i * MAX_NUM_INTERACTIONS + k];
+
+            matIdj = particles->materialId[j];
+
+            #pragma unroll
+            for (d = 0; d < DIM; d++) {
+                accelsj[d] = 0.0;
+            }
+
+#if (VARIABLE_SML || INTEGRATE_SML) // || DEAL_WITH_TOO_MANY_INTERACTIONS)
+            sml = 0.5 * (particles->sml[i] + particles->sml[j]);
+#endif
+
+            vxj = particles->vx[j];
+#if DIM > 1
+            vyj = particles->vy[j];
+#if DIM > 2
+            vzj = particles->vz[j];
+#endif
+#endif
+            // relative vector
+            dr[0] = x - particles->x[j];
+#if DIM > 1
+            dr[1] = y - particles->y[j];
+#if DIM > 2
+            dr[2] = z - particles->z[j];
+#endif
+#endif
+            r = 0;
+            #pragma unroll
+            for (e = 0; e < DIM; e++) {
+                r += dr[e]*dr[e];
+                dWdx[e] = 0.0;
+#if AVERAGE_KERNELS
+                dWdxj[e] = 0.0;
+#endif
+            }
+            W = 0.0;
+            dWdr = 0.0;
+#if AVERAGE_KERNELS
+            Wj = 0.0;
+            dWdrj = 0.0;
+#endif
+            r = cuda::math::sqrt(r);
+
+            // get kernel values for this interaction
+#if AVERAGE_KERNELS
+            kernel(&W, dWdx, &dWdr, dr, particles->sml[i]);
+            kernel(&Wj, dWdxj, &dWdrj, dr, particles->sml[j]);
+# if SHEPARD_CORRECTION
+            W /= p_rhs.shepard_correction[i];
+            Wj /= p_rhs.shepard_correction[j];
+            for (e = 0; e < DIM; e++) {
+                dWdx[e] /= p_rhs.shepard_correction[i];
+                dWdxj[e] /= p_rhs.shepard_correction[j];
+            }
+            dWdr /= p_rhs.shepard_correction[i];
+            dWdrj /= p_rhs.shepard_correction[j];
+
+            W = 0.5 * (W + Wj);
+            dWdr = 0.5 * (dWdr + dWdrj);
+            for (e = 0; e < DIM; e++) {
+                dWdx[e] = 0.5 * (dWdx[e] + dWdxj[e]);
+            }
+# endif // SHEPARD_CORRECTION
+#else
+            kernel(&W, dWdx, &dWdr, dr, sml);
+#if SHEPARD_CORRECTION
+            W /= p_rhs.shepard_correction[i];
+            for (e = 0; e < DIM; e++) {
+                dWdx[e] /= p_rhs.shepard_correction[i];
+            }
+            dWdr /= p_rhs.shepard_correction[i];
+#endif
+#endif
+
+            dv[0] = dvx = vx - vxj;
+#if DIM > 1
+            dv[1] = dvy = vy - vyj;
+#if DIM > 2
+            dv[2] = dvz = vz - vzj;
+#endif
+#endif
+
+            vvnablaW = dvx * dWdx[0];
+#if DIM > 1
+            vvnablaW += dvy * dWdx[1];
+#if DIM > 2
+            vvnablaW += dvz * dWdx[2];
+#endif
+#endif
+
+            rr = 0.0;
+            vr = 0.0;
+            #pragma unroll
+            for (e = 0; e < DIM; e++) {
+                rr += dr[e]*dr[e];
+                vr += dv[e]*dr[e];
+                //printf("vr += %e * %e\n", dv[e], dr[e]);
+            }
+            //printf("pij: vr = %e\n", vr);
+
+            pij = 0.0;
+
+            // artificial viscosity force only if v_ij * r_ij < 0
+            if (vr < 0) {
+                csbar = 0.5*(particles->cs[i] + particles->cs[j]);
+                //if (std::isnan(csbar)) {
+                //    printf("csbar = %e, cs[%i] = %e, cs[%i] = %e\n", csbar, i, particles->cs[i], j, particles->cs[j]);
+                //}
+                smooth = 0.5*(sml1 + particles->sml[j]);
+
+                const real eps_artvisc = 1e-2;
+                mu = smooth*vr/(rr + smooth*smooth*eps_artvisc);
+
+                if (mu > muijmax) {
+                    muijmax = mu;
+                }
+                rhobar = 0.5*(particles->rho[i] + particles->rho[j]);
+# if BALSARA_SWITCH
+                curlj = 0;
+                for (d = 0; d < DIM; d++) {
+                    curlj += p_rhs.curlv[j*DIM+d]*p_rhs.curlv[j*DIM+d];
+                }
+                curlj = cuda::math::sqrt(curlj);
+                fj = cuda::math::abs(p_rhs.divv[j]) / (cuda::math::abs(p_rhs.divv[j]) + curlj + eps_balsara*p.cs[j]/p.h[j]);
+                mu *= (fi+fj)/2.;
+# endif
+                pij = (beta*mu - alpha*csbar) * mu/rhobar;
+                //if (std::isnan(pij)) {
+                //    printf("pij = (%e * %e - %e * %e) * (%e/%e)\n", beta, mu, alpha, csbar, mu, rhobar);
+                //}
+            }
+
+#if NAVIER_STOKES
+            eta = (particles->eta[i] + particles->eta[j]) * 0.5 ;
+            for (d = 0; d < DIM; d++) {
+                accelshearj[d] = 0;
+                for (dd = 0; dd < DIM; dd++) {
+# if (SPH_EQU_VERSION == 1)
+#  if SML_CORRECTION
+                    accelshearj[d] += eta * particles->mass[j] * (particles->Tshear[CudaUtils::stressIndex(j,d,dd)]/(particles->sml_omega[j]*particles->rho[j]*particles->rho[j])+ particles->Tshear[stressIndex(i,d,dd)]/(particles->sml_omega[i]*particles->rho[i]*particles->rho[i])) *dWdx[dd];
+#  else
+                    accelshearj[d] += eta * particles->mass[j] * (particles->Tshear[CudaUtils::stressIndex(j,d,dd)]/(particles->rho[j]*particles->rho[j]) + particles->Tshear[CudaUtils::stressIndex(i,d,dd)]/(particles->rho[i]*particles->rho[i])) *dWdx[dd];
+#  endif
+# elif (SPH_EQU_VERSION == 2)
+#  if SML_CORRECTION
+                    accelshearj[d] += eta * particles->mass[j] * (particles->Tshear[CudaUtils::stressIndex(j,d,dd)]+particles->Tshear[CudaUtils::stressIndex(i,d,dd)])/(particles->sml_omega[i]*particles->rho[i]*particles->sml_omega[j]*particles->rho[j]) *dWdx[dd];
+#  else
+                    accelshearj[d] += eta * particles->mass[j] * (particles->Tshear[CudaUtils::stressIndex(j,d,dd)]+particles->Tshear[CudaUtils::stressIndex(i,d,dd)])/(particles->rho[i]*particles->rho[j]) *dWdx[dd];
+#  endif
+# endif // SPH_EQU_VERSION
+                }
+            }
+#if KLEY_VISCOSITY //artificial bulk viscosity with f=0.5
+            zetaij = 0.0;
+            if (vr < 0) { // only for approaching particles
+                zetaij = -0.5 * (0.25*(p.h[i] + p.h[j])*(p.h[i]+p.h[j])) * (p.rho[i]+p.rho[j])*0.5 * (p_rhs.divv[i] + p_rhs.divv[j])*0.5;
+            }
+            for (d = 0; d < DIM; d++) {
+# if (SPH_EQU_VERSION == 1)
+                accelshearj[d] += zetaij * p.m[j] * (p_rhs.divv[i] + p_rhs.divv[j]) /(p.rho[i]*p.rho[j]) * dWdx[d];
+# elif (SPH_EQU_VERSION == 2)
+                accelshearj[d] += zetaij * p.m[j] * (p_rhs.divv[i]/(p.rho[i]*p.rho[i]) + p_rhs.divv[j]/(p.rho[j]*p.rho[j])) * dWdx[d];
+# endif
+            }
+#endif // KLEY_VISCOSITY
+#endif // NAVIER_STOKES
+
+#if (SPH_EQU_VERSION == 1)
+            #pragma unroll
+            for (d = 0; d < DIM; d++) {
+                accelsj[d] =  -particles->mass[j] * (particles->p[i]/(particles->rho[i]*particles->rho[i]) + particles->p[j]/(particles->rho[j]*particles->rho[j])) * dWdx[d];
+                accels[d] += accelsj[d];
+            }
+#elif (SPH_EQU_VERSION == 2)
+            #pragma unroll
+            for (d = 0; d < DIM; d++) {
+                accelsj[d] =  -particles->mass[j] * ((particles->p[i]+particles->p[j])/(particles->rho[i]*particles->rho[j])) * dWdx[d];
+                accels[d] += accelsj[d];
+            }
+#endif // SPH_EQU_VERSION
+
+#if NAVIER_STOKES
+            #pragma unroll
+            for (d = 0; d < DIM; d++) {
+                accels[d] += accelshearj[d];
+            }
+#endif
+
+            accels[0] += particles->mass[j]*(-pij)*dWdx[0];
+#if DIM > 1
+            accels[1] += particles->mass[j]*(-pij)*dWdx[1];
+#if DIM == 3
+            accels[2] += particles->mass[j]*(-pij)*dWdx[2];
+#endif
+#endif
+
+            //if (std::isnan(accels[0]) || std::isnan(accels[1]) || std::isnan(accels[2])) {
+            //    printf("accels = (%e, %e, %e), mass = %e, pij = %e dWdx = (%e, %e, %e)\n", accels[0], accels[1], accels[2],
+            //           particles->mass[j], pij, dWdx[0], dWdx[1], dWdx[2]);
+            //    assert(0);
+            //}
+
+
+            drhodt += particles->rho[i]/particles->rho[j] * particles->mass[j] * vvnablaW;
+
+#if INTEGRATE_SML
+            // minus since vvnablaW is v_i - v_j \nabla W_ij
+#if TENSORIAL_CORRECTION
+            for (d = 0; d < DIM; d++) {
+                for (dd = 0; dd < DIM; dd++) {
+                    particles->dsmldt[i] -= 1./DIM * particles->sml[i] * particles->mass[j]/particles->rho[j] * dv[d] * dWdx[dd] * particles->tensorialCorrectionMatrix[i*DIM*DIM+d*DIM+dd];
+                }
+            }
+#endif
+#endif // INTEGRATE_SML
+
+#if INTEGRATE_ENERGY
+            if (true) { // !isRelaxationRun) {
+                dedt += 0.5 * particles->mass[j] * pij * vvnablaW;
+                //if (dedt < 0.) {
+                //    printf("dedt (= %e) += 0.5 * %e * %e * %e (= %e)\n", dedt, particles->mass[j], pij, vvnablaW, particles->mass[j] * pij * vvnablaW);
+                //}
+            }
+
+            // remember, accelsj  are accelerations by particle j, and dv = v_i - v_j
+            dedt += 0.5 * accelsj[0] * -dvx;
+#  if DIM > 1
+            dedt += 0.5 * accelsj[1] * -dvy;
+#  endif
+#  if DIM > 2
+            dedt += 0.5 * accelsj[2] * -dvz;
+#  endif
+            //if (dedt < 0.) {
+            //    printf("dedt (= %e) += (%e + %e + %e) = %e dv (%e, %e, %e)\n", dedt, 0.5 * accelsj[0] * -dvx, 0.5 * accelsj[1] * -dvy, 0.5 * accelsj[2] * -dvz,
+            //           0.5 * accelsj[0] * -dvx + 0.5 * accelsj[1] * -dvy + 0.5 * accelsj[2] * -dvz, dvx, dvy, dvz);
+            //}
+
+#endif // INTEGRATE ENERGY
+
+        } // neighbors loop end
+
+        ax = accels[0];
+#if DIM > 1
+        ay = accels[1];
+#endif
+#if DIM > 2
+        az = accels[2];
+#endif
+        particles->ax[i] = ax;
+#if DIM > 1
+        particles->ay[i] = ay;
+#endif
+#if DIM > 2
+        particles->az[i] = az;
+#endif
+
+        particles->drhodt[i] = drhodt;
+
+
+#if INTEGRATE_ENERGY
+        particles->dedt[i] = dedt;
+#endif // INTEGRATE_ENERGY
+
+    } // particle loop end
+
+}
+
+/*__global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *materials, Tree *tree, Particles *particles,
+                                            int *interactions, int numRealParticles) {
+
+    int i, k, inc, j, numInteractions;
+    int f, kk;
+
+    real W;
+    real tmp;
     real ax, ay;
     real sml;
 #if DIM == 3
@@ -240,18 +691,18 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 
             //boundia = 0;
             //boundia = p_rhs.materialId[j] == BOUNDARY_PARTICLE_ID;
-            /*
-             * now, if the interaction partner is a BOUNDARY_PARTICLE
-             * we need to determine the correct velocity, pressure and stress
-             * for it
-             */
+            //
+            // now, if the interaction partner is a BOUNDARY_PARTICLE
+            // we need to determine the correct velocity, pressure and stress
+            // for it
+            //
 #if (VARIABLE_SML || INTEGRATE_SML || DEAL_WITH_TOO_MANY_INTERACTIONS)
             sml = 0.5*(particles->sml[i] + particles->sml[j]);
 #endif
-            if (false/*boundia*/) {
-                /* set quantities for boundary particle */
+            if (false) { //boundia) {
+                // set quantities for boundary particle
                 //setQuantitiesFixedVirtualParticles(i, j, &vxj, &vyj, &vzj, &particles->rho[j], &particles->p[j], Sj);
-            } else { /* no boundary particle, just copy */
+            } else { // no boundary particle, just copy
                 vxj = particles->vx[j];
 #if DIM > 1
                 vyj = particles->vy[j];
@@ -564,11 +1015,11 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 
                     // the version as suggested by Libersky, Randles, Carney, Dickinson 1997
                     // unstable for a rotating rod!
-/*                    for (e = 0; e < DIM; e++) {
-                        accelsj[d] +=  -p.m[j]/(p.rho[i]*p.rho[j]) * (sigma_j[d][dd] -
-                                sigma_i[d][dd]) * dWdr/r * dr[e] *
-                            p_rhs.tensorialCorrectionMatrix[i*DIM*DIM+dd*DIM+e];
-                      } */
+                    // for (e = 0; e < DIM; e++) {
+                    //    accelsj[d] +=  -p.m[j]/(p.rho[i]*p.rho[j]) * (sigma_j[d][dd] -
+                    //            sigma_i[d][dd]) * dWdr/r * dr[e] *
+                    //        p_rhs.tensorialCorrectionMatrix[i*DIM*DIM+dd*DIM+e];
+                    //  }
 
 // Correction for tensile instability fix according to Monaghan, jcp 159 (2000)
 # if ARTIFICIAL_STRESS
@@ -586,21 +1037,21 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
                     // bs...
                    // accels[d] += p.m[j] * (sigma_j[d][dd]/pow(p.rho[j],2) + sigma_i[d][dd]/pow(p.rho[i],2)) * dWdr/r * (-dr[dd]) * (-dr[d]) * p_rhs.tensorialCorrectionMatrix[i*DIM*DIM+d*DIM+dd];
 
-                   /*if (std::isnan(particles->mass[j]*(-pij)*dWdx[0])
-#if DIM > 1
-                || std::isnan(particles->mass[j]*(-pij)*dWdx[1])
-#if DIM == 3
-                || std::isnan(particles->mass[j]*(-pij)*dWdx[2])
-#endif
-#endif
-                    ) {
-#if DIM == 3
-                printf("NAN!!! index = %i, accels += (%f, %f, %f) mass[%i] = %e, pij = %e, dWdx = (%e, %e, %e) noi = %i\n", i, particles->mass[j]*(-pij)*dWdx[0],
-                       particles->mass[j]*(-pij)*dWdx[1], particles->mass[j]*(-pij)*dWdx[2], particles->noi[i],
-                       particles->mass[j], pij, dWdx[0], dWdx[1], dWdx[2]);
-#endif
-                assert(0);
-            }*/
+                   // if (std::isnan(particles->mass[j]*(-pij)*dWdx[0])
+                   //#if DIM > 1
+                   //|| std::isnan(particles->mass[j]*(-pij)*dWdx[1])
+                   //#if DIM == 3
+                   //|| std::isnan(particles->mass[j]*(-pij)*dWdx[2])
+                   //#endif
+                   //#endif
+                   //) {
+                   //#if DIM == 3
+                //printf("NAN!!! index = %i, accels += (%f, %f, %f) mass[%i] = %e, pij = %e, dWdx = (%e, %e, %e) noi = %i\n", i, particles->mass[j]*(-pij)*dWdx[0],
+                //       particles->mass[j]*(-pij)*dWdx[1], particles->mass[j]*(-pij)*dWdx[2], particles->noi[i],
+                //       particles->mass[j], pij, dWdx[0], dWdx[1], dWdx[2]);
+                //#endif
+                //assert(0);
+            //}
 
                     accels[d] += accelsj[d];
                 }
@@ -720,14 +1171,14 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 
 #if INTEGRATE_ENERGY
 # if ARTIFICIAL_VISCOSITY
-            if (true/*!isRelaxationRun*/) {
+            if (true) { // !isRelaxationRun) {
 #  if SML_CORRECTION
                 dedt += particles->mass[j] * vvnablaW;
 #  else
                 dedt += 0.5 * particles->mass[j] * pij * vvnablaW;
-                /*if (dedt < 0.) {
-                    printf("dedt (= %e) += 0.5 * %e * %e * %e (= %e)\n", dedt, particles->mass[j], pij, vvnablaW, particles->mass[j] * pij * vvnablaW);
-                }*/
+                //if (dedt < 0.) {
+                //    printf("dedt (= %e) += 0.5 * %e * %e * %e (= %e)\n", dedt, particles->mass[j], pij, vvnablaW, particles->mass[j] * pij * vvnablaW);
+                //}
 #  endif // SML_CORRECTION
             }
 # endif
@@ -761,10 +1212,10 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 #  if DIM > 2
             dedt += 0.5 * accelsj[2] * -dvz;
 #  endif
-            /*if (dedt < 0.) {
-                printf("dedt (= %e) += (%e + %e + %e) = %e dv (%e, %e, %e)\n", dedt, 0.5 * accelsj[0] * -dvx, 0.5 * accelsj[1] * -dvy, 0.5 * accelsj[2] * -dvz,
-                       0.5 * accelsj[0] * -dvx + 0.5 * accelsj[1] * -dvy + 0.5 * accelsj[2] * -dvz, dvx, dvy, dvz);
-            }*/
+            //if (dedt < 0.) {
+            //    printf("dedt (= %e) += (%e + %e + %e) = %e dv (%e, %e, %e)\n", dedt, 0.5 * accelsj[0] * -dvx, 0.5 * accelsj[1] * -dvy, 0.5 * accelsj[2] * -dvz,
+            //           0.5 * accelsj[0] * -dvx + 0.5 * accelsj[1] * -dvy + 0.5 * accelsj[2] * -dvz, dvx, dvy, dvz);
+            //}
 # endif // SOLID
 
 #endif // INTEGRATE ENERGY
@@ -862,7 +1313,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 #endif
 
 #if EPSALPHA_POROSITY
-        /* calculate the change in epsilon and alpha per time */
+        // calculate the change in epsilon and alpha per time
         if (matEOS[matId] == EOS_TYPE_EPSILON) {
             real dalpha_epspordeps = 0.0;
             p.depsilon_vdt[i] = 0.0;
@@ -956,7 +1407,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             }
 
 # if JC_PLASTICITY
-            /* calculate plastic strain rate tensor from dSdt */
+            // calculate plastic strain rate tensor from dSdt
             real K2 = 0;
             for (d = 0; d < DIM; d++) {
                 for (e = 0; e < DIM; e++) {
@@ -965,22 +1416,22 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             }
             p.edotp[i] = 2./3. * cuda::math::sqrt(3*K2);
 
-            /* change of temperature due to plastic deformation */
+            // change of temperature due to plastic deformation
             real work = 0;
             for (d = 0; d < DIM; d++) {
                 for (e = 0; e < DIM; e++) {
                     work += sigma_i[d][e] * edotp[d][e];
                 }
             }
-            /* these are the particles that fail the adiabatic assumption */
+            // these are the particles that fail the adiabatic assumption
             if (work < 0) {
-                /*  fprintf(stderr, "Warning: work related to plastic strain is negative for particle %d located at \t", i);
-                for (d = 0; d < DIM; d++)
-                    fprintf(stderr, "x[%d]: %g \t", d, p[i].x[d]);
-                fprintf(stderr, "\n"); */
+                //  fprintf(stderr, "Warning: work related to plastic strain is negative for particle %d located at \t", i);
+                //for (d = 0; d < DIM; d++)
+                //    fprintf(stderr, "x[%d]: %g \t", d, p[i].x[d]);
+                //fprintf(stderr, "\n");
                 work = 0;
             }
-            /* daniel Thun daniel thun */
+            // daniel Thun daniel thun
             p.dTdt[i] = work / (matCp[p_rhs.materialId[i]] * p.rho[i]);
             if (p.dTdt[i] < 0) {
                 //fprintf(stderr, "%d work: %g, Cp: %g, rho: %g\n", i, work, matCp[p_rhs.materialId[i]], p.rho[i]);
@@ -1035,7 +1486,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             }
 #  if PALPHA_POROSITY
             if (matEOS[matId] == EOS_TYPE_JUTZI || matEOS[matId] == EOS_TYPE_JUTZI_MURNAGHAN || matEOS[matId] == EOS_TYPE_JUTZI_ANEOS) {
-                real deld = 0.01; 	/* variation in the damage to avoid infinity problem */
+                real deld = 0.01; 	// variation in the damage to avoid infinity problem
                 real alpha_0 = matporjutzi_alpha_0[matId];
                 if (alpha_0 > 1) {
                     p.ddamage_porjutzidt[i] = - 1.0/DIM * (pow(1.0 - (p.alpha_jutzi[i] - 1.0) / (alpha_0 - 1.0) + deld, 1.0/DIM - 1.0))
@@ -1093,7 +1544,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
                     lambda_dot *= shear/sqrt_J2;
                 }
                 lambda_dot += 3*alpha_phi*bulk*tr_edot;
-                /*lambda_dot /= 9*alpha_phi*alpha_phi*bulk + shear;*/
+                //lambda_dot /= 9*alpha_phi*alpha_phi*bulk + shear;
                 lambda_dot /= shear;
             }
 
@@ -1112,11 +1563,11 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
                         p.dSdt[stressIndex(i,d,e)] -= S_i[d][e]*lambda_dot*shear/sqrt_J2;
                     }
                 }
-                /*p.dSdt[stressIndex(i,d,d)] += tr_edot*(bulk-2*shear/3.0) - 3*lambda_dot*alpha_phi*bulk;*/
+                //p.dSdt[stressIndex(i,d,d)] += tr_edot*(bulk-2*shear/3.0) - 3*lambda_dot*alpha_phi*bulk;
                 p.dSdt[stressIndex(i,d,d)] += tr_edot*(bulk-2*shear/3.0);
             }
 # if FRAGMENTATION
-            /* disable fragmentation for regolith, cause there's none */
+            // disable fragmentation for regolith, cause there's none
             p.local_strain[i] = 0.0;
             p.numActiveFlaws[i] = 0;
             p.dddt[i] = 0.0;
@@ -1133,470 +1584,6 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 
     } // particle loop end
 
-}
-
-//TODO: correct #ifs and correct ???
-/*__global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *materials, Tree *tree, Particles *particles,
-                                            int *interactions, int numRealParticles) {
-
-    int i, k, inc, j, numInteractions;
-    int f, kk;
-
-    real W;
-    real tmp;
-    real x, vx, vxj, ax, dvx;
-    ax = 0;
-#if DIM > 1
-    real y, vy, vyj, ay, dvy;
-    ay = 0;
-#if DIM == 3
-    real z, vz, vzj, az, dvz;
-    az = 0;
-#endif // DIM > 1
-#endif // DIM == 3
-
-    real sml;
-
-    int matId;
-    int matIdj;
-
-    real sml1;
-    real Sj[DIM*DIM];
-
-    real vr; // vr = v_ij * r_ij
-    real rr;
-    real rhobar; // rhobar = 0.5*(rho_i + rho_j)
-    real mu;
-    real muijmax;
-    real smooth;
-    real csbar;
-    real alpha, beta;
-
-#if ARTIFICIAL_STRESS
-    real artf = 0;
-#endif // ARTIFICIAL_STRESS
-
-    int d;
-    int dd;
-    int e;
-
-    real dr[DIM];
-    real dv[DIM];
-
-    real drhodt;
-
-#if INTEGRATE_ENERGY
-    real dedt;
-#endif // INTEGRATE_ENERGY
-
-#if NAVIER_STOKES
-    real eta;
-    real zetaij;
-#endif // NAVIER_STOKES
-
-    real vvnablaW;
-    real dWdr;
-    real dWdrj;
-    real dWdx[DIM];
-    real Wj;
-    real dWdxj[DIM];
-    real pij = 0;
-    real r;
-    real accels[DIM];
-    real accelsj[DIM];
-    real accelshearj[DIM];
-
-    inc = blockDim.x * gridDim.x;
-    for (i = threadIdx.x + blockIdx.x * blockDim.x; i < numRealParticles; i += inc) {
-
-        matId = particles->materialId[i];
-        //if (EOS_TYPE_IGNORE == matEOS[p_rhs.materialId[i]] || matId == EOS_TYPE_IGNORE) {
-        //    continue;
-        //}
-
-        numInteractions = particles->noi[i];
-        if (numInteractions < 0 || numInteractions > MAX_NUM_INTERACTIONS) {
-            printf("i: %i   number of interactions = %i\n", i, numInteractions);
-            assert(0);
-        }
-
-        ax = 0;
-#if DIM > 1
-        ay = 0;
-#if DIM == 3
-        az = 0;
-#endif // DIM > 1
-#endif // DIM == 3
-
-        alpha = materials[matId].artificialViscosity.alpha; //alpha = matAlpha[matId];
-        beta = materials[matId].artificialViscosity.beta; //beta = matBeta[matId];
-
-        muijmax = 0;
-
-        sml1 = particles->sml[i];
-
-        drhodt = 0;
-
-#if INTEGRATE_ENERGY
-        dedt = 0;
-#endif // INTEGRATE_ENERGY
-
-#if INTEGRATE_SML
-        particles->dsmldt[i] = 0.0;
-        //printf("dsmldt = 0\n");
-#endif // INTEGRATE_SML
-
-        for (d = 0; d < DIM; d++) {
-            accels[d] = 0.0;
-            accelsj[d] = 0.0;
-            accelshearj[d] = 0.0;
-        } // for (d = 0; d < DIM; d++)
-        sml = particles->sml[i];
-
-        x = particles->x[i];
-        vx = particles->vx[i];
-#if DIM > 1
-        y = particles->y[i];
-        vy = particles->vy[i];
-#if DIM == 3
-        z = particles->z[i];
-        vz = particles->vz[i];
-#endif // DIM > 1
-#endif // DIM == 3
-
-        // TODO: do I really want to zero the acceleration?
-        particles->ax[i] = 0;
-        // TODO: there is no particle entry dxdt within particles (but IntegratedParticles?!)
-        //particles->dxdt[i] = 0;
-#if DIM > 1
-        particles->ay[i] = 0;
-        //particles->dydt[i] = 0;
-#if DIM == 3
-        particles->az[i] = 0;
-        //particles->dzdt[i] = 0;
-#endif // DIM > 1
-#endif // DIM == 3
-
-#if INTEGRATE_DENSITY
-        particles->drhodt[i] = 0.0;
-#endif
-#if INTEGRATE_ENERGY
-        particles->dedt[i] = 0.0;
-#endif // INTEGRATE_ENERGY
-#if INTEGRATE_SML
-        particles->dsmldt[i] = 0.0;
-        //printf("dsmldt = 0\n");
-#endif // INTEGRATE_SML
-
-        // if particle has no interactions continue and set all derivs to zero
-        // but not the accels (these are handled in the tree for gravity)
-        if (numInteractions == 0) {
-            // finally continue
-            // testing
-            //for (d = 0; d < DIM; d++) {
-            //    accelsj[d] = 0.0;
-            //} // for (d = 0; d < DIM; d++)
-            // end: testing
-            continue;
-        } // if (numInteractions == 0)
-
-        // THE MAIN SPH LOOP FOR ALL INTERNAL FORCES
-        // loop over interaction partners for SPH sums
-        for (k = 0; k < numInteractions; k++) {
-
-            //matIdj = EOS_TYPE_IGNORE;
-            // the interaction partner
-            j = interactions[i * MAX_NUM_INTERACTIONS + k];
-
-            matIdj = particles->materialId[j];
-            //if (EOS_TYPE_IGNORE == matEOS[p_rhs.materialId[j]] || matIdj == EOS_TYPE_IGNORE) {
-            //    continue;
-            //}
-
-            for (d = 0; d < DIM; d++) {
-                accelsj[d] = 0.0;
-            } // for (d = 0; d < DIM; d++)
-
-
-#if (VARIABLE_SML || INTEGRATE_SML)// || DEAL_WITH_TOO_MANY_INTERACTIONS)
-            sml = 0.5*(particles->sml[i] + particles->sml[j]);
-            //printf("sml: 0.5 * (%f + %f)\n", particles->sml[i], particles->sml[j]);
-#endif // (VARIABLE_SML || INTEGRATE_SML)// || DEAL_WITH_TOO_MANY_INTERACTIONS)
-
-            vxj = particles->vx[j];
-#if DIM > 1
-            vyj = particles->vy[j];
-#if DIM == 3
-            vzj = particles->vz[j];
-#endif // DIM > 1
-#endif // DIM == 3
-
-            // relative vector
-            dr[0] = x - particles->x[j];
-#if DIM > 1
-            dr[1] = y - particles->y[j];
-#if DIM == 3
-            dr[2] = z - particles->z[j];
-#endif // DIM > 1
-#endif // DIM == 3
-            r = 0;
-            for (e = 0; e < DIM; e++) {
-                r += dr[e] * dr[e];
-                dWdx[e] = 0.0;
-            } // for (e = 0; e < DIM; e++)
-
-            W = 0.0;
-            dWdr = 0.0;
-
-            r = cuda::math::sqrt(r);
-
-            // get kernel values for this interaction
-            kernel(&W, dWdx, &dWdr, dr, sml);
-
-            dv[0] = dvx = vx - vxj;
-#if DIM > 1
-            dv[1] = dvy = vy - vyj;
-#if DIM == 3
-            dv[2] = dvz = vz - vzj;
-#endif // DIM > 1
-#endif // DIM == 3
-
-            vvnablaW = dvx * dWdx[0];
-#if DIM > 1
-            vvnablaW += dvy * dWdx[1];
-#if DIM == 3
-            vvnablaW += dvz * dWdx[2];
-#endif // DIM > 1
-#endif // DIM == 3
-
-            rr = 0.0;
-            vr = 0.0;
-            for (e = 0; e < DIM; e++) {
-                rr += dr[e] * dr[e];
-                vr += dv[e] * dr[e];
-            } // for (e = 0; e < DIM; e++)
-
-            // artificial viscosity force only if v_ij * r_ij < 0
-            if (vr < 0) {
-                csbar = 0.5 * (particles->cs[i] + particles->cs[j]);
-                smooth = 0.5 * (sml1 + particles->sml[j]);
-
-                const real eps_artvisc = 1e-2;
-                mu = smooth * vr/(rr + smooth * smooth * eps_artvisc);
-
-                if (mu > muijmax) {
-                    muijmax = mu;
-                } // if (mu > muijmax)
-                rhobar = 0.5 * (particles->rho[i] + particles->rho[j]);
-
-                pij = (beta * mu - alpha * csbar) * mu/rhobar;
-                if (std::isnan(pij) || pij > 1.e250) {
-                    printf("pij = %e, beta = %f, mu = %f, alpha = %f, csbar = %f, rhobar = %f\n",
-                           pij, beta, mu, alpha, csbar, rhobar);
-                    assert(0);
-                }
-
-            } // if (vr < 0)
-
-
-#if NAVIER_STOKES
-            eta = (particles->eta[i] + particles->eta[j]) * 0.5 ;
-            for (d = 0; d < DIM; d++) {
-                accelshearj[d] = 0;
-                for (dd = 0; dd < DIM; dd++) {
-#if (SPH_EQU_VERSION == 1)
-#if SML_CORRECTION
-                    accelshearj[d] += eta * particles->mass[j] *
-                        (particles->Tshear[CudaUtils::stressIndex(j,d,dd)]/(particles->sml_omega[j]*particles->rho[j]*particles->rho[j])
-                        + particles->Tshear[CudaUtils::stressIndex(i,d,dd)]/(particles->sml_omega[i]*particles->rho[i]*particles->rho[i])) *dWdx[dd];
-#else // !SML_CORRECTION
-                    accelshearj[d] += eta * particles->mass[j] *
-                                (particles->Tshear[CudaUtils::stressIndex(j,d,dd)]/(particles->rho[j]*particles->rho[j]) +
-                                    particles->Tshear[CudaUtils::stressIndex(i,d,dd)]/(particles->rho[i]*particles->rho[i])) *
-                                    dWdx[dd];
-#endif // SML_CORRECTION
-#elif (SPH_EQU_VERSION == 2)
-#if SML_CORRECTION
-                    accelshearj[d] += eta * particles->mass[j] * (particles->Tshear[CudaUtils::stressIndex(j,d,dd)] +
-                            particles->Tshear[CudaUtils::stressIndex(i,d,dd)])/(particles->sml_omega[i]*particles->rho[i] *
-                                    particles->sml_omega[j]*particles->rho[j]) *dWdx[dd];
-#else // !SML_CORRECTION
-                    accelshearj[d] += eta * particles->mass[j] *
-                            (particles->Tshear[CudaUtils::stressIndex(j,d,dd)]+particles->Tshear[CudaUtils::stressIndex(i,d,dd)])/
-                                (particles->rho[i]*particles->rho[j]) * dWdx[dd];
-#endif // SML_CORRECTION
-#endif // SPH_EQU_VERSION
-                }
-            }
-
-#endif // NAVIER_STOKES
-
-#if SPH_EQU_VERSION == 1
-#if SML_CORRECTION
-            for (d = 0; d < DIM; d++) {
-                accelsj[d] =  -particles->mass[j] * (particles->p[i]/(particles->sml_omega[i]*particles->rho[i]*particles->rho[i])
-                        + particles->p[j]/(particles->sml_omega[j]*particles->rho[j]*particles->rho[j])) * dWdx[d];
-                accels[d] += accelsj[d];
-            }
-#else // if !SML_CORRECTION
-            for (d = 0; d < DIM; d++) {
-                accelsj[d] =  -particles->mass[j] * (particles->p[i]/(particles->rho[i]*particles->rho[i]) +
-                                                     particles->p[j]/(particles->rho[j]*particles->rho[j])) * dWdx[d];
-
-                // TODO: remove " if (!isnan(accelsj[d])) {" !!!
-                //if (!isnan(accelsj[d])) {
-                    accels[d] += accelsj[d];
-                //}
-
-                if (std::isnan(accelsj[d])) {
-                    printf("NAN!!! index = %i, accelsj = %f rho[i = %i] = %e, rho[j = %i] = %e mass = %e dWdx = %e p_i = %e, p_j = %e\n", i, accelsj[d], i, particles->rho[i],
-                           j, particles->rho[j], particles->mass[j], dWdx[d], particles->p[i], particles->p[j]);
-                    assert(0);
-                }
-            } // for (d = 0; d < DIM; d++)
-#endif // SML_CORRECTION
-#elif SPH_EQU_VERSION == 2
-#if SML_CORRECTION
-            for (d = 0; d < DIM; d++) {
-                accelsj[d] =  -particles->mass[j] * ((particles->p[i]+particles->p[j])/
-                            (particles->sml_omega[i]*particles->rho[i]*particles->sml_omega[j]*particles->rho[j])) * dWdx[d];
-                accels[d] += accelsj[d];
-            }
-#else // !SML_CORRECTION
-            for (d = 0; d < DIM; d++) {
-                accelsj[d] =  -particles->mass[j] * ((particles->p[i] + particles->p[j])/ (particles->rho[i]*particles->rho[j])) * dWdx[d];
-                accels[d] += accelsj[d];
-            } //  for (d = 0; d < DIM; d++)
-# endif // SML_CORRECTION
-#else // SPH_EQU_VERSION
-            printf("SPH equation representation not available!\n");
-#endif // SPH_EQU_VERSION
-
-#if NAVIER_STOKES
-            // add viscous accel to total accel
-            for (d = 0; d < DIM; d++) {
-                accels[d] += accelshearj[d];
-            }
-#endif // NAVIER_STOKES
-
-            if (std::isnan(particles->mass[j]*(-pij)*dWdx[0])
-#if DIM > 1
-                || std::isnan(particles->mass[j]*(-pij)*dWdx[1])
-#if DIM == 3
-                || std::isnan(particles->mass[j]*(-pij)*dWdx[2])
-#endif
-#endif
-                    ) {
-#if DIM == 3
-                printf("NAN!!! index = %i, accels += (%f, %f, %f) mass[%i] = %e, pij = %e, dWdx = (%e, %e, %e) noi = %i\n", i, particles->mass[j]*(-pij)*dWdx[0],
-                       particles->mass[j]*(-pij)*dWdx[1], particles->mass[j]*(-pij)*dWdx[2], particles->noi[i],
-                       particles->mass[j], pij, dWdx[0], dWdx[1], dWdx[2]);
-#endif
-                assert(0);
-            }
-
-            accels[0] += particles->mass[j]*(-pij)*dWdx[0];
-#if DIM > 1
-            accels[1] += particles->mass[j]*(-pij)*dWdx[1];
-#if DIM == 3
-            accels[2] += particles->mass[j]*(-pij)*dWdx[2];
-#endif // DIM > 1
-#endif // DIM == 3
-
-
-            if (std::isnan(accels[0])
-#if DIM > 1
-                || std::isnan(accels[1])
-#if DIM == 3
-                || std::isnan(accels[2])
-#endif
-#endif
-                    ) {
-#if DIM == 3
-                printf("NAN for index within internalForces() afterwards: %i numInteractions = %i (%f, %f, %f) %f a += (%f, %f, %f)\n",
-                       i, numInteractions,
-                       particles->x[i],
-                       particles->y[i],
-                       particles->z[i],
-                       particles->mass[i],
-                       accels[0], accels[1], accels[2]);
-#endif
-                assert(0);
-            }
-
-# if SML_CORRECTION
-            drhodt += particles->mass[j] * vvnablaW;
-# else // !SML_CORRECTION
-            drhodt += particles->rho[i]/particles->rho[j] * particles->mass[j] * vvnablaW;
-# endif // SML_CORRECTION
-
-    //printf("dsmldt ...\n");
-
-#if INTEGRATE_SML
-    // minus since vvnablaW is v_i - v_j \nabla W_ij
-# if !SML_CORRECTION
-        particles->dsmldt[i] += 1./DIM * particles->sml[i] * particles->mass[j]/particles->rho[j] * vvnablaW;
-        //particles->dsmldt[i] += 1./DIM * particles->sml[i] * particles->mass[j]/particles->rho[j] * vvnablaW;
-        //printf("dsmldt[%i] -= %f\n", i, particles->dsmldt[i]);
-# endif // !SML_CORRECTION
-#endif // INTEGRATE_SML
-
-#if INTEGRATE_ENERGY
-            if (true) { // !isRelaxationRun) { //TODO: isRelaxationRun
-#  if SML_CORRECTION
-                dedt += particles->mass[j] * vvnablaW;
-#  else // !SML_CORRECTION
-                dedt += 0.5 * particles->mass[j] * pij * vvnablaW;
-#  endif // SML_CORRECTION
-            } // if (true) { // !isRelaxationRun)
-
-            // remember, accelsj  are accelerations by particle j, and dv = v_i - v_j
-            dedt += 0.5 * accelsj[0] * -dvx;
-#if DIM > 1
-            dedt += 0.5 * accelsj[1] * -dvy;
-#if DIM == 3
-            dedt += 0.5 * accelsj[2] * -dvz;
-#endif // DIM > 1
-#endif // DIM == 3
-
-#endif // INTEGRATE ENERGY
-
-        } // for (k = 0; k < numInteractions; k++) // neighbors loop end
-
-        ax = accels[0];
-#if DIM > 1
-        ay = accels[1];
-#if DIM == 3
-        az = accels[2];
-#endif // DIM > 1
-#endif // DIM == 3
-        particles->ax[i] = ax;
-#if DIM > 1
-        particles->ay[i] = ay;
-#if DIM == 3
-        particles->az[i] = az;
-#endif // DIM > 1
-#endif // DIM == 3
-
-#if SML_CORRECTION
-        particles->drhodt[i] = 1 / particles->sml_omega[i] * drhodt;
-        particles->dsmldt[i] = - particles->sml[i] / (DIM * particles->rho[i]) * particles->drhodt[i];
-#else // !SML_CORRECTION
-#if INTEGRATE_DENSITY
-        particles->drhodt[i] = drhodt;
-#endif
-#endif // SML_CORRECTION
-
-#if INTEGRATE_ENERGY
-
-#if SML_CORRECTION
-        particles->dedt[i] = particles->p[i]/(particles->rho[i]*particles->rho[i] * particles->sml_omega[i]) * dedt;
-#else
-        particles->dedt[i] = dedt;
-#endif // SML_CORRECTION
-#endif // INTEGRATE_ENERGY
-
-    } // particle loop end // for (i = threadIdx.x + blockIdx.x * blockDim.x; i < numRealParticles; i += inc)
 }*/
 
 real SPH::Kernel::Launch::internalForces(::SPH::SPH_kernel kernel, Material *materials, Tree *tree, Particles *particles,

@@ -31,152 +31,51 @@ namespace SPH {
 
     namespace Kernel {
 
-        __global__ void nearNeighbourSearch(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
+        // Brute-force method (you don't want to use this!)
+        __global__ void fixedRadiusNN_bruteForce(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
                                             integer numParticles, integer numNodes) {
 
-            integer i, inc, nodeIndex, depth, childNumber, child, radius;
-            real x, interactionDistance, dx, r, d, x_radius;
+
+            integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+
+            real dx, dy, dz;
+            real distance;
+            int numInteractions;
+
+            while ((bodyIndex + offset) < numParticlesLocal) {
+
+                int numInteractions = 0;
+                for (int i=0; i<tree->toDeleteLeaf[1]; ++i) {
+                    if ((bodyIndex + offset) == i) {
+                        continue;
+                    }
+                    dx = particles->x[bodyIndex + offset] - particles->x[i];
 #if DIM > 1
-            real y, dy, y_radius;
-#endif
-            integer currentNodeIndex[MAX_DEPTH];
-            integer currentChildNumber[MAX_DEPTH];
-            integer numberOfInteractions;
+                    dy = particles->y[bodyIndex + offset] - particles->y[i];
 #if DIM == 3
-            real z, dz, z_radius, r_temp;
-#endif
-            inc = blockDim.x * gridDim.x;
-            for (i = threadIdx.x + blockIdx.x * blockDim.x; i < numParticles; i += inc) {
-//                x = p.x[i];
-//#if DIM > 1
-//                y = p.y[i];
-//#if DIM == 3
-//                z = p.z[i];
-//#endif
-//#endif
-                //double sml; /* smoothing length of particle */
-                //double smlj; /* smoothing length of potential interaction partner */
-
-                x_radius = 0.5 * (*tree->maxX - (*tree->minX));
-#if DIM > 1
-                y_radius = 0.5 * (*tree->maxY - (*tree->minY));
-#if DIM == 3
-                z_radius = 0.5 * (*tree->maxZ - (*tree->minZ));
+                    dz = particles->z[bodyIndex + offset] - particles->z[i];
 #endif
 #endif
 
-#if DIM == 1
-                r = x_radius;
-#elif DIM == 2
-                r = cuda::math::max(x_radius, y_radius);
-#else
-                r_temp = cuda::math::max(x_radius, y_radius);
-                r = cuda::math::max(r_temp, z_radius); //TODO: (0.5 * r) or (1.0 * r)
-#endif
+                    distance = dx*dx + dy*dy + dz*dz;
 
-            // start at root
-                depth = 0;
-                currentNodeIndex[depth] = 0; //numNodes - 1;
-                currentChildNumber[depth] = 0;
-                numberOfInteractions = 0;
-                r = radius * 0.5; // because we start with root children
-                //sml = p.h[i];
-                particles->noi[i] = 0;
-                interactionDistance = (r + particles->sml[i]);
-
-                do {
-
-                    childNumber = currentChildNumber[depth];
-                    nodeIndex = currentNodeIndex[depth];
-
-                    while (childNumber < POW_DIM) {
-
-                        child = tree->child[POW_DIM * nodeIndex + childNumber];
-                        childNumber++;
-
-                        if (child != -1 && child != i) {
-
-                            dx = particles->x[i] - particles->x[child];
-#if DIM > 1
-                            dy = particles->y[i] - particles->y[child];
-#if DIM == 3
-                            dz = particles->z[i] - particles->z[child];
-#endif
-#endif
-
-                            if (child < numParticles) {
-                                //if (p_rhs.materialId[child] == EOS_TYPE_IGNORE) {
-                                //    continue;
-                                //}
-                                d = dx*dx;
-#if DIM > 1
-                                d += dy*dy;
-#if DIM == 3
-                                d += dz*dz;
-#endif
-#endif
-
-                                //smlj = p.h[child];
-
-                                if (d < particles->sml[i]*particles->sml[i] && d < particles->sml[child]*particles->sml[child]) {
-                                    interactions[i * MAX_NUM_INTERACTIONS + numberOfInteractions] = child;
-                                    numberOfInteractions++;
-//#if TOO_MANY_INTERACTIONS_KILL_PARTICLE
-//                                    if (numberOfInteractions >= MAX_NUM_INTERACTIONS) {
-//                                printf("setting the smoothing length for particle %d to 0!\n", i);
-//                                p.h[i] = 0.0;
-//                                p.noi[i] = 0;
-//                                sml = 0.0;
-//                                interactionDistance = 0.0;
-//                                p_rhs.materialId[i] = EOS_TYPE_IGNORE;
-//                                // continue with next particle by setting depth to -1
-//                                // cms 2018-01-19
-//                                depth = -1;
-//                                break;
-//                            }
-//#endif
-                                }
-                            } else if (cuda::math::abs(dx) < interactionDistance
-                                       #if DIM > 1
-                                       && cuda::math::abs(dy) < interactionDistance
-                                       #if DIM == 3
-                                       && cuda::math::abs(dz) < interactionDistance
-#endif
-#endif
-                                    ) {
-                                // put child on stack
-                                currentChildNumber[depth] = childNumber;
-                                currentNodeIndex[depth] = nodeIndex;
-                                depth++;
-                                r *= 0.5;
-                                interactionDistance = (r + particles->sml[i]); //sml);
-                                if (depth >= MAX_DEPTH) {
-                                    printf("Error, maxdepth reached depth = %i < MAX_DEPTH = %i!\n", depth, MAX_DEPTH);
-                                    assert(depth < MAX_DEPTH);
-                                }
-                                childNumber = 0;
-                                nodeIndex = child;
-                            }
+                    if (distance < (particles->sml[bodyIndex + offset] * particles->sml[bodyIndex + offset]) &&
+                        distance < (particles->sml[i] * particles->sml[i])) {
+                        interactions[(bodyIndex + offset) * MAX_NUM_INTERACTIONS + numInteractions] = i;
+                        numInteractions++;
+                        if (numInteractions > MAX_NUM_INTERACTIONS) {
+                            assert(0);
                         }
                     }
 
-                    depth--;
-                    r *= 2.0;
-                    interactionDistance = (r + particles->sml[i]);
-                } while (depth >= 0);
-
-                if (numberOfInteractions >= MAX_NUM_INTERACTIONS) {
-                    printf("ERROR: Maximum number of interactions exceeded: %d / %d\n", numberOfInteractions, MAX_NUM_INTERACTIONS);
-//#if !TOO_MANY_INTERACTIONS_KILL_PARTICLE
-//                    assert(numberOfInteractions < MAX_NUM_INTERACTIONS);
-//#endif
-                    /*
-                    for (child = 0; child < MAX_NUM_INTERACTIONS; child++) {
-                        printf("(thread %d): %d - %d\n", threadIdx.x, i, interactions[i*MAX_NUM_INTERACTIONS+child]);
-                    } */
                 }
-                particles->noi[i] = numberOfInteractions;
+                particles->noi[bodyIndex + offset] = numInteractions;
+                offset += stride;
             }
+
+
         }
 
         __global__ void fixedRadiusNN(Tree *tree, Particles *particles, integer *interactions, real radius,
@@ -211,6 +110,7 @@ namespace SPH {
 
             while ((bodyIndex + offset) < numParticlesLocal) {
 
+                //index = tree->sorted[bodyIndex + offset];
                 index = bodyIndex + offset;
 
                 x = particles->x[index];
@@ -371,7 +271,7 @@ namespace SPH {
             }
         }
 
-        __global__ void fixedRadiusNN_New(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
+        __global__ void fixedRadiusNN_withinBox(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
                                       integer numParticles, integer numNodes) {
 
             int bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
@@ -379,31 +279,36 @@ namespace SPH {
             int offset = 0;
             int index;
 
-            if ((bodyIndex + offset) == 0) {
-                printf("new fixed radius...\n");
-            }
+            //if ((bodyIndex + offset) == 0) {
+            //    printf("new fixed radius...\n");
+            //}
 
             integer childNumber, nodeIndex, childIndex;
 
-            real dx, min_x, max_x, x_temp, x_child, min_dx, max_dx, x;
+            real tmp1, tmp2;
+            register real dx, min_x, max_x, x_temp, x_child, min_dx, max_dx, x;
 #if DIM > 1
-            real dy, min_y, max_y, y_temp, y_child, min_dy, max_dy, y;
+            register real dy, min_y, max_y, y_temp, y_child, min_dy, max_dy, y;
 #if DIM == 3
-            real dz, min_z, max_z, z_temp, z_child, min_dz, max_dz, z;
+            register real dz, min_z, max_z, z_temp, z_child, min_dz, max_dz, z;
 #endif
 #endif
+            register real sml;
             real d;
             real min_distance;
             real max_distance;
 
             // outer stack
-            int outer_currentNodeIndex[MAX_DEPTH];
-            int outer_currentChildNumber[MAX_DEPTH];
-            int outer_currentNodeLevel[MAX_DEPTH];
+            register int outer_currentNodeIndex[MAX_DEPTH];
+            register int outer_currentChildNumber[MAX_DEPTH];
+            register int outer_currentNodeLevel[MAX_DEPTH];
 
             // inner stack
-            integer inner_currentNodeIndex[MAX_DEPTH];
-            integer inner_currentChildNumber[MAX_DEPTH];
+            //integer inner_currentNodeIndex[MAX_DEPTH];
+            //integer inner_currentChildNumber[MAX_DEPTH];
+            // but reuse (outer stack!)
+            int *inner_currentNodeIndex;
+            int *inner_currentChildNumber;
 
             int depth, inner_depth;
             int noOfInteractions;
@@ -411,30 +316,17 @@ namespace SPH {
             int level;
 
             while ((bodyIndex + offset) < numParticlesLocal) {
+
                 index = bodyIndex + offset;
 
-                // copy bounding box(es)
-                min_x = *tree->minX;
-                max_x = *tree->maxX;
                 x = particles->x[index];
 #if DIM > 1
-                min_y = *tree->minY;
-                max_y = *tree->maxY;
                 y = particles->y[index];
 #if DIM == 3
-                min_z = *tree->minZ;
-                max_z = *tree->maxZ;
                 z = particles->z[index];
 #endif
 #endif
-                // end: copy bounding box(es)
-
-                // resetting
-                //#pragma unroll
-                //for (integer i = 0; i < MAX_NUM_INTERACTIONS; i++) {
-                //    interactions[(bodyIndex + offset) * MAX_NUM_INTERACTIONS + i] = -1;
-                //}
-                // end: resetting
+                sml = particles->sml[index];
 
                 depth = 0;
                 outer_currentNodeIndex[depth] = 0;
@@ -448,90 +340,72 @@ namespace SPH {
                     nodeIndex = outer_currentNodeIndex[depth];
                     level = outer_currentNodeLevel[depth];
 
-                    /*
-                    if (childNumber & 1) {
-                        x_temp = max_x;
-                        max_x = 0.5 * (min_x + max_x);
-                    } else {
-                        x_temp = min_x;
-                        min_x = 0.5 * (min_x + max_x);
-                    }
-#if DIM > 1
-                    if ((childNumber >> 1) & 1) {
-                        y_temp = max_y;
-                        max_y = 0.5 * (min_y + max_y);
-                    } else {
-                        y_temp = min_y;
-                        min_y = 0.5 * (min_y + max_y);
-                    }
-#if DIM == 3
-                    if ((childNumber >> 2) & 1) {
-                        z_temp = max_z;
-                        max_z = 0.5 * (min_z + max_z);
-                    } else {
-                        y_temp = min_z;
-                        min_z = 0.5 * (min_z + max_z);
-                    }
-#endif
-#endif
-                    */
-
                     while (childNumber < POW_DIM) {
 
                         childIndex = tree->child[POW_DIM * nodeIndex + childNumber];
                         childNumber++;
 
-                        //if (index % 1000 == 0) { printf("childIndex: %i, childNumber %i, level = %i\n", childIndex, childNumber, level); }
-
-                        if (childIndex != -1 && childIndex != (bodyIndex + offset)) {
+                        if (childIndex != -1 && childIndex != (index)) {
 
                             x_child = particles->x[childIndex];
 #if DIM > 1
-                            y_child = particles->x[childIndex];
+                            y_child = particles->y[childIndex];
 #if DIM == 3
-                            z_child = particles->x[childIndex];
+                            z_child = particles->z[childIndex];
 #endif
 #endif
 
-                            // copy bounding box(es)
-                            min_x = *tree->minX;
-                            max_x = *tree->maxX;
-#if DIM > 1
-                            min_y = *tree->minY;
-                            max_y = *tree->maxY;
-#if DIM == 3
-                            min_z = *tree->minZ;
-                            max_z = *tree->maxZ;
-#endif
-#endif
-                            for (int _level=0; _level < level; ++_level) {
-                                if (x_child < 0.5 * (min_x + max_x)) { max_x = 0.5 * (min_x + max_x); }
-                                else { min_x = 0.5 * (min_x + max_x); }
-#if DIM > 1
-                                if (y_child < 0.5 * (min_y + max_y)) { max_y = 0.5 * (min_y + max_y); }
-                                else { min_y = 0.5 * (min_y + max_y); }
-#if DIM == 3
-                                if (z_child < 0.5 * (min_z + max_z)) { max_z = 0.5 * (min_z + max_z); }
-                                else { min_z = 0.5 * (min_z + max_z); }
-#endif
-#endif
-                            }
+                            if (childIndex >= numParticles) {
 
-                            dx = x - x_child;
+                                // copy bounding box(es)
+                                min_x = *tree->minX;
+                                max_x = *tree->maxX;
 #if DIM > 1
-                            dy = y - y_child;
+                                min_y = *tree->minY;
+                                max_y = *tree->maxY;
 #if DIM == 3
-                            dz = z - z_child;
+                                min_z = *tree->minZ;
+                                max_z = *tree->maxZ;
 #endif
 #endif
-                            //if (childIndex >= numParticles) {
+                                for (int _level=0; _level < level; ++_level) {
+                                    if (x_child < 0.5 * (min_x + max_x)) {
+                                        max_x = 0.5 * (min_x + max_x);
+                                    }
+                                    else {
+                                        min_x = 0.5 * (min_x + max_x);
+                                    }
+#if DIM > 1
+                                    if (y_child < 0.5 * (min_y + max_y)) {
+                                        max_y = 0.5 * (min_y + max_y);
+                                    }
+                                    else {
+                                        min_y = 0.5 * (min_y + max_y);
+                                    }
+#if DIM == 3
+                                    if (z_child < 0.5 * (min_z + max_z)) {
+                                        max_z = 0.5 * (min_z + max_z);
+                                    }
+                                    else {
+                                        min_z = 0.5 * (min_z + max_z);
+                                    }
+#endif
+#endif
+                                }
+
                                 if (x < min_x) {
                                     min_dx = x - min_x;
                                     max_dx = x - max_x;
                                 } else if (x > max_x) {
                                     min_dx = x - max_x;
                                     max_dx = x - min_x;
-                                } else { min_dx = 0.f; }
+                                } else {
+                                    min_dx = 0.f;
+                                    //max_dx = (cuda::math::abs(x-min_x) > cuda::math::abs(x-max_x)) ? cuda::math::abs(x-min_x) : cuda::math::abs(x-max_x);
+                                    tmp1 = cuda::math::abs(x-min_x);
+                                    tmp2 = cuda::math::abs(x-max_x);
+                                    max_dx = (tmp1 > tmp2) ? tmp1 : tmp2;
+                                }
 #if DIM > 1
                                 if (y < min_y) {
                                     min_dy = y - min_y;
@@ -539,7 +413,13 @@ namespace SPH {
                                 } else if (y > max_y) {
                                     min_dy = y - max_y;
                                     max_dy = y - min_y;
-                                } else { min_dy = 0.f; }
+                                } else {
+                                    min_dy = 0.f;
+                                    //max_dy = (cuda::math::abs(y-min_y) > cuda::math::abs(y-max_y)) ? cuda::math::abs(y-min_y) : cuda::math::abs(y-max_y);
+                                    tmp1 = cuda::math::abs(y-min_y);
+                                    tmp2 = cuda::math::abs(y-max_y);
+                                    max_dy = (tmp1 > tmp2) ? tmp1 : tmp2;
+                                }
 #if DIM == 3
                                 if (z < min_z) {
                                     min_dz = z - min_z;
@@ -547,7 +427,13 @@ namespace SPH {
                                 } else if (z > max_z) {
                                     min_dz = z - max_z;
                                     max_dz = z - min_z;
-                                } else { min_dz = 0.f; }
+                                } else {
+                                    min_dz = 0.f;
+                                    //max_dz = (cuda::math::abs(z-min_z) > cuda::math::abs(z-max_z)) ? cuda::math::abs(z-min_z) : cuda::math::abs(z-max_z);
+                                    tmp1 = cuda::math::abs(z-min_z);
+                                    tmp2 = cuda::math::abs(z-max_z);
+                                    max_dz = (tmp1 > tmp2) ? tmp1 : tmp2;
+                                }
 
 #endif
 #endif
@@ -556,14 +442,14 @@ namespace SPH {
 #elif DIM == 2
                                 //r = cuda::math::sqrt(dx*dx + dy*dy);
 #else
-                                min_distance = cuda::math::sqrt(min_dx*min_dx + min_dy*min_dy + min_dz*min_dz);
-                                max_distance = cuda::math::sqrt(max_dx*max_dx + max_dy*max_dy + max_dz*max_dz);
+                                min_distance = min_dx*min_dx + min_dy*min_dy + min_dz*min_dz;
+                                max_distance = max_dx*max_dx + max_dy*max_dy + max_dz*max_dz;
 #endif
-                            //}
-                            //else {
-                            //    min_distance = 0;
-                            //    max_distance = 0;
-                            //}
+                            }
+                            else {
+                                min_distance = 0;
+                                max_distance = 0;
+                            }
 
                             //if (index % 1000 == 0) {
                             //    printf("level: %i | d: %e, min_distance: %e, max_distance: %e\n", level, d, min_distance, max_distance);
@@ -573,95 +459,109 @@ namespace SPH {
                             //if (index % 1000 == 0) { printf("child on stack? %e > %e\n", particles->sml[index], min_distance); }
 
                             if (childIndex < numParticles) {
-                                //if (index % 1000 == 0) { printf("childIndex < numParticles\n"); }
-#if DIM == 1
-                                d = cuda::math::sqrt(dx*dx);
-#elif DIM == 2
-                                d = cuda::math::sqrt(dx*dx + dy*dy);
-#else
-                                d = cuda::math::sqrt(dx*dx + dy*dy + dz*dz);
+
+                                dx = x - x_child;
+#if DIM > 1
+                                dy = y - y_child;
+#if DIM == 3
+                                dz = z - z_child;
+#endif
 #endif
 
-                                if (d < particles->sml[index] && d < particles->sml[childIndex]) {
+#if DIM == 1
+                                d = dx*dx;
+#elif DIM == 2
+                                d = dx*dx + dy*dy;
+#else
+                                d = dx*dx + dy*dy + dz*dz;
+#endif
+
+                                if (d < (sml * sml) &&
+                                    d < (particles->sml[childIndex] * particles->sml[childIndex])) {
                                     interactions[index * MAX_NUM_INTERACTIONS + noOfInteractions] = childIndex;
                                     //if (index % 1000 == 0) { printf("%i adding interaction #%i...\n", index, noOfInteractions); }
                                     noOfInteractions++;
+                                    if (noOfInteractions > MAX_NUM_INTERACTIONS) {
+                                        assert(0);
+                                    }
                                 }
                             }
-                            // box completely within sml, thus add all
-                            /*else if (particles->sml[index] >= max_distance) {
-                                //nodeIndex = childIndex;
-                                inner_depth = 0;
-                                int inner_childNumber = childNumber;
-                                int inner_nodeIndex = nodeIndex;
-                                int inner_childIndex;
-                                do {
-                                    inner_currentNodeIndex[depth] = nodeIndex;
-                                    inner_currentChildNumber[depth] = childNumber;
+                            // box at least partly within sml, thus add to exlicity stack
+                            else if ((sml*sml) > min_distance) {
+                                // box completely within sml
+                                if ((sml*sml) >= max_distance) {
 
-                                    while (inner_childNumber < POW_DIM) {
+                                    inner_currentNodeIndex = &outer_currentNodeIndex[depth];
+                                    inner_currentChildNumber = &outer_currentChildNumber[depth];
 
-                                        inner_childIndex = tree->child[POW_DIM * inner_nodeIndex + inner_childNumber];
-                                        inner_childNumber++;
+                                    inner_depth = 0;
+                                    inner_currentNodeIndex[inner_depth] = childIndex; //nodeIndex;
+                                    inner_currentChildNumber[inner_depth] = 0; //childNumber;
+                                    int inner_childNumber; //= childNumber;
+                                    int inner_nodeIndex; // = nodeIndex;
+                                    int inner_childIndex;
+                                    do {
+                                        //inner_currentNodeIndex[depth] = nodeIndex;
+                                        //inner_currentChildNumber[depth] = childNumber;
+                                        inner_childNumber = inner_currentChildNumber[inner_depth];
+                                        inner_nodeIndex = inner_currentNodeIndex[inner_depth];
 
-                                        if (inner_childIndex != -1 && inner_childIndex != (index)) {
-                                            if (inner_childIndex < numParticles) {
-                                                interactions[(bodyIndex + offset) * MAX_NUM_INTERACTIONS +
-                                                             noOfInteractions] = inner_childIndex;
-                                                noOfInteractions++;
+                                        while (inner_childNumber < POW_DIM) {
+
+                                            inner_childIndex = tree->child[POW_DIM * inner_nodeIndex + inner_childNumber];
+                                            inner_childNumber++;
+
+                                            if (inner_childIndex != -1 && inner_childIndex != (index)) {
+                                                if (inner_childIndex < numParticles) {
+                                                    interactions[(bodyIndex + offset) * MAX_NUM_INTERACTIONS +
+                                                                 noOfInteractions] = inner_childIndex;
+                                                    noOfInteractions++;
+                                                    //printf("%i: adding directly: %i, depth: %i, child: %i\n", index, inner_childIndex, inner_depth, inner_childNumber);
+                                                    if (noOfInteractions > MAX_NUM_INTERACTIONS) {
+                                                        assert(0);
+                                                    }
+                                                } else {
+                                                    //printf("%i: directly on stack: %i, depth: %i, child: %i\n", index, inner_childIndex, inner_depth, inner_childNumber);
+                                                    inner_currentChildNumber[inner_depth] = inner_childNumber;
+                                                    inner_currentNodeIndex[inner_depth] = inner_nodeIndex;
+                                                    inner_depth++;
+
+                                                    inner_childNumber = 0;
+                                                    inner_nodeIndex = inner_childIndex;
+                                                }
                                             }
                                         }
-                                        else {
-                                            inner_currentChildNumber[inner_depth] = inner_childNumber;
-                                            inner_currentNodeIndex[inner_depth] = inner_nodeIndex;
-                                            inner_depth++;
-                                        }
-                                        inner_childNumber = 0;
-                                        inner_nodeIndex = inner_childIndex;
-                                    }
-                                    inner_depth--;
-
-                                } while (inner_depth >= 0);
-                            }*/
-                            // box partly within sml, thus add to exlicity stack
-                            /*else if (cuda::math::abs(dx) < interactionDistance
-#if DIM > 1
-                                     && cuda::math::abs(dy) < interactionDistance
-#if DIM == 3
-                                     && cuda::math::abs(dz) < interactionDistance
-#endif
-#endif
-                                    ) {*/
-                            else if (particles->sml[index] > min_distance) {
-                                //if (index % 1000 == 0) { printf("child on stack...\n"); }
-                                // put child on stack
-                                outer_currentChildNumber[depth] = childNumber;
-                                outer_currentNodeIndex[depth] = nodeIndex;
-                                outer_currentNodeLevel[depth] = level; // + 1;
-                                level++;
-                                depth++;
-                                //r *= 0.5;
-                                //interactionDistance = (r + particles->sml[index]);
-
-                                if (depth > MAX_DEPTH) {
-                                    printf("ERROR: maximal depth reached! MAX_DEPTH = %i\n", MAX_DEPTH);
-                                    assert(depth < MAX_DEPTH);
+                                        inner_depth--;
+                                        //printf("%i: directly depth--: %i, depth: %i\n", inner_childIndex, inner_depth);
+                                    } while (inner_depth >= 0);
+                                    //printf("%i: added directly: %i (counter: %i, maxDistance: %e, sml: %e)\n", index, numParticlesDirectly, counter, max_distance, particles->sml[index]);
                                 }
-                                childNumber = 0;
-                                nodeIndex = childIndex;
+                                // box only partly within sml, thus add to exlicity stack
+                                else {
+                                    // put child on stack
+                                    outer_currentChildNumber[depth] = childNumber;
+                                    outer_currentNodeIndex[depth] = nodeIndex;
+                                    outer_currentNodeLevel[depth] = level; // + 1;
+                                    level++;
+                                    depth++;
+
+                                    if (depth > MAX_DEPTH) {
+                                        printf("ERROR: maximal depth reached! MAX_DEPTH = %i\n", MAX_DEPTH);
+                                        assert(depth < MAX_DEPTH);
+                                    }
+                                    childNumber = 0;
+                                    nodeIndex = childIndex;
+                                }
                             }
                         }
                     }
 
                     depth--;
-                    //level--;
-                    //r *= 2.0;
-                    //interactionDistance = (r + particles->sml[index]);
 
                 } while (depth >= 0);
 
                 particles->noi[bodyIndex + offset] = noOfInteractions;
-                printf("%i: noOfInteractions = %i\n", bodyIndex + offset, noOfInteractions);
+                //printf("%i: noOfInteractions = %i\n", bodyIndex + offset, noOfInteractions);
                 //if (index % 1000 == 0) {
                 //    printf("noi[%i]: %i\n", index, noOfInteractions);
                 //}
@@ -671,7 +571,7 @@ namespace SPH {
         }
 
         __global__ void
-        fixedRadiusNN_Test(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
+        fixedRadiusNN_sharedMemory(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
                            integer numParticles, integer numNodes) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
@@ -2611,6 +2511,14 @@ namespace SPH {
         }
 
         namespace Launch {
+
+            real fixedRadiusNN_bruteForce(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
+                                     integer numParticles, integer numNodes) {
+                ExecutionPolicy executionPolicy; // 4 * numMultiProcessors, 256
+                return cuda::launch(true, executionPolicy, ::SPH::Kernel::fixedRadiusNN_bruteForce, tree, particles, interactions,
+                                    numParticlesLocal, numParticles, numNodes);
+            }
+
             real fixedRadiusNN(Tree *tree, Particles *particles, integer *interactions, real radius,
                                integer numParticlesLocal, integer numParticles, integer numNodes) {
                 //ExecutionPolicy executionPolicy(numParticlesLocal, ::SPH::Kernel::fixedRadiusNN, tree, particles, interactions,
@@ -2620,17 +2528,17 @@ namespace SPH {
                                     radius, numParticlesLocal, numParticles, numNodes);
             }
 
-            real fixedRadiusNN_New(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
+            real fixedRadiusNN_withinBox(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
                                integer numParticles, integer numNodes) {
                 //ExecutionPolicy executionPolicy(numParticlesLocal, ::SPH::Kernel::fixedRadiusNN, tree, particles, interactions,
                 //                                numParticlesLocal, numParticles, numNodes);
                 Logger(INFO) << "calling new fixed radius...";
                 ExecutionPolicy executionPolicy;
-                return cuda::launch(true, executionPolicy, ::SPH::Kernel::fixedRadiusNN_New, tree, particles, interactions,
+                return cuda::launch(true, executionPolicy, ::SPH::Kernel::fixedRadiusNN_withinBox, tree, particles, interactions,
                                     numParticlesLocal, numParticles, numNodes);
             }
 
-            real fixedRadiusNN_Test(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
+            real fixedRadiusNN_sharedMemory(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
                                integer numParticles, integer numNodes) {
                 size_t sharedMemory = 20 * 2 * sizeof(integer) * MAX_DEPTH;
                 //int _blockSize;
@@ -2641,7 +2549,7 @@ namespace SPH {
                 ExecutionPolicy executionPolicy(256, 10, sharedMemory);
                 //printf("gridSize: %i, blockSize: %i\n", _gridSize, _blockSize);
                 //ExecutionPolicy executionPolicy(_gridSize, _blockSize, sharedMemory);
-                return cuda::launch(true, executionPolicy, ::SPH::Kernel::fixedRadiusNN_Test, tree, particles, interactions,
+                return cuda::launch(true, executionPolicy, ::SPH::Kernel::fixedRadiusNN_sharedMemory, tree, particles, interactions,
                                     numParticlesLocal, numParticles, numNodes);
             }
 

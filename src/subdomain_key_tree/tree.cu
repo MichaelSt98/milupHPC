@@ -712,6 +712,17 @@ __global__ void TreeNS::Kernel::buildTreeMiluphcuda(Tree *tree, Particles *parti
 
 }
 
+__global__ void TreeNS::Kernel::prepareSorting(Tree *tree, Particles *particles, integer n, integer m) {
+    int bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+    int stride = blockDim.x * gridDim.x;
+    int offset = 0;
+
+    while ((bodyIndex + offset) < n) {
+        tree->start[bodyIndex + offset] = bodyIndex + offset;
+        offset += stride;
+    }
+}
+
 
 __global__ void TreeNS::Kernel::calculateCentersOfMass(Tree *tree, Particles *particles, integer n, integer level) {
 
@@ -1109,6 +1120,11 @@ namespace TreeNS {
             real buildTreeMiluphcuda(Tree *tree, Particles *particles, integer n, integer m, bool time) {
                 ExecutionPolicy executionPolicy;
                 return cuda::launch(time, executionPolicy, ::TreeNS::Kernel::buildTreeMiluphcuda, tree, particles, n, m);
+            }
+
+            real prepareSorting(Tree *tree, Particles *particles, integer n, integer m) {
+                ExecutionPolicy executionPolicy;
+                return cuda::launch(time, executionPolicy, ::TreeNS::Kernel::prepareSorting, tree, particles, n, m);
             }
 
             real calculateCentersOfMass(Tree *tree, Particles *particles, integer n, integer level, bool time) {

@@ -990,7 +990,6 @@ real Miluphpc::parallel_gravity() {
     }
 
     treeHandler->copy(To::host);
-
 #if CUBIC_DOMAINS
     real diam = std::abs(*treeHandler->h_maxX) + std::abs(*treeHandler->h_minX);
     Logger(INFO) << "diam: " << diam;
@@ -1612,11 +1611,11 @@ real Miluphpc::parallel_sph() {
     }
 
     // writing particles to send to h5 file
-    //int *h_particles2SendIndices = new int[particleTotalSendLength];
-    //cuda::copy(h_particles2SendIndices, d_particles2SendIndices, particleTotalSendLength, To::host);
-    //std::string filename = "SPH2Send";
-    //particles2file(filename, h_particles2SendIndices, particleTotalSendLength);
-    //delete [] h_particles2SendIndices;
+    int *h_particles2SendIndices = new int[particleTotalSendLength];
+    cuda::copy(h_particles2SendIndices, d_particles2SendIndices, particleTotalSendLength, To::host);
+    std::string filename = "SPH2Send";
+    particles2file(filename, h_particles2SendIndices, particleTotalSendLength);
+    delete [] h_particles2SendIndices;
     // end: writing particles to send to h5 file
 
     Logger(INFO) << "sph: particleTotalReceiveLength: " << particleTotalReceiveLength;
@@ -1805,14 +1804,40 @@ real Miluphpc::parallel_sph() {
 #endif
 
 
+    /*real timeSorting = 0.;
+    timeSorting += TreeNS::Kernel::Launch::prepareSorting(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal, numParticles);
+
+    keyType *d_keys;
+    cuda::malloc(d_keys, numParticlesLocal);
+    timeSorting += SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys(subDomainKeyTreeHandler->d_subDomainKeyTree,
+                                                        treeHandler->d_tree, particleHandler->d_particles,
+                                                        d_keys, 21, numParticlesLocal, curveType);
+
+    timeSorting += HelperNS::sortArray(treeHandler->d_start, treeHandler->d_sorted, d_keys, helperHandler->d_keyTypeBuffer, numParticlesLocal);
+
+    //int *h_sorted = new int[numParticlesLocal];
+    //cuda::copy(h_sorted, treeHandler->d_sorted, numParticlesLocal, To::host);
+    //for (int i=0; i<100; i++) {
+    //    Logger(INFO) << "i: " << i << " sorted: " << h_sorted[i];
+    //}
+    //delete [] h_sorted;
+    cuda::free(d_keys);
+
+    Logger(INFO) << "sph: presorting: " << timeSorting << " ms";*/
 
     time = SPH::Kernel::Launch::fixedRadiusNN(treeHandler->d_tree, particleHandler->d_particles, particleHandler->d_nnl,
                                               0.5 * diam, numParticlesLocal, numParticles, numNodes);
 
-    //time = SPH::Kernel::Launch::fixedRadiusNN_Test(treeHandler->d_tree, particleHandler->d_particles, particleHandler->d_nnl,
+    // ATTENTION: brute-force method
+    //time = SPH::Kernel::Launch::fixedRadiusNN_bruteForce(treeHandler->d_tree, particleHandler->d_particles, particleHandler->d_nnl,
+    //                                                        numParticlesLocal, numParticles, numNodes);
+
+    // using shared memory (not beneficial)
+    //time = SPH::Kernel::Launch::fixedRadiusNN_sharedMemory(treeHandler->d_tree, particleHandler->d_particles, particleHandler->d_nnl,
     //                                                numParticlesLocal, numParticles, numNodes);
 
-    //time = SPH::Kernel::Launch::fixedRadiusNN_New(treeHandler->d_tree, particleHandler->d_particles, particleHandler->d_nnl,
+    // test version
+    //time = SPH::Kernel::Launch::fixedRadiusNN_withinBox(treeHandler->d_tree, particleHandler->d_particles, particleHandler->d_nnl,
     //                                               numParticlesLocal, numParticles, numNodes);
 
     totalTime += time;
@@ -1843,23 +1868,24 @@ real Miluphpc::parallel_sph() {
     //Timer timerTemp;
     // TODO: update rho, cs, p, sml
     // updating necessary particle entries
-    // sml-entry particle exchange
+
 
     // not really necessary but beneficial for timing
     comm.barrier();
 
+    // sml-entry particle exchange
     CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_sml, d_collectedEntries,
                                              particleTotalSendLength);
     //timerTemp.reset();
-    sendParticles(d_collectedEntries, &particleHandler->d_rho[numParticlesLocal], particleSendLengths,
+    sendParticles(d_collectedEntries, &particleHandler->d_sml[numParticlesLocal], particleSendLengths,
                   particleReceiveLengths);
     //Logger(TIME) << "sph: resending rho: " << timerTemp.elapsed();
+
     // pressure-entry particle exchange
     CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_p, d_collectedEntries,
                                              particleTotalSendLength);
-
     //timerTemp.reset();
-    sendParticles(d_collectedEntries, &particleHandler->d_sml[numParticlesLocal], particleSendLengths,
+    sendParticles(d_collectedEntries, &particleHandler->d_p[numParticlesLocal], particleSendLengths,
                   particleReceiveLengths);
     //Logger(TIME) << "sph: resending sml: " << timerTemp.elapsed();
     // rho-entry particle exchange
@@ -1867,7 +1893,7 @@ real Miluphpc::parallel_sph() {
                                                                       particleTotalSendLength);
 
     //timerTemp.reset();
-    sendParticles(d_collectedEntries, &particleHandler->d_p[numParticlesLocal], particleSendLengths,
+    sendParticles(d_collectedEntries, &particleHandler->d_rho[numParticlesLocal], particleSendLengths,
                   particleReceiveLengths);
     //Logger(TIME) << "sph: resending pressure: " << timerTemp.elapsed();
 

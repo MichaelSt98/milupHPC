@@ -474,6 +474,8 @@ namespace TreeNS {
 
         __global__ void buildTreeMiluphcuda(Tree *tree, Particles *particles, integer n, integer m);
 
+        __global__ void prepareSorting(Tree *tree, Particles *particles, integer n, integer m);
+
         __global__ void calculateCentersOfMass(Tree *tree, Particles *particles, integer n, integer level);
 
         /**
@@ -557,6 +559,8 @@ namespace TreeNS {
             real buildTree(Tree *tree, Particles *particles, integer n, integer m, bool time=false);
 
             real buildTreeMiluphcuda(Tree *tree, Particles *particles, integer n, integer m, bool time=false);
+
+            real prepareSorting(Tree *tree, Particles *particles, integer n, integer m);
 
             real calculateCentersOfMass(Tree *tree, Particles *particles, integer n, integer level, bool time=false);
 
