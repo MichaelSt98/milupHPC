@@ -25,10 +25,14 @@ void SetDeviceBeforeInit()
     {
         rank = atoi(localRankStr);
     }
-    Logger(INFO) << "devCount: " << devCount << " | rank: " << rank
-    << " | setting device: " << rank % devCount;
+
+    //Logger(INFO) << "devCount: " << devCount << " | rank: " << rank
+    //<< " | setting device: " << rank % devCount;
+
     safeCudaCall(cudaGetDeviceCount(&devCount));
-    safeCudaCall(cudaSetDevice(rank % devCount));
+    //safeCudaCall(cudaSetDevice(rank % devCount));
+
+    cudaSetDevice(rank % devCount);
 }
 
 structlog LOGCFG = {};
@@ -36,7 +40,7 @@ structlog LOGCFG = {};
 int main(int argc, char** argv)
 {
 
-    //SetDeviceBeforeInit();
+    SetDeviceBeforeInit();
 
     boost::mpi::environment env(argc, argv);
     boost::mpi::communicator comm;
@@ -50,7 +54,7 @@ int main(int argc, char** argv)
 
     printf("Hello World from proc %i out of %i\n", rank, numProcesses);
 
-    cudaSetDevice(rank);
+    //cudaSetDevice(rank);
     int device;
     cudaGetDevice(&device);
     int numDevices;
