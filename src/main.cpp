@@ -124,8 +124,8 @@ int main(int argc, char** argv)
 #endif
 #endif
 
-    //IntegratorSelection::Type integratorSelection = IntegratorSelection::explicit_euler;
-    IntegratorSelection::Type integratorSelection = IntegratorSelection::predictor_corrector_euler;
+    IntegratorSelection::Type integratorSelection = IntegratorSelection::explicit_euler;
+    //IntegratorSelection::Type integratorSelection = IntegratorSelection::predictor_corrector_euler;
 
     Miluphpc *miluphpc;
     // miluphpc = new Miluphpc(parameters, numParticles, numNodes); // not possible since abstract class

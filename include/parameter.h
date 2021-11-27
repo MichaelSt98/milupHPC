@@ -134,13 +134,12 @@ enum EquationOfStates {
 // Dimension of the problem
 #define DIM 3
 
-#define SI_UNITS 1
+#define SI_UNITS 0
 
 namespace Constants {
     constexpr real G = 6.67430e-11;
 }
 
-#define SPH_SIM 1
 
 struct Entry
 {
@@ -179,7 +178,8 @@ private:
 
 #define CUBIC_DOMAINS 0
 
-#define GRAVITY_SIM 0
+#define GRAVITY_SIM 1
+#define SPH_SIM 0
 
 #define INTEGRATE_ENERGY 1
 

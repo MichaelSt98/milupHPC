@@ -59,7 +59,7 @@ void PredictorCorrectorEuler::integrate(int step) {
 
         printf("removing particles...\n");
 
-        removeParticles();
+        //removeParticles();
 
         printf("removed particles...\n");
 

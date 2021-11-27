@@ -567,12 +567,458 @@ namespace Gravity {
             }
         }
 
-        __global__ void computeForces(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
-                                      integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree) {
+        __global__ void computeForces_v1(Tree *tree, Particles *particles, real radius, integer n, integer m,
+                                         SubDomainKeyTree *subDomainKeyTree) {
+
+            register int i, ii;
+            int child, nodeIndex, childNumber, depth;
+
+            real px, ax, dx, f, distance;
+#if DIM > 1
+            real py, ay, dy;
+#if DIM == 3
+            real pz, az, dz;
+#endif
+#endif
+            real sml;
+            real thetasq = theta*theta;
+
+            int currentNodeIndex[MAX_DEPTH];
+            int currentChildNumber[MAX_DEPTH];
+
+            __shared__ volatile real cellSize[MAX_DEPTH];
+
+            if (threadIdx.x == 0) {
+                cellSize[0] = 4.0 * radius * radius;
+#pragma unroll
+                for (i = 1; i < MAX_DEPTH; i++) {
+                    cellSize[i] = cellSize[i - 1] * 0.25;
+                }
+            }
+
+            __syncthreads();
+
+            for (ii = threadIdx.x + blockIdx.x * blockDim.x; ii < n; ii += blockDim.x * gridDim.x) {
+
+                i = tree->sorted[ii]; //i = ii;
+
+                px = particles->x[i];
+#if DIM > 1
+                py = particles->y[i];
+#if DIM == 3
+                pz = particles->z[i];
+#endif
+#endif
+                //particles->ax[i] = 0.0;
+                particles->g_ax[i] = 0.0;
+#if DIM > 1
+                //particles->ay[i] = 0.0;
+                particles->g_ay[i] = 0.0;
+#if DIM == 3
+                //particles->az[i] = 0.0;
+                particles->g_az[i] = 0.0;
+#endif
+#endif
+                ax = 0.0;
+#if DIM > 1
+                ay = 0.0;
+#if DIM == 3
+                az = 0.0;
+#endif
+#endif
+
+                // start at root
+                depth = 1;
+                currentNodeIndex[depth] = 0;
+                currentChildNumber[depth] = 0;
+
+                do {
+                    childNumber = currentChildNumber[depth];
+                    nodeIndex = currentNodeIndex[depth];
+
+                    while(childNumber < POW_DIM) {
+                        do {
+                            child = tree->child[POW_DIM * nodeIndex + childNumber];
+                            childNumber++;
+                        } while(child == -1 && childNumber < POW_DIM);
+                        if (child != -1 && child != i) { // dont do self-gravity with yourself!
+                            dx = particles->x[child] - px;
+                            // TODO: make smoothing parameter to input constant
+                            distance = dx*dx + 0.025; //150329404.287723; //(0.0317 * 0.0317); //0.025;
+#if DIM > 1
+                            dy = particles->y[child] - py;
+                            distance += dy*dy;
+#endif
+#if DIM == 3
+                            dz = particles->z[child] - pz;
+                            distance += dz*dz;
+#endif
+                            // if child is leaf or far away
+                            if (child < n || distance * thetasq > cellSize[depth]) {
+                                distance = cuda::math::sqrt(distance);
+#if SI_UNITS
+                                f = Constants::G * particles->mass[child] / (distance * distance * distance);
+#else
+                                f = particles->mass[child] / (distance * distance * distance);
+#endif
+
+                                ax += f*dx;
+#if DIM > 1
+                                ay += f*dy;
+#if DIM == 3
+                                az += f*dz;
+#endif
+#endif
+                                //TODO: some flag for calculating potential energy
+                                // gravitational potential energy
+                                //particles->u[i] -= 0.5 * (particles->mass[child] * particles->mass[i])/distance;
+                                // end: gravitational potential energy
+                            } else {
+                                // put child on stack
+                                currentChildNumber[depth] = childNumber;
+                                currentNodeIndex[depth] = nodeIndex;
+                                depth++;
+                                if (depth == MAX_DEPTH) {
+                                    printf("\n\nMAX_DEPTH reached in selfgravity... this is not good.\n\n");
+                                    assert(depth < MAX_DEPTH);
+                                }
+                                childNumber = 0;
+                                nodeIndex = child;
+                            }
+                        }
+                    }
+                    depth--;
+                } while(depth > 0);
+
+                //particles->ax[i] = ax;
+                particles->g_ax[i] = ax;
+#if DIM > 1
+                //particles->ay[i] = ay;
+                particles->g_ay[i] = ay;
+#if DIM == 3
+                //particles->az[i] = az;
+                particles->g_az[i] = az;
+#endif
+#endif
+            }
+        }
+
+        __global__ void computeForces_v1_1(Tree *tree, Particles *particles, real radius, integer n, integer m,
+                                         SubDomainKeyTree *subDomainKeyTree) {
+
+            integer i, ii, child, nodeIndex, childNumber, depth;
+
+            real px, ax, dx, f, distance;
+#if DIM > 1
+            real py, ay, dy;
+#if DIM == 3
+            real pz, az, dz;
+#endif
+#endif
+
+            real sml;
+            real thetasq = theta*theta;
+
+            integer currentNodeIndex[MAX_DEPTH];
+            integer currentChildNumber[MAX_DEPTH];
+
+            __shared__ volatile real cellSize[MAX_DEPTH];
+
+            if (threadIdx.x == 0) {
+                cellSize[0] = 4.0 * radius * radius;
+#pragma unroll
+                for (i = 1; i < MAX_DEPTH; i++) {
+                    cellSize[i] = cellSize[i - 1] * 0.25;
+                }
+            }
+
+            __syncthreads();
+
+            for (i = threadIdx.x + blockIdx.x * blockDim.x; i < n; i += blockDim.x * gridDim.x) {
+
+                px = particles->x[i];
+#if DIM > 1
+                py = particles->y[i];
+#if DIM == 3
+                pz = particles->z[i];
+#endif
+#endif
+                //particles->ax[i] = 0.0;
+                particles->g_ax[i] = 0.0;
+#if DIM > 1
+                //particles->ay[i] = 0.0;
+                particles->g_ay[i] = 0.0;
+#if DIM == 3
+                //particles->az[i] = 0.0;
+                particles->g_az[i] = 0.0;
+#endif
+#endif
+                ax = 0.0;
+#if DIM > 1
+                ay = 0.0;
+#if DIM == 3
+                az = 0.0;
+#endif
+#endif
+
+                // start at root
+                depth = 1;
+                currentNodeIndex[depth] = 0;
+                currentChildNumber[depth] = 0;
+
+                do {
+                    childNumber = currentChildNumber[depth];
+                    nodeIndex = currentNodeIndex[depth];
+
+                    while(childNumber < POW_DIM) {
+                        do {
+                            child = tree->child[POW_DIM * nodeIndex + childNumber]; //childList[childListIndex(nodeIndex, childNumber)];
+                            childNumber++;
+                        } while(child == -1 && childNumber < POW_DIM);
+                        if (child != -1 && child != i) { // dont do self-gravity with yourself!
+                            dx = particles->x[child] - px;
+                            // TODO: make smoothing parameter to input constant
+                            distance = dx*dx + 0.025; //150329404.287723; //(0.0317 * 0.0317); //0.025;
+#if DIM > 1
+                            dy = particles->y[child] - py;
+                            distance += dy*dy;
+#endif
+#if DIM == 3
+                            dz = particles->z[child] - pz;
+                            distance += dz*dz;
+#endif
+                            // if child is leaf or far away
+                            if (child < n || distance * thetasq > cellSize[depth]) {
+                                distance = sqrt(distance);
+#if SI_UNITS
+                                f = Constants::G * particles->mass[child] / (distance * distance * distance);
+#else
+                                f = particles->mass[child] / (distance * distance * distance);
+#endif
+
+                                ax += f*dx;
+#if DIM > 1
+                                ay += f*dy;
+#if DIM == 3
+                                az += f*dz;
+#endif
+#endif
+                                //TODO: some flag for calculating potential energy
+                                // gravitational potential energy
+                                //particles->u[i] -= 0.5 * (particles->mass[child] * particles->mass[i])/distance;
+                                // end: gravitational potential energy
+                            } else {
+                                // put child on stack
+                                currentChildNumber[depth] = childNumber;
+                                currentNodeIndex[depth] = nodeIndex;
+                                depth++;
+                                if (depth == MAX_DEPTH) {
+                                    printf("\n\nMAX_DEPTH reached in selfgravity... this is not good.\n\n");
+                                    assert(depth < MAX_DEPTH);
+                                }
+                                childNumber = 0;
+                                nodeIndex = child;
+                            }
+                        }
+                    }
+                    depth--;
+                } while(depth > 0);
+
+                //particles->ax[i] = ax;
+                particles->g_ax[i] = ax;
+#if DIM > 1
+                //particles->ay[i] = ay;
+                particles->g_ay[i] = ay;
+#if DIM == 3
+                //particles->az[i] = az;
+                particles->g_az[i] = az;
+#endif
+#endif
+            }
+        }
+
+        __global__ void computeForces_v1_2(Tree *tree, Particles *particles, real radius, integer n, integer m,
+                                           SubDomainKeyTree *subDomainKeyTree) {
+
+            register int i, ii;
+            int child, nodeIndex, childNumber, depth;
+
+            real px, ax, dx, f, distance;
+#if DIM > 1
+            real py, ay, dy;
+#if DIM == 3
+            real pz, az, dz;
+#endif
+#endif
+            real sml;
+            real thetasq = theta*theta;
+
+            __shared__ int currentNodeIndex[MAX_DEPTH];
+            __shared__ int currentChildNumber[MAX_DEPTH];
+
+            __shared__ volatile real cellSize[MAX_DEPTH];
+
+            if (threadIdx.x == 0) {
+                cellSize[0] = 4.0 * radius * radius;
+                #pragma unroll
+                for (i = 1; i < MAX_DEPTH; i++) {
+                    cellSize[i] = cellSize[i - 1] * 0.25;
+                }
+            }
+
+            __syncthreads();
+
+            for (ii = threadIdx.x + blockIdx.x * blockDim.x; ii < n; ii += blockDim.x * gridDim.x) {
+
+                i = tree->sorted[ii]; //i = ii;
+
+                px = particles->x[i];
+#if DIM > 1
+                py = particles->y[i];
+#if DIM == 3
+                pz = particles->z[i];
+#endif
+#endif
+                //particles->ax[i] = 0.0;
+                particles->g_ax[i] = 0.0;
+#if DIM > 1
+                //particles->ay[i] = 0.0;
+                particles->g_ay[i] = 0.0;
+#if DIM == 3
+                //particles->az[i] = 0.0;
+                particles->g_az[i] = 0.0;
+#endif
+#endif
+                ax = 0.0;
+#if DIM > 1
+                ay = 0.0;
+#if DIM == 3
+                az = 0.0;
+#endif
+#endif
+
+                // start at root
+                depth = 1;
+                currentNodeIndex[depth] = 0;
+                currentChildNumber[depth] = 0;
+
+                do {
+                    childNumber = currentChildNumber[depth];
+                    nodeIndex = currentNodeIndex[depth];
+
+                    while(childNumber < POW_DIM) {
+                        do {
+                            child = tree->child[POW_DIM * nodeIndex + childNumber];
+                            childNumber++;
+                        } while(child == -1 && childNumber < POW_DIM);
+                        if (child != -1 && child != i) { // dont do self-gravity with yourself!
+                            dx = particles->x[child] - px;
+                            // TODO: make smoothing parameter to input constant
+                            distance = dx*dx + 0.025; //150329404.287723; //(0.0317 * 0.0317); //0.025;
+#if DIM > 1
+                            dy = particles->y[child] - py;
+                            distance += dy*dy;
+#endif
+#if DIM == 3
+                            dz = particles->z[child] - pz;
+                            distance += dz*dz;
+#endif
+                            // if child is leaf or far away
+                            if (child < n || distance * thetasq > cellSize[depth]) {
+                                distance = cuda::math::sqrt(distance);
+#if SI_UNITS
+                                f = Constants::G * particles->mass[child] / (distance * distance * distance);
+#else
+                                f = particles->mass[child] / (distance * distance * distance);
+#endif
+
+                                ax += f*dx;
+#if DIM > 1
+                                ay += f*dy;
+#if DIM == 3
+                                az += f*dz;
+#endif
+#endif
+                                //TODO: some flag for calculating potential energy
+                                // gravitational potential energy
+                                //particles->u[i] -= 0.5 * (particles->mass[child] * particles->mass[i])/distance;
+                                // end: gravitational potential energy
+                            } else {
+                                // put child on stack
+                                currentChildNumber[depth] = childNumber;
+                                currentNodeIndex[depth] = nodeIndex;
+                                depth++;
+                                if (depth == MAX_DEPTH) {
+                                    printf("\n\nMAX_DEPTH reached in selfgravity... this is not good.\n\n");
+                                    assert(depth < MAX_DEPTH);
+                                }
+                                childNumber = 0;
+                                nodeIndex = child;
+                            }
+                        }
+                    }
+                    depth--;
+                } while(depth > 0);
+
+                //particles->ax[i] = ax;
+                particles->g_ax[i] = ax;
+#if DIM > 1
+                //particles->ay[i] = ay;
+                particles->g_ay[i] = ay;
+#if DIM == 3
+                //particles->az[i] = az;
+                particles->g_az[i] = az;
+#endif
+#endif
+            }
+        }
+
+        // see: https://iss.oden.utexas.edu/Publications/Papers/burtscher11.pdf
+        /*__global__ void test() {
+            // precompute and cache info
+            // determine first thread in each warp
+            for (//sorted body indexes assigned to me) {
+                // cache body data
+                // initialize iteration stack
+                depth = 0;
+                while (depth >= 0) {
+                    while (//there are more nodes to visit) {
+                        if (//I’m the first thread in the warp) {
+                            // move on to next node
+                            // read node data and put in shared memory
+                        }
+                        threadfence block();
+                        if (//node is not null) {
+                            // get node data from shared memory
+                            // compute distance to node
+                            if ((//node is a body) || all(//distance >= cutoff)) {
+                                // compute interaction force contribution
+                            } else {
+                                depth++; // descend to next tree level
+                                if (//I’m the first thread in the warp) {
+                                    // push node’s children onto iteration stack
+                                }
+                                threadfence block();
+                            }
+                        } else {
+                            depth = max(0, depth-1); // early out because remaining nodes are also null
+                        }
+                    }
+                    depth−−;
+                }
+            // update body data
+            }
+        }*/
+
+        __global__ void computeForces_v2(Tree *tree, Particles *particles, real radius, integer n, integer m,
+                                         integer blockSize, integer warp, integer stackSize,
+                                         SubDomainKeyTree *subDomainKeyTree) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x*blockDim.x;
             integer stride = blockDim.x*gridDim.x;
             integer offset = 0;
+
+            register int sortedIndex;
 
             //__shared__ real depth[stackSize * blockSize/warp];
             //__shared__ integer stack[stackSize * blockSize/warp];
@@ -581,51 +1027,52 @@ namespace Gravity {
             real* depth = (real*)buffer;
             integer* stack = (integer*)&depth[stackSize * blockSize/warp];
 
-            real x_radius = 0.5*(*tree->maxX - (*tree->minX));
+            real pos_x;
 #if DIM > 1
-            real y_radius = 0.5*(*tree->maxY - (*tree->minY));
+            real pos_y;
 #if DIM == 3
-            real z_radius = 0.5*(*tree->maxZ - (*tree->minZ));
+            real pos_z;
 #endif
 #endif
 
-#if DIM == 1
-            real radius = x_radius;
-#elif DIM == 2
-            real radius = cuda::math::max(x_radius, y_radius);
-#else
-            real radius_max = cuda::math::max(x_radius, y_radius);
-            real radius = cuda::math::max(radius_max, z_radius);
+            real acc_x;
+#if DIM > 1
+            real acc_y;
+#if DIM == 3
+            real acc_z;
+#endif
 #endif
 
             // in case that one of the first children are a leaf
-            integer jj = -1;
+            int jj = -1;
+            #pragma unroll
             for (integer i=0; i<POW_DIM; i++) {
                 if (tree->child[i] != -1) {
                     jj++;
                 }
             }
 
-            integer counter = threadIdx.x % warp;
-            integer stackStartIndex = stackSize*(threadIdx.x / warp);
+            int counter = threadIdx.x % warp;
+            int stackStartIndex = stackSize*(threadIdx.x / warp);
 
             while ((bodyIndex + offset) < n) {
 
-                integer sortedIndex = tree->sorted[bodyIndex + offset];
+                //sortedIndex = bodyIndex + offset;
+                sortedIndex = tree->sorted[bodyIndex + offset];
 
-                real pos_x = particles->x[sortedIndex];
+                pos_x = particles->x[sortedIndex];
 #if DIM > 1
-                real pos_y = particles->y[sortedIndex];
+                pos_y = particles->y[sortedIndex];
 #if DIM == 3
-                real pos_z = particles->z[sortedIndex];
+                pos_z = particles->z[sortedIndex];
 #endif
 #endif
 
-                real acc_x = 0.0;
+                acc_x = 0.0;
 #if DIM > 1
-                real acc_y = 0.0;
+                acc_y = 0.0;
 #if DIM == 3
-                real acc_z = 0.0;
+                acc_z = 0.0;
 #endif
 #endif
 
@@ -634,8 +1081,9 @@ namespace Gravity {
 
                 if (counter == 0) {
 
-                    integer temp = 0;
+                    int temp = 0;
 
+                    #pragma unroll
                     for (int i=0; i<POW_DIM; i++) {
                         if (tree->child[i] != -1) {
                             stack[stackStartIndex + temp] = tree->child[i];
@@ -706,11 +1154,12 @@ namespace Gravity {
                                     depth[top] = dp; // depth[top] = 0.25*dp;
                                 }
                                 top++; // descend to next tree level
-                                //__threadfence();
+                                __threadfence_block();
                             }
                         }
+                        // this is not working
                         //else {
-                        //    top = max(stackStartIndex, top-1);
+                        //    top = cuda::math::max(stackStartIndex, top-1);
                         //}
                     }
                     top--;
@@ -725,14 +1174,13 @@ namespace Gravity {
 #endif
 
                 offset += stride;
-
                 __syncthreads();
             }
 
         }
 
-        __global__ void computeForcesUnsorted(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
-                                      integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree) {
+        __global__ void computeForces_v2_1(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
+                                           integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x*blockDim.x;
             integer stride = blockDim.x*gridDim.x;
@@ -892,150 +1340,6 @@ namespace Gravity {
 
         }
 
-        __global__ void computeForcesMiluphcuda(Tree *tree, Particles *particles, integer n, integer m,
-                                                SubDomainKeyTree *subDomainKeyTree) {
-
-            integer i, child, nodeIndex, childNumber, depth;
-            real px, ax, dx, f, distance;
-#if DIM > 1
-            real py, ay, dy;
-#endif
-            integer currentNodeIndex[MAX_DEPTH];
-            integer currentChildNumber[MAX_DEPTH];
-#if DIM == 3
-            real pz, az, dz;
-#endif
-            real sml;
-            real thetasq = theta*theta;
-
-            __shared__ volatile real cellsize[MAX_DEPTH];
-
-            real x_radius = 0.5*(*tree->maxX - (*tree->minX));
-#if DIM > 1
-            real y_radius = 0.5*(*tree->maxY - (*tree->minY));
-#if DIM == 3
-            real z_radius = 0.5*(*tree->maxZ - (*tree->minZ));
-#endif
-#endif
-
-#if DIM == 1
-            real radius = x_radius;
-#elif DIM == 2
-            real radius = cuda::math::max(x_radius, y_radius);
-#else
-            real radius_max = cuda::math::max(x_radius, y_radius);
-            real radius = cuda::math::max(radius_max, z_radius);
-#endif
-
-            if (0 == threadIdx.x) {
-                cellsize[0] = 4.0 * radius * radius;
-                for (i = 1; i < MAX_DEPTH; i++) {
-                    cellsize[i] = cellsize[i - 1] * 0.25;
-                }
-            }
-
-            __syncthreads();
-            //__threadfence();
-
-            for (i = threadIdx.x + blockIdx.x * blockDim.x; i < n; i += blockDim.x * gridDim.x) {
-                px = particles->x[i];
-#if DIM > 1
-                py = particles->y[i];
-#if DIM == 3
-                pz = particles->z[i];
-#endif
-#endif
-                //particles->ax[i] = 0.0;
-                particles->g_ax[i] = 0.0;
-#if DIM > 1
-                //particles->ay[i] = 0.0;
-                particles->g_ay[i] = 0.0;
-#endif
-                ax = 0.0;
-#if DIM > 1
-                ay = 0.0;
-#if DIM == 3
-                az = 0.0;
-                //particles->az[i] = 0.0;
-                particles->g_az[i] = 0.0;
-#endif
-#endif
-
-                // start at root
-                depth = 1;
-                currentNodeIndex[depth] = 0;
-                currentChildNumber[depth] = 0;
-
-                do {
-                    childNumber = currentChildNumber[depth];
-                    nodeIndex = currentNodeIndex[depth];
-
-                    while(childNumber < POW_DIM) {
-                        do {
-                            child = tree->child[POW_DIM * nodeIndex + childNumber]; //childList[childListIndex(nodeIndex, childNumber)];
-                            childNumber++;
-                        } while(child == -1 && childNumber < POW_DIM);
-                        if (child != -1 && child != i) { // dont do self-gravity with yourself!
-                            dx = particles->x[child] - px;
-                            distance = dx*dx + 150329404.287723; //(0.0317 * 0.0317); //0.025;
-#if DIM > 1
-                            dy = particles->y[child] - py;
-                            distance += dy*dy;
-#endif
-#if DIM == 3
-                            dz = particles->z[child] - pz;
-                            distance += dz*dz;
-#endif
-                            // if child is leaf or far away
-                            if (child < n || distance * thetasq > cellsize[depth]) {
-                                distance = sqrt(distance);
-                                //distance += 1e10;
-#if SI_UNITS
-                                f = Constants::G * particles->mass[child] / (distance * distance * distance);
-#else
-                                f = particles->mass[child] / (distance * distance * distance);
-#endif
-
-                                ax += f*dx;
-#if DIM > 1
-                                ay += f*dy;
-#if DIM == 3
-                                az += f*dz;
-#endif
-#endif
-                                // gravitational potential energy
-                                particles->u[i] -= 0.5 * (particles->mass[child] * particles->mass[i])/distance;
-                                // end: gravitational potential energy
-                            } else {
-                                // put child on stack
-                                currentChildNumber[depth] = childNumber;
-                                currentNodeIndex[depth] = nodeIndex;
-                                depth++;
-                                if (depth == MAX_DEPTH) {
-                                    printf("\n\nMAX_DEPTH reached in selfgravity... this is not good.\n\n");
-                                    assert(depth < MAX_DEPTH);
-                                }
-                                childNumber = 0;
-                                nodeIndex = child;
-                            }
-                        }
-                    }
-                    depth--;
-                } while(depth > 0);
-
-                //particles->ax[i] = ax;
-                particles->g_ax[i] = ax;
-#if DIM > 1
-                //particles->ay[i] = ay;
-                particles->g_ay[i] = ay;
-#if DIM == 3
-                //particles->az[i] = az;
-                particles->g_az[i] = az;
-#endif
-#endif
-            }
-        }
-
         __global__ void createKeyHistRanges(Helper *helper, integer bins) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
@@ -1082,16 +1386,19 @@ namespace Gravity {
                                       integer n, integer m, integer relevantIndex, integer level,
                                       Curve::Type curveType) {
 
-            integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
-            integer stride = blockDim.x * gridDim.x;
-            integer offset = 0;
+            int bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            int stride = blockDim.x * gridDim.x;
+            int offset = 0;
 
-            integer particleLevel;
-            integer domainListLevel;
-            integer childIndex;
+            int particleLevel;
+            int domainListLevel;
+            int currentDomainListIndex;
+            int currentParticleIndex;
+            int childIndex;
 
-            integer childPath;
-            integer tempChildIndex;
+            int childPath;
+            int tempChildIndex;
+
             bool isDomainListNode;
             bool insert;
 
@@ -1143,19 +1450,23 @@ namespace Gravity {
                     //           particles->mass[domainList->relevantDomainListIndices[relevantIndex]]);
                     //}
 
-                    insert = true;
-                    isDomainListNode = false;
+                    currentParticleIndex = bodyIndex + offset;
 
-                    if (sendIndices[bodyIndex + offset] == 0 || sendIndices[bodyIndex + offset] == 3 && ((bodyIndex + offset) < n || (bodyIndex + offset) >= m )) {
+                    if (sendIndices[currentParticleIndex] == 0 || sendIndices[currentParticleIndex] == 3 && (currentParticleIndex < n || currentParticleIndex >= m )) {
 
-                        if (sendIndices[bodyIndex + offset] == 0) {
+                        insert = true;
+                        isDomainListNode = false;
+
+                        if (sendIndices[currentParticleIndex] == 0) {
+
                             // TODO: this is probably not necessary, since only domain list indices can correspond to another process
                             if (subDomainKeyTree->key2proc(
-                                    tree->getParticleKey(particles, bodyIndex + offset, MAX_LEVEL, curveType)) !=
+                                    tree->getParticleKey(particles, currentParticleIndex, MAX_LEVEL, curveType)) !=
                                 subDomainKeyTree->rank) {
                                 insert = false;
                             }
                             // check whether to be inserted index corresponds to a domain list
+                            /*
                             if (insert) {
                                 for (int i_domain = 0; i_domain < *domainList->domainListIndex; i_domain++) {
                                     if ((bodyIndex + offset) == domainList->domainListIndices[i_domain]) {
@@ -1165,22 +1476,28 @@ namespace Gravity {
                                     }
                                 }
                             }
+                            */
 
                             if (insert) {
-                                sendIndices[bodyIndex + offset] = 3;
+                                sendIndices[currentParticleIndex] = 3;
                             } else {
-                                sendIndices[bodyIndex + offset] = -1;
+                                sendIndices[currentParticleIndex] = -1;
                             }
                         }
 
                         // get the particle's level
-                        particleLevel = tree->getTreeLevel(particles, bodyIndex + offset, MAX_LEVEL, curveType);
+                        particleLevel /*int tempParticleLevel*/ = tree->getTreeLevel(particles, currentParticleIndex, MAX_LEVEL, curveType);
+                        //particleLevel = particles->level[bodyIndex + offset];
+                        //if (tempParticleLevel != particleLevel) {
+                        //    printf("%i vs %i\n", tempParticleLevel, particleLevel);
+                        //}
 
                         // get the domain list node's level
                         //domainListLevel = tree->getTreeLevel(particles,
                         //                                     domainList->relevantDomainListIndices[relevantIndex],
                         //                                     MAX_LEVEL, curveType);
                         domainListLevel = domainList->relevantDomainListLevels[relevantIndex];
+                        currentDomainListIndex = domainList->relevantDomainListIndices[relevantIndex];
                         //printf("domainListLevel = %i\n", domainListLevel);
                         if (domainListLevel == -1) {
                             printf("symbolicForce(): domainListLevel == -1 for (relevant) index: %i\n", relevantIndex);
@@ -1205,6 +1522,7 @@ namespace Gravity {
                         //}
                         for (int j = 0; j < domainListLevel; j++) {
 
+                            /*
 #if DIM == 3
                             if (particles->x[domainList->relevantDomainListIndices[relevantIndex]] <= max_x && particles->x[domainList->relevantDomainListIndices[relevantIndex]] >= min_x &&
                                 particles->y[domainList->relevantDomainListIndices[relevantIndex]] <= max_y && particles->y[domainList->relevantDomainListIndices[relevantIndex]] >= min_y &&
@@ -1220,22 +1538,24 @@ namespace Gravity {
                                 assert(0);
                             }
 #endif
+                            */
+
                             childPath = 0;
-                            if (particles->x[domainList->relevantDomainListIndices[relevantIndex]] < 0.5 * (min_x + max_x)) {
+                            if (particles->x[currentDomainListIndex] < 0.5 * (min_x + max_x)) {
                                 childPath += 1;
                                 max_x = 0.5 * (min_x + max_x);
                             } else {
                                 min_x = 0.5 * (min_x + max_x);
                             }
 #if DIM > 1
-                            if (particles->y[domainList->relevantDomainListIndices[relevantIndex]] < 0.5 * (min_y + max_y)) {
+                            if (particles->y[currentDomainListIndex] < 0.5 * (min_y + max_y)) {
                                 childPath += 2;
                                 max_y = 0.5 * (min_y + max_y);
                             } else {
                                 min_y = 0.5 * (min_y + max_y);
                             }
 #if DIM == 3
-                            if (particles->z[domainList->relevantDomainListIndices[relevantIndex]] < 0.5 * (min_z + max_z)) {
+                            if (particles->z[currentDomainListIndex] < 0.5 * (min_z + max_z)) {
                                 childPath += 4;
                                 max_z = 0.5 * (min_z + max_z);
                             } else {
@@ -1246,17 +1566,29 @@ namespace Gravity {
                         }
 
                         // determine (smallest) distance between domain list box and (pseudo-) particle
-                        if (particles->x[bodyIndex + offset] < min_x) { dx = particles->x[bodyIndex + offset] - min_x;
-                        } else if (particles->x[bodyIndex + offset] > max_x) { dx = particles->x[bodyIndex + offset] - max_x;
-                        } else { dx = 0.f; }
+                        if (particles->x[currentParticleIndex] < min_x) {
+                            dx = particles->x[currentParticleIndex] - min_x;
+                        } else if (particles->x[currentParticleIndex] > max_x) {
+                            dx = particles->x[currentParticleIndex] - max_x;
+                        } else {
+                            dx = 0.;
+                        }
 #if DIM > 1
-                        if (particles->y[bodyIndex + offset] < min_y) { dy = particles->y[bodyIndex + offset] - min_y;
-                        } else if (particles->y[bodyIndex + offset] > max_y) { dy = particles->y[bodyIndex + offset] - max_y;
-                        } else { dy = 0.f; }
+                        if (particles->y[currentParticleIndex] < min_y) {
+                            dy = particles->y[currentParticleIndex] - min_y;
+                        } else if (particles->y[currentParticleIndex] > max_y) {
+                            dy = particles->y[currentParticleIndex] - max_y;
+                        } else {
+                            dy = 0.;
+                        }
 #if DIM == 3
-                        if (particles->z[bodyIndex + offset] < min_z) { dz = particles->z[bodyIndex + offset] - min_z;
-                        } else if (particles->z[bodyIndex + offset] > max_z) { dz = particles->z[bodyIndex + offset] - max_z;
-                        } else { dz = 0.f; }
+                        if (particles->z[currentParticleIndex] < min_z) {
+                            dz = particles->z[currentParticleIndex] - min_z;
+                        } else if (particles->z[currentParticleIndex] > max_z) { dz =
+                        particles->z[currentParticleIndex] - max_z;
+                        } else {
+                            dz = 0.;
+                        }
 
 #endif
 #endif
@@ -1272,6 +1604,7 @@ namespace Gravity {
                         //printf("%f >= %f (particleLevel = %i, theta = %f, r = %f)\n", powf(0.5, particleLevel-1) /* * 2*/ * diam, (theta_ * r), particleLevel, theta_, r);
                         if (particleLevel != -1 && ((powf(0.5, particleLevel-1) * 2 * diam) >= (theta_ * r))) {
 
+                            #pragma unroll
                             for (int i = 0; i < POW_DIM; i++) {
 
                                 //if (sendIndices[tree->child[POW_DIM * (bodyIndex + offset) + i]] != 1 && tree->child[POW_DIM * (bodyIndex + offset) + i] != -1) {
@@ -1286,9 +1619,9 @@ namespace Gravity {
                                     //       particles->x[tree->child[POW_DIM * (bodyIndex + offset) + i]], particles->y[tree->child[POW_DIM * (bodyIndex + offset) + i]], particles->z[tree->child[POW_DIM * (bodyIndex + offset) + i]]);
                                 //}
 
-                                if (tree->child[POW_DIM * (bodyIndex + offset) + i] != -1) {
-                                    if (sendIndices[tree->child[POW_DIM * (bodyIndex + offset) + i]] != 1) {
-                                        sendIndices[tree->child[POW_DIM * (bodyIndex + offset) + i]] = 2;
+                                if (tree->child[POW_DIM * currentParticleIndex + i] != -1) {
+                                    if (sendIndices[tree->child[POW_DIM * currentParticleIndex + i]] != 1) {
+                                        sendIndices[tree->child[POW_DIM * currentParticleIndex + i]] = 2;
                                     }
                                 }
 
@@ -1515,7 +1848,7 @@ namespace Gravity {
 #endif
 #endif
                     int childIndex = tree->child[temp*POW_DIM + childPath];
-                    //atomicAdd(&tree->count[childIndex], 1);
+                    atomicAdd(&tree->count[childIndex], 1);
                     insertionLevel++;
 
                     // debug
@@ -1571,7 +1904,7 @@ namespace Gravity {
                         }
 #endif
 #endif
-                        //atomicAdd(&tree->count[temp], 1); // ? do not count, since particles are just temporarily saved on this process
+                        atomicAdd(&tree->count[temp], 1); // ? do not count, since particles are just temporarily saved on this process
                         childIndex = tree->child[POW_DIM*temp + childPath];
 
                     }
@@ -1736,7 +2069,7 @@ namespace Gravity {
                     }
 #endif
 #endif
-                    //atomicAdd(&tree->count[temp], 1); // do not count, since particles are just temporarily saved on this process
+                    atomicAdd(&tree->count[temp], 1); // do not count, since particles are just temporarily saved on this process
                     childIndex = tree->child[POW_DIM*temp + childPath];
 
                 }
@@ -1929,35 +2262,54 @@ namespace Gravity {
                                 particles, domainList, lowestDomainList, n);
         }
 
-        real Launch::computeForces(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
-                                   integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree) {
-
-            size_t sharedMemory = (sizeof(real)+sizeof(integer))*stackSize*blockSize/warp;
-            //size_t sharedMemory = 2*sizeof(real)*stackSize*blockSize/warp;
-            ExecutionPolicy executionPolicy(256, 256, sharedMemory);
-            //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
-            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces, tree, particles, n, m,
-                                blockSize, warp, stackSize, subDomainKeyTree);
-        }
-
-        real Launch::computeForcesUnsorted(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
-                                   integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree) {
-
-            size_t sharedMemory = (sizeof(real)+sizeof(integer))*stackSize*blockSize/warp;
-            //size_t sharedMemory = 2*sizeof(real)*stackSize*blockSize/warp;
-            ExecutionPolicy executionPolicy(256, 256, sharedMemory);
-            //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
-            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForcesUnsorted, tree, particles, n, m,
-                                blockSize, warp, stackSize, subDomainKeyTree);
-        }
-
-        real Launch::computeForcesMiluphcuda(Tree *tree, Particles *particles, integer n, integer m,
-                                             SubDomainKeyTree *subDomainKeyTree) {
+        real Launch::computeForces_v1(Tree *tree, Particles *particles, real radius, integer n, integer m,
+                                      SubDomainKeyTree *subDomainKeyTree) {
             size_t sharedMemory = sizeof(real) * MAX_DEPTH;
             ExecutionPolicy executionPolicy(256, 256, sharedMemory);
             //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
-            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForcesMiluphcuda, tree, particles, n, m,
-                                subDomainKeyTree);
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v1, tree, particles,
+                                radius, n, m, subDomainKeyTree);
+        }
+
+        real Launch::computeForces_v1_1(Tree *tree, Particles *particles, real radius, integer n, integer m,
+                                        SubDomainKeyTree *subDomainKeyTree) {
+            size_t sharedMemory = sizeof(real) * MAX_DEPTH;
+            ExecutionPolicy executionPolicy(256, 256, sharedMemory);
+            //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v1_1, tree, particles,
+                                radius, n, m, subDomainKeyTree);
+        }
+
+        real Launch::computeForces_v1_2(Tree *tree, Particles *particles, real radius, integer n, integer m,
+                                      SubDomainKeyTree *subDomainKeyTree) {
+            size_t sharedMemory = (2*sizeof(int) + sizeof(real)) * MAX_DEPTH;
+            ExecutionPolicy executionPolicy(256, 256, sharedMemory);
+            //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v1_2, tree, particles,
+                                radius, n, m, subDomainKeyTree);
+        }
+
+        real Launch::computeForces_v2(Tree *tree, Particles *particles, real radius, integer n, integer m,
+                                      integer blockSize, integer warp, integer stackSize,
+                                      SubDomainKeyTree *subDomainKeyTree) {
+
+            size_t sharedMemory = (sizeof(real)+sizeof(integer))*stackSize*blockSize/warp;
+            //size_t sharedMemory = 2*sizeof(real)*stackSize*blockSize/warp;
+            ExecutionPolicy executionPolicy(256, 256, sharedMemory);
+            //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v2, tree, particles, radius,
+                                n, m, blockSize, warp, stackSize, subDomainKeyTree);
+        }
+
+        real Launch::computeForces_v2_1(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
+                                        integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree) {
+
+            size_t sharedMemory = (sizeof(real)+sizeof(integer))*stackSize*blockSize/warp;
+            //size_t sharedMemory = 2*sizeof(real)*stackSize*blockSize/warp;
+            ExecutionPolicy executionPolicy(256, 256, sharedMemory);
+            //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v2_1, tree, particles, n, m,
+                                blockSize, warp, stackSize, subDomainKeyTree);
         }
 
         //real Launch::symbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,

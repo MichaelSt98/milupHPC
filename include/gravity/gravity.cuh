@@ -47,14 +47,21 @@ namespace Gravity {
         __global__ void compDomainListPseudoParticles(Tree *tree, Particles *particles, DomainList *domainList,
                                                       DomainList *lowestDomainList, int n);
 
-        __global__ void computeForces(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
-                                      integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree);
+        __global__ void computeForces_v1(Tree *tree, Particles *particles, real radius, integer n, integer m,
+                                         SubDomainKeyTree *subDomainKeyTree);
 
-        __global__ void computeForcesUnsorted(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
-                                       integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree);
+        __global__ void computeForces_v1_1(Tree *tree, Particles *particles, real radius, integer n, integer m,
+                                         SubDomainKeyTree *subDomainKeyTree);
 
-        __global__ void computeForcesMiluphcuda(Tree *tree, Particles *particles, integer n, integer m,
-                                                SubDomainKeyTree *subDomainKeyTree);
+        __global__ void computeForces_v1_2(Tree *tree, Particles *particles, real radius, integer n, integer m,
+                                           SubDomainKeyTree *subDomainKeyTree);
+
+        __global__ void computeForces_v2(Tree *tree, Particles *particles, real radius, integer n, integer m,
+                                         integer blockSize, integer warp, integer stackSize,
+                                         SubDomainKeyTree *subDomainKeyTree);
+
+        __global__ void computeForces_v2_1(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
+                                           integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree);
 
         __global__ void intermediateSymbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                   DomainList *domainList, integer *sendIndices, real diam, real theta_,
@@ -136,14 +143,22 @@ namespace Gravity {
             real compDomainListPseudoParticles(Tree *tree, Particles *particles, DomainList *domainList,
                                                DomainList *lowestDomainList, int n);
 
-            real computeForces(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
-                               integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree);
+            real computeForces_v1(Tree *tree, Particles *particles, real radius, integer n, integer m,
+                                  SubDomainKeyTree *subDomainKeyTree);
 
-            real computeForcesUnsorted(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
-                                        integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree);
+            real computeForces_v1_1(Tree *tree, Particles *particles, real radius, integer n, integer m,
+                                  SubDomainKeyTree *subDomainKeyTree);
 
-            real computeForcesMiluphcuda(Tree *tree, Particles *particles, integer n, integer m,
-                                         SubDomainKeyTree *subDomainKeyTree);
+            real computeForces_v1_2(Tree *tree, Particles *particles, real radius, integer n, integer m,
+                                    SubDomainKeyTree *subDomainKeyTree);
+
+            real computeForces_v2(Tree *tree, Particles *particles, real radius, integer n, integer m,
+                                  integer blockSize, integer warp, integer stackSize,
+                                  SubDomainKeyTree *subDomainKeyTree);
+
+            real computeForces_v2_1(Tree *tree, Particles *particles, integer n, integer m,
+                                    integer blockSize, integer warp, integer stackSize,
+                                    SubDomainKeyTree *subDomainKeyTree);
 
             real intermediateSymbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                       DomainList *domainList, integer *sendIndices, real diam, real theta_,

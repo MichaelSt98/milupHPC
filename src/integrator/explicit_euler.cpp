@@ -25,9 +25,14 @@ void ExplicitEuler::integrate(int step) {
 
     real time_elapsed;
 
+    Logger(INFO) << "ExplicitEuler::integrate()... currentTime: " << *simulationTimeHandler->h_currentTime
+        << " | endTime: " << *simulationTimeHandler->h_endTime;
+
     while (*simulationTimeHandler->h_currentTime < *simulationTimeHandler->h_endTime) {
 
-        removeParticles();
+        Logger(INFO) << "ExplicitEuler::integrate while...";
+
+        //removeParticles();
 
         Logger(INFO) << "rhs::loadBalancing()";
         timer.reset();
@@ -45,10 +50,10 @@ void ExplicitEuler::integrate(int step) {
         printf("ExplicitEuler::integrate()\n");
         timer.reset();
         //real time;
-        time = rhs(step, true);
+        time = rhs(step, true, true);
         time_elapsed = timer.elapsed();
         Logger(TIME) << "rhs: " << time << " ms";
-        Logger(TIME) << "rhs elapsed: " << time_elapsed << " ms";
+        Logger(TIME) << "rhsElapsed: " << time_elapsed << " ms";
 
         ExplicitEulerNS::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal,
                                                 *simulationTimeHandler->h_dt); //(real) simulationParameters.timestep);

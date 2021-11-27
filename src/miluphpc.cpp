@@ -20,9 +20,6 @@ Miluphpc::Miluphpc(SimulationParameters simulationParameters) {
 
     this->simulationParameters = simulationParameters;
 
-    //curveType = Curve::lebesgue; //curveType = Curve::hilbert;
-    curveType = Curve::Type(simulationParameters.curveType);
-
     cuda::malloc(d_mutex, 1);
     helperHandler = new HelperHandler(numNodes);
     buffer = new HelperHandler(numNodes);
@@ -31,6 +28,14 @@ Miluphpc::Miluphpc(SimulationParameters simulationParameters) {
     treeHandler = new TreeHandler(numParticles, numNodes);
     domainListHandler = new DomainListHandler(DOMAIN_LIST_SIZE);
     lowestDomainListHandler = new DomainListHandler(DOMAIN_LIST_SIZE);
+
+    if (subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses == 1) {
+        curveType = Curve::lebesgue;
+    }
+    else {
+        //curveType = Curve::lebesgue; //curveType = Curve::hilbert;
+        curveType = Curve::Type(simulationParameters.curveType);
+    }
 
     // TODO: buffer arrays/pointers handling/optimization
     // testing
@@ -228,7 +233,7 @@ void Miluphpc::prepareSimulation() {
     particleHandler->copyDistribution(To::device, true, true);
     particleHandler->copySPH(To::device);
 
-    removeParticles();
+    //removeParticles();
 
     Logger(INFO) << "compute bounding box ...";
     TreeNS::Kernel::Launch::computeBoundingBox(treeHandler->d_tree, particleHandler->d_particles, d_mutex,
@@ -589,6 +594,8 @@ real Miluphpc::assignParticles() {
     idInteger *d_idIntTempEntry = d_idIntegerBuffer;
     idInteger *d_idIntCopyBuffer = d_idIntegerCopyBuffer;
 
+    bool arrangeAll = false;
+
     time += SubDomainKeyTreeNS::Kernel::Launch::markParticlesProcess(subDomainKeyTreeHandler->d_subDomainKeyTree,
                                                                      treeHandler->d_tree, particleHandler->d_particles,
                                                                      numParticlesLocal, numNodes,
@@ -596,18 +603,30 @@ real Miluphpc::assignParticles() {
 
     time += arrangeParticleEntries(d_particlesProcess, d_particlesProcessSorted, particleHandler->d_x, d_tempEntry);
     time += arrangeParticleEntries(d_particlesProcess, d_particlesProcessSorted, particleHandler->d_vx, d_tempEntry);
-    time += arrangeParticleEntries(d_particlesProcess, d_particlesProcessSorted, particleHandler->d_ax, d_tempEntry);
-    time += arrangeParticleEntries(d_particlesProcess, d_particlesProcessSorted, particleHandler->d_g_ax, d_tempEntry);
+    if (arrangeAll) {
+        time += arrangeParticleEntries(d_particlesProcess, d_particlesProcessSorted, particleHandler->d_ax,
+                                       d_tempEntry);
+        time += arrangeParticleEntries(d_particlesProcess, d_particlesProcessSorted, particleHandler->d_g_ax,
+                                       d_tempEntry);
+    }
 #if DIM > 1
     time += arrangeParticleEntries(d_particlesProcess, d_particlesProcessSorted, particleHandler->d_y, d_tempEntry);
     time += arrangeParticleEntries(d_particlesProcess, d_particlesProcessSorted, particleHandler->d_vy, d_tempEntry);
-    time += arrangeParticleEntries(d_particlesProcess, d_particlesProcessSorted, particleHandler->d_ay, d_tempEntry);
-    time += arrangeParticleEntries(d_particlesProcess, d_particlesProcessSorted, particleHandler->d_g_ay, d_tempEntry);
+    if (arrangeAll) {
+        time += arrangeParticleEntries(d_particlesProcess, d_particlesProcessSorted, particleHandler->d_ay,
+                                       d_tempEntry);
+        time += arrangeParticleEntries(d_particlesProcess, d_particlesProcessSorted, particleHandler->d_g_ay,
+                                       d_tempEntry);
+    }
 #if DIM == 3
     time += arrangeParticleEntries(d_particlesProcess, d_particlesProcessSorted, particleHandler->d_z, d_tempEntry);
     time += arrangeParticleEntries(d_particlesProcess, d_particlesProcessSorted, particleHandler->d_vz, d_tempEntry);
-    time += arrangeParticleEntries(d_particlesProcess, d_particlesProcessSorted, particleHandler->d_az, d_tempEntry);
-    time += arrangeParticleEntries(d_particlesProcess, d_particlesProcessSorted, particleHandler->d_g_az, d_tempEntry);
+    if (arrangeAll) {
+        time += arrangeParticleEntries(d_particlesProcess, d_particlesProcessSorted, particleHandler->d_az,
+                                       d_tempEntry);
+        time += arrangeParticleEntries(d_particlesProcess, d_particlesProcessSorted, particleHandler->d_g_az,
+                                       d_tempEntry);
+    }
 #endif
 #endif
     time += arrangeParticleEntries(d_particlesProcess, d_particlesProcessSorted, particleHandler->d_mass, d_tempEntry);
@@ -642,18 +661,24 @@ real Miluphpc::assignParticles() {
 
     sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_x, d_tempEntry, d_copyBuffer);
     sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_vx, d_tempEntry, d_copyBuffer);
-    sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_ax, d_tempEntry, d_copyBuffer);
-    sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_g_ax, d_tempEntry, d_copyBuffer);
+    if (arrangeAll) {
+        sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_ax, d_tempEntry, d_copyBuffer);
+        sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_g_ax, d_tempEntry, d_copyBuffer);
+    }
 #if DIM > 1
     sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_y, d_tempEntry, d_copyBuffer);
     sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_vy, d_tempEntry, d_copyBuffer);
-    sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_ay, d_tempEntry, d_copyBuffer);
-    sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_g_ay, d_tempEntry, d_copyBuffer);
+    if (arrangeAll) {
+        sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_ay, d_tempEntry, d_copyBuffer);
+        sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_g_ay, d_tempEntry, d_copyBuffer);
+    }
 #if DIM == 3
     sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_z, d_tempEntry, d_copyBuffer);
     sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_vz, d_tempEntry, d_copyBuffer);
-    sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_az, d_tempEntry, d_copyBuffer);
-    sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_g_az, d_tempEntry, d_copyBuffer);
+    if (arrangeAll) {
+        sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_az, d_tempEntry, d_copyBuffer);
+        sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_g_az, d_tempEntry, d_copyBuffer);
+    }
 #endif
 #endif
     sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_uid, d_idIntTempEntry, d_idIntCopyBuffer);
@@ -677,18 +702,27 @@ real Miluphpc::assignParticles() {
     int resetLength = numParticles-numParticlesLocal;
     time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_x[numParticlesLocal], (real)0, resetLength);
     time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_vx[numParticlesLocal], (real)0, resetLength);
-    time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_ax[numParticlesLocal], (real)0, resetLength);
-    time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_g_ax[numParticlesLocal], (real)0, resetLength);
+    if (arrangeAll) {
+        time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_ax[numParticlesLocal], (real) 0, resetLength);
+        time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_g_ax[numParticlesLocal], (real) 0,
+                                                     resetLength);
+    }
 #if DIM > 1
     time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_y[numParticlesLocal], (real)0, resetLength);
     time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_vy[numParticlesLocal], (real)0, resetLength);
-    time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_ay[numParticlesLocal], (real)0, resetLength);
-    time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_g_ay[numParticlesLocal], (real)0, resetLength);
+    if (arrangeAll) {
+        time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_ay[numParticlesLocal], (real) 0, resetLength);
+        time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_g_ay[numParticlesLocal], (real) 0,
+                                                     resetLength);
+    }
 #if DIM == 3
     time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_z[numParticlesLocal], (real)0, resetLength);
     time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_vz[numParticlesLocal], (real)0, resetLength);
-    time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_az[numParticlesLocal], (real)0, resetLength);
-    time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_g_az[numParticlesLocal], (real)0, resetLength);
+    if (arrangeAll) {
+        time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_az[numParticlesLocal], (real) 0, resetLength);
+        time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_g_az[numParticlesLocal], (real) 0,
+                                                     resetLength);
+    }
 #endif
 #endif
     time += HelperNS::Kernel::Launch::resetArray(&particleHandler->d_mass[numParticlesLocal], (real)0, resetLength);
@@ -1413,24 +1447,154 @@ real Miluphpc::parallel_gravity() {
     Logger(INFO) << "Finished inserting received particles!";
 
     time = 0;
-    // TODO: sorting only needed for Gravity::Kernel::Launch::computeForces()
-    //time = TreeNS::Kernel::Launch::sort(treeHandler->d_tree, numParticlesLocal, numParticles, true);
+
 
     Logger(TIME) << "sorting: " << time << " ms";
 
     //TreeNS::Kernel::Launch::testTree(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal, numParticles);
 
-    //actual (local) force
-    //integer warp = 32;
-    //integer stackSize = 64; //128; //64;
-    //integer blockSize = 256;
-    //time = Gravity::Kernel::Launch::computeForces(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal, numParticles,
-    //                                                      blockSize, warp, stackSize, subDomainKeyTreeHandler->d_subDomainKeyTree);
-    //time = Gravity::Kernel::Launch::computeForcesUnsorted(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal, numParticles,
-    //                                       blockSize, warp, stackSize, subDomainKeyTreeHandler->d_subDomainKeyTree);
-    time = Gravity::Kernel::Launch::computeForcesMiluphcuda(treeHandler->d_tree, particleHandler->d_particles,
-                                                            numParticles, numParticles,
-                                                            subDomainKeyTreeHandler->d_subDomainKeyTree);
+    // SELECT compute forces version:
+    // 0: similiar to burtscher with presorting according to the space-filling curves
+    // 1: similiar to burtscher
+    // 2: miluphcuda version with additional presorting according to the space-filling curves
+    // 3: miluphcuda version
+    // TODO: need to be verified (possible to use this additional shared memory?)
+    // 4: miluphcuda version with additional presorting according to the space-filling curves and shared memory
+    int computeForcesVersion = 2;
+
+    // preparations for computing forces
+    treeHandler->copy(To::host);
+    real x_radius = 0.5 * (*treeHandler->h_maxX - (*treeHandler->h_minX));
+#if DIM > 1
+    real y_radius = 0.5 * (*treeHandler->h_maxY - (*treeHandler->h_minY));
+#if DIM == 3
+    real z_radius = 0.5 * (*treeHandler->h_maxZ - (*treeHandler->h_minZ));
+#endif
+#endif
+
+#if DIM == 1
+    real radius = x_radius;
+#elif DIM == 2
+    real radius = std::max(x_radius, y_radius);
+#else
+    real radius_max = std::max(x_radius, y_radius);
+    real radius = std::max(radius_max, z_radius);
+#endif
+    Logger(INFO) << "radius: " << radius;
+    // end: preparations for computing forces
+
+    // needed for version 0 and 1
+    int warp = 32;
+    int stackSize = 64; //128; //64;
+    int blockSize = 256;
+    // end: needed for version 0 and 1
+    if (computeForcesVersion == 0) {
+        // TODO: currently not working: why?
+        //time = TreeNS::Kernel::Launch::sort(treeHandler->d_tree, numParticlesLocal, numParticles, true);
+
+        // presorting using keys...
+        real timeSorting = 0.;
+        timeSorting += TreeNS::Kernel::Launch::prepareSorting(treeHandler->d_tree, particleHandler->d_particles,
+                                                              numParticlesLocal, numParticles);
+
+        keyType *d_keys;
+        cuda::malloc(d_keys, numParticlesLocal);
+        timeSorting += SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys(subDomainKeyTreeHandler->d_subDomainKeyTree,
+                                                            treeHandler->d_tree, particleHandler->d_particles,
+                                                            d_keys, 21, numParticlesLocal, curveType);
+
+        timeSorting += HelperNS::sortArray(treeHandler->d_start, treeHandler->d_sorted, d_keys, helperHandler->d_keyTypeBuffer, numParticlesLocal);
+
+        //int *h_sorted = new int[numParticlesLocal];
+        //cuda::copy(h_sorted, treeHandler->d_sorted, numParticlesLocal, To::host);
+        //for (int i=0; i<100; i++) {
+        //    Logger(INFO) << "i: " << i << " sorted: " << h_sorted[i];
+        //}
+        //delete [] h_sorted;
+        cuda::free(d_keys);
+
+        Logger(INFO) << "sph: presorting: " << timeSorting << " ms";
+        //end: presorting using keys...
+
+        //actual (local) force
+        time = Gravity::Kernel::Launch::computeForces_v2(treeHandler->d_tree, particleHandler->d_particles, radius,
+                                                         numParticlesLocal, numParticles, blockSize, warp, stackSize,
+                                                         subDomainKeyTreeHandler->d_subDomainKeyTree);
+    }
+    else if (computeForcesVersion == 1) {
+        time = Gravity::Kernel::Launch::computeForces_v2_1(treeHandler->d_tree, particleHandler->d_particles,
+                                                           numParticlesLocal, numParticles, blockSize, warp, stackSize,
+                                                           subDomainKeyTreeHandler->d_subDomainKeyTree);
+    }
+    else if (computeForcesVersion == 2) {
+
+        // presorting using keys...
+        real timeSorting = 0.;
+        timeSorting += TreeNS::Kernel::Launch::prepareSorting(treeHandler->d_tree, particleHandler->d_particles,
+                                                              numParticlesLocal, numParticles);
+
+        keyType *d_keys;
+        cuda::malloc(d_keys, numParticlesLocal + particleTotalReceiveLength);
+        timeSorting += SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys(subDomainKeyTreeHandler->d_subDomainKeyTree,
+                                                                           treeHandler->d_tree, particleHandler->d_particles,
+                                                                           d_keys, 21, numParticlesLocal + particleTotalReceiveLength, curveType);
+
+        timeSorting += HelperNS::sortArray(treeHandler->d_start, treeHandler->d_sorted, d_keys, helperHandler->d_keyTypeBuffer, numParticlesLocal + particleTotalReceiveLength);
+
+        //int *h_sorted = new int[numParticlesLocal];
+        //cuda::copy(h_sorted, treeHandler->d_sorted, numParticlesLocal, To::host);
+        //for (int i=0; i<100; i++) {
+        //    Logger(INFO) << "i: " << i << " sorted: " << h_sorted[i];
+        //}
+        //delete [] h_sorted;
+        cuda::free(d_keys);
+
+        Logger(INFO) << "sph: presorting: " << timeSorting << " ms";
+        //end: presorting using keys...
+
+        time = Gravity::Kernel::Launch::computeForces_v1(treeHandler->d_tree, particleHandler->d_particles,
+                                                         radius, numParticles, numParticles,
+                                                         subDomainKeyTreeHandler->d_subDomainKeyTree);
+    }
+    else if (computeForcesVersion == 3) {
+        time = Gravity::Kernel::Launch::computeForces_v1_1(treeHandler->d_tree, particleHandler->d_particles,
+                                                           radius,numParticles, numParticles,
+                                                           subDomainKeyTreeHandler->d_subDomainKeyTree);
+    }
+    else if (computeForcesVersion == 4) {
+        // presorting using keys...
+        real timeSorting = 0.;
+        timeSorting += TreeNS::Kernel::Launch::prepareSorting(treeHandler->d_tree, particleHandler->d_particles,
+                                                              numParticlesLocal, numParticles);
+
+        keyType *d_keys;
+        cuda::malloc(d_keys, numParticlesLocal + particleTotalReceiveLength);
+        timeSorting += SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys(subDomainKeyTreeHandler->d_subDomainKeyTree,
+                                                                           treeHandler->d_tree, particleHandler->d_particles,
+                                                                           d_keys, 21, numParticlesLocal + particleTotalReceiveLength, curveType);
+
+        timeSorting += HelperNS::sortArray(treeHandler->d_start, treeHandler->d_sorted, d_keys, helperHandler->d_keyTypeBuffer, numParticlesLocal + particleTotalReceiveLength);
+
+        //int *h_sorted = new int[numParticlesLocal];
+        //cuda::copy(h_sorted, treeHandler->d_sorted, numParticlesLocal, To::host);
+        //for (int i=0; i<100; i++) {
+        //    Logger(INFO) << "i: " << i << " sorted: " << h_sorted[i];
+        //}
+        //delete [] h_sorted;
+        cuda::free(d_keys);
+
+        Logger(INFO) << "sph: presorting: " << timeSorting << " ms";
+        //end: presorting using keys...
+
+        time = Gravity::Kernel::Launch::computeForces_v1_2(treeHandler->d_tree, particleHandler->d_particles,
+                                                           radius, numParticles, numParticles,
+                                                           subDomainKeyTreeHandler->d_subDomainKeyTree);
+    }
+    else {
+        MPI_Finalize();
+        Logger(ERROR) << "select proper compute forces version!";
+        exit(0);
+    }
 
     //NOTE: time(computeForces) < time(computeForceMiluphcuda) for kepler disk, but time(computeForces) >> time(computeForceMiluphcuda) for plummer!!!
 
