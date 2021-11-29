@@ -12,7 +12,7 @@ class LibConfigReader {
 public:
     config_t config;
     config_setting_t *materials;
-    int loadConfigFromFile(char *configFile);
+    int loadConfigFromFile(const char *configFile);
 };
 
 class MaterialHandler {
@@ -24,7 +24,7 @@ public:
     Material *d_materials;
 
     MaterialHandler(integer numMaterials);
-    MaterialHandler(char *material_cfg);
+    MaterialHandler(const char *material_cfg);
     MaterialHandler(integer numMaterials, integer ID, integer interactions, real alpha, real beta);
     ~MaterialHandler();
 

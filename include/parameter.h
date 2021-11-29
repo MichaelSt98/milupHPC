@@ -3,38 +3,142 @@
 
 #include <limits>
 
+/**
+ * Type definitions
+ * * `real` corresponds to floating point precision for whole program
+ * * `keyType` influences the maximal tree depth
+ *     * maximal tree depth: (sizeof(keyType) - (sizeof(keyType) % DIM))/DIM
+ */
 #ifdef SINGLE_PRECISION
     typedef float real;
 #else
     typedef double real;
 #endif
-
-constexpr real dbl_max = std::numeric_limits<real>::max();
-#define DBL_MAX dbl_max;
-
-#define FORCES_FACT 0.2
-
-//typedef float real;
-//typedef double real;
 typedef int integer;
 typedef unsigned long keyType;
 typedef int idInteger;
 
 #include <iostream>
 
-#define theta 0.5
+//#define theta 0.5
+
+#define MAX_LEVEL 21
+
+#define DEBUGGING 0
+
+#define SAFE 0
+
+/// Dimension of the problem
+#define DIM 3
+#define power_two(x) (1 << (x))
+#define POW_DIM power_two(DIM)
+
+/// [0]: natural units, [1]: SI units
+#define SI_UNITS 0
+
+/// [0]: rectangular (and not necessarily cubic domains), [1]: cubic domains
+#define CUBIC_DOMAINS 0
+
+/// Simulation with gravitational forces
+#define GRAVITY_SIM 1
+
+/// SPH simulation
+#define SPH_SIM 0
+
+/// integrate energy equation
+#define INTEGRATE_ENERGY 1
+
+/// integrate density equation
+#define INTEGRATE_DENSITY 0
+
+/// integrate smoothing length
+#define INTEGRATE_SML 0
+
+/// decouple smoothing length for pc integrator(s)
+#define DECOUPLE_SML 0
+
+/// variable smoothing length
+#define VARIABLE_SML 0
+
+/// correct smoothing length
+#define SML_CORRECTION 0
+
+/**
+ * Choose the SPH representation to solve the momentum and energy equation:
+ * * **SPH_EQU_VERSION 1:** original version with
+ *     * HYDRO $dv_a/dt ~ - (p_a/rho_a**2 + p_b/rho_b**2)  \nabla_a W_ab$
+ *     * SOLID $dv_a/dt ~ (sigma_a/rho_a**2 + sigma_b/rho_b**2) \nabla_a W_ab$
+ * * **SPH_EQU_VERSION 2:** slighty different version with
+ *     * HYDRO $dv_a/dt ~ - (p_a+p_b)/(rho_a*rho_b)  \nabla_a W_ab$
+ *     * SOLID $dv_a/dt ~ (sigma_a+sigma_b)/(rho_a*rho_b)  \nabla_a W_ab$
+ */
+#define SPH_EQU_VERSION 1
+
+// deprecated flag
+#define ARTIFICIAL_VISCOSITY 1
+
+// to be (fully) implemented flags
+#define AVERAGE_KERNELS 0
+#define DEAL_WITH_TOO_MANY_INTERACTIONS 0
+#define SHEPARD_CORRECTION 0
+#define SOLID 0
+#define NAVIER_STOKES 0
+#define ARTIFICIAL_STRESS 0
+#define POROSITY 0
+#define ZERO_CONSISTENCY 0
+#define LINEAR_CONSISTENCY 0
+#define FRAGMENTATION 0
+#define PALPHA_POROSITY 0
+#define PLASTICITY 0
+#define KLEY_VISCOSITY 0
+
 #define KEY_MAX ULONG_MAX
 #define DOMAIN_LIST_SIZE 512
-
 #define MAX_DEPTH 128
 #define MAX_NUM_INTERACTIONS 180
-
 #define NUM_THREADS_LIMIT_TIME_STEP 256
-
 #define NUM_THREADS_CALC_CENTER_OF_MASS 256
 
 // Courant (CFL) number (note that our sml is defined up to the zero of the kernel, not half of it)
 #define COURANT_FACT 0.4
+
+#define FORCES_FACT 0.2
+
+constexpr real dbl_max = std::numeric_limits<real>::max();
+#define DBL_MAX dbl_max;
+
+namespace Constants {
+    constexpr real G = 6.67430e-11;
+}
+
+typedef struct SimulationParameters {
+    int verbosity;
+    bool timeKernels;
+    int numOutputFiles;
+    real timeStep;
+    real maxTimeStep;
+    real timeEnd;
+    bool loadBalancing;
+    int loadBalancingInterval;
+    std::string inputFile;
+    std::string materialConfigFile;
+    int outputRank;
+    bool performanceLog;
+    bool particlesSent2H5;
+    int sfcSelection;
+    int integratorSelection;
+//#if GRAVITY_SIM
+    real theta;
+    int gravityForceVersion;
+//#endif
+//#if SPH_SIM
+    int smoothingKernelSelection;
+    int sphFixedRadiusNNVersion;
+//#endif
+    bool removeParticles;
+    int removeParticlesCriterion;
+    real removeParticlesDimension;
+} SimulationParameters;
 
 struct To
 {
@@ -97,7 +201,7 @@ struct IntegratorSelection
 {
     enum Type
     {
-        euler, explicit_euler, predictor_corrector, predictor_corrector_euler
+        explicit_euler, predictor_corrector_euler
     };
     Type t_;
     IntegratorSelection(Type t) : t_(t) {}
@@ -127,20 +231,6 @@ enum EquationOfStates {
     //EOS_TYPE_JUTZI_ANEOS = 13/// ANEOS EOS with p-alpha model by Jutzi et al.
 };
 
-#define DEBUGGING 0
-
-#define SAFE 0
-
-// Dimension of the problem
-#define DIM 3
-
-#define SI_UNITS 0
-
-namespace Constants {
-    constexpr real G = 6.67430e-11;
-}
-
-
 struct Entry
 {
     enum Name
@@ -162,60 +252,6 @@ private:
     operator T () const;
 };
 
-#define power_two(x) (1 << (x))
-#define POW_DIM power_two(DIM)
-
-#define SOLID 0
-#define FRAGMENTATION 0
-#define PLASTICITY 0
-#define DEAL_WITH_TOO_MANY_INTERACTIONS 0
-#define KLEY_VISCOSITY 0
-#define ARTIFICIAL_VISCOSITY 1
-#define AVERAGE_KERNELS 0
-#define SHEPARD_CORRECTION 0
-
-#define MAX_LEVEL 21
-
-#define CUBIC_DOMAINS 0
-
-#define GRAVITY_SIM 1
-#define SPH_SIM 0
-
-#define INTEGRATE_ENERGY 1
-
-#define INTEGRATE_DENSITY 0
-
-#define INTEGRATE_SML 0
-#define DECOUPLE_SML 0
-
-#define SML_CORRECTION 0
-
-#define VARIABLE_SML 0
-
-#define SOLID 0
-
-#define NAVIER_STOKES 0
-
-#define ARTIFICIAL_STRESS 0
-
-#define POROSITY 0
-
-#define ZERO_CONSISTENCY 0
-
-#define LINEAR_CONSISTENCY 0
-
-#define FRAGMENTATION 0
-
-#define PALPHA_POROSITY 0
-
-// Choose the SPH representation to solve the momentum and energy equation:
-// SPH_EQU_VERSION 1: original version with HYDRO dv_a/dt ~ - (p_a/rho_a**2 + p_b/rho_b**2)  \nabla_a W_ab
-//                                     SOLID dv_a/dt ~ (sigma_a/rho_a**2 + sigma_b/rho_b**2) \nabla_a W_ab
-// SPH_EQU_VERSION 2: slighty different version with
-//                                     HYDRO dv_a/dt ~ - (p_a+p_b)/(rho_a*rho_b)  \nabla_a W_ab
-//                                     SOLID dv_a/dt ~ (sigma_a+sigma_b)/(rho_a*rho_b)  \nabla_a W_ab
-// If you do not know what to do, choose SPH_EQU_VERSION 1.
-#define SPH_EQU_VERSION 1
 
 //#define SOLID
 // ideal hydro, navier stokes

@@ -1,6 +1,6 @@
 #include "../../include/materials/material_handler.h"
 
-int LibConfigReader::loadConfigFromFile(char *configFile)
+int LibConfigReader::loadConfigFromFile(const char *configFile)
 {
     int numberOfElements;
 
@@ -66,7 +66,7 @@ MaterialHandler::MaterialHandler(integer numMaterials) : numMaterials(numMateria
 
 }
 
-MaterialHandler::MaterialHandler(char *material_cfg) {
+MaterialHandler::MaterialHandler(const char *material_cfg) {
     LibConfigReader libConfigReader;
     numMaterials = libConfigReader.loadConfigFromFile(material_cfg);
 

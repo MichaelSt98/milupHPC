@@ -464,15 +464,21 @@ namespace DomainListNS {
 
 namespace ParticlesNS {
 
-    __device__ bool applyCriterion(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, int index);
+    __device__ bool applySphericalCriterion(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                            real d, int index);
+
+    __device__ bool applyCubicCriterion(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                        real d, int index);
 
     namespace Kernel {
         __global__ void mark2remove(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
-                                    int *particles2remove, int *counter, int numParticles);
+                                    int *particles2remove, int *counter, int criterion, real d,
+                                    int numParticles);
 
         namespace Launch {
             real mark2remove(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
-                             int *particles2remove, int *counter, int numParticles);
+                             int *particles2remove, int *counter, int criterion, real d,
+                             int numParticles);
         }
     }
 }

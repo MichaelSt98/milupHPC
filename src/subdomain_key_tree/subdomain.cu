@@ -906,18 +906,17 @@ namespace DomainListNS {
 }
 
 namespace ParticlesNS {
-    __device__ bool applyCriterion(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, int index) {
+    __device__ bool applySphericalCriterion(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                            real d, int index) {
 
 #if DIM == 1
-        if (cuda::math::sqrt(particles->x[index] * particles->x[index]) < 30.) {
+        if (cuda::math::sqrt(particles->x[index] * particles->x[index]) < d) {
 #elif DIM == 2
         if (cuda::math::sqrt(particles->x[index] * particles->x[index] +
-                particles->y[index] * particles->y[index]) < 30.) {
+                particles->y[index] * particles->y[index]) < d) {
 #else
-            //printf("distance: %e\n", cuda::math::sqrt(particles->x[index] * particles->x[index] + particles->y[index] * particles->y[index] +
-            //                                          particles->z[index] * particles->z[index]));
         if (cuda::math::sqrt(particles->x[index] * particles->x[index] + particles->y[index] * particles->y[index] +
-                  particles->z[index] * particles->z[index]) < 0.5) { //3.5e14) {//150597870700.) {//3.25e14) {
+                  particles->z[index] * particles->z[index]) < d) { //3.5e14) {//150597870700.) {//3.25e14) {
         //if (cuda::math::abs(particles->x[index]) < 0.5 &&
         //        cuda::math::abs(particles->y[index]) < 0.5 &&
         //        cuda::math::abs(particles->z[index]) < 0.5) {
@@ -928,18 +927,50 @@ namespace ParticlesNS {
         }
     }
 
+    __device__ bool applyCubicCriterion(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                        real d, int index) {
+
+#if DIM == 1
+        if (cuda::math::abs(particles->x[index]) < d)) {
+#elif DIM == 2
+        if (cuda::math::abs(particles->x[index]) < d &&
+            cuda::math::abs(particles->y[index]) < d) {
+#else
+        if (cuda::math::abs(particles->x[index]) < d &&
+            cuda::math::abs(particles->y[index]) < d &&
+            cuda::math::abs(particles->z[index]) < d) {
+#endif
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     namespace Kernel {
 
         __global__ void mark2remove(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
-                                    int *particles2remove, int *counter, int numParticles) {
+                                    int *particles2remove, int *counter, int criterion, real d, int numParticles) {
 
             int bodyIndex = threadIdx.x + blockDim.x * blockIdx.x;
             int stride = blockDim.x * gridDim.x;
             int offset = 0;
+            bool remove;
 
             while (bodyIndex + offset < numParticles) {
 
-                if (::ParticlesNS::applyCriterion(subDomainKeyTree, tree, particles, bodyIndex + offset)) {
+                switch (criterion) {
+                    case 0: {
+                        remove = applySphericalCriterion(subDomainKeyTree, tree, particles, d, bodyIndex + offset);
+                    } break;
+                    case 1: {
+                        remove = applyCubicCriterion(subDomainKeyTree, tree, particles, d, bodyIndex + offset);
+                    } break;
+                    default: {
+                        printf("Criterion for removing particles not available! Exiting...\n");
+                        assert(0);
+                    }
+                }
+                if (remove) {
                     particles2remove[bodyIndex + offset] = 1;
                     atomicAdd(counter, 1);
                 } else {
@@ -952,10 +983,11 @@ namespace ParticlesNS {
         }
 
         real Launch::mark2remove(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
-                                 int *particles2remove, int *counter, int numParticles) {
+                                 int *particles2remove, int *counter, int criterion, real d,
+                                 int numParticles) {
             ExecutionPolicy executionPolicy;
             return cuda::launch(true, executionPolicy, ::ParticlesNS::Kernel::mark2remove, subDomainKeyTree,
-                                tree, particles, particles2remove, counter, numParticles);
+                                tree, particles, particles2remove, counter, criterion, d, numParticles);
         }
 
     }

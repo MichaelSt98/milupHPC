@@ -27,12 +27,14 @@ namespace ProfilerIds {
         const char *const rhsElapsed      { "/time/rhsElapsed" };
         const char *const loadBalancing   { "/time/loadBalancing" };
         const char *const reset           { "/time/reset" };
+        const char *const removeParticles { "/time/removeParticles" };
         const char *const boundingBox     { "/time/boundingBox" };
         const char *const assignParticles { "/time/assignParticles" };
         const char *const tree            { "/time/tree" };
         const char *const pseudoParticle  { "/time/pseudoParticle"};
         const char *const gravity         { "/time/gravity" };
         const char *const sph             { "/time/sph" };
+        const char *const IO              { "/time/IO" };
 
         namespace Reset {
 
@@ -47,9 +49,9 @@ namespace ProfilerIds {
         }
 
         namespace Tree {
-            const char *const createDomain    { "/time/createDomainList" };
-            const char *const tree            { "/time/buildTree" };
-            const char *const buildDomain     { "/time/buildDomainTree" };
+            const char *const createDomain    { "/time/tree_createDomainList" };
+            const char *const tree            { "/time/tree_buildTree" };
+            const char *const buildDomain     { "/time/tree_buildDomainTree" };
         }
 
         namespace PseudoParticles {
@@ -57,16 +59,28 @@ namespace ProfilerIds {
         }
 
         namespace Gravity {
-            const char *const compTheta      { "/time/compTheta" };
-            const char *const symbolicForce  { "/time/symbolicForce" };
-            const char *const sending        { "/time/gravitySendingParticles" };
-            const char *const insertReceivedPseudoParticles { "/time/gravityInsertReceivedPseudoParticles" };
-            const char *const insertReceivedParticles       { "/time/gravityInsertReceivedParticles" };
-            const char *const force          { "/time/gravityForce" };
+            const char *const compTheta      { "/time/gravity_compTheta" };
+            const char *const symbolicForce  { "/time/gravity_symbolicForce" };
+            const char *const sending        { "/time/gravity_gravitySendingParticles" };
+            const char *const insertReceivedPseudoParticles { "/time/gravity_insertReceivedPseudoParticles" };
+            const char *const insertReceivedParticles       { "/time/gravity_insertReceivedParticles" };
+            const char *const force          { "/time/gravity_force" };
+            const char *const repairTree     { "/time/gravity_repairTree" };
         }
 
         namespace SPH {
-
+            const char *const compTheta      { "/time/sph_compTheta" };
+            const char *const determineSearchRadii { "time/sph_determineSearchRadii" };
+            const char *const symbolicForce  { "/time/sph_symbolicForce" };
+            const char *const sending        { "/time/sph_sendingParticles" };
+            const char *const insertReceivedParticles { "/time/sph_insertReceivedParticles" };
+            const char *const fixedRadiusNN  { "/time/sph_fixedRadiusNN" };
+            const char *const density        { "/time/sph_density" };
+            const char *const soundSpeed     { "/time/sph_soundSpeed" };
+            const char *const pressure       { "/time/sph_pressure" };
+            const char *const resend         { "/time/sph_resendingParticles" };
+            const char *const internalForces { "/time/sph_internalForces" };
+            const char *const repairTree     { "/time/sph_repairTree" };
         }
 
     }

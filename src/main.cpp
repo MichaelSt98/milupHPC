@@ -1,7 +1,5 @@
 #include "../include/miluphpc.h"
-#include "../include/integrator/euler.h"
 #include "../include/integrator/explicit_euler.h"
-#include "../include/integrator/predictor_corrector.h"
 #include "../include/integrator/predictor_corrector_euler.h"
 #include "../include/utils/config_parser.h"
 
@@ -14,32 +12,49 @@
 
 #define ENV_LOCAL_RANK "OMPI_COMM_WORLD_LOCAL_RANK"
 
+bool checkFile(const std::string file, bool terminate=false, const std::string message="");
+bool checkFile(const std::string file, bool terminate, const std::string message) {
+    std::ifstream fileStream(file.c_str());
+    if (fileStream.good()) {
+        return true;
+    }
+    else {
+        if (terminate) {
+            Logger(WARN) << message;
+            Logger(ERROR) << "Provided file: " << file << " not available!";
+            MPI_Finalize();
+            exit(0);
+        }
+        return false;
+    }
+}
+
 // see: http://fargo.in2p3.fr/manuals/html/communications.html#mpicuda
 void SetDeviceBeforeInit()
 {
     char * localRankStr = NULL;
-    int rank = 0, devCount = 2;
+    int rank = 0;
+    int devCount = 2;
 
-    // We extract the local rank initialization using an environment variable
     if ((localRankStr = getenv(ENV_LOCAL_RANK)) != NULL)
     {
         rank = atoi(localRankStr);
     }
 
-    //Logger(INFO) << "devCount: " << devCount << " | rank: " << rank
-    //<< " | setting device: " << rank % devCount;
-
-    safeCudaCall(cudaGetDeviceCount(&devCount));
-    //safeCudaCall(cudaSetDevice(rank % devCount));
-
-    cudaSetDevice(rank % devCount);
+    gpuErrorcheck(cudaGetDeviceCount(&devCount));
+    //gpuErrorcheck(cudaSetDevice(rank % devCount));
+    gpuErrorcheck(cudaSetDevice(rank % devCount));
 }
 
-structlog LOGCFG = {};
+structLog LOGCFG = {};
 
 int main(int argc, char** argv)
 {
 
+    /// SETTINGS/INITIALIZATIONS
+    // -----------------------------------------------------------------------------------------------------------------
+
+    /// MPI rank setting
     SetDeviceBeforeInit();
 
     boost::mpi::environment env(argc, argv);
@@ -48,71 +63,18 @@ int main(int argc, char** argv)
     int rank = comm.rank();
     int numProcesses = comm.size();
 
-    LOGCFG.headers = true;
-    LOGCFG.level = DEBUG;
-    LOGCFG.myrank = rank;
-
-    printf("Hello World from proc %i out of %i\n", rank, numProcesses);
-
+    /// Setting CUDA device
     //cudaSetDevice(rank);
     int device;
     cudaGetDevice(&device);
     int numDevices;
     cudaGetDeviceCount(&numDevices);
-    Logger(INFO) << "device: " << device << " | num devices: " << numDevices;
-
     cudaDeviceSynchronize();
 
-    int mpi_test = rank;
-    all_reduce(comm, boost::mpi::inplace_t<int*>(&mpi_test), 1, std::plus<int>());
-    Logger(INFO) << "mpi_test = " << mpi_test;
-
-    ConfigParser confP{ConfigParser("config/config.info")};
-    real timeStep = confP.getVal<real>("timeStep");
-    Logger(INFO) << "timeStep from config file: " << timeStep;
-
-    cxxopts::Options options("HPC NBody", "Multi-GPU CUDA Barnes-Hut NBody/SPH code");
-
-    bool render = false;
-    bool loadBalancing = false;
-
-    options.add_options()
-            ("i,iterations", "number of iterations", cxxopts::value<int>()->default_value("100"))
-            //("n,particles", "number of particles", cxxopts::value<int>()->default_value("524288")) //"524288"
-            ("t,timestep", "time step", cxxopts::value<float>()->default_value("0.001"))
-            ("l,loadbalancing", "load balancing", cxxopts::value<bool>(loadBalancing))
-            ("L,loadbalancinginterval", "load balancing interval", cxxopts::value<int>()->default_value("10"))
-            //("m,material", "material config file", cxxopts::value<std::string>()->default_value("config/material.cfg"))
-            ("c,curvetype", "curve type (Lebesgue: 0/Hilbert: 1)", cxxopts::value<int>()->default_value("0"))
-            ("f,filename", "File name", cxxopts::value<std::string>()->default_value("-"))
-            //("v,verbosity", "Verbosity level")
-            ("h,help", "Show this help");
-
-    auto result = options.parse(argc, argv);
-
-    if (result.count("help")) {
-        std::cout << options.help() << std::endl;
-        exit(0);
-    }
-
-    /** Initialization */
-    SimulationParameters parameters;
-
-    parameters.iterations = result["iterations"].as<int>(); //500;
-    //parameters.numberOfParticles = result["particles"].as<int>(); //512*256*4;
-    parameters.timestep = result["timestep"].as<float>();
-    parameters.dampening = 1.0;
-    parameters.timeKernels = true;
-    parameters.loadBalancing = loadBalancing;
-    parameters.loadBalancingInterval = result["loadbalancinginterval"].as<int>();
-    //parameters.loadBalancing = loadBalancing;
-    //parameters.loadBalancingInterval = result["loadbalancinginterval"].as<int>();
-    parameters.curveType = result["curvetype"].as<int>();
-    std::string filename = result["filename"].as<std::string>();
-    parameters.filename = filename;
-
-    parameters.sml = confP.getVal<real>("sml");
-
+    /// Logger settings
+    LOGCFG.headers = true;
+    //LOGCFG.level = DEBUG;
+    LOGCFG.rank = rank;
     //LOGCFG.outputRank = 0;
     //Logger(DEBUG) << "DEBUG output";
     //Logger(WARN) << "WARN output";
@@ -120,82 +82,198 @@ int main(int argc, char** argv)
     //Logger(INFO) << "INFO output";
     //Logger(TIME) << "TIME output";
 
-#if DEBUGGING
-#ifdef SINGLE_PRECISION
-    Logger(INFO) << "typedef float real";
-#else
-    Logger(INFO) << "typedef double real";
-#endif
-#endif
+    // testing whether MPI works ...
+    //int mpi_test = rank;
+    //all_reduce(comm, boost::mpi::inplace_t<int*>(&mpi_test), 1, std::plus<int>());
+    //Logger(INFO) << "mpi_test = " << mpi_test;
 
-    IntegratorSelection::Type integratorSelection = IntegratorSelection::explicit_euler;
-    //IntegratorSelection::Type integratorSelection = IntegratorSelection::predictor_corrector_euler;
+    /// Command line argument parsing
+    cxxopts::Options options("HPC NBody", "Multi-GPU CUDA Barnes-Hut NBody/SPH code");
 
-    Miluphpc *miluphpc;
-    // miluphpc = new Miluphpc(parameters, numParticles, numNodes); // not possible since abstract class
+    bool loadBalancing = false;
 
-    switch (integratorSelection) {
-        case IntegratorSelection::explicit_euler: {
-            miluphpc = new ExplicitEuler(parameters);
-        } break;
-        case IntegratorSelection::euler: {
-            miluphpc = new Euler(parameters);
-        } break;
-        case IntegratorSelection::predictor_corrector: {
-            miluphpc = new PredictorCorrector(parameters);
-        } break;
-        case IntegratorSelection::predictor_corrector_euler: {
-            miluphpc = new PredictorCorrectorEuler(parameters);
-        } break;
-        default: {
-            printf("Integrator not available!");
-        }
+    options.add_options()
+            ("n,number-output-files", "number of output files", cxxopts::value<int>()->default_value("100"))
+            ("t,max-time-step", "time step", cxxopts::value<real>()->default_value("-1."))
+            ("l,load-balancing", "load balancing", cxxopts::value<bool>(loadBalancing))
+            ("L,load-balancing-interval", "load balancing interval", cxxopts::value<int>()->default_value("10"))
+            ("C,config", "config file", cxxopts::value<std::string>()->default_value("config/config.info"))
+            ("m,material-config", "material config file", cxxopts::value<std::string>()->default_value("config/material.cfg"))
+            ("c,curve-type", "curve type (Lebesgue: 0/Hilbert: 1)", cxxopts::value<int>()->default_value("-1"))
+            ("f,input-file", "File name", cxxopts::value<std::string>()->default_value("-"))
+            ("v,verbosity", "Verbosity level", cxxopts::value<int>()->default_value("0"))
+            ("h,help", "Show this help");
+
+    cxxopts::ParseResult result;
+    try {
+        result = options.parse(argc, argv);
+    }
+    catch (cxxopts::OptionException &exception) {
+        std::cerr << exception.what();
+        MPI_Finalize();
+        exit(0);
+    }
+    catch (...) {
+        std::cerr << "Error parsing ...";
+        MPI_Finalize();
+        exit(0);
     }
 
+    if (result.count("help")) {
+        if (rank == 0) {
+            std::cout << options.help() << std::endl;
+        }
+        MPI_Finalize();
+        exit(0);
+    }
+
+    Logger(DEBUG) << "rank: " << rank << " | number of processes: " << numProcesses;
+    Logger(INFO) << "device: " << device << " | num devices: " << numDevices;
+
+    /// Config file parsing
+    std::string configFile = result["config"].as<std::string>();
+    checkFile(configFile, true, std::string{"Provided config file not available!"});
+
+    /// Collect settings/information in struct
+    SimulationParameters parameters;
+    ConfigParser confP{ConfigParser(configFile.c_str())}; //"config/config.info"
+    LOGCFG.write2LogFile = confP.getVal<bool>("log");
+    LOGCFG.omitTime = confP.getVal<bool>("omitTime");
+    parameters.timeStep = confP.getVal<real>("timeStep");
+    parameters.maxTimeStep = result["max-time-step"].as<real>();
+    if (parameters.maxTimeStep < 0.) {
+        parameters.maxTimeStep = confP.getVal<real>("maxTimeStep");
+    }
+    parameters.timeEnd = confP.getVal<real>("timeEnd");
+    parameters.outputRank = confP.getVal<int>("outputRank");
+    if (parameters.outputRank < 0 || parameters.outputRank >= numProcesses) {
+        parameters.outputRank = -1; // if selected output rank is not valid, log all processes
+    }
+    LOGCFG.outputRank = parameters.outputRank;
+    parameters.performanceLog = confP.getVal<bool>("performanceLog");
+    parameters.particlesSent2H5 = confP.getVal<bool>("particlesSent2H5");
+    parameters.sfcSelection = confP.getVal<int>("sfc");
+    if (result["curve-type"].as<int>() != -1) {
+        parameters.sfcSelection = result["curve-type"].as<int>();
+    }
+    parameters.integratorSelection = confP.getVal<int>("integrator");
+//#if GRAVITY_SIM
+    parameters.theta = confP.getVal<real>("theta");
+    parameters.gravityForceVersion = confP.getVal<int>("gravityForceVersion");
+//#endif
+//#if SPH_SIM
+    parameters.smoothingKernelSelection = confP.getVal<int>("smoothingKernel");
+    parameters.sphFixedRadiusNNVersion = confP.getVal<int>("sphFixedRadiusNNVersion");
+//#endif
+    parameters.removeParticles = confP.getVal<bool>("removeParticles");
+    parameters.removeParticlesCriterion = confP.getVal<int>("removeParticlesCriterion");
+    parameters.removeParticlesDimension = confP.getVal<real>("removeParticlesDimension");
+    parameters.numOutputFiles = result["number-output-files"].as<int>();
+    parameters.timeKernels = true;
+    parameters.loadBalancing = loadBalancing;
+    parameters.loadBalancingInterval = result["load-balancing-interval"].as<int>();
+    parameters.verbosity = result["verbosity"].as<int>();
+    parameters.materialConfigFile = result["material-config"].as<std::string>();
+    parameters.inputFile = result["input-file"].as<std::string>();
+
+    if (checkFile(parameters.materialConfigFile, false)) {
+        parameters.materialConfigFile = std::string{"config/material.cfg"};
+        checkFile(parameters.materialConfigFile, true,
+                  std::string{"Provided material config file and default (config/material.cfg) not available!"});
+    }
+    checkFile(parameters.inputFile, true, std::string{"Provided input file not available!"});
+
+
+    /// H5 profiling/profiler
     // profiling
     H5Profiler &profiler = H5Profiler::getInstance("log/performance.h5");
     profiler.setRank(comm.rank());
     profiler.setNumProcs(comm.size());
-
+    if (!parameters.performanceLog) {
+        profiler.disableWrite();
+    }
+    // General
     profiler.createValueDataSet<int>(ProfilerIds::numParticles, 1);
     profiler.createValueDataSet<int>(ProfilerIds::numParticlesLocal, 1);
     profiler.createVectorDataSet<keyType>(ProfilerIds::ranges, 1, comm.size() + 1);
-
+    // Timing
     profiler.createValueDataSet<real>(ProfilerIds::Time::rhs, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::rhsElapsed, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::loadBalancing, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::reset, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::removeParticles, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::boundingBox, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::assignParticles, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::tree, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::pseudoParticle, 1);
+#if GRAVITY_SIM
     profiler.createValueDataSet<real>(ProfilerIds::Time::gravity, 1);
+#endif
 #if SPH_SIM
     profiler.createValueDataSet<real>(ProfilerIds::Time::sph, 1);
 #endif
+    // Detailed timing
     profiler.createValueDataSet<real>(ProfilerIds::Time::Tree::createDomain, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::Tree::tree, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::Tree::buildDomain, 1);
+#if GRAVITY_SIM
     profiler.createValueDataSet<real>(ProfilerIds::Time::Gravity::compTheta, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::Gravity::symbolicForce, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::Gravity::sending, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::Gravity::insertReceivedPseudoParticles, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::Gravity::insertReceivedParticles, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::Gravity::force, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::Gravity::repairTree, 1);
+#endif
+#if SPH_SIM
+    profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::compTheta, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::determineSearchRadii, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::symbolicForce, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::sending, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::insertReceivedParticles, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::fixedRadiusNN, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::density, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::soundSpeed, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::pressure, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::resend, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::internalForces, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::repairTree, 1);
+#endif
 
+
+    /// INTEGRATOR SELECTION
+    // -----------------------------------------------------------------------------------------------------------------
+    Miluphpc *miluphpc;
+    // miluphpc = new Miluphpc(parameters, numParticles, numNodes); // not possible since abstract class
+    switch (parameters.integratorSelection) {
+        case IntegratorSelection::explicit_euler: {
+            miluphpc = new ExplicitEuler(parameters);
+        } break;
+        case IntegratorSelection::predictor_corrector_euler: {
+            miluphpc = new PredictorCorrectorEuler(parameters);
+        } break;
+        default: {
+            Logger(ERROR) << "Integrator not available!";
+            MPI_Finalize();
+            exit(1);
+        }
+    }
+
+    /// MAIN LOOP
+    // -----------------------------------------------------------------------------------------------------------------
     int fileCounter = 0;
     real t = 0;
-    for (int i_step=0; i_step<parameters.iterations; i_step++) {
+    for (int i_step=0; i_step<parameters.numOutputFiles; i_step++) {
 
-        profiler.setStep(i_step);
+        //profiler.setStep(i_step);
 
         Logger(INFO) << "-----------------------------------------------------------------";
-        Logger(INFO) << "STEP: " << i_step;
+        Logger(INFO, true) << "STEP: " << i_step;
         Logger(INFO) << "-----------------------------------------------------------------";
 
-        real endTime = 0.06;
+        *miluphpc->simulationTimeHandler->h_subEndTime += (parameters.timeEnd/(real)parameters.numOutputFiles);
+        Logger(INFO) << "subEndTime += " << (parameters.timeEnd/(real)parameters.numOutputFiles);
 
-        *miluphpc->simulationTimeHandler->h_endTime += (endTime/(real)parameters.iterations);
         miluphpc->simulationTimeHandler->copy(To::device);
 
         miluphpc->integrate(i_step);
@@ -217,11 +295,25 @@ int main(int argc, char** argv)
             Logger(TIME) << "particles2file: " << time << " ms";
         }
 
-        t += parameters.timestep;
+        t += parameters.timeStep;
 
     }
 
-    Logger(INFO) << "---------------FINISHED---------------";
+    /// END OF SIMULATION
+    // -----------------------------------------------------------------------------------------------------------------
+    comm.barrier();
+    LOGCFG.outputRank = -1;
+    if (rank == 0) {
+        Logger(INFO) << "\n\n";
+        Logger(INFO) << "---------------FINISHED---------------";
+        Logger(INFO) << "Input file: " << parameters.inputFile;
+        Logger(INFO) << "Config file: " << parameters.materialConfigFile;
+        Logger(INFO) << "Material config: " << parameters.materialConfigFile;
+        Logger(INFO) << "Generated " << parameters.numOutputFiles << " files!";
+        Logger(INFO) << "Output saved to " << "output/";
+        Logger(INFO) << "Performance log saved to " << "log/performance.h5";
+        Logger(INFO) << "---------------FINISHED---------------";
+    }
 
     return 0;
 }

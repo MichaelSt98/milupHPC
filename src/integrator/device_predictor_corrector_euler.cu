@@ -462,7 +462,7 @@ namespace PredictorCorrectorEulerNS {
                     *simulationTime->dt = cuda::math::min(*simulationTime->dt, dtartvisc);
                     //printf("viscos : dt = %e\n", dtartvisc);
 
-                    *simulationTime->dt = cuda::math::min(*simulationTime->dt, *simulationTime->endTime - *simulationTime->currentTime);
+                    *simulationTime->dt = cuda::math::min(*simulationTime->dt, *simulationTime->subEndTime - *simulationTime->currentTime);
                     if (*simulationTime->dt > *simulationTime->dt_max) {
                         *simulationTime->dt = *simulationTime->dt_max;
                     }

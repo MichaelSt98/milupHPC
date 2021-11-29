@@ -17,8 +17,8 @@
 namespace KeyNS {
 
     /**
-     * Table needed to convert from Lebesgue to Hilbert keys
-     */
+ * Table needed to convert from Lebesgue to Hilbert keys
+ */
 #if DIM == 1
     CUDA_CALLABLE_MEMBER const unsigned char DirTable[1][1] = {{1}}; //TODO: 1D DirTable?
 #elif DIM == 2
@@ -28,7 +28,8 @@ namespace KeyNS {
              {2,0,2,3},
              {3,3,1,2}};
 #else DIM == 3
-    CUDA_CALLABLE_MEMBER const unsigned char DirTable[12][8] =
+#ifndef __CUDACC__
+    const unsigned char DirTable[12][8] =
             {{8,  10, 3,  3,  4,  5,  4,  5},
              {2,  2,  11, 9,  4,  5,  4,  5},
              {7,  6,  7,  6,  8,  10, 1,  1},
@@ -41,6 +42,21 @@ namespace KeyNS {
              {1,  1,  8,  5,  3,  3,  8,  6},
              {11, 5,  0,  0,  11, 6,  2,  2},
              {1,  1,  4,  10, 3,  3,  7,  10}};
+#else
+    __device__ const unsigned char DirTable[12][8] =
+            {{8,  10, 3,  3,  4,  5,  4,  5},
+             {2,  2,  11, 9,  4,  5,  4,  5},
+             {7,  6,  7,  6,  8,  10, 1,  1},
+             {7,  6,  7,  6,  0,  0,  11, 9},
+             {0,  8,  1,  11, 6,  8,  6,  11},
+             {10, 0,  9,  1,  10, 7,  9,  7},
+             {10, 4,  9,  4,  10, 2,  9,  3},
+             {5,  8,  5,  11, 2,  8,  3,  11},
+             {4,  9,  0,  0,  7,  9,  2,  2},
+             {1,  1,  8,  5,  3,  3,  8,  6},
+             {11, 5,  0,  0,  11, 6,  2,  2},
+             {1,  1,  4,  10, 3,  3,  7,  10}};
+#endif
 #endif
 
     /**
@@ -55,7 +71,21 @@ namespace KeyNS {
              {2,3,1,0},
              {2,1,3,0}};
 #else
-    CUDA_CALLABLE_MEMBER const unsigned char HilbertTable[12][8] = {{0, 7, 3, 4, 1, 6, 2, 5},
+#ifndef __CUDACC__
+    const unsigned char HilbertTable[12][8] = {{0, 7, 3, 4, 1, 6, 2, 5},
+                                               {4, 3, 7, 0, 5, 2, 6, 1},
+                                               {6, 1, 5, 2, 7, 0, 4, 3},
+                                               {2, 5, 1, 6, 3, 4, 0, 7},
+                                               {0, 1, 7, 6, 3, 2, 4, 5},
+                                               {6, 7, 1, 0, 5, 4, 2, 3},
+                                               {2, 3, 5, 4, 1, 0, 6, 7},
+                                               {4, 5, 3, 2, 7, 6, 0, 1},
+                                               {0, 3, 1, 2, 7, 4, 6, 5},
+                                               {2, 1, 3, 0, 5, 6, 4, 7},
+                                               {4, 7, 5, 6, 3, 0, 2, 1},
+                                               {6, 5, 7, 4, 1, 2, 0, 3}};
+#else
+    __device__ const unsigned char HilbertTable[12][8] = {{0, 7, 3, 4, 1, 6, 2, 5},
                                                                     {4, 3, 7, 0, 5, 2, 6, 1},
                                                                     {6, 1, 5, 2, 7, 0, 4, 3},
                                                                     {2, 5, 1, 6, 3, 4, 0, 7},
@@ -67,6 +97,7 @@ namespace KeyNS {
                                                                     {2, 1, 3, 0, 5, 6, 4, 7},
                                                                     {4, 7, 5, 6, 3, 0, 2, 1},
                                                                     {6, 5, 7, 4, 1, 2, 0, 3}};
+#endif
 #endif
 
     /**

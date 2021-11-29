@@ -568,7 +568,7 @@ namespace Gravity {
         }
 
         __global__ void computeForces_v1(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                         SubDomainKeyTree *subDomainKeyTree) {
+                                         SubDomainKeyTree *subDomainKeyTree, real theta) {
 
             register int i, ii;
             int child, nodeIndex, childNumber, depth;
@@ -704,7 +704,7 @@ namespace Gravity {
         }
 
         __global__ void computeForces_v1_1(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                         SubDomainKeyTree *subDomainKeyTree) {
+                                         SubDomainKeyTree *subDomainKeyTree, real theta) {
 
             integer i, ii, child, nodeIndex, childNumber, depth;
 
@@ -838,7 +838,7 @@ namespace Gravity {
         }
 
         __global__ void computeForces_v1_2(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                           SubDomainKeyTree *subDomainKeyTree) {
+                                           SubDomainKeyTree *subDomainKeyTree, real theta) {
 
             register int i, ii;
             int child, nodeIndex, childNumber, depth;
@@ -1012,7 +1012,7 @@ namespace Gravity {
 
         __global__ void computeForces_v2(Tree *tree, Particles *particles, real radius, integer n, integer m,
                                          integer blockSize, integer warp, integer stackSize,
-                                         SubDomainKeyTree *subDomainKeyTree) {
+                                         SubDomainKeyTree *subDomainKeyTree, real theta) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x*blockDim.x;
             integer stride = blockDim.x*gridDim.x;
@@ -1180,7 +1180,8 @@ namespace Gravity {
         }
 
         __global__ void computeForces_v2_1(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
-                                           integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree) {
+                                           integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree,
+                                           real theta) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x*blockDim.x;
             integer stride = blockDim.x*gridDim.x;
@@ -2263,53 +2264,54 @@ namespace Gravity {
         }
 
         real Launch::computeForces_v1(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                      SubDomainKeyTree *subDomainKeyTree) {
+                                      SubDomainKeyTree *subDomainKeyTree, real theta) {
             size_t sharedMemory = sizeof(real) * MAX_DEPTH;
             ExecutionPolicy executionPolicy(256, 256, sharedMemory);
             //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v1, tree, particles,
-                                radius, n, m, subDomainKeyTree);
+                                radius, n, m, subDomainKeyTree, theta);
         }
 
         real Launch::computeForces_v1_1(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                        SubDomainKeyTree *subDomainKeyTree) {
+                                        SubDomainKeyTree *subDomainKeyTree, real theta) {
             size_t sharedMemory = sizeof(real) * MAX_DEPTH;
             ExecutionPolicy executionPolicy(256, 256, sharedMemory);
             //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v1_1, tree, particles,
-                                radius, n, m, subDomainKeyTree);
+                                radius, n, m, subDomainKeyTree, theta);
         }
 
         real Launch::computeForces_v1_2(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                      SubDomainKeyTree *subDomainKeyTree) {
+                                      SubDomainKeyTree *subDomainKeyTree, real theta) {
             size_t sharedMemory = (2*sizeof(int) + sizeof(real)) * MAX_DEPTH;
             ExecutionPolicy executionPolicy(256, 256, sharedMemory);
             //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v1_2, tree, particles,
-                                radius, n, m, subDomainKeyTree);
+                                radius, n, m, subDomainKeyTree, theta);
         }
 
         real Launch::computeForces_v2(Tree *tree, Particles *particles, real radius, integer n, integer m,
                                       integer blockSize, integer warp, integer stackSize,
-                                      SubDomainKeyTree *subDomainKeyTree) {
+                                      SubDomainKeyTree *subDomainKeyTree, real theta) {
 
             size_t sharedMemory = (sizeof(real)+sizeof(integer))*stackSize*blockSize/warp;
             //size_t sharedMemory = 2*sizeof(real)*stackSize*blockSize/warp;
             ExecutionPolicy executionPolicy(256, 256, sharedMemory);
             //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v2, tree, particles, radius,
-                                n, m, blockSize, warp, stackSize, subDomainKeyTree);
+                                n, m, blockSize, warp, stackSize, subDomainKeyTree, theta);
         }
 
         real Launch::computeForces_v2_1(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
-                                        integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree) {
+                                        integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree,
+                                        real theta) {
 
             size_t sharedMemory = (sizeof(real)+sizeof(integer))*stackSize*blockSize/warp;
             //size_t sharedMemory = 2*sizeof(real)*stackSize*blockSize/warp;
             ExecutionPolicy executionPolicy(256, 256, sharedMemory);
             //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v2_1, tree, particles, n, m,
-                                blockSize, warp, stackSize, subDomainKeyTree);
+                                blockSize, warp, stackSize, subDomainKeyTree, theta);
         }
 
         //real Launch::symbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,

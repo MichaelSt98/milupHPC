@@ -55,11 +55,20 @@ void PredictorCorrectorEuler::integrate(int step) {
 
     Timer timerRhs;
 
-    while (*simulationTimeHandler->h_currentTime < *simulationTimeHandler->h_endTime) {
+    while (*simulationTimeHandler->h_currentTime < *simulationTimeHandler->h_subEndTime) {
+
+        profiler.setStep(subStep);
+        subStep++;
 
         printf("removing particles...\n");
 
-        //removeParticles();
+        timer.reset();
+        if (simulationParameters.removeParticles) {
+            time = removeParticles();
+            Logger(TIME) << "removing particles: " << time_elapsed << " ms";
+        }
+        time_elapsed = timer.elapsed();
+        profiler.value2file(ProfilerIds::Time::removeParticles, time_elapsed);
 
         printf("removed particles...\n");
 
@@ -69,13 +78,16 @@ void PredictorCorrectorEuler::integrate(int step) {
         }
 
         timerRhs.reset();
+        // -------------------------------------------------------------------------------------------------------------
         time += rhs(step, true, true);
+        // -------------------------------------------------------------------------------------------------------------
         Logger(TIME) << "rhsElapsed: " << timerRhs.elapsed();
 
         // ------------------------------------------------------------------------------------------------------------
         //simulationTimeHandler->copy(To::host);
         //Logger(INFO) << "h_dt = " << *simulationTimeHandler->h_dt;
         //Logger(INFO) << "h_startTime = " << *simulationTimeHandler->h_startTime;
+        //Logger(INFO) << "h_subEndTime = " << *simulationTimeHandler->h_subEndTime;
         //Logger(INFO) << "h_endTime = " << *simulationTimeHandler->h_endTime;
         //Logger(INFO) << "h_currentTime = " << *simulationTimeHandler->h_currentTime;
         //Logger(INFO) << "h_dt_max = " << *simulationTimeHandler->h_dt_max;
@@ -88,11 +100,12 @@ void PredictorCorrectorEuler::integrate(int step) {
                                                                d_blockShared, d_blockCount, h_searchRadius,
                                                                numParticlesLocal);
 
-        simulationTimeHandler->globalize(Execution::device);
+        simulationTimeHandler->globalizeTimeStep(Execution::device);
         simulationTimeHandler->copy(To::host);
         Logger(INFO) << "h_dt = " << *simulationTimeHandler->h_dt << "  | h_dt_max = "
                      << *simulationTimeHandler->h_dt_max;;
         Logger(INFO) << "h_startTime = " << *simulationTimeHandler->h_startTime;
+        Logger(INFO) << "h_subEndTime = " << *simulationTimeHandler->h_subEndTime;
         Logger(INFO) << "h_endTime = " << *simulationTimeHandler->h_endTime;
         Logger(INFO) << "h_currentTime = " << *simulationTimeHandler->h_currentTime;
         //Logger(INFO) << "h_dt_max = " << *simulationTimeHandler->h_dt_max;
@@ -107,7 +120,9 @@ void PredictorCorrectorEuler::integrate(int step) {
         particleHandler->setPointer(&integratedParticles[0]);
 
         timerRhs.reset();
+        // -------------------------------------------------------------------------------------------------------------
         time += rhs(step, false, false);
+        // -------------------------------------------------------------------------------------------------------------
         Logger(TIME) << "rhsElapsed: " << timerRhs.elapsed();
         //Logger(TIME) << "rhs: " << time << " ms";
 
@@ -124,29 +139,30 @@ void PredictorCorrectorEuler::integrate(int step) {
         *simulationTimeHandler->h_currentTime += *simulationTimeHandler->h_dt;
         simulationTimeHandler->copy(To::device);
 
-        Logger(INFO) << "simulation time: " << *simulationTimeHandler->h_currentTime << "( STEP: " << step << ", endTime = " << *simulationTimeHandler->h_endTime << ")";
+        Logger(INFO) << "finished sub step - simulation time: " << *simulationTimeHandler->h_currentTime
+                << " (STEP: " << step << " | subStep: " << subStep
+                << " | time = " << *simulationTimeHandler->h_currentTime << "/"
+                << *simulationTimeHandler->h_subEndTime << "/"
+                << *simulationTimeHandler->h_endTime << ")";
+
+        //H5Profiler &profiler = H5Profiler::getInstance("log/performance.h5");
+        profiler.value2file(ProfilerIds::Time::rhs, time);
+        profiler.value2file(ProfilerIds::Time::rhsElapsed, time_elapsed);
+
+        subDomainKeyTreeHandler->copy(To::host, true, false);
+        profiler.vector2file(ProfilerIds::ranges, subDomainKeyTreeHandler->h_range);
+
+        boost::mpi::communicator comm;
+        sumParticles = numParticlesLocal;
+        all_reduce(comm, boost::mpi::inplace_t<integer*>(&sumParticles), 1, std::plus<integer>());
+
+        profiler.value2file(ProfilerIds::numParticles, sumParticles);
+        profiler.value2file(ProfilerIds::numParticlesLocal, numParticlesLocal);
 
     }
 
     time_elapsed = timer.elapsed();
     Logger(TIME) << "integration step elapsed: " << time_elapsed << " ms";
-
-    //Gravity::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal,
-    //                                (real)simulationParameters.timestep, (real)simulationParameters.dampening);
-
-    //H5Profiler &profiler = H5Profiler::getInstance("log/performance.h5");
-    profiler.value2file(ProfilerIds::Time::rhs, time);
-    profiler.value2file(ProfilerIds::Time::rhsElapsed, time_elapsed);
-
-    subDomainKeyTreeHandler->copy(To::host, true, false);
-    profiler.vector2file(ProfilerIds::ranges, subDomainKeyTreeHandler->h_range);
-
-    boost::mpi::communicator comm;
-    sumParticles = numParticlesLocal;
-    all_reduce(comm, boost::mpi::inplace_t<integer*>(&sumParticles), 1, std::plus<integer>());
-
-    profiler.value2file(ProfilerIds::numParticles, sumParticles);
-    profiler.value2file(ProfilerIds::numParticlesLocal, numParticlesLocal);
 
 }
 

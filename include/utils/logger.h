@@ -5,6 +5,8 @@
 #include <string>
 #include "color.h"
 #include "../parameter.h"
+#include <iostream>
+#include <fstream>
 
 namespace Color {
     class Modifier {
@@ -15,7 +17,7 @@ namespace Color {
     };
 }
 
-enum typelog {
+enum typeLog {
     DEBUG,
     WARN,
     ERROR,
@@ -23,32 +25,42 @@ enum typelog {
     TIME
 };
 
-struct structlog {
+struct structLog {
     bool headers = false;
-    typelog level = DEBUG;
-    int myrank = -1; // don't use MPI by default
+    typeLog level = DEBUG;
+    int rank = -1; // don't use MPI by default
     int outputRank = -1;
+    bool write2LogFile = true;
+    std::string logFileName {"log/miluphpc.log"};
+    bool omitTime = false;
 };
 
-extern structlog LOGCFG;
+extern structLog LOGCFG;
 
 class Logger {
 public:
     Logger() {}
-    Logger(typelog type);
+    Logger(typeLog type, bool toLog=false);
     ~Logger();
 
     template<class T> Logger &operator<<(const T &msg) {
-        if (msglevel >= LOGCFG.level && (LOGCFG.myrank == LOGCFG.outputRank || LOGCFG.outputRank == -1)) {
-            std::cout << msg;
-            opened = true;
+
+        if (LOGCFG.write2LogFile && (this->toLog || (msgLevel == typeLog::WARN || msgLevel == typeLog::ERROR))) {
+            logFile << msg;
+            openedLogFile = true;
+        }
+        if (msgLevel >= LOGCFG.level && (LOGCFG.rank == LOGCFG.outputRank || LOGCFG.outputRank == -1)) {
+            if (!omit) {
+                std::cout << msg;
+                opened = true;
+            }
         }
         return *this;
     }
 
     Logger &operator<<(const unsigned long &key) {
         int level = 21;
-        if (msglevel >= LOGCFG.level && (LOGCFG.myrank == LOGCFG.outputRank || LOGCFG.outputRank == -1)) {
+        if (msgLevel >= LOGCFG.level && (LOGCFG.rank == LOGCFG.outputRank || LOGCFG.outputRank == -1)) {
             int levels [level];
             for (int i = 0; i<level; i++) {
                 levels[i] = (key >> DIM*i) & (unsigned long)(POW_DIM - 1);
@@ -58,19 +70,24 @@ public:
                 msg += std::to_string(levels[i]);
                 msg += "|";
             }
-            std::cout << msg;
-            opened = true;
+            if (!omit) {
+                std::cout << msg;
+                opened = true;
+            }
         }
         return *this;
     }
 
 
-
 private:
     bool opened = false;
-    typelog msglevel = DEBUG;
-    inline std::string getLabel(typelog type);
-    inline Color::Modifier getColor(typelog type);
+    typeLog msgLevel = DEBUG;
+    inline std::string getLabel(typeLog type);
+    inline Color::Modifier getColor(typeLog type);
+    std::ofstream logFile;
+    bool openedLogFile = false;
+    bool toLog = false;
+    bool omit = false;
 };
 
 #endif //NBODY_LOGGER_H

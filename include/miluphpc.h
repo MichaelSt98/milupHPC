@@ -103,6 +103,8 @@ private:
 
 public:
 
+    int subStep;
+
     real h_searchRadius;
 
     real removeParticles();
@@ -178,6 +180,8 @@ public:
 
     //virtual void integrate() {};
     virtual void integrate(int step = 0) = 0;
+
+    void afterIntegrationStep();
 
     real particles2file(int step);
 

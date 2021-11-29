@@ -11,6 +11,7 @@ public:
 
     real *h_dt;
     real *h_startTime;
+    real *h_subEndTime;
     real *h_endTime;
     real *h_currentTime;
     real *h_dt_max;
@@ -19,6 +20,7 @@ public:
 
     real *d_dt;
     real *d_startTime;
+    real *d_subEndTime;
     real *d_endTime;
     real *d_currentTime;
     real *d_dt_max;
@@ -29,8 +31,7 @@ public:
     ~SimulationTimeHandler();
 
     void copy(To::Target target);
-
-    void globalize(Execution::Location exLoc);
+    void globalizeTimeStep(Execution::Location exLoc);
 
 };
 
