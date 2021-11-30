@@ -5,22 +5,21 @@ int LibConfigReader::loadConfigFromFile(const char *configFile)
     int numberOfElements;
 
     std::ifstream f(configFile);
-    if(f.good()) {
-        printf("File exists!\n");
+    if(!f.good()) {
+        Logger(ERROR) << "Error: config file cannot be found: " << configFile;
+        MPI_Finalize();
+        exit(1);
     }
-    else {
-        fprintf(stderr, "Error: config file %s cannot be found!\n", configFile);
-    }
-    //config_t config;
+
     config_init(&config);
 
     if (!config_read_file(&config, configFile)) {
-        fprintf(stderr, "Error reading config file %s.\n", configFile);
+        Logger(ERROR) << "Error reading config file: " << configFile;
         const char *errorText;
         errorText = new char[500];
         errorText = config_error_text(&config);
         int errorLine = config_error_line(&config);
-        fprintf(stderr, "Since: %s on %i\n", errorText, errorLine);
+        Logger(ERROR) << "since: " << errorText << " on line: " << errorLine;
         delete [] errorText;
         config_destroy(&config);
         exit(1);
@@ -38,16 +37,17 @@ int LibConfigReader::loadConfigFromFile(const char *configFile)
             material = config_setting_get_elem(materials, i);
             int ID;
             if (!config_setting_lookup_int(material, "ID", &ID)) {
-                fprintf(stderr, "Error. Found material without ID in config file...\n");
+                Logger(ERROR) << "Error. Found material without ID in config file...";
+                MPI_Finalize();
                 exit(1);
             }
 
-            fprintf(stdout, "Found material ID: %d\n", ID);
-
+            Logger(DEBUG) << "Found material ID: " << ID;
             maxId = std::max(ID, maxId);
         }
         if (maxId != numberOfElements - 1) {
-            fprintf(stderr, "Error. Material-IDs in config file have to be 0, 1, 2,...\n");
+            Logger(ERROR) << "Material-IDs in config file have to be 0, 1, 2,...";
+            MPI_Finalize();
             exit(1);
         }
     }
@@ -67,6 +67,7 @@ MaterialHandler::MaterialHandler(integer numMaterials) : numMaterials(numMateria
 }
 
 MaterialHandler::MaterialHandler(const char *material_cfg) {
+
     LibConfigReader libConfigReader;
     numMaterials = libConfigReader.loadConfigFromFile(material_cfg);
 
@@ -84,7 +85,7 @@ MaterialHandler::MaterialHandler(const char *material_cfg) {
         int id;
         config_setting_lookup_int(material, "ID", &id);
         h_materials[id].ID = id;
-        fprintf(stdout, "Reading information about material ID %d out of %d in total...\n", id, numMaterials);
+        Logger(DEBUG) << "Reading information about material ID " << id << " out of " << numMaterials << "...";
         config_setting_lookup_int(material, "interactions", &h_materials[id].interactions);
         config_setting_lookup_float(material, "sml", &temp);
         h_materials[id].sml = temp;

@@ -262,8 +262,10 @@ CUDA_CALLABLE_MEMBER integer Tree::getTreeLevel(Particles *particles, integer in
     }
 
 #if DIM == 3
+#if SAFETY_LEVEL > 1
     printf("ATTENTION: level = -1 (index = %i x = (%f, %f, %f) %f) tree index = %i\n",
            index, particles->x[index], particles->y[index], particles->z[index], particles->mass[index], *this->index);
+#endif
 #endif
 
     //for (integer i=0; i<maxLevel; i++) {

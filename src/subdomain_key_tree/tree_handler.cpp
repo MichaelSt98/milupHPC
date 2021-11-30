@@ -3,7 +3,6 @@
 TreeHandler::TreeHandler(integer numParticles, integer numNodes) : numParticles(numParticles),
                                                         numNodes(numNodes) {
 
-    printf("POW_DIM: %i\n", POW_DIM);
     cuda::malloc(d_count, numNodes);
     cuda::malloc(d_start, numNodes);
     cuda::malloc(d_sorted, numNodes);

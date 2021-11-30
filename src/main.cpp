@@ -71,17 +71,6 @@ int main(int argc, char** argv)
     cudaGetDeviceCount(&numDevices);
     cudaDeviceSynchronize();
 
-    /// Logger settings
-    LOGCFG.headers = true;
-    //LOGCFG.level = DEBUG;
-    LOGCFG.rank = rank;
-    //LOGCFG.outputRank = 0;
-    //Logger(DEBUG) << "DEBUG output";
-    //Logger(WARN) << "WARN output";
-    //Logger(ERROR) << "ERROR output";
-    //Logger(INFO) << "INFO output";
-    //Logger(TIME) << "TIME output";
-
     // testing whether MPI works ...
     //int mpi_test = rank;
     //all_reduce(comm, boost::mpi::inplace_t<int*>(&mpi_test), 1, std::plus<int>());
@@ -96,7 +85,7 @@ int main(int argc, char** argv)
             ("n,number-output-files", "number of output files", cxxopts::value<int>()->default_value("100"))
             ("t,max-time-step", "time step", cxxopts::value<real>()->default_value("-1."))
             ("l,load-balancing", "load balancing", cxxopts::value<bool>(loadBalancing))
-            ("L,load-balancing-interval", "load balancing interval", cxxopts::value<int>()->default_value("10"))
+            ("L,load-balancing-interval", "load balancing interval", cxxopts::value<int>()->default_value("-1"))
             ("C,config", "config file", cxxopts::value<std::string>()->default_value("config/config.info"))
             ("m,material-config", "material config file", cxxopts::value<std::string>()->default_value("config/material.cfg"))
             ("c,curve-type", "curve type (Lebesgue: 0/Hilbert: 1)", cxxopts::value<int>()->default_value("-1"))
@@ -127,15 +116,41 @@ int main(int argc, char** argv)
         exit(0);
     }
 
-    Logger(DEBUG) << "rank: " << rank << " | number of processes: " << numProcesses;
-    Logger(INFO) << "device: " << device << " | num devices: " << numDevices;
-
     /// Config file parsing
     std::string configFile = result["config"].as<std::string>();
     checkFile(configFile, true, std::string{"Provided config file not available!"});
 
     /// Collect settings/information in struct
     SimulationParameters parameters;
+
+    parameters.verbosity = result["verbosity"].as<int>();
+    /// Logger settings
+    LOGCFG.headers = true;
+    if (parameters.verbosity == 0) {
+        LOGCFG.level = TRACE;
+    }
+    else if (parameters.verbosity == 1) {
+        LOGCFG.level = INFO;
+    }
+    else if (parameters.verbosity >= 2) {
+        LOGCFG.level = DEBUG;
+    }
+    else {
+        LOGCFG.level = TRACE;
+    }
+    //LOGCFG.level = static_cast<typeLog>(1); //TRACE; //DEBUG;
+    LOGCFG.rank = rank;
+    //LOGCFG.outputRank = 0;
+    //Logger(DEBUG) << "DEBUG output";
+    //Logger(WARN) << "WARN output";
+    //Logger(ERROR) << "ERROR output";
+    //Logger(INFO) << "INFO output";
+    //Logger(TRACE) << "TRACE output";
+    //Logger(TIME) << "TIME output";
+
+    Logger(DEBUG) << "rank: " << rank << " | number of processes: " << numProcesses;
+    Logger(DEBUG) << "device: " << device << " | num devices: " << numDevices;
+
     ConfigParser confP{ConfigParser(configFile.c_str())}; //"config/config.info"
     LOGCFG.write2LogFile = confP.getVal<bool>("log");
     LOGCFG.omitTime = confP.getVal<bool>("omitTime");
@@ -159,6 +174,7 @@ int main(int argc, char** argv)
     parameters.integratorSelection = confP.getVal<int>("integrator");
 //#if GRAVITY_SIM
     parameters.theta = confP.getVal<real>("theta");
+    parameters.smoothing = confP.getVal<real>("smoothing");
     parameters.gravityForceVersion = confP.getVal<int>("gravityForceVersion");
 //#endif
 //#if SPH_SIM
@@ -170,11 +186,28 @@ int main(int argc, char** argv)
     parameters.removeParticlesDimension = confP.getVal<real>("removeParticlesDimension");
     parameters.numOutputFiles = result["number-output-files"].as<int>();
     parameters.timeKernels = true;
-    parameters.loadBalancing = loadBalancing;
-    parameters.loadBalancingInterval = result["load-balancing-interval"].as<int>();
+    parameters.loadBalancing = confP.getVal<bool>("loadBalancing");
+    if (parameters.loadBalancing || loadBalancing) {
+        parameters.loadBalancing = true;
+    }
+    parameters.loadBalancingInterval = confP.getVal<int>("loadBalancingInterval");
+    if (result["load-balancing-interval"].as<int>() > 0) {
+        parameters.loadBalancingInterval = result["load-balancing-interval"].as<int>();
+    }
+    parameters.loadBalancingBins = confP.getVal<int>("loadBalancingBins");
     parameters.verbosity = result["verbosity"].as<int>();
     parameters.materialConfigFile = result["material-config"].as<std::string>();
     parameters.inputFile = result["input-file"].as<std::string>();
+    parameters.particleMemoryContingent = confP.getVal<real>("particleMemoryContingent");
+    if (parameters.particleMemoryContingent > 1.0 || parameters.particleMemoryContingent < 0.0) {
+        parameters.particleMemoryContingent = 1.0;
+        Logger(WARN) << "Setting particle memory contingent to: " << parameters.particleMemoryContingent;
+    }
+    //TODO: apply those
+    parameters.calculateAngularMomentum = confP.getVal<bool>("calculateAngularMomentum");
+    parameters.calculateEnergy = confP.getVal<bool>("calculateEnergy");
+    parameters.calculateCenterOfMass = confP.getVal<bool>("calculateCenterOfMass");
+
 
     if (checkFile(parameters.materialConfigFile, false)) {
         parameters.materialConfigFile = std::string{"config/material.cfg"};
@@ -259,41 +292,31 @@ int main(int argc, char** argv)
         }
     }
 
+    if (rank == 0) {
+        Logger(TRACE) << "---------------STARTING---------------";
+    }
+
     /// MAIN LOOP
     // -----------------------------------------------------------------------------------------------------------------
-    int fileCounter = 0;
     real t = 0;
     for (int i_step=0; i_step<parameters.numOutputFiles; i_step++) {
 
         //profiler.setStep(i_step);
 
-        Logger(INFO) << "-----------------------------------------------------------------";
-        Logger(INFO, true) << "STEP: " << i_step;
-        Logger(INFO) << "-----------------------------------------------------------------";
+        Logger(TRACE) << "-----------------------------------------------------------------";
+        Logger(TRACE, true) << "STEP: " << i_step;
+        Logger(TRACE) << "-----------------------------------------------------------------";
 
         *miluphpc->simulationTimeHandler->h_subEndTime += (parameters.timeEnd/(real)parameters.numOutputFiles);
-        Logger(INFO) << "subEndTime += " << (parameters.timeEnd/(real)parameters.numOutputFiles);
+        Logger(DEBUG) << "subEndTime += " << (parameters.timeEnd/(real)parameters.numOutputFiles);
 
         miluphpc->simulationTimeHandler->copy(To::device);
 
         miluphpc->integrate(i_step);
 
-        if (i_step == 0 || i_step % 1 == 0) {
-            real *d_com;
-            cuda::malloc(d_com, DIM);
-            real *h_com = new real[DIM];
-            Gravity::Kernel::Launch::globalCOM(miluphpc->treeHandler->d_tree, miluphpc->particleHandler->d_particles,
-                                               d_com);
-            cuda::copy(h_com, d_com, DIM, To::host);
-            for (int i=0; i<DIM; i++) {
-                Logger(INFO) << "com[" << i << "] = " << h_com[i];
-            }
-            //TODO: fileCounter vs step (regarding current time)
-            auto time = miluphpc->particles2file(fileCounter);
-            //auto time = miluphpc->particles2file(fileCounter, h_com, t);
-            fileCounter++;
-            Logger(TIME) << "particles2file: " << time << " ms";
-        }
+        auto time = miluphpc->particles2file(i_step);
+        Logger(TIME) << "particles2file: " << time << " ms";
+
 
         t += parameters.timeStep;
 
@@ -304,15 +327,15 @@ int main(int argc, char** argv)
     comm.barrier();
     LOGCFG.outputRank = -1;
     if (rank == 0) {
-        Logger(INFO) << "\n\n";
-        Logger(INFO) << "---------------FINISHED---------------";
-        Logger(INFO) << "Input file: " << parameters.inputFile;
-        Logger(INFO) << "Config file: " << parameters.materialConfigFile;
-        Logger(INFO) << "Material config: " << parameters.materialConfigFile;
-        Logger(INFO) << "Generated " << parameters.numOutputFiles << " files!";
-        Logger(INFO) << "Output saved to " << "output/";
-        Logger(INFO) << "Performance log saved to " << "log/performance.h5";
-        Logger(INFO) << "---------------FINISHED---------------";
+        Logger(TRACE) << "\n\n";
+        Logger(TRACE) << "---------------FINISHED---------------";
+        Logger(TRACE) << "Input file: " << parameters.inputFile;
+        Logger(TRACE) << "Config file: " << parameters.materialConfigFile;
+        Logger(TRACE) << "Material config: " << parameters.materialConfigFile;
+        Logger(TRACE) << "Generated " << parameters.numOutputFiles << " files!";
+        Logger(TRACE) << "Output saved to " << "output/";
+        Logger(TRACE) << "Performance log saved to " << "log/performance.h5";
+        Logger(TRACE) << "---------------FINISHED---------------";
     }
 
     return 0;

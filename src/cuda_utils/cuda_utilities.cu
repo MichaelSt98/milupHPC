@@ -37,7 +37,6 @@ void checkCudaCall(cudaError_t command, const char * commandName, const char * f
     }
 }
 
-
 namespace CudaUtils {
 
     namespace Kernel {

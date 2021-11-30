@@ -19,9 +19,10 @@ namespace Color {
 
 enum typeLog {
     DEBUG,
+    INFO,
+    TRACE,
     WARN,
     ERROR,
-    INFO,
     TIME
 };
 
@@ -81,7 +82,7 @@ public:
 
 private:
     bool opened = false;
-    typeLog msgLevel = DEBUG;
+    typeLog msgLevel = INFO;
     inline std::string getLabel(typeLog type);
     inline Color::Modifier getColor(typeLog type);
     std::ofstream logFile;

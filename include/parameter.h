@@ -26,7 +26,13 @@ typedef int idInteger;
 
 #define DEBUGGING 0
 
-#define SAFE 0
+/**
+ * * `SAFETY_LEVEL 0`: almost no safety measures
+ * * `SAFETY_LEVEL 1`: most relevant/important safety measures
+ * * `SAFETY_LEVEL 2`: more safety measures, including assertions
+ * * `SAFETY_LEVEL 3`: many security measures, including all assertions
+ */
+#define SAFETY_LEVEL 1
 
 /// Dimension of the problem
 #define DIM 3
@@ -120,6 +126,7 @@ typedef struct SimulationParameters {
     real timeEnd;
     bool loadBalancing;
     int loadBalancingInterval;
+    int loadBalancingBins;
     std::string inputFile;
     std::string materialConfigFile;
     int outputRank;
@@ -129,6 +136,7 @@ typedef struct SimulationParameters {
     int integratorSelection;
 //#if GRAVITY_SIM
     real theta;
+    real smoothing;
     int gravityForceVersion;
 //#endif
 //#if SPH_SIM
@@ -138,6 +146,11 @@ typedef struct SimulationParameters {
     bool removeParticles;
     int removeParticlesCriterion;
     real removeParticlesDimension;
+    int bins;
+    bool calculateAngularMomentum;
+    bool calculateEnergy;
+    bool calculateCenterOfMass;
+    real particleMemoryContingent;
 } SimulationParameters;
 
 struct To

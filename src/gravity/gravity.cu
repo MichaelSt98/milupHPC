@@ -332,35 +332,34 @@ namespace Gravity {
                 }
 
                 if (originalIndex == -1) {
-                    printf("ATTENTION: originalIndex = -1 (index = %i)!\n",
+                    cudaTerminate("ATTENTION: originalIndex = -1 (index = %i)!\n",
                            lowestDomainList->sortedDomainListKeys[bodyIndex + offset]);
-                    assert(0);
                 }
 
                 switch (entry) {
-                    case Entry::x:
+                    case Entry::x: {
                         particles->x[lowestDomainList->domainListIndices[originalIndex]] =
                                 helper->realBuffer[DOMAIN_LIST_SIZE + bodyIndex + offset];
-                        break;
+                    } break;
 #if DIM > 1
-                    case Entry::y:
+                    case Entry::y: {
                         particles->y[lowestDomainList->domainListIndices[originalIndex]] =
                                 helper->realBuffer[DOMAIN_LIST_SIZE + bodyIndex + offset];
-                        break;
+                    } break;
 #if DIM == 3
-                    case Entry::z:
+                    case Entry::z: {
                         particles->z[lowestDomainList->domainListIndices[originalIndex]] =
                                 helper->realBuffer[DOMAIN_LIST_SIZE + bodyIndex + offset];
-                        break;
+                    } break;
 #endif
 #endif
-                    case Entry::mass:
+                    case Entry::mass: {
                         particles->mass[lowestDomainList->domainListIndices[originalIndex]] =
                                 helper->realBuffer[DOMAIN_LIST_SIZE + bodyIndex + offset];
-                        break;
-                    default:
+                    } break;
+                    default: {
                         printf("Entry not available!\n");
-                        break;
+                    }
                 }
 
                 offset += stride;
@@ -568,7 +567,7 @@ namespace Gravity {
         }
 
         __global__ void computeForces_v1(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                         SubDomainKeyTree *subDomainKeyTree, real theta) {
+                                         SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing) {
 
             register int i, ii;
             int child, nodeIndex, childNumber, depth;
@@ -643,8 +642,7 @@ namespace Gravity {
                         } while(child == -1 && childNumber < POW_DIM);
                         if (child != -1 && child != i) { // dont do self-gravity with yourself!
                             dx = particles->x[child] - px;
-                            // TODO: make smoothing parameter to input constant
-                            distance = dx*dx + 0.025; //150329404.287723; //(0.0317 * 0.0317); //0.025;
+                            distance = dx*dx + smoothing; //150329404.287723; //(0.0317 * 0.0317); //0.025;
 #if DIM > 1
                             dy = particles->y[child] - py;
                             distance += dy*dy;
@@ -679,8 +677,7 @@ namespace Gravity {
                                 currentNodeIndex[depth] = nodeIndex;
                                 depth++;
                                 if (depth == MAX_DEPTH) {
-                                    printf("\n\nMAX_DEPTH reached in selfgravity... this is not good.\n\n");
-                                    assert(depth < MAX_DEPTH);
+                                    cudaTerminate("depth = %i >= MAX_DEPTH = %i\n", depth, MAX_DEPTH);
                                 }
                                 childNumber = 0;
                                 nodeIndex = child;
@@ -704,7 +701,7 @@ namespace Gravity {
         }
 
         __global__ void computeForces_v1_1(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                         SubDomainKeyTree *subDomainKeyTree, real theta) {
+                                         SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing) {
 
             integer i, ii, child, nodeIndex, childNumber, depth;
 
@@ -777,8 +774,7 @@ namespace Gravity {
                         } while(child == -1 && childNumber < POW_DIM);
                         if (child != -1 && child != i) { // dont do self-gravity with yourself!
                             dx = particles->x[child] - px;
-                            // TODO: make smoothing parameter to input constant
-                            distance = dx*dx + 0.025; //150329404.287723; //(0.0317 * 0.0317); //0.025;
+                            distance = dx*dx + smoothing; //150329404.287723; //(0.0317 * 0.0317); //0.025;
 #if DIM > 1
                             dy = particles->y[child] - py;
                             distance += dy*dy;
@@ -813,8 +809,7 @@ namespace Gravity {
                                 currentNodeIndex[depth] = nodeIndex;
                                 depth++;
                                 if (depth == MAX_DEPTH) {
-                                    printf("\n\nMAX_DEPTH reached in selfgravity... this is not good.\n\n");
-                                    assert(depth < MAX_DEPTH);
+                                    cudaTerminate("depth = %i >= MAX_DEPTH = %i\n", depth, MAX_DEPTH);
                                 }
                                 childNumber = 0;
                                 nodeIndex = child;
@@ -838,7 +833,7 @@ namespace Gravity {
         }
 
         __global__ void computeForces_v1_2(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                           SubDomainKeyTree *subDomainKeyTree, real theta) {
+                                           SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing) {
 
             register int i, ii;
             int child, nodeIndex, childNumber, depth;
@@ -913,8 +908,7 @@ namespace Gravity {
                         } while(child == -1 && childNumber < POW_DIM);
                         if (child != -1 && child != i) { // dont do self-gravity with yourself!
                             dx = particles->x[child] - px;
-                            // TODO: make smoothing parameter to input constant
-                            distance = dx*dx + 0.025; //150329404.287723; //(0.0317 * 0.0317); //0.025;
+                            distance = dx*dx + smoothing; //150329404.287723; //(0.0317 * 0.0317); //0.025;
 #if DIM > 1
                             dy = particles->y[child] - py;
                             distance += dy*dy;
@@ -949,8 +943,7 @@ namespace Gravity {
                                 currentNodeIndex[depth] = nodeIndex;
                                 depth++;
                                 if (depth == MAX_DEPTH) {
-                                    printf("\n\nMAX_DEPTH reached in selfgravity... this is not good.\n\n");
-                                    assert(depth < MAX_DEPTH);
+                                    cudaTerminate("depth = %i >= MAX_DEPTH = %i\n", depth, MAX_DEPTH);
                                 }
                                 childNumber = 0;
                                 nodeIndex = child;
@@ -1012,7 +1005,8 @@ namespace Gravity {
 
         __global__ void computeForces_v2(Tree *tree, Particles *particles, real radius, integer n, integer m,
                                          integer blockSize, integer warp, integer stackSize,
-                                         SubDomainKeyTree *subDomainKeyTree, real theta) {
+                                         SubDomainKeyTree *subDomainKeyTree, real theta,
+                                         real smoothing) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x*blockDim.x;
             integer stride = blockDim.x*gridDim.x;
@@ -1117,7 +1111,7 @@ namespace Gravity {
 #endif
 #endif
 
-                            real r = dx*dx + 0.025; // SMOOTHING
+                            real r = dx*dx + smoothing; // SMOOTHING
 #if DIM > 1
                             r += dy*dy;
 #if DIM == 3
@@ -1181,7 +1175,7 @@ namespace Gravity {
 
         __global__ void computeForces_v2_1(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
                                            integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree,
-                                           real theta) {
+                                           real theta, real smoothing) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x*blockDim.x;
             integer stride = blockDim.x*gridDim.x;
@@ -1280,7 +1274,7 @@ namespace Gravity {
 #endif
 #endif
 
-                            real r = dx*dx + 0.025; // SMOOTHING
+                            real r = dx*dx + smoothing; // SMOOTHING
 #if DIM > 1
                             r += dy*dy;
 #if DIM == 3
@@ -1501,8 +1495,8 @@ namespace Gravity {
                         currentDomainListIndex = domainList->relevantDomainListIndices[relevantIndex];
                         //printf("domainListLevel = %i\n", domainListLevel);
                         if (domainListLevel == -1) {
-                            printf("symbolicForce(): domainListLevel == -1 for (relevant) index: %i\n", relevantIndex);
-                            assert(0);
+                            cudaAssert("symbolicForce(): domainListLevel == -1 for (relevant) index: %i\n",
+                                       relevantIndex);
                         }
 
                         min_x = *tree->minX;
@@ -1911,7 +1905,6 @@ namespace Gravity {
                     }
 #if DIM == 3
                     if (childIndex != -1) {
-                        printf("ATTENTION: insertReceivedPseudoParticles(): childIndex = %i temp = %i\n", childIndex, temp);
                         printf("[rank %i] (%f, %f, %f) vs (%f, %f, %f)\n", subDomainKeyTree->rank,
                                particles->x[tree->toDeleteNode[0] + bodyIndex + offset],
                                particles->y[tree->toDeleteNode[0] + bodyIndex + offset],
@@ -1919,7 +1912,7 @@ namespace Gravity {
                                particles->x[childIndex],
                                particles->y[childIndex],
                                particles->z[childIndex]);
-                        assert(0);
+                        cudaAssert("insertReceivedPseudoParticles(): childIndex = %i temp = %i\n", childIndex, temp);
                     }
 #endif
 
@@ -2076,9 +2069,9 @@ namespace Gravity {
                 }
 
                 if (childIndex != -1) {
-                    printf("ATTENTION: insertReceivedParticles(): childIndex = %i (%i, %i) (%i, %i)\n", childIndex,
-                           tree->toDeleteLeaf[0], tree->toDeleteLeaf[1], tree->toDeleteNode[0], tree->toDeleteNode[1]);
-                    assert(0);
+                    cudaAssert("ATTENTION: insertReceivedParticles(): childIndex = %i (%i, %i) (%i, %i)\n", childIndex,
+                               tree->toDeleteLeaf[0], tree->toDeleteLeaf[1], tree->toDeleteNode[0],
+                               tree->toDeleteNode[1]);
                     //printf("[rank %i] ATTENTION: childIndex = %i,... child[8 * %i + %i] = %i (%f, %f, %f) vs (%f, %f, %f)\n", subDomainKeyTree->rank,
                     //           childIndex, temp, childPath, bodyIndex + offset,
                     //           particles->x[childIndex], particles->y[childIndex], particles->z[childIndex],
@@ -2264,54 +2257,55 @@ namespace Gravity {
         }
 
         real Launch::computeForces_v1(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                      SubDomainKeyTree *subDomainKeyTree, real theta) {
+                                      SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing) {
             size_t sharedMemory = sizeof(real) * MAX_DEPTH;
             ExecutionPolicy executionPolicy(256, 256, sharedMemory);
             //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v1, tree, particles,
-                                radius, n, m, subDomainKeyTree, theta);
+                                radius, n, m, subDomainKeyTree, theta, smoothing);
         }
 
         real Launch::computeForces_v1_1(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                        SubDomainKeyTree *subDomainKeyTree, real theta) {
+                                        SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing) {
             size_t sharedMemory = sizeof(real) * MAX_DEPTH;
             ExecutionPolicy executionPolicy(256, 256, sharedMemory);
             //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v1_1, tree, particles,
-                                radius, n, m, subDomainKeyTree, theta);
+                                radius, n, m, subDomainKeyTree, theta, smoothing);
         }
 
         real Launch::computeForces_v1_2(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                      SubDomainKeyTree *subDomainKeyTree, real theta) {
+                                      SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing) {
             size_t sharedMemory = (2*sizeof(int) + sizeof(real)) * MAX_DEPTH;
             ExecutionPolicy executionPolicy(256, 256, sharedMemory);
             //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v1_2, tree, particles,
-                                radius, n, m, subDomainKeyTree, theta);
+                                radius, n, m, subDomainKeyTree, theta, smoothing);
         }
 
         real Launch::computeForces_v2(Tree *tree, Particles *particles, real radius, integer n, integer m,
                                       integer blockSize, integer warp, integer stackSize,
-                                      SubDomainKeyTree *subDomainKeyTree, real theta) {
+                                      SubDomainKeyTree *subDomainKeyTree, real theta,
+                                      real smoothing) {
 
             size_t sharedMemory = (sizeof(real)+sizeof(integer))*stackSize*blockSize/warp;
             //size_t sharedMemory = 2*sizeof(real)*stackSize*blockSize/warp;
             ExecutionPolicy executionPolicy(256, 256, sharedMemory);
             //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v2, tree, particles, radius,
-                                n, m, blockSize, warp, stackSize, subDomainKeyTree, theta);
+                                n, m, blockSize, warp, stackSize, subDomainKeyTree, theta, smoothing);
         }
 
         real Launch::computeForces_v2_1(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
                                         integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree,
-                                        real theta) {
+                                        real theta, real smoothing) {
 
             size_t sharedMemory = (sizeof(real)+sizeof(integer))*stackSize*blockSize/warp;
             //size_t sharedMemory = 2*sizeof(real)*stackSize*blockSize/warp;
             ExecutionPolicy executionPolicy(256, 256, sharedMemory);
             //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v2_1, tree, particles, n, m,
-                                blockSize, warp, stackSize, subDomainKeyTree, theta);
+                                blockSize, warp, stackSize, subDomainKeyTree, theta, smoothing);
         }
 
         //real Launch::symbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,

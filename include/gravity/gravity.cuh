@@ -48,21 +48,22 @@ namespace Gravity {
                                                       DomainList *lowestDomainList, int n);
 
         __global__ void computeForces_v1(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                         SubDomainKeyTree *subDomainKeyTree, real theta);
+                                         SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing);
 
         __global__ void computeForces_v1_1(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                         SubDomainKeyTree *subDomainKeyTree, real theta);
+                                         SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing);
 
         __global__ void computeForces_v1_2(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                           SubDomainKeyTree *subDomainKeyTree, real theta);
+                                           SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing);
 
         __global__ void computeForces_v2(Tree *tree, Particles *particles, real radius, integer n, integer m,
                                          integer blockSize, integer warp, integer stackSize,
-                                         SubDomainKeyTree *subDomainKeyTree, real theta);
+                                         SubDomainKeyTree *subDomainKeyTree, real theta,
+                                         real smoothing);
 
         __global__ void computeForces_v2_1(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
                                            integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree,
-                                           real theta);
+                                           real theta, real smoothing);
 
         __global__ void intermediateSymbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                   DomainList *domainList, integer *sendIndices, real diam, real theta_,
@@ -145,21 +146,23 @@ namespace Gravity {
                                                DomainList *lowestDomainList, int n);
 
             real computeForces_v1(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                  SubDomainKeyTree *subDomainKeyTree, real theta);
+                                  SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing);
 
             real computeForces_v1_1(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                  SubDomainKeyTree *subDomainKeyTree, real theta);
+                                  SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing);
 
             real computeForces_v1_2(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                    SubDomainKeyTree *subDomainKeyTree, real theta);
+                                    SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing);
 
             real computeForces_v2(Tree *tree, Particles *particles, real radius, integer n, integer m,
                                   integer blockSize, integer warp, integer stackSize,
-                                  SubDomainKeyTree *subDomainKeyTree, real theta);
+                                  SubDomainKeyTree *subDomainKeyTree, real theta,
+                                  real smoothing);
 
             real computeForces_v2_1(Tree *tree, Particles *particles, integer n, integer m,
                                     integer blockSize, integer warp, integer stackSize,
-                                    SubDomainKeyTree *subDomainKeyTree, real theta);
+                                    SubDomainKeyTree *subDomainKeyTree, real theta,
+                                    real smoothing);
 
             real intermediateSymbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                       DomainList *domainList, integer *sendIndices, real diam, real theta_,

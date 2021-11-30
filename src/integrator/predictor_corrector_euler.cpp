@@ -139,7 +139,7 @@ void PredictorCorrectorEuler::integrate(int step) {
         *simulationTimeHandler->h_currentTime += *simulationTimeHandler->h_dt;
         simulationTimeHandler->copy(To::device);
 
-        Logger(INFO) << "finished sub step - simulation time: " << *simulationTimeHandler->h_currentTime
+        Logger(TRACE) << "finished sub step - simulation time: " << *simulationTimeHandler->h_currentTime
                 << " (STEP: " << step << " | subStep: " << subStep
                 << " | time = " << *simulationTimeHandler->h_currentTime << "/"
                 << *simulationTimeHandler->h_subEndTime << "/"

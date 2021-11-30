@@ -5,7 +5,7 @@
 #include <cuda.h>
 #include <cuda_runtime.h>
 #include "../parameter.h"
-
+#include <assert.h>
 
 #ifdef __CUDACC__
 #define CUDA_CALLABLE_MEMBER __host__ __device__
@@ -16,6 +16,38 @@
 
 #define safeCudaCall(call) checkCudaCall(call, #call, __FILE__, __LINE__)
 #define gpuErrorcheck(ans) { gpuAssert((ans), __FILE__, __LINE__); }
+
+/**
+ * Somewhat of an assertion,
+ * printing warning and/or terminating in dependence of `SAFETY_LEVEL`
+ */
+#if SAFETY_LEVEL == 0
+#define cudaAssert(...)
+#elif SAFETY_LEVEL == 1
+#define cudaAssert(...) {    \
+    printf(__VA_ARGS__);     \
+}
+#elif SAFETY_LEVEL == 2
+#define cudaAssert(...) {    \
+    printf(__VA_ARGS__);             \
+    assert(0);               \
+}
+#elif SAFETY_LEVEL == 3
+#define cudaAssert(...) {    \
+    printf(__VA_ARGS__);             \
+    assert(0);               \
+}
+#else
+#define cudaAssert(...)
+#endif
+
+/**
+ * Terminate from within CUDA kernel using assert(0)
+ */
+#define cudaTerminate(...) { \
+    printf(__VA_ARGS__);     \
+    assert(0);               \
+}
 
 #if !defined(__CUDA_ARCH__) || __CUDA_ARCH__ >= 600
 #else

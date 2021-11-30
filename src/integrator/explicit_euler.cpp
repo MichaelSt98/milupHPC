@@ -7,15 +7,11 @@
 }*/
 
 ExplicitEuler::ExplicitEuler(SimulationParameters simulationParameters) : Miluphpc(simulationParameters) {
-    printf("ExplicitEuler()\n");
-    // just testing // TODO: remove!!!
-    //integratedParticles = new IntegratedParticleHandler(numParticles, numNodes);
-    //particleHandler->setPointer(&integratedParticles[0]);
-    // end: testing
+    Logger(DEBUG) << "ExplicitEuler()";
 }
 
 ExplicitEuler::~ExplicitEuler() {
-    printf("~ExplicitEuler()\n");
+    Logger(DEBUG) << "~ExplicitEuler()";
 }
 
 void ExplicitEuler::integrate(int step) {
@@ -57,7 +53,6 @@ void ExplicitEuler::integrate(int step) {
         //Logger(INFO) << "checking for nans before update() ..";
         //ParticlesNS::Kernel::Launch::check4nans(particleHandler->d_particles, numParticlesLocal);
 
-        printf("ExplicitEuler::integrate()\n");
         timer.reset();
         //real time;
         // -------------------------------------------------------------------------------------------------------------
@@ -79,7 +74,7 @@ void ExplicitEuler::integrate(int step) {
         cuda::set(particleHandler->d_dsmldt, (real)0, numParticles);
 #endif
 
-        Logger(INFO) << "finished sub step - simulation time: " << *simulationTimeHandler->h_currentTime
+        Logger(TRACE) << "finished sub step - simulation time: " << *simulationTimeHandler->h_currentTime
                      << " (STEP: " << step << " | subStep: " << subStep
                      << " | time = " << *simulationTimeHandler->h_currentTime << "/"
                      << *simulationTimeHandler->h_subEndTime << "/"
