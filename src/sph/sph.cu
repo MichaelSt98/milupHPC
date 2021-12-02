@@ -66,10 +66,10 @@ namespace SPH {
                         interactions[(bodyIndex + offset) * MAX_NUM_INTERACTIONS + numInteractions] = i;
                         numInteractions++;
                         if (numInteractions > MAX_NUM_INTERACTIONS) {
-                            assert(0);
+                            cudaTerminate("numInteractions = %i > MAX_NUM_INTERACTIONS = %i\n", numInteractions,
+                                          MAX_NUM_INTERACTIONS);
                         }
                     }
-
                 }
                 particles->noi[bodyIndex + offset] = numInteractions;
                 offset += stride;
@@ -139,18 +139,9 @@ namespace SPH {
                 interactionDistance = (r + sml);
 
                 do {
-                    //if (childNumber == currentChildNumber[depth] && nodeIndex == currentNodeIndex[depth]) {
-                    //    printf("ATTENTION: current = next child = %i node = %i depth = %i\n", childNumber, nodeIndex,
-                    //           depth);
-                    //        assert(0);
-                    //}
+
                     childNumber = currentChildNumber[depth];
                     nodeIndex = currentNodeIndex[depth];
-
-                    //if (childNumber > POW_DIM) {
-                    //    printf("%i depth = %i childNumber = %i\n", bodyIndex + offset, depth, childNumber);
-                    //    assert(0);
-                    //}
 
                     while (childNumber < POW_DIM) {
 
@@ -248,8 +239,7 @@ namespace SPH {
                                     //           currentNodeIndex[i_depth], i_depth, currentChildNumber[i_depth], tree->child[POW_DIM * currentNodeIndex[i_depth] + currentChildNumber[i_depth]]);
                                     //}
                                     // TODO: why not here redoNeighborSearch() ???
-                                    printf("ERROR: maximal depth reached! depth = %i > MAX_DEPTH = %i\n", depth, MAX_DEPTH);
-                                    assert(depth < MAX_DEPTH); //MAX_DEPTH);
+                                    cudaTerminate("depth = %i > MAX_DEPTH = %i\n", depth, MAX_DEPTH);
                                 }
                                 childNumber = 0;
                                 nodeIndex = childIndex;
@@ -482,7 +472,8 @@ namespace SPH {
                                     //if (index % 1000 == 0) { printf("%i adding interaction #%i...\n", index, noOfInteractions); }
                                     noOfInteractions++;
                                     if (noOfInteractions > MAX_NUM_INTERACTIONS) {
-                                        assert(0);
+                                        cudaTerminate("noOfInteractions = %i > MAX_NUM_INTERACTIONS = %i\n",
+                                                   noOfInteractions, MAX_NUM_INTERACTIONS);
                                     }
                                 }
                             }
@@ -518,7 +509,8 @@ namespace SPH {
                                                     noOfInteractions++;
                                                     //printf("%i: adding directly: %i, depth: %i, child: %i\n", index, inner_childIndex, inner_depth, inner_childNumber);
                                                     if (noOfInteractions > MAX_NUM_INTERACTIONS) {
-                                                        assert(0);
+                                                        cudaTerminate("noOfInteractions = %i > MAX_NUM_INTERACTIONS = %i\n",
+                                                                      noOfInteractions, MAX_NUM_INTERACTIONS);
                                                     }
                                                 } else {
                                                     //printf("%i: directly on stack: %i, depth: %i, child: %i\n", index, inner_childIndex, inner_depth, inner_childNumber);
@@ -546,8 +538,7 @@ namespace SPH {
                                     depth++;
 
                                     if (depth > MAX_DEPTH) {
-                                        printf("ERROR: maximal depth reached! MAX_DEPTH = %i\n", MAX_DEPTH);
-                                        assert(depth < MAX_DEPTH);
+                                        cudaTerminate("depth = %i > MAX_DEPTH = %i\n", depth, MAX_DEPTH);
                                     }
                                     childNumber = 0;
                                     nodeIndex = childIndex;
@@ -690,8 +681,7 @@ namespace SPH {
                                 interactionDistance = (r + particles->sml[bodyIndex + offset]);
 
                                 if (depth > MAX_DEPTH) {
-                                    printf("ERROR: maximal depth reached! MAX_DEPTH = %i\n", MAX_DEPTH);
-                                    assert(depth < MAX_DEPTH);
+                                    cudaTerminate("depth = %i > MAX_DEPTH = %i\n", depth, MAX_DEPTH);
                                 }
                                 childNumber = 0;
                                 nodeIndex = childIndex;
@@ -738,11 +728,11 @@ namespace SPH {
 #endif
 #endif
 
-            x_radius = 0.5 * (*tree->maxX - (*tree->minX));
+            x_radius = /*0.5 * */(*tree->maxX - (*tree->minX));
 #if DIM > 1
-            y_radius = 0.5 * (*tree->maxY - (*tree->minY));
+            y_radius = /*0.5 * */(*tree->maxY - (*tree->minY));
 #if DIM == 3
-            z_radius = 0.5 * (*tree->maxZ - (*tree->minZ));
+            z_radius = /*0.5 * */(*tree->maxZ - (*tree->minZ));
 #endif
 #endif
 #if DIM == 1
@@ -792,7 +782,7 @@ namespace SPH {
                     currentNodeIndex[depth] = 0; //numNodes - 1;
                     currentChildNumber[depth] = 0;
                     numberOfInteractions = 0;
-                    r = radius * 0.5; // because we start with root children
+                    r = radius; // * 0.5; // because we start with root children
                     interactionDistance = (r + htmp);
                     do {
 
@@ -822,7 +812,7 @@ namespace SPH {
                                     htmpj = particles->sml[child];
 
                                     //TODO: include d < htmpj*htmpj
-                                    if (d < htmp*htmp) { //&& d < htmpj*htmpj) {
+                                    if (d < htmp*htmp && d < htmpj*htmpj) {
                                         numberOfInteractions++;
                                     }
                                 } else if (/*tree->child[POW_DIM * nodeIndex + childNumber] != -1 &&*/  // need to check, since there are nodes without any leaves as children
@@ -846,14 +836,12 @@ namespace SPH {
                                     depth++;
                                     r *= 0.5;
                                     interactionDistance = (r + htmp);
-                                    if (depth > 180) { //MAX_DEPTH) {
-                                        for (int i_depth=0; i_depth<depth; i_depth++) {
-                                            printf("%i node[%i] = %i child[%i] = %i tree->child = %i\n", i, i_depth,
-                                                   currentNodeIndex[i_depth], i_depth, currentChildNumber[i_depth], tree->child[POW_DIM * currentNodeIndex[i_depth] + currentChildNumber[i_depth]]);
-                                        }
-                                        // TODO: why not here redoNeighborSearch() ???
-                                        printf("ERROR: maximal depth reached! depth = %i > MAX_DEPTH = %i\n", depth, MAX_DEPTH);
-                                        assert(depth < 180); //MAX_DEPTH);
+                                    if (depth > MAX_DEPTH) {
+                                        //for (int i_depth=0; i_depth<depth; i_depth++) {
+                                        //    printf("%i node[%i] = %i child[%i] = %i tree->child = %i\n", i, i_depth,
+                                        //           currentNodeIndex[i_depth], i_depth, currentChildNumber[i_depth], tree->child[POW_DIM * currentNodeIndex[i_depth] + currentChildNumber[i_depth]]);
+                                        //}
+                                        cudaTerminate("depth = %i > MAX_DEPTH = %i\n", depth, MAX_DEPTH);
                                     }
                                     /*if (depth >= MAX_DEPTH) {
                                         printf("Error, maxdepth reached! problem in tree during interaction search");
@@ -924,11 +912,12 @@ namespace SPH {
                            htmp, htmpold, materials[particles->materialId[i]].interactions, numberOfInteractions,
                            particles->materialId[i],
                            particles->uid[i], particles->x[i], particles->y[i], particles->z[i], numParticlesLocal);
-                    assert(0);
+                    cudaTerminate("numberOfInteractions = %i > MAX_NUM_INTERACTIONS = %i\n", numberOfInteractions,
+                                  MAX_NUM_INTERACTIONS);
                 }
-                if (numberOfInteractions == 0) {
-                    printf("noi: %d: %d %e (nit: %i)\n", i, numberOfInteractions, particles->sml[i], nit);
-                }
+                //if (numberOfInteractions == 0) {
+                //    printf("noi: %d: %d %e (nit: %i)\n", i, numberOfInteractions, particles->sml[i], nit);
+                //}
             }
 
         }
@@ -1027,9 +1016,8 @@ namespace SPH {
                             depth++;
                             r *= 0.5;
                             interactionDistance = (r + sml);
-                            if (depth >= MAX_DEPTH) {
-                                printf("wtf, maxdepth reached!");
-                                assert(depth < MAX_DEPTH);
+                            if (depth > MAX_DEPTH) {
+                                cudaTerminate("depth = %i > MAX_DEPTH = %i\n", depth, MAX_DEPTH);
                             }
                             childNumber = 0;
                             nodeIndex = child;
@@ -1671,26 +1659,29 @@ namespace SPH {
 
                 integer childIndex = tree->child[temp*POW_DIM + childPath];
 
+#if DIM == 3
                 if (particles->x[bodyIndex + offset] > max_x || particles->x[bodyIndex + offset] < min_x ||
                         particles->y[bodyIndex + offset] > max_y || particles->y[bodyIndex + offset] < min_y ||
                         particles->z[bodyIndex + offset] > max_z || particles->z[bodyIndex + offset] < min_z) {
-                    printf("[rank %i] sph(%i) out of box (%.17lf, %.17lf, %.17lf) min/max = (%.17lf - %.17lf, %.17lf - %.17g, %.17lf - %.17lf) level = %i\n", subDomainKeyTree->rank, bodyIndex + offset,
-                           particles->x[bodyIndex + offset], particles->y[bodyIndex + offset], particles->z[bodyIndex + offset],
-                           min_x, max_x, min_y, max_y, min_z, max_z, level);
-                    assert(0);
+                    //printf("[rank %i] sph(%i) out of box (%.17lf, %.17lf, %.17lf) min/max = (%.17lf - %.17lf, %.17lf - %.17g, %.17lf - %.17lf) level = %i\n", subDomainKeyTree->rank, bodyIndex + offset,
+                    //       particles->x[bodyIndex + offset], particles->y[bodyIndex + offset], particles->z[bodyIndex + offset],
+                    //       min_x, max_x, min_y, max_y, min_z, max_z, level);
+                    //assert(0);
+                    cudaAssert("[rank %i] sph index: %i out of box!\n", subDomainKeyTree->rank, bodyIndex + offset);
                 }
 
 //#if DEBUGGING
-                if (childIndex != -2 && childIndex != -1 &&
-                    (particles->x[childIndex] > max_x || particles->x[childIndex] < min_x ||
-                    particles->y[childIndex] > max_y || particles->y[childIndex] < min_y ||
-                    particles->z[childIndex] > max_z || particles->z[childIndex] < min_z)) {
-                    printf("[rank %i] sph(%i) out of box for childIndex = %i (%e, %e, %e) min/max = (%e - %e, %e - %e, %e - %e) level = %i\n", subDomainKeyTree->rank, bodyIndex + offset,
-                           childIndex, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex],
-                           min_x, max_x, min_y, max_y, min_z, max_z, level);
-                    assert(0);
-                }
+                //if (childIndex != -2 && childIndex != -1 &&
+                //    (particles->x[childIndex] > max_x || particles->x[childIndex] < min_x ||
+                //    particles->y[childIndex] > max_y || particles->y[childIndex] < min_y ||
+                //    particles->z[childIndex] > max_z || particles->z[childIndex] < min_z)) {
+                //    printf("[rank %i] sph(%i) out of box for childIndex = %i (%e, %e, %e) min/max = (%e - %e, %e - %e, %e - %e) level = %i\n", subDomainKeyTree->rank, bodyIndex + offset,
+                //           childIndex, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex],
+                //           min_x, max_x, min_y, max_y, min_z, max_z, level);
+                //    //assert(0);
+                //}
 //#endif
+#endif
 
 #if DEBUGGING
                 printf("[rank %i] sph(%i) childIndex = %i temp = %i childPath = %i (%e, %e, %e) vs (%e, %e, %e) min/max = (%e - %e, %e - %e, %e - %e\n",
@@ -1863,13 +1854,10 @@ namespace SPH {
                                 level++;
                                 if (level > MAX_LEVEL) {
                                     printf("[rank %i] sph(%i) assert... childIndex = %i level = %i\n", subDomainKeyTree->rank, bodyIndex + offset, childIndex, level);
-                                    printf("level = %i for index %i (%e, %e, %e)\n", level,
-                                           bodyIndex + offset, particles->x[bodyIndex + offset],
-                                           particles->y[bodyIndex + offset], particles->z[bodyIndex + offset]);
-                                    //newBody = 1;
-                                    //childIndex = -1;
-                                    //break;
-                                    assert(0);
+                                    //printf("level = %i for index %i (%e, %e, %e)\n", level,
+                                    //       bodyIndex + offset, particles->x[bodyIndex + offset],
+                                    //       particles->y[bodyIndex + offset], particles->z[bodyIndex + offset]);
+                                    cudaAssert("level = %i > MAX_LEVEL %i\n", level, MAX_LEVEL);
                                 }
 #if DEBUGGING
                                 printf("[rank %i] sph(%i) inbetween POW_DIM * %i + %i = %i (%e, %e, %e) vs (%e, %e, %e) min/max = (%e - %e, %e - %e, %e - %e)\n", subDomainKeyTree->rank,
@@ -2027,13 +2015,11 @@ namespace SPH {
 #endif
                     }
 
-                    if (std::isnan(particles->x[bodyIndex + offset])) {
-                        printf("NAN! within calculateCenterOfMasses for %i: x = %f, m = %f\n", bodyIndex + offset, particles->x[bodyIndex + offset],
-                               particles->mass[bodyIndex + offset]);
-                        assert(0);
-                    }
-
-
+                    //if (std::isnan(particles->x[bodyIndex + offset])) {
+                    //    printf("NAN! within calculateCenterOfMasses for %i: x = %f, m = %f\n", bodyIndex + offset, particles->x[bodyIndex + offset],
+                    //           particles->mass[bodyIndex + offset]);
+                    //    assert(0);
+                    //}
                     //counter[particles->level[bodyIndex + offset]] += 1;
 
                 }

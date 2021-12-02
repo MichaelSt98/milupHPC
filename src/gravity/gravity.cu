@@ -588,7 +588,7 @@ namespace Gravity {
             __shared__ volatile real cellSize[MAX_DEPTH];
 
             if (threadIdx.x == 0) {
-                cellSize[0] = 4.0 * radius * radius;
+                cellSize[0] = 8.0 * radius * radius; //4.0 * radius * radius; //TODO: original one is 4.0 * radi...
 #pragma unroll
                 for (i = 1; i < MAX_DEPTH; i++) {
                     cellSize[i] = cellSize[i - 1] * 0.25;
@@ -2109,15 +2109,17 @@ namespace Gravity {
 
             while ((bodyIndex + offset) < *lowestDomainList->domainListIndex) {
                 domainIndex = lowestDomainList->domainListIndices[bodyIndex + offset];
-                /*key = tree->getParticleKey(particles, domainIndex, MAX_LEVEL, curveType); // working version
-                proc = subDomainKeyTree->key2proc(key);
-                //printf("[rank %i] deleting: proc = %i\n", subDomainKeyTree->rank, proc);
-                if (proc != subDomainKeyTree->rank) {
-                    for (int i=0; i<POW_DIM; i++) {
-                        //printf("[rank %i] deleting: POWDIM * %i + %i = %i\n", subDomainKeyTree->rank, domainIndex, i, tree->child[POW_DIM * domainIndex + i]);
-                        tree->child[POW_DIM * domainIndex + i] = -1;
-                    }
-                }*/
+
+                //key = tree->getParticleKey(particles, domainIndex, MAX_LEVEL, curveType); // working version
+                //proc = subDomainKeyTree->key2proc(key);
+                // //printf("[rank %i] deleting: proc = %i\n", subDomainKeyTree->rank, proc);
+                //if (proc != subDomainKeyTree->rank) {
+                //    for (int i=0; i<POW_DIM; i++) {
+                //        //printf("[rank %i] deleting: POWDIM * %i + %i = %i\n", subDomainKeyTree->rank, domainIndex, i, tree->child[POW_DIM * domainIndex + i]);
+                //        tree->child[POW_DIM * domainIndex + i] = -1;
+                //    }
+                //}
+
                 for (int i=0; i<POW_DIM; i++) {
                     if (tree->child[POW_DIM * domainIndex + i] >= tree->toDeleteNode[0]) {
                         tree->child[POW_DIM * domainIndex + i] = -1;

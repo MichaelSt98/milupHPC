@@ -346,11 +346,6 @@ __global__ void TreeNS::Kernel::computeBoundingBox(Tree *tree, Particles *partic
 #endif
 #endif
 
-        //if (std::isinf(particles->x[index + offset]) || std::isinf(particles->y[index + offset]) || std::isinf(particles->z[index + offset])) {
-        //    printf("x[%i]= (%e, %e, %e)\n", index + offset, particles->x[index + offset], particles->y[index + offset], particles->z[index + offset]);
-        //    assert(0);
-        //}
-
         offset += stride;
     }
 
@@ -384,14 +379,7 @@ __global__ void TreeNS::Kernel::computeBoundingBox(Tree *tree, Particles *partic
             z_max_buffer[threadIdx.x] = cuda::math::max(z_max_buffer[threadIdx.x], z_max_buffer[threadIdx.x + i]);
 #endif
 #endif
-            //if (std::isinf(x_min_buffer[threadIdx.x]) || std::isinf(x_max_buffer[threadIdx.x]) ||
-            //        std::isinf(y_min_buffer[threadIdx.x]) || std::isinf(y_max_buffer[threadIdx.x]) ||
-            //        std::isinf(z_min_buffer[threadIdx.x]) || std::isinf(z_max_buffer[threadIdx.x])) {
-            //    printf("%i: min_buffer= (%e, %e, %e) max_buffer = (%e, %e, %e)\n", threadIdx.x,
-            //           x_min_buffer[threadIdx.x], y_min_buffer[threadIdx.x], z_min_buffer[threadIdx.x],
-            //           x_max_buffer[threadIdx.x], y_max_buffer[threadIdx.x], z_max_buffer[threadIdx.x]);
-            //    assert(0);
-            //}
+
         }
         __syncthreads();
         i /= 2;
@@ -443,14 +431,6 @@ __global__ void TreeNS::Kernel::computeBoundingBox(Tree *tree, Particles *partic
         }
 #endif
 
-        //if (std::isinf(*tree->minX) || std::isinf(*tree->maxX) ||
-        //        std::isinf(*tree->minY) || std::isinf(*tree->maxY) ||
-        //        std::isinf(*tree->minZ) ||std::isinf(*tree->maxZ)) {
-        //    printf("tree->minX = %e | tree->maxX = %e\n", *tree->minX, *tree->maxX);
-        //    printf("tree->minY = %e | tree->maxY = %e\n", *tree->minY, *tree->maxY);
-        //    printf("tree->minZ = %e | tree->maxZ = %e\n", *tree->minZ, *tree->maxZ);
-        //    assert(0);
-        //}
 #endif
 #endif
         atomicExch(mutex, 0); // unlock
@@ -633,10 +613,19 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
                         // ATTENTION: most likely a problem with level counting (level = level - 1)
                         // but could be also a problem regarding maximum tree depth...
                         if (level > (MAX_LEVEL + 1)) {
-                            printf("level = %i for index %i (%f, %f, %f)\n", level,
-                                   bodyIndex + offset, particles->x[bodyIndex + offset],
-                                   particles->y[bodyIndex + offset], particles->z[bodyIndex + offset]);
-                            assert(0);
+#if DIM == 1
+                            cudaAssert("buildTree: level = %i for index %i (%e)", level,
+                                       bodyIndex + offset, particles->x[bodyIndex + offset]);
+#elif DIM == 2
+                            cudaAssert("buildTree: level = %i for index %i (%e, %e)", level,
+                                       bodyIndex + offset, particles->x[bodyIndex + offset],
+                                       particles->y[bodyIndex + offset]);
+#else
+                            cudaAssert("buildTree: level = %i for index %i (%e, %e, %e)", level,
+                                       bodyIndex + offset, particles->x[bodyIndex + offset],
+                                       particles->y[bodyIndex + offset],
+                                       particles->z[bodyIndex + offset]);
+#endif
                         }
 
                         // insert old/original particle
@@ -648,11 +637,14 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
                         if (particles->z[childIndex] < 0.5 * (min_z + max_z)) { childPath += 4; }
 #endif
 #endif
-                        particles->x[cell] = particles->x[childIndex]; //0.5 * (min_x + max_x);
+                        particles->x[cell] = particles->x[childIndex];
+                        //particles->x[cell] = 0.5 * (min_x + max_x);
 #if DIM > 1
-                        particles->y[cell] = particles->y[childIndex]; //0.5 * (min_y + max_y);
+                        particles->y[cell] = particles->y[childIndex];
+                        //particles->y[cell] = 0.5 * (min_y + max_y);
 #if DIM == 3
-                        particles->z[cell] = particles->z[childIndex]; //0.5 * (min_z + max_z);
+                        particles->z[cell] = particles->z[childIndex];
+                        //particles->z[cell] = 0.5 * (min_z + max_z);
 #endif
 #endif
 
@@ -660,6 +652,7 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
 
                         tree->child[POW_DIM * cell + childPath] = childIndex;
                         particles->level[cell] = level;
+                        particles->level[childIndex] += 1; // TODO: new!
                         tree->start[cell] = -1;
 
                         // insert new particle
@@ -803,12 +796,6 @@ __global__ void TreeNS::Kernel::calculateCentersOfMass(Tree *tree, Particles *pa
             particles->z[i] = z;
 #endif
 #endif
-
-            //if (std::isnan(particles->x[bodyIndex + offset])) {
-            //    printf("NAN! within calculateCenterOfMasses for %i: x = %f, m = %f\n", bodyIndex + offset, particles->x[bodyIndex + offset],
-            //           particles->mass[bodyIndex + offset]);
-            //    assert(0);
-            //}
 
         }
         offset += stride;

@@ -67,7 +67,7 @@ Miluphpc::Miluphpc(SimulationParameters simulationParameters) {
     cuda::malloc(d_idIntegerCopyBuffer, numParticles);
 
 #if SPH_SIM
-    try { kernelHandler = SPH::KernelHandler(Smoothing::Kernel(simulationParameters.smoothingKernel)); }
+    try { kernelHandler = SPH::KernelHandler(Smoothing::Kernel(simulationParameters.smoothingKernelSelection)); }
     catch(...) {
         Logger(WARN) << "Kernel not available! Selecting cubic spline [1] as default!";
         kernelHandler = SPH::KernelHandler(Smoothing::Kernel::cubic_spline);
@@ -157,7 +157,9 @@ void Miluphpc::distributionFromFile(const std::string& filename) {
     HighFive::DataSet vel = file.getDataSet("/v");
 #if SPH_SIM
     HighFive::DataSet matId = file.getDataSet("/materialId");
+#if INTEGRATE_ENERGY
     HighFive::DataSet h5_u = file.getDataSet("/u");
+#endif
 #endif
 
     // read data
@@ -166,7 +168,10 @@ void Miluphpc::distributionFromFile(const std::string& filename) {
     vel.read(v);
 #if SPH_SIM
     matId.read(materialId);
+    //TODO: when do I want to read in the (internal) energy?
+#if INTEGRATE_ENERGY
     h5_u.read(u);
+#endif
 #endif
 
     integer ppp = m.size()/subDomainKeyTreeHandler->h_numProcesses;
@@ -195,7 +200,9 @@ void Miluphpc::distributionFromFile(const std::string& filename) {
 #endif
 #endif
 #if SPH_SIM
+#if INTEGRATE_ENERGY
         particleHandler->h_particles->e[i] = u[j];
+#endif
         particleHandler->h_particles->materialId[i] = materialId[j];
         //particleHandler->h_particles->sml[i] = simulationParameters.sml;
         particleHandler->h_particles->sml[i] = materialHandler->h_materials[materialId[j]].sml;
@@ -557,7 +564,7 @@ real Miluphpc::boundingBox() {
     //treeHandler->copy(To::device);
 
     //debug
-    /*
+
     treeHandler->copy(To::host);
     *treeHandler->h_minX *= 1.1;
     *treeHandler->h_maxX *= 1.1;
@@ -566,7 +573,7 @@ real Miluphpc::boundingBox() {
     *treeHandler->h_minZ *= 1.1;
     *treeHandler->h_maxZ *= 1.1;
     treeHandler->copy(To::device);
-    */
+
     //Logger(INFO) << "x: max = " << *treeHandler->h_maxX << ", min = " << *treeHandler->h_minX;
     //Logger(INFO) << "y: max = " << *treeHandler->h_maxY << ", min = " << *treeHandler->h_minY;
     //Logger(INFO) << "z: max = " << *treeHandler->h_maxZ << ", min = " << *treeHandler->h_minZ;
@@ -771,9 +778,11 @@ real Miluphpc::parallel_tree() {
     // START: creating domain list
     Logger(DEBUG) << "building domain list ...";
     // ---------------------------------------------------------
-    time = DomainListNS::Kernel::Launch::createDomainList(subDomainKeyTreeHandler->d_subDomainKeyTree,
-                                                          domainListHandler->d_domainList, MAX_LEVEL,
-                                                          curveType);
+    if (subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses > 1) {
+        time = DomainListNS::Kernel::Launch::createDomainList(subDomainKeyTreeHandler->d_subDomainKeyTree,
+                                                              domainListHandler->d_domainList, MAX_LEVEL,
+                                                              curveType);
+    }
     // ---------------------------------------------------------
     totalTime += time;
     Logger(DEBUG) << "createDomainList: " << time << " ms";
@@ -1495,9 +1504,9 @@ real Miluphpc::parallel_gravity() {
     treeHandler->copy(To::host);
     real x_radius = 0.5 * (*treeHandler->h_maxX - (*treeHandler->h_minX));
 #if DIM > 1
-    real y_radius = 0.5 * (*treeHandler->h_maxY - (*treeHandler->h_minY));
+    real y_radius = 0.5 *  (*treeHandler->h_maxY - (*treeHandler->h_minY));
 #if DIM == 3
-    real z_radius = 0.5 * (*treeHandler->h_maxZ - (*treeHandler->h_minZ));
+    real z_radius = 0.5 *  (*treeHandler->h_maxZ - (*treeHandler->h_minZ));
 #endif
 #endif
 
@@ -1509,7 +1518,9 @@ real Miluphpc::parallel_gravity() {
     real radius_max = std::max(x_radius, y_radius);
     real radius = std::max(radius_max, z_radius);
 #endif
+    radius *= 2.1;
     Logger(INFO) << "radius: " << radius;
+
     // end: preparations for computing forces
 
     // needed for version 0 and 1
@@ -1703,21 +1714,21 @@ real Miluphpc::parallel_sph() {
 
     // DETERMINE search radius
     // [1] either: use max(sml):
-    //const unsigned int blockSizeReduction = 256;
-    //real *d_searchRadii;
-    //cuda::malloc(d_searchRadii, blockSizeReduction);
-    //cuda::set(d_searchRadii, (real)0., blockSizeReduction);
-    //time += CudaUtils::Kernel::Launch::reduceBlockwise<real, blockSizeReduction>(particleHandler->d_sml, d_searchRadii,
-    //                                                                             numParticlesLocal);
-    //real *d_intermediateResult;
-    //cuda::malloc(d_intermediateResult, 1);
-    //cuda::set(d_intermediateResult, (real)0., 1);
-    //time += CudaUtils::Kernel::Launch::blockReduction<real, blockSizeReduction>(d_searchRadii, d_intermediateResult);
-    //cuda::copy(&h_searchRadius, d_intermediateResult, 1, To::host);
-    //h_searchRadius /= subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses;
-    //all_reduce(comm, boost::mpi::inplace_t<real*>(&h_searchRadius), 1, std::plus<real>());
-    //cuda::free(d_searchRadii);
-    //cuda::free(d_intermediateResult);
+    /*const unsigned int blockSizeReduction = 256;
+    real *d_searchRadii;
+    cuda::malloc(d_searchRadii, blockSizeReduction);
+    cuda::set(d_searchRadii, (real)0., blockSizeReduction);
+    time += CudaUtils::Kernel::Launch::reduceBlockwise<real, blockSizeReduction>(particleHandler->d_sml, d_searchRadii,
+                                                                                 numParticlesLocal);
+    real *d_intermediateResult;
+    cuda::malloc(d_intermediateResult, 1);
+    cuda::set(d_intermediateResult, (real)0., 1);
+    time += CudaUtils::Kernel::Launch::blockReduction<real, blockSizeReduction>(d_searchRadii, d_intermediateResult);
+    cuda::copy(&h_searchRadius, d_intermediateResult, 1, To::host);
+    h_searchRadius /= subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses;
+    all_reduce(comm, boost::mpi::inplace_t<real*>(&h_searchRadius), 1, std::plus<real>());
+    cuda::free(d_searchRadii);
+    cuda::free(d_intermediateResult);*/
 
     // [2] or: calculate search radii as sml - min(distance to other process) for all particles
     real *d_intermediateResult;
@@ -2006,13 +2017,15 @@ real Miluphpc::parallel_sph() {
     time = 0.;
 #if VARIABLE_SML
     // ---------------------------------------------------------
-    time += SPH::Kernel::Launch::fixedRadiusNN_variableSML(materialHandler->d_materials, treeHandler->d_tree, particleHandler->d_particles, particleHandler->d_nnl,
-                                              numParticlesLocal, numParticles, numNodes);
+    time += SPH::Kernel::Launch::fixedRadiusNN_variableSML(materialHandler->d_materials, treeHandler->d_tree,
+                                                           particleHandler->d_particles, particleHandler->d_nnl,
+                                                           numParticlesLocal, numParticles, numNodes);
     // ---------------------------------------------------------
     // TODO: for variable SML
     // überprüfen inwiefern sich die sml geändert hat, sml_new <= sml_global_search // if sml_new > sml_global_search
 #endif
 
+    //Logger(TRACE) << "diam: " << diam; // << "  (x = " << diam_x << ", y = " << diam_y << ", z = " << diam_z << ")";
 
     /*
     real timeSorting = 0.;
@@ -2038,12 +2051,11 @@ real Miluphpc::parallel_sph() {
     */
 
     int fixedRadiusNN_version = simulationParameters.sphFixedRadiusNNVersion;
-
     if (fixedRadiusNN_version == 0) {
         // ---------------------------------------------------------
         time += SPH::Kernel::Launch::fixedRadiusNN(treeHandler->d_tree, particleHandler->d_particles,
                                                    particleHandler->d_nnl,
-                                                   0.5 * diam, numParticlesLocal, numParticles, numNodes);
+                                                   diam, numParticlesLocal, numParticles, numNodes);
         // ---------------------------------------------------------
     }
     else if (fixedRadiusNN_version == 1) {
@@ -2140,6 +2152,7 @@ real Miluphpc::parallel_sph() {
                   particleReceiveLengths);
     //Logger(TIME) << "sph: resending soundspeed: " << timerTemp.elapsed();
     // end: updating necessary particle entries
+
 
     time = timer.elapsed();
     Logger(TIME) << "sph: sending particles (again): " << time;

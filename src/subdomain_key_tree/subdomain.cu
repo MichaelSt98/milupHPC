@@ -71,7 +71,7 @@ CUDA_CALLABLE_MEMBER integer SubDomainKeyTree::key2proc(keyType key/*, Curve::Ty
             return proc;
         }
     }
-    printf("ERROR: key2proc(k=%lu): -1!", key);
+    printf("ERROR: key2proc(k=%lu): -1!\n", key);
     return -1;
 }
 

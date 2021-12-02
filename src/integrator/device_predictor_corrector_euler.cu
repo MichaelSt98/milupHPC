@@ -183,10 +183,10 @@ namespace PredictorCorrectorEulerNS {
 #if INTEGRATE_DENSITY
                 particles->rho[i] = particles->rho[i] + dt/2 * (predictor->drhodt[i] + particles->drhodt[i]);
                 particles->drhodt[i] = 0.5 * (predictor->drhodt[i] + particles->drhodt[i]);
-                if (i == 12) { //(i % 1000 == 0) {
-                    printf("corrector: rho[%i] = %e + %e/2 * (%e + %e)\n", i, particles->rho[i], dt, predictor->drhodt[i],
-                           particles->drhodt[i]);
-                }
+                //if (i == 12) { //(i % 1000 == 0) {
+                //    printf("corrector: rho[%i] = %e + %e/2 * (%e + %e)\n", i, particles->rho[i], dt, predictor->drhodt[i],
+                //           particles->drhodt[i]);
+                //}
 #else
                 //p.rho[i] = p.rho[i];
 #endif
@@ -290,7 +290,9 @@ namespace PredictorCorrectorEulerNS {
             int i, j, k, m;
             int d, dd;
             int index;
+#if INTEGRATE_ENERGY
             bool hasEnergy;
+#endif
             real forces = DBL_MAX;
             real courant = DBL_MAX;
             real dtx = DBL_MAX;
@@ -301,9 +303,12 @@ namespace PredictorCorrectorEulerNS {
             real sml;
             int matId;
 
-            real ax, ay;
+            real ax;
+#if DIM > 1
+            real ay;
 #if DIM == 3
             real az;
+#endif
 #endif
             real dtartvisc = DBL_MAX;
 
@@ -338,11 +343,29 @@ namespace PredictorCorrectorEulerNS {
 //                  break;
 //          }
 #endif
-                ax = particles->ax[i];
+                ax = 0.;
 #if DIM > 1
-                ay = particles->ay[i];
+                ay = 0.;
 #if DIM == 3
-                az = particles->az[i];
+                az = 0.;
+#endif
+#endif
+#if GRAVITY_SIM
+                ax += particles->g_ax[i];
+#if DIM > 1
+                ay += particles->g_ay[i];
+#if DIM == 3
+                az += particles->g_az[i];
+#endif
+#endif
+#endif
+#if SPH_SIM
+                ax += particles->ax[i];
+#if DIM > 1
+                ay += particles->ay[i];
+#if DIM == 3
+                az += particles->az[i];
+#endif
 #endif
 #endif
                 temp = ax * ax;
@@ -356,7 +379,6 @@ namespace PredictorCorrectorEulerNS {
                 //if (i % 10000 == 0) {
                 //    printf("i: %i ax = %e, ay = %e, az = %e\n", i, ax, ay, az);
                 //}
-
                 sml = particles->sml[i];
                 temp = cuda::math::sqrt(sml / cuda::math::sqrt(temp));
                 forces = cuda::math::min(forces, temp);
@@ -385,6 +407,8 @@ namespace PredictorCorrectorEulerNS {
 
 #if INTEGRATE_DENSITY
                 if (particles->drhodt[i] != 0) {
+                    //TODO: define rhomin_d
+                    double rhomin_d = 0.01;
                     temp = SAFETY_FIRST * (cuda::math::abs(particles->rho[i])+rhomin_d)/cuda::math::abs(particles->drhodt[i]);
                     dtrho = cuda::math::min(temp, dtrho);
                 }
@@ -456,7 +480,7 @@ namespace PredictorCorrectorEulerNS {
                     *simulationTime->dt = cuda::math::min(*simulationTime->dt, dte);
 #endif
 #if INTEGRATE_DENSITY
-                    dt = cuda::math::min(dt, dtrho);
+                    *simulationTime->dt = cuda::math::min(*simulationTime->dt, dtrho);
 #endif
 
                     *simulationTime->dt = cuda::math::min(*simulationTime->dt, dtartvisc);
@@ -466,6 +490,9 @@ namespace PredictorCorrectorEulerNS {
                     if (*simulationTime->dt > *simulationTime->dt_max) {
                         *simulationTime->dt = *simulationTime->dt_max;
                     }
+                    //if (*simulationTime->dt < 5.e8) {
+                    //    *simulationTime->dt = 5.e8;
+                    //}
                     //printf("max    : dt = %e\n", *simulationTime->dt_max);
 
                     //printf("Time Step Information: dt(v and x): %.17e dtS: %.17e dte: %.17e dtrho: %.17e dtdamage: %.17e dtalpha: %.17e dtalpha_epspor: %.17e dtepsilon_v: %.17e\n", dtx, dtS, dte, dtrho, dtdamage, dtalpha, dtalpha_epspor, dtepsilon_v);
