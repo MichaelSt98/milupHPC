@@ -1519,12 +1519,6 @@ namespace Gravity {
 
                         if (sendIndices[currentParticleIndex] == 0) {
 
-                            // TODO: this is probably not necessary, since only domain list indices can correspond to another process
-                            if (subDomainKeyTree->key2proc(
-                                    tree->getParticleKey(particles, currentParticleIndex, MAX_LEVEL, curveType)) !=
-                                subDomainKeyTree->rank) {
-                                insert = false;
-                            }
                             // check whether to be inserted index corresponds to a domain list
                             if (insert) {
                                 for (int i_domain = 0; i_domain < *domainList->domainListIndex; i_domain++) {
@@ -1533,6 +1527,15 @@ namespace Gravity {
                                         isDomainListNode = true;
                                         break;
                                     }
+                                }
+                            }
+                            // TODO: this is probably not necessary, since only domain list indices can correspond to another process
+                            if (!isDomainListNode) {
+                                if (subDomainKeyTree->key2proc(
+                                        tree->getParticleKey(particles, currentParticleIndex, MAX_LEVEL, curveType)) !=
+                                    subDomainKeyTree->rank) {
+                                    insert = false;
+                                    //printf("Happening?\n");
                                 }
                             }
 
@@ -1670,7 +1673,7 @@ namespace Gravity {
 
                         // TODO: depending on gravity force version and amount of processes: 2 * diam or 1 * diam (why?)
                         //printf("%f >= %f (particleLevel = %i, theta = %f, r = %f)\n", powf(0.5, particleLevel-1) /* * 2*/ * diam, (theta_ * r), particleLevel, theta_, r);
-                        if (particleLevel != -1 && ((powf(0.5, particleLevel-1) * 2 * diam) >= (theta_ * r))) {
+                        if (particleLevel != -1 && (((powf(0.5, particleLevel-1) /* * 2*/ * diam) >= (theta_ * r)) || isDomainListNode)) {
 
                             #pragma unroll
                             for (int i = 0; i < POW_DIM; i++) {

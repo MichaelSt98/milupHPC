@@ -170,7 +170,7 @@ namespace SubDomainKeyTreeNS {
                     path[j] = (integer) (domainList->domainListKeys[i] >> (MAX_LEVEL * DIM - DIM * (j + 1)) &
                                          (integer)(POW_DIM - 1));
                     temp = childIndex;
-                    childIndex = tree->child[POW_DIM*temp+path[j]];//tree->child[POW_DIM*childIndex + path[j]];
+                    childIndex = tree->child[POW_DIM*childIndex+path[j]];//tree->child[POW_DIM*childIndex + path[j]];
                     if (childIndex < n) {
                         if (childIndex == -1) {
                             // no child at all here, thus add node
@@ -278,9 +278,9 @@ namespace SubDomainKeyTreeNS {
                             // end: new
                             //assert(0);
 #if DIM == 3
-                            printf("adding node in between for index %i, temp = %i  cell = %i (childPath = %i,  j = %i)! x = (%e, %e, %e) level = %i\n",
+                            printf("adding node in between for index %i, temp = %i  cell = %i (childPath = %i,  j = %i)! x = (%e, %e, %e) level = %i vs %i\n",
                                    childIndex, temp, cell, childPath, j, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex],
-                                   particles->level[cell]);
+                                   particles->level[cell], particles->level[childIndex]);
 #endif
 
                             tree->child[POW_DIM * cell + childPath] = childIndex;
@@ -359,9 +359,15 @@ namespace SubDomainKeyTreeNS {
                             // no child at all here, thus add node
                             integer cell = atomicAdd(tree->index, 1);
                             tree->child[POW_DIM * temp + path[j-1]] = cell;
+                            particles->level[cell] = j;
                             childIndex = cell;
                             //domainListCounter = atomicAdd(domainList->domainListCounter, 1);
                             domainList->domainListIndices[index + offset] = childIndex; //cell;
+#if DIM == 3
+                            printf("adding node index %i  cell = %i (childPath = %i,  j = %i)! x = (%e, %e, %e) level = %i\n",
+                                   temp, cell, path[j], j, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex],
+                                   particles->level[cell]);
+#endif
 #if DIM == 3
 #if DEBUGGING
                             printf("[rank %i] adding domainListIndices[%i] = %i, childIndex = %i, path = %i\n", subDomainKeyTree->rank,
@@ -374,6 +380,7 @@ namespace SubDomainKeyTreeNS {
                         } else {
                             // child is a leaf, thus add node in between
                             integer cell = atomicAdd(tree->index, 1);
+                            //TODO: ??? j or j-1
                             tree->child[POW_DIM * temp + path[j - 1]] = cell;
 
                             min_x = *tree->minX;
@@ -435,20 +442,29 @@ namespace SubDomainKeyTreeNS {
                             //else { min_z = 0.5 * (min_z + max_z); }
 #endif
 #endif
-                            particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
+
+
+                            //particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
+                            particles->x[cell] = particles->x[childIndex];
 #if DIM > 1
-                            particles->y[cell] += particles->weightedEntry(childIndex, Entry::y);
+                            //particles->y[cell] += particles->weightedEntry(childIndex, Entry::y);
+                            particles->y[cell] = particles->y[childIndex];
 #if DIM == 3
-                            particles->z[cell] += particles->weightedEntry(childIndex, Entry::z);
+                            //particles->z[cell] += particles->weightedEntry(childIndex, Entry::z);
+                            particles->z[cell] = particles->z[childIndex];
 #endif
 #endif
-                            particles->mass[cell] += particles->mass[childIndex];
+                            //particles->mass[cell] += particles->mass[childIndex];
+                            particles->mass[cell] = particles->mass[childIndex];
+
+                            particles->level[cell] = particles->level[childIndex];
+                            //particles->level[childIndex] += 1;
+                            atomicAdd(&particles->level[childIndex], 1);
+
 #if DIM == 3
-#if DEBUGGING
-                            printf("[rank%i] adding node in between for index %i  cell = %i (childPath = %i, path[%i] = %i  j = %i)! x = (%f, %f, %f)\n",
-                                   subDomainKeyTree->rank, childIndex, cell, childPath, k-1, path[k-1], j, particles->x[childIndex],
-                                   particles->y[childIndex], particles->z[childIndex]);
-#endif
+                            printf("adding node in between for index %i, temp = %i  cell = %i (childPath = %i,  j = %i)! x = (%e, %e, %e) level = %i vs %i\n",
+                                   childIndex, temp, cell, childPath, j, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex],
+                                   particles->level[cell], particles->level[childIndex]);
 #endif
 
 

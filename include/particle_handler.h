@@ -50,6 +50,8 @@ public:
 #endif
 #endif
 
+    integer *h_nodeType;
+
     integer *h_level;
     /// host unique identifier
     idInteger *h_uid, *_h_uid; // unique identifier (unsigned int/long?)
@@ -203,6 +205,8 @@ public:
     real *d_g_az;
 #endif
 #endif
+
+    integer *d_nodeType;
 
     integer *d_level;
     /// device unique identifier

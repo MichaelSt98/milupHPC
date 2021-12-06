@@ -31,6 +31,8 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     h_g_az = new real[numParticles];
 #endif
 #endif
+
+    h_nodeType = new integer[numNodes];
     h_level = new integer[numNodes];
     _h_uid = new idInteger[numParticles];
     h_uid = _h_uid;
@@ -151,6 +153,7 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     cuda::malloc(d_g_az, numParticles);
 #endif
 #endif
+    cuda::malloc(d_nodeType, numNodes);
     cuda::malloc(d_level, numNodes);
     cuda::malloc(_d_uid, numParticles);
     d_uid = _d_uid;
@@ -267,6 +270,8 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     ParticlesNS::Kernel::Launch::setGravity(d_particles, d_g_ax, d_g_ay, d_g_az);
 #endif
 
+    h_particles->setNodeType(h_nodeType);
+    ParticlesNS::Kernel::Launch::setNodeType(d_particles, d_nodeType);
     h_particles->setU(h_u);
     ParticlesNS::Kernel::Launch::setU(d_particles, d_u);
 
@@ -352,6 +357,7 @@ ParticleHandler::~ParticleHandler() {
     delete [] h_g_az;
 #endif
 #endif
+    delete [] h_nodeType;
     delete [] h_uid;
     delete [] h_materialId;
     delete [] _h_sml;
@@ -385,6 +391,7 @@ ParticleHandler::~ParticleHandler() {
     cuda::free(d_g_az);
 #endif
 #endif
+    cuda::free(d_nodeType);
     cuda::free(d_uid);
     cuda::free(d_materialId);
     cuda::free(_d_sml);

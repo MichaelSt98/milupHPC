@@ -840,9 +840,9 @@ real Miluphpc::parallel_tree() {
     cuda::set(domainListHandler->d_domainListCounter, 0, 1);
 
     // serial version
-    //time = SubDomainKeyTreeNS::Kernel::Launch::buildDomainTree(treeHandler->d_tree, particleHandler->d_particles,
-    //                                                           domainListHandler->d_domainList, numParticlesLocal,
-    //                                                           numNodes);
+    time = SubDomainKeyTreeNS::Kernel::Launch::buildDomainTree(treeHandler->d_tree, particleHandler->d_particles,
+                                                               domainListHandler->d_domainList, numParticlesLocal,
+                                                               numNodes);
 
     //TODO: remove
     //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = 0UL;
@@ -1596,7 +1596,8 @@ real Miluphpc::parallel_gravity() {
                                                             treeHandler->d_tree, particleHandler->d_particles,
                                                             d_keys, 21, numParticlesLocal, curveType);
 
-        timeSorting += HelperNS::sortArray(treeHandler->d_start, treeHandler->d_sorted, d_keys, helperHandler->d_keyTypeBuffer, numParticlesLocal);
+        timeSorting += HelperNS::sortArray(treeHandler->d_start, treeHandler->d_sorted, d_keys, helperHandler->d_keyTypeBuffer,
+                                           numParticlesLocal);
         cuda::free(d_keys);
 
         Logger(TIME) << "gravity: presorting: " << timeSorting << " ms";

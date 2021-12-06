@@ -147,6 +147,10 @@ CUDA_CALLABLE_MEMBER void Particles::setU(real *u) {
     this->u = u;
 }
 
+CUDA_CALLABLE_MEMBER void Particles::setNodeType(integer *nodeType) {
+    this->nodeType = nodeType;
+}
+
 CUDA_CALLABLE_MEMBER void Particles::setArtificialViscosity(real *muijmax) {
     this->muijmax = muijmax;
 }
@@ -655,6 +659,16 @@ namespace ParticlesNS {
             }
         }
 
+        __global__ void setNodeType(Particles *particles, integer *nodeType) {
+            particles->setNodeType(nodeType);
+        }
+        namespace Launch {
+            void setNodeType(Particles *particles, integer *nodeType) {
+                ExecutionPolicy executionPolicy(1, 1);
+                cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::setNodeType, particles, nodeType);
+            }
+        }
+
         __global__ void setArtificialViscosity(Particles *particles, real *muijmax) {
             particles->setArtificialViscosity(muijmax);
         }
@@ -922,6 +936,14 @@ CUDA_CALLABLE_MEMBER void IntegratedParticles::set(idInteger *uid, real *rho, re
 
 #endif
 
+//CUDA_CALLABLE_MEMBER void IntegratedParticles::setLevel(integer *level) {
+//    this->level = level;
+//}
+
+//CUDA_CALLABLE_MEMBER void IntegratedParticles::setNodeType(integer *nodeType) {
+//    this->nodeType = nodeType;
+//}
+
 CUDA_CALLABLE_MEMBER void IntegratedParticles::setSML(real *sml) {
     this->sml = sml;
 }
@@ -1020,6 +1042,28 @@ namespace IntegratedParticlesNS {
         }
 
 #endif
+
+        //__global__ void setLevel(IntegratedParticles *integratedParticles, integer *level) {
+        //    integratedParticles->setLevel(level);
+        //}
+        //namespace Launch {
+        //    void setLevel(IntegratedParticles *integratedParticles, integer *level) {
+        //        ExecutionPolicy executionPolicy(1, 1);
+        //        cuda::launch(false, executionPolicy, ::IntegratedParticlesNS::Kernel::setLevel,
+        //                     integratedParticles, level);
+        //    }
+        //}
+
+        //__global__ void setNodeType(IntegratedParticles *integratedParticles, integer *nodeType) {
+        //    integratedParticles->setNodeType(nodeType);
+        //}
+        //namespace Launch {
+        //    void setNodeType(IntegratedParticles *integratedParticles, integer *nodeType) {
+        //        ExecutionPolicy executionPolicy(1, 1);
+        //        cuda::launch(false, executionPolicy, ::IntegratedParticlesNS::Kernel::setLevel,
+        //                     integratedParticles, level);
+        //    }
+        //}
 
         __global__ void setSML(IntegratedParticles *integratedParticles, real *sml) {
             integratedParticles->setSML(sml);

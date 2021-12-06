@@ -53,7 +53,9 @@ public:
 #endif
 #endif
 
+    integer *nodeType;
     integer *level;
+
     /// (pointer to) unique identifier (array)
     idInteger *uid; // unique identifier (unsigned int/long?)
     /// (pointer to) material identifier (array)
@@ -245,6 +247,8 @@ public:
 #endif
 
     CUDA_CALLABLE_MEMBER void setU(real *u);
+
+    CUDA_CALLABLE_MEMBER void setNodeType(integer *nodeType);
 
     CUDA_CALLABLE_MEMBER void setArtificialViscosity(real *muijmax);
 
@@ -489,6 +493,11 @@ namespace ParticlesNS {
         __global__ void setU(Particles *particles, real *u);
         namespace Launch {
             void setU(Particles *particles, real *u);
+        }
+
+        __global__ void setNodeType(Particles *particles, integer *nodeType);
+        namespace Launch {
+            void setNodeType(Particles *particles, integer *nodeType);
         }
 
         __global__ void setArtificialViscosity(Particles *particles, real *muijmax);
@@ -792,6 +801,9 @@ public:
 #endif
 #endif
 
+    //integer *level;
+    //integer *nodeType;
+
     ///
     real *rho;
     real *e;
@@ -841,6 +853,9 @@ public:
                                   real *ay, real *az);
 
 #endif
+
+    //CUDA_CALLABLE_MEMBER void setLevel(integer *level);
+    //CUDA_CALLABLE_MEMBER void setNodeType(integer *nodeType);
 
     CUDA_CALLABLE_MEMBER void setSML(real *sml);
 
@@ -907,6 +922,16 @@ namespace IntegratedParticlesNS {
         }
 
 #endif
+
+        //__global__ void setLevel(IntegratedParticles *integratedParticles, integer *level);
+        //namespace Launch {
+        //    void setLevel(IntegratedParticles *integratedParticles, integer *level);
+        //}
+
+        //__global__ void setNodeType(IntegratedParticles *integratedParticles, integer *nodeType);
+        //namespace Launch {
+        //    void setNodeType(IntegratedParticles *integratedParticles, integer *nodeType);
+        //}
 
         __global__ void setSML(IntegratedParticles *integratedParticles, real *sml);
 
