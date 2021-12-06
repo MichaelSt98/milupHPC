@@ -398,6 +398,12 @@ namespace ParticlesNS {
             int offset = 0;
 
             while ((bodyIndex + offset) < n) {
+
+                if (particles->level[bodyIndex + offset] == -1) {
+                    printf("level[%i] = %i!\n", bodyIndex + offset, particles->level[bodyIndex + offset]);
+                    assert(0);
+                }
+                /*
                 if (std::isnan(particles->x[bodyIndex + offset]) || std::isnan(particles->mass[bodyIndex + offset])
                     #if DIM > 1
                     || std::isnan(particles->y[bodyIndex + offset])
@@ -464,20 +470,20 @@ namespace ParticlesNS {
                     assert(0);
                 }
 
-                /*if (bodyIndex + offset == 128121) {
-                    printf("INFO for index: %i (%e, %e, %e) %e sml = %e\n", bodyIndex + offset,
-                           particles->x[bodyIndex + offset],
-                           particles->y[bodyIndex + offset],
-                           particles->z[bodyIndex + offset],
-                           particles->mass[bodyIndex + offset],
-                           particles->sml[bodyIndex + offset]);
-                }*/
+                //if (bodyIndex + offset == 128121) {
+                //    printf("INFO for index: %i (%e, %e, %e) %e sml = %e\n", bodyIndex + offset,
+                //           particles->x[bodyIndex + offset],
+                //           particles->y[bodyIndex + offset],
+                //           particles->z[bodyIndex + offset],
+                //           particles->mass[bodyIndex + offset],
+                //           particles->sml[bodyIndex + offset]);
+                //}
 
-                /*if (particles->sml[bodyIndex + offset] < 1.e-20) {
-                    printf("sml = %e\n", particles->sml[bodyIndex + offset]);
-                    assert(0);
-                }*/
-
+                //if (particles->sml[bodyIndex + offset] < 1.e-20) {
+                //    printf("sml = %e\n", particles->sml[bodyIndex + offset]);
+                //    assert(0);
+                //}
+                */
                 offset += stride;
             }
         }

@@ -328,19 +328,19 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
     Logger(INFO) << "before: numNodes:          " << numNodes;
 #endif
 
+    timer.reset();
     if (assignParticlesToProcess) {
         if (subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses > 1) {
             Logger(INFO) << "rhs::assignParticles()";
-            timer.reset();
             // ---------------------------------------------------------------------------------------------------------
             time = assignParticles();
             // ---------------------------------------------------------------------------------------------------------
-            elapsed = timer.elapsed();
-            totalTime += time;
-            Logger(TIME) << "rhs::assignParticles(): " << elapsed << " ms"; //time << " ms";
-            profiler.value2file(ProfilerIds::Time::assignParticles, *profilerTime);
         }
     }
+    elapsed = timer.elapsed();
+    totalTime += time;
+    Logger(TIME) << "rhs::assignParticles(): " << elapsed << " ms"; //time << " ms";
+    profiler.value2file(ProfilerIds::Time::assignParticles, *profilerTime);
 
     //Logger(INFO) << "checking for nans after assigning particles...";
     //ParticlesNS::Kernel::Launch::check4nans(particleHandler->d_particles, numParticlesLocal);
@@ -382,17 +382,17 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
     profiler.value2file(ProfilerIds::Time::pseudoParticle, *profilerTime);
 
 #if GRAVITY_SIM
+    timer.reset();
     if (selfGravity) {
         Logger(INFO) << "rhs::gravity()";
-        timer.reset();
         // -------------------------------------------------------------------------------------------------------------
         time = gravity();
         // -------------------------------------------------------------------------------------------------------------
-        elapsed = timer.elapsed();
-        totalTime += time;
-        Logger(TIME) << "rhs::gravity(): " << time << " ms";
-        profiler.value2file(ProfilerIds::Time::gravity, *profilerTime);
     }
+    elapsed = timer.elapsed();
+    totalTime += time;
+    Logger(TIME) << "rhs::gravity(): " << time << " ms";
+    profiler.value2file(ProfilerIds::Time::gravity, *profilerTime);
 #endif
 
 #if SPH_SIM
@@ -526,6 +526,11 @@ real Miluphpc::reset() {
     cuda::set(particleHandler->d_az, (real)0., numParticles);
 #endif
 #endif
+
+    //cuda::set(&particleHandler->d_x[numParticles], (real)0., numNodes-numParticles);
+    //cuda::set(&particleHandler->d_y[numParticles], (real)0., numNodes-numParticles);
+    //cuda::set(&particleHandler->d_z[numParticles], (real)0., numNodes-numParticles);
+    //cuda::set(&particleHandler->d_mass[numParticles], (real)0., numNodes-numParticles);
 
     helperHandler->reset();
     buffer->reset();
@@ -775,6 +780,10 @@ real Miluphpc::parallel_tree() {
     real time;
     real totalTime = 0.;
 
+    //TODO: remove
+    //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = (4UL << 60);
+    //subDomainKeyTreeHandler->copy(To::device);
+
     // START: creating domain list
     Logger(DEBUG) << "building domain list ...";
     // ---------------------------------------------------------
@@ -809,6 +818,9 @@ real Miluphpc::parallel_tree() {
     Logger(TIME) << "buildTree: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::Tree::tree, time);
 
+    //TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles,
+    //                             numParticlesLocal, numParticles);
+
     integer treeIndex;
     cuda::copy(&treeIndex, treeHandler->d_index, 1, To::host);
 
@@ -832,6 +844,10 @@ real Miluphpc::parallel_tree() {
     //                                                           domainListHandler->d_domainList, numParticlesLocal,
     //                                                           numNodes);
 
+    //TODO: remove
+    //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = 0UL;
+    //subDomainKeyTreeHandler->copy(To::device);
+
     time = 0;
     // TODO: serial version (above) working for one process, "parallel" version not working for one process, thus
     //  if statement introduced
@@ -853,6 +869,9 @@ real Miluphpc::parallel_tree() {
     cuda::copy(&domainListCounterAfterwards, domainListHandler->d_domainListCounter, 1, To::host);
     Logger(DEBUG) << "domain list counter afterwards : " << domainListCounterAfterwards;
 #endif
+
+    //TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles,
+    //                             numParticlesLocal, numParticles);
 
     cuda::set(domainListHandler->d_domainListCounter, 0, 1);
     // END: tree construction (including common coarse tree)
@@ -884,10 +903,13 @@ real Miluphpc::parallel_pseudoParticles() {
     real timeCOM = 0;
     for (int level=MAX_LEVEL; level>0; --level) {
         // ---------------------------------------------------------
-        timeCOM += TreeNS::Kernel::Launch::calculateCentersOfMass(treeHandler->d_tree, particleHandler->d_particles, numParticles,
-                                                               level, true);
+        timeCOM += TreeNS::Kernel::Launch::calculateCentersOfMass(treeHandler->d_tree, particleHandler->d_particles,
+                                                                  numParticles, level, true);
         // ---------------------------------------------------------
     }
+
+    //timeCOM = TreeNS::Kernel::Launch::centerOfMass(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal,
+    //                                               true);
 
     Logger(TIME) << "calculate COM: " << timeCOM << " ms";
     time += timeCOM;
@@ -896,6 +918,8 @@ real Miluphpc::parallel_pseudoParticles() {
     Gravity::Kernel::Launch::zeroDomainListNodes(particleHandler->d_particles, domainListHandler->d_domainList,
                                                  lowestDomainListHandler->d_domainList);
     // ---------------------------------------------------------
+
+    //DomainListNS::Kernel::Launch::info(particleHandler->d_particles, domainListHandler->d_domainList);
 
     // old version
     //time += Gravity::Kernel::Launch::compLocalPseudoParticles(treeHandler->d_tree, particleHandler->d_particles,
@@ -916,6 +940,7 @@ real Miluphpc::parallel_pseudoParticles() {
 
     //TODO: current approach reasonable?
     // or template functions and explicitly hand over buffer(s) (and not instance of buffer class)
+
 
     // x ----------------------------------------------------------------------------------------------
 
@@ -977,6 +1002,7 @@ real Miluphpc::parallel_pseudoParticles() {
 
 #endif
 #endif
+
     // m ----------------------------------------------------------------------------------------------
 
     cuda::set(lowestDomainListHandler->d_domainListCounter, 0);
@@ -999,8 +1025,8 @@ real Miluphpc::parallel_pseudoParticles() {
 
     Logger(DEBUG) << "finish computation of lowest domain list nodes ...";
     // ---------------------------------------------------------
-    time += Gravity::Kernel::Launch::compLowestDomainListNodes(treeHandler->d_tree, particleHandler->d_particles,
-                                                               lowestDomainListHandler->d_domainList);
+    //time += Gravity::Kernel::Launch::compLowestDomainListNodes(treeHandler->d_tree, particleHandler->d_particles,
+    //                                                           lowestDomainListHandler->d_domainList);
     // ---------------------------------------------------------
     //end: for all entries!
 
@@ -1014,6 +1040,10 @@ real Miluphpc::parallel_pseudoParticles() {
                                                                                numParticles, domainLevel);
         // ---------------------------------------------------------
     }
+
+    //timeCOM = TreeNS::Kernel::Launch::centerOfMass(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal,
+    //                                                       true);
+
     return time;
 }
 
@@ -1129,6 +1159,10 @@ real Miluphpc::parallel_gravity() {
                     }
                 }
             }
+            time += Gravity::Kernel::Launch::intermediateSymbolicForce(subDomainKeyTreeHandler->d_subDomainKeyTree,
+                                                                       treeHandler->d_tree, particleHandler->d_particles, domainListHandler->d_domainList,
+                                                                       d_markedSendIndices, diam, simulationParameters.theta, numParticlesLocal, numParticles,0, 0,
+                                                                       curveType);
             // ---------------------------------------------------------
             time += Gravity::Kernel::Launch::collectSendIndices(treeHandler->d_tree, particleHandler->d_particles,
                                                                 d_markedSendIndices,
@@ -1192,6 +1226,9 @@ real Miluphpc::parallel_gravity() {
         }
     }
 
+    profiler.vector2file(ProfilerIds::SendLengths::gravityParticles, particleSendLengths);
+    profiler.vector2file(ProfilerIds::SendLengths::gravityPseudoParticles, pseudoParticleSendLengths);
+
     mpi::messageLengths(subDomainKeyTreeHandler->h_subDomainKeyTree, particleSendLengths, particleReceiveLengths);
 
     integer particleTotalReceiveLength = 0;
@@ -1206,7 +1243,16 @@ real Miluphpc::parallel_gravity() {
     Logger(INFO) << "gravity: particleTotalReceiveLength: " << particleTotalReceiveLength;
     Logger(INFO) << "gravity: particleTotalSendLength: " << particleTotalSendLength;
 
+    Logger(INFO) << "temporary numParticles: " << numParticlesLocal + particleTotalReceiveLength;
+
+    if (numParticlesLocal + particleTotalReceiveLength != 2000) {
+        //MPI_Finalize();
+        //exit(1);
+    }
     mpi::messageLengths(subDomainKeyTreeHandler->h_subDomainKeyTree, pseudoParticleSendLengths, pseudoParticleReceiveLengths);
+
+    profiler.vector2file(ProfilerIds::ReceiveLengths::gravityParticles, particleReceiveLengths);
+    profiler.vector2file(ProfilerIds::ReceiveLengths::gravityPseudoParticles, pseudoParticleReceiveLengths);
 
     integer pseudoParticleTotalReceiveLength = 0;
     integer pseudoParticleTotalSendLength = 0;
@@ -1384,6 +1430,7 @@ real Miluphpc::parallel_gravity() {
     sendParticles(d_pseudoParticles2SendLevels, d_pseudoParticles2ReceiveLevels, pseudoParticleSendLengths,
                   pseudoParticleReceiveLengths);
 
+
     time = timer.elapsed();
     totalTime += time;
     Logger(TIME) << "parallel_force(): sending particles: " << time << " ms";
@@ -1462,6 +1509,7 @@ real Miluphpc::parallel_gravity() {
         // ---------------------------------------------------------
     }
 
+
     //Logger(INFO) << "toDeleteNode: " << treeHandler->h_toDeleteNode[0] << ", " << treeHandler->h_toDeleteNode[1];
 
     totalTime += time;
@@ -1486,6 +1534,7 @@ real Miluphpc::parallel_gravity() {
 
     time = 0;
 
+    //DomainListNS::Kernel::Launch::info(particleHandler->d_particles, domainListHandler->d_domainList);
 
     Logger(TIME) << "sorting: " << time << " ms";
 
@@ -1499,6 +1548,8 @@ real Miluphpc::parallel_gravity() {
     // TODO: need to be verified (possible to use this additional shared memory?)
     // 4: miluphcuda version with additional presorting according to the space-filling curves and shared memory
     int computeForcesVersion = simulationParameters.gravityForceVersion;
+
+    Logger(DEBUG) << "computeForcesVersion: " << computeForcesVersion;
 
     // preparations for computing forces
     treeHandler->copy(To::host);
@@ -1518,7 +1569,7 @@ real Miluphpc::parallel_gravity() {
     real radius_max = std::max(x_radius, y_radius);
     real radius = std::max(radius_max, z_radius);
 #endif
-    radius *= 2.1;
+    radius *= 1.0;
     Logger(INFO) << "radius: " << radius;
 
     // end: preparations for computing forces
@@ -1646,9 +1697,9 @@ real Miluphpc::parallel_gravity() {
 
     Logger(DEBUG) << "repairing tree...";
     // ---------------------------------------------------------
-    Gravity::Kernel::Launch::repairTree(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
-                                        particleHandler->d_particles, lowestDomainListHandler->d_domainList,
-                                        numParticlesLocal, numNodes, curveType);
+    //Gravity::Kernel::Launch::repairTree(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
+    //                                    particleHandler->d_particles, lowestDomainListHandler->d_domainList,
+    //                                    numParticlesLocal, numNodes, curveType);
     // ---------------------------------------------------------
 
     //TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, treeIndex, treeIndex + pseudoParticleTotalReceiveLength);
@@ -1773,7 +1824,8 @@ real Miluphpc::parallel_sph() {
                     time += SPH::Kernel::Launch::symbolicForce(subDomainKeyTreeHandler->d_subDomainKeyTree,
                                                                treeHandler->d_tree, particleHandler->d_particles,
                                                                lowestDomainListHandler->d_domainList,
-                                                               d_markedSendIndices, h_searchRadius, numParticlesLocal, numParticles,
+                                                               d_markedSendIndices, h_searchRadius, numParticlesLocal,
+                                                               numParticles,
                                                                relevantIndex, curveType);
                     // ---------------------------------------------------------
                 }
@@ -1812,6 +1864,9 @@ real Miluphpc::parallel_sph() {
     }
 
     mpi::messageLengths(subDomainKeyTreeHandler->h_subDomainKeyTree, particleSendLengths, particleReceiveLengths);
+
+    profiler.vector2file(ProfilerIds::SendLengths::sph, particleSendLengths);
+    profiler.vector2file(ProfilerIds::ReceiveLengths::sph, particleReceiveLengths);
 
     integer particleTotalReceiveLength = 0;
     integer particleTotalSendLength = 0;
@@ -2190,7 +2245,8 @@ void Miluphpc::fixedLoadBalancing() {
     subDomainKeyTreeHandler->h_subDomainKeyTree->range[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses] = KEY_MAX;
 
     //subDomainKeyTreeHandler->h_subDomainKeyTree->range[0] = 0UL;
-    //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = (4UL << 60) + (4UL << 57);
+    //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = 0UL;
+    //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = (2UL << 60) + (4UL << 57); // + (4UL << 54) + (2UL << 51) + (1UL << 39);
     //subDomainKeyTreeHandler->h_subDomainKeyTree->range[2] = (4UL << 60) + (2UL << 57);
     //subDomainKeyTreeHandler->h_subDomainKeyTree->range[3] = (6UL << 60) + (1UL << 57);
     //subDomainKeyTreeHandler->h_subDomainKeyTree->range[4] = KEY_MAX;

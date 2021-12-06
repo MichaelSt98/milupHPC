@@ -241,9 +241,15 @@ int main(int argc, char** argv)
     profiler.createValueDataSet<real>(ProfilerIds::Time::pseudoParticle, 1);
 #if GRAVITY_SIM
     profiler.createValueDataSet<real>(ProfilerIds::Time::gravity, 1);
+    profiler.createVectorDataSet<int>(ProfilerIds::SendLengths::gravityParticles, 1, numProcesses);
+    profiler.createVectorDataSet<int>(ProfilerIds::SendLengths::gravityPseudoParticles, 1, numProcesses);
+    profiler.createVectorDataSet<int>(ProfilerIds::ReceiveLengths::gravityParticles, 1, numProcesses);
+    profiler.createVectorDataSet<int>(ProfilerIds::ReceiveLengths::gravityPseudoParticles, 1, numProcesses);
 #endif
 #if SPH_SIM
     profiler.createValueDataSet<real>(ProfilerIds::Time::sph, 1);
+    profiler.createVectorDataSet<int>(ProfilerIds::SendLengths::sph, 1, numProcesses);
+    profiler.createVectorDataSet<int>(ProfilerIds::ReceiveLengths::sph, 1, numProcesses);
 #endif
     // Detailed timing
     profiler.createValueDataSet<real>(ProfilerIds::Time::Tree::createDomain, 1);
@@ -272,6 +278,7 @@ int main(int argc, char** argv)
     profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::internalForces, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::repairTree, 1);
 #endif
+    profiler.createValueDataSet<real>(ProfilerIds::Time::IO, 1);
 
 
     /// INTEGRATOR SELECTION
@@ -296,6 +303,8 @@ int main(int argc, char** argv)
         Logger(TRACE) << "---------------STARTING---------------";
     }
 
+    Timer timer;
+    real timeElapsed;
     /// MAIN LOOP
     // -----------------------------------------------------------------------------------------------------------------
     real t = 0;
@@ -314,8 +323,12 @@ int main(int argc, char** argv)
 
         miluphpc->integrate(i_step);
 
+        timer.reset();
         auto time = miluphpc->particles2file(i_step);
-        Logger(TIME) << "particles2file: " << time << " ms";
+        timeElapsed = timer.elapsed();
+        Logger(TIME) << "particles2file: " << timeElapsed << " ms";
+        // TODO: not working properly (why?)
+        //profiler.value2file(ProfilerIds::Time::IO, timeElapsed);
 
 
         t += parameters.timeStep;

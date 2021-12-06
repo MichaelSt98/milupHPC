@@ -32,7 +32,7 @@ typedef int idInteger;
  * * `SAFETY_LEVEL 2`: more safety measures, including assertions
  * * `SAFETY_LEVEL 3`: many security measures, including all assertions
  */
-#define SAFETY_LEVEL 2
+#define SAFETY_LEVEL 1
 
 /// Dimension of the problem
 #define DIM 3
@@ -40,7 +40,7 @@ typedef int idInteger;
 #define POW_DIM power_two(DIM)
 
 /// [0]: natural units, [1]: SI units
-#define SI_UNITS 1
+#define SI_UNITS 0
 
 /// [0]: rectangular (and not necessarily cubic domains), [1]: cubic domains
 #define CUBIC_DOMAINS 1
@@ -49,13 +49,13 @@ typedef int idInteger;
 #define GRAVITY_SIM 1
 
 /// SPH simulation
-#define SPH_SIM 1
+#define SPH_SIM 0
 
 /// integrate energy equation
 #define INTEGRATE_ENERGY 0
 
 /// integrate density equation
-#define INTEGRATE_DENSITY 1
+#define INTEGRATE_DENSITY 0
 
 /// integrate smoothing length
 #define INTEGRATE_SML 0
@@ -64,7 +64,7 @@ typedef int idInteger;
 #define DECOUPLE_SML 0
 
 /// variable smoothing length
-#define VARIABLE_SML 1
+#define VARIABLE_SML 0
 
 /// correct smoothing length
 #define SML_CORRECTION 0

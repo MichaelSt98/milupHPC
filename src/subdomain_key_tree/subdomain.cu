@@ -170,18 +170,26 @@ namespace SubDomainKeyTreeNS {
                     path[j] = (integer) (domainList->domainListKeys[i] >> (MAX_LEVEL * DIM - DIM * (j + 1)) &
                                          (integer)(POW_DIM - 1));
                     temp = childIndex;
-                    childIndex = tree->child[POW_DIM*childIndex + path[j]];
+                    childIndex = tree->child[POW_DIM*temp+path[j]];//tree->child[POW_DIM*childIndex + path[j]];
                     if (childIndex < n) {
                         if (childIndex == -1) {
                             // no child at all here, thus add node
                             integer cell = atomicAdd(tree->index, 1);
                             tree->child[POW_DIM * temp + path[j]] = cell;
+                            // TODO: remove
+                            if (temp == -1) {
+                                printf("temp = -1\n");
+                                assert(0);
+                            }
+                            particles->level[cell] = j + 1; //particles->level[temp] + 1;
                             childIndex = cell;
                             domainList->domainListIndices[domainListCounter] = childIndex; //cell;
 #if DIM == 3
-                            //printf("adding node index %i  cell = %i (childPath = %i,  j = %i)! x = (%f, %f, %f)\n",
-                            //       childIndex, cell, path[j], j, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex]);
+                            printf("adding node index %i  cell = %i (childPath = %i,  j = %i)! x = (%e, %e, %e) level = %i\n",
+                                   temp, cell, path[j], j, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex],
+                                   particles->level[cell]);
 #endif
+                            //particles->level[cell] = -2; //TODO: new
                             domainListCounter++;
                         } else {
                             // child is a leaf, thus add node in between
@@ -251,17 +259,28 @@ namespace SubDomainKeyTreeNS {
 #endif
 #endif
 
-                            particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
+                            //particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
+                            particles->x[cell] = particles->x[childIndex];
 #if DIM > 1
-                            particles->y[cell] += particles->weightedEntry(childIndex, Entry::y);
+                            //particles->y[cell] += particles->weightedEntry(childIndex, Entry::y);
+                            particles->y[cell] = particles->y[childIndex];
 #if DIM == 3
-                            particles->z[cell] += particles->weightedEntry(childIndex, Entry::z);
+                            //particles->z[cell] += particles->weightedEntry(childIndex, Entry::z);
+                            particles->z[cell] = particles->z[childIndex];
 #endif
 #endif
-                            particles->mass[cell] += particles->mass[childIndex];
+                            //particles->mass[cell] += particles->mass[childIndex];
+                            particles->mass[cell] = particles->mass[childIndex];
+
+                            // NEW
+                            particles->level[cell] = particles->level[childIndex];
+                            particles->level[childIndex] += 1;
+                            // end: new
+                            //assert(0);
 #if DIM == 3
-                            //printf("adding node in between for index %i  cell = %i (childPath = %i,  j = %i)! x = (%f, %f, %f)\n",
-                            //       childIndex, cell, childPath, j, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex]);
+                            printf("adding node in between for index %i, temp = %i  cell = %i (childPath = %i,  j = %i)! x = (%e, %e, %e) level = %i\n",
+                                   childIndex, temp, cell, childPath, j, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex],
+                                   particles->level[cell]);
 #endif
 
                             tree->child[POW_DIM * cell + childPath] = childIndex;

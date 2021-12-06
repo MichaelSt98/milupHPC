@@ -51,7 +51,7 @@ void PredictorCorrectorEuler::integrate(int step) {
     Timer timer;
     real time = 0.;
 
-    real time_elapsed;
+    real timeElapsed;
 
     Timer timerRhs;
 
@@ -63,10 +63,10 @@ void PredictorCorrectorEuler::integrate(int step) {
         timer.reset();
         if (simulationParameters.removeParticles) {
             time = removeParticles();
-            Logger(TIME) << "removing particles: " << time_elapsed << " ms";
+            Logger(TIME) << "removing particles: " << timeElapsed << " ms";
         }
-        time_elapsed = timer.elapsed();
-        profiler.value2file(ProfilerIds::Time::removeParticles, time_elapsed);
+        timeElapsed = timer.elapsed();
+        profiler.value2file(ProfilerIds::Time::removeParticles, timeElapsed);
 
         Logger(INFO) << "rhs::loadBalancing()";
         if (simulationParameters.loadBalancing && step != 0 && step % simulationParameters.loadBalancingInterval == 0) {
@@ -77,7 +77,11 @@ void PredictorCorrectorEuler::integrate(int step) {
         // -------------------------------------------------------------------------------------------------------------
         time += rhs(step, true, true);
         // -------------------------------------------------------------------------------------------------------------
-        Logger(TIME) << "rhsElapsed: " << timerRhs.elapsed();
+        timeElapsed = timerRhs.elapsed();
+        Logger(TIME) << "rhsElapsed: " << timeElapsed;
+        //Logger(TIME) << "rhs: " << time << " ms";
+        profiler.value2file(ProfilerIds::Time::rhs, time);
+        profiler.value2file(ProfilerIds::Time::rhsElapsed, timeElapsed);
 
         // ------------------------------------------------------------------------------------------------------------
         //simulationTimeHandler->copy(To::host);
@@ -119,8 +123,11 @@ void PredictorCorrectorEuler::integrate(int step) {
         // -------------------------------------------------------------------------------------------------------------
         time += rhs(step, false, false);
         // -------------------------------------------------------------------------------------------------------------
-        Logger(TIME) << "rhsElapsed: " << timerRhs.elapsed();
+        timeElapsed = timerRhs.elapsed();
+        Logger(TIME) << "rhsElapsed: " << timeElapsed;
         //Logger(TIME) << "rhs: " << time << " ms";
+        profiler.value2file(ProfilerIds::Time::rhs, time);
+        profiler.value2file(ProfilerIds::Time::rhsElapsed, timeElapsed);
 
         Logger(INFO) << "resetPointer()...";
         particleHandler->resetPointer();
@@ -142,8 +149,7 @@ void PredictorCorrectorEuler::integrate(int step) {
                 << *simulationTimeHandler->h_endTime << ")";
 
         //H5Profiler &profiler = H5Profiler::getInstance("log/performance.h5");
-        profiler.value2file(ProfilerIds::Time::rhs, time);
-        profiler.value2file(ProfilerIds::Time::rhsElapsed, time_elapsed);
+        
 
         subDomainKeyTreeHandler->copy(To::host, true, false);
         profiler.vector2file(ProfilerIds::ranges, subDomainKeyTreeHandler->h_range);
@@ -157,8 +163,8 @@ void PredictorCorrectorEuler::integrate(int step) {
 
     }
 
-    time_elapsed = timer.elapsed();
-    Logger(TIME) << "integration step elapsed: " << time_elapsed << " ms";
+    timeElapsed = timer.elapsed();
+    Logger(TIME) << "integration step elapsed: " << timeElapsed << " ms";
 
 }
 

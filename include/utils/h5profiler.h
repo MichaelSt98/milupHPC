@@ -21,6 +21,18 @@ namespace ProfilerIds {
     const char* const numParticlesLocal { "/general/numParticlesLocal" };
     const char* const ranges            { "/general/ranges" };
 
+    namespace SendLengths {
+        const char* const gravityParticles         { "/sending/gravityParticles" };
+        const char* const gravityPseudoParticles   { "/sending/gravityPseudoParticles" };
+        const char* const sph             { "/sending/sph" };
+    };
+
+    namespace ReceiveLengths {
+        const char* const gravityParticles         { "/receiving/gravityParticles" };
+        const char* const gravityPseudoParticles   { "/receiving/gravityPseudoParticles" };
+        const char* const sph             { "/receiving/sph" };
+    };
+
     namespace Time {
 
         const char *const rhs             { "/time/rhs" };

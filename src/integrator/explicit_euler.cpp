@@ -19,7 +19,7 @@ void ExplicitEuler::integrate(int step) {
     Timer timer;
     real time = 0.;
 
-    real time_elapsed;
+    real timeElapsed;
 
     Logger(INFO) << "ExplicitEuler::integrate()... currentTime: " << *simulationTimeHandler->h_currentTime
         << " | subEndTime: " << *simulationTimeHandler->h_subEndTime
@@ -35,10 +35,10 @@ void ExplicitEuler::integrate(int step) {
         timer.reset();
         if (simulationParameters.removeParticles) {
             time = removeParticles();
-            Logger(TIME) << "removing particles: " << time_elapsed << " ms";
+            Logger(TIME) << "removing particles: " << timeElapsed << " ms";
         }
-        time_elapsed = timer.elapsed();
-        profiler.value2file(ProfilerIds::Time::removeParticles, time_elapsed);
+        timeElapsed = timer.elapsed();
+        profiler.value2file(ProfilerIds::Time::removeParticles, timeElapsed);
 
         Logger(INFO) << "rhs::loadBalancing()";
         timer.reset();
@@ -58,9 +58,11 @@ void ExplicitEuler::integrate(int step) {
         // -------------------------------------------------------------------------------------------------------------
         time = rhs(step, true, true);
         // -------------------------------------------------------------------------------------------------------------
-        time_elapsed = timer.elapsed();
+        timeElapsed = timer.elapsed();
         Logger(TIME) << "rhs: " << time << " ms";
-        Logger(TIME) << "rhsElapsed: " << time_elapsed << " ms";
+        Logger(TIME) << "rhsElapsed: " << timeElapsed << " ms";
+        profiler.value2file(ProfilerIds::Time::rhs, time);
+        profiler.value2file(ProfilerIds::Time::rhsElapsed, timeElapsed);
 
         ExplicitEulerNS::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal,
                                                 *simulationTimeHandler->h_dt); //(real) simulationParameters.timestep);
@@ -79,10 +81,6 @@ void ExplicitEuler::integrate(int step) {
                      << " | time = " << *simulationTimeHandler->h_currentTime << "/"
                      << *simulationTimeHandler->h_subEndTime << "/"
                      << *simulationTimeHandler->h_endTime << ")";
-
-        //H5Profiler &profiler = H5Profiler::getInstance("log/performance.h5");
-        profiler.value2file(ProfilerIds::Time::rhs, time);
-        profiler.value2file(ProfilerIds::Time::rhsElapsed, time_elapsed);
 
         subDomainKeyTreeHandler->copy(To::host, true, false);
         profiler.vector2file(ProfilerIds::ranges, subDomainKeyTreeHandler->h_range);
