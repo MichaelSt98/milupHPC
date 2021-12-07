@@ -1576,7 +1576,7 @@ real Miluphpc::parallel_gravity() {
 
     // needed for version 0 and 1
     int warp = 32;
-    int stackSize = 64; //128; //64;
+    int stackSize = 128; //128; //64;
     int blockSize = 256;
     // end: needed for version 0 and 1
     if (computeForcesVersion == 0) {
