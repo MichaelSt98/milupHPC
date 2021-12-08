@@ -63,10 +63,10 @@ void PredictorCorrectorEuler::integrate(int step) {
         timer.reset();
         if (simulationParameters.removeParticles) {
             time = removeParticles();
-            Logger(TIME) << "removing particles: " << timeElapsed << " ms";
         }
         timeElapsed = timer.elapsed();
         profiler.value2file(ProfilerIds::Time::removeParticles, timeElapsed);
+        Logger(TIME) << "removing particles: " << timeElapsed << " ms";
 
         Logger(INFO) << "rhs::loadBalancing()";
         if (simulationParameters.loadBalancing && step != 0 && step % simulationParameters.loadBalancingInterval == 0) {

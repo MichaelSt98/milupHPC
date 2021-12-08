@@ -527,6 +527,8 @@ real Miluphpc::reset() {
 #endif
 #endif
 
+    cuda::set(particleHandler->d_nodeType, 0, numNodes);
+
     //cuda::set(&particleHandler->d_x[numParticles], (real)0., numNodes-numParticles);
     //cuda::set(&particleHandler->d_y[numParticles], (real)0., numNodes-numParticles);
     //cuda::set(&particleHandler->d_z[numParticles], (real)0., numNodes-numParticles);
@@ -895,7 +897,7 @@ real Miluphpc::parallel_pseudoParticles() {
     Logger(DEBUG) << "lowestDomainList() ...";
     // ---------------------------------------------------------
     time += DomainListNS::Kernel::Launch::lowestDomainList(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
-                                                           domainListHandler->d_domainList,
+                                                           particleHandler->d_particles, domainListHandler->d_domainList,
                                                            lowestDomainListHandler->d_domainList, numParticles, numNodes);
     // ---------------------------------------------------------
 
@@ -1536,8 +1538,6 @@ real Miluphpc::parallel_gravity() {
 
     //DomainListNS::Kernel::Launch::info(particleHandler->d_particles, domainListHandler->d_domainList);
 
-    Logger(TIME) << "sorting: " << time << " ms";
-
     //TreeNS::Kernel::Launch::testTree(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal, numParticles);
 
     // SELECT compute forces version:
@@ -1581,8 +1581,13 @@ real Miluphpc::parallel_gravity() {
     // end: needed for version 0 and 1
     if (computeForcesVersion == 0) {
 
-        // TODO: currently not working: why?
+        //int sortVersion = 0;
+        //if (sortVersion == 0) {
+        // TODO: currently not working: why? (working only for small amount of particles, ...)
         //time = TreeNS::Kernel::Launch::sort(treeHandler->d_tree, numParticlesLocal, numParticles, true);
+        //Logger(TIME) << "sorting: " << time << " ms";
+        //}
+        //else if (sortVersion == 1) {
 
         // THUS, instead:
         // presorting using keys...
@@ -1592,24 +1597,31 @@ real Miluphpc::parallel_gravity() {
 
         keyType *d_keys;
         cuda::malloc(d_keys, numParticlesLocal);
-        timeSorting += SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys(subDomainKeyTreeHandler->d_subDomainKeyTree,
-                                                            treeHandler->d_tree, particleHandler->d_particles,
-                                                            d_keys, 21, numParticlesLocal, curveType);
+        timeSorting += SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys(
+                subDomainKeyTreeHandler->d_subDomainKeyTree,
+                treeHandler->d_tree, particleHandler->d_particles,
+                d_keys, 21, numParticlesLocal, curveType);
 
-        timeSorting += HelperNS::sortArray(treeHandler->d_start, treeHandler->d_sorted, d_keys, helperHandler->d_keyTypeBuffer,
+        timeSorting += HelperNS::sortArray(treeHandler->d_start, treeHandler->d_sorted, d_keys,
+                                           helperHandler->d_keyTypeBuffer,
                                            numParticlesLocal);
         cuda::free(d_keys);
 
         Logger(TIME) << "gravity: presorting: " << timeSorting << " ms";
         //end: presorting using keys...
 
+        //}
+
         //actual (local) force
         // ---------------------------------------------------------
         time = Gravity::Kernel::Launch::computeForces_v2(treeHandler->d_tree, particleHandler->d_particles, radius,
-                                                         numParticlesLocal, numParticles, blockSize, warp, stackSize,
+                                                         numParticlesLocal, numParticles, blockSize, warp,
+                                                         stackSize,
                                                          subDomainKeyTreeHandler->d_subDomainKeyTree,
-                                                         simulationParameters.theta, simulationParameters.smoothing);
+                                                         simulationParameters.theta,
+                                                         simulationParameters.smoothing);
         // ---------------------------------------------------------
+
     }
     else if (computeForcesVersion == 1) {
         // ---------------------------------------------------------
@@ -1698,9 +1710,10 @@ real Miluphpc::parallel_gravity() {
 
     Logger(DEBUG) << "repairing tree...";
     // ---------------------------------------------------------
-    //Gravity::Kernel::Launch::repairTree(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
-    //                                    particleHandler->d_particles, lowestDomainListHandler->d_domainList,
-    //                                    numParticlesLocal, numNodes, curveType);
+    Gravity::Kernel::Launch::repairTree(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
+                                        particleHandler->d_particles, domainListHandler->d_domainList,
+                                        lowestDomainListHandler->d_domainList,
+                                        numParticles, numNodes, curveType);
     // ---------------------------------------------------------
 
     //TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, treeIndex, treeIndex + pseudoParticleTotalReceiveLength);
@@ -1798,6 +1811,9 @@ real Miluphpc::parallel_sph() {
     Logger(TIME) << "sph: determineSearchRadii: " << time << " ms";
     h_searchRadius = HelperNS::reduceAndGlobalize(d_potentialSearchRadii, d_intermediateResult,
                                                   numParticlesLocal, Reduction::max);
+
+    //TODO: why is this necessary?
+    h_searchRadius *= 1.; // *= 2.;
 
     cuda::free(d_potentialSearchRadii);
     // end:testing
@@ -2024,8 +2040,7 @@ real Miluphpc::parallel_sph() {
                                                         treeHandler->d_tree,
                                                         particleHandler->d_particles, domainListHandler->d_domainList,
                                                         lowestDomainListHandler->d_domainList,
-                                                        numParticles, //treeHandler->h_toDeleteLeaf[1],
-                                                        numParticles);
+                                                        numParticles, numParticles);
     // ---------------------------------------------------------
     //}
     profiler.value2file(ProfilerIds::Time::SPH::insertReceivedParticles, time);
@@ -2225,8 +2240,9 @@ real Miluphpc::parallel_sph() {
 
     // TODO: repair tree necessary?
     Gravity::Kernel::Launch::repairTree(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
-                                        particleHandler->d_particles, lowestDomainListHandler->d_domainList,
-                                        numParticlesLocal, numNodes, curveType);
+                                        particleHandler->d_particles, domainListHandler->d_domainList,
+                                        lowestDomainListHandler->d_domainList,
+                                        numParticles, numNodes, curveType);
     Logger(TIME) << "sph: totalTime: " << totalTime << " ms";
     profiler.value2file(ProfilerIds::Time::SPH::repairTree, time);
 

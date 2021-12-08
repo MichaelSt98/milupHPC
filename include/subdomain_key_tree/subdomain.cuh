@@ -392,8 +392,8 @@ namespace DomainListNS {
          * @param n
          * @param m
          */
-        __global__ void lowestDomainList(SubDomainKeyTree *subDomainKeyTree, Tree *tree, DomainList *domainList,
-                                         DomainList *lowestDomainList, integer n, integer m);
+        __global__ void lowestDomainList(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                         DomainList *domainList, DomainList *lowestDomainList, integer n, integer m);
 
         namespace Launch {
             /**
@@ -455,8 +455,8 @@ namespace DomainListNS {
              * @param m
              * @return
              */
-            real lowestDomainList(SubDomainKeyTree *subDomainKeyTree, Tree *tree, DomainList *domainList,
-                                             DomainList *lowestDomainList, integer n, integer m);
+            real lowestDomainList(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                  DomainList *domainList, DomainList *lowestDomainList, integer n, integer m);
         }
     }
 

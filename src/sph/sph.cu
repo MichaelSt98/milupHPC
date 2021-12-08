@@ -46,28 +46,39 @@ namespace SPH {
 
             while ((bodyIndex + offset) < numParticlesLocal) {
 
-                int numInteractions = 0;
+                numInteractions = 0;
                 for (int i=0; i<tree->toDeleteLeaf[1]; ++i) {
-                    if ((bodyIndex + offset) == i) {
-                        continue;
-                    }
-                    dx = particles->x[bodyIndex + offset] - particles->x[i];
+                    if ((bodyIndex + offset) != i) {
+
+                        dx = particles->x[bodyIndex + offset] - particles->x[i];
 #if DIM > 1
-                    dy = particles->y[bodyIndex + offset] - particles->y[i];
+                        dy = particles->y[bodyIndex + offset] - particles->y[i];
 #if DIM == 3
-                    dz = particles->z[bodyIndex + offset] - particles->z[i];
+                        dz = particles->z[bodyIndex + offset] - particles->z[i];
 #endif
 #endif
 
-                    distance = dx*dx + dy*dy + dz*dz;
+#if DIM == 1
 
-                    if (distance < (particles->sml[bodyIndex + offset] * particles->sml[bodyIndex + offset]) &&
-                        distance < (particles->sml[i] * particles->sml[i])) {
-                        interactions[(bodyIndex + offset) * MAX_NUM_INTERACTIONS + numInteractions] = i;
-                        numInteractions++;
-                        if (numInteractions > MAX_NUM_INTERACTIONS) {
-                            cudaTerminate("numInteractions = %i > MAX_NUM_INTERACTIONS = %i\n", numInteractions,
-                                          MAX_NUM_INTERACTIONS);
+#elif DIM == 2
+
+#else //DIM == 3
+                        distance = dx * dx + dy * dy + dz * dz;
+#endif
+
+                        if (distance < (particles->sml[bodyIndex + offset] * particles->sml[bodyIndex + offset]) &&
+                            distance < (particles->sml[i] * particles->sml[i])) {
+                            interactions[(bodyIndex + offset) * MAX_NUM_INTERACTIONS + numInteractions] = i;
+                            numInteractions++;
+                            //if ((bodyIndex + offset) % 1000 == 0) {
+                            //    printf("distance: %e, %i vs. %i\n", distance, bodyIndex + offset, i);
+                            //}
+                            if (numInteractions > MAX_NUM_INTERACTIONS) {
+                                //printf("numInteractions = %i > MAX_NUM_INTERACTIONS = %i\n", numInteractions,
+                                //       MAX_NUM_INTERACTIONS);
+                                cudaTerminate("numInteractions = %i > MAX_NUM_INTERACTIONS = %i\n", numInteractions,
+                                              MAX_NUM_INTERACTIONS);
+                            }
                         }
                     }
                 }
@@ -138,11 +149,13 @@ namespace SPH {
 
                 interactionDistance = (r + sml);
 
+                //bool remember;
                 do {
 
                     childNumber = currentChildNumber[depth];
                     nodeIndex = currentNodeIndex[depth];
 
+                    //remember = false;
                     while (childNumber < POW_DIM) {
 
                         childIndex = tree->child[POW_DIM * nodeIndex + childNumber];
@@ -213,9 +226,9 @@ namespace SPH {
 #else
                             else if (/*tree->child[POW_DIM * nodeIndex + childNumber] != -1 && */  // need to check, since there are nodes without any leaves as children
                                      /*(childNumber == currentChildNumber[depth-1] && nodeIndex == currentNodeIndex[depth-1]) &&*/  //TODO: just a fix, why is this happening at all?
-                                     cuda::math::abs(dx) < interactionDistance &&
+                                    (cuda::math::abs(dx) < interactionDistance &&
                                      cuda::math::abs(dy) < interactionDistance &&
-                                     cuda::math::abs(dz) < interactionDistance) {
+                                     cuda::math::abs(dz) < interactionDistance) || particles->nodeType[childIndex] >= 1) {
 #endif
 
                                 currentChildNumber[depth] = childNumber;
@@ -231,7 +244,10 @@ namespace SPH {
                                 //    depth++;
                                 //}
                                 depth++;
+                                //if (particles->nodeType[childIndex] == 0) {
                                 r *= 0.5;
+                                //remember = true;
+                                //}
                                 interactionDistance = (r + sml);
                                 if (depth > MAX_DEPTH) { //MAX_DEPTH) {
                                     //for (int i_depth=0; i_depth<depth; i_depth++) {
@@ -248,7 +264,9 @@ namespace SPH {
                     }
 
                     depth--;
+                    //if (!remember) {
                     r *= 2.0;
+                    //}
                     interactionDistance = (r + sml);
 
                 } while (depth >= 0);
@@ -257,7 +275,7 @@ namespace SPH {
                 //printf("%i: noOfInteractions = %i\n", bodyIndex + offset, noOfInteractions);
 
                 offset += stride;
-                //__syncthreads();
+                __syncthreads();
             }
         }
 
@@ -664,14 +682,17 @@ namespace SPH {
                                 }
                             }
 #if DIM == 1
-                                else if (cuda::math::abs(dx) < interactionDistance) {
+                                else if (cuda::math::abs(dx) < interactionDistance ||
+                                        particles->nodeType[childIndex] >= 1) {
 #elif DIM == 2
-                                else if (cuda::math::abs(dx) < interactionDistance &&
-                                     cuda::math::abs(dy) < interactionDistance) {
+                                else if ((cuda::math::abs(dx) < interactionDistance &&
+                                     cuda::math::abs(dy) < interactionDistance) ||
+                                     particles->nodeType[childIndex] >= 1) {
 #else
-                            else if (cuda::math::abs(dx) < interactionDistance &&
+                            else if ((cuda::math::abs(dx) < interactionDistance &&
                                      cuda::math::abs(dy) < interactionDistance &&
-                                     cuda::math::abs(dz) < interactionDistance) {
+                                     cuda::math::abs(dz) < interactionDistance) ||
+                                     particles->nodeType[childIndex] >= 1) {
 #endif
                                 // put child on stack
                                 currentChildNumber[depth] = childNumber;
@@ -817,14 +838,14 @@ namespace SPH {
                                     }
                                 } else if (/*tree->child[POW_DIM * nodeIndex + childNumber] != -1 &&*/  // need to check, since there are nodes without any leaves as children
                                            /*(childNumber == currentChildNumber[depth-1] && nodeIndex == currentNodeIndex[depth-1]) &&*/  //TODO: just a fix, why is this happening at all?
-                                            cuda::math::abs(dx) < interactionDistance
+                                        (cuda::math::abs(dx) < interactionDistance
 #if DIM > 1
                                             && cuda::math::abs(dy) < interactionDistance
 #if DIM == 3
                                             && cuda::math::abs(dz) < interactionDistance
 #endif
 #endif
-                                        ) {
+                                        ) || particles->nodeType[child] >= 1) {
                                     // put child on stack
                                     currentChildNumber[depth] = childNumber;
                                     currentNodeIndex[depth] = nodeIndex;
@@ -916,6 +937,7 @@ namespace SPH {
                                   MAX_NUM_INTERACTIONS);
                 }
                 //if (numberOfInteractions == 0) {
+                //if (i % 1000 == 0) {
                 //    printf("noi: %d: %d %e (nit: %i)\n", i, numberOfInteractions, particles->sml[i], nit);
                 //}
             }
@@ -1532,7 +1554,330 @@ namespace SPH {
 
     } */
 
+
+#define COMPUTE_DIRECTLY 0
+
         __global__ void insertReceivedParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                                DomainList *domainList, DomainList *lowestDomainList, int n, int m) {
+
+
+            integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+
+            //note: -1 used as "null pointer"
+            //note: -2 used to lock a child (pointer)
+
+            integer offset;
+            int level;
+            bool newBody = true;
+
+            real min_x;
+            real max_x;
+            real x;
+#if DIM > 1
+            real y;
+            real min_y;
+            real max_y;
+#if DIM == 3
+            real z;
+            real min_z;
+            real max_z;
+#endif
+#endif
+
+            integer childPath;
+            integer temp;
+
+            offset = tree->toDeleteLeaf[0];
+
+            while ((bodyIndex + offset) < tree->toDeleteLeaf[1]) {
+
+                if (newBody) {
+
+                    newBody = false;
+                    level = 0;
+
+                    // copy bounding box(es)
+                    min_x = *tree->minX;
+                    max_x = *tree->maxX;
+                    x = particles->x[bodyIndex + offset];
+#if DIM > 1
+                    y = particles->y[bodyIndex + offset];
+                    min_y = *tree->minY;
+                    max_y = *tree->maxY;
+#if DIM == 3
+                    z = particles->z[bodyIndex + offset];
+                    min_z = *tree->minZ;
+                    max_z = *tree->maxZ;
+#endif
+#endif
+                    temp = 0;
+                    childPath = 0;
+
+                    // find insertion point for body
+                    //if (particles->x[bodyIndex + offset] < 0.5 * (min_x + max_x)) { // x direction
+                    if (x < 0.5 * (min_x + max_x)) { // x direction
+                        childPath += 1;
+                        max_x = 0.5 * (min_x + max_x);
+                    }
+                    else {
+                        min_x = 0.5 * (min_x + max_x);
+                    }
+#if DIM > 1
+                    //if (particles->y[bodyIndex + offset] < 0.5 * (min_y + max_y)) { // y direction
+                    if (y < 0.5 * (min_y + max_y)) { // y direction
+                        childPath += 2;
+                        max_y = 0.5 * (min_y + max_y);
+                    }
+                    else {
+                        min_y = 0.5 * (min_y + max_y);
+                    }
+#if DIM == 3
+                    //if (particles->z[bodyIndex + offset] < 0.5 * (min_z + max_z)) {  // z direction
+                    if (z < 0.5 * (min_z + max_z)) {  // z direction
+                        childPath += 4;
+                        max_z = 0.5 * (min_z + max_z);
+                    }
+                    else {
+                        min_z = 0.5 * (min_z + max_z);
+                    }
+#endif
+#endif
+                }
+
+                integer childIndex = tree->child[temp*POW_DIM + childPath];
+
+                // traverse tree until hitting leaf node
+                while (childIndex >= m) { //n
+
+                    temp = childIndex;
+                    level++;
+
+                    //if (particles->level[temp] == -1) {
+                    //    printf("level[%i] = %i...\n", temp, particles->level[temp]);
+                    //    assert(0);
+                    //}
+
+                    childPath = 0;
+
+                    // find insertion point for body
+                    if (x < 0.5 * (min_x + max_x)) { // x direction
+                        childPath += 1;
+                        max_x = 0.5 * (min_x + max_x);
+                    }
+                    else {
+                        min_x = 0.5 * (min_x + max_x);
+                    }
+#if DIM > 1
+                    if (y < 0.5 * (min_y + max_y)) { // y direction
+                        childPath += 2;
+                        max_y = 0.5 * (min_y + max_y);
+                    }
+                    else {
+                        min_y = 0.5 * (min_y + max_y);
+                    }
+#if DIM == 3
+                    if (z < 0.5 * (min_z + max_z)) { // z direction
+                        childPath += 4;
+                        max_z = 0.5 * (min_z + max_z);
+                    }
+                    else {
+                        min_z = 0.5 * (min_z + max_z);
+                    }
+#endif
+#endif
+
+#if COMPUTE_DIRECTLY
+                    if (particles->mass[bodyIndex + offset] != 0) {
+                //particles->x[temp] += particles->weightedEntry(bodyIndex + offset, Entry::x);
+                atomicAdd(&particles->x[temp], particles->weightedEntry(bodyIndex + offset, Entry::x));
+#if DIM > 1
+                //particles->y[temp] += particles->weightedEntry(bodyIndex + offset, Entry::y);
+                atomicAdd(&particles->y[temp], particles->weightedEntry(bodyIndex + offset, Entry::y));
+#if DIM == 3
+                //particles->z[temp] += particles->weightedEntry(bodyIndex + offset, Entry::z);
+                atomicAdd(&particles->z[temp], particles->weightedEntry(bodyIndex + offset, Entry::z));
+#endif
+#endif
+            }
+
+            //particles->mass[temp] += particles->mass[bodyIndex + offset];
+            atomicAdd(&particles->mass[temp], particles->mass[bodyIndex + offset]);
+#endif // COMPUTE_DIRECTLY
+
+                    atomicAdd(&tree->count[temp], 1);
+                    childIndex = tree->child[POW_DIM * temp + childPath];
+                }
+
+                // if child is not locked
+                if (childIndex != -2) {
+
+                    integer locked = temp * POW_DIM + childPath;
+
+                    if (atomicCAS(&tree->child[locked], childIndex, -2) == childIndex) {
+
+                        // check whether a body is already stored at the location
+                        if (childIndex == -1) {
+                            //insert body and release lock
+                            tree->child[locked] = bodyIndex + offset;
+                            particles->level[bodyIndex + offset] = level + 1;
+
+                        }
+                        else {
+                            if (childIndex >= n) {
+                                printf("ATTENTION!\n");
+                            }
+                            integer patch = POW_DIM * m; //8*n
+                            while (childIndex >= 0 && childIndex < n) { // was n
+
+                                //create a new cell (by atomically requesting the next unused array index)
+                                integer cell = atomicAdd(tree->index, 1);
+                                patch = min(patch, cell);
+
+                                if (patch != cell) {
+                                    tree->child[POW_DIM * temp + childPath] = cell;
+                                }
+
+                                level++;
+                                // ATTENTION: most likely a problem with level counting (level = level - 1)
+                                // but could be also a problem regarding maximum tree depth...
+                                if (level > (MAX_LEVEL + 1)) {
+#if DIM == 1
+                                    cudaAssert("buildTree: level = %i for index %i (%e)", level,
+                                       bodyIndex + offset, particles->x[bodyIndex + offset]);
+#elif DIM == 2
+                                    cudaAssert("buildTree: level = %i for index %i (%e, %e)", level,
+                                       bodyIndex + offset, particles->x[bodyIndex + offset],
+                                       particles->y[bodyIndex + offset]);
+#else
+                                    cudaAssert("buildTree: level = %i for index %i (%e, %e, %e)", level,
+                                               bodyIndex + offset, particles->x[bodyIndex + offset],
+                                               particles->y[bodyIndex + offset],
+                                               particles->z[bodyIndex + offset]);
+#endif
+                                }
+
+                                // insert old/original particle
+                                childPath = 0;
+                                if (particles->x[childIndex] < 0.5 * (min_x + max_x)) { childPath += 1; }
+#if DIM > 1
+                                if (particles->y[childIndex] < 0.5 * (min_y + max_y)) { childPath += 2; }
+#if DIM == 3
+                                if (particles->z[childIndex] < 0.5 * (min_z + max_z)) { childPath += 4; }
+#endif
+#endif
+#if COMPUTE_DIRECTLY
+                                particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
+                        //particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
+#if DIM > 1
+                        particles->y[cell] += particles->weightedEntry(childIndex, Entry::y);
+                        //particles->y[cell] += particles->weightedEntry(childIndex, Entry::y);
+#if DIM == 3
+                        particles->z[cell] += particles->weightedEntry(childIndex, Entry::z);
+                        //particles->z[cell] += particles->weightedEntry(childIndex, Entry::z);
+#endif
+#endif
+
+                        //if (cell % 1000 == 0) {
+                        //    printf("buildTree: x[%i] = (%f, %f, %f) from x[%i] = (%f, %f, %f) m = %f\n", cell, particles->x[cell], particles->y[cell],
+                        //           particles->z[cell], childIndex, particles->x[childIndex], particles->y[childIndex],
+                        //           particles->z[childIndex], particles->mass[childIndex]);
+                        //}
+
+                        particles->mass[cell] += particles->mass[childIndex];
+#else // COMPUTE_DIRECTLY
+                                //particles->x[cell] = particles->x[childIndex];
+                                particles->x[cell] = 0.5 * (min_x + max_x);
+#if DIM > 1
+                                //particles->y[cell] = particles->y[childIndex];
+                                particles->y[cell] = 0.5 * (min_y + max_y);
+#if DIM == 3
+                                //particles->z[cell] = particles->z[childIndex];
+                                particles->z[cell] = 0.5 * (min_z + max_z);
+#endif
+#endif
+
+#endif // COMPUTE_DIRECTLY
+
+                                tree->count[cell] += tree->count[childIndex];
+
+                                tree->child[POW_DIM * cell + childPath] = childIndex;
+                                particles->level[cell] = level;
+                                particles->level[childIndex] += 1;
+                                tree->start[cell] = -1;
+
+#if DEBUGGING
+                                if (particles->level[cell] >= particles->level[childIndex]) {
+                            printf("lvl: %i vs. %i\n", particles->level[cell], particles->level[childIndex]);
+                            assert(0);
+                        }
+#endif
+
+                                // insert new particle
+                                temp = cell;
+                                childPath = 0;
+
+                                // find insertion point for body
+                                //if (particles->x[bodyIndex + offset] < 0.5 * (min_x + max_x)) {
+                                if (x < 0.5 * (min_x + max_x)) {
+                                    childPath += 1;
+                                    max_x = 0.5 * (min_x + max_x);
+                                } else {
+                                    min_x = 0.5 * (min_x + max_x);
+                                }
+#if DIM > 1
+                                //if (particles->y[bodyIndex + offset] < 0.5 * (min_y + max_y)) {
+                                if (y < 0.5 * (min_y + max_y)) {
+                                    childPath += 2;
+                                    max_y = 0.5 * (min_y + max_y);
+                                } else {
+                                    min_y = 0.5 * (min_y + max_y);
+                                }
+#if DIM == 3
+                                //if (particles->z[bodyIndex + offset] < 0.5 * (min_z + max_z)) {
+                                if (z < 0.5 * (min_z + max_z)) {
+                                    childPath += 4;
+                                    max_z = 0.5 * (min_z + max_z);
+                                } else {
+                                    min_z = 0.5 * (min_z + max_z);
+                                }
+#endif
+#endif
+#if COMPUTE_DIRECTLY
+                                // COM / preparing for calculation of COM
+                        if (particles->mass[bodyIndex + offset] != 0) {
+                            //particles->x[cell] += particles->weightedEntry(bodyIndex + offset, Entry::x);
+                            particles->x[cell] += particles->weightedEntry(bodyIndex + offset, Entry::x);
+#if DIM > 1
+                            //particles->y[cell] += particles->weightedEntry(bodyIndex + offset, Entry::y);
+                            particles->y[cell] += particles->weightedEntry(bodyIndex + offset, Entry::y);
+#if DIM == 3
+                            //particles->z[cell] += particles->weightedEntry(bodyIndex + offset, Entry::z);
+                            particles->z[cell] += particles->weightedEntry(bodyIndex + offset, Entry::z);
+#endif
+#endif
+                            particles->mass[cell] += particles->mass[bodyIndex + offset];
+                        }
+#endif // COMPUTE_DIRECTLY
+                                tree->count[cell] += tree->count[bodyIndex + offset];
+                                childIndex = tree->child[POW_DIM * temp + childPath];
+                            }
+
+                            tree->child[POW_DIM * temp + childPath] = bodyIndex + offset;
+                            particles->level[bodyIndex + offset] = level + 1;
+
+                            __threadfence();  // written to global memory arrays (child, x, y, mass) thus need to fence
+                            tree->child[locked] = patch;
+                        }
+                        offset += stride;
+                        newBody = true;
+                    }
+                }
+                __syncthreads(); //TODO: __syncthreads() needed?
+            }
+        }
+
+        /*__global__ void insertReceivedParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                 DomainList *domainList, DomainList *lowestDomainList, int n, int m) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
@@ -1559,34 +1904,6 @@ namespace SPH {
 #endif
 #endif
 
-            // new
-            real r;
-            real x_radius, dx;
-#if DIM > 1
-            real y_radius, dy;
-#if DIM == 3
-            real z_radius, dz;
-            real r_temp;
-#endif
-#endif
-
-            x_radius = 0.5 * (*tree->maxX - (*tree->minX));
-#if DIM > 1
-            y_radius = 0.5 * (*tree->maxY - (*tree->minY));
-#if DIM == 3
-            z_radius = 0.5 * (*tree->maxZ - (*tree->minZ));
-#endif
-#endif
-#if DIM == 1
-            r = x_radius;
-#elif DIM == 2
-            r = cuda::math::max(x_radius, y_radius);
-#else
-            r_temp = cuda::math::max(x_radius, y_radius);
-            r = cuda::math::max(r_temp, z_radius); //TODO: (0.5 * r) or (1.0 * r)
-#endif
-//end: new
-
 
             integer childPath;
             integer temp;
@@ -1594,7 +1911,8 @@ namespace SPH {
             offset = tree->toDeleteLeaf[0];
 
             //bool newBody = true;
-            volatile int newBody = 1;
+            //volatile int
+            bool newBody;
 
             while ((bodyIndex + offset) < tree->toDeleteLeaf[1]) {
 
@@ -1606,7 +1924,7 @@ namespace SPH {
                 if (newBody) {
 
                     //printf("[rank %i] sph(%i) START newBody::newBody = %d\n", subDomainKeyTree->rank, bodyIndex + offset, newBody);
-                    newBody = 0;//false;
+                    newBody = false;
                     level = 0;
 
                     // copy bounding box(es)
@@ -1663,9 +1981,10 @@ namespace SPH {
                 if (particles->x[bodyIndex + offset] > max_x || particles->x[bodyIndex + offset] < min_x ||
                         particles->y[bodyIndex + offset] > max_y || particles->y[bodyIndex + offset] < min_y ||
                         particles->z[bodyIndex + offset] > max_z || particles->z[bodyIndex + offset] < min_z) {
-                    //printf("[rank %i] sph(%i) out of box (%.17lf, %.17lf, %.17lf) min/max = (%.17lf - %.17lf, %.17lf - %.17g, %.17lf - %.17lf) level = %i\n", subDomainKeyTree->rank, bodyIndex + offset,
-                    //       particles->x[bodyIndex + offset], particles->y[bodyIndex + offset], particles->z[bodyIndex + offset],
-                    //       min_x, max_x, min_y, max_y, min_z, max_z, level);
+                    printf("[rank %i] sph(%i) out of box (%e, %e, %e) min/max = (%e - %e, %e - %e, %e - %e) level = %i\n",
+                           subDomainKeyTree->rank, bodyIndex + offset,
+                           particles->x[bodyIndex + offset], particles->y[bodyIndex + offset], particles->z[bodyIndex + offset],
+                           min_x, max_x, min_y, max_y, min_z, max_z, level);
                     //assert(0);
                     cudaAssert("[rank %i] sph index: %i out of box!\n", subDomainKeyTree->rank, bodyIndex + offset);
                 }
@@ -1770,6 +2089,20 @@ namespace SPH {
                                     tree->child[POW_DIM * temp + childPath] = cell;
                                 }
 
+                                level++;
+
+                                if (level > (MAX_LEVEL + 1)) {
+                                    printf("[rank %i] sph(%i) assert... childIndex = %i cell = %i (type: %i) temp = %i (type: %i) level = %i (%i, %i)\n",
+                                           subDomainKeyTree->rank, bodyIndex + offset, childIndex, cell,
+                                           particles->nodeType[cell], temp, particles->nodeType[temp], level,
+                                           tree->toDeleteLeaf[0], tree->toDeleteLeaf[1]);
+
+                                    printf("level = %i for index %i (%e, %e, %e)\n", level,
+                                           bodyIndex + offset, particles->x[bodyIndex + offset],
+                                           particles->y[bodyIndex + offset], particles->z[bodyIndex + offset]);
+                                    cudaAssert("level = %i > MAX_LEVEL %i\n", level, MAX_LEVEL);
+                                }
+
 #if DEBUGGING
                                 // debugging
                                 //if (particles->x[bodyIndex + offset] == particles->x[childIndex] &&
@@ -1783,26 +2116,6 @@ namespace SPH {
                                 //}
 #endif
 
-
-
-                                // new
-/*                                dx = (childPath & 1) * r * (pow(0.5, (double)level - 1));
-#if DIM > 1
-                                dy = ((childPath >> 1) & 1) * r * (pow(0.5, (double)level - 1));
-#if DIM == 3
-                                dz = ((childPath >> 2) & 1) * r * (pow(0.5, (double)level - 1));
-#endif
-#endif
-                                particles->x[cell] = particles->x[childIndex] - r * (pow(0.5, (double)level)) + dx;
-#if DIM > 1
-                                particles->y[cell] = particles->y[childIndex] - r * (pow(0.5, (double)level)) + dy;
-#if DIM == 3
-                                particles->z[cell] = particles->z[childIndex] - r * (pow(0.5, (double)level)) + dz;
-#endif
-#endif
-*/
-                                //end: new
-
                                 // insert old/original particle
                                 childPath = 0;
                                 if (particles->x[childIndex] < 0.5 * (min_x + max_x)) { childPath += 1; }
@@ -1813,52 +2126,20 @@ namespace SPH {
 #endif
 #endif
 
-                                particles->x[cell] = particles->x[childIndex]; //0.5 * (min_x + max_x);
+                                //particles->x[cell] = particles->x[childIndex];
+                                particles->x[cell] = 0.5 * (min_x + max_x);
 #if DIM > 1
-                                particles->y[cell] = particles->y[childIndex]; //0.5 * (min_y + max_y);
+                                //particles->y[cell] = particles->y[childIndex];
+                                particles->y[cell] = 0.5 * (min_y + max_y);
 #if DIM == 3
-                                particles->z[cell] = particles->z[childIndex]; //0.5 * (min_z + max_z);
+                                //particles->z[cell] = particles->z[childIndex];
+                                particles->z[cell] = 0.5 * (min_z + max_z);
 #endif
 #endif
-
-
-                                /*
-                                particles->x[cell] = particles->x[childIndex] ;
-#if DIM > 1
-                                particles->y[cell] = particles->y[childIndex];
-#if DIM == 3
-                                particles->z[cell] = particles->z[childIndex];
-#endif
-#endif
-                                 */
-
-/* //#if COMPUTE_DIRECTLY
-                                particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
-                                //particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
-#if DIM > 1
-                                particles->y[cell] += particles->weightedEntry(childIndex, Entry::y);
-                                //particles->y[cell] += particles->weightedEntry(childIndex, Entry::y);
-#if DIM == 3
-                                particles->z[cell] += particles->weightedEntry(childIndex, Entry::z);
-                                //particles->z[cell] += particles->weightedEntry(childIndex, Entry::z);
-#endif
-#endif
-                                particles->mass[cell] += particles->mass[childIndex];
-//#endif // COMPUTE_DIRECTLY */
-
-                                //tree->count[cell] += tree->count[childIndex];
-                                //level++;
 
                                 tree->child[POW_DIM * cell + childPath] = childIndex;
-                                particles->level[temp] = level;
-                                level++;
-                                if (level > MAX_LEVEL) {
-                                    printf("[rank %i] sph(%i) assert... childIndex = %i level = %i\n", subDomainKeyTree->rank, bodyIndex + offset, childIndex, level);
-                                    //printf("level = %i for index %i (%e, %e, %e)\n", level,
-                                    //       bodyIndex + offset, particles->x[bodyIndex + offset],
-                                    //       particles->y[bodyIndex + offset], particles->z[bodyIndex + offset]);
-                                    cudaAssert("level = %i > MAX_LEVEL %i\n", level, MAX_LEVEL);
-                                }
+                                //particles->level[temp] = level;
+
 #if DEBUGGING
                                 printf("[rank %i] sph(%i) inbetween POW_DIM * %i + %i = %i (%e, %e, %e) vs (%e, %e, %e) min/max = (%e - %e, %e - %e, %e - %e)\n", subDomainKeyTree->rank,
                                     bodyIndex + offset, cell, childPath, childIndex,
@@ -1867,6 +2148,7 @@ namespace SPH {
                                     min_x, max_x, min_y, max_y, min_z, max_z);
 #endif
                                 particles->level[cell] = level;
+                                particles->level[childIndex] += 1;
                                 tree->start[cell] = -1;
 
                                 // insert new particle
@@ -1900,23 +2182,6 @@ namespace SPH {
 #endif
 #endif
 
-/* //#if COMPUTE_DIRECTLY
-                                // COM / preparing for calculation of COM
-                            if (particles->mass[bodyIndex + offset] != 0) {
-                                //particles->x[cell] += particles->weightedEntry(bodyIndex + offset, Entry::x);
-                                particles->x[cell] += particles->weightedEntry(bodyIndex + offset, Entry::x);
-#if DIM > 1
-                                //particles->y[cell] += particles->weightedEntry(bodyIndex + offset, Entry::y);
-                                particles->y[cell] += particles->weightedEntry(bodyIndex + offset, Entry::y);
-#if DIM == 3
-                                //particles->z[cell] += particles->weightedEntry(bodyIndex + offset, Entry::z);
-                                particles->z[cell] += particles->weightedEntry(bodyIndex + offset, Entry::z);
-#endif
-#endif
-                                particles->mass[cell] += particles->mass[bodyIndex + offset];
-                            }
-//#endif // COMPUTE_DIRECTLY */
-
                                 tree->count[cell] += tree->count[bodyIndex + offset];
                                 childIndex = tree->child[POW_DIM * temp + childPath];
 #if DEBUGGING
@@ -1926,12 +2191,12 @@ namespace SPH {
                             }
 
                             tree->child[POW_DIM * temp + childPath] = bodyIndex + offset;
+                            particles->level[bodyIndex + offset] = level + 1;
 #if DEBUGGING
                             printf("[rank %i] sph(%i) set temp = %i + childPath = %i = index = %i (level = %i) x[%i] = (%e, %e, %e)\n",
                                     subDomainKeyTree->rank, bodyIndex + offset, temp, childPath, bodyIndex + offset, level, temp,
                                     particles->x[temp], particles->y[temp], particles->z[temp]);
 #endif
-                            particles->level[bodyIndex + offset] = level + 1;
 
                             __threadfence();  // written to global memory arrays (child, x, y, mass) thus need to fence
                             tree->child[locked] = patch;
@@ -1940,25 +2205,26 @@ namespace SPH {
                         printf("[rank %i] sph(%i) newBody = %d, offset+=stride (= %i) = %i\n", subDomainKeyTree->rank, bodyIndex + offset, newBody, stride, offset + stride);
 #endif
                         offset += stride;
-                        newBody = 1; //true;
+                        newBody = true;
 #if DEBUGGING
                         printf("[rank %i] sph(%i) newBody = %d, after offset+=stride (= %i) = %i\n", subDomainKeyTree->rank, bodyIndex + offset, newBody, stride, offset);
 #endif
                     }
-                    else {
-                        //printf("WTF!\n");
-                        //newBody = 1; //TODO: needed?
-                    }
+                    //else {
+                    //    //printf("WTF!\n");
+                    //    //newBody = 1; //TODO: needed?
+                    //}
+                //}
+                //else {
+//#if DEBUGGING
+//                    printf("[rank %i] sph(%i) waiting... childIndex = %i level = %i newBody = %d\n", subDomainKeyTree->rank, bodyIndex + offset, childIndex, level,
+//                           newBody);
+//#endif
                 }
-                else {
-#if DEBUGGING
-                    printf("[rank %i] sph(%i) waiting... childIndex = %i level = %i newBody = %d\n", subDomainKeyTree->rank, bodyIndex + offset, childIndex, level,
-                           newBody);
-#endif
-                }
-                //__syncthreads(); //TODO: needed?
+                __syncthreads(); //TODO: needed?
             }
         }
+        */
 
         __global__ void calculateCentersOfMass(Tree *tree, Particles *particles, integer level) {
 

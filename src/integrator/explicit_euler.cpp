@@ -35,10 +35,10 @@ void ExplicitEuler::integrate(int step) {
         timer.reset();
         if (simulationParameters.removeParticles) {
             time = removeParticles();
-            Logger(TIME) << "removing particles: " << timeElapsed << " ms";
         }
         timeElapsed = timer.elapsed();
         profiler.value2file(ProfilerIds::Time::removeParticles, timeElapsed);
+        Logger(TIME) << "removing particles: " << timeElapsed << " ms";
 
         Logger(INFO) << "rhs::loadBalancing()";
         timer.reset();

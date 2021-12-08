@@ -246,6 +246,7 @@ CUDA_CALLABLE_MEMBER void Particles::setPorosity(real *pold, real *alpha_jutzi, 
 
 CUDA_CALLABLE_MEMBER void Particles::reset(integer index) {
     level[index] = -1;
+    nodeType[index] = 0;
     x[index] = 0;
 #if DIM > 1
     y[index] = 0;

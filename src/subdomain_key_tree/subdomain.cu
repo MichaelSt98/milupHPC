@@ -184,10 +184,13 @@ namespace SubDomainKeyTreeNS {
                             particles->level[cell] = j + 1; //particles->level[temp] + 1;
                             childIndex = cell;
                             domainList->domainListIndices[domainListCounter] = childIndex; //cell;
+                            particles->nodeType[childIndex] = 1;
+#if DEBUGGING
 #if DIM == 3
                             printf("adding node index %i  cell = %i (childPath = %i,  j = %i)! x = (%e, %e, %e) level = %i\n",
                                    temp, cell, path[j], j, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex],
                                    particles->level[cell]);
+#endif
 #endif
                             //particles->level[cell] = -2; //TODO: new
                             domainListCounter++;
@@ -277,31 +280,38 @@ namespace SubDomainKeyTreeNS {
                             particles->level[childIndex] += 1;
                             // end: new
                             //assert(0);
+#if DEBUGGING
 #if DIM == 3
                             printf("adding node in between for index %i, temp = %i  cell = %i (childPath = %i,  j = %i)! x = (%e, %e, %e) level = %i vs %i\n",
                                    childIndex, temp, cell, childPath, j, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex],
                                    particles->level[cell], particles->level[childIndex]);
+#endif
 #endif
 
                             tree->child[POW_DIM * cell + childPath] = childIndex;
 
                             childIndex = cell;
                             domainList->domainListIndices[domainListCounter] = childIndex; //temp;
+                            particles->nodeType[childIndex] = 1;
                             domainListCounter++;
                         }
                     }
                     else {
                         insert = true;
                         // check whether node already marked as domain list node
-                        for (int k=0; k<domainListCounter; k++) {
-                            if (childIndex == domainList->domainListIndices[k]) {
-                                insert = false;
-                                break;
-                            }
+                        if (particles->nodeType[childIndex] >= 1) {
+                            insert = false;
                         }
+                        //for (int k=0; k<domainListCounter; k++) {
+                        //    if (childIndex == domainList->domainListIndices[k]) {
+                        //        insert = false;
+                        //        break;
+                        //    }
+                        //}
                         if (insert) {
                             // mark/save node as domain list node
                             domainList->domainListIndices[domainListCounter] = childIndex; //temp;
+                            particles->nodeType[childIndex] = 1;
                             domainListCounter++;
                         }
                     }
@@ -363,10 +373,13 @@ namespace SubDomainKeyTreeNS {
                             childIndex = cell;
                             //domainListCounter = atomicAdd(domainList->domainListCounter, 1);
                             domainList->domainListIndices[index + offset] = childIndex; //cell;
+                            particles->nodeType[childIndex] = 1;
+#if DEBUGGING
 #if DIM == 3
                             printf("adding node index %i  cell = %i (childPath = %i,  j = %i)! x = (%e, %e, %e) level = %i\n",
                                    temp, cell, path[j], j, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex],
                                    particles->level[cell]);
+#endif
 #endif
 #if DIM == 3
 #if DEBUGGING
@@ -460,11 +473,12 @@ namespace SubDomainKeyTreeNS {
                             particles->level[cell] = particles->level[childIndex];
                             //particles->level[childIndex] += 1;
                             atomicAdd(&particles->level[childIndex], 1);
-
+#if DEBUGGING
 #if DIM == 3
                             printf("adding node in between for index %i, temp = %i  cell = %i (childPath = %i,  j = %i)! x = (%e, %e, %e) level = %i vs %i\n",
                                    childIndex, temp, cell, childPath, j, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex],
                                    particles->level[cell], particles->level[childIndex]);
+#endif
 #endif
 
 
@@ -474,6 +488,7 @@ namespace SubDomainKeyTreeNS {
                             childIndex = cell;
                             //domainListCounter = atomicAdd(domainList->domainListCounter, 1);
                             domainList->domainListIndices[index + offset] = childIndex; //temp;
+                            particles->nodeType[childIndex] = 1;
                         }
                     } else {
                         // mark/save node as domain list node
@@ -483,6 +498,7 @@ namespace SubDomainKeyTreeNS {
                                subDomainKeyTree->rank, index + offset, childIndex, path[j-1], level);
 #endif
                         domainList->domainListIndices[index + offset] = childIndex; //temp;
+                        particles->nodeType[childIndex] = 1;
 
                     }
 
@@ -843,8 +859,9 @@ namespace DomainListNS {
             }
         }
 
-        __global__ void lowestDomainList(SubDomainKeyTree *subDomainKeyTree, Tree *tree, DomainList *domainList,
-                                                       DomainList *lowestDomainList, integer n, integer m) {
+        __global__ void lowestDomainList(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                         DomainList *domainList, DomainList *lowestDomainList,
+                                         integer n, integer m) {
 
             integer index = threadIdx.x + blockIdx.x * blockDim.x;
             integer stride = blockDim.x * gridDim.x;
@@ -868,14 +885,17 @@ namespace DomainListNS {
                         // check whether child is a node
                         if (childIndex >= n) {
                             // check if this node is a domain list node
-                            for (int k=0; k<*domainList->domainListIndex; k++) {
-                                if (childIndex == domainList->domainListIndices[k]) {
-                                    //printf("domainIndex = %i  childIndex: %i  domainListIndices: %i\n", domainIndex,
-                                    //       childIndex, domainListIndices[k]);
-                                    lowestDomainListNode = false;
-                                    break;
-                                }
+                            if (particles->nodeType[childIndex] >= 1) {
+                                lowestDomainListNode = false;
                             }
+                            //for (int k=0; k<*domainList->domainListIndex; k++) {
+                            //    if (childIndex == domainList->domainListIndices[k]) {
+                            //        //printf("domainIndex = %i  childIndex: %i  domainListIndices: %i\n", domainIndex,
+                            //        //       childIndex, domainListIndices[k]);
+                            //        lowestDomainListNode = false;
+                            //        break;
+                            //    }
+                            //}
                             // one child being a domain list node is sufficient for not being a lowest domain list node
                             if (!lowestDomainListNode) {
                                 break;
@@ -889,6 +909,7 @@ namespace DomainListNS {
                     lowestDomainIndex = atomicAdd(lowestDomainList->domainListIndex, 1);
                     // add/save index of lowest domain list node
                     lowestDomainList->domainListIndices[lowestDomainIndex] = domainIndex;
+                    particles->nodeType[domainIndex] = 2;
                     // add/save key of lowest domain list node
                     lowestDomainList->domainListKeys[lowestDomainIndex] = domainList->domainListKeys[index + offset];
                     // add/save level of lowest domain list node
@@ -930,11 +951,11 @@ namespace DomainListNS {
                                 domainList, maxLevel, curveType);
         }
 
-        real Launch::lowestDomainList(SubDomainKeyTree *subDomainKeyTree, Tree *tree, DomainList *domainList,
-                              DomainList *lowestDomainList, integer n, integer m) {
+        real Launch::lowestDomainList(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                      DomainList *domainList, DomainList *lowestDomainList, integer n, integer m) {
             ExecutionPolicy executionPolicy;
             return cuda::launch(true, executionPolicy, ::DomainListNS::Kernel::lowestDomainList, subDomainKeyTree,
-                                tree, domainList, lowestDomainList, n, m);
+                                tree, particles, domainList, lowestDomainList, n, m);
         }
     }
 

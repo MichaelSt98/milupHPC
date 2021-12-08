@@ -110,7 +110,8 @@ namespace Gravity {
                                                 DomainList *domainList, DomainList *lowestDomainList, int n, int m);
 
         __global__ void repairTree(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
-                                   DomainList *lowestDomainList, int n, int m, Curve::Type curveType);
+                                   DomainList *domainList, DomainList *lowestDomainList,
+                                   int n, int m, Curve::Type curveType);
 
         namespace Launch {
 
@@ -193,7 +194,8 @@ namespace Gravity {
                                                     DomainList *domainList, DomainList *lowestDomainList, int n, int m);
 
             real repairTree(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
-                            DomainList *lowestDomainList, int n, int m, Curve::Type curveType);
+                            DomainList *domainList, DomainList *lowestDomainList,
+                            int n, int m, Curve::Type curveType);
 
         }
     }
