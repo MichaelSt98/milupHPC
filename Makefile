@@ -90,7 +90,7 @@ cleaner: clean
 #link
 $(TARGET): $(OBJECTS) $(CUDA_OBJECTS)
 	@echo "Linking ..."
-	$(NVCC) $(GPU_ARCH) $(LFLAGS) $(INC) -o $(TARGETDIR)/$(TARGET) $^ $(LIB) #$(GPU_ARCH)
+	@$(NVCC) $(GPU_ARCH) $(LFLAGS) $(INC) -o $(TARGETDIR)/$(TARGET) $^ $(LIB) #$(GPU_ARCH)
 
 #compile
 $(BUILDDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)
