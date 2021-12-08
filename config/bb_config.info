@@ -1,24 +1,3 @@
-; IO RELATED
-; ------------------------------------------------------
-; output directory (will be created if it does not exist)
-directory bb/
-
-; outputRank (-1 corresponds to all)
-outputRank -1
-
-; omit logType::TIME for standard output
-omitTime true
-
-; create log file (including warnings, errors, ...)
-log true
-
-; create performance log
-performanceLog true
-
-; write particles to be sent to h5 file
-particlesSent2H5 true
-
-
 ; INTEGRATOR RELATED
 ; ------------------------------------------------------
 ; integrator selection
@@ -27,7 +6,7 @@ integrator 1
 ; initial time step
 timeStep 1e-4
 ; max time step allowed
-maxTimeStep 1e9
+maxTimeStep 1e8
 ; end time for simulation
 ;timeEnd 1.0
 ;timeEnd 5.0e7
@@ -61,7 +40,7 @@ removeParticles true
 removeParticlesCriterion 0
 ; allowed distance to center (0, 0, 0)
 ;removeParticlesDimension 1.0
-removeParticlesDimension 3.6e14
+removeParticlesDimension 3.2e14
 
 ; execute load balancing
 loadBalancing false
@@ -74,11 +53,28 @@ loadBalancingBins 2000
 particleMemoryContingent 1.0
 
 ; calculate angular momentum (and save to output file)
-calculateAngularMomentum true
+calculateAngularMomentum false
 ; calculate (total) energy (and save to output file)
-calculateEnergy true
+calculateEnergy false
 ; calculate center of mass (and save to output file)
 calculateCenterOfMass false
+
+; IO RELATED
+; ------------------------------------------------------
+; outputRank (-1 corresponds to all)
+outputRank -1
+
+; omit logType::TIME for standard output
+omitTime true
+
+; create log file (including warnings, errors, ...)
+log false
+
+; create performance log
+performanceLog true
+
+; write particles to be sent to h5 file
+particlesSent2H5 false
 
 
 ; THESE SHOULD PROBABLY NOT EXIST IN A PRODUCTION VERSION

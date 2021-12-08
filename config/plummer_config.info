@@ -1,40 +1,35 @@
 ; IO RELATED
 ; ------------------------------------------------------
 ; output directory (will be created if it does not exist)
-directory bb/
+directory plummer/
 
 ; outputRank (-1 corresponds to all)
 outputRank -1
 
 ; omit logType::TIME for standard output
-omitTime true
+omitTime false
 
 ; create log file (including warnings, errors, ...)
-log true
+log false
 
 ; create performance log
 performanceLog true
 
 ; write particles to be sent to h5 file
-particlesSent2H5 true
+particlesSent2H5 false
 
 
 ; INTEGRATOR RELATED
 ; ------------------------------------------------------
 ; integrator selection
 ; explicit euler [0], predictor-corrector euler [1]
-integrator 1
+integrator 0
 ; initial time step
-timeStep 1e-4
+timeStep 0.025
 ; max time step allowed
-maxTimeStep 1e9
+maxTimeStep 0.025
 ; end time for simulation
-;timeEnd 1.0
-;timeEnd 5.0e7
-timeEnd 6.9e11
-;timeEnd 0.5e10;
-;timeEnd 1e12
-;timeEnd 6e-2
+timeEnd 25.0
 
 ; SIMULATION RELATED
 ; ------------------------------------------------------
@@ -43,13 +38,10 @@ timeEnd 6.9e11
 sfc 1
 
 ; theta-criterion for Barnes-Hut (approximative gravity)
-theta 0.5
+theta 1.0
 ; smoothing parameter for gravitational forces
-;smoothing 0.025
-;smoothing 3.0e12
-;smoothing 1.6e13
-;smoothing 3.2e13
-smoothing 2.56e+20
+;smoothing 0.032
+smoothing 0.001024
 
 ; SPH smoothing kernel selection
 ; spiky [0], cubic spline [1], wendlandc2 [3], wendlandc4 [4], wendlandc6 [5]
@@ -60,8 +52,7 @@ removeParticles true
 ; spherically [0], cubic [1]
 removeParticlesCriterion 0
 ; allowed distance to center (0, 0, 0)
-;removeParticlesDimension 1.0
-removeParticlesDimension 3.6e14
+removeParticlesDimension 10.0
 
 ; execute load balancing
 loadBalancing false
@@ -74,19 +65,19 @@ loadBalancingBins 2000
 particleMemoryContingent 1.0
 
 ; calculate angular momentum (and save to output file)
-calculateAngularMomentum true
+calculateAngularMomentum false
 ; calculate (total) energy (and save to output file)
-calculateEnergy true
+calculateEnergy false
 ; calculate center of mass (and save to output file)
-calculateCenterOfMass false
+calculateCenterOfMass true
 
 
 ; THESE SHOULD PROBABLY NOT EXIST IN A PRODUCTION VERSION
 ; ------------------------------------------------------
 ; ------------------------------------------------------
-; force version for gravity (use [2])
+; force version for gravity (use [0] or [2])
 ; burtscher [0], burtscher without presorting [1], miluphcuda with presorting [2],
-; miluphcuda without presorting [3], miluphcuda shared memory (experimental) [4]
+; miluphcuda without presorting [3], miluphcuda shared memory (NOT working properly) [4]
 gravityForceVersion 0
 ; fixed radius NN version for SPH (use [0])
 ; normal [0], brute-force [1], shared-memory [2], within-box [3]
