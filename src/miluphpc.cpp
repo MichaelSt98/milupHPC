@@ -716,6 +716,13 @@ real Miluphpc::assignParticles() {
 #endif
     numParticlesLocal = sendParticlesEntry(sendLengths, receiveLengths, particleHandler->d_mass, d_tempEntry, d_copyBuffer);
 
+    if (numParticlesLocal > numParticles) {
+        MPI_Finalize();
+        Logger(ERROR) << "numParticlesLocal = " << numParticlesLocal << " > " << " numParticles = " << numParticles;
+        Logger(ERROR) << "Restart simulation with more memory! exiting ...";
+        exit(1);
+    }
+
     delete [] sendLengths;
     delete [] receiveLengths;
 
@@ -1453,6 +1460,13 @@ real Miluphpc::parallel_gravity() {
     treeHandler->h_toDeleteLeaf[1] = numParticlesLocal + particleTotalReceiveLength;
     cuda::copy(treeHandler->h_toDeleteLeaf, treeHandler->d_toDeleteLeaf, 2, To::device);
 
+    if (treeHandler->h_toDeleteLeaf[1] > numParticles) {
+        MPI_Finalize();
+        Logger(ERROR) << "numParticlesLocal + receiveLength = " << treeHandler->h_toDeleteLeaf[1] << " > " << " numParticles = " << numParticles;
+        Logger(ERROR) << "Restart simulation with more memory! exiting ...";
+        exit(1);
+    }
+
     //int debugOffset = 0;
     //for (int proc=0; proc<subDomainKeyTreeHandler->h_numProcesses; proc++) {
     //    gpuErrorcheck(cudaMemset(buffer->d_integerVal, 0, sizeof(integer)));
@@ -1494,6 +1508,14 @@ real Miluphpc::parallel_gravity() {
 
     treeHandler->h_toDeleteNode[0] = treeIndex;
     treeHandler->h_toDeleteNode[1] = treeIndex + pseudoParticleTotalReceiveLength;
+
+    if (treeHandler->h_toDeleteNode[1] > numNodes) {
+        MPI_Finalize();
+        Logger(ERROR) << "needed numNodes = " << treeHandler->h_toDeleteNode[1] << " > " << " numNodes = " << numNodes;
+        Logger(ERROR) << "Restart simulation with more memory! exiting ...";
+        exit(1);
+    }
+
     cuda::copy(treeHandler->h_toDeleteNode, treeHandler->d_toDeleteNode, 2, To::device);
 
 #if DEBUGGING
@@ -1916,6 +1938,13 @@ real Miluphpc::parallel_sph() {
     treeHandler->h_toDeleteLeaf[1] = numParticlesLocal + particleTotalReceiveLength;
     cuda::copy(treeHandler->h_toDeleteLeaf, treeHandler->d_toDeleteLeaf, 2, To::device);
 
+    if (treeHandler->h_toDeleteLeaf[1] > numParticles) {
+        MPI_Finalize();
+        Logger(ERROR) << "numParticlesLocal + receiveLength = " << treeHandler->h_toDeleteLeaf[1] << " > " << " numParticles = " << numParticles;
+        Logger(ERROR) << "Restart simulation with more memory! exiting ...";
+        exit(1);
+    }
+
     // x-entry particle exchange
     CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_x, d_collectedEntries,
                                              particleTotalSendLength);
@@ -2058,8 +2087,15 @@ real Miluphpc::parallel_sph() {
     cuda::copy(&treeHandler->h_toDeleteNode[1], treeHandler->d_index, 1, To::host);
     cuda::copy(treeHandler->h_toDeleteNode, treeHandler->d_toDeleteNode, 2, To::device);
 
-    //Logger(INFO) << "treeHandler->h_toDeleteNode[0]: " << treeHandler->h_toDeleteNode[0];
-    //Logger(INFO) << "treeHandler->h_toDeleteNode[1]: " << treeHandler->h_toDeleteNode[1];
+    Logger(DEBUG) << "treeHandler->h_toDeleteNode[0]: " << treeHandler->h_toDeleteNode[0];
+    Logger(DEBUG) << "treeHandler->h_toDeleteNode[1]: " << treeHandler->h_toDeleteNode[1];
+
+    if (treeHandler->h_toDeleteNode[1] > numNodes) {
+        MPI_Finalize();
+        Logger(ERROR) << "needed numNodes = " << treeHandler->h_toDeleteNode[1] << " > " << " numNodes = " << numNodes;
+        Logger(ERROR) << "Restart simulation with more memory! exiting ...";
+        exit(1);
+    }
 
     treeHandler->copy(To::host);
 
