@@ -1,23 +1,22 @@
 #include "../include/H5Renderer.h"
 
-H5Renderer::H5Renderer(std::string _h5folder, double _systemSize, int _imgHeight, double _zoom, bool _processColoring) :
+H5Renderer::H5Renderer(std::string _h5folder, double _systemSize, int _imgHeight, double _zoom, bool _markParticles,
+                       bool _processColoring) :
 h5folder { _h5folder }, systemSize { _systemSize }, imgHeight { _imgHeight }, zoom { _zoom },
-processColoring { _processColoring },
-h5files { std::vector<fs::path>() }
+markParticles { _markParticles}, processColoring { _processColoring }, h5files { std::vector<fs::path>() }
 {
     // gather files found at h5folder
     fs::path h5path ( h5folder );
     if( !fs::exists(h5path) ){
-        Logger(ERROR) << "Bad provided path for 'h5folder/*.h5': '" << h5folder << "' doesn't exist.";
+        Logger(ERROR) << "Bad provided path for 'h5folder/*.h(df)5': '" << h5folder << "' doesn't exist.";
     } else if ( !fs::is_directory(h5path) ){
-        Logger(ERROR) << "Bad provided path for 'h5folder/*.h5': '" << h5folder << "' is not a directory.";
+        Logger(ERROR) << "Bad provided path for 'h5folder/*.(df)h5': '" << h5folder << "' is not a directory.";
     } else {
         Logger(INFO) << "Collecting h5 files from '" << h5folder << "' ...";
         fs::directory_iterator endDirIt; // empty iterator serves as end
         fs::directory_iterator dirIt(h5path);
         while (dirIt != endDirIt){
-            // TODO: also allow .hdf, .hdf5 etc.
-            if(fs::extension(dirIt->path()) == ".h5"){
+            if(fs::extension(dirIt->path()) == ".h5" || fs::extension(dirIt->path()) == ".hdf5") {
                 // collect h5files in h5folder dir in container
                 h5files.push_back(dirIt->path());
                 Logger(INFO) << "Found " << dirIt->path().filename();
@@ -45,18 +44,18 @@ void H5Renderer::createImages(std::string outDir){
         HighFive::File file(h5PathIt->string(), HighFive::File::ReadOnly);
 
         // reading process ranges
-        HighFive::DataSet rng = file.getDataSet("/hilbertRanges");
+        HighFive::DataSet rng = file.getDataSet("/ranges");
         std::vector<unsigned long> ranges;
         rng.read(ranges);
 
         // reading particle keys
-        HighFive::DataSet key = file.getDataSet("/hilbertKey");
+        HighFive::DataSet key = file.getDataSet("/key");
         std::vector<unsigned long> k;
         key.read(k);
 
-        for (int i = 0; i < ranges.size(); ++i) {
-            printf("ranges[%i] = %lu\n", i, ranges[i]);
-        }
+        //for (int i = 0; i < ranges.size(); ++i) {
+        //    printf("ranges[%i] = %lu\n", i, ranges[i]);
+        //}
 
         // reading particle positions
         HighFive::DataSet pos = file.getDataSet("/x");
@@ -86,7 +85,13 @@ void H5Renderer::createImages(std::string outDir){
         for (int i = 0; i < particles.size(); ++i) {
             ColorRGB color = procColor(particles[i].key, ranges);
             particle2PixelXY(particles[i].x, particles[i].y, color, pixelSpace);
-        }
+            if (markParticles) {
+                for (int ii = -10; ii < 10; ii++) {
+                    particle2PixelXY(particles[i].x + ii * (systemSize / 100.), particles[i].y, color, pixelSpace);
+                    particle2PixelXY(particles[i].x, particles[i].y + ii * (systemSize / 100.), color, pixelSpace);
+                }
+            }
+	    }
         Logger(DEBUG) << "    ... done.";
 
 
@@ -97,6 +102,12 @@ void H5Renderer::createImages(std::string outDir){
         for (int i = 0; i < particles.size(); ++i) {
             ColorRGB color = procColor(particles[i].key, ranges);
             particle2PixelXZ(particles[i].x, particles[i].z, color, pixelSpace);
+            if (markParticles) {
+                for (int ii = -10; ii < 10; ii++) {
+                    particle2PixelXZ(particles[i].x + ii*(systemSize/100.), particles[i].z, color, pixelSpace);
+                    particle2PixelXZ(particles[i].x, particles[i].z + ii*(systemSize/100.), color, pixelSpace);
+                }
+            }
         }
         Logger(DEBUG) << "    ... done.";
 
@@ -140,6 +151,8 @@ void H5Renderer::clearPixelSpace(ColorRGB *pixelSpace){
 }
 
 int H5Renderer::pos2pixel(double pos){
+    //double zoomBoxRadius = .5*systemSize/zoom;    
+    //return abs(pos) > zoomBoxRadius ? -1 : (int)round(imgHeight/2. * (1. + pos/zoomBoxRadius*SCALE2FIT));
     return pos > systemSize/zoom ? -1 : round(imgHeight/2. * (1. + pos/(systemSize/zoom)*SCALE2FIT));
 }
 
@@ -152,7 +165,6 @@ void H5Renderer::particle2PixelXY(double x, double y, const ColorRGB &color, Col
     if (xPx >= 0 && yPx >= 0){
         // draw in x-y plane
         pixelSpace[xPx+2*imgHeight*yPx] = color;
-
     }
 }
 

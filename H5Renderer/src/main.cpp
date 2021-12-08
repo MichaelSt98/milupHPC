@@ -2,7 +2,7 @@
 #include <vector>
 
 
-#include <cxxopts.hpp>
+#include <cxxopts.h>
 #include <highfive/H5File.hpp>
 
 #include "../include/H5Renderer.h"
@@ -19,7 +19,9 @@ int main(int argc, char *argv[]) {
     options.add_options()
             ("c,config", "Path to config file", cxxopts::value<std::string>()->default_value("h5renderer.info"))
             ("v,verbose", "More printouts for debugging")
+            ("i,input", "Read files from given path (otherwise from config file)", cxxopts::value<std::string>()->default_value("-"))
             ("o,output", "Write result files to given path", cxxopts::value<std::string>()->default_value("./output"))
+            ("x,mark", "Mark particles as + instead of points", cxxopts::value<bool>()->default_value("false"))
             ("z,zoom", "Zoom in factor to show more details", cxxopts::value<double>()->default_value("1"))
             ("h,help", "Show this help");
 
@@ -39,12 +41,21 @@ int main(int argc, char *argv[]) {
     /** Parse config file **/
     ConfigParser confP{ ConfigParser(opts["config"].as<std::string>()) };
 
+    std::string inputFolder = confP.getVal<std::string>("h5folder");
+    std::string inputFolderCmdArgument = opts["input"].as<std::string>();
+    if (inputFolderCmdArgument.compare(std::string{"-"})) {
+        inputFolder = inputFolderCmdArgument;
+    }
+
+    bool markParticles = opts["mark"].as<bool>();
+    std::cout << "Mark particles: " << markParticles << std::endl;
+
     /** Initialize H5Renderer from config file **/
-    auto renderer { H5Renderer(
-            confP.getVal<std::string>("h5folder"),
+    auto renderer { H5Renderer( inputFolder,
                     confP.getVal<double>("systemSize"),
             confP.getVal<int>("imgHeight"),
                     opts["zoom"].as<double>(),
+                            markParticles,
             confP.getVal<bool>("processColoring")) };
 
     /** create the images from data in h5 files **/

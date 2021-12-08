@@ -2619,7 +2619,7 @@ real Miluphpc::particles2file(int step) {
     dataSpaceDims[0] = std::size_t(sumParticles);
     dataSpaceDims[1] = DIM;
 
-    HighFive::DataSet ranges = h5file.createDataSet<keyType>("/hilbertRanges",
+    HighFive::DataSet ranges = h5file.createDataSet<keyType>("/ranges",
                                                              HighFive::DataSpace(subDomainKeyTreeHandler->h_numProcesses + 1));
 
     keyType *rangeValues;
@@ -2643,8 +2643,9 @@ real Miluphpc::particles2file(int step) {
 
     HighFive::DataSet pos = h5file.createDataSet<real>("/x", HighFive::DataSpace(dataSpaceDims));
     HighFive::DataSet vel = h5file.createDataSet<real>("/v", HighFive::DataSpace(dataSpaceDims));
-    HighFive::DataSet key = h5file.createDataSet<keyType>("/hilbertKey", HighFive::DataSpace(sumParticles));
+    HighFive::DataSet key = h5file.createDataSet<keyType>("/key", HighFive::DataSpace(sumParticles));
     HighFive::DataSet h5_mass = h5file.createDataSet<real>("/m", HighFive::DataSpace(sumParticles));
+    HighFive::DataSet h5_proc = h5file.createDataSet<int>("/proc", HighFive::DataSpace(sumParticles));
 #if SPH_SIM
     HighFive::DataSet h5_rho = h5file.createDataSet<real>("/rho", HighFive::DataSpace(sumParticles));
     HighFive::DataSet h5_p = h5file.createDataSet<real>("/p", HighFive::DataSpace(sumParticles));
@@ -2660,6 +2661,7 @@ real Miluphpc::particles2file(int step) {
     std::vector<std::vector<real>> x, v; // two dimensional vector for 3D vector data
     std::vector<keyType> k; // one dimensional vector holding particle keys
     std::vector<real> mass;
+    std::vector<int> particleProc;
 #if SPH_SIM
     std::vector<real> rho, p, e, sml, cs;
     std::vector<integer> noi;
@@ -2707,6 +2709,7 @@ real Miluphpc::particles2file(int step) {
 #endif
         k.push_back(h_keys[i]);
         mass.push_back(particleHandler->h_mass[i]);
+        particleProc.push_back(subDomainKeyTreeHandler->h_subDomainKeyTree->rank);
         //Logger(INFO) << "mass[" << i << "] = " << mass[i];
 #if SPH_SIM
         rho.push_back(particleHandler->h_rho[i]);
@@ -2751,6 +2754,7 @@ real Miluphpc::particles2file(int step) {
                 {std::size_t(numParticlesLocal), std::size_t(DIM)}).write(v);
     key.select({nOffset}, {std::size_t(numParticlesLocal)}).write(k);
     h5_mass.select({nOffset}, {std::size_t(numParticlesLocal)}).write(mass);
+    h5_proc.select({nOffset}, {std::size_t(numParticlesLocal)}).write(particleProc);
 #if SPH_SIM
     h5_rho.select({nOffset}, {std::size_t(numParticlesLocal)}).write(rho);
     h5_p.select({nOffset}, {std::size_t(numParticlesLocal)}).write(p);
@@ -2808,7 +2812,7 @@ real Miluphpc::particles2file(const std::string& filename, int *particleIndices,
     dataSpaceDims[0] = std::size_t(totalLength);
     dataSpaceDims[1] = DIM;
 
-    HighFive::DataSet ranges = h5file.createDataSet<keyType>("/hilbertRanges",
+    HighFive::DataSet ranges = h5file.createDataSet<keyType>("/ranges",
                                                              HighFive::DataSpace(subDomainKeyTreeHandler->h_numProcesses + 1));
 
     keyType *rangeValues;
@@ -2826,7 +2830,7 @@ real Miluphpc::particles2file(const std::string& filename, int *particleIndices,
 
     HighFive::DataSet pos = h5file.createDataSet<real>("/x", HighFive::DataSpace(dataSpaceDims));
     //HighFive::DataSet vel = h5file.createDataSet<real>("/v", HighFive::DataSpace(dataSpaceDims));
-    HighFive::DataSet key = h5file.createDataSet<keyType>("/hilbertKey", HighFive::DataSpace(totalLength));
+    HighFive::DataSet key = h5file.createDataSet<keyType>("/key", HighFive::DataSpace(totalLength));
 
     // ----------
 

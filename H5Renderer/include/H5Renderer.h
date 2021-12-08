@@ -48,9 +48,10 @@ private:
     const int imgHeight;
     const double zoom;
     const bool processColoring; // default: true
+    const bool markParticles;
 
     // constants
-    const double SCALE2FIT = .9;
+    const double SCALE2FIT = .95;
 
     // internal variables
     std::vector<fs::path> h5files;
@@ -66,7 +67,8 @@ private:
     void pixelSpace2File(const std::string &outFile, ColorRGB *pixelSpace);
 
 public:
-    H5Renderer(std::string _h5folder, double _systemSize, int _imgHeight, double _zoom, bool _processColoring=true);
+    H5Renderer(std::string _h5folder, double _systemSize, int _imgHeight, double _zoom, bool _markParticles,
+               bool _processColoring=true);
 
     void createImages(std::string outDir);
 };
