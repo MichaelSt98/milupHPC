@@ -2,6 +2,7 @@
 #include "../include/integrator/explicit_euler.h"
 #include "../include/integrator/predictor_corrector_euler.h"
 #include "../include/utils/config_parser.h"
+#include <boost/filesystem.hpp>
 
 #include <fenv.h>
 #include <iostream>
@@ -154,6 +155,23 @@ int main(int argc, char** argv)
     ConfigParser confP{ConfigParser(configFile.c_str())}; //"config/config.info"
     LOGCFG.write2LogFile = confP.getVal<bool>("log");
     LOGCFG.omitTime = confP.getVal<bool>("omitTime");
+
+    parameters.directory = confP.getVal<std::string>("directory");
+    if (boost::filesystem::create_directories(parameters.directory)) {
+        Logger(DEBUG) << "Created directory: " << parameters.directory;
+    }
+    parameters.logDirectory = parameters.directory + std::string{"log/"};
+    if (boost::filesystem::create_directories(parameters.logDirectory)) {
+        Logger(DEBUG) << "Created directory: " << parameters.logDirectory;
+    }
+
+    std::stringstream logFileName;
+    logFileName << parameters.logDirectory << "miluphpc.log";
+    LOGCFG.logFileName = logFileName.str();
+    Logger(TRACE) << "log file to: " << logFileName.str();
+    //MPI_Finalize();
+    //exit(0);
+
     parameters.timeStep = confP.getVal<real>("timeStep");
     parameters.maxTimeStep = result["max-time-step"].as<real>();
     if (parameters.maxTimeStep < 0.) {
@@ -203,11 +221,14 @@ int main(int argc, char** argv)
         parameters.particleMemoryContingent = 1.0;
         Logger(WARN) << "Setting particle memory contingent to: " << parameters.particleMemoryContingent;
     }
+    parameters.calculateCenterOfMass = confP.getVal<bool>("calculateCenterOfMass");
     //TODO: apply those
     parameters.calculateAngularMomentum = confP.getVal<bool>("calculateAngularMomentum");
     parameters.calculateEnergy = confP.getVal<bool>("calculateEnergy");
-    parameters.calculateCenterOfMass = confP.getVal<bool>("calculateCenterOfMass");
 
+    // + 1 should not be necessary, but need to investigate whether this is a problem for 1 GPU sims
+    parameters.domainListSize = POW_DIM * MAX_LEVEL * (numProcesses - 1) + 1;
+    Logger(DEBUG) << "domainListSize: " << parameters.domainListSize;
 
     if (checkFile(parameters.materialConfigFile, false)) {
         parameters.materialConfigFile = std::string{"config/material.cfg"};
@@ -219,7 +240,9 @@ int main(int argc, char** argv)
 
     /// H5 profiling/profiler
     // profiling
-    H5Profiler &profiler = H5Profiler::getInstance("log/performance.h5");
+    std::stringstream profilerFile;
+    profilerFile << parameters.logDirectory << "performance.h5";
+    H5Profiler &profiler = H5Profiler::getInstance(profilerFile.str());
     profiler.setRank(comm.rank());
     profiler.setNumProcs(comm.size());
     if (!parameters.performanceLog) {
@@ -345,9 +368,17 @@ int main(int argc, char** argv)
         Logger(TRACE) << "Input file: " << parameters.inputFile;
         Logger(TRACE) << "Config file: " << parameters.materialConfigFile;
         Logger(TRACE) << "Material config: " << parameters.materialConfigFile;
+        if (LOGCFG.write2LogFile) {
+            Logger(TRACE) << "Log file saved to: " << LOGCFG.logFileName;
+        }
+        if (parameters.performanceLog) {
+            Logger(TRACE) << "Performance log saved to " << profilerFile.str();
+        }
+        if (parameters.particlesSent2H5) {
+            Logger(TRACE) << "(Most recent) particles sent saved to: " << parameters.logDirectory;
+        }
         Logger(TRACE) << "Generated " << parameters.numOutputFiles << " files!";
-        Logger(TRACE) << "Output saved to " << "output/";
-        Logger(TRACE) << "Performance log saved to " << "log/performance.h5";
+        Logger(TRACE) << "Data saved to " << parameters.directory;
         Logger(TRACE) << "---------------FINISHED---------------";
     }
 

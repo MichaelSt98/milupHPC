@@ -99,7 +99,7 @@ typedef int idInteger;
 #define KLEY_VISCOSITY 0
 
 #define KEY_MAX ULONG_MAX
-#define DOMAIN_LIST_SIZE 512
+//#define DOMAIN_LIST_SIZE 512 // changed to be a runtime constant
 #define MAX_DEPTH 128
 #define MAX_NUM_INTERACTIONS 180
 #define NUM_THREADS_LIMIT_TIME_STEP 256
@@ -118,6 +118,8 @@ namespace Constants {
 }
 
 typedef struct SimulationParameters {
+    std::string directory;
+    std::string logDirectory;
     int verbosity;
     bool timeKernels;
     int numOutputFiles;
@@ -151,6 +153,7 @@ typedef struct SimulationParameters {
     bool calculateEnergy;
     bool calculateCenterOfMass;
     real particleMemoryContingent;
+    int domainListSize;
 } SimulationParameters;
 
 struct To
