@@ -13,6 +13,7 @@
 #include "../parameter.h"
 #include "../cuda_utils/cuda_runtime.h"
 #include "../cuda_utils/cuda_utilities.cuh"
+#include "../helper_handler.h"
 #include "tree.cuh"
 
 //TODO: necessary/reasonable to have Key class?
@@ -182,6 +183,49 @@ namespace SubDomainKeyTreeNS {
                                              integer n, integer m, integer *sortArray,
                                              Curve::Type curveType=Curve::lebesgue);
 
+        __global__ void zeroDomainListNodes(Particles *particles, DomainList *domainList,
+                                            DomainList *lowestDomainList);
+
+        __global__ void prepareLowestDomainExchange(Particles *particles, DomainList *lowestDomainList,
+                                                    Helper *helper, Entry::Name entry);
+
+        __global__ void updateLowestDomainListNodes(Particles *particles, DomainList *lowestDomainList,
+                                                    Helper *helper, int domainListSize, Entry::Name entry);
+
+        __global__ void compLowestDomainListNodes(Tree *tree, Particles *particles, DomainList *lowestDomainList);
+
+        __global__ void compLocalPseudoParticles(Tree *tree, Particles *particles, DomainList *domainList, int n);
+
+        __global__ void compDomainListPseudoParticlesPerLevel(Tree *tree, Particles *particles, DomainList *domainList,
+                                                              DomainList *lowestDomainList, int n, int level);
+
+        __global__ void compDomainListPseudoParticles(Tree *tree, Particles *particles, DomainList *domainList,
+                                                      DomainList *lowestDomainList, int n);
+
+        __global__ void repairTree(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                   DomainList *domainList, DomainList *lowestDomainList,
+                                   int n, int m, Curve::Type curveType);
+
+        // notes:
+        // - using Helper::keyTypeBuffer as keyHistRanges
+        __global__ void createKeyHistRanges(Helper *helper, integer bins);
+
+        // notes:
+        // - using Helper::keyTypeBuffer as keyHistRanges
+        // - using Helper::integerBuffer as keyHistCounts
+        __global__ void keyHistCounter(Tree *tree, Particles *particles, SubDomainKeyTree *subDomainKeyTree,
+                                       Helper *helper,
+                /*keyType *keyHistRanges, integer *keyHistCounts,*/ int bins, int n,
+                                       Curve::Type curveType=Curve::lebesgue);
+
+        // notes:
+        // - using Helper::keyTypeBuffer as keyHistRanges
+        // - using Helper::integerBuffer as keyHistCounts
+        __global__ void calculateNewRange(SubDomainKeyTree *subDomainKeyTree, Helper *helper,
+                /*keyType *keyHistRanges, integer *keyHistCounts,*/ int bins, int n,
+                                          Curve::Type curveType=Curve::lebesgue);
+
+
         namespace Launch {
 
             /**
@@ -262,6 +306,36 @@ namespace SubDomainKeyTreeNS {
             real markParticlesProcess(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                  integer n, integer m, integer *sortArray,
                                                  Curve::Type curveType=Curve::lebesgue);
+
+            real zeroDomainListNodes(Particles *particles, DomainList *domainList, DomainList *lowestDomainList);
+
+            real prepareLowestDomainExchange(Particles *particles, DomainList *lowestDomainList,
+                                             Helper *helper, Entry::Name entry);
+
+            real updateLowestDomainListNodes(Particles *particles, DomainList *lowestDomainList,
+                                             Helper *helper, int domainListSize, Entry::Name entry);
+
+            real compLowestDomainListNodes(Tree *tree, Particles *particles, DomainList *lowestDomainList);
+
+            real compLocalPseudoParticles(Tree *tree, Particles *particles, DomainList *domainList, int n);
+
+            real compDomainListPseudoParticlesPerLevel(Tree *tree, Particles *particles, DomainList *domainList,
+                                                       DomainList *lowestDomainList, int n, int level);
+
+            real compDomainListPseudoParticles(Tree *tree, Particles *particles, DomainList *domainList,
+                                               DomainList *lowestDomainList, int n);
+
+            real repairTree(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                            DomainList *domainList, DomainList *lowestDomainList,
+                            int n, int m, Curve::Type curveType);
+
+            real createKeyHistRanges(Helper *helper, integer bins);
+
+            real keyHistCounter(Tree *tree, Particles *particles, SubDomainKeyTree *subDomainKeyTree,
+                                Helper *helper, int bins, int n, Curve::Type curveType=Curve::lebesgue);
+
+            real calculateNewRange(SubDomainKeyTree *subDomainKeyTree, Helper *helper, int bins, int n,
+                                   Curve::Type curveType=Curve::lebesgue);
         }
 
     }
@@ -395,6 +469,7 @@ namespace DomainListNS {
         __global__ void lowestDomainList(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                          DomainList *domainList, DomainList *lowestDomainList, integer n, integer m);
 
+
         namespace Launch {
             /**
              * Wrapped kernel call to setter
@@ -457,6 +532,7 @@ namespace DomainListNS {
              */
             real lowestDomainList(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                   DomainList *domainList, DomainList *lowestDomainList, integer n, integer m);
+
         }
     }
 

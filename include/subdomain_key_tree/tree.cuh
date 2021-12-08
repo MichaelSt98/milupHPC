@@ -503,8 +503,6 @@ namespace TreeNS {
          */
         __global__ void buildTree(Tree *tree, Particles *particles, integer n, integer m);
 
-        __global__ void buildTreeMiluphcuda(Tree *tree, Particles *particles, integer n, integer m);
-
         __global__ void prepareSorting(Tree *tree, Particles *particles, integer n, integer m);
 
         __global__ void calculateCentersOfMass(Tree *tree, Particles *particles, integer n, integer level);
@@ -552,6 +550,8 @@ namespace TreeNS {
         __global__ void getParticleKeys(Tree *tree, Particles *particles, keyType *keys, integer maxLevel, integer n,
                                         Curve::Type curveType = Curve::lebesgue);
 
+        __global__ void globalCOM(Tree *tree, Particles *particles, real com[DIM]);
+
         namespace Launch {
 
             /**
@@ -588,8 +588,6 @@ namespace TreeNS {
              * @return
              */
             real buildTree(Tree *tree, Particles *particles, integer n, integer m, bool time=false);
-
-            real buildTreeMiluphcuda(Tree *tree, Particles *particles, integer n, integer m, bool time=false);
 
             real prepareSorting(Tree *tree, Particles *particles, integer n, integer m);
 
@@ -630,6 +628,8 @@ namespace TreeNS {
              * @return
              */
             real sort(Tree *tree, integer n, integer m, bool time=false);
+
+            real globalCOM(Tree *tree, Particles *particles, real com[DIM]);
 
         }
     }

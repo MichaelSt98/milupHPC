@@ -770,11 +770,6 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
     }
 }
 
-
-__global__ void TreeNS::Kernel::buildTreeMiluphcuda(Tree *tree, Particles *particles, integer n, integer m) {
-
-}
-
 __global__ void TreeNS::Kernel::prepareSorting(Tree *tree, Particles *particles, integer n, integer m) {
     int bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
     int stride = blockDim.x * gridDim.x;
@@ -982,6 +977,38 @@ __global__ void TreeNS::Kernel::getParticleKeys(Tree *tree, Particles *particles
 
         offset += stride;
     }
+
+}
+
+__global__ void TreeNS::Kernel::globalCOM(Tree *tree, Particles *particles, real com[DIM]) {
+
+    real mass = 0;
+    for (int i=0; i<DIM; i++) {
+        com[i] = 0;
+    }
+    for (int i=0; i<POW_DIM; i++) {
+        if (tree->child[i] != -1) {
+            mass += particles->mass[tree->child[i]];
+            com[0] += particles->weightedEntry(tree->child[i], Entry::x);
+#if DIM > 1
+            com[1] += particles->weightedEntry(tree->child[i], Entry::y);
+#if DIM == 3
+            com[2] += particles->weightedEntry(tree->child[i], Entry::z);
+#endif
+#endif
+        }
+    }
+
+    if (mass > 0) {
+        com[0] /= mass;
+#if DIM > 1
+        com[1] /= mass;
+#if DIM == 3
+        com[2] /= mass;
+#endif
+#endif
+    }
+
 }
 
 namespace TreeNS {
@@ -1254,11 +1281,6 @@ namespace TreeNS {
                 return cuda::launch(time, executionPolicy, ::TreeNS::Kernel::buildTree, tree, particles, n, m);
             }
 
-            real buildTreeMiluphcuda(Tree *tree, Particles *particles, integer n, integer m, bool time) {
-                ExecutionPolicy executionPolicy;
-                return cuda::launch(time, executionPolicy, ::TreeNS::Kernel::buildTreeMiluphcuda, tree, particles, n, m);
-            }
-
             real prepareSorting(Tree *tree, Particles *particles, integer n, integer m) {
                 ExecutionPolicy executionPolicy;
                 return cuda::launch(time, executionPolicy, ::TreeNS::Kernel::prepareSorting, tree, particles, n, m);
@@ -1292,6 +1314,11 @@ namespace TreeNS {
                 ExecutionPolicy executionPolicy;
                 return cuda::launch(time, executionPolicy, ::TreeNS::Kernel::getParticleKeys, tree, particles, keys,
                                     maxLevel, n, curveType);
+            }
+
+            real globalCOM(Tree *tree, Particles *particles, real com[DIM]) {
+                ExecutionPolicy executionPolicy(1, 1);
+                return cuda::launch(true, executionPolicy, ::TreeNS::Kernel::globalCOM, tree, particles, com);
             }
         }
     }
