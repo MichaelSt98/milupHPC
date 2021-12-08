@@ -15,7 +15,7 @@ CUDA_CALLABLE_MEMBER void KeyNS::key2Char(keyType key, integer maxLevel, char *k
 }
 
 CUDA_CALLABLE_MEMBER integer KeyNS::key2proc(keyType key, SubDomainKeyTree *subDomainKeyTree/*, Curve::Type curveType*/) {
-    return subDomainKeyTree->key2proc(key/*, curveType*/);
+    return subDomainKeyTree->key2proc(key); //, curveType);
 }
 
 CUDA_CALLABLE_MEMBER SubDomainKeyTree::SubDomainKeyTree() {
@@ -63,6 +63,7 @@ CUDA_CALLABLE_MEMBER void SubDomainKeyTree::set(integer rank, integer numProcess
 //        printf("Curve type not available!\n");
 //    }
 //}
+
 // ATTENTION: independent of lebesgue/hilbert, thus provide appropriate key!
 CUDA_CALLABLE_MEMBER integer SubDomainKeyTree::key2proc(keyType key/*, Curve::Type curveType*/) {
 
@@ -80,7 +81,7 @@ CUDA_CALLABLE_MEMBER bool SubDomainKeyTree::isDomainListNode(keyType key, intege
     integer p1, p2;
     //p1 = key2proc(key);
     //p2 = key2proc(key | ~(~0UL << DIM * (maxLevel - level)));
-    //TODO: necessary? always lebesgue key?
+
     switch (curveType) {
         case Curve::lebesgue: {
             p1 = key2proc(key);
@@ -111,9 +112,11 @@ CUDA_CALLABLE_MEMBER bool SubDomainKeyTree::isDomainListNode(keyType key, intege
             //p2 = key2proc(hilbert | (KEY_MAX >> (DIM*level+1)));
             p2 = key2proc(hilbert | (keyMax >> (DIM*level+1)));
 
-            //printf("lebesgue: %lu vs %lu < ? : %i\n", key, key | ~(~0UL << DIM * (maxLevel - level)), key < (key | ~(~0UL << DIM * (maxLevel - level))));
-            //printf("hilbert: %lu vs %lu < ? : %i\n", KeyNS::lebesgue2hilbert(key, maxLevel, maxLevel), hilbert | (KEY_MAX >> (DIM*level+1)),
-                   //KeyNS::lebesgue2hilbert(key, maxLevel, maxLevel) < (hilbert | (KEY_MAX >> (DIM*level+1))));
+            //printf("lebesgue: %lu vs %lu < ? : %i\n", key, key | ~(~0UL << DIM * (maxLevel - level)),
+            // key < (key | ~(~0UL << DIM * (maxLevel - level))));
+            //printf("hilbert: %lu vs %lu < ? : %i\n", KeyNS::lebesgue2hilbert(key, maxLevel, maxLevel),
+            // hilbert | (KEY_MAX >> (DIM*level+1)),
+            //KeyNS::lebesgue2hilbert(key, maxLevel, maxLevel) < (hilbert | (KEY_MAX >> (DIM*level+1))));
 
             break;
         }
@@ -176,11 +179,6 @@ namespace SubDomainKeyTreeNS {
                             // no child at all here, thus add node
                             integer cell = atomicAdd(tree->index, 1);
                             tree->child[POW_DIM * temp + path[j]] = cell;
-                            // TODO: remove
-                            if (temp == -1) {
-                                printf("temp = -1\n");
-                                assert(0);
-                            }
                             particles->level[cell] = j + 1; //particles->level[temp] + 1;
                             childIndex = cell;
                             domainList->domainListIndices[domainListCounter] = childIndex; //cell;
@@ -275,11 +273,8 @@ namespace SubDomainKeyTreeNS {
                             //particles->mass[cell] += particles->mass[childIndex];
                             particles->mass[cell] = particles->mass[childIndex];
 
-                            // NEW
                             particles->level[cell] = particles->level[childIndex];
                             particles->level[childIndex] += 1;
-                            // end: new
-                            //assert(0);
 #if DEBUGGING
 #if DIM == 3
                             printf("adding node in between for index %i, temp = %i  cell = %i (childPath = %i,  j = %i)! x = (%e, %e, %e) level = %i vs %i\n",
@@ -501,11 +496,8 @@ namespace SubDomainKeyTreeNS {
                         particles->nodeType[childIndex] = 1;
 
                     }
-
                     __threadfence();
-                    //__syncthreads();
                 }
-                //__threadfence();
                 __syncthreads();
 
                 offset += stride;
@@ -633,7 +625,6 @@ namespace SubDomainKeyTreeNS {
                 }
 
                 if (zero) {
-                    //printf("zero %i\n", domainIndex);
                     particles->x[domainIndex] = (real)0;
 #if DIM > 1
                     particles->y[domainIndex] = (real)0;
@@ -644,23 +635,19 @@ namespace SubDomainKeyTreeNS {
 
                     particles->mass[domainIndex] = (real)0;
                 }
-                /*
-                else {
-                    //printf("domainIndex = %i *= mass = %f\n", domainIndex, particles->mass[domainIndex]);
-                    particles->x[domainIndex] *= particles->mass[domainIndex];
-#if DIM > 1
-                    particles->y[domainIndex] *= particles->mass[domainIndex];
-#if DIM == 3
-                    particles->z[domainIndex] *= particles->mass[domainIndex];
-#endif
-#endif
-                }
-                */
-
+                //else {
+                //    //printf("domainIndex = %i *= mass = %f\n", domainIndex, particles->mass[domainIndex]);
+                //    particles->x[domainIndex] *= particles->mass[domainIndex];
+                //#if DIM > 1
+                //    particles->y[domainIndex] *= particles->mass[domainIndex];
+                //#if DIM == 3
+                //    particles->z[domainIndex] *= particles->mass[domainIndex];
+                //#endif
+                //#endif
+                //}
 
                 offset += stride;
             }
-
         }
 
         __global__ void prepareLowestDomainExchange(Particles *particles, DomainList *lowestDomainList,
@@ -786,20 +773,13 @@ namespace SubDomainKeyTreeNS {
                     //       particles->y[lowestDomainIndex], particles->z[lowestDomainIndex], particles->mass[lowestDomainIndex]);
 #endif
 
-                    /*particles->x[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
-#if DIM > 1
-                    particles->y[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
-#if DIM == 3
-                    particles->z[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
-#endif
-#endif
-                     */
-
-                    //if (std::isnan(particles->x[lowestDomainIndex])) {
-                    //    printf("NAN! within compLowestDomainListNodes for %i: x = %f, m = %f\n", lowestDomainIndex, particles->x[lowestDomainIndex],
-                    //           particles->mass[lowestDomainIndex]);
-                    //    assert(0);
-                    //}
+                    //particles->x[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
+                    //#if DIM > 1
+                    //particles->y[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
+                    //#if DIM == 3
+                    //particles->z[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
+                    //#endif
+                    //#endif
 
 #if DIM == 3
                     //printf("lowestDomainIndex: %i (%f, %f, %f) %f\n", lowestDomainIndex, particles->x[lowestDomainIndex],
@@ -921,7 +901,7 @@ namespace SubDomainKeyTreeNS {
                 //                assert(0);
                 //            }
                 //            lowestDomainIndex = tree->child[POW_DIM * lowestDomainIndex + childToLookAt];
-                //        }*/
+                //        }
                 //        break;
                 //    }
                 //}
@@ -1040,27 +1020,6 @@ namespace SubDomainKeyTreeNS {
                 *tree->index = tree->toDeleteNode[0];
             }
 
-            /*while ((bodyIndex + offset) < *lowestDomainList->domainListIndex) {
-                domainIndex = lowestDomainList->domainListIndices[bodyIndex + offset];
-
-                //key = tree->getParticleKey(particles, domainIndex, MAX_LEVEL, curveType); // working version
-                //proc = subDomainKeyTree->key2proc(key);
-                // //printf("[rank %i] deleting: proc = %i\n", subDomainKeyTree->rank, proc);
-                //if (proc != subDomainKeyTree->rank) {
-                //    for (int i=0; i<POW_DIM; i++) {
-                //        //printf("[rank %i] deleting: POWDIM * %i + %i = %i\n", subDomainKeyTree->rank, domainIndex, i, tree->child[POW_DIM * domainIndex + i]);
-                //        tree->child[POW_DIM * domainIndex + i] = -1;
-                //    }
-                //}
-
-                for (int i=0; i<POW_DIM; i++) {
-                    if (tree->child[POW_DIM * domainIndex + i] >= tree->toDeleteNode[0]) {
-                        tree->child[POW_DIM * domainIndex + i] = -1;
-                    }
-                }
-                offset += stride;
-            }*/
-
             while ((bodyIndex + offset) < *domainList->domainListIndex) {
                 domainIndex = domainList->domainListIndices[bodyIndex + offset];
                 for (int i=0; i<POW_DIM; i++) {
@@ -1075,6 +1034,20 @@ namespace SubDomainKeyTreeNS {
                 }
                 offset += stride;
             }
+            // alternatively:
+            //while ((bodyIndex + offset) < *lowestDomainList->domainListIndex) {
+            //    domainIndex = lowestDomainList->domainListIndices[bodyIndex + offset];
+            //    //key = tree->getParticleKey(particles, domainIndex, MAX_LEVEL, curveType); // working version
+            //    //proc = subDomainKeyTree->key2proc(key);
+            //    // //printf("[rank %i] deleting: proc = %i\n", subDomainKeyTree->rank, proc);
+            //    //if (proc != subDomainKeyTree->rank) {
+            //    //    for (int i=0; i<POW_DIM; i++) {
+            //    //        //printf("[rank %i] deleting: POWDIM * %i + %i = %i\n", subDomainKeyTree->rank, domainIndex, i, tree->child[POW_DIM * domainIndex + i]);
+            //    //        tree->child[POW_DIM * domainIndex + i] = -1;
+            //    //    }
+            //    //}
+            //    offset += stride;
+            //}
 
             offset = tree->toDeleteLeaf[0];
             //delete inserted leaves
@@ -1107,7 +1080,7 @@ namespace SubDomainKeyTreeNS {
                 offset += stride;
             }
 
-            offset = tree->toDeleteNode[0]; //0;
+            offset = tree->toDeleteNode[0];
             //delete inserted cells
             while ((bodyIndex + offset) >= tree->toDeleteNode[0] && (bodyIndex + offset) < tree->toDeleteNode[1]) {
                 for (int i=0; i<POW_DIM; i++) {
@@ -1156,9 +1129,8 @@ namespace SubDomainKeyTreeNS {
         }
 
         __global__ void keyHistCounter(Tree *tree, Particles *particles, SubDomainKeyTree *subDomainKeyTree,
-                                       Helper *helper,
-                /*keyType *keyHistRanges, integer *keyHistCounts,*/ int bins, int n,
-                                       Curve::Type curveType) {
+                                       Helper *helper, /*keyType *keyHistRanges, integer *keyHistCounts,*/
+                                       int bins, int n, Curve::Type curveType) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
             integer stride = blockDim.x * gridDim.x;
@@ -1185,8 +1157,8 @@ namespace SubDomainKeyTreeNS {
 
         //TODO: resetting helper (buffers)?!
         __global__ void calculateNewRange(SubDomainKeyTree *subDomainKeyTree, Helper *helper,
-                /*keyType *keyHistRanges, integer *keyHistCounts,*/ int bins, int n,
-                                          Curve::Type curveType) {
+                                          /*keyType *keyHistRanges, integer *keyHistCounts,*/
+                                          int bins, int n, Curve::Type curveType) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
             integer stride = blockDim.x * gridDim.x;
@@ -1211,8 +1183,6 @@ namespace SubDomainKeyTreeNS {
                         subDomainKeyTree->range[i] = (helper->keyTypeBuffer[bodyIndex + offset] >> (1*DIM)) << (1*DIM);
                     }
                 }
-
-
                 //printf("[rank %i] keyHistCounts[%i] = %i\n", s->rank, bodyIndex+offset, keyHistCounts[bodyIndex+offset]);
                 atomicAdd(helper->integerVal, helper->integerBuffer[bodyIndex+offset]);
                 offset += stride;
@@ -1659,10 +1629,7 @@ namespace ParticlesNS {
                 particles->y[index] * particles->y[index]) < d) {
 #else
         if (cuda::math::sqrt(particles->x[index] * particles->x[index] + particles->y[index] * particles->y[index] +
-                  particles->z[index] * particles->z[index]) < d) { //3.5e14) {//150597870700.) {//3.25e14) {
-        //if (cuda::math::abs(particles->x[index]) < 0.5 &&
-        //        cuda::math::abs(particles->y[index]) < 0.5 &&
-        //        cuda::math::abs(particles->z[index]) < 0.5) {
+                  particles->z[index] * particles->z[index]) < d) {
 #endif
             return false;
         } else {
@@ -1709,8 +1676,7 @@ namespace ParticlesNS {
                         remove = applyCubicCriterion(subDomainKeyTree, tree, particles, d, bodyIndex + offset);
                     } break;
                     default: {
-                        printf("Criterion for removing particles not available! Exiting...\n");
-                        assert(0);
+                        cudaTerminate("Criterion for removing particles not available! Exiting...\n");
                     }
                 }
                 if (remove) {
@@ -1933,7 +1899,6 @@ namespace Physics {
             unsigned int tid = threadIdx.x;
             unsigned int i = blockIdx.x*(blockSize*2) + tid;
             unsigned int gridSize = blockSize*2*gridDim.x;
-            //sdata[tid] = 0.;
 
             lx[tid] = 0.;
 #if DIM > 1
@@ -1957,8 +1922,6 @@ namespace Physics {
                             particles->mass[i+blockSize] * (particles->x[i+blockSize]*particles->vy[i+blockSize] - particles->y[i+blockSize]*particles->vx[i+blockSize]);
 #endif
 
-                //sdata[tid] += g_idata[i] + g_idata[i+blockSize];
-                //printf("l[%i] = (%f, %f, %f)\n", tid, lx[tid], ly[tid], lz[tid]);
                 i += gridSize;
             }
 
@@ -1973,7 +1936,6 @@ namespace Physics {
                     lz[tid] += lz[tid + 256];
 #endif
 #endif
-                    //sdata[tid] += sdata[tid + 256];
                 }
                 __syncthreads();
             }
@@ -1986,7 +1948,6 @@ namespace Physics {
                     lz[tid] += lz[tid + 128];
 #endif
 #endif
-                    //sdata[tid] += sdata[tid + 128];
                 }
                 __syncthreads();
             }
@@ -1999,7 +1960,6 @@ namespace Physics {
                     lz[tid] += lz[tid + 64];
 #endif
 #endif
-                    //sdata[tid] += sdata[tid + 64];
                 }
                 __syncthreads();
             }
@@ -2014,7 +1974,6 @@ namespace Physics {
                     lz[tid] += lz[tid + 32];
 #endif
 #endif
-                    //sdata[tid] += sdata[tid + 32];
                 }
                 if (blockSize >= 32) {
                     lx[tid] += lx[tid + 16];
@@ -2024,7 +1983,6 @@ namespace Physics {
                     lz[tid] += lz[tid + 16];
 #endif
 #endif
-                    //sdata[tid] += sdata[tid + 16];
                 }
                 if (blockSize >= 16) {
                     lx[tid] += lx[tid + 8];
@@ -2034,7 +1992,6 @@ namespace Physics {
                     lz[tid] += lz[tid + 8];
 #endif
 #endif
-                    //sdata[tid] += sdata[tid + 8];
                 }
                 if (blockSize >= 8) {
                     lx[tid] += lx[tid + 4];
@@ -2044,7 +2001,6 @@ namespace Physics {
                     lz[tid] += lz[tid + 4];
 #endif
 #endif
-                    //sdata[tid] += sdata[tid + 4];
                 }
                 if (blockSize >= 4) {
                     lx[tid] += lx[tid + 2];
@@ -2054,7 +2010,6 @@ namespace Physics {
                     lz[tid] += lz[tid + 2];
 #endif
 #endif
-                    //sdata[tid] += sdata[tid + 2];
                 }
                 if (blockSize >= 2) {
                     lx[tid] += lx[tid + 1];
@@ -2064,7 +2019,6 @@ namespace Physics {
                     lz[tid] += lz[tid + 1];
 #endif
 #endif
-                    //sdata[tid] += sdata[tid + 1];
                 }
             }
 
@@ -2074,7 +2028,6 @@ namespace Physics {
                 outputData[blockSize + blockIdx.x] = ly[0];
 #if DIM > 2
                 outputData[2 * blockSize + blockIdx.x] = lz[0];
-                //g_odata[blockIdx.x] = sdata[0];
 #endif
 #endif
             }
@@ -2121,8 +2074,7 @@ namespace Physics {
                             particles->vz[index + offset] * particles->vz[index + offset]);
 #endif
 
-                //particles->u[index + offset] += 0.5 * particles->mass[index + offset] * vel * vel;
-
+                particles->u[index + offset] += 0.5 * particles->mass[index + offset] * vel * vel;
                 offset += stride;
             }
         }

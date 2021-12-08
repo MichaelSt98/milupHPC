@@ -2281,11 +2281,6 @@ namespace SPH {
 #endif
                     }
 
-                    //if (std::isnan(particles->x[bodyIndex + offset])) {
-                    //    printf("NAN! within calculateCenterOfMasses for %i: x = %f, m = %f\n", bodyIndex + offset, particles->x[bodyIndex + offset],
-                    //           particles->mass[bodyIndex + offset]);
-                    //    assert(0);
-                    //}
                     //counter[particles->level[bodyIndex + offset]] += 1;
 
                 }

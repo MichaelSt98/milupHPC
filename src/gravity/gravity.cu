@@ -73,14 +73,12 @@ namespace Gravity {
 #endif
 #endif
 
-            /*while ((bodyIndex + offset) < length) {
-
-                printf("x[%i] = (%f, %f, %f) %f\n", sendIndices[bodyIndex + offset], particles->x[sendIndices[bodyIndex + offset]],
-                       particles->y[sendIndices[bodyIndex + offset]], particles->z[sendIndices[bodyIndex + offset]],
-                       particles->mass[sendIndices[bodyIndex + offset]]);
-
-                offset += stride;
-            }*/
+            //while ((bodyIndex + offset) < length) {
+            //    printf("x[%i] = (%f, %f, %f) %f\n", sendIndices[bodyIndex + offset], particles->x[sendIndices[bodyIndex + offset]],
+            //           particles->y[sendIndices[bodyIndex + offset]], particles->z[sendIndices[bodyIndex + offset]],
+            //           particles->mass[sendIndices[bodyIndex + offset]]);
+            //    offset += stride;
+            //}
 
             //while ((bodyIndex + offset) < length) {
             //    if (particles->x[sendIndices[bodyIndex + offset]] == 0.f &&
@@ -182,10 +180,10 @@ namespace Gravity {
                     if (!available) {
                         //integer a = -1;
                         //markedSendIndices[childIndex] = a;
-                        printf("[rank %i] %i (relevant son: %i) NOT Available sendIndices[%i] = %i, [%i] = %i)!\n",
-                               subDomainKeyTree->rank, temp, childIndex,
-                               childIndex, markedSendIndices[childIndex], temp, markedSendIndices[temp]);
-                        assert(0);
+
+                        cudaTerminate("[rank %i] %i (relevant son: %i) NOT Available sendIndices[%i] = %i, [%i] = %i)!\n",
+                                      subDomainKeyTree->rank, temp, childIndex, childIndex,
+                                      markedSendIndices[childIndex], temp, markedSendIndices[temp])
                     }
 
                     //if (childIndex != sendIndices[bodyIndex + offset]) {
@@ -202,7 +200,8 @@ namespace Gravity {
         }
 
         __global__ void computeForces_v1(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                         SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing) {
+                                         SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing,
+                                         bool potentialEnergy) {
 
             register int i, ii;
             int child, nodeIndex, childNumber, depth;
@@ -223,7 +222,7 @@ namespace Gravity {
             __shared__ volatile real cellSize[MAX_DEPTH];
 
             if (threadIdx.x == 0) {
-                cellSize[0] = 4.0 * radius * radius; //4.0 * radius * radius; //TODO: original one is 4.0 * radi...
+                cellSize[0] = 4.0 * radius * radius; //4.0 * radius * radius;
 #pragma unroll
                 for (i = 1; i < MAX_DEPTH; i++) {
                     cellSize[i] = cellSize[i - 1] * 0.25;
@@ -278,7 +277,7 @@ namespace Gravity {
 
                         if (child != -1 && child != i) { // dont do self-gravity with yourself!
                             dx = particles->x[child] - px;
-                            distance = dx*dx + smoothing; //150329404.287723; //(0.0317 * 0.0317); //0.025;
+                            distance = dx*dx + smoothing;
 #if DIM > 1
                             dy = particles->y[child] - py;
                             distance += dy*dy;
@@ -303,10 +302,14 @@ namespace Gravity {
                                 az += f*dz;
 #endif
 #endif
-                                //TODO: some flag for calculating potential energy
                                 // gravitational potential energy
-                                //particles->u[i] -= 0.5 * (particles->mass[child] * particles->mass[i])/distance;
-                                // end: gravitational potential energy
+                                if (potentialEnergy) {
+#if SI_UNITS
+                                    particles->u[i] -= 0.5 * (Constants::G * particles->mass[child] * particles->mass[i]) / distance;
+#else
+                                    particles->u[i] -= 0.5 * (particles->mass[child] * particles->mass[i]) / distance;
+#endif
+                                }
                             } else {
                                 // put child on stack
                                 currentChildNumber[depth] = childNumber;
@@ -337,7 +340,8 @@ namespace Gravity {
         }
 
         __global__ void computeForces_v1_1(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                         SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing) {
+                                           SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing,
+                                           bool potentialEnergy) {
 
             integer i, ii, child, nodeIndex, childNumber, depth;
 
@@ -435,10 +439,14 @@ namespace Gravity {
                                 az += f*dz;
 #endif
 #endif
-                                //TODO: some flag for calculating potential energy
                                 // gravitational potential energy
-                                //particles->u[i] -= 0.5 * (particles->mass[child] * particles->mass[i])/distance;
-                                // end: gravitational potential energy
+                                if (potentialEnergy) {
+#if SI_UNITS
+                                    particles->u[i] -= 0.5 * (Constants::G * particles->mass[child] * particles->mass[i])/distance;
+#else
+                                    particles->u[i] -= 0.5 * (particles->mass[child] * particles->mass[i])/distance;
+#endif
+                                }
                             } else {
                                 // put child on stack
                                 currentChildNumber[depth] = childNumber;
@@ -469,7 +477,8 @@ namespace Gravity {
         }
 
         __global__ void computeForces_v1_2(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                           SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing) {
+                                           SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing,
+                                           bool potentialEnergy) {
 
             register int i, ii;
             int child, nodeIndex, childNumber, depth;
@@ -569,10 +578,14 @@ namespace Gravity {
                                 az += f*dz;
 #endif
 #endif
-                                //TODO: some flag for calculating potential energy
                                 // gravitational potential energy
-                                //particles->u[i] -= 0.5 * (particles->mass[child] * particles->mass[i])/distance;
-                                // end: gravitational potential energy
+                                if (potentialEnergy) {
+#if SI_UNITS
+                                    particles->u[i] -= 0.5 * (Constants::G * particles->mass[child] * particles->mass[i])/distance;
+#else
+                                    particles->u[i] -= 0.5 * (particles->mass[child] * particles->mass[i])/distance;
+#endif
+                                }
                             } else {
                                 // put child on stack
                                 currentChildNumber[depth] = childNumber;
@@ -642,7 +655,7 @@ namespace Gravity {
         __global__ void computeForces_v2(Tree *tree, Particles *particles, real radius, integer n, integer m,
                                          integer blockSize, integer warp, integer stackSize,
                                          SubDomainKeyTree *subDomainKeyTree, real theta,
-                                         real smoothing) {
+                                         real smoothing, bool potentialEnergy) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x*blockDim.x;
             integer stride = blockDim.x*gridDim.x;
@@ -776,6 +789,15 @@ namespace Gravity {
                                 acc_z += f*dz;
 #endif
 #endif
+                                if (potentialEnergy) {
+#if SI_UNITS
+                                    particles->u[bodyIndex + offset] -= 0.5 * (Constants::G * particles->mass[ch] *
+                                        particles->mass[bodyIndex + offset])/cuda::math::sqrt(r);
+#else
+                                    particles->u[bodyIndex + offset] -= 0.5 * (particles->mass[ch] *
+                                            particles->mass[bodyIndex + offset])/cuda::math::sqrt(r);
+#endif
+                                }
                             }
                             else {
                                 // if first thread in warp: push node's children onto iteration stack
@@ -811,7 +833,7 @@ namespace Gravity {
 
         __global__ void computeForces_v2_1(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
                                            integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree,
-                                           real theta, real smoothing) {
+                                           real theta, real smoothing, bool potentialEnergy) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x*blockDim.x;
             integer stride = blockDim.x*gridDim.x;
@@ -939,6 +961,15 @@ namespace Gravity {
                                 acc_z += f*dz;
 #endif
 #endif
+                                if (potentialEnergy) {
+#if SI_UNITS
+                                    particles->u[bodyIndex + offset] -= 0.5 * (Constants::G * particles->mass[ch] *
+                                            particles->mass[bodyIndex + offset])/cuda::math::sqrt(r);
+#else
+                                    particles->u[bodyIndex + offset] -= 0.5 * (particles->mass[ch] *
+                                            particles->mass[bodyIndex + offset])/cuda::math::sqrt(r);
+#endif
+                                }
                             }
                             else {
                                 // if first thread in warp: push node's children onto iteration stack
@@ -950,9 +981,9 @@ namespace Gravity {
                                 //__threadfence();
                             }
                         }
-                        else {
-                            /*top = max(stackStartIndex, top-1); */
-                        }
+                        //else {
+                        //    top = max(stackStartIndex, top-1);
+                        //}
                     }
                     top--;
                 }
@@ -1148,23 +1179,19 @@ namespace Gravity {
                         //}
                         for (int j = 0; j < domainListLevel; j++) {
 
-                            /*
-#if DIM == 3
-                            if (particles->x[domainList->relevantDomainListIndices[relevantIndex]] <= max_x && particles->x[domainList->relevantDomainListIndices[relevantIndex]] >= min_x &&
-                                particles->y[domainList->relevantDomainListIndices[relevantIndex]] <= max_y && particles->y[domainList->relevantDomainListIndices[relevantIndex]] >= min_y &&
-                                particles->z[domainList->relevantDomainListIndices[relevantIndex]] <= max_z && particles->z[domainList->relevantDomainListIndices[relevantIndex]] >= min_z) {
-
-                            }
-                            else {
-                                printf("not within box %i, %i  level: %i (%f, %f, %f) box (%f, %f), (%f, %f), (%f, %f)!\n", relevantIndex, domainList->relevantDomainListIndices[relevantIndex],
-                                       domainList->relevantDomainListLevels[relevantIndex],
-                                       particles->x[domainList->relevantDomainListIndices[relevantIndex]], particles->y[domainList->relevantDomainListIndices[relevantIndex]],
-                                       particles->z[domainList->relevantDomainListIndices[relevantIndex]],
-                                       min_x, max_x, min_y, max_y, min_z, max_z);
-                                assert(0);
-                            }
-#endif
-                            */
+                            //#if DIM == 3
+                            //if (particles->x[domainList->relevantDomainListIndices[relevantIndex]] <= max_x && particles->x[domainList->relevantDomainListIndices[relevantIndex]] >= min_x &&
+                            //    particles->y[domainList->relevantDomainListIndices[relevantIndex]] <= max_y && particles->y[domainList->relevantDomainListIndices[relevantIndex]] >= min_y &&
+                            //    particles->z[domainList->relevantDomainListIndices[relevantIndex]] <= max_z && particles->z[domainList->relevantDomainListIndices[relevantIndex]] >= min_z) {
+                            //}
+                            //else {
+                            //    printf("not within box %i, %i  level: %i (%f, %f, %f) box (%f, %f), (%f, %f), (%f, %f)!\n", relevantIndex, domainList->relevantDomainListIndices[relevantIndex],
+                            //           domainList->relevantDomainListLevels[relevantIndex],
+                            //           particles->x[domainList->relevantDomainListIndices[relevantIndex]], particles->y[domainList->relevantDomainListIndices[relevantIndex]],
+                            //           particles->z[domainList->relevantDomainListIndices[relevantIndex]],
+                            //           min_x, max_x, min_y, max_y, min_z, max_z);
+                            //    assert(0);
+                            //}
 
                             childPath = 0;
                             if (particles->x[currentDomainListIndex] < 0.5 * (min_x + max_x)) {
@@ -1215,7 +1242,6 @@ namespace Gravity {
                         } else {
                             dz = 0.;
                         }
-
 #endif
 #endif
 
@@ -1227,7 +1253,7 @@ namespace Gravity {
                         r = cuda::math::sqrt(dx*dx + dy*dy + dz*dz);
 #endif
 
-                        // TODO: depending on gravity force version and amount of processes: 2 * diam or 1 * diam (why?)
+                        // TODO: (still?) depending on gravity force version and amount of processes: 2 * diam or 1 * diam (why?)
                         //printf("%f >= %f (particleLevel = %i, theta = %f, r = %f)\n", powf(0.5, particleLevel-1) /* * 2*/ * diam, (theta_ * r), particleLevel, theta_, r);
                         if (particleLevel != -1 && (((powf(0.5, particleLevel-1) /* * 2*/ * diam) >= (theta_ * r)) || isDomainListNode)) {
 
@@ -1255,7 +1281,6 @@ namespace Gravity {
                             }
                         }
                     }
-
                     __threadfence();
                     offset += stride;
                 }
@@ -1280,7 +1305,7 @@ namespace Gravity {
 
                 bodyIndex = domainList->domainListIndices[index + offset];
                 //calculate key
-                //TODO: why not
+                //TODO: why not domainList->domainListKeys[index + offset] instead of getParticleKey()?
                 //key =  domainList->domainListKeys[index + offset]; //???
                 //hilbert = KeyNS::lebesgue2hilbert(key, 21);
                 key = tree->getParticleKey(particles, bodyIndex, MAX_LEVEL, curveType); // working version
@@ -1291,10 +1316,6 @@ namespace Gravity {
                 //       bodyIndex, particles->x[bodyIndex],
                 //       particles->y[bodyIndex], particles->z[bodyIndex]);
 
-                if (proc < 0 && particles->mass[bodyIndex] <= 0.f) {
-                    printf("proc = %i, mass = %e\n", proc, particles->mass[bodyIndex]);
-                    //assert(0);
-                }
                 if (proc != subDomainKeyTree->rank && proc >= 0 && particles->mass[bodyIndex] > 0.f) {
                     //printf("[rank = %i] proc = %i, key = %lu for x = (%f, %f, %f)\n", subDomainKeyTree->rank, proc, key, particles->x[bodyIndex], particles->y[bodyIndex], particles->z[bodyIndex]);
                     domainIndex = atomicAdd(domainList->domainListCounter, 1);
@@ -1526,10 +1547,9 @@ namespace Gravity {
                         //            particles->mass[tree->toDeleteNode[0] + i]);
                         //}
 
-                        printf("insertReceivedPseudoParticles() for %i: level[%i] = %i != insertionLevel = %i!\n",
-                               tree->toDeleteNode[0] + bodyIndex + offset, bodyIndex + offset,
-                               levels[bodyIndex + offset], insertionLevel);
-                        assert(0);
+                        cudaAssert("insertReceivedPseudoParticles() for %i: level[%i] = %i != insertionLevel = %i!\n",
+                                   tree->toDeleteNode[0] + bodyIndex + offset, bodyIndex + offset,
+                                   levels[bodyIndex + offset], insertionLevel);
                     }
                 }
                 __threadfence();
@@ -1552,7 +1572,6 @@ namespace Gravity {
             real min_z, max_z;
 #endif
 #endif
-
             integer childPath;
             integer temp;
 
@@ -1602,7 +1621,6 @@ namespace Gravity {
                 }
 #endif
 #endif
-
                 int childIndex = tree->child[temp*POW_DIM + childPath];
 
                 // traverse tree until hitting leaf node
@@ -1682,55 +1700,58 @@ namespace Gravity {
         }
 
         real Launch::computeForces_v1(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                      SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing) {
+                                      SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing,
+                                      bool potentialEnergy) {
             size_t sharedMemory = sizeof(real) * MAX_DEPTH;
             ExecutionPolicy executionPolicy(256, 256, sharedMemory);
             //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v1, tree, particles,
-                                radius, n, m, subDomainKeyTree, theta, smoothing);
+                                radius, n, m, subDomainKeyTree, theta, smoothing, potentialEnergy);
         }
 
         real Launch::computeForces_v1_1(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                        SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing) {
+                                        SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing,
+                                        bool potentialEnergy) {
             size_t sharedMemory = sizeof(real) * MAX_DEPTH;
             ExecutionPolicy executionPolicy(256, 256, sharedMemory);
             //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v1_1, tree, particles,
-                                radius, n, m, subDomainKeyTree, theta, smoothing);
+                                radius, n, m, subDomainKeyTree, theta, smoothing, potentialEnergy);
         }
 
         real Launch::computeForces_v1_2(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                      SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing) {
+                                      SubDomainKeyTree *subDomainKeyTree, real theta, real smoothing,
+                                      bool potentialEnergy) {
             size_t sharedMemory = (2*sizeof(int) + sizeof(real)) * MAX_DEPTH;
             ExecutionPolicy executionPolicy(256, 256, sharedMemory);
             //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v1_2, tree, particles,
-                                radius, n, m, subDomainKeyTree, theta, smoothing);
+                                radius, n, m, subDomainKeyTree, theta, smoothing, potentialEnergy);
         }
 
         real Launch::computeForces_v2(Tree *tree, Particles *particles, real radius, integer n, integer m,
                                       integer blockSize, integer warp, integer stackSize,
                                       SubDomainKeyTree *subDomainKeyTree, real theta,
-                                      real smoothing) {
+                                      real smoothing, bool potentialEnergy) {
 
             size_t sharedMemory = (sizeof(real)+sizeof(integer))*stackSize*blockSize/warp;
             //size_t sharedMemory = 2*sizeof(real)*stackSize*blockSize/warp;
             ExecutionPolicy executionPolicy(256, 256, sharedMemory);
             //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v2, tree, particles, radius,
-                                n, m, blockSize, warp, stackSize, subDomainKeyTree, theta, smoothing);
+                                n, m, blockSize, warp, stackSize, subDomainKeyTree, theta, smoothing, potentialEnergy);
         }
 
         real Launch::computeForces_v2_1(Tree *tree, Particles *particles, integer n, integer m, integer blockSize,
                                         integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree,
-                                        real theta, real smoothing) {
+                                        real theta, real smoothing, bool potentialEnergy) {
 
             size_t sharedMemory = (sizeof(real)+sizeof(integer))*stackSize*blockSize/warp;
             //size_t sharedMemory = 2*sizeof(real)*stackSize*blockSize/warp;
             ExecutionPolicy executionPolicy(256, 256, sharedMemory);
             //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v2_1, tree, particles, n, m,
-                                blockSize, warp, stackSize, subDomainKeyTree, theta, smoothing);
+                                blockSize, warp, stackSize, subDomainKeyTree, theta, smoothing, potentialEnergy);
         }
 
         //real Launch::symbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,

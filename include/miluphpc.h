@@ -171,6 +171,9 @@ public:
     /// search radius for SPH (MPI-process overarching) neighbor search
     real h_searchRadius;
 
+    real totalEnergy;
+    real totalAngularMomentum;
+
     /**
      * Remove particles in dependence of some criterion.
      *

@@ -345,6 +345,7 @@ int main(int argc, char** argv)
         miluphpc->simulationTimeHandler->copy(To::device);
 
         miluphpc->integrate(i_step);
+        miluphpc->afterIntegrationStep();
 
         timer.reset();
         auto time = miluphpc->particles2file(i_step);

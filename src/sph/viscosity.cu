@@ -14,8 +14,7 @@ __global__ void SPH::Kernel::calculate_shear_stress_tensor(::SPH::SPH_kernel ker
         // TODO: matnu
         //particles->eta[i] = matnu[particles->materialId[i]] * particles->rho[i];
 //#else
-        printf("not implemented\n");
-        assert(0);
+        cudaTerminate("not implemented yet!\n")
 //#endif
     }
 }

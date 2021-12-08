@@ -407,16 +407,20 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
     totalTime += time;
 #endif
 
-    // TODO: move to somewhere else (outside of rhs() -> afterIntegrationStep ?)
-    //angularMomentum();
-    //energy();
-
     return totalTime;
 }
 
 void Miluphpc::afterIntegrationStep() {
-    //TODO: implement things which need/can be done after (full) integration step
-    // e.g.: energy calculation, angular momentum, ...
+    // things which need/can be done after (full) integration step
+
+    // angular momentum calculation
+    if (simulationParameters.calculateAngularMomentum) {
+        angularMomentum();
+    }
+    // energy calculation
+    if (simulationParameters.calculateEnergy) {
+        energy();
+    }
 }
 
 real Miluphpc::angularMomentum() {
@@ -454,7 +458,8 @@ real Miluphpc::angularMomentum() {
                            h_intermediateResult[2] * h_intermediateResult[2]);
 #endif
 
-    Logger(DEBUG) << "angular momentum: " << angularMomentum;
+    totalAngularMomentum = angularMomentum;
+    Logger(DEBUG) << "angular momentum: " << totalAngularMomentum;
 
     delete [] h_intermediateResult;
     cuda::free(d_outputData);
@@ -489,12 +494,12 @@ real Miluphpc::energy() {
     all_reduce(comm, boost::mpi::inplace_t<real*>(d_intermediateResult), 1, std::plus<real>());
 
     cuda::copy(&h_intermediateResult, d_intermediateResult, 1, To::host);
-    real energy = h_intermediateResult;
+    totalEnergy = h_intermediateResult;
 
     cuda::free(d_outputData);
     cuda::free(d_intermediateResult);
 
-    Logger(DEBUG) << "energy: " << energy;
+    Logger(DEBUG) << "energy: " << totalEnergy;
     Logger(TIME) << "energy: " << time << " ms";
 
     //cuda::copy(particleHandler->h_u, particleHandler->d_u, numParticlesLocal, To::host);
@@ -504,7 +509,6 @@ real Miluphpc::energy() {
     //        Logger(INFO) << "u[" << i << "] = " << particleHandler->h_u[i] << "( mass = " << particleHandler->h_mass[i] << ")";
     //    }
     //}
-
 
     return time;
 }
@@ -517,6 +521,7 @@ real Miluphpc::reset() {
     time = Kernel::Launch::resetArrays(treeHandler->d_tree, particleHandler->d_particles, d_mutex, numParticles,
                                        numNodes, true);
     // ---------------------------------------------------------
+
     cuda::set(particleHandler->d_u, (real)0., numParticlesLocal);
 
     cuda::set(particleHandler->d_ax, (real)0., numParticles);
@@ -1639,10 +1644,9 @@ real Miluphpc::parallel_gravity() {
         // ---------------------------------------------------------
         time = Gravity::Kernel::Launch::computeForces_v2(treeHandler->d_tree, particleHandler->d_particles, radius,
                                                          numParticlesLocal, numParticles, blockSize, warp,
-                                                         stackSize,
-                                                         subDomainKeyTreeHandler->d_subDomainKeyTree,
-                                                         simulationParameters.theta,
-                                                         simulationParameters.smoothing);
+                                                         stackSize, subDomainKeyTreeHandler->d_subDomainKeyTree,
+                                                         simulationParameters.theta, simulationParameters.smoothing,
+                                                         simulationParameters.calculateEnergy);
         // ---------------------------------------------------------
 
     }
@@ -1651,7 +1655,8 @@ real Miluphpc::parallel_gravity() {
         time = Gravity::Kernel::Launch::computeForces_v2_1(treeHandler->d_tree, particleHandler->d_particles,
                                                            numParticlesLocal, numParticles, blockSize, warp, stackSize,
                                                            subDomainKeyTreeHandler->d_subDomainKeyTree,
-                                                           simulationParameters.theta, simulationParameters.smoothing);
+                                                           simulationParameters.theta, simulationParameters.smoothing,
+                                                           simulationParameters.calculateEnergy);
         // ---------------------------------------------------------
     }
     else if (computeForcesVersion == 2) {
@@ -1677,7 +1682,8 @@ real Miluphpc::parallel_gravity() {
         time = Gravity::Kernel::Launch::computeForces_v1(treeHandler->d_tree, particleHandler->d_particles,
                                                          radius, numParticles, numParticles,
                                                          subDomainKeyTreeHandler->d_subDomainKeyTree,
-                                                         simulationParameters.theta, simulationParameters.smoothing);
+                                                         simulationParameters.theta, simulationParameters.smoothing,
+                                                         simulationParameters.calculateEnergy);
         // ---------------------------------------------------------
     }
     else if (computeForcesVersion == 3) {
@@ -1685,7 +1691,8 @@ real Miluphpc::parallel_gravity() {
         time = Gravity::Kernel::Launch::computeForces_v1_1(treeHandler->d_tree, particleHandler->d_particles,
                                                            radius,numParticles, numParticles,
                                                            subDomainKeyTreeHandler->d_subDomainKeyTree,
-                                                           simulationParameters.theta, simulationParameters.smoothing);
+                                                           simulationParameters.theta, simulationParameters.smoothing,
+                                                           simulationParameters.calculateEnergy);
         // ---------------------------------------------------------
     }
     else if (computeForcesVersion == 4) {
@@ -1710,7 +1717,8 @@ real Miluphpc::parallel_gravity() {
         time = Gravity::Kernel::Launch::computeForces_v1_2(treeHandler->d_tree, particleHandler->d_particles,
                                                            radius, numParticles, numParticles,
                                                            subDomainKeyTreeHandler->d_subDomainKeyTree,
-                                                           simulationParameters.theta, simulationParameters.smoothing);
+                                                           simulationParameters.theta, simulationParameters.smoothing,
+                                                           simulationParameters.calculateEnergy);
         // ---------------------------------------------------------
     }
     else {
@@ -2655,6 +2663,17 @@ real Miluphpc::particles2file(int step) {
     HighFive::DataSet h5_cs = h5file.createDataSet<real>("/cs", HighFive::DataSpace(sumParticles));
 #endif
 
+    HighFive::DataSet h5_totalEnergy;
+    if (simulationParameters.calculateEnergy) {
+        h5_totalEnergy = h5file.createDataSet<real>("/totalEnergy",
+                        HighFive::DataSpace(subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses));
+    }
+    HighFive::DataSet h5_totalAngularMomentum;
+    if (simulationParameters.calculateAngularMomentum) {
+        h5_totalAngularMomentum = h5file.createDataSet<real>("/totalAngularMomentum",
+                             HighFive::DataSpace(subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses));
+    }
+
     Logger(INFO) << "creating datasets ...";
     // ----------
 
@@ -2763,6 +2782,13 @@ real Miluphpc::particles2file(int step) {
     h5_noi.select({nOffset}, {std::size_t(numParticlesLocal)}).write(noi);
     h5_cs.select({nOffset}, {std::size_t(numParticlesLocal)}).write(cs);
 #endif
+
+    if (simulationParameters.calculateEnergy) {
+        h5_totalEnergy.select({subDomainKeyTreeHandler->h_subDomainKeyTree->rank}, {1}).write(totalEnergy);
+    }
+    if (simulationParameters.calculateAngularMomentum) {
+        h5_totalAngularMomentum.select({subDomainKeyTreeHandler->h_subDomainKeyTree->rank}, {1}).write(totalAngularMomentum);
+    }
 
     if (simulationParameters.calculateCenterOfMass) {
         real *h_com = new real[DIM];

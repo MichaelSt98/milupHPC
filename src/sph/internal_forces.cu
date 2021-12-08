@@ -381,13 +381,6 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 #endif
 #endif
 
-            //if (std::isnan(accels[0]) || std::isnan(accels[1]) || std::isnan(accels[2])) {
-            //    printf("accels = (%e, %e, %e), mass = %e, pij = %e dWdx = (%e, %e, %e)\n", accels[0], accels[1], accels[2],
-            //           particles->mass[j], pij, dWdx[0], dWdx[1], dWdx[2]);
-            //    assert(0);
-            //}
-
-
             drhodt += particles->rho[i]/particles->rho[j] * particles->mass[j] * vvnablaW;
 
 #if INTEGRATE_SML
