@@ -52,12 +52,15 @@ void PredictorCorrectorEuler::integrate(int step) {
     real time = 0.;
 
     real timeElapsed;
+    real timeIntegrate;
 
     Timer timerRhs;
 
     while (*simulationTimeHandler->h_currentTime < *simulationTimeHandler->h_subEndTime) {
 
-        profiler.setStep(subStep);
+        timeIntegrate = 0.;
+
+        //profiler.setStep(subStep);
         subStep++;
 
         timer.reset();
@@ -68,10 +71,14 @@ void PredictorCorrectorEuler::integrate(int step) {
         profiler.value2file(ProfilerIds::Time::removeParticles, timeElapsed);
         Logger(TIME) << "removing particles: " << timeElapsed << " ms";
 
+        timer.reset();
         Logger(INFO) << "rhs::loadBalancing()";
         if (simulationParameters.loadBalancing && step != 0 && step % simulationParameters.loadBalancingInterval == 0) {
             dynamicLoadBalancing();
         }
+        timeElapsed = timer.elapsed();
+        profiler.value2file(ProfilerIds::Time::loadBalancing, timeElapsed);
+        Logger(TIME) << "load balancing: " << timeElapsed << " ms";
 
         timerRhs.reset();
         // -------------------------------------------------------------------------------------------------------------
@@ -93,12 +100,15 @@ void PredictorCorrectorEuler::integrate(int step) {
         //Logger(INFO) << "h_dt_max = " << *simulationTimeHandler->h_dt_max;
 
         Logger(INFO) << "setTimeStep: search radius: " << h_searchRadius;
-        PredictorCorrectorEulerNS::Kernel::Launch::setTimeStep(prop.multiProcessorCount,
+        time = PredictorCorrectorEulerNS::Kernel::Launch::setTimeStep(prop.multiProcessorCount,
                                                                simulationTimeHandler->d_simulationTime,
                                                                materialHandler->d_materials,
                                                                particleHandler->d_particles,
                                                                d_blockShared, d_blockCount, h_searchRadius,
                                                                numParticlesLocal);
+
+        timeIntegrate += time;
+        Logger(TIME) << "integrate: setTimeStep: " << time << " ms";
 
         simulationTimeHandler->globalizeTimeStep(Execution::device);
         simulationTimeHandler->copy(To::host);
@@ -111,10 +121,13 @@ void PredictorCorrectorEuler::integrate(int step) {
         //Logger(INFO) << "h_dt_max = " << *simulationTimeHandler->h_dt_max;
         // ------------------------------------------------------------------------------------------------------------
         Logger(INFO) << "PREDICTOR!";
-        time += PredictorCorrectorEulerNS::Kernel::Launch::predictor(particleHandler->d_particles,
+        time = PredictorCorrectorEulerNS::Kernel::Launch::predictor(particleHandler->d_particles,
                                                                      integratedParticles[0].d_integratedParticles,
                                                                      *simulationTimeHandler->h_dt, //(real) simulationParameters.timestep,
                                                                      numParticlesLocal);
+
+        timeIntegrate += time;
+        Logger(TIME) << "integrate: predictor: " << time << " ms";
 
         Logger(INFO) << "setPointer()...";
         particleHandler->setPointer(&integratedParticles[0]);
@@ -133,11 +146,15 @@ void PredictorCorrectorEuler::integrate(int step) {
         particleHandler->resetPointer();
 
         Logger(INFO) << "CORRECTOR!";
-        time += PredictorCorrectorEulerNS::Kernel::Launch::corrector(particleHandler->d_particles,
+        time = PredictorCorrectorEulerNS::Kernel::Launch::corrector(particleHandler->d_particles,
                                                                      integratedParticles[0].d_integratedParticles,
                                                                      *simulationTimeHandler->h_dt, //(real) simulationParameters.timestep,
                                                                      numParticlesLocal);
 
+        timeIntegrate += time;
+        Logger(TIME) << "integrate: corrector: " << time << " ms";
+
+        profiler.value2file(ProfilerIds::Time::integrate, timeIntegrate);
 
         *simulationTimeHandler->h_currentTime += *simulationTimeHandler->h_dt;
         simulationTimeHandler->copy(To::device);

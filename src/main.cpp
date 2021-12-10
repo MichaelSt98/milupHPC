@@ -30,7 +30,6 @@ bool checkFile(const std::string file, bool terminate, const std::string message
     }
 }
 
-// see: http://fargo.in2p3.fr/manuals/html/communications.html#mpicuda
 void SetDeviceBeforeInit()
 {
     char * localRankStr = NULL;
@@ -301,6 +300,7 @@ int main(int argc, char** argv)
     profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::internalForces, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::repairTree, 1);
 #endif
+    profiler.createValueDataSet<real>(ProfilerIds::Time::integrate, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::IO, 1);
 
 
@@ -351,8 +351,7 @@ int main(int argc, char** argv)
         auto time = miluphpc->particles2file(i_step);
         timeElapsed = timer.elapsed();
         Logger(TIME) << "particles2file: " << timeElapsed << " ms";
-        // TODO: not working properly (why?)
-        //profiler.value2file(ProfilerIds::Time::IO, timeElapsed);
+        profiler.value2file(ProfilerIds::Time::IO, timeElapsed);
 
 
         t += parameters.timeStep;

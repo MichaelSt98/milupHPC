@@ -328,19 +328,22 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
     Logger(INFO) << "before: numNodes:          " << numNodes;
 #endif
 
-    timer.reset();
     if (assignParticlesToProcess) {
+        timer.reset();
         if (subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses > 1) {
             Logger(INFO) << "rhs::assignParticles()";
             // ---------------------------------------------------------------------------------------------------------
             time = assignParticles();
             // ---------------------------------------------------------------------------------------------------------
         }
+        elapsed = timer.elapsed();
+        totalTime += time;
+        Logger(TIME) << "rhs::assignParticles(): " << elapsed << " ms"; //time << " ms";
+        profiler.value2file(ProfilerIds::Time::assignParticles, *profilerTime);
     }
-    elapsed = timer.elapsed();
-    totalTime += time;
-    Logger(TIME) << "rhs::assignParticles(): " << elapsed << " ms"; //time << " ms";
-    profiler.value2file(ProfilerIds::Time::assignParticles, *profilerTime);
+    //else {
+    //    profiler.value2file(ProfilerIds::Time::assignParticles, 0.);
+    //}
 
     //Logger(INFO) << "checking for nans after assigning particles...";
     //ParticlesNS::Kernel::Launch::check4nans(particleHandler->d_particles, numParticlesLocal);
@@ -382,17 +385,39 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
     profiler.value2file(ProfilerIds::Time::pseudoParticle, *profilerTime);
 
 #if GRAVITY_SIM
-    timer.reset();
     if (selfGravity) {
+        timer.reset();
         Logger(INFO) << "rhs::gravity()";
         // -------------------------------------------------------------------------------------------------------------
         time = gravity();
         // -------------------------------------------------------------------------------------------------------------
+        elapsed = timer.elapsed();
+        totalTime += time;
+        Logger(TIME) << "rhs::gravity(): " << time << " ms";
+        profiler.value2file(ProfilerIds::Time::gravity, *profilerTime);
     }
-    elapsed = timer.elapsed();
-    totalTime += time;
-    Logger(TIME) << "rhs::gravity(): " << time << " ms";
-    profiler.value2file(ProfilerIds::Time::gravity, *profilerTime);
+    //else {
+    //
+    //    int *dummy = new int[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+    //    for (int i_dummy=0; i_dummy<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; ++i_dummy) {
+    //        dummy[i_dummy] = 0;
+    //    }
+    //    profiler.vector2file(ProfilerIds::SendLengths::gravityParticles, dummy);
+    //    profiler.vector2file(ProfilerIds::SendLengths::gravityPseudoParticles, dummy);
+    //    profiler.vector2file(ProfilerIds::ReceiveLengths::gravityParticles, dummy);
+    //    profiler.vector2file(ProfilerIds::ReceiveLengths::gravityPseudoParticles, dummy);
+    //    delete [] dummy;
+    //
+    //    profiler.value2file(ProfilerIds::Time::Gravity::compTheta, 0.);
+    //    profiler.value2file(ProfilerIds::Time::Gravity::symbolicForce, 0.);
+    //    profiler.value2file(ProfilerIds::Time::Gravity::sending, 0.);
+    //    profiler.value2file(ProfilerIds::Time::Gravity::insertReceivedPseudoParticles, 0.);
+    //    profiler.value2file(ProfilerIds::Time::Gravity::insertReceivedParticles, 0.);
+    //    profiler.value2file(ProfilerIds::Time::Gravity::force, 0.);
+    //    profiler.value2file(ProfilerIds::Time::Gravity::repairTree, 0.);
+    //
+    //    profiler.value2file(ProfilerIds::Time::gravity, 0.);
+    //}
 #endif
 
 #if SPH_SIM
@@ -1236,8 +1261,8 @@ real Miluphpc::parallel_gravity() {
         if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
             particleSendLengths[proc] = h_particles2SendCount[proc];
             pseudoParticleSendLengths[proc] = h_pseudoParticles2SendCount[proc];
-            //Logger(INFO) << "particleSendLengths[" << proc << "] = " << particleSendLengths[proc];
-            //Logger(INFO) << "pseudoParticleSendLengths[" << proc << "] = " << pseudoParticleSendLengths[proc];
+            Logger(INFO) << "particleSendLengths[" << proc << "] = " << particleSendLengths[proc];
+            Logger(INFO) << "pseudoParticleSendLengths[" << proc << "] = " << pseudoParticleSendLengths[proc];
         }
     }
 
@@ -1260,10 +1285,6 @@ real Miluphpc::parallel_gravity() {
 
     Logger(INFO) << "temporary numParticles: " << numParticlesLocal + particleTotalReceiveLength;
 
-    if (numParticlesLocal + particleTotalReceiveLength != 2000) {
-        //MPI_Finalize();
-        //exit(1);
-    }
     mpi::messageLengths(subDomainKeyTreeHandler->h_subDomainKeyTree, pseudoParticleSendLengths, pseudoParticleReceiveLengths);
 
     profiler.vector2file(ProfilerIds::ReceiveLengths::gravityParticles, particleReceiveLengths);
@@ -1741,11 +1762,13 @@ real Miluphpc::parallel_gravity() {
 
     Logger(DEBUG) << "repairing tree...";
     // ---------------------------------------------------------
-    SubDomainKeyTreeNS::Kernel::Launch::repairTree(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
+    time = SubDomainKeyTreeNS::Kernel::Launch::repairTree(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
                                                    particleHandler->d_particles, domainListHandler->d_domainList,
                                                    lowestDomainListHandler->d_domainList,
                                                    numParticles, numNodes, curveType);
     // ---------------------------------------------------------
+
+    profiler.value2file(ProfilerIds::Time::Gravity::repairTree);
 
     //TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, treeIndex, treeIndex + pseudoParticleTotalReceiveLength);
     //TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal, numParticlesLocal + particleTotalReceiveLength);
@@ -1810,26 +1833,25 @@ real Miluphpc::parallel_sph() {
 
     // DETERMINE search radius
     // [1] either: use max(sml):
-    /*const unsigned int blockSizeReduction = 256;
-    real *d_searchRadii;
-    cuda::malloc(d_searchRadii, blockSizeReduction);
-    cuda::set(d_searchRadii, (real)0., blockSizeReduction);
-    time += CudaUtils::Kernel::Launch::reduceBlockwise<real, blockSizeReduction>(particleHandler->d_sml, d_searchRadii,
-                                                                                 numParticlesLocal);
-    real *d_intermediateResult;
-    cuda::malloc(d_intermediateResult, 1);
-    cuda::set(d_intermediateResult, (real)0., 1);
-    time += CudaUtils::Kernel::Launch::blockReduction<real, blockSizeReduction>(d_searchRadii, d_intermediateResult);
-    cuda::copy(&h_searchRadius, d_intermediateResult, 1, To::host);
-    h_searchRadius /= subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses;
-    all_reduce(comm, boost::mpi::inplace_t<real*>(&h_searchRadius), 1, std::plus<real>());
-    cuda::free(d_searchRadii);
-    cuda::free(d_intermediateResult);*/
+    //const unsigned int blockSizeReduction = 256;
+    //real *d_searchRadii;
+    //cuda::malloc(d_searchRadii, blockSizeReduction);
+    //cuda::set(d_searchRadii, (real)0., blockSizeReduction);
+    //time += CudaUtils::Kernel::Launch::reduceBlockwise<real, blockSizeReduction>(particleHandler->d_sml, d_searchRadii,
+    //                                                                             numParticlesLocal);
+    //real *d_intermediateResult;
+    //cuda::malloc(d_intermediateResult, 1);
+    //cuda::set(d_intermediateResult, (real)0., 1);
+    //time += CudaUtils::Kernel::Launch::blockReduction<real, blockSizeReduction>(d_searchRadii, d_intermediateResult);
+    //cuda::copy(&h_searchRadius, d_intermediateResult, 1, To::host);
+    //h_searchRadius /= subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses;
+    //all_reduce(comm, boost::mpi::inplace_t<real*>(&h_searchRadius), 1, std::plus<real>());
+    //cuda::free(d_searchRadii);
+    //cuda::free(d_intermediateResult);
 
     // [2] or: calculate search radii as sml - min(distance to other process) for all particles
     real *d_intermediateResult;
     cuda::malloc(d_intermediateResult, 1);
-    // testing
     real *d_potentialSearchRadii;
     cuda::malloc(d_potentialSearchRadii, numParticlesLocal);
     // ---------------------------------------------------------
@@ -1847,7 +1869,6 @@ real Miluphpc::parallel_sph() {
     h_searchRadius *= 1.; // *= 2.;
 
     cuda::free(d_potentialSearchRadii);
-    // end:testing
 
     //h_searchRadius = HelperNS::reduceAndGlobalize(particleHandler->d_sml, d_intermediateResult,
     //                                              numParticlesLocal, Reduction::max);
@@ -2202,6 +2223,11 @@ real Miluphpc::parallel_sph() {
     totalTime += time;
     Logger(TIME) << "sph: fixedRadiusNN: " << time << " ms";
 
+    // TODO: investigate presorting/cache efficiency for:
+    //  * calculateDensity
+    //  * calculateSoundSpeed
+    //  * calculatePressure
+    //  * internalForces
 
     Logger(DEBUG) << "calculate density";
     // ---------------------------------------------------------
@@ -2229,9 +2255,7 @@ real Miluphpc::parallel_sph() {
 
     timer.reset();
     //Timer timerTemp;
-    // TODO: update rho, cs, p, sml
     // updating necessary particle entries
-
 
     // not really necessary but beneficial for timing
     comm.barrier();
@@ -2239,34 +2263,26 @@ real Miluphpc::parallel_sph() {
     // sml-entry particle exchange
     CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_sml, d_collectedEntries,
                                              particleTotalSendLength);
-    //timerTemp.reset();
     sendParticles(d_collectedEntries, &particleHandler->d_sml[numParticlesLocal], particleSendLengths,
                   particleReceiveLengths);
-    //Logger(TIME) << "sph: resending rho: " << timerTemp.elapsed();
 
     // pressure-entry particle exchange
     CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_p, d_collectedEntries,
                                              particleTotalSendLength);
-    //timerTemp.reset();
     sendParticles(d_collectedEntries, &particleHandler->d_p[numParticlesLocal], particleSendLengths,
                   particleReceiveLengths);
-    //Logger(TIME) << "sph: resending sml: " << timerTemp.elapsed();
+
     // rho-entry particle exchange
     CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_rho, d_collectedEntries,
                                                                       particleTotalSendLength);
-
-    //timerTemp.reset();
     sendParticles(d_collectedEntries, &particleHandler->d_rho[numParticlesLocal], particleSendLengths,
                   particleReceiveLengths);
-    //Logger(TIME) << "sph: resending pressure: " << timerTemp.elapsed();
 
     // cs-entry particle exchange
     CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_cs, d_collectedEntries,
                                              particleTotalSendLength);
-    //timerTemp.reset();
     sendParticles(d_collectedEntries, &particleHandler->d_cs[numParticlesLocal], particleSendLengths,
                   particleReceiveLengths);
-    //Logger(TIME) << "sph: resending soundspeed: " << timerTemp.elapsed();
     // end: updating necessary particle entries
 
 
@@ -2283,7 +2299,6 @@ real Miluphpc::parallel_sph() {
     Logger(TIME) << "sph: internalForces: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::SPH::internalForces, time);
 
-    // TODO: repair tree necessary?
     SubDomainKeyTreeNS::Kernel::Launch::repairTree(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
                                                    particleHandler->d_particles, domainListHandler->d_domainList,
                                                    lowestDomainListHandler->d_domainList,

@@ -46,6 +46,7 @@ namespace ProfilerIds {
         const char *const pseudoParticle  { "/time/pseudoParticle"};
         const char *const gravity         { "/time/gravity" };
         const char *const sph             { "/time/sph" };
+        const char *const integrate       { "/time/integrate" };
         const char *const IO              { "/time/IO" };
 
         namespace Reset {
@@ -119,6 +120,8 @@ public:
     void const disableWrite() { disabled = true; }
     void const enableWrite() { disabled = false; }
 
+    int currentMaxLength = 0;
+
     /*void createTimeDataSet(const std::string& path, int steps);
     void time(const std::string &path);
     void timePause(const std::string &path);
@@ -134,20 +137,21 @@ public:
         dataSets[path] = h5file.createDataSet<T>(path, HighFive::DataSpace({std::size_t(steps), std::size_t(numProcs)},
                                                                         {maxSteps, std::size_t(numProcs)}), props);
         totalSteps[path] = steps;
+        currentSteps[path] = 0;
     }
 
     template<typename T>
     void value2file(const std::string& path, T value) {
 
         if (!disabled) {
-            if (step >= totalSteps[path]) {
+            if (currentSteps[path] >= totalSteps[path]) {
                 totalSteps[path] += 1;
                 //Logger(INFO) << "resizing: " << totalSteps[path];
                 dataSets[path].resize({std::size_t(totalSteps[path]), std::size_t(numProcs)});
             }
-            dataSets[path].select({std::size_t(step), std::size_t(myRank)}, {1, 1}).write(value);
+            dataSets[path].select({std::size_t(currentSteps[path]), std::size_t(myRank)}, {1, 1}).write(value);
         }
-
+        currentSteps[path] += 1;
     }
 
     // track vector values
@@ -161,19 +165,21 @@ public:
                                                                            {maxSteps, std::size_t(numProcs), size}),
                                                  props);
         vectorSizes[path] = size;
+        currentSteps[path] = 0;
     }
 
     template<typename T>
     void vector2file(const std::string& path, std::vector<T> data){
         if (!disabled) {
-            if (step >= totalSteps[path]) {
+            if (currentSteps[path] >= totalSteps[path]) {
                 totalSteps[path] += 1;
                 //Logger(INFO) << "resizing: " << totalSteps[path];
                 dataSets[path].resize({std::size_t(totalSteps[path]), std::size_t(numProcs), vectorSizes[path]});
             }
-            dataSets[path].select({std::size_t(step), std::size_t(myRank), 0},
+            dataSets[path].select({std::size_t(currentSteps[path]), std::size_t(myRank), 0},
                                              {1, 1, vectorSizes[path]}).write(data);
         }
+        currentSteps[path] += 1;
     }
 
     template<typename T>
@@ -202,6 +208,7 @@ private:
     std::unordered_map<std::string, double> timeStart;
     std::unordered_map<std::string, double> timeElapsed;
 
+    std::unordered_map<std::string, int> currentSteps;
     std::unordered_map<std::string, int> totalSteps;
     // vector sizes
     std::unordered_map<std::string, std::size_t> vectorSizes;

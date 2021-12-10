@@ -27,7 +27,7 @@ void ExplicitEuler::integrate(int step) {
 
     while (*simulationTimeHandler->h_currentTime < *simulationTimeHandler->h_subEndTime) {
 
-        profiler.setStep(subStep);
+        //profiler.setStep(subStep);
         subStep++;
 
         Logger(INFO) << "ExplicitEuler::integrate while...";
@@ -64,8 +64,10 @@ void ExplicitEuler::integrate(int step) {
         profiler.value2file(ProfilerIds::Time::rhs, time);
         profiler.value2file(ProfilerIds::Time::rhsElapsed, timeElapsed);
 
-        ExplicitEulerNS::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal,
+        time = ExplicitEulerNS::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal,
                                                 *simulationTimeHandler->h_dt); //(real) simulationParameters.timestep);
+
+        profiler.value2file(ProfilerIds::Time::integrate, time);
 
         //Logger(INFO) << "timestep: " << (real) simulationParameters.timestep;
 
@@ -91,6 +93,7 @@ void ExplicitEuler::integrate(int step) {
 
         profiler.value2file(ProfilerIds::numParticles, sumParticles);
         profiler.value2file(ProfilerIds::numParticlesLocal, numParticlesLocal);
+
     }
 
     //Logger(INFO) << "checking for nans after update()...";
