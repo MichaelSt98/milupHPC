@@ -118,6 +118,8 @@ namespace Constants {
 }
 
 typedef struct SimulationParameters {
+    std::string directory;
+    std::string logDirectory;
     int verbosity;
     bool timeKernels;
     int numOutputFiles;
@@ -151,6 +153,7 @@ typedef struct SimulationParameters {
     bool calculateEnergy;
     bool calculateCenterOfMass;
     real particleMemoryContingent;
+    int domainListSize;
 } SimulationParameters;
 
 struct To
