@@ -74,7 +74,7 @@ void PredictorCorrectorEuler::integrate(int step) {
         timer.reset();
         Logger(INFO) << "rhs::loadBalancing()";
         if (simulationParameters.loadBalancing && step != 0 && step % simulationParameters.loadBalancingInterval == 0) {
-            dynamicLoadBalancing();
+            dynamicLoadBalancing(simulationParameters.loadBalancingBins);
         }
         timeElapsed = timer.elapsed();
         profiler.value2file(ProfilerIds::Time::loadBalancing, timeElapsed);

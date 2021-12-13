@@ -247,10 +247,12 @@ void Miluphpc::prepareSimulation() {
                                                numParticlesLocal, 256, false);
 
 #if DEBUGGING
+#if DIM == 3
     treeHandler->copy(To::host);
     Logger(DEBUG) << "x: " << std::abs(*treeHandler->h_maxX) << ", " << std::abs(*treeHandler->h_minX);
     Logger(DEBUG) << "y: " << std::abs(*treeHandler->h_maxY) << ", " << std::abs(*treeHandler->h_minY);
     Logger(DEBUG) << "z: " << std::abs(*treeHandler->h_maxZ) << ", " << std::abs(*treeHandler->h_minZ);
+#endif
 #endif
 
     treeHandler->globalizeBoundingBox(Execution::device);
@@ -819,10 +821,6 @@ real Miluphpc::parallel_tree() {
     real time;
     real totalTime = 0.;
 
-    //TODO: remove
-    //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = (4UL << 60);
-    //subDomainKeyTreeHandler->copy(To::device);
-
     // START: creating domain list
     Logger(DEBUG) << "building domain list ...";
     // ---------------------------------------------------------
@@ -857,9 +855,6 @@ real Miluphpc::parallel_tree() {
     Logger(TIME) << "buildTree: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::Tree::tree, time);
 
-    //TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles,
-    //                             numParticlesLocal, numParticles);
-
     integer treeIndex;
     cuda::copy(&treeIndex, treeHandler->d_index, 1, To::host);
 
@@ -883,10 +878,6 @@ real Miluphpc::parallel_tree() {
                                                                domainListHandler->d_domainList, numParticlesLocal,
                                                                numNodes);
 
-    //TODO: remove
-    //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = 0UL;
-    //subDomainKeyTreeHandler->copy(To::device);
-
     time = 0;
     // TODO: serial version (above) working for one process, "parallel" version not working for one process, thus
     //  if statement introduced
@@ -908,9 +899,6 @@ real Miluphpc::parallel_tree() {
     cuda::copy(&domainListCounterAfterwards, domainListHandler->d_domainListCounter, 1, To::host);
     Logger(DEBUG) << "domain list counter afterwards : " << domainListCounterAfterwards;
 #endif
-
-    //TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles,
-    //                             numParticlesLocal, numParticles);
 
     cuda::set(domainListHandler->d_domainListCounter, 0, 1);
     // END: tree construction (including common coarse tree)
@@ -958,8 +946,6 @@ real Miluphpc::parallel_pseudoParticles() {
                                                  lowestDomainListHandler->d_domainList);
     // ---------------------------------------------------------
 
-    //DomainListNS::Kernel::Launch::info(particleHandler->d_particles, domainListHandler->d_domainList);
-
     // old version
     //time += SubDomainKeyTreeNS::Kernel::Launch::compLocalPseudoParticles(treeHandler->d_tree, particleHandler->d_particles,
     //                                                          domainListHandler->d_domainList, numParticles);
@@ -979,7 +965,6 @@ real Miluphpc::parallel_pseudoParticles() {
 
     //TODO: current approach reasonable?
     // or template functions and explicitly hand over buffer(s) (and not instance of buffer class)
-
 
     // x ----------------------------------------------------------------------------------------------
 
@@ -1507,7 +1492,6 @@ real Miluphpc::parallel_gravity() {
     //    debugOffset += particleReceiveLengths[proc];
     //}
 
-
     //#if DEBUGGING
     //gpuErrorcheck(cudaMemset(buffer->d_integerVal, 0, sizeof(integer)));
     //CudaUtils::Kernel::Launch::findDuplicateEntries(&particleHandler->d_x[treeHandler->h_toDeleteLeaf[0]],
@@ -1560,9 +1544,6 @@ real Miluphpc::parallel_gravity() {
         // ---------------------------------------------------------
     }
 
-
-    //Logger(INFO) << "toDeleteNode: " << treeHandler->h_toDeleteNode[0] << ", " << treeHandler->h_toDeleteNode[1];
-
     totalTime += time;
     Logger(TIME) << "parallel_gravity: inserting received pseudo-particles: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::Gravity::insertReceivedPseudoParticles, time);
@@ -1586,7 +1567,6 @@ real Miluphpc::parallel_gravity() {
     time = 0;
 
     //DomainListNS::Kernel::Launch::info(particleHandler->d_particles, domainListHandler->d_domainList);
-
     //TreeNS::Kernel::Launch::testTree(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal, numParticles);
 
     // SELECT compute forces version:
@@ -1768,7 +1748,7 @@ real Miluphpc::parallel_gravity() {
                                                    numParticles, numNodes, curveType);
     // ---------------------------------------------------------
 
-    profiler.value2file(ProfilerIds::Time::Gravity::repairTree);
+    profiler.value2file(ProfilerIds::Time::Gravity::repairTree, time);
 
     //TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, treeIndex, treeIndex + pseudoParticleTotalReceiveLength);
     //TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal, numParticlesLocal + particleTotalReceiveLength);
@@ -1865,7 +1845,6 @@ real Miluphpc::parallel_sph() {
     h_searchRadius = HelperNS::reduceAndGlobalize(d_potentialSearchRadii, d_intermediateResult,
                                                   numParticlesLocal, Reduction::max);
 
-    //TODO: why is this necessary?
     h_searchRadius *= 1.; // *= 2.;
 
     cuda::free(d_potentialSearchRadii);
@@ -2058,7 +2037,7 @@ real Miluphpc::parallel_sph() {
                                              particleTotalSendLength);
     sendParticles(d_collectedEntries, &particleHandler->d_e[numParticlesLocal], particleSendLengths,
                   particleReceiveLengths);
-    //TODO: all entries... (material id, ...) ?
+    // necessary for all entries... (material id, ...) ?
     // should not be necessary to send all entries (since they will be resent)
 
     time = timer.elapsed();
@@ -2164,17 +2143,16 @@ real Miluphpc::parallel_sph() {
 
     //Logger(TRACE) << "diam: " << diam; // << "  (x = " << diam_x << ", y = " << diam_y << ", z = " << diam_z << ")";
 
-    /*
-    real timeSorting = 0.;
-    timeSorting += TreeNS::Kernel::Launch::prepareSorting(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal, numParticles);
 
-    keyType *d_keys;
-    cuda::malloc(d_keys, numParticlesLocal);
-    timeSorting += SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys(subDomainKeyTreeHandler->d_subDomainKeyTree,
-                                                        treeHandler->d_tree, particleHandler->d_particles,
-                                                        d_keys, 21, numParticlesLocal, curveType);
-
-    timeSorting += HelperNS::sortArray(treeHandler->d_start, treeHandler->d_sorted, d_keys, helperHandler->d_keyTypeBuffer, numParticlesLocal);
+    //real timeSorting = 0.;
+    //timeSorting += TreeNS::Kernel::Launch::prepareSorting(treeHandler->d_tree, particleHandler->d_particles, numParticlesLocal, numParticles);
+    //keyType *d_keys;
+    //cuda::malloc(d_keys, numParticlesLocal);
+    //timeSorting += SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys(subDomainKeyTreeHandler->d_subDomainKeyTree,
+    //                                                    treeHandler->d_tree, particleHandler->d_particles,
+    //                                                    d_keys, 21, numParticlesLocal, curveType);
+    //timeSorting += HelperNS::sortArray(treeHandler->d_start, treeHandler->d_sorted, d_keys,
+    //                                   helperHandler->d_keyTypeBuffer, numParticlesLocal);
 
     //int *h_sorted = new int[numParticlesLocal];
     //cuda::copy(h_sorted, treeHandler->d_sorted, numParticlesLocal, To::host);
@@ -2182,10 +2160,8 @@ real Miluphpc::parallel_sph() {
     //    Logger(INFO) << "i: " << i << " sorted: " << h_sorted[i];
     //}
     //delete [] h_sorted;
-    cuda::free(d_keys);
-
-    Logger(INFO) << "sph: presorting: " << timeSorting << " ms";
-    */
+    //cuda::free(d_keys);
+    //Logger(INFO) << "sph: presorting: " << timeSorting << " ms";
 
     int fixedRadiusNN_version = simulationParameters.sphFixedRadiusNNVersion;
     if (fixedRadiusNN_version == 0) {
@@ -2367,7 +2343,7 @@ void Miluphpc::dynamicLoadBalancing(int bins) {
     Logger(INFO) << "aimedParticlesPerProcess = " << aimedParticlesPerProcess;
 //#endif
 
-    updateRangeApproximately(aimedParticlesPerProcess, 20000);
+    updateRangeApproximately(aimedParticlesPerProcess, bins);
 
     delete [] processParticleCounts;
 }
@@ -2392,6 +2368,25 @@ void Miluphpc::updateRangeApproximately(int aimedParticlesPerProcess, int bins) 
                                             bins, numParticlesLocal, curveType);
 
     all_reduce(comm, boost::mpi::inplace_t<integer*>(helperHandler->d_integerBuffer), bins - 1, std::plus<integer>());
+
+    // ------------------------------------------------------------------------------
+    // //if (subDomainKeyTreeHandler->h_subDomainKeyTree->rank == 0) {
+    //    int *histogram = new int[bins];
+    //    cuda::copy(histogram, helperHandler->d_integerBuffer, bins, To::host);
+    //
+    //    HighFive::File h5file(simulationParameters.logDirectory + "histogram.h5",
+    //                          HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate,
+    //                          HighFive::MPIOFileDriver(MPI_COMM_WORLD, MPI_INFO_NULL));
+    //    Logger(INFO) << "histogram bins: " << bins;
+    //    for (int i = 0; i < bins; i++) {
+    //        Logger(INFO) << "histogram[" << i << "]: " << histogram[i];
+    //    }
+    //    HighFive::DataSet h5_ranges = h5file.createDataSet<keyType>("/bins", HighFive::DataSpace(bins));
+    //    h5_ranges.write(histogram);
+    //    // h5file.close();
+    //    delete[] histogram;
+    // //}
+    // ------------------------------------------------------------------------------
 
     SubDomainKeyTreeNS::Kernel::Launch::calculateNewRange(subDomainKeyTreeHandler->d_subDomainKeyTree, helperHandler->d_helper,
                                                bins, aimedParticlesPerProcess, curveType);

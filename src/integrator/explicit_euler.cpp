@@ -43,7 +43,7 @@ void ExplicitEuler::integrate(int step) {
         Logger(INFO) << "rhs::loadBalancing()";
         timer.reset();
         if (simulationParameters.loadBalancing && step != 0 && step % simulationParameters.loadBalancingInterval == 0) {
-            dynamicLoadBalancing();
+            dynamicLoadBalancing(simulationParameters.loadBalancingBins);
         }
         real elapsed = timer.elapsed();
         //totalTime += elapsed;
