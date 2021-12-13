@@ -1,0 +1,1 @@
+ffmpeg -pattern_type glob -i 'output/*.ppm' -vcodec libx264 -s 1024x512 -pix_fmt yuv420p movie.mp4
