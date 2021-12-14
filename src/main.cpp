@@ -229,7 +229,7 @@ int main(int argc, char** argv)
     parameters.domainListSize = POW_DIM * MAX_LEVEL * (numProcesses - 1) + 1;
     Logger(DEBUG) << "domainListSize: " << parameters.domainListSize;
 
-    if (checkFile(parameters.materialConfigFile, false)) {
+    if (!checkFile(parameters.materialConfigFile, false)) {
         parameters.materialConfigFile = std::string{"config/material.cfg"};
         checkFile(parameters.materialConfigFile, true,
                   std::string{"Provided material config file and default (config/material.cfg) not available!"});
