@@ -190,6 +190,7 @@ class PlummerRun(object):
         cmd += " -n {}".format(int(self.settings["numOutput"][index]))
         cmd += " -f {}".format("{}{}".format(self.base_directory, self.initial_distribution[str(int(self.settings["numParticles"][index]))]["path"]))
         cmd += " -C {}".format("{}{}/config.info".format(self.base_directory, self.get_simulation_directory(index)))
+        cmd += " -m {}".format("{}{}/material.cfg".format(self.base_directory, self.get_simulation_directory(index)))
         # print(cmd)
         return cmd
 

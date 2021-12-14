@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     double tmp, tmp1, tmp2, tmp3;
     int draw = FALSE;
     double rmax = RMAX * 1.01;
-    double delta = 3.015e12;
+    double delta = 1.7e13; //3.015e12;
     int n = 0;
     double m = 0;
     double deltam = 0;

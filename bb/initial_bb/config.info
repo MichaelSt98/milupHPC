@@ -1,3 +1,24 @@
+; IO RELATED
+; ------------------------------------------------------
+; output directory (will be created if it does not exist)
+directory _DIRECTORY_
+
+; outputRank (-1 corresponds to all)
+outputRank -1
+
+; omit logType::TIME for standard output
+omitTime false
+
+; create log file (including warnings, errors, ...)
+log false
+
+; create performance log
+performanceLog true
+
+; write particles to be sent to h5 file
+particlesSent2H5 false
+
+
 ; INTEGRATOR RELATED
 ; ------------------------------------------------------
 ; integrator selection
@@ -59,23 +80,6 @@ calculateAngularMomentum false
 calculateEnergy false
 ; calculate center of mass (and save to output file)
 calculateCenterOfMass false
-
-; IO RELATED
-; ------------------------------------------------------
-; outputRank (-1 corresponds to all)
-outputRank -1
-
-; omit logType::TIME for standard output
-omitTime true
-
-; create log file (including warnings, errors, ...)
-log false
-
-; create performance log
-performanceLog true
-
-; write particles to be sent to h5 file
-particlesSent2H5 false
 
 
 ; THESE SHOULD PROBABLY NOT EXIST IN A PRODUCTION VERSION
