@@ -257,6 +257,7 @@ namespace PredictorCorrectorEulerNS {
 #else
                 predictor->sml[i] = particles->sml[i];
 #endif
+                predictor->cs[i] = particles->cs[i];
             }
 
         }
@@ -382,6 +383,10 @@ namespace PredictorCorrectorEulerNS {
                 sml = particles->sml[i];
                 temp = cuda::math::sqrt(sml / cuda::math::sqrt(temp));
                 forces = cuda::math::min(forces, temp);
+                //if (forces == 0.) {
+                //    printf("forces: %e, sml: %e, temp: %e ax = %e, g_ax = %e (noi: %i)\n", forces, sml, temp, particles->ax[i],
+                //           particles->g_ax[i], particles->noi[i]);
+                //}
                 temp = sml / particles->cs[i];
                 courant = cuda::math::min(courant, temp);
 
@@ -414,11 +419,11 @@ namespace PredictorCorrectorEulerNS {
                 }
 #endif
 #if INTEGRATE_ENERGY
-                if (particles->dedt[i] != 0 && hasEnergy) {
+                //if (particles->dedt[i] != 0 && hasEnergy) {
                     //TODO: define emin_d
                     //temp = SAFETY_FIRST * (cuda::math::abs(particles->e[i])+emin_d)/cuda::math::abs(particles->dedt[i]);
-                    dte = cuda::math::min(temp, dte);
-                }
+                    //dte = cuda::math::min(temp, dte);
+                //}
 #endif
 
             }
@@ -478,9 +483,11 @@ namespace PredictorCorrectorEulerNS {
                     }
 #if INTEGRATE_ENERGY
                     *simulationTime->dt = cuda::math::min(*simulationTime->dt, dte);
+                    //printf("dte: %e\n", dte);
 #endif
 #if INTEGRATE_DENSITY
                     *simulationTime->dt = cuda::math::min(*simulationTime->dt, dtrho);
+                    //printf("dtrho: %e\n", dtrho);
 #endif
 
                     *simulationTime->dt = cuda::math::min(*simulationTime->dt, dtartvisc);
@@ -490,10 +497,11 @@ namespace PredictorCorrectorEulerNS {
                     if (*simulationTime->dt > *simulationTime->dt_max) {
                         *simulationTime->dt = *simulationTime->dt_max;
                     }
-                    //if (*simulationTime->dt < 5.e8) {
-                    //    *simulationTime->dt = 5.e8;
+                    //if (*simulationTime->dt < 1.e8) {
+                    //    *simulationTime->dt = 1.e8;
                     //}
                     //printf("max    : dt = %e\n", *simulationTime->dt_max);
+                    //printf("dt: %e\n", *simulationTime->dt);
 
                     //printf("Time Step Information: dt(v and x): %.17e dtS: %.17e dte: %.17e dtrho: %.17e dtdamage: %.17e dtalpha: %.17e dtalpha_epspor: %.17e dtepsilon_v: %.17e\n", dtx, dtS, dte, dtrho, dtdamage, dtalpha, dtalpha_epspor, dtepsilon_v);
                     //printf("time: %.17e timestep set to %.17e, integrating until %.17e \n", currentTimeD, dt, endTimeD);

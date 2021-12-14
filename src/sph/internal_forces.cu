@@ -185,6 +185,10 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             // the interaction partner
             j = interactions[i * MAX_NUM_INTERACTIONS + k];
 
+            if (i == j) {
+                cudaTerminate("i = %i == j = %i\n", i, j);
+            }
+
             matIdj = particles->materialId[j];
 
             #pragma unroll
@@ -290,9 +294,9 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             // artificial viscosity force only if v_ij * r_ij < 0
             if (vr < 0) {
                 csbar = 0.5*(particles->cs[i] + particles->cs[j]);
-                //if (std::isnan(csbar)) {
-                //    printf("csbar = %e, cs[%i] = %e, cs[%i] = %e\n", csbar, i, particles->cs[i], j, particles->cs[j]);
-                //}
+                if (std::isnan(csbar)) {
+                    printf("csbar = %e, cs[%i] = %e, cs[%i] = %e\n", csbar, i, particles->cs[i], j, particles->cs[j]);
+                }
                 smooth = 0.5*(sml1 + particles->sml[j]);
 
                 const real eps_artvisc = 1e-2;
@@ -312,8 +316,9 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
                 mu *= (fi+fj)/2.;
 # endif
                 pij = (beta*mu - alpha*csbar) * mu/rhobar;
-                //if (std::isnan(pij)) {
-                //    printf("pij = (%e * %e - %e * %e) * (%e/%e)\n", beta, mu, alpha, csbar, mu, rhobar);
+                //if (std::isnan(pij) || std::isinf(pij)) {
+                //    cudaTerminate("pij = (%e * %e - %e * %e) * (%e/%e), cs[i] = %e, cs[j] = %e\n", beta, mu, alpha, csbar, mu, rhobar,
+                //                  particles->cs[i], particles->cs[j]);
                 //}
             }
 
@@ -366,6 +371,10 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             }
 #endif // SPH_EQU_VERSION
 
+            //if (std::isnan(accelsj[0])) {
+            //    cudaTerminate("accelsj[0] = %e\n", accelsj[0]);
+            //}
+
 #if NAVIER_STOKES
             #pragma unroll
             for (d = 0; d < DIM; d++) {
@@ -380,7 +389,10 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             accels[2] += particles->mass[j]*(-pij)*dWdx[2];
 #endif
 #endif
-
+            //if (std::isnan(accels[0])) {
+            //    cudaTerminate("accels[0] = %e, mass = %e, pij = %e, dWdx[0] = %e\n", accels[0],
+            //                  particles->mass[j], pij, dWdx[0]);
+            //}
             drhodt += particles->rho[i]/particles->rho[j] * particles->mass[j] * vvnablaW;
 
 #if INTEGRATE_SML
@@ -433,6 +445,10 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 #if DIM > 2
         particles->az[i] = az;
 #endif
+
+        //if (std::isnan(ax)) {
+        //    cudaTerminate("ax[%i] = %e, density = %e\n", i, ax, particles->rho[i]);
+        //}
 
         particles->drhodt[i] = drhodt;
 

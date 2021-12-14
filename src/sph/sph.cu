@@ -832,7 +832,6 @@ namespace SPH {
 #endif
                                     htmpj = particles->sml[child];
 
-                                    //TODO: include d < htmpj*htmpj
                                     if (d < htmp*htmp && d < htmpj*htmpj) {
                                         numberOfInteractions++;
                                     }
@@ -927,7 +926,7 @@ namespace SPH {
                     }
 
                 }
-                if (numberOfInteractions > MAX_NUM_INTERACTIONS) {
+                if (numberOfInteractions > MAX_NUM_INTERACTIONS || numberOfInteractions == 0) {
                     printf("+++ particle: %d it: %d htmp: %e htmpold: %e wanted: %d current: %d mId: %d uid: %i (%e, %e, %e) n = %i\n",
                            i, nit,
                            htmp, htmpold, materials[particles->materialId[i]].interactions, numberOfInteractions,

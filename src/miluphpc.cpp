@@ -235,6 +235,10 @@ void Miluphpc::prepareSimulation() {
     Logger(DEBUG) << "Initialize/Read particle distribution ...";
     distributionFromFile(simulationParameters.inputFile);
 
+#if SPH_SIM
+    SPH::Kernel::Launch::initializeSoundSpeed(particleHandler->d_particles, materialHandler->d_materials, numParticlesLocal);
+#endif
+
     particleHandler->copyDistribution(To::device, true, true);
     particleHandler->copySPH(To::device);
 
@@ -266,10 +270,6 @@ void Miluphpc::prepareSimulation() {
     }
 
     subDomainKeyTreeHandler->copy(To::device);
-
-#if SPH_SIM
-    SPH::Kernel::Launch::initializeSoundSpeed(particleHandler->d_particles, materialHandler->d_materials, numParticlesLocal);
-#endif
 
     boost::mpi::communicator comm;
     sumParticles = numParticlesLocal;
