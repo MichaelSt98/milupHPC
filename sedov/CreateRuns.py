@@ -197,7 +197,26 @@ class PlummerRun(object):
         file_content += "yes | ./H5Renderer/createMP4From {} &> /dev/null".format(renderer_directory)
         file_content += "\n"
         file_content += "\n"
-        # TODO: ./PlotSedov ...
+
+        # min max mean ...
+        file_content += "./postprocessing/GetMinMaxMean.py -i {}{}/ -o {}{}/".format(self.base_directory, self.get_simulation_directory(index),
+                                                                                     self.base_directory, self.get_simulation_directory(index))
+        file_content += "\n"
+        file_content += "./postprocessing/PlotMinMaxMean.py -i {}{}/min_max_mean.csv -o {}{}/ -a".format(self.base_directory,
+                                                                                                         self.get_simulation_directory(index),
+                                                                                                         self.base_directory,
+                                                                                                         self.get_simulation_directory(index))
+
+        file_content += "\n"
+        file_content += "\n"
+
+        # find sedov/sedov_N31_sfc1F_np2/ -type f -name '*.h5' -print0 | parallel -0 -j8 ./postprocessing/PlotSedov.py -i {} -o sedov/sedov_N31_sfc1F_np2/ -a -p 2 \;
+        file_content += "find {}{}/ -type f -name 'ts*.h5' -print0 | parallel -0 -j 1 ./postprocessing/PlotSedov.py -i {{}} -o {}{}/ -a -p 0 \\;".format(self.base_directory, self.get_simulation_directory(index),
+                                                                                                                                                       self.base_directory, self.get_simulation_directory(index))
+        file_content += "\n"
+        # ffmpeg -r 24 -i sedov/sedov_N31_sfc1F_np2/ts%06d.h5.png -vf "pad=ceil(iw/2)*2:ceil(ih/2)*2" -pix_fmt yuv420p -vcodec libx264 -y -an sedov/sedov_N31_sfc1F_np2/evolution.mp4
+        file_content += "ffmpeg -r 24 -i {}{}/ts%06d.h5.png -vf 'pad=ceil(iw/2)*2:ceil(ih/2)*2' -pix_fmt yuv420p -vcodec libx264 -y -an {}{}/evolution.mp4".format(self.base_directory, self.get_simulation_directory(index),
+                                                                                                                                                                   self.base_directory, self.get_simulation_directory(index))
         file_content += "\n"
         file_content += "\n"
         file_content += "./postprocessing/Performance.py -f {}{}/log/performance.h5 -d {}{}/ -s {}".format(self.base_directory, self.get_simulation_directory(index),

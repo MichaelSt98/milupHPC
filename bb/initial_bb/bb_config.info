@@ -6,7 +6,7 @@ integrator 1
 ; initial time step
 timeStep 1e-4
 ; max time step allowed
-maxTimeStep 1e8
+maxTimeStep 1e9
 ; end time for simulation
 ;timeEnd 1.0
 ;timeEnd 5.0e7

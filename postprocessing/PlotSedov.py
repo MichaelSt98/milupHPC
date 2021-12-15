@@ -313,7 +313,7 @@ if __name__ == '__main__':
 
     # font = {'family': 'normal', 'weight': 'bold', 'size': 18}
     # font = {'family': 'normal', 'size': 18}
-    font = {'size': 15}
+    font = {'size': 12}
     matplotlib.rc('font', **font)
 
     if args.plot_type == 0:
@@ -394,6 +394,7 @@ if __name__ == '__main__':
             csv_writer.writerow(pressure_analytical)
             csv_writer.writerow(energy_analytical)
 
+    fig.tight_layout()
     fig.savefig("{}{}.png".format(args.output, os.path.basename(filename)))
 
     if ".h5" in filename and ".csv" not in filename:

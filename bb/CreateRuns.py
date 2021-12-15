@@ -205,11 +205,26 @@ class PlummerRun(object):
         file_content += "\n"
         file_content += "\n"
 
+        # max density evolution
+        file_content += "./postprocessing/PlotBB.py -d {}{}/ -o {}{}/".format(self.base_directory, self.get_simulation_directory(index),
+                                                                             self.base_directory, self.get_simulation_directory(index))
+        file_content += "\n"
+        file_content += "\n"
+
+        # min max mean ...
+        file_content += "./postprocessing/GetMinMaxMean.py -i {}{}/ -o {}{}/".format(self.base_directory, self.get_simulation_directory(index),
+                                                                                     self.base_directory, self.get_simulation_directory(index))
+        file_content += "\n"
+        file_content += "./postprocessing/PlotMinMaxMean.py -i {}{}/min_max_mean.csv -o {}{}/ -a".format(self.base_directory,
+                                                                                                         self.get_simulation_directory(index),
+                                                                                                         self.base_directory,
+                                                                                                         self.get_simulation_directory(index))
+
         file_content += "\n"
         file_content += "\n"
         file_content += "./postprocessing/Performance.py -f {}{}/log/performance.h5 -d {}{}/ -s {}".format(self.base_directory, self.get_simulation_directory(index),
                                                                                                            self.base_directory, self.get_simulation_directory(index),
-                                                                                                           self.simulation_type_postprocessing)
+                                                                                           self.simulation_type_postprocessing)
         file_content += "\n"
 
         with open("{}/postprocess.sh".format(self.get_simulation_directory(index)), 'w') as file:

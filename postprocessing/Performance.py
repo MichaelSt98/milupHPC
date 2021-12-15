@@ -316,7 +316,7 @@ class CommunicationEvaluator(object):
         try:
             self.numProcesses = self.data_dic["gravityParticles"].numProcesses
         except:
-            self.numProcesses = self.data_dic["sph"]
+            self.numProcesses = self.data_dic["sph"].numProcesses
         self.gravity_particle_sums = None
         self.gravity_pseudo_particle_sums = None
         self.gravity_sums = None

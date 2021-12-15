@@ -5,19 +5,14 @@ directory _DIRECTORY_
 
 ; outputRank (-1 corresponds to all)
 outputRank -1
-
 ; omit logType::TIME for standard output
-omitTime false
-
+omitTime true
 ; create log file (including warnings, errors, ...)
-log false
-
+log true
 ; create performance log
 performanceLog true
-
 ; write particles to be sent to h5 file
 particlesSent2H5 false
-
 
 ; INTEGRATOR RELATED
 ; ------------------------------------------------------
@@ -27,14 +22,10 @@ integrator _INTEGRATOR_
 ; initial time step
 timeStep _TIMESTEP_
 ; max time step allowed
-maxTimeStep 1e8
+maxTimeStep 1e9
 ; end time for simulation
-;timeEnd 1.0
-;timeEnd 5.0e7
 timeEnd _TIMEEND_
-;timeEnd 0.5e10;
-;timeEnd 1e12
-;timeEnd 6e-2
+
 
 ; SIMULATION RELATED
 ; ------------------------------------------------------
@@ -45,11 +36,6 @@ sfc _SFC_
 ; theta-criterion for Barnes-Hut (approximative gravity)
 theta _THETA_
 ; smoothing parameter for gravitational forces
-;smoothing 0.025
-;smoothing 3.0e12
-;smoothing 1.6e13
-;smoothing 3.2e13
-;smoothing 2.56e+20
 smoothing _SMOOTHING_
 
 ; SPH smoothing kernel selection
