@@ -240,7 +240,14 @@ void Miluphpc::prepareSimulation() {
 #endif
 
     particleHandler->copyDistribution(To::device, true, true);
-    particleHandler->copySPH(To::device);
+    //TODO: problem: (e.g.) cs should not be copied....
+    //particleHandler->copySPH(To::device);
+    //cuda::copy(particleHandler->h_rho, particleHandler->d_rho, numParticles, To::device);
+    //cuda::copy(particleHandler->h_p, particleHandler->d_p, numParticles, To::device);
+    cuda::copy(particleHandler->h_e, particleHandler->d_e, numParticles, To::device);
+    cuda::copy(particleHandler->h_sml, particleHandler->d_sml, numParticles, To::device);
+    //cuda::copy(particleHandler->h_noi, particleHandler->d_noi, numParticles, To::device);
+    //cuda::copy(particleHandler->h_cs, particleHandler->d_cs, numParticles, To::device);
 
     if (simulationParameters.removeParticles) {
         removeParticles();

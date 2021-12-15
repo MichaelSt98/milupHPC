@@ -212,8 +212,11 @@ namespace PredictorCorrectorEulerNS {
 #else
                 particles->sml[i] = predictor->sml[i];
 #endif
-
-                predictor->reset(i); //TODO: move somewhere else?
+                //if (i % 1000 == 0) {
+                //    printf("i: %i, particles->cs = %e, predictor->cs = %e\n", i, particles->cs[i], predictor->cs[i]);
+                //}
+                // TODO: needed?
+                //predictor->reset(i); //TODO: move somewhere else?
             }
         }
 

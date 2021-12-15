@@ -15,6 +15,9 @@ __global__ void SPH::Kernel::initializeSoundSpeed(Particles *particles, Material
             } break;
             case EquationOfStates::EOS_TYPE_ISOTHERMAL_GAS: {
                 particles->cs[i] = 203.0; // this is pure molecular hydrogen at 10 K
+                //if (i % 1000 == 0) {
+                //    printf("cs[%i]: %e\n", i, particles->cs[i]);
+                //}
 #if !SI_UNITS
                 particles->cs[i] /= 2.998e8; // speed of light
 #endif
