@@ -38,36 +38,43 @@ void H5Renderer::createImages(std::string outDir){
     #pragma omp parallel for
     for (std::vector<fs::path>::const_iterator h5PathIt = h5files.begin(); h5PathIt < h5files.end(); h5PathIt++) {
 
+        // initialize data structures
+        std::vector<unsigned long> ranges;
+        std::vector<unsigned long> k;
+        std::vector<std::vector<double>> x; // container for particle positions
+
         Logger(INFO) << "Reading " << h5PathIt->filename() << " ...";
 
+        Logger(DEBUG) << "    Opening '" << h5PathIt->string() << "' ...";
         // opening file
-        HighFive::File file(h5PathIt->string(), HighFive::File::ReadOnly);
 
-        // reading process ranges
-        HighFive::DataSet rng = file.getDataSet("/ranges");
-        std::vector<unsigned long> ranges;
-        rng.read(ranges);
+        #pragma omp critical
+        {
+            HighFive::File file(h5PathIt->string(), HighFive::File::ReadOnly);
+            Logger(DEBUG) << "    file opened.";
 
-        // reading particle keys
-        HighFive::DataSet key = file.getDataSet("/key");
-        std::vector<unsigned long> k;
-        key.read(k);
 
-        //for (int i = 0; i < ranges.size(); ++i) {
-        //    printf("ranges[%i] = %lu\n", i, ranges[i]);
-        //}
+            // reading process ranges
+            HighFive::DataSet rng = file.getDataSet("/ranges");
 
-        // reading particle positions
-        HighFive::DataSet pos = file.getDataSet("/x");
-        std::vector<std::vector<double>> x; // container for particle positions
-        pos.read(x);
+            rng.read(ranges);
+
+            // reading particle keys
+            HighFive::DataSet key = file.getDataSet("/key");
+
+            key.read(k);
+
+            // reading particle positions
+            HighFive::DataSet pos = file.getDataSet("/x");
+
+            pos.read(x);
+        }
 
         Logger(DEBUG) << "    Storing read data to vector<Particle> container ...";
-        std::vector<Particle> particles{std::vector<Particle>()};
+        std::vector<Particle> particles {};
 
         for (int i = 0; i < x.size(); ++i) {
             particles.push_back(Particle(x[i][0], x[i][1], x[i][2], k[i]));
-            //particles.push_back(Particle(x[i][0], x[i][1], 0., k[i]));
         }
         Logger(DEBUG) << "    ... done.";
 
@@ -85,15 +92,8 @@ void H5Renderer::createImages(std::string outDir){
         for (int i = 0; i < particles.size(); ++i) {
             ColorRGB color = procColor(particles[i].key, ranges);
             particle2PixelXY(particles[i].x, particles[i].y, color, pixelSpace);
-            if (markParticles) {
-                for (int ii = -10; ii < 10; ii++) {
-                    particle2PixelXY(particles[i].x + ii * (systemSize / 100.), particles[i].y, color, pixelSpace);
-                    particle2PixelXY(particles[i].x, particles[i].y + ii * (systemSize / 100.), color, pixelSpace);
-                }
-            }
-	    }
+        }
         Logger(DEBUG) << "    ... done.";
-
 
         Logger(DEBUG) << "    Sorting by y-coordinate  ...";
         std::sort(particles.begin(), particles.end(), Particle::yComp);
@@ -102,15 +102,8 @@ void H5Renderer::createImages(std::string outDir){
         for (int i = 0; i < particles.size(); ++i) {
             ColorRGB color = procColor(particles[i].key, ranges);
             particle2PixelXZ(particles[i].x, particles[i].z, color, pixelSpace);
-            if (markParticles) {
-                for (int ii = -10; ii < 10; ii++) {
-                    particle2PixelXZ(particles[i].x + ii*(systemSize/100.), particles[i].z, color, pixelSpace);
-                    particle2PixelXZ(particles[i].x, particles[i].z + ii*(systemSize/100.), color, pixelSpace);
-                }
-            }
         }
         Logger(DEBUG) << "    ... done.";
-
 
         std::string outFile = outDir + "/" + h5PathIt->stem().string() + ".ppm";
         Logger(INFO) << "... writing to file '" << outFile << "' ...";
@@ -118,6 +111,7 @@ void H5Renderer::createImages(std::string outDir){
         pixelSpace2File(outFile, pixelSpace);
 
         Logger(DEBUG) << "  Deleting pixel space.";
+        delete[] pixelSpace;
 
         Logger(INFO) << "... done. Results written to '" << outFile << "'.";
     }
@@ -131,7 +125,7 @@ ColorRGB H5Renderer::procColor(unsigned long k, const std::vector<unsigned long>
             return COLORS[proc];
         }
     }
-    return ColorRGB(); // black
+    return ColorRGB(); // black or white
 }
 
 int H5Renderer::procNumber(unsigned long k, const std::vector<unsigned long> &ranges){
