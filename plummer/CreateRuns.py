@@ -163,7 +163,10 @@ class Run(object):
     def _create_run_cmd_binac(self, index):
         ...  # mpirun ...
         # -C config_file.info
-        cmd = "mpirun --report-bindings --map-by socket --bind-to core bin/runner"
+        if int(self.settings["numProcs"][index]) == 1:
+            cmd = "mpirun -np 1 bin/runner"
+        else:
+            cmd = "mpirun --report-bindings --map-by socket --bind-to core bin/runner"
         cmd += " -n {}".format(int(self.settings["numOutput"][index]))
         cmd += " -f {}".format("{}{}".format(self.base_directory, self.initial_distribution[str(int(self.settings["numParticles"][index]))]["path"]))
         cmd += " -C {}".format("{}{}/config.info".format(self.base_directory, self.get_simulation_directory(index)))
@@ -183,6 +186,8 @@ class Run(object):
     def _create_post_run(self, index):
         file_content = ""
         renderer_directory = "{}{}/".format(self.base_directory, self.get_simulation_directory(index))
+        file_content += "export OMP_NUM_THREADS=1"
+        file_content += "\n"
         file_content += "./H5Renderer/bin/h5renderer -c H5Renderer/h5renderer.info -i {} -o {} > /dev/null".format(renderer_directory, renderer_directory)
         file_content += "\n"
         file_content += "yes | ./H5Renderer/createMP4From {} &> /dev/null".format(renderer_directory)
@@ -277,7 +282,7 @@ class Run(object):
 
 if __name__ == '__main__':
 
-    filename = "VerificationRuns.csv"
+    filename = "PlummerRuns.csv"
     csv_reader = CSVReader(filename=filename)
 
     run = Run(csv_reader.data, "plummer/", "initial_plummer/submit.sh",

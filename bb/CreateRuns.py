@@ -175,7 +175,10 @@ class Run(object):
     def _create_run_cmd_binac(self, index):
         ...  # mpirun ...
         # -C config_file.info
-        cmd = "mpirun --report-bindings --map-by socket --bind-to core bin/runner"
+        if int(self.settings["numProcs"][index]) == 1:
+            cmd = "mpirun -np 1 bin/runner"
+        else:
+            cmd = "mpirun --report-bindings --map-by socket --bind-to core bin/runner"
         cmd += " -n {}".format(int(self.settings["numOutput"][index]))
         cmd += " -f {}".format("{}{}".format(self.base_directory, self.initial_distribution[str(int(self.settings["numParticles"][index]))]["path"]))
         cmd += " -C {}".format("{}{}/config.info".format(self.base_directory, self.get_simulation_directory(index)))

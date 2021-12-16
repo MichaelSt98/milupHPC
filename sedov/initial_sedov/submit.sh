@@ -13,6 +13,7 @@ module load devel/cuda/10.1
 module load mpi/openmpi/4.1-gnu-8.3
 module load lib/hdf5/1.12.0-openmpi-4.1-gnu-8.3
 module load devel/python/3.7.1
+source ~/milupHPCpython/bin/activate
 
 # Going to working directory
 cd $PBS_O_WORKDIR
