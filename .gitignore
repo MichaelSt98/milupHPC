@@ -15,6 +15,15 @@ docs/*
 doc/html/*
 doc/latex/*
 
+kepler/*
+plummer/*.h5
+plummer/pl_N*/*
+sedov/*.h5
+sedov/sedov_N*/*
+bb/*.h5
+bb/bb_N*/*
+
+
 *.h5
 !examples/*.h5
 *.numbers
