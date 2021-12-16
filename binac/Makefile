@@ -1,4 +1,4 @@
-ompiler/Linker
+#Compiler/Linker
 CXX            := mpic++
 NVCC           := nvcc
 
