@@ -188,10 +188,11 @@ class Run(object):
         file_content += "yes | ./H5Renderer/createMP4From {} &> /dev/null".format(renderer_directory)
         file_content += "\n"
         file_content += "\n"
-        file_content += "./postprocessing/PlotPlummer.py -Q -d {} -o {}".format(self.base_directory,
-                                                                                self.base_directory + self.get_simulation_directory(index) + "/",
+        file_content += "./postprocessing/PlotPlummer.py -Q -d {} -o {}".format(self.base_directory + self.get_simulation_directory(index) + "/",
                                                                                 self.base_directory + self.get_simulation_directory(index) + "/")
 
+        file_content += "\n"
+        file_content += "\n"
         # min max mean ...
         file_content += "./postprocessing/GetMinMaxMean.py -i {}{}/ -o {}{}/".format(self.base_directory, self.get_simulation_directory(index),
                                                                                      self.base_directory, self.get_simulation_directory(index))
