@@ -25,9 +25,9 @@ OBJECTS := $(SOURCES:$(SRCDIR)/%.$(SRCEXT)=$(OBJDIR)/%.$(OBJEXT))
 MAIN := main
 
 # setting general flags
-CXXFLAGS := -std=c++11 -I/opt/bwhpc/common/lib/boost/1.69.0/include -I/opt/bwhpc/common/lib/hdf5/1.12.0-openmpi-4.1-gnu-8.3/include -I$(INCLDIR) -I${HOME}/local/include -I/usr/include/hdf5/serial -fopenmp
+CXXFLAGS := -std=c++11 -I/opt/bwhpc/common/lib/hdf5/1.12.0-openmpi-4.1-gnu-8.3/include -I$(INCLDIR) -I${HOME}/local/include  -fopenmp
 # setting linker flags
-LDFLAGS := -L/opt/bwhpc/common/lib/boost/1.69.0/lib -L/opt/bwhpc/common/lib/hdf5/1.12.0-openmpi-4.1-gnu-8.3/lib -L${HOME}/local/lib -L${HOME}/lib -lboost_system -lboost_filesystem -lhdf5
+LDFLAGS := -L/opt/bwhpc/common/lib/hdf5/1.12.0-openmpi-4.1-gnu-8.3/lib -L${HOME}/local/lib  -lboost_atomic -lboost_system -lboost_filesystem -lhdf5
 
 # get kernel name to be able to run sed correctly on Darwin (MacOS) or Linux kernels
 KERNEL := $(shell uname -s)
