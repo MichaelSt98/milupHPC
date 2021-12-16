@@ -89,7 +89,6 @@ if __name__ == "__main__":
         quantiles = np.array(mass_quantiles)
 
         color = "k"  # "darkgrey"
-
         ax1.plot(time, quantiles[:, 0], label="10%", color=color, linestyle="dotted", linewidth=2.0)
         ax1.plot(time, quantiles[:, 1], label="50%", color=color, linestyle="dashed", linewidth=2.0)
         ax1.plot(time, quantiles[:, 2], label="90%", color=color, linestyle="dashdot", linewidth=2.0)
