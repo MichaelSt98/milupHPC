@@ -7,7 +7,7 @@ directory _DIRECTORY_
 outputRank -1
 
 ; omit logType::TIME for standard output
-omitTime false
+omitTime true
 
 ; create log file (including warnings, errors, ...)
 log false

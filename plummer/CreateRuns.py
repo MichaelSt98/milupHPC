@@ -33,7 +33,7 @@ class CSVReader(object):
 #  os.path.dirname(os.path.abspath(__file__))
 # current working directory
 #  os.path.abspath(os.getcwd())
-class PlummerRun(object):
+class Run(object):
 
     def __init__(self, settings, base_directory, submit_template_binac, submit_template_naboo, config_template):
         self.settings = settings
@@ -279,11 +279,10 @@ if __name__ == '__main__':
     filename = "VerificationRuns.csv"
     csv_reader = CSVReader(filename=filename)
 
-    plummer_run = PlummerRun(csv_reader.data, "plummer/", "initial_plummer/submit.sh",
+    run = Run(csv_reader.data, "plummer/", "initial_plummer/submit.sh",
                              "initial_plummer/submit_naboo.sh", "initial_plummer/config.info")
 
     for i in range(len(csv_reader.data["run"])):
-        plummer_run.create_run(i)
+        run.create_run(i)
 
-    plummer_run.create_run_list("test_runs.txt")
-
+    run.create_run_list("List" + filename.replace(".csv", ".txt"))
