@@ -369,6 +369,85 @@ namespace SubDomainKeyTreeNS {
                             //domainListCounter = atomicAdd(domainList->domainListCounter, 1);
                             domainList->domainListIndices[index + offset] = childIndex; //cell;
                             particles->nodeType[childIndex] = 1;
+
+                            min_x = *tree->minX;
+                            max_x = *tree->maxX;
+#if DIM > 1
+                            min_y = *tree->minY;
+                            max_y = *tree->maxY;
+#if DIM == 3
+                            min_z = *tree->minZ;
+                            max_z = *tree->maxZ;
+#endif
+#endif
+
+                            // new
+                            int k;
+                            for (k = 0; k < j; k++) {
+
+                                currentChild = path[k];
+                                //printf("[rank %i] currentChild: %i\n", subDomainKeyTree->rank, currentChild);
+                                if (currentChild & 1) {
+                                    max_x = 0.5 * (min_x + max_x);
+                                    //path -= 1;
+                                } else {
+                                    min_x = 0.5 * (min_x + max_x);
+                                }
+#if DIM > 1
+                                if ((currentChild >> 1) & 1) {
+                                    //if (path % 2 == 0 && path % 4 != 0) {
+                                    max_y = 0.5 * (min_y + max_y);
+                                    //path -= 2;
+                                } else {
+                                    min_y = 0.5 * (min_y + max_y);
+                                }
+#if DIM == 3
+                                if ((currentChild >> 2) & 1) {
+                                    //if (path == 4) {
+                                    max_z = 0.5 * (min_z + max_z);
+                                    //path -= 4;
+                                } else {
+                                    min_z = 0.5 * (min_z + max_z);
+                                }
+#endif
+#endif
+                                /*
+                                if (currentChild % 2 != 0) {
+                                    max_x = 0.5 * (min_x + max_x);
+                                    currentChild -= 1;
+                                } else {
+                                    min_x = 0.5 * (min_x + max_x);
+                                }
+#if DIM > 1
+                                if (currentChild % 2 == 0 && currentChild % 4 != 0) {
+                                    max_y = 0.5 * (min_y + max_y);
+                                    currentChild -= 2;
+                                } else {
+                                    min_y = 0.5 * (min_y + max_y);
+                                }
+#if DIM == 3
+                                if (currentChild == 4) {
+                                    max_z = 0.5 * (min_z + max_z);
+                                    currentChild -= 4;
+                                } else {
+                                    min_z = 0.5 * (min_z + max_z);
+                                }
+#endif
+#endif
+                                */
+                            }
+
+                            //particles->x[cell] = particles->x[childIndex];
+                            particles->x[cell] = 0.5 * (min_x + max_x);
+#if DIM > 1
+                            //particles->y[cell] = particles->y[childIndex];
+                            particles->y[cell] = 0.5 * (min_y + max_y);
+#if DIM == 3
+                            //particles->z[cell] = particles->z[childIndex];
+                            particles->z[cell] = 0.5 * (min_z + max_z);
+#endif
+#endif
+                            // end: new
 #if DEBUGGING
 #if DIM == 3
                             printf("adding node index %i  cell = %i (childPath = %i,  j = %i)! x = (%e, %e, %e) level = %i\n",
@@ -429,6 +508,37 @@ namespace SubDomainKeyTreeNS {
 #endif
 #endif
                             }
+
+                            //particles->x[cell] = particles->x[childIndex];
+                            particles->x[cell] = 0.5 * (min_x + max_x);
+#if DIM > 1
+                            //particles->y[cell] = particles->y[childIndex];
+                            particles->y[cell] = 0.5 * (min_y + max_y);
+#if DIM == 3
+                            //particles->z[cell] = particles->z[childIndex];
+                            particles->z[cell] = 0.5 * (min_z + max_z);
+#endif
+#endif
+
+                            /*
+                            //particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
+                            particles->x[cell] = particles->x[childIndex];
+#if DIM > 1
+                            //particles->y[cell] += particles->weightedEntry(childIndex, Entry::y);
+                            particles->y[cell] = particles->y[childIndex];
+#if DIM == 3
+                            //particles->z[cell] += particles->weightedEntry(childIndex, Entry::z);
+                            particles->z[cell] = particles->z[childIndex];
+#endif
+#endif
+                            //particles->mass[cell] += particles->mass[childIndex];
+                            particles->mass[cell] = particles->mass[childIndex];
+                            */
+
+                            particles->level[cell] = particles->level[childIndex];
+                            //particles->level[childIndex] += 1;
+                            atomicAdd(&particles->level[childIndex], 1);
+
                             // insert old/original particle
                             childPath = 0; //(int) (domainListKeys[i] >> (21 * 3 - 3 * ((j+1) + 1)) & (int)7); //0; //currentChild; //0;
                             if (particles->x[childIndex] < 0.5 * (min_x + max_x)) {
@@ -452,22 +562,7 @@ namespace SubDomainKeyTreeNS {
 #endif
 
 
-                            //particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
-                            particles->x[cell] = particles->x[childIndex];
-#if DIM > 1
-                            //particles->y[cell] += particles->weightedEntry(childIndex, Entry::y);
-                            particles->y[cell] = particles->y[childIndex];
-#if DIM == 3
-                            //particles->z[cell] += particles->weightedEntry(childIndex, Entry::z);
-                            particles->z[cell] = particles->z[childIndex];
-#endif
-#endif
-                            //particles->mass[cell] += particles->mass[childIndex];
-                            particles->mass[cell] = particles->mass[childIndex];
 
-                            particles->level[cell] = particles->level[childIndex];
-                            //particles->level[childIndex] += 1;
-                            atomicAdd(&particles->level[childIndex], 1);
 #if DEBUGGING
 #if DIM == 3
                             printf("adding node in between for index %i, temp = %i  cell = %i (childPath = %i,  j = %i)! x = (%e, %e, %e) level = %i vs %i\n",

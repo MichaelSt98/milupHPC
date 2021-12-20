@@ -383,15 +383,32 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
     Logger(TIME) << "rhs::tree(): " << elapsed << " ms"; //time << " ms";
     profiler.value2file(ProfilerIds::Time::tree, *profilerTime);
 
-    Logger(INFO) << "rhs::pseudoParticles()";
-    timer.reset();
-    // -----------------------------------------------------------------------------------------------------------------
-    time = pseudoParticles();
-    // -----------------------------------------------------------------------------------------------------------------
-    elapsed = timer.elapsed();
-    totalTime += time;
-    Logger(TIME) << "rhs::pseudoParticles(): " << elapsed << " ms"; //time << " ms";
-    profiler.value2file(ProfilerIds::Time::pseudoParticle, *profilerTime);
+#if GRAVITY_SIM
+    if (selfGravity) {
+        Logger(INFO) << "rhs::pseudoParticles()";
+        timer.reset();
+        // -----------------------------------------------------------------------------------------------------------------
+        time = pseudoParticles();
+        // -----------------------------------------------------------------------------------------------------------------
+        elapsed = timer.elapsed();
+        totalTime += time;
+        Logger(TIME) << "rhs::pseudoParticles(): " << elapsed << " ms"; //time << " ms";
+        profiler.value2file(ProfilerIds::Time::pseudoParticle, *profilerTime);
+    }
+    else {
+        // ---------------------------------------------------------
+        DomainListNS::Kernel::Launch::lowestDomainList(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
+                                                       particleHandler->d_particles, domainListHandler->d_domainList,
+                                                       lowestDomainListHandler->d_domainList, numParticles, numNodes);
+        // ---------------------------------------------------------
+    }
+#else
+    // ---------------------------------------------------------
+    DomainListNS::Kernel::Launch::lowestDomainList(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
+                                                   particleHandler->d_particles, domainListHandler->d_domainList,
+                                                   lowestDomainListHandler->d_domainList, numParticles, numNodes);
+    // ---------------------------------------------------------
+#endif
 
 #if GRAVITY_SIM
     if (selfGravity) {
@@ -611,7 +628,8 @@ real Miluphpc::boundingBox() {
 
     //debug
 
-    treeHandler->copy(To::host);
+    /*
+    *treeHandler->copy(To::host);
     *treeHandler->h_minX *= 1.1;
     *treeHandler->h_maxX *= 1.1;
     *treeHandler->h_minY *= 1.1;
@@ -619,6 +637,7 @@ real Miluphpc::boundingBox() {
     *treeHandler->h_minZ *= 1.1;
     *treeHandler->h_maxZ *= 1.1;
     treeHandler->copy(To::device);
+     */
 
     //Logger(INFO) << "x: max = " << *treeHandler->h_maxX << ", min = " << *treeHandler->h_minX;
     //Logger(INFO) << "y: max = " << *treeHandler->h_maxY << ", min = " << *treeHandler->h_minY;
@@ -881,12 +900,13 @@ real Miluphpc::parallel_tree() {
     cuda::set(domainListHandler->d_domainListCounter, 0, 1);
 
     // serial version
-    time = SubDomainKeyTreeNS::Kernel::Launch::buildDomainTree(treeHandler->d_tree, particleHandler->d_particles,
-                                                               domainListHandler->d_domainList, numParticlesLocal,
-                                                               numNodes);
+    //time = SubDomainKeyTreeNS::Kernel::Launch::buildDomainTree(treeHandler->d_tree, particleHandler->d_particles,
+    //                                                           domainListHandler->d_domainList, numParticlesLocal,
+    //                                                           numNodes);
 
     time = 0;
-    // TODO: serial version (above) working for one process, "parallel" version not working for one process, thus
+    // parallel version
+    // serial version (above) working for one process, "parallel" version not working for one process, thus
     //  if statement introduced
     if (subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses > 1) {
         for (int level = 0; level <= MAX_LEVEL; level++) {
@@ -1790,8 +1810,8 @@ real Miluphpc::parallel_sph() {
 
     // ---------------------------------------------------------
     time = SPH::Kernel::Launch::compTheta(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
-                                          particleHandler->d_particles,
-                                          lowestDomainListHandler->d_domainList, curveType);
+                                          particleHandler->d_particles, lowestDomainListHandler->d_domainList,
+                                          curveType);
     // ---------------------------------------------------------
 
     totalTime += time;
@@ -1852,7 +1872,8 @@ real Miluphpc::parallel_sph() {
     h_searchRadius = HelperNS::reduceAndGlobalize(d_potentialSearchRadii, d_intermediateResult,
                                                   numParticlesLocal, Reduction::max);
 
-    h_searchRadius *= 1.; // *= 2.;
+    h_searchRadius *= 2.; // *= 1.;
+    //h_searchRadius = 2 * 0.080001;
 
     cuda::free(d_potentialSearchRadii);
 
@@ -1862,18 +1883,19 @@ real Miluphpc::parallel_sph() {
 
     cuda::free(d_intermediateResult);
 
-    Logger(DEBUG) << "search radius: " << h_searchRadius;
+    Logger(INFO) << "search radius: " << h_searchRadius;
     // end: determine search radius
     timeElapsed = timer.elapsed();
     profiler.value2file(ProfilerIds::Time::SPH::determineSearchRadii, timeElapsed);
 
     time = 0;
+    Logger(DEBUG) << "relevant indices counter: " << relevantIndicesCounter;
     for (int proc=0; proc<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
         if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
             cuda::set(d_markedSendIndices, -1, numParticles); //numParticlesLocal should be sufficient
             for (int relevantIndex = 0; relevantIndex < relevantIndicesCounter; relevantIndex++) {
                 if (h_relevantDomainListProcess[relevantIndex] == proc) {
-                    //Logger(INFO) << "h_relevantDomainListProcess[" << relevantIndex << "] = "
+                    //Logger(TRACE) << "h_relevantDomainListProcess[" << relevantIndex << "] = "
                     //             << h_relevantDomainListProcess[relevantIndex];
                     // ---------------------------------------------------------
                     time += SPH::Kernel::Launch::symbolicForce(subDomainKeyTreeHandler->d_subDomainKeyTree,
@@ -2091,9 +2113,9 @@ real Miluphpc::parallel_sph() {
     profiler.value2file(ProfilerIds::Time::SPH::insertReceivedParticles, time);
 
     time = 0;
-    for (int level=MAX_LEVEL; level>0; --level) {
-        time += SPH::Kernel::Launch::calculateCentersOfMass(treeHandler->d_tree, particleHandler->d_particles, level);
-    }
+    //for (int level=MAX_LEVEL; level>0; --level) {
+    //    time += SPH::Kernel::Launch::calculateCentersOfMass(treeHandler->d_tree, particleHandler->d_particles, level);
+    //}
     Logger(TIME) << "sph: calculate centers of mass: " << time << " ms";
 
     totalTime += time;

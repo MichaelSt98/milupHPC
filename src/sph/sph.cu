@@ -8,6 +8,7 @@
 
 namespace SPH {
 
+    // deprecated
     void exchangeParticleEntry(SubDomainKeyTree *subDomainKeyTree, real *entry, real *toSend, integer *sendLengths,
                                integer *receiveLengths, integer numParticlesLocal) {
 
@@ -1076,13 +1077,24 @@ namespace SPH {
 
                 bodyIndex = lowestDomainList->domainListIndices[index + offset];
                 //calculate key
-                key = tree->getParticleKey(particles, bodyIndex, MAX_LEVEL, curveType);
-
+                //key = tree->getParticleKey(particles, bodyIndex, MAX_LEVEL, curveType);
+                //printf("x = %e, %e, %e\n", particles->x[bodyIndex], particles->y[bodyIndex], particles->y[bodyIndex]);
                 //if domain list node belongs to other process: add to relevant domain list indices
-                proc = subDomainKeyTree->key2proc(key);
+                // TODO: is this the problem?
+                //proc = subDomainKeyTree->key2proc(key);
+                if (curveType == Curve::Type::lebesgue) {
+                    proc = subDomainKeyTree->key2proc(lowestDomainList->domainListKeys[index + offset]);
+                }
+                else {
+                    proc = subDomainKeyTree->key2proc(KeyNS::lebesgue2hilbert(lowestDomainList->domainListKeys[index + offset], MAX_LEVEL, lowestDomainList->domainListLevels[index + offset]));
+                }
+                //printf("[rank %i] sph: proc = %i, bodyIndex = %i\n", subDomainKeyTree->rank, proc, bodyIndex);
                 if (proc != subDomainKeyTree->rank) {
+                    //printf("[rank %i] sph: proc = %i, bodyIndex = %i level = %i (%e, %e, %e)\n", subDomainKeyTree->rank,
+                    //       proc, bodyIndex, lowestDomainList->domainListLevels[index + offset], particles->x[bodyIndex],
+                    //       particles->y[bodyIndex], particles->z[bodyIndex]);
                     domainIndex = atomicAdd(lowestDomainList->domainListCounter, 1);
-                    //printf("sph: domainIndex = %i\n", domainIndex);
+                    //printf("[rank %i] sph: domainIndex = %i\n", subDomainKeyTree->rank, domainIndex);
                     lowestDomainList->relevantDomainListIndices[domainIndex] = bodyIndex;
                     lowestDomainList->relevantDomainListLevels[domainIndex] = lowestDomainList->domainListLevels[index + offset];
                     lowestDomainList->relevantDomainListProcess[domainIndex] = proc;
@@ -1213,12 +1225,15 @@ namespace SPH {
                 d = dx*dx + dy*dy + dz*dz;
 #endif
 
+                //if ((bodyIndex + offset) % 500 == 0) {
+                //    printf("d = %e < (%e * %e = %e) sml = %e\n", d, searchRadius, searchRadius,
+                //           searchRadius * searchRadius, particles->sml[bodyIndex + offset]);
+                //}
                 //if (d < (particles->sml[bodyIndex + offset] * particles->sml[bodyIndex + offset])) {
                 if (d < (searchRadius * searchRadius)) {
                     //printf("d = %f < (%f * %f = %f)\n", d, particles->sml[bodyIndex + offset], particles->sml[bodyIndex + offset],
                     //       particles->sml[bodyIndex + offset] * particles->sml[bodyIndex + offset]);
-                    //printf("d = %e < (%e * %e = %e) sml = %e\n", d, searchRadius, searchRadius,
-                    //       searchRadius * searchRadius, particles->sml[bodyIndex + offset]);
+
                     sendIndices[bodyIndex + offset] = 1;
                 }
                 //else {
@@ -1247,6 +1262,8 @@ namespace SPH {
                 if (sendIndices[bodyIndex + offset] == 1) {
                     particleInsertIndex = atomicAdd(particlesCount, 1);
                     particles2Send[particleInsertIndex] = bodyIndex + offset;
+                    //printf("check: sending: (%e, %e, %e) %e\n", particles->x[bodyIndex + offset], particles->y[bodyIndex + offset],
+                    //       particles->z[bodyIndex + offset], particles->mass[bodyIndex + offset]);
                 }
 
                 __threadfence();
@@ -1255,7 +1272,7 @@ namespace SPH {
 
         }
 
-
+        // deprecated
         __global__ void particles2Send(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                        DomainList *domainList, DomainList *lowestDomainList, integer maxLevel,
                                        integer *toSend, integer *sendCount, integer *alreadyInserted,
@@ -1595,6 +1612,9 @@ namespace SPH {
 
                     newBody = false;
                     level = 0;
+
+                    //printf("check: inserting: (%e, %e, %e) %e\n", particles->x[bodyIndex + offset], particles->y[bodyIndex + offset],
+                    //       particles->z[bodyIndex + offset], particles->mass[bodyIndex + offset]);
 
                     // copy bounding box(es)
                     min_x = *tree->minX;
@@ -2319,10 +2339,13 @@ namespace SPH {
 
                 searchRadius = 0.;
 
-                for (int i=0; i<*lowestDomainList->domainListIndex; i++) {
-                    lowestDomainIndex = lowestDomainList->domainListIndices[i];
-                    key = tree->getParticleKey(particles, lowestDomainIndex, MAX_LEVEL, curveType);
-                    proc = subDomainKeyTree->key2proc(key);
+                //for (int i=0; i<*lowestDomainList->domainListIndex; i++) {
+                for (int i=0; i<*lowestDomainList->domainListCounter; i++) {
+                    //lowestDomainIndex = lowestDomainList->domainListIndices[i];
+                    lowestDomainIndex = lowestDomainList->relevantDomainListIndices[i];
+                    //key = tree->getParticleKey(particles, lowestDomainIndex, MAX_LEVEL, curveType);
+                    //proc = subDomainKeyTree->key2proc(key);
+                    proc = lowestDomainList->relevantDomainListProcess[i];
                     if (proc != subDomainKeyTree->rank) {
                         // determine distance
                         min_x = *tree->minX;
@@ -2443,7 +2466,6 @@ namespace SPH {
                             searchRadius = particles->sml[bodyIndex + offset] - distance;
                             //printf("search: distance %e level = %i\n", distance, lowestDomainList->domainListLevels[i]);
                         }
-
                     }
                 }
 

@@ -261,6 +261,11 @@ namespace PredictorCorrectorEulerNS {
                 predictor->sml[i] = particles->sml[i];
 #endif
                 predictor->cs[i] = particles->cs[i];
+                // TODO: why is this needed?
+                predictor->p[i] = particles->p[i];
+                //predictor->ax[i] = particles->ax[i];
+                //predictor->ay[i] = particles->ay[i];
+                //predictor->az[i] = particles->az[i];
             }
 
         }
