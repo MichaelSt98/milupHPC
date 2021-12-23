@@ -1271,10 +1271,7 @@ namespace SubDomainKeyTreeNS {
 
                 for (integer i=1; i<subDomainKeyTree->numProcesses; i++) {
                     if ((sum + helper->integerBuffer[bodyIndex + offset]) >= (i*n) && sum < (i*n)) {
-#if DEBUGGING
-                        printf("[rank %i] new range: %lu\n", subDomainKeyTree->rank,
-                               helper->keyTypeBuffer[bodyIndex + offset]);
-#endif
+
                         subDomainKeyTree->range[i] = (helper->keyTypeBuffer[bodyIndex + offset] >> (1*DIM)) << (1*DIM);
                     }
                 }

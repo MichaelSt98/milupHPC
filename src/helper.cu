@@ -47,6 +47,22 @@ namespace HelperNS {
 
 namespace HelperNS {
 
+    template <typename A>
+    real sortKeys(A *keysToSort, A *sortedKeys, int n) {
+        void     *d_temp_storage = NULL;
+        size_t   temp_storage_bytes = 0;
+        gpuErrorcheck(cub::DeviceRadixSort::SortKeys(d_temp_storage, temp_storage_bytes, keysToSort, sortedKeys, n));
+        // Allocate temporary storage
+        //Logger(INFO) << "temp storage bytes: " << temp_storage_bytes;
+        cuda::malloc(d_temp_storage, temp_storage_bytes);
+        //cudaMalloc(&d_temp_storage, temp_storage_bytes);
+        // Run sorting operation
+        gpuErrorcheck(cub::DeviceRadixSort::SortKeys(d_temp_storage, temp_storage_bytes, keysToSort, sortedKeys, n));
+        cuda::free(d_temp_storage);
+        return 0.f;
+    }
+    template real sortKeys<keyType>(keyType *keysToSort, keyType *sortedKeys, int n);
+
     template <typename A, typename B>
     real sortArray(A *arrayToSort, A *sortedArray, B *keyIn, B *keyOut, integer n) {
 

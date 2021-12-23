@@ -68,6 +68,9 @@ namespace HelperNS {
         }
     }
 
+    template <typename A>
+    real sortKeys(A *keysToSort, A *sortedKeys, int n);
+
     template <typename A, typename B>
     real sortArray(A *arrayToSort, A *sortedArray, B *keyIn, B *keyOut, integer n);
 

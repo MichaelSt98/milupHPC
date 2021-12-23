@@ -48,6 +48,8 @@
 #include <random>
 #include <fstream>
 
+#include <boost/mpi/collectives/all_gatherv.hpp>
+
 #include <highfive/H5File.hpp>
 #include <highfive/H5DataSpace.hpp>
 #include <highfive/H5DataSet.hpp>
@@ -206,6 +208,8 @@ public:
      * @param bins amount of bins the range will be subdivided
      */
     void updateRangeApproximately(int aimedParticlesPerProcess, int bins=5000);
+
+    void updateRange(int aimedParticlesPerProcess);
 
     /// H5 profiler instance
     H5Profiler &profiler = H5Profiler::getInstance("log/performance.h5");

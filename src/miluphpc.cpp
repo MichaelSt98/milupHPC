@@ -270,6 +270,7 @@ void Miluphpc::prepareSimulation() {
     treeHandler->copy(To::host);
 
     if (simulationParameters.loadBalancing) {
+        fixedLoadBalancing();
         dynamicLoadBalancing();
     }
     else {
@@ -1717,7 +1718,7 @@ real Miluphpc::parallel_gravity() {
     else if (computeForcesVersion == 3) {
         // ---------------------------------------------------------
         time = Gravity::Kernel::Launch::computeForces_v1_1(treeHandler->d_tree, particleHandler->d_particles,
-                                                           radius,numParticles, numParticles,
+                                                           radius, numParticles, numParticles,
                                                            subDomainKeyTreeHandler->d_subDomainKeyTree,
                                                            simulationParameters.theta, simulationParameters.smoothing,
                                                            simulationParameters.calculateEnergy);
@@ -2372,9 +2373,66 @@ void Miluphpc::dynamicLoadBalancing(int bins) {
     Logger(INFO) << "aimedParticlesPerProcess = " << aimedParticlesPerProcess;
 //#endif
 
-    updateRangeApproximately(aimedParticlesPerProcess, bins);
+    //updateRangeApproximately(aimedParticlesPerProcess, bins);
+    updateRange(aimedParticlesPerProcess);
 
     delete [] processParticleCounts;
+}
+
+void Miluphpc::updateRange(int aimedParticlesPerProcess) {
+
+    boost::mpi::communicator comm;
+
+    sumParticles = numParticlesLocal;
+    all_reduce(comm, boost::mpi::inplace_t<integer*>(&sumParticles), 1, std::plus<integer>());
+
+    keyType *d_localKeys;
+    cuda::malloc(d_localKeys, numParticlesLocal);
+    //keyType *h_localKeys = new keyType[sumParticles];
+
+    SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys(subDomainKeyTreeHandler->d_subDomainKeyTree,
+                                                        treeHandler->d_tree, particleHandler->d_particles,
+                                                        d_localKeys, 21, numParticlesLocal, curveType);
+
+    int *numParticlesPerProcess = new int[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+    all_gather(comm, numParticlesLocal, numParticlesPerProcess);
+    std::vector<int> sizes;
+    for (int i = 0; i < subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
+        sizes.push_back(numParticlesPerProcess[i]);
+    }
+
+    keyType *d_keys;
+    cuda::malloc(d_keys, sumParticles);
+
+    //for (int i = 0; i < subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
+    //    Logger(INFO) << "numParticlesPerProcess[" << i << "] = " << numParticlesPerProcess[i] << " (numParticlesLocal: " << sumParticles << ")";
+    //}
+
+    all_gatherv(comm, d_localKeys, d_keys, sizes);
+
+    keyType *d_sortedKeys;
+    cuda::malloc(d_sortedKeys, sumParticles);
+
+    keyType *h_sortedKeys = new keyType[sumParticles];
+    cuda::copy(h_sortedKeys, d_keys, sumParticles, To::host);
+
+    //for (int i=sumParticles-100; i<sumParticles; i++) {
+    //    Logger(INFO) << "sortedKeys[" << i << "] = " << h_sortedKeys[i];
+    //}
+
+    HelperNS::sortKeys(d_keys, d_sortedKeys, sumParticles);
+
+    keyType newRange;
+    for (int proc=1; proc<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
+        cuda::copy(&subDomainKeyTreeHandler->h_subDomainKeyTree->range[proc], &d_sortedKeys[proc * aimedParticlesPerProcess], 1, To::host);
+        //Logger(INFO) << "new range: " << newRange;
+    }
+
+    subDomainKeyTreeHandler->copy(To::device);
+
+    cuda::free(d_keys);
+    cuda::free(d_sortedKeys);
+
 }
 
 void Miluphpc::updateRangeApproximately(int aimedParticlesPerProcess, int bins) {
