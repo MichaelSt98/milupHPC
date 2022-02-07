@@ -2,10 +2,16 @@
 **/.idea/
 **/build/
 **/bin/
+**/dep/
+**/obj/
 **/output/
 **/testing/
 **/movies/
 **/testcases/
+**/log/
+
+H5Renderer/obj/*
+H5Renderer/bin/*
 
 **/.idea/
 
@@ -32,3 +38,6 @@ bb/bb_N*/*
 !documents/*.csv
 # ignore MPI-debug lldb pipe
 *.lldb
+
+*.d
+*.o

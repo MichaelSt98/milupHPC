@@ -44,7 +44,7 @@ OBJECTS        := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.$(O
 CUDA_OBJECTS   := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(CUDA_SOURCES:.$(CUDASRCEXT)=.$(OBJEXT)))
 
 #Documentation (Doxygen)
-DOXY           := /usr/local/Cellar/doxygen/1.8.20/bin/doxygen
+DOXY           := /usr/local/Cellar/doxygen/1.9.3_1/bin/doxygen
 DOXYFILE       := $(DOCDIR)/Doxyfile
 
 #default make (all)

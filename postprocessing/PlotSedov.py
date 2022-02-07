@@ -64,7 +64,7 @@ class SedovSolution(object):
         # Characterize the solution
         f_min = self.c2 if self.w1 > w else self.c6
 
-        f = np.logspace(np.log10(f_min), 0, 1e5)
+        f = np.logspace(np.log10(f_min), 0, int(1e5))
 
         # Sort the etas for our interpolation function
         eta = self.parametrized_eta(f)
@@ -317,8 +317,8 @@ if __name__ == '__main__':
     matplotlib.rc('font', **font)
 
     if args.plot_type == 0:
-        fig, (ax1) = plt.subplots(nrows=1, sharex=True)
-        plt.subplots_adjust(hspace=0.1)
+        fig, (ax1) = plt.subplots(nrows=1, sharex=True, gridspec_kw={'hspace': 0.1, 'wspace': 0.1})
+        # plt.subplots_adjust(hspace=0.1)
         if plot_analytical_solution:
             ax1.plot(r_analytical, rho_analytical, color=colors["rho"])
         ax1.scatter(r, rho, c=colors["rho"], s=0.1, alpha=0.3)
@@ -328,8 +328,8 @@ if __name__ == '__main__':
         ax1.set_xlim(0, r_max)
         ax1.set_ylim(0, 4.0)
     elif args.plot_type == 1:
-        fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, sharex=True)
-        plt.subplots_adjust(hspace=0.1)
+        fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, sharex=True, gridspec_kw={'hspace': 0.1, 'wspace': 0.1})
+        # plt.subplots_adjust(hspace=0.1)
         if plot_analytical_solution:
             ax1.plot(r_analytical, rho_analytical, color=colors["rho"])
         ax1.scatter(r, rho, c=colors["rho"], s=0.1, alpha=0.3)
@@ -350,8 +350,8 @@ if __name__ == '__main__':
         ax3.set_ylabel(r'$e$')
         ax3.set_xlim(0, r_max)
     elif args.plot_type == 2:
-        fig, (ax1, ax2, ax3, ax4) = plt.subplots(nrows=4, sharex=True)
-        plt.subplots_adjust(hspace=0.1)
+        fig, (ax1, ax2, ax3, ax4) = plt.subplots(nrows=4, sharex=True, gridspec_kw={'hspace': 0.1, 'wspace': 0.1})
+        # plt.subplots_adjust(hspace=0.1)
         if plot_analytical_solution:
             ax1.plot(r_analytical, rho_analytical, color=colors["rho"])
         ax1.scatter(r, rho, c=colors["rho"], s=0.1, alpha=0.3)

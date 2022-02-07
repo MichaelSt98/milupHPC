@@ -1,2 +1,0 @@
-plummer/pl_N100000_sfc0F_np2
-plummer/pl_N100000_sfc0F_np8

@@ -2381,6 +2381,9 @@ void Miluphpc::dynamicLoadBalancing(int bins) {
 
 void Miluphpc::updateRange(int aimedParticlesPerProcess) {
 
+    //TODO: update bounding boxes here!
+    boundingBox();
+
     boost::mpi::communicator comm;
 
     sumParticles = numParticlesLocal;

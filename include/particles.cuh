@@ -387,7 +387,7 @@ public:
     /**
      * Destructor
      */
-    CUDA_CALLABLE_MEMBER ~Particles();
+    f
 
 };
 
