@@ -1,3 +1,12 @@
+/**
+ * @file predictor_corrector_euler.h
+ * @brief Predictor Corrector Euler integrator.
+ *
+ * Predictor Corrector Euler integrator inheriting from the Miluphpc class.
+ *
+ * @author Michael Staneker
+ * @bug no known bugs
+ */
 #ifndef MILUPHPC_PREDICTOR_CORRECTOR_EULER_H
 #define MILUPHPC_PREDICTOR_CORRECTOR_EULER_H
 
@@ -9,7 +18,6 @@
 class PredictorCorrectorEuler : public Miluphpc {
 
 private:
-
 
 public:
 
@@ -26,11 +34,24 @@ public:
 
     PredictorCorrectorEulerNS::BlockShared *d_blockShared;
 
+    /**
+     * @brief Constructor.
+     *
+     * @param simulationParameters Simulation parameters/settings.
+     */
     PredictorCorrectorEuler(SimulationParameters simulationParameters);
+
+    /**
+     * @brief Destructor.
+     */
     ~PredictorCorrectorEuler();
 
+    /**
+     * @brief Implementation of the abstract integration method.
+     *
+     * @param step Integration step (number)
+     */
     void integrate(int step);
 };
-
 
 #endif //MILUPHPC_PREDICTOR_CORRECTOR_EULER_H

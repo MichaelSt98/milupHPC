@@ -1,3 +1,18 @@
+/**
+ * @file material.cuh
+ * @brief Material parameters and settings.
+ *
+ * Material parameters/attributes/properties and settings like:
+ *
+ * * Equation of state
+ * * Artificial viscosity (parameters)
+ * * smoothing length
+ * * interactions
+ *
+ * @author Michael Staneker
+ * @bug no known bugs
+ * @todo implement missing parameters/variables
+ */
 #ifndef MILUPHPC_MATERIAL_CUH
 #define MILUPHPC_MATERIAL_CUH
 
@@ -9,31 +24,48 @@
 #include <cuda.h>
 #include <boost/mpi.hpp>
 
-//TODO: implement missing parameters/variables
-
 /**
- * Artificial viscosity parameters
+ * @brief Artificial viscosity parameters.
  */
 struct ArtificialViscosity {
 
     // enable communication via MPI (send instance of struct directly)
     friend class boost::serialization::access;
+    /**
+     * @brief Serialization function for boost::mpi functionality.
+     *
+     * @tparam Archive
+     * @param ar
+     * @param version
+     */
     template<class Archive>
     void serialize(Archive &ar, const unsigned int version) {
         ar & alpha;
         ar & beta;
     }
 
+    /// Artificial viscosity \f$ \alpha \f$
     real alpha;
+    /// Artificial viscosity \f$ \beta \f$
     real beta;
 
     CUDA_CALLABLE_MEMBER ArtificialViscosity();
     CUDA_CALLABLE_MEMBER ArtificialViscosity(real alpha, real beta);
 };
 
+/**
+ * @brief Equation of states.
+ */
 struct EqOfSt {
 
     friend class boost::serialization::access;
+    /**
+     * @brief Serialization function for boost::mpi functionality.
+     *
+     * @tparam Archive
+     * @param ar
+     * @param version
+     */
     template<class Archive>
     void serialize(Archive &ar, const unsigned int version) {
         ar & type;
@@ -51,7 +83,7 @@ struct EqOfSt {
 };
 
 /**
- * Material parameters
+ * @brief Material parameters.
  */
 class Material {
 
@@ -59,6 +91,13 @@ public:
 
     // enable communication via MPI (send instance of class directly)
     friend class boost::serialization::access;
+    /**
+     * @brief Serialization function for boost::mpi functionality.
+     *
+     * @tparam Archive
+     * @param ar
+     * @param version
+     */
     template<class Archive>
     void serialize(Archive &ar, const unsigned int version) {
         ar & ID;
@@ -153,18 +192,30 @@ public:
     };*/
 };
 
-
+/// Material related functions and kernels
 namespace MaterialNS {
 
+    /// CUDA kernel functions
     namespace Kernel {
 
+        /**
+         * @brief Debug kernel giving information about material(s).
+         *
+         * > Corresponding wrapper function: ::MaterialNS::Kernel::Launch::info()
+         *
+         * @param material Material class instance
+         */
         __global__ void info(Material *material);
 
+        /// Wrapper functions
         namespace Launch {
+
+            /**
+             * @brief Wrapper for ::MaterialNS::Kernel::info().
+             */
             void info(Material *material);
         }
     }
-
 }
 
 #endif //MILUPHPC_MATERIAL_CUH

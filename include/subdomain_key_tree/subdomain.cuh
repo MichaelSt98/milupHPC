@@ -1,5 +1,5 @@
 /**
- * @file subdomain.cu
+ * @file subdomain.cuh
  *
  * @brief Classes and Kernels handling subdomains that distribute the
  * workload among the MPI processes.
@@ -31,14 +31,30 @@ class DomainList;
 // Forward declaration of SubDomainKeyTree class
 class SubDomainKeyTree;
 
+/// Key (keyType) related functions and kernels
 namespace KeyNS {
 
+    /**
+     * @brief Convert a key to a char for printing.
+     *
+     * @param[in] key Key to be converted
+     * @param[in] maxLevel maximum (tree) level
+     * @param[out] keyAsChar key as char
+     */
     CUDA_CALLABLE_MEMBER void key2Char(keyType key, integer maxLevel, char *keyAsChar);
+
+    /**
+     * @brief Convert the key to the corresponding process
+     *
+     * @param key Key to be evaluated
+     * @param subDomainKeyTree SubDomainKeyTree class instance
+     * @return Process key belongs to
+     */
     CUDA_CALLABLE_MEMBER integer key2proc(keyType key, SubDomainKeyTree *subDomainKeyTree/*, Curve::Type curveType=Curve::lebesgue*/);
 }
 
 /**
- * SubDomainKeyTree class handling rank, number of processes and ranges
+ * @brief SubDomainKeyTree class handling rank, number of processes and ranges
  */
 class SubDomainKeyTree {
 
@@ -54,11 +70,11 @@ public:
     integer *procParticleCounter;
 
     /**
-     * Default Constructor
+     * @brief Default Constructor.
      */
     CUDA_CALLABLE_MEMBER SubDomainKeyTree();
     /**
-     * Constructor
+     * @brief Constructor.
      *
      * @param rank MPI rank
      * @param numProcesses MPI number of processes
@@ -68,11 +84,12 @@ public:
     CUDA_CALLABLE_MEMBER SubDomainKeyTree(integer rank, integer numProcesses, keyType *range,
                                           integer *procParticleCounter);
     /**
-     * Destructor
+     * @brief Destructor.
      */
     CUDA_CALLABLE_MEMBER ~SubDomainKeyTree();
+
     /**
-     * Setter
+     * @brief Setter.
      *
      * @param rank MPI rank
      * @param numProcesses MPI number of processes
@@ -80,15 +97,17 @@ public:
      * @param procParticleCounter // particle counter in dependence of MPI processes
      */
     CUDA_CALLABLE_MEMBER void set(integer rank, integer numProcesses, keyType *range, integer *procParticleCounter);
+
     /**
-     * Compute particle's MPI process belonging by it's key
+     * @brief Compute particle's MPI process belonging by it's key.
      *
      * @param key input key, representing a particle/pseudo-particle/node
      * @return affiliated MPI process
      */
     CUDA_CALLABLE_MEMBER integer key2proc(keyType key/*, Curve::Type curveType=Curve::lebesgue*/);
+
     /**
-     * Check whether key, thus particle, represents a domain list node
+     * @brief Check whether key, thus particle, represents a domain list node.
      *
      * @param key input key, representing a particle/pseudo-particle/node
      * @param maxLevel max tree level
@@ -101,37 +120,45 @@ public:
 
 };
 
+/// SubDomainKeyTree related functions and kernels
 namespace SubDomainKeyTreeNS {
 
+    /// Kernels
     namespace Kernel {
 
         /**
-         * Kernel call to setter
+         * @brief Kernel call to setter.
          *
-         * @param subDomainKeyTree
-         * @param rank
-         * @param numProcesses
-         * @param range
-         * @param procParticleCounter
+         * > Corresponding wrapper function: ::SubDomainKeyTreeNS::Kernel::Launch::set()
+         *
+         * @param subDomainKeyTree SubDomainKeyTree class instance
+         * @param rank MPI rank
+         * @param numProcesses MPI number of processes
+         * @param range SFC curve range to MPI process mapping
+         * @param procParticleCounter Number of particles per MPI process
          */
         __global__ void set(SubDomainKeyTree *subDomainKeyTree, integer rank, integer numProcesses, keyType *range,
                             integer *procParticleCounter);
 
         /**
-         * Test kernel call (for debugging/testing purposes)
+         * @brief Test kernel call (for debugging/testing purposes).
          *
-         * @param subDomainKeyTree
+         * > Corresponding wrapper function: ::SubDomainKeyTreeNS::Kernel::Launch::test()
+         *
+         * @param subDomainKeyTree SubDomainKeyTree class instance
          */
         __global__ void test(SubDomainKeyTree *subDomainKeyTree);
 
         /**
-         * Kernel to build the domain tree
+         * @brief Kernel to build the domain tree.
+         *
+         * > Corresponding wrapper function: ::SubDomainKeyTreeNS::Kernel::Launch::buildDomainTree()
          *
          * Using the already built tree, marking domain list nodes
          * and adding them if necessary
          *
-         * @param tree target tree instance
-         * @param particles particle information
+         * @param tree Target Tree class instance
+         * @param particles Particle class instance/information
          * @param domainList domainList instance
          * @param n number of
          * @param m number of
@@ -141,67 +168,148 @@ namespace SubDomainKeyTreeNS {
         __global__ void buildDomainTree(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, DomainList *domainList, integer n, integer m, integer level);
 
         /**
-         * Kernel to get all particle keys (and additional information for debugging purposes)
+         * @brief Kernel to get all particle keys (and additional information for debugging purposes).
          *
-         * @param subDomainKeyTree
-         * @param tree
-         * @param particles
-         * @param keys
-         * @param maxLevel
-         * @param n
-         * @param curveType
+         * > Corresponding wrapper function: ::SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys()
+         *
+         * @param subDomainKeyTree SubdomainKeyTree class instance
+         * @param tree Tree class instance
+         * @param particles Particles class instance
+         * @param keys Particle keys
+         * @param maxLevel Tree maximum level
+         * @param n number of particles
+         * @param curveType SFC curve type (Lebesgue/Hilbert)
          */
         __global__ void getParticleKeys(SubDomainKeyTree *subDomainKeyTree, Tree *tree,
                                                         Particles *particles, keyType *keys, integer maxLevel,
                                                         integer n, Curve::Type curveType = Curve::lebesgue);
 
         /**
-         * Kernel to check particle's belonging and count in dependence of belonging/process
+         * @brief Kernel to check particle's belonging and count in dependence of belonging/process.
          *
-         * @param subDomainKeyTree
-         * @param tree
-         * @param particles
+         * > Corresponding wrapper function: ::SubDomainKeyTreeNS::Kernel::Launch::particlesPerProcess()
+         *
+         * @param subDomainKeyTree SubDomainKeyTree class instance
+         * @param tree Tree class instance
+         * @param particles Particles class instance
          * @param n
          * @param m
-         * @param curveType
+         * @param curveType SFC curve type (Lebesgue/Hilbert)
          */
         __global__ void particlesPerProcess(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                             integer n, integer m, Curve::Type curveType=Curve::lebesgue);
 
         /**
-         * Kernel to mark particle's belonging
+         * @brief Kernel to mark particle's belonging.
          *
-         * @param subDomainKeyTree
-         * @param tree
-         * @param particles
+         * > Corresponding wrapper function: ::SubDomainKeyTreeNS::Kernel::Launch::markParticlesProcess()
+         *
+         * @param subDomainKeyTree SubDomainKeyTree class instance
+         * @param tree Tree class instance
+         * @param particles Particles class instance
          * @param n
          * @param m
          * @param sortArray
-         * @param curveType
+         * @param curveType SFC curve type (Lebesgue/Hilbert)
          */
         __global__ void markParticlesProcess(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                              integer n, integer m, integer *sortArray,
                                              Curve::Type curveType=Curve::lebesgue);
 
+        /**
+         * @brief Zero domain list nodes.
+         *
+         * > Corresponding wrapper function: ::SubDomainKeyTreeNS::Kernel::Launch::zeroDomainListNodes()
+         *
+         * @param particles Particles class instance
+         * @param domainList DomainList class instance/information about domain list nodes
+         * @param lowestDomainList DomainList class instance/information about lowest domain list nodes
+         */
         __global__ void zeroDomainListNodes(Particles *particles, DomainList *domainList,
                                             DomainList *lowestDomainList);
 
+        /**
+         * @brief Prepare lowest domain exchange via MPI by copying to contiguous memory.
+         *
+         * > Corresponding wrapper function: ::SubDomainKeyTreeNS::Kernel::Launch::prepareLowestDomainExchange()
+         *
+         * @param particles Particles class instance
+         * @param lowestDomainList DomainList class instance/information about lowest domain list nodes
+         * @param helper
+         * @param entry
+         */
         __global__ void prepareLowestDomainExchange(Particles *particles, DomainList *lowestDomainList,
                                                     Helper *helper, Entry::Name entry);
 
+        /**
+         * @brief Update lowest domain list nodes.
+         *
+         * > Corresponding wrapper function: ::SubDomainKeyTreeNS::Kernel::Launch::updateLowestDomainListNodes()
+         *
+         * @param particles Particles class instance
+         * @param lowestDomainList DomainList class instance/information about lowest domain list nodes
+         * @param helper
+         * @param domainListSize
+         * @param entry
+         */
         __global__ void updateLowestDomainListNodes(Particles *particles, DomainList *lowestDomainList,
                                                     Helper *helper, int domainListSize, Entry::Name entry);
 
+        /**
+         * @brief Compute/Find lowest domain list nodes.
+         *
+         * > Corresponding wrapper function: ::SubDomainKeyTreeNS::Kernel::Launch::compLowestDomainListNodes()
+         *
+         * @param tree Tree class instance
+         * @param particles Particles class instance
+         * @param lowestDomainList DomainList class instance/information about lowest domain list nodes
+         */
         __global__ void compLowestDomainListNodes(Tree *tree, Particles *particles, DomainList *lowestDomainList);
 
+        /**
+         * @brief Compute local (tree) pseudo particles.
+         *
+         * > Corresponding wrapper function: ::SubDomainKeyTreeNS::Kernel::Launch::compLocalPseudoParticles()
+         *
+         * @param tree Tree class instance
+         * @param particles Particles class instance
+         * @param domainList DomainList class instance/information about domain list nodes
+         * @param n
+         */
         __global__ void compLocalPseudoParticles(Tree *tree, Particles *particles, DomainList *domainList, int n);
 
+        /**
+         * @brief Compute domain list pseudo particles (per level).
+         *
+         * > Corresponding wrapper function: ::SubDomainKeyTreeNS::Kernel::Launch::compDomainListPseudoParticlesPerLevel()
+         *
+         * @param tree Tree class instance
+         * @param particles Particles class instance
+         * @param domainList DomainList class instance/information about domain list nodes
+         * @param lowestDomainList DomainList class instance/information about lowest domain list nodes
+         * @param n
+         * @param level Tree level
+         */
         __global__ void compDomainListPseudoParticlesPerLevel(Tree *tree, Particles *particles, DomainList *domainList,
                                                               DomainList *lowestDomainList, int n, int level);
 
         __global__ void compDomainListPseudoParticles(Tree *tree, Particles *particles, DomainList *domainList,
                                                       DomainList *lowestDomainList, int n);
 
+        /**
+         * @brief Repair tree by removing received and inserted (pseudo-)particles.
+         *
+         * > Corresponding wrapper function: ::SubDomainKeyTreeNS::Kernel::Launch::repairTree()
+         *
+         * @param subDomainKeyTree SubDomainKeyTree class instance
+         * @param tree Tree class instance
+         * @param particles Particles class instance
+         * @param domainList DomainList class instance/information about domain list nodes
+         * @param lowestDomainList DomainList class instance/information about lowest domain list nodes
+         * @param n
+         * @param m
+         * @param curveType SFC curve type (Lebesgue/Hilbert)
+         */
         __global__ void repairTree(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                    DomainList *domainList, DomainList *lowestDomainList,
                                    int n, int m, Curve::Type curveType);
@@ -226,105 +334,113 @@ namespace SubDomainKeyTreeNS {
                                           Curve::Type curveType=Curve::lebesgue);
 
 
+        /// Wrapped kernels
         namespace Launch {
 
             /**
-             * Wrapped kernel call to setter
-             *
-             * @param subDomainKeyTree
-             * @param rank
-             * @param numProcesses
-             * @param range
-             * @param procParticleCounter
+             * @brief Wrapper for ::SubDomainKeyTreeNS::Kernel::set().
              */
             void set(SubDomainKeyTree *subDomainKeyTree, integer rank, integer numProcesses, keyType *range,
                      integer *procParticleCounter);
 
             /**
-             * Wrapped test kernel call (for debugging/testing purposes)
-             *
-             * @param subDomainKeyTree
+             * @brief Wrapper for ::SubDomainKeyTreeNS::Kernel::test().
              */
             void test(SubDomainKeyTree *subDomainKeyTree);
 
             /**
-             * Wrapped kernel to build the domain tree
+             * @brief Wrapper for ::SubDomainKeyTreeNS::Kernel::buildDomainTree().
              *
-             * @param tree
-             * @param particles
-             * @param domainList
-             * @param n
-             * @param m
-             * @return
+             * @return Wall time of execution
              */
             real buildDomainTree(Tree *tree, Particles *particles, DomainList *domainList, integer n, integer m);
 
             real buildDomainTree(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, DomainList *domainList, integer n, integer m, integer level);
 
             /**
-             * Wrapped kernel to get all particle keys (and additional information for debugging purposes)
+             * @brief Wrapper for ::SubDomainKeyTreeNS::Kernel::getParticleKeys().
              *
-             * @param subDomainKeyTree
-             * @param tree
-             * @param particles
-             * @param keys
-             * @param maxLevel
-             * @param n
-             * @param curveType
-             * @return
+             * @return Wall time of execution
              */
             real getParticleKeys(SubDomainKeyTree *subDomainKeyTree, Tree *tree,
                                  Particles *particles, keyType *keys, integer maxLevel,
                                  integer n, Curve::Type curveType = Curve::lebesgue);
 
             /**
-             * Wrapped Kernel to check particle's belonging and count in dependence of belonging/process
+             * @brief Wrapper for ::SubDomainKeyTreeNS::Kernel::particlesPerProcess().
              *
-             * @param subDomainKeyTree
-             * @param tree
-             * @param particles
-             * @param n
-             * @param m
-             * @param curveType
-             * @return
+             * @return Wall time of execution
              */
             real particlesPerProcess(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                 integer n, integer m, Curve::Type curveType=Curve::lebesgue);
 
             /**
-             * Wrapped kernel to mark particle's belonging
+             * @brief Wrapper for ::SubDomainKeyTreeNS::Kernel::markParticlesPerProcess().
              *
-             * @param subDomainKeyTree
-             * @param tree
-             * @param particles
-             * @param n
-             * @param m
-             * @param sortArray
-             * @param curveType
-             * @return
+             * @return Wall time of execution
              */
             real markParticlesProcess(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                  integer n, integer m, integer *sortArray,
                                                  Curve::Type curveType=Curve::lebesgue);
 
+            /**
+             * @brief Wrapper for ::SubDomainKeyTreeNS::Kernel::zeroDomainListNodes().
+             *
+             * @return Wall time of execution
+             */
             real zeroDomainListNodes(Particles *particles, DomainList *domainList, DomainList *lowestDomainList);
 
+            /**
+             * @brief Wrapper for ::SubDomainKeyTreeNS::Kernel::prepareLowestDomainExchange().
+             *
+             * @return Wall time of execution
+             */
             real prepareLowestDomainExchange(Particles *particles, DomainList *lowestDomainList,
                                              Helper *helper, Entry::Name entry);
 
+            /**
+             * @brief Wrapper for ::SubDomainKeyTreeNS::Kernel::updateLowestDomainListNodes().
+             *
+             * @return Wall time of execution
+             */
             real updateLowestDomainListNodes(Particles *particles, DomainList *lowestDomainList,
                                              Helper *helper, int domainListSize, Entry::Name entry);
 
+            /**
+             * @brief Wrapper for ::SubDomainKeyTreeNS::Kernel::compLowestDomainListNodes().
+             *
+             * @return Wall time of execution
+             */
             real compLowestDomainListNodes(Tree *tree, Particles *particles, DomainList *lowestDomainList);
 
+            /**
+             * @brief Wrapper for ::SubDomainKeyTreeNS::Kernel::compLocalPseudoParticles().
+             *
+             * @return Wall time of execution
+             */
             real compLocalPseudoParticles(Tree *tree, Particles *particles, DomainList *domainList, int n);
 
+            /**
+             * @brief Wrapper for ::SubDomainKeyTreeNS::Kernel::compDomainListPseudoParticlesPerLevel().
+             *
+             * @return Wall time of execution
+             */
             real compDomainListPseudoParticlesPerLevel(Tree *tree, Particles *particles, DomainList *domainList,
                                                        DomainList *lowestDomainList, int n, int level);
 
+            /**
+             * @brief Wrapper for ::SubDomainKeyTreeNS::Kernel::compDomainListPseudoParticles().
+             *
+             * @return Wall time of execution
+             */
             real compDomainListPseudoParticles(Tree *tree, Particles *particles, DomainList *domainList,
                                                DomainList *lowestDomainList, int n);
 
+            /**
+             * @brief Wrapper for ::SubDomainKeyTreeNS::Kernel::repairTree().
+             *
+             * @return Wall time of execution
+             */
             real repairTree(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                             DomainList *domainList, DomainList *lowestDomainList,
                             int n, int m, Curve::Type curveType);
@@ -369,18 +485,19 @@ public:
     integer *relevantDomainListProcess;
 
     /**
-     * Constructor
+     * @brief Constructor.
      */
     CUDA_CALLABLE_MEMBER DomainList();
+
     /**
-     * Constructor, passing pointer to member variables
+     * @brief Constructor, passing pointer to member variables.
      *
-     * @param domainListIndices
-     * @param domainListLevels
+     * @param domainListIndices Indices of the domain list nodes in Particles class instance
+     * @param domainListLevels Levels of the domain list nodes within (to be built) Tree
      * @param domainListIndex
      * @param domainListCounter
-     * @param domainListKeys
-     * @param sortedDomainListKeys
+     * @param domainListKeys Keys of the domain list nodes
+     * @param sortedDomainListKeys Sorted (or buffer for sorting) of the domain list nodes keys
      * @param relevantDomainListIndices
      */
     CUDA_CALLABLE_MEMBER DomainList(integer *domainListIndices, integer *domainListLevels, integer *domainListIndex,
@@ -388,14 +505,14 @@ public:
                                     integer *relevantDomainListIndices, integer *relevantDomainListLevels,
                                     integer *relevantDomainListProcess);
     /**
-     * Setter, passing pointer to member variables
+     * @brief Setter, passing pointer to member variables.
      *
-     * @param domainListIndices
-     * @param domainListLevels
+     * @param domainListIndices Indices of the domain list nodes in Particles class instance
+     * @param domainListLevels Levels of the domain list nodes within (to be built) Tree
      * @param domainListIndex
      * @param domainListCounter
-     * @param domainListKeys
-     * @param sortedDomainListKeys
+     * @param domainListKeys Keys of the domain list nodes
+     * @param sortedDomainListKeys Sorted (or buffer for sorting) of the domain list nodes keys
      * @param relevantDomainListIndices
      */
     CUDA_CALLABLE_MEMBER void set(integer *domainListIndices, integer *domainListLevels, integer *domainListIndex,
@@ -403,7 +520,7 @@ public:
                                   integer *relevantDomainListIndices, integer *relevantDomainListLevels,
                                   integer *relevantDomainListProcess);
     /**
-     * Destructor
+     * @brief Destructor.
      */
     CUDA_CALLABLE_MEMBER ~DomainList();
 };
@@ -411,15 +528,18 @@ public:
 namespace DomainListNS {
 
     namespace Kernel {
+
         /**
-         * Kernel call to setter
+         * @brief Kernel call to setter.
          *
-         * @param domainList
-         * @param domainListIndices
-         * @param domainListLevels
+         * > Corresponding wrapper function: ::DomainListNS::Kernel::Launch::set()
+         *
+         * @param domainList DomainList class instance (to be constructed)
+         * @param domainListIndices Indices of the domain list nodes in Particles class instance
+         * @param domainListLevels Levels of the domain list nodes within (to be built) Tree
          * @param domainListIndex
          * @param domainListCounter
-         * @param domainListKeys
+         * @param domainListKeys Keys of the domain list nodes in Particles class instance
          * @param sortedDomainListKeys
          * @param relevantDomainListIndices
          */
@@ -429,7 +549,9 @@ namespace DomainListNS {
                             integer *relevantDomainListLevels, integer *relevantDomainListProcess);
 
         /**
-         * Info kernel (for debugging purposes)
+         * @brief Info kernel (for debugging purposes).
+         *
+         * > Corresponding wrapper function: ::DomainListNS::Kernel::Launch::info()
          *
          * @param particles
          * @param domainList
@@ -437,7 +559,9 @@ namespace DomainListNS {
         __global__ void info(Particles *particles, DomainList *domainList);
 
         /**
-         * Info kernel (for debugging purposes)
+         * @brief Info kernel (for debugging purposes).
+         *
+         * > Corresponding wrapper function: ::DomainListNS::Kernel::Launch::info()
          *
          * @param particles
          * @param domainList
@@ -446,7 +570,9 @@ namespace DomainListNS {
         __global__ void info(Particles *particles, DomainList *domainList, DomainList *lowestDomainList);
 
         /**
-         * Kernel to create the domain list
+         * @brief Kernel to create the domain list.
+         *
+         * > Corresponding wrapper function: ::DomainListNS::Kernel::Launch::createDomainList()
          *
          * @param subDomainKeyTree
          * @param domainList
@@ -457,7 +583,9 @@ namespace DomainListNS {
                                          integer maxLevel, Curve::Type curveType = Curve::lebesgue);
 
         /**
-         * Kernel to create the lowest domain list
+         * @brief Kernel to create the lowest domain list.
+         *
+         * > Corresponding wrapper function: ::DomainListNS::Kernel::Launch::lowestDomainList()
          * 
          * @param subDomainKeyTree
          * @param tree
@@ -471,17 +599,9 @@ namespace DomainListNS {
 
 
         namespace Launch {
+
             /**
-             * Wrapped kernel call to setter
-             *
-             * @param domainList
-             * @param domainListIndices
-             * @param domainListLevels
-             * @param domainListIndex
-             * @param domainListCounter
-             * @param domainListKeys
-             * @param sortedDomainListKeys
-             * @param relevantDomainListIndices
+             * @brief Wrapper for ::DomainListNS::Kernel::set().
              */
             void set(DomainList *domainList, integer *domainListIndices, integer *domainListLevels,
                      integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
@@ -489,46 +609,26 @@ namespace DomainListNS {
                      integer *relevantDomainListLevels, integer *relevantDomainListProcess);
 
             /**
-             * Wrapped info kernel (for debugging purposes)
+             * @brief Wrapper for ::DomainListNS::Kernel::info().
              *
-             * @param particles
-             * @param domainList
-             * @return
+             * @return Wall time of execution
              */
             real info(Particles *particles, DomainList *domainList);
 
-            /**
-             * Wrapped info kernel (for debugging purposes)
-             *
-             * @param particles
-             * @param domainList
-             * @param lowestDomainList
-             * @return
-             */
             real info(Particles *particles, DomainList *domainList, DomainList *lowestDomainList);
 
             /**
-             * Wrapped kernel to create the domain list
+             * @brief Wrapper for ::DomainListNS::Kernel::createDomainList().
              *
-             * @param subDomainKeyTree
-             * @param domainList
-             * @param maxLevel
-             * @param curveType
-             * @return
+             * @return Wall time of execution
              */
             real createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList,
                                   integer maxLevel, Curve::Type curveType = Curve::lebesgue);
 
             /**
-             * Wrapped kernel to create the lowest domain list
+             * @brief Wrapper for ::DomainListNS::Kernel::lowestDoainList().
              *
-             * @param subDomainKeyTree
-             * @param tree
-             * @param domainList
-             * @param lowestDomainList
-             * @param n
-             * @param m
-             * @return
+             * @return Wall time of execution
              */
             real lowestDomainList(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                   DomainList *domainList, DomainList *lowestDomainList, integer n, integer m);
@@ -538,11 +638,32 @@ namespace DomainListNS {
 
 }
 
+/// Particle class related functions and kernels
 namespace ParticlesNS {
 
+    /**
+     * @brief Check whether particle(s) are within sphere from simulation center.
+     *
+     * @param subDomainKeyTree SubDomainKeyTree class instance
+     * @param tree Tree class instance
+     * @param particles Particles class instance
+     * @param d distance/diameter/radius
+     * @param index Particle index within Particles class instance
+     * @return Whether particle within sphere from simulation center
+     */
     __device__ bool applySphericalCriterion(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                             real d, int index);
 
+    /**
+     * @brief Check whether particle(s) are within cube from simulation center.
+     *
+     * @param subDomainKeyTree SubDomainKeyTree class instance
+     * @param tree Tree class instance
+     * @param particles Particles class instance
+     * @param d distance/cube length
+     * @param index Particle index within Particles class instance
+     * @return Whether particle within cube from simulation center
+     */
     __device__ bool applyCubicCriterion(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                         real d, int index);
 
@@ -583,24 +704,67 @@ namespace CudaUtils {
     }
 }
 
+/// Physics related functions and kernels
 namespace Physics {
     namespace Kernel {
 
+        /**
+         * @brief Calculate angular momentum for all particles (per block).
+         *
+         * > Corresponding wrapper function: ::Physics::Kernel::Launch::calculateAngularMomentumBlockwise()
+         *
+         * @tparam[in] blockSize
+         * @param[in] particles
+         * @param[out] outputData
+         * @param[in] n
+         */
         template <unsigned int blockSize>
         __global__ void calculateAngularMomentumBlockwise(Particles *particles, real *outputData, int n);
 
+        /**
+         * @brief Calculate angular momentum: sum over blocks.
+         *
+         * > Corresponding wrapper function: ::Physics::Kernel::Launch::sumAngularMomentum()
+         *
+         * @tparam[in] blockSize
+         * @param[in] indata
+         * @param[out] outdata
+         */
         template <unsigned int blockSize>
         __global__ void sumAngularMomentum(const real *indata, real *outdata);
 
+        /**
+         * @brief Calculate kinetic energy.
+         *
+         * > Corresponding wrapper function: ::Physics::Kernel::Launch::kineticEnergy()
+         *
+         * @param particles
+         * @param n
+         */
         __global__ void kineticEnergy(Particles *particles, int n);
 
         namespace Launch {
+            /**
+             * @brief Wrapper for: ::Physics::Kernel::calculateAngularMomentumBlockwise().
+             *
+             * @return Wall time of execution
+             */
             template <unsigned int blockSize>
             real calculateAngularMomentumBlockwise(Particles *particles, real *outputData, int n);
 
+            /**
+             * @brief Wrapper for: ::Physics::Kernel::sumAngularMomentum().
+             *
+             * @return Wall time of execution
+             */
             template <unsigned int blockSize>
             real sumAngularMomentum(const real *indata, real *outdata);
 
+            /**
+             * @brief Wrapper for: ::Physics::Kernel::kineticEnergy().
+             *
+             * @return Wall time of execution
+             */
             real kineticEnergy(Particles *particles, int n);
         }
     }

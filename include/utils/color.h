@@ -1,6 +1,7 @@
 #ifndef CPPUTILS_COLOR_H
 #define CPPUTILS_COLOR_H
 
+//! Colors for output formatting
 namespace Color {
     enum Code {
         FG_DEFAULT = 39,

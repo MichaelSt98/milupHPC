@@ -43,61 +43,9 @@ class CSVReader(object):
 
 if __name__ == '__main__':
 
-    # plummer
-    """
-    file = "time.csv" # time_gravity
-    directories = ["/Users/Michi/Desktop/milupHPC/master/binac_data/plummer/milupHPC2/milupHPC/plummer/pl_N1000000_sfc0F_np1/",
-                   "/Users/Michi/Desktop/milupHPC/master/binac_data/plummer/milupHPC2/milupHPC/plummer/pl_N1000000_sfc1D_np2/",
-                   "/Users/Michi/Desktop/milupHPC/master/binac_data/plummer/milupHPC2/milupHPC/plummer/pl_N1000000_sfc1D_np4/",
-                   "/Users/Michi/Desktop/milupHPC/master/binac_data/plummer/milupHPC2/milupHPC/plummer/pl_N1000000_sfc1D_np8/",
-                   "/Users/Michi/Desktop/milupHPC/master/binac_data/plummer/milupHPC2/milupHPC/plummer/pl_N1000000_sfc1D_np16/",
-                   "/Users/Michi/Desktop/milupHPC/master/binac_data/plummer/milupHPC2/milupHPC/plummer/pl_N1000000_sfc1D_np32/"]
-    """
-
-    """
-    # sedov
-    file = "time_tree.csv" # time_sph
-    directories = ["/Users/Michi/Desktop/milupHPC/master/binac_data/sedov/milupHPC/sedov/sedov_N81_sfc0F_np1/",
-                   "/Users/Michi/Desktop/milupHPC/master/binac_data/sedov/milupHPC/sedov/sedov_N81_sfc1D_np2/",
-                   "/Users/Michi/Desktop/milupHPC/master/binac_data/sedov/milupHPC/sedov/sedov_N81_sfc1D_np4/",
-                   "/Users/Michi/Desktop/milupHPC/master/binac_data/sedov/milupHPC/sedov/sedov_N81_sfc1D_np8/",
-                   "/Users/Michi/Desktop/milupHPC/master/binac_data/sedov/milupHPC/sedov/sedov_N81_sfc1D_np16/",
-                   "/Users/Michi/Desktop/milupHPC/master/binac_data/sedov/milupHPC/sedov/sedov_N81_sfc1D_np32/"]
-    """
-
-    # bb
-    file = "time_sph.csv" # time_sph, time_gravity
-    directories = ["/Users/Michi/Desktop/milupHPC/master/binac_data/bb/milupHPC2_short/bb/bb_N500000_sfc0F_np1/",
-                   "/Users/Michi/Desktop/milupHPC/master/binac_data/bb/milupHPC2_short/bb/bb_N500000_sfc1D_np2/",
-                   "/Users/Michi/Desktop/milupHPC/master/binac_data/bb/milupHPC2_short/bb/bb_N500000_sfc1D_np4/",
-                   "/Users/Michi/Desktop/milupHPC/master/binac_data/bb/milupHPC2_short/bb/bb_N500000_sfc1D_np8/",
-                   "/Users/Michi/Desktop/milupHPC/master/binac_data/bb/milupHPC2_short/bb/bb_N500000_sfc1D_np16/",
-                   "/Users/Michi/Desktop/milupHPC/master/binac_data/bb/milupHPC2_short/bb/bb_N500000_sfc1D_np32/"]
-
+    file = ""
+    directories = ["./"]
     file_names = ["{}{}".format(directory, file) for directory in directories]
 
-    data = {}
-    available_np = []
     for i_file_name, file_name in enumerate(file_names):
         csv_reader = CSVReader(file_name)
-        available_np.append(str(csv_reader.num_processes))
-        data["{}".format(csv_reader.num_processes)] = csv_reader.data
-
-    header = ["number of processes"]
-    for _np in available_np:
-        header.append(_np)
-    header.append("\\\\")
-    print(header)
-    with open('eggs.csv', 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile, delimiter='&', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        writer.writerow(header)
-
-        for i_key, key in enumerate(data["1"]["key"]):
-            row = [data["1"]["name"][i_key]]
-            for _np in available_np:
-                row.append(round(float(data[_np]["total_average"][i_key]), 3))
-                # row.append("{} ({})".format(round(float(data[_np]["total_average"][i_key]), 3), round(float(data[_np]["real_average"][i_key]), 3)))
-            row.append("\\\\")
-            writer.writerow(row)
-
-

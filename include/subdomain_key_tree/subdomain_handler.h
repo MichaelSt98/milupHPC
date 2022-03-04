@@ -1,5 +1,5 @@
 /**
- * @file subdomain_handler.cpp
+ * @file subdomain_handler.h
  *
  * @brief Classes and Kernels handling subdomains that distribute the
  * workload among the MPI processes.
@@ -48,24 +48,24 @@ public:
     SubDomainKeyTree *d_subDomainKeyTree;
 
     /**
-     * Constructor
+     * @brief Constructor
      */
     SubDomainKeyTreeHandler();
 
     /**
-     * Destructor
+     * @brief Destructor
      */
     ~SubDomainKeyTreeHandler();
 
     /**
-     * Resetting member variables
+     * @brief Resetting member variables
      *
      * Setting counter for particles in dependence of MPI process to zero
      */
     void reset();
 
     /**
-     * Copy (parts of the) SubDomainKeyTree instance(s) between host and device
+     * @brief Copy (parts of the) SubDomainKeyTree instance(s) between host and device
      *
      * @param target copy to target
      * @param range flag whether range(s) should be copied
@@ -105,19 +105,19 @@ public:
     DomainList *d_domainList;
 
     /**
-     * Constructor
+     * @brief Constructor
      *
      * @param domainListSize size/length of domain lists
      */
     DomainListHandler(integer domainListSize);
 
     /**
-     * Destructor
+     * @brief Destructor
      */
     ~DomainListHandler();
 
     /**
-     * Resetting entries
+     * @brief Resetting entries
      */
     void reset();
 
@@ -125,7 +125,7 @@ public:
 
 namespace mpi {
     /**
-     * Send array with length of number of MPI processes across processes
+     * @brief Send array with length of number of MPI processes across processes
      *
      * @tparam T type
      * @param subDomainKeyTree instance of `SubDomainKeyTree` class

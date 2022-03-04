@@ -31,7 +31,7 @@ maxTimeStep 1e9
 ; end time for simulation
 ;timeEnd 1.0
 ;timeEnd 5.0e7
-timeEnd 1.0e11
+timeEnd 6.9e11
 ;timeEnd 0.5e10;
 ;timeEnd 1e12
 ;timeEnd 6e-2
@@ -68,8 +68,7 @@ loadBalancing false
 ; interval for executing load balancing (every Nth step)
 loadBalancingInterval 1
 ; amount of bins for load balancing
-;loadBalancingBins 2000
-loadBalancingBins 200
+loadBalancingBins 2000
 
 ; how much memory to allocate (1.0 -> all particles can in principle be on one process)
 particleMemoryContingent 1.0

@@ -1,0 +1,13 @@
+simulation type:  pl
+numParticles:     4096
+numProcs:         1
+integrator:       0
+timeStep:         0.025
+timeEnd:          25.0
+sfc:              0
+loadBalancing:    0
+theta:            1.0
+force version:    2
+smoothing:        0.001024
+numOutput:        200
+note:             plummer verification run 4096

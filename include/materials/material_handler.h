@@ -1,3 +1,18 @@
+/**
+ * @file material_handler.h
+ * @brief Handler for material parameters and settings.
+ *
+ * Handler for material parameters/attributes/properties and settings like:
+ *
+ * * Equation of state
+ * * Artificial viscosity (parameters)
+ * * smoothing length
+ * * interactions
+ *
+ * @author Michael Staneker
+ * @bug no known bugs
+ * @todo implement missing parameters/variables
+ */
 #ifndef MILUPHPC_MATERIAL_HANDLER_H
 #define MILUPHPC_MATERIAL_HANDLER_H
 
@@ -10,7 +25,7 @@
 #include <libconfig.h>
 
 /**
- * Read material config files.
+ * @brief Read material config files.
  */
 class LibConfigReader {
 public:
@@ -26,7 +41,8 @@ public:
 };
 
 /**
- * Material class handler.
+ * @brief Material class handler.
+ *
  * * handling host and device instances
  * * initializing values using `LibConfigReader`
  * * copying instances/values between MPI processes and/or device and host
@@ -42,19 +58,21 @@ public:
     Material *d_materials;
 
     /**
+     * @brief Constructor.
      *
      * @param numMaterials
      */
     MaterialHandler(integer numMaterials);
 
     /**
-     * Constructor from config file.
+     * @brief Constructor from config file.
      *
      * @param material_cfg Config file name/path
      */
     MaterialHandler(const char *material_cfg);
 
     /**
+     * @brief Constructor.
      *
      * @param numMaterials
      * @param ID
@@ -64,6 +82,9 @@ public:
      */
     MaterialHandler(integer numMaterials, integer ID, integer interactions, real alpha, real beta);
 
+    /**
+     * @brief Destructor.
+     */
     ~MaterialHandler();
 
     /**

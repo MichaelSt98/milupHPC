@@ -1,11 +1,12 @@
 /**
  * @file miluphpc.h
- * @brief short description
+ * @brief Right-hand-side implementation and CUDA kernel execution via wrapper functions.
+ *
+ * Abstract bass class for integrator classes implementing the right-hand-side
+ * via modular functions for different parts of the simulation.
  *
  * @author Michael Staneker
- *
- * More detailed description.
- * This file contains ...
+ * @bug no known bugs
  */
 #ifndef MILUPHPC_MILUPHPC_H
 #define MILUPHPC_MILUPHPC_H
@@ -54,11 +55,16 @@
 #include <highfive/H5DataSpace.hpp>
 #include <highfive/H5DataSet.hpp>
 
+/**
+ * Miluphpc class
+ *
+ * More detailed description ...
+ */
 class Miluphpc {
 
 private:
 
-    // TODO: implement serial versions in order to reduce overhead
+    // @todo implement serial versions in order to reduce overhead
     //  arised from parallelization
     //real serial_tree();
     //real serial_pseudoParticles();
@@ -102,7 +108,7 @@ private:
      */
     real parallel_sph();
 
-    // TODO: possible to combine sendPartclesEntry and sendParticles
+    // @todo possible to combine sendPartclesEntry and sendParticles
     /**
      * Send particles/Exchange particles among MPI processes.
      *
@@ -173,7 +179,10 @@ public:
     /// search radius for SPH (MPI-process overarching) neighbor search
     real h_searchRadius;
 
+    /// total energy
     real totalEnergy;
+
+    /// total angular momentum
     real totalAngularMomentum;
 
     /**
@@ -185,6 +194,9 @@ public:
      */
     real removeParticles();
 
+    /**
+     * Load balancing via equidistant ranges.
+     */
     void fixedLoadBalancing();
 
     /**
@@ -209,6 +221,11 @@ public:
      */
     void updateRangeApproximately(int aimedParticlesPerProcess, int bins=5000);
 
+    /**
+     * Update the range in dependence on number of (MPI) processes and aimed particles per process.
+     *
+     * @param aimedParticlesPerProcess optimal number of particles per process
+     */
     void updateRange(int aimedParticlesPerProcess);
 
     /// H5 profiler instance
@@ -259,12 +276,14 @@ public:
     /// Instance to handle `Materials` instances on device and host
     MaterialHandler *materialHandler;
 
-    // TODO: revise buffer handling
-    /// buffer (need for revising)
+    /// @todo revise buffer handling
+    /// buffer instance
     HelperHandler *helperHandler;
-    /// buffer (need for revising)
+    /// buffer instance
     HelperHandler *buffer;
+
     // testing
+    /// buffer (need for revising)
     integer *d_particles2SendIndices;
     /// buffer (need for revising)
     integer *d_pseudoParticles2SendIndices;
@@ -292,9 +311,17 @@ public:
     /**
      * Constructor to set up simulation.
      *
+     * The distance between \f$(x_1,y_1)\f$ and \f$(x_2,y_2)\f$ is \f$\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}\f$.
+     *
+     * \f{equation}{ x=2 \f}
+     *
      * @param simulationParameters all the information required to set up simulation
      */
     Miluphpc(SimulationParameters simulationParameters);
+
+    /**
+     * Destructor freeing class instances.
+     */
     ~Miluphpc();
 
     /**
@@ -395,6 +422,5 @@ public:
     real particles2file(const std::string& filename, int *particleIndices, int length);
 
 };
-
 
 #endif //MILUPHPC_MILUPHPC_H

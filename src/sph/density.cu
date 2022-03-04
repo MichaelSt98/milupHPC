@@ -1,3 +1,13 @@
+/**
+ * @file miluphpc.h
+ * @brief short description
+ *
+ * More detailed description.
+ * This file contains ...
+ *
+ * @author Michael Staneker
+ * @bug no known bugs
+ */
 #include "../../include/sph/density.cuh"
 #include "../include/cuda_utils/cuda_launcher.cuh"
 

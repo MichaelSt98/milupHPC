@@ -1,0 +1,85 @@
+; IO RELATED
+; ------------------------------------------------------
+; output directory (will be created if it does not exist)
+directory plummer/pl_N4096_sfc0F_np1/
+
+; outputRank (-1 corresponds to all)
+outputRank -1
+
+; omit logType::TIME for standard output
+omitTime true
+
+; create log file (including warnings, errors, ...)
+log false
+
+; create performance log
+performanceLog true
+
+; write particles to be sent to h5 file
+particlesSent2H5 false
+
+
+; INTEGRATOR RELATED
+; ------------------------------------------------------
+; integrator selection
+; explicit euler [0], predictor-corrector euler [1]
+integrator 0
+; initial time step
+timeStep 0.025
+; max time step allowed
+maxTimeStep 0.025
+; end time for simulation
+timeEnd 25.0
+
+; SIMULATION RELATED
+; ------------------------------------------------------
+; space-filling curve selection
+; lebesgue [0], hilbert [1]
+sfc 0
+
+; theta-criterion for Barnes-Hut (approximative gravity)
+theta 1.0
+; smoothing parameter for gravitational forces
+;smoothing 0.032
+;smoothing 0.001024
+smoothing 0.001024
+
+; SPH smoothing kernel selection
+; spiky [0], cubic spline [1], wendlandc2 [3], wendlandc4 [4], wendlandc6 [5]
+smoothingKernel 1
+
+; remove particles (corresponding to some criterion)
+removeParticles true
+; spherically [0], cubic [1]
+removeParticlesCriterion 0
+; allowed distance to center (0, 0, 0)
+removeParticlesDimension 10.0
+
+; execute load balancing
+loadBalancing false
+; interval for executing load balancing (every Nth step)
+loadBalancingInterval 1
+; amount of bins for load balancing
+loadBalancingBins 2000
+
+; how much memory to allocate (1.0 -> all particles can in principle be on one process)
+particleMemoryContingent 1.0
+
+; calculate angular momentum (and save to output file)
+calculateAngularMomentum false
+; calculate (total) energy (and save to output file)
+calculateEnergy false
+; calculate center of mass (and save to output file)
+calculateCenterOfMass true
+
+
+; THESE SHOULD PROBABLY NOT EXIST IN A PRODUCTION VERSION
+; ------------------------------------------------------
+; ------------------------------------------------------
+; force version for gravity (use [0] or [2])
+; burtscher [0], burtscher without presorting [1], miluphcuda with presorting [2],
+; miluphcuda without presorting [3], miluphcuda shared memory (NOT working properly) [4]
+gravityForceVersion 2
+; fixed radius NN version for SPH (use [0])
+; normal [0], brute-force [1], shared-memory [2], within-box [3]
+sphFixedRadiusNNVersion 0

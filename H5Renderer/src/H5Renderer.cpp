@@ -92,15 +92,8 @@ void H5Renderer::createImages(std::string outDir){
         for (int i = 0; i < particles.size(); ++i) {
             ColorRGB color = procColor(particles[i].key, ranges);
             particle2PixelXY(particles[i].x, particles[i].y, color, pixelSpace);
-            if (markParticles) {
-                for (int ii = -20; ii < 20; ii++) {
-                    particle2PixelXY(particles[i].x + ii * (systemSize/300.), particles[i].y, color, pixelSpace);
-                    particle2PixelXY(particles[i].x, particles[i].y + ii * (systemSize/300.), color, pixelSpace);
-                }
-            }
         }
-        Logger(DEBUG) << "    ... done."; // 19 and 34 rho, p, sml, e, material_type, number_of_interactions, soundspeed, proc
-        // cs, e, key, m, noi, p, proc, ranges, rho, sml, v
+        Logger(DEBUG) << "    ... done.";
 
         Logger(DEBUG) << "    Sorting by y-coordinate  ...";
         std::sort(particles.begin(), particles.end(), Particle::yComp);
@@ -109,12 +102,6 @@ void H5Renderer::createImages(std::string outDir){
         for (int i = 0; i < particles.size(); ++i) {
             ColorRGB color = procColor(particles[i].key, ranges);
             particle2PixelXZ(particles[i].x, particles[i].z, color, pixelSpace);
-            if (markParticles) {
-                for (int ii = -20; ii < 20; ii++) {
-                    particle2PixelXZ(particles[i].x + ii * (systemSize/300.), particles[i].z, color, pixelSpace);
-                    particle2PixelXZ(particles[i].x, particles[i].z + ii * (systemSize/300.), color, pixelSpace);
-                }
-            }
         }
         Logger(DEBUG) << "    ... done.";
 

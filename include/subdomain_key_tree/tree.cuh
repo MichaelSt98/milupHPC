@@ -1,3 +1,14 @@
+/**
+ * @file tree.cuh
+ * @brief Tree related classes, kernels and functions.
+ *
+ *
+ * @author Michael Staneker
+ * @bug no known bugs
+ * @todo: compiling on binac:
+ *   src/gravity/../../include/gravity/../subdomain_key_tree/tree.cuh(26): error: attribute "__host__" does not apply here
+ *   src/gravity/../../include/gravity/../subdomain_key_tree/tree.cuh(53): error: attribute "__host__" does not apply here
+ */
 #ifndef MILUPHPC_TREE_CUH
 #define MILUPHPC_TREE_CUH
 
@@ -11,13 +22,10 @@
 #include <assert.h>
 #include <cmath>
 
-//TODO: compiling on binac:
-// src/gravity/../../include/gravity/../subdomain_key_tree/tree.cuh(26): error: attribute "__host__" does not apply here
-// src/gravity/../../include/gravity/../subdomain_key_tree/tree.cuh(53): error: attribute "__host__" does not apply here
 namespace KeyNS {
 
-    /**
- * Table needed to convert from Lebesgue to Hilbert keys
+/**
+ * @brief Table needed to convert from Lebesgue to Hilbert keys
  */
 #if DIM == 1
     CUDA_CALLABLE_MEMBER const unsigned char DirTable[1][1] = {{1}}; //TODO: 1D DirTable?
@@ -59,9 +67,9 @@ namespace KeyNS {
 #endif
 #endif
 
-    /**
-     * Table needed to convert from Lebesgue to Hilbert keys
-     */
+/**
+ * @brief Table needed to convert from Lebesgue to Hilbert keys
+ */
 #if DIM == 1
     CUDA_CALLABLE_MEMBER const unsigned char HilbertTable[1][1] = {{1}}; //TODO: 1D HilbertTable?
 #elif DIM == 2
@@ -101,7 +109,7 @@ namespace KeyNS {
 #endif
 
     /**
-     * Convert a Lebesgue key to a Hilbert key
+     * @brief Convert a Lebesgue key to a Hilbert key
      *
      * @param lebesgue Lebesgue key
      * @param maxLevel Maximum tree level
@@ -114,7 +122,7 @@ namespace KeyNS {
 }
 
 /**
- * Tree class.
+ * @brief Tree class.
  *
  * Class to build and store hierarchical tree structure.
  */
@@ -123,7 +131,7 @@ class Tree {
 public:
 
     //TODO: count, start, sorted currently unused (since sort() and computeForces() described by Griebel not used!)
-    /// accumulated nodes/leaves beneath
+    /// accumulated nodes/leaves beneath @deprecated
     integer *count;
     /// TODO: describe start
     integer *start;
@@ -157,12 +165,12 @@ public:
 #endif
 
     /**
-     * Default constructor
+     * @brief Default constructor
      */
     CUDA_CALLABLE_MEMBER Tree();
 
     /**
-     * Constructor, passing pointer to member variables
+     * @brief Constructor, passing pointer to member variables
      *
      * @param count allocated array for accumulated nodes/leaves beneath
      * @param start allocated array for
@@ -178,7 +186,7 @@ public:
                               integer *toDeleteLeaf, integer *toDeleteNode,
                               real *minX, real *maxX);
     /**
-     * Setter, passing pointer to member variables
+     * @brief Setter, passing pointer to member variables
      *
      * @param count allocated array for accumulated nodes/leaves beneath
      * @param start allocated array for
@@ -196,7 +204,7 @@ public:
 
 #if DIM > 1
     /**
-     * Constructor, passing pointer to member variables
+     * @brief Constructor, passing pointer to member variables
      *
      * @param count allocated array for accumulated nodes/leaves beneath
      * @param start allocated array for
@@ -214,7 +222,7 @@ public:
                               integer *toDeleteLeaf, integer *toDeleteNode,
                               real *minX, real *maxX, real *minY, real *maxY);
     /**
-     * Setter, passing pointer to member variables
+     * @brief Setter, passing pointer to member variables
      *
      * @param count allocated array for accumulated nodes/leaves beneath
      * @param start allocated array for
@@ -234,7 +242,7 @@ public:
 
 #if DIM == 3
     /**
-     * Constructor, passing pointer to member variables
+     * @brief Constructor, passing pointer to member variables
      *
      * @param count allocated array for accumulated nodes/leaves beneath
      * @param start allocated array for
@@ -254,7 +262,7 @@ public:
                               integer *toDeleteLeaf, integer *toDeleteNode,
                               real *minX, real *maxX, real *minY, real *maxY, real *minZ, real *maxZ);
     /**
-     * Constructor, passing pointer to member variables
+     * @brief Constructor, passing pointer to member variables
      *
      * @param count allocated array for accumulated nodes/leaves beneath
      * @param start allocated array for
@@ -278,7 +286,7 @@ public:
 #endif
 
     /**
-     * Reset (specific) entries
+     * @brief Reset (specific) entries
      *
      * @param index
      * @param n
@@ -286,6 +294,7 @@ public:
     CUDA_CALLABLE_MEMBER void reset(integer index, integer n);
 
     /**
+     * @brief Get SFC key of a particle.
      *
      * @param particles instance of particles (array)
      * @param index desired index in particles to get tree of desired particle
@@ -297,7 +306,7 @@ public:
                                                 Curve::Type curveType = Curve::lebesgue);
 
     /**
-     * Get tree level for a (specific) particle.
+     * @brief Get tree level for a (specific) particle.
      *
      * Calculates the particle key and uses key to construct path within tree, returning when path lead to
      * the desired particle/index of the particle.
@@ -312,14 +321,14 @@ public:
                                               Curve::Type curveType = Curve::lebesgue);
 
     /**
-     * Sum particles in tree.
+     * @brief Sum particles in tree.
      *
      * @return sum of particles within tree
      */
     CUDA_CALLABLE_MEMBER integer sumParticles();
 
     /**
-     * Destructor
+     * @brief Destructor
      */
     CUDA_CALLABLE_MEMBER ~Tree();
 
@@ -331,9 +340,11 @@ namespace TreeNS {
     namespace Kernel {
 
         /**
-         * Kernel call to setter
+         * @brief Kernel call to setter
          *
-         * @param tree
+         * > Corresponding wrapper function: ::TreeNS::Kernel::Launch::set()
+         *
+         * @param tree Tree class instance (to be constructed)
          * @param count
          * @param start
          * @param child
@@ -349,7 +360,9 @@ namespace TreeNS {
                             real *minX, real *maxX);
 
         /**
-         * Info Kernel for tree class (for debugging purposes)
+         * @brief Info Kernel for tree class (for debugging purposes)
+         *
+         * > Corresponding wrapper function: ::TreeNS::Kernel::Launch::info()
          *
          * @param tree
          * @param n
@@ -363,25 +376,14 @@ namespace TreeNS {
 
         namespace Launch {
             /**
-             * Wrapped kernel call to setter
-             *
-             * @param tree
-             * @param count
-             * @param start
-             * @param child
-             * @param sorted
-             * @param index
-             * @param toDeleteLeaf
-             * @param toDeleteNode
-             * @param minX
-             * @param maxX
+             * @brief Wrapper for ::TreeNS::Kernel::set()
              */
             void set(Tree *tree, integer *count, integer *start, integer *child, integer *sorted, integer *index,
                      integer *toDeleteLeaf, integer *toDeleteNode,
                      real *minX, real *maxX);
 
             /**
-             * Wrapped kernel for tree class (for debugging purposes)
+             * @brief Wrapper for ::TreeNS::Kernel::Launch::info()
              */
             real info(Tree *tree, Particles *particles, integer n, integer m);
 
@@ -392,7 +394,7 @@ namespace TreeNS {
 
 #if DIM > 1
         /**
-         * Kernel call to setter
+         * @brief Kernel call to setter
          *
          * @param tree
          * @param count
@@ -413,7 +415,7 @@ namespace TreeNS {
 
         namespace Launch {
             /**
-             * Wrapped kernel call to setter
+             * @brief Wrapper for ::TreeNS::Kernel::Launch::set()
              *
              * @param tree
              * @param count
@@ -460,7 +462,7 @@ namespace TreeNS {
 
         namespace Launch {
             /**
-             * Wrapped kernel call to setter
+             * @brief Wrapper for ::TreeNS::Kernel::Launch::set()
              *
              * @param tree
              * @param count
@@ -487,17 +489,21 @@ namespace TreeNS {
 #endif
 
         /**
-         * Kernel call to sum particles within tree
+         * @brief Kernel call to sum particles within tree
+         *
+         * > Corresponding wrapper function: ::TreeNS::Kernel::Launch::sumParticles()
          *
          * @param tree target tree instance
          */
         __global__ void sumParticles(Tree *tree);
 
         /**
-         * Kernel to construct the tree using the particles within `particles`
+         * @brief Kernel to construct the tree using the particles within `particles`
          *
-         * @param tree tree target instance
-         * @param particles particles to be inserted in tree
+         * > Corresponding wrapper function: ::TreeNS::Kernel::Launch::buildTree()
+         *
+         * @param tree Tree class target instance
+         * @param particles Particles class instance/particles to be inserted in tree
          * @param n number of particles
          * @param m number of potential particles to be inserted (needed for start index of nodes)
          */
@@ -508,10 +514,12 @@ namespace TreeNS {
         __global__ void calculateCentersOfMass(Tree *tree, Particles *particles, integer n, integer level);
 
         /**
-         * Kernel to compute the bounding box/borders of the tree or rather the particles within the tree
+         * @brief Kernel to compute the bounding box/borders of the tree or rather the particles within the tree
          *
-         * @param tree tree target instance
-         * @param particles particles within the tree
+         * > Corresponding wrapper function: ::TreeNS::Kernel::Launch::computeBoundingBox()
+         *
+         * @param tree Tree class target instance
+         * @param particles Particles class instance/particles within the tree
          * @param mutex mutex/lock
          * @param n number of particles
          * @param blockSize device block size
@@ -522,70 +530,72 @@ namespace TreeNS {
         /**
          * Kernel to compute center of mass for pseudo-particles/nodes within tree
          *
-         * @param tree
-         * @param particles
+         * > Corresponding wrapper function: ::TreeNS::Kernel::Launch::centerOfMass()
+         *
+         * @param tree Tree class instance
+         * @param particles Particles class instance
          * @param n
          */
         __global__ void centerOfMass(Tree *tree, Particles *particles, integer n);
 
         /**
-         * Kernel to sort tree/child indices to optimize cache efficiency
+         * @brief Kernel to sort tree/child indices to optimize cache efficiency
          *
-         * @param tree
+         * > Corresponding wrapper function: ::TreeNS::Kernel::Launch::sort()
+         *
+         * @param tree Tree class instance
          * @param n
          * @param m
          */
         __global__ void sort(Tree *tree, integer n, integer m);
 
         /**
-         * Kernel to get all particle's keys
+         * @brief Kernel to get all particle's keys
          *
-         * @param tree
-         * @param particles
+         * > Corresponding wrapper function: ::TreeNS::Kernel::Launch::getParticleKeys()
+         *
+         * @param[in] tree Tree class instance
+         * @param[in] particles Particles class instance
          * @param[out] keys input particle's keys
-         * @param maxLevel
-         * @param n
-         * @param curveType
+         * @param[in] maxLevel Tree maximum level
+         * @param[in] n
+         * @param[in] curveType SFC curve type (Lebesgue/Hilbert)
          */
         __global__ void getParticleKeys(Tree *tree, Particles *particles, keyType *keys, integer maxLevel, integer n,
                                         Curve::Type curveType = Curve::lebesgue);
 
+        /**
+         * @brief Compute center of mass for all particles
+         *
+         * > Corresponding wrapper function: ::TreeNS::Kernel::Launch::globalCOM()
+         *
+         * @param[in] tree Tree class instance
+         * @param[in] particles Particle class instance
+         * @param[out] com Center of mass
+         */
         __global__ void globalCOM(Tree *tree, Particles *particles, real com[DIM]);
 
         namespace Launch {
 
             /**
-             * Wrapped kernel call to sum particles within tree.
+             * @brief Wrapper for ::TreeNS::Kernel::sumParticles()
              *
-             * @param tree
-             * @return
+             * @return Wall time of execution
              */
             real sumParticles(Tree *tree);
 
             /**
-             * Wrapped kernel call to get all particle's key(s)
+             * @brief Wrapper for ::TreeNS::Kernel::getParticleKeys()
              *
-             * @param tree
-             * @param particles
-             * @param keys
-             * @param maxLevel
-             * @param n
-             * @param curveType
-             * @param time
-             * @return
+             * @return Wall time of execution
              */
             real getParticleKeys(Tree *tree, Particles *particles, keyType *keys, integer maxLevel, integer n,
                                  Curve::Type curveType = Curve::lebesgue, bool time=false);
 
             /**
-             * Wrapped kernel call to build tree structure
+             * @brief Wrapper for ::TreeNS::Kernel::buildTree()
              *
-             * @param tree
-             * @param particles
-             * @param n
-             * @param m
-             * @param time
-             * @return
+             * @return Wall time of execution
              */
             real buildTree(Tree *tree, Particles *particles, integer n, integer m, bool time=false);
 
@@ -594,41 +604,32 @@ namespace TreeNS {
             real calculateCentersOfMass(Tree *tree, Particles *particles, integer n, integer level, bool time=false);
 
             /**
-             * Wrapped kernel call to compute bounding box(es)/borders
+             * @brief Wrapper for ::TreeNS::Kernel::computeBoundingBox()
              *
-             * @param tree
-             * @param particles
-             * @param mutex
-             * @param n
-             * @param blockSize
-             * @param time
-             * @return
+             * @return Wall time of execution
              */
             real computeBoundingBox(Tree *tree, Particles *particles, integer *mutex, integer n,
                                           integer blockSize, bool time=false);
 
             /**
-             * Wrapped kernel call to compute center of mass
+             * @brief Wrapper for ::TreeNS::Kernel::centerOfMass()
              *
-             * @param tree
-             * @param particles
-             * @param n
-             * @param time
-             * @return
+             * @return Wall time of execution
              */
             real centerOfMass(Tree *tree, Particles *particles, integer n, bool time=false);
 
             /**
-             * Wrapped kernel call to sort tree (indices)
+             * @brief Wrapper for ::TreeNS::Kernel::sort()
              *
-             * @param tree
-             * @param n
-             * @param m
-             * @param time
-             * @return
+             * @return Wall time of execution
              */
             real sort(Tree *tree, integer n, integer m, bool time=false);
 
+            /**
+             * @brief @brief Wrapper for ::TreeNS::Kernel::globalCOM()
+             *
+             * @return Wall time of execution
+             */
             real globalCOM(Tree *tree, Particles *particles, real com[DIM]);
 
         }

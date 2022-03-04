@@ -1,0 +1,7 @@
+plummer/pl_N4096_sfc0F_np1
+plummer/pl_N4096_sfc0F_np2
+plummer/pl_N4096_sfc1F_np2
+plummer/pl_N4096_sfc0D_np2
+plummer/pl_N4096_sfc1D_np2
+plummer/pl_N4096_sfc0D_np4
+plummer/pl_N4096_sfc1D_np4
