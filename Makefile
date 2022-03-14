@@ -24,7 +24,7 @@ OBJEXT         := o
 
 #Flags, Libraries and Includes
 CXXFLAGS       += -std=c++11 -w -I/usr/include/hdf5/openmpi#-O3
-NVFLAGS        := --std=c++11 -x cu -c -dc -w -Xcompiler "-pthread" -Wno-deprecated-gpu-targets -O3 -I/opt/openmpi-4.1.0/include -I/usr/include/hdf5/openmpi
+NVFLAGS        := --std=c++11 -x cu -c -dc -w -Xcompiler "-pthread" -Wno-deprecated-gpu-targets -fmad=false -O3 -I/opt/openmpi-4.1.0/include -I/usr/include/hdf5/openmpi
 LFLAGS         += -lm -L$(CUDADIR)/lib64 -lcudart -lpthread -lconfig -L/usr/local/cuda-11.4/lib64 -L/opt/openmpi-4.1.0/lib -L/usr/lib/x86_64-linux-gnu/hdf5/openmpi -lmpi -lhdf5 -lboost_filesystem -lboost_system
 GPU_ARCH       := -arch=sm_52
 CUDALFLAGS     := -dlink
@@ -44,7 +44,7 @@ OBJECTS        := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.$(O
 CUDA_OBJECTS   := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(CUDA_SOURCES:.$(CUDASRCEXT)=.$(OBJEXT)))
 
 #Documentation (Doxygen)
-DOXY           := /usr/local/Cellar/doxygen/1.8.20/bin/doxygen
+DOXY           := /usr/local/Cellar/doxygen/1.9.3_1/bin/doxygen
 DOXYFILE       := $(DOCDIR)/Doxyfile
 
 #default make (all)
