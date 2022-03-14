@@ -247,14 +247,14 @@ CUDA_CALLABLE_MEMBER void Particles::setPorosity(real *pold, real *alpha_jutzi, 
 CUDA_CALLABLE_MEMBER void Particles::reset(integer index) {
     level[index] = -1;
     nodeType[index] = 0;
-    x[index] = 0;
+    x[index] = 0.;
 #if DIM > 1
-    y[index] = 0;
+    y[index] = 0.;
 #if DIM == 3
-    z[index] = 0;
+    z[index] = 0.;
 #endif
 #endif
-    mass[index] = 0;
+    mass[index] = 0.;
 }
 
 CUDA_CALLABLE_MEMBER real Particles::distance(integer index_1, integer index_2) {

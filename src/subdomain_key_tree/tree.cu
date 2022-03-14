@@ -1296,3 +1296,106 @@ namespace TreeNS {
         }
     }
 }
+
+
+#if UNIT_TESTING
+namespace UnitTesting {
+    namespace Kernel {
+
+        __global__ void test_localTree(Tree *tree, Particles *particles, int n, int m) {
+
+            int bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            int stride = blockDim.x * gridDim.x;
+
+            real childMasses;
+            real positionX;
+#if DIM > 1
+            real positionY;
+#if DIM == 3
+            real positionZ;
+#endif
+#endif
+            int childIndex;
+            // check pseudo-particles
+            int offset = n;
+            while ((bodyIndex + offset) < m) {
+                // check whether pseudo-particles are correctly calculated
+                childMasses = 0.;
+                positionX = 0.;
+#if DIM > 1
+                positionY = 0.;
+#if DIM == 3
+                positionZ = 0.;
+#endif
+#endif
+                for (int child=0; child<POW_DIM; child++) {
+                    childIndex = tree->child[POW_DIM * (bodyIndex + offset) + child];
+
+                    if (childIndex != -1) {
+                        childMasses += particles->mass[childIndex];
+                        positionX += particles->mass[childIndex] * particles->x[childIndex];
+#if DIM > 1
+                        positionY += particles->mass[childIndex] * particles->y[childIndex];
+#if DIM == 3
+                        positionZ += particles->mass[childIndex] * particles->z[childIndex];
+#endif
+#endif
+                    }
+                }
+                if (childMasses > 0.) {
+                    positionX /= childMasses;
+#if DIM > 1
+                    positionY /= childMasses;
+#if DIM == 3
+                    positionZ /= childMasses;
+#endif
+#endif
+                }
+                //if (particles->nodeType[bodyIndex + offset] == 1) { // <
+                //    printf("Masses [%i] ?: %e vs %e (type: %i)!\n", bodyIndex + offset, particles->mass[bodyIndex + offset], childMasses, particles->nodeType[bodyIndex + offset]);
+                //}
+                // now compare
+                if (particles->mass[bodyIndex + offset] != childMasses) {
+                    if (particles->nodeType[bodyIndex + offset] != 2) { // >=
+                        printf("Masses are not correct [%i]: %e vs %e (type: %i)!\n", bodyIndex + offset, particles->mass[bodyIndex + offset], childMasses, particles->nodeType[bodyIndex + offset]);
+                        //for (int child=0; child<POW_DIM; child++) {
+                        //    printf("[%i] Masses: index: %i\n", bodyIndex + offset, tree->child[POW_DIM * (bodyIndex + offset) + child]);
+                        //}
+                    }
+                }
+                if (cuda::math::abs(particles->x[bodyIndex + offset] - positionX) > 1e-3) {
+                    if (particles->nodeType[bodyIndex + offset] != 2) {
+                        printf("Masses... X position are not correct [%i]: %e vs %e (m = %e vs %e)!\n", bodyIndex + offset,
+                               particles->x[bodyIndex + offset], positionX, particles->mass[bodyIndex + offset], childMasses);
+                        for (int child=0; child<POW_DIM; child++) {
+                            printf("[%i] Masses: index: %i\n", bodyIndex + offset, tree->child[POW_DIM * (bodyIndex + offset) + child]);
+                        }
+                    }
+                }
+#if DIM > 1
+                if (cuda::math::abs(particles->y[bodyIndex + offset] - positionY) > 1e-3) {
+                    if (particles->nodeType[bodyIndex + offset] != 2) {
+                        printf("Masses... Y position are not correct: %e vs %e (m = %e vs %e)!\n", particles->y[bodyIndex + offset], positionY, particles->mass[bodyIndex + offset], childMasses);
+                    }
+                }
+#if DIM == 3
+                if (cuda::math::abs(particles->z[bodyIndex + offset] - positionZ) > 1e-3) {
+                    if (particles->nodeType[bodyIndex + offset] != 2) {
+                        printf("Masses... Z position are not correct: %e vs %e (m = %e vs %e)!\n", particles->z[bodyIndex + offset], positionZ, particles->mass[bodyIndex + offset], childMasses);
+                    }
+                }
+#endif
+#endif
+                offset += stride;
+            }
+        }
+
+        namespace Launch {
+            real test_localTree(Tree *tree, Particles *particles, int n, int m) {
+                ExecutionPolicy executionPolicy;
+                return cuda::launch(true, executionPolicy, ::UnitTesting::Kernel::test_localTree, tree, particles, n, m);
+            }
+        }
+    }
+}
+#endif

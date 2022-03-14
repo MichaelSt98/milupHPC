@@ -41,6 +41,9 @@ typedef int idInteger;
 /// maximum tree level
 #define MAX_LEVEL 21
 
+/// compile & dispatch unit tests
+#define UNIT_TESTING 0
+
 /// enable/disable debugging calculations/outputs
 #define DEBUGGING 0
 

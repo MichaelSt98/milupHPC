@@ -190,7 +190,6 @@ namespace SubDomainKeyTreeNS {
                                    particles->level[cell]);
 #endif
 #endif
-                            //particles->level[cell] = -2; //TODO: new
                             domainListCounter++;
                         } else {
                             // child is a leaf, thus add node in between
@@ -362,6 +361,7 @@ namespace SubDomainKeyTreeNS {
                     if (childIndex < n) {
                         if (childIndex == -1) {
                             // no child at all here, thus add node
+                            printf("build domain tree, adding node ...\n");
                             integer cell = atomicAdd(tree->index, 1);
                             tree->child[POW_DIM * temp + path[j-1]] = cell;
                             particles->level[cell] = j;
@@ -465,9 +465,9 @@ namespace SubDomainKeyTreeNS {
 #endif
 #endif
                         } else {
+                            printf("build domain tree, adding node in between...\n");
                             // child is a leaf, thus add node in between
                             integer cell = atomicAdd(tree->index, 1);
-                            //TODO: ??? j or j-1
                             tree->child[POW_DIM * temp + path[j - 1]] = cell;
 
                             min_x = *tree->minX;
@@ -485,23 +485,26 @@ namespace SubDomainKeyTreeNS {
 
                                 currentChild = path[k];
 
-                                if (currentChild % 2 != 0) {
+                                //if (currentChild % 2 != 0) {
+                                if (currentChild & 1) {
                                     max_x = 0.5 * (min_x + max_x);
-                                    currentChild -= 1;
+                                    //currentChild -= 1;
                                 } else {
                                     min_x = 0.5 * (min_x + max_x);
                                 }
 #if DIM > 1
-                                if (currentChild % 2 == 0 && currentChild % 4 != 0) {
+                                //if (currentChild % 2 == 0 && currentChild % 4 != 0) {
+                                if ((currentChild >> 1) & 1) {
                                     max_y = 0.5 * (min_y + max_y);
-                                    currentChild -= 2;
+                                    //currentChild -= 2;
                                 } else {
                                     min_y = 0.5 * (min_y + max_y);
                                 }
 #if DIM == 3
-                                if (currentChild == 4) {
+                                //if (currentChild == 4) {
+                                if ((currentChild >> 2) & 1) {
                                     max_z = 0.5 * (min_z + max_z);
-                                    currentChild -= 4;
+                                    //currentChild -= 4;
                                 } else {
                                     min_z = 0.5 * (min_z + max_z);
                                 }
@@ -509,16 +512,18 @@ namespace SubDomainKeyTreeNS {
 #endif
                             }
 
-                            //particles->x[cell] = particles->x[childIndex];
-                            particles->x[cell] = 0.5 * (min_x + max_x);
+                            //TODO: was particles->x[cell] = 0.5 * (min_x + max_x);
+                            particles->x[cell] = particles->x[childIndex];
+                            //particles->x[cell] = 0.5 * (min_x + max_x);
 #if DIM > 1
-                            //particles->y[cell] = particles->y[childIndex];
-                            particles->y[cell] = 0.5 * (min_y + max_y);
+                            particles->y[cell] = particles->y[childIndex];
+                            //particles->y[cell] = 0.5 * (min_y + max_y);
 #if DIM == 3
-                            //particles->z[cell] = particles->z[childIndex];
-                            particles->z[cell] = 0.5 * (min_z + max_z);
+                            particles->z[cell] = particles->z[childIndex];
+                            //particles->z[cell] = 0.5 * (min_z + max_z);
 #endif
 #endif
+                            //particles->mass[cell] = particles->mass[childIndex];
 
                             /*
                             //particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
@@ -573,7 +578,9 @@ namespace SubDomainKeyTreeNS {
 
 
                             tree->child[POW_DIM * cell + childPath] = childIndex;
-                            //printf("child[8 * %i + %i] = %i\n", cell, childPath, childIndex);
+                            printf("child[8 * %i + %i] = %i\n", cell, childPath, childIndex);
+
+                            //particles->nodeType[childIndex] = -10; // just some testing
 
                             childIndex = cell;
                             //domainListCounter = atomicAdd(domainList->domainListCounter, 1);
@@ -727,19 +734,18 @@ namespace SubDomainKeyTreeNS {
                     particles->z[domainIndex] = (real)0;
 #endif
 #endif
-
                     particles->mass[domainIndex] = (real)0;
                 }
-                //else {
+                else {
                 //    //printf("domainIndex = %i *= mass = %f\n", domainIndex, particles->mass[domainIndex]);
-                //    particles->x[domainIndex] *= particles->mass[domainIndex];
-                //#if DIM > 1
-                //    particles->y[domainIndex] *= particles->mass[domainIndex];
-                //#if DIM == 3
-                //    particles->z[domainIndex] *= particles->mass[domainIndex];
-                //#endif
-                //#endif
-                //}
+                    particles->x[domainIndex] *= particles->mass[domainIndex];
+#if DIM > 1
+                    particles->y[domainIndex] *= particles->mass[domainIndex];
+#if DIM == 3
+                    particles->z[domainIndex] *= particles->mass[domainIndex];
+#endif
+#endif
+                }
 
                 offset += stride;
             }
@@ -868,17 +874,17 @@ namespace SubDomainKeyTreeNS {
                     //       particles->y[lowestDomainIndex], particles->z[lowestDomainIndex], particles->mass[lowestDomainIndex]);
 #endif
 
-                    //particles->x[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
-                    //#if DIM > 1
-                    //particles->y[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
-                    //#if DIM == 3
-                    //particles->z[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
-                    //#endif
-                    //#endif
+                    particles->x[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
+#if DIM > 1
+                    particles->y[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
+#if DIM == 3
+                    particles->z[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
+#endif
+#endif
 
 #if DIM == 3
-                    //printf("lowestDomainIndex: %i (%f, %f, %f) %f\n", lowestDomainIndex, particles->x[lowestDomainIndex],
-                    //       particles->y[lowestDomainIndex], particles->z[lowestDomainIndex], particles->mass[lowestDomainIndex]);
+                    printf("lowestDomainIndex: %i (%f, %f, %f) %f\n", lowestDomainIndex, particles->x[lowestDomainIndex],
+                           particles->y[lowestDomainIndex], particles->z[lowestDomainIndex], particles->mass[lowestDomainIndex]);
 #endif
                 }
 
@@ -1002,10 +1008,16 @@ namespace SubDomainKeyTreeNS {
                 //}
                 if (compute && domainList->domainListLevels[bodyIndex + offset] == level) {
                     // do the calculation
-                    //particles->x[domainIndex] = 0.;
-                    //particles->y[domainIndex] = 0.;
-                    //particles->z[domainIndex] = 0.;
-                    //particles->mass[domainIndex] = 0.;
+                    /*
+                    particles->x[domainIndex] += 0.;
+#if DIM > 1
+                    particles->y[domainIndex] += 0.;
+#if DIM == 3
+                    particles->z[domainIndex] += 0.;
+#endif
+#endif
+                    particles->mass[domainIndex] += 0.;
+                    */
                     for (int i=0; i<POW_DIM; i++) {
                         particles->x[domainIndex] += particles->x[tree->child[POW_DIM*domainIndex + i]] *
                                                      particles->mass[tree->child[POW_DIM*domainIndex + i]];
@@ -1020,7 +1032,7 @@ namespace SubDomainKeyTreeNS {
                         particles->mass[domainIndex] += particles->mass[tree->child[POW_DIM*domainIndex + i]];
                     }
 
-                    if (particles->mass[domainIndex] != 0.f) {
+                    if (particles->mass[domainIndex] > 0.) {
                         particles->x[domainIndex] /= particles->mass[domainIndex];
 #if DIM > 1
                         particles->y[domainIndex] /= particles->mass[domainIndex];

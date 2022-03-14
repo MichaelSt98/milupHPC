@@ -584,6 +584,19 @@ real Miluphpc::reset() {
 #endif
 #endif
 
+    // TODO: just some testing
+    /*
+    cuda::set(treeHandler->d_child, -1, POW_DIM * numNodes);
+    cuda::set(&particleHandler->d_mass[numParticlesLocal], (real)0., numNodes - numParticlesLocal);
+    cuda::set(&particleHandler->d_x[numParticlesLocal], (real)0., numNodes - numParticlesLocal);
+#if DIM > 1
+    cuda::set(&particleHandler->d_y[numParticlesLocal], (real)0., numNodes - numParticlesLocal);
+#if DIM == 3
+    cuda::set(&particleHandler->d_z[numParticlesLocal], (real)0., numNodes - numParticlesLocal);
+#endif
+#endif
+     */
+    // end: testing
     cuda::set(particleHandler->d_nodeType, 0, numNodes);
 
     //cuda::set(&particleHandler->d_x[numParticles], (real)0., numNodes-numParticles);
@@ -1078,8 +1091,9 @@ real Miluphpc::parallel_pseudoParticles() {
 
     Logger(DEBUG) << "finish computation of lowest domain list nodes ...";
     // ---------------------------------------------------------
-    //time += SubDomainKeyTreeNS::Kernel::Launch::compLowestDomainListNodes(treeHandler->d_tree, particleHandler->d_particles,
-    //                                                           lowestDomainListHandler->d_domainList);
+    // TODO: this was not activated for thesis...
+    time += SubDomainKeyTreeNS::Kernel::Launch::compLowestDomainListNodes(treeHandler->d_tree, particleHandler->d_particles,
+                                                               lowestDomainListHandler->d_domainList);
     // ---------------------------------------------------------
     //end: for all entries!
 
@@ -1112,6 +1126,17 @@ real Miluphpc::parallel_gravity() {
     real time;
     real totalTime = 0;
 
+    /*
+#if UNIT_TESTING
+    //if (subStep == 10) {
+        int actualTreeIndex;
+        cuda::copy(&actualTreeIndex, treeHandler->d_index, 1, To::host);
+        Logger(TRACE) << "[" << subStep << "] Checking Masses ...";
+        UnitTesting::Kernel::Launch::test_localTree(treeHandler->d_tree, particleHandler->d_particles, numParticles, actualTreeIndex); //numNodes);
+    //}
+#endif
+     */
+
     totalTime += HelperNS::Kernel::Launch::resetArray(helperHandler->d_realBuffer, (real)0, numParticles);
 
     cuda::set(domainListHandler->d_domainListCounter, 0);
@@ -1119,7 +1144,7 @@ real Miluphpc::parallel_gravity() {
     Logger(DEBUG) << "compTheta()";
     // ---------------------------------------------------------
     time = Gravity::Kernel::Launch::compTheta(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
-                                              particleHandler->d_particles, domainListHandler->d_domainList,
+                                              particleHandler->d_particles, lowestDomainListHandler->d_domainList, //domainListHandler->d_domainList,
                                               helperHandler->d_helper, curveType);
     // ---------------------------------------------------------
     totalTime += time;
@@ -1127,13 +1152,16 @@ real Miluphpc::parallel_gravity() {
     profiler.value2file(ProfilerIds::Time::Gravity::compTheta, time);
 
     integer relevantIndicesCounter;
-    cuda::copy(&relevantIndicesCounter, domainListHandler->d_domainListCounter, 1, To::host);
+    // changed from domainListHandler to lowestDomainListHandler
+    cuda::copy(&relevantIndicesCounter, lowestDomainListHandler->d_domainListCounter, 1, To::host);
 
     Logger(DEBUG) << "relevantIndicesCounter: " << relevantIndicesCounter;
 
     integer *h_relevantDomainListProcess;
     h_relevantDomainListProcess = new integer[relevantIndicesCounter]; //TODO: delete [] h_relevantDomainListProcess;
-    cuda::copy(h_relevantDomainListProcess, domainListHandler->d_relevantDomainListProcess, relevantIndicesCounter, To::host);
+    //cuda::copy(h_relevantDomainListProcess, domainListHandler->d_relevantDomainListProcess, relevantIndicesCounter, To::host);
+    // changed from domainListHandler to lowestDomainListHandler
+    cuda::copy(h_relevantDomainListProcess, lowestDomainListHandler->d_relevantDomainListProcess, relevantIndicesCounter, To::host);
 
     for (int i=0; i<relevantIndicesCounter; i++) {
         Logger(DEBUG) << "relevantDomainListProcess[" << i << "] = " << h_relevantDomainListProcess[i];
@@ -1164,7 +1192,8 @@ real Miluphpc::parallel_gravity() {
 #endif // CUBIC_DOMAINS
 
     // TODO: create buffer concept and (re)use buffer for gravity internode communicaton
-    cuda::set(domainListHandler->d_domainListCounter, 0);
+    // changed from domainListHandler to lowestDomainListHandler
+    cuda::set(lowestDomainListHandler->d_domainListCounter, 0);
     integer *d_markedSendIndices = buffer->d_integerBuffer;
     real *d_collectedEntries = buffer->d_realBuffer;
 
@@ -1191,8 +1220,9 @@ real Miluphpc::parallel_gravity() {
             cuda::set(d_markedSendIndices, -1, numNodes);
             for (int level = 0; level < MAX_LEVEL; level++) {
                 // ---------------------------------------------------------
+                // changed from domainListHandler to lowestDomainListHandler
                 time += Gravity::Kernel::Launch::intermediateSymbolicForce(subDomainKeyTreeHandler->d_subDomainKeyTree,
-                        treeHandler->d_tree, particleHandler->d_particles, domainListHandler->d_domainList,
+                        treeHandler->d_tree, particleHandler->d_particles, lowestDomainListHandler->d_domainList,
                         d_markedSendIndices, diam, simulationParameters.theta, numParticlesLocal, numParticles,0, level,
                         curveType);
                 // ---------------------------------------------------------
@@ -1201,9 +1231,10 @@ real Miluphpc::parallel_gravity() {
                         //Logger(INFO) << "h_relevantDomainListProcess[" << relevantIndex << "] = "
                         //             << h_relevantDomainListProcess[relevantIndex];
                         // ---------------------------------------------------------
+                        // changed from domainListHandler to lowestDomainListHandler
                         time += Gravity::Kernel::Launch::symbolicForce(subDomainKeyTreeHandler->d_subDomainKeyTree,
                                                                        treeHandler->d_tree, particleHandler->d_particles,
-                                                                       domainListHandler->d_domainList,
+                                                                       lowestDomainListHandler->d_domainList,
                                                                        d_markedSendIndices, diam,
                                                                        simulationParameters.theta,
                                                                        numParticlesLocal, numParticles,
@@ -1212,8 +1243,9 @@ real Miluphpc::parallel_gravity() {
                     }
                 }
             }
+            // changed from domainListHandler to lowestDomainListHandler
             time += Gravity::Kernel::Launch::intermediateSymbolicForce(subDomainKeyTreeHandler->d_subDomainKeyTree,
-                                                                       treeHandler->d_tree, particleHandler->d_particles, domainListHandler->d_domainList,
+                                                                       treeHandler->d_tree, particleHandler->d_particles, lowestDomainListHandler->d_domainList,
                                                                        d_markedSendIndices, diam, simulationParameters.theta, numParticlesLocal, numParticles,0, 0,
                                                                        curveType);
             // ---------------------------------------------------------
@@ -1355,7 +1387,7 @@ real Miluphpc::parallel_gravity() {
     integer treeIndex;
     cuda::copy(&treeIndex, treeHandler->d_index, 1, To::host);
 
-    if (simulationParameters.particlesSent2H5) {
+    if (simulationParameters.particlesSent2H5 && subStep == 500) {
 
         // WRITING PARTICLES TO SEND TO H5 FILE
 
@@ -1404,15 +1436,15 @@ real Miluphpc::parallel_gravity() {
 
     //Particle velocity and acceleration:
     // vx-entry particle exchange
-    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_vx, d_collectedEntries,
-                                             particleTotalSendLength);
-    sendParticles(d_collectedEntries, &particleHandler->d_vx[numParticlesLocal], particleSendLengths,
-                  particleReceiveLengths);
+    //CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_vx, d_collectedEntries,
+    //                                         particleTotalSendLength);
+    //sendParticles(d_collectedEntries, &particleHandler->d_vx[numParticlesLocal], particleSendLengths,
+    //              particleReceiveLengths);
     // ax-entry particle exchange
-    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_ax, d_collectedEntries,
-                                             particleTotalSendLength);
-    sendParticles(d_collectedEntries, &particleHandler->d_ax[numParticlesLocal], particleSendLengths,
-                  particleReceiveLengths);
+    //CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_ax, d_collectedEntries,
+    //                                         particleTotalSendLength);
+    //sendParticles(d_collectedEntries, &particleHandler->d_ax[numParticlesLocal], particleSendLengths,
+    //              particleReceiveLengths);
 #if DIM > 1
     // y-entry pseudo-particle exchange
     CudaUtils::Kernel::Launch::collectValues(d_pseudoParticles2SendIndices, particleHandler->d_y, d_collectedEntries,
@@ -1428,15 +1460,15 @@ real Miluphpc::parallel_gravity() {
 
     //Particle velocity and acceleration:
     // vy-entry particle exchange
-    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_vy, d_collectedEntries,
-                                             particleTotalSendLength);
-    sendParticles(d_collectedEntries, &particleHandler->d_vy[numParticlesLocal], particleSendLengths,
-                  particleReceiveLengths);
+    //CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_vy, d_collectedEntries,
+    //                                         particleTotalSendLength);
+    //sendParticles(d_collectedEntries, &particleHandler->d_vy[numParticlesLocal], particleSendLengths,
+    //              particleReceiveLengths);
     // ay-entry particle exchange
-    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_ay, d_collectedEntries,
-                                             particleTotalSendLength);
-    sendParticles(d_collectedEntries, &particleHandler->d_ay[numParticlesLocal], particleSendLengths,
-                  particleReceiveLengths);
+    //CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_ay, d_collectedEntries,
+    //                                         particleTotalSendLength);
+    //sendParticles(d_collectedEntries, &particleHandler->d_ay[numParticlesLocal], particleSendLengths,
+    //              particleReceiveLengths);
 #if DIM == 3
     // z-entry pseudo-particle exchange
     CudaUtils::Kernel::Launch::collectValues(d_pseudoParticles2SendIndices, particleHandler->d_z, d_collectedEntries,
@@ -1451,15 +1483,15 @@ real Miluphpc::parallel_gravity() {
 
     //Particle velocity and acceleration:
     // vz-entry particle exchange
-    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_vz, d_collectedEntries,
-                                             particleTotalSendLength);
-    sendParticles(d_collectedEntries, &particleHandler->d_vz[numParticlesLocal], particleSendLengths,
-                  particleReceiveLengths);
+    //CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_vz, d_collectedEntries,
+    //                                         particleTotalSendLength);
+    //sendParticles(d_collectedEntries, &particleHandler->d_vz[numParticlesLocal], particleSendLengths,
+    //              particleReceiveLengths);
     // az-entry particle exchange
-    CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_az, d_collectedEntries,
-                                             particleTotalSendLength);
-    sendParticles(d_collectedEntries, &particleHandler->d_az[numParticlesLocal], particleSendLengths,
-                  particleReceiveLengths);
+    //CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_az, d_collectedEntries,
+    //                                         particleTotalSendLength);
+    //sendParticles(d_collectedEntries, &particleHandler->d_az[numParticlesLocal], particleSendLengths,
+    //              particleReceiveLengths);
 
 #endif
 #endif
@@ -1561,6 +1593,8 @@ real Miluphpc::parallel_gravity() {
     Logger(INFO) << "toDeleteNode: " << treeHandler->h_toDeleteNode[0] << " : " << treeHandler->h_toDeleteNode[1];
 #endif
 
+
+
     time = 0;
     // insert received pseudo-particles per level in order to ensure correct order (avoid race condition)
     for (int level=0; level<MAX_LEVEL; level++) {
@@ -1591,6 +1625,15 @@ real Miluphpc::parallel_gravity() {
     profiler.value2file(ProfilerIds::Time::Gravity::insertReceivedParticles, time);
 
     Logger(DEBUG) << "Finished inserting received particles!";
+
+#if UNIT_TESTING
+    //if (subStep == 10) {
+        int actualTreeIndex;
+        cuda::copy(&actualTreeIndex, treeHandler->d_index, 1, To::host);
+        Logger(TRACE) << "[" << subStep << "] Checking Masses ...";
+        UnitTesting::Kernel::Launch::test_localTree(treeHandler->d_tree, particleHandler->d_particles, numParticles, actualTreeIndex); //numNodes);
+    //}
+#endif
 
     time = 0;
 
@@ -1626,7 +1669,7 @@ real Miluphpc::parallel_gravity() {
     real radius_max = std::max(x_radius, y_radius);
     real radius = std::max(radius_max, z_radius);
 #endif
-    radius *= 1.0;
+    radius *= 0.5; // TODO: was 1.0
     Logger(INFO) << "radius: " << radius;
 
     // end: preparations for computing forces
@@ -1763,7 +1806,7 @@ real Miluphpc::parallel_gravity() {
     profiler.value2file(ProfilerIds::Time::Gravity::force, time);
 
     // repairTree
-    // necessary? Tree is build for every iteration: ONLY necessary if subsequent SPH
+    // necessary? Tree is build for every iteration: ONLY necessary if subsequent SPH?
     int debug_lowestDomainListIndex;
     cuda::copy(&debug_lowestDomainListIndex, lowestDomainListHandler->d_domainListIndex, 1, To::host);
     Logger(DEBUG) << "lowest Domain list index: " << debug_lowestDomainListIndex;
@@ -2330,6 +2373,14 @@ void Miluphpc::fixedLoadBalancing() {
     //subDomainKeyTreeHandler->h_subDomainKeyTree->range[0] = 0UL;
     //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = 0UL;
     //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = (2UL << 60) + (4UL << 57); // + (4UL << 54) + (2UL << 51) + (1UL << 39);
+    // 3|4|5|0|6|4|5|1|2|0|4|7|5|6|2|3|0|2|2|4|6|
+    //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = (4UL << 60) + (1UL << 57);
+    //        + (4UL << 57); // + (5UL << 54) + (0UL << 51) + (6UL << 48)
+            //+ (4UL << 45) + (5UL << 42) + (1UL << 39) + (2UL << 36)
+            //+ (0UL << 33) + (4UL << 30) + (7UL << 27) + (5UL << 24)
+            //+ (6UL << 21) + (2UL << 18) + (3UL << 15) + (0UL << 12)
+            //+ (2UL << 9) + (2UL << 6) + (4UL << 3) + (6UL << 0);
+    //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = (4UL << 60) + (4UL << 57) + (3UL << 54) + (2UL << 51) + (3UL << 30);
     //subDomainKeyTreeHandler->h_subDomainKeyTree->range[2] = (4UL << 60) + (2UL << 57);
     //subDomainKeyTreeHandler->h_subDomainKeyTree->range[3] = (6UL << 60) + (1UL << 57);
     //subDomainKeyTreeHandler->h_subDomainKeyTree->range[4] = KEY_MAX;

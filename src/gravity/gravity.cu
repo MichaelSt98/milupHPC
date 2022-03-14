@@ -270,12 +270,14 @@ namespace Gravity {
                     nodeIndex = currentNodeIndex[depth];
 
                     while(childNumber < POW_DIM) {
+
                         do {
                             child = tree->child[POW_DIM * nodeIndex + childNumber];
                             childNumber++;
                         } while(child == -1 && childNumber < POW_DIM);
 
                         if (child != -1 && child != i) { // dont do self-gravity with yourself!
+
                             dx = particles->x[child] - px;
                             distance = dx*dx + smoothing;
 #if DIM > 1
@@ -288,6 +290,7 @@ namespace Gravity {
 #endif
                             // if child is leaf or far away
                             if (child < n || distance * thetasq > cellSize[depth]) {
+
                                 distance = cuda::math::sqrt(distance);
 #if SI_UNITS
                                 f = Constants::G * particles->mass[child] / (distance * distance * distance);
@@ -314,7 +317,9 @@ namespace Gravity {
                                 // put child on stack
                                 currentChildNumber[depth] = childNumber;
                                 currentNodeIndex[depth] = nodeIndex;
+                                //if (particles->nodeType[child] != 3) {
                                 depth++;
+                                //}
                                 if (depth == MAX_DEPTH) {
                                     cudaTerminate("depth = %i >= MAX_DEPTH = %i\n", depth, MAX_DEPTH);
                                 }
@@ -425,6 +430,21 @@ namespace Gravity {
 #endif
                             // if child is leaf or far away
                             if (child < n || distance * thetasq > cellSize[depth]) {
+                                if (particles->nodeType[child] == 3 || particles->nodeType[child] == -10) {
+                                    printf("Taking node type %i into account...\n", particles->nodeType[child]);
+                                    if (particles->nodeType[child] == 3) {
+                                        for (int i_test=0; i_test<POW_DIM; ++i_test) {
+                                            printf("%i node type %i: (%e, %e, %e | %e), child %i: %i (%e, %e, %e | %e)\n",
+                                                   child, particles->nodeType[child], particles->x[child], particles->y[child], particles->z[child],
+                                                   particles->mass[child], i_test,
+                                                   tree->child[POW_DIM * child + i_test],
+                                                   particles->x[tree->child[POW_DIM * child + i_test]],
+                                                   particles->y[tree->child[POW_DIM * child + i_test]],
+                                                   particles->z[tree->child[POW_DIM * child + i_test]],
+                                                   particles->mass[tree->child[POW_DIM * child + i_test]]);
+                                        }
+                                    }
+                                }
                                 distance = sqrt(distance);
 #if SI_UNITS
                                 f = Constants::G * particles->mass[child] / (distance * distance * distance);
@@ -1284,9 +1304,7 @@ namespace Gravity {
                     __threadfence();
                     offset += stride;
                 }
-
             }
-
         }
 
         __global__ void compTheta(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
@@ -1315,6 +1333,24 @@ namespace Gravity {
                 //printf("[rank %i] potential relevant domain list node: %i (%f, %f, %f)\n", subDomainKeyTree->rank,
                 //       bodyIndex, particles->x[bodyIndex],
                 //       particles->y[bodyIndex], particles->z[bodyIndex]);
+
+                // TODO: part of unit testing ...
+                /*
+                if (particles->mass[bodyIndex] == 0.) {
+                    //printf("Masses ... Domain index: %i mass = %e x = (%e, %e, %e)!\n", bodyIndex,
+                    //       particles->mass[bodyIndex], particles->x[bodyIndex], particles->y[bodyIndex],
+                    //       particles->z[bodyIndex]);
+                    for (int child=0; child<POW_DIM; child++) {
+                        if (tree->child[POW_DIM * bodyIndex + child] != -1 && particles->mass[tree->child[POW_DIM * bodyIndex + child]] > 0.) {
+                            printf("Masses ... Domain index: %i (type: %i) mass = %e x = (%e, %e, %e) but child %i not zero (mass = %e x = (%e, %e, %e))!!!\n", bodyIndex, particles->nodeType[bodyIndex],
+                                   particles->mass[bodyIndex], particles->x[bodyIndex], particles->y[bodyIndex],
+                                   particles->z[bodyIndex], child, particles->mass[tree->child[POW_DIM * bodyIndex + child]],
+                                   particles->x[tree->child[POW_DIM * bodyIndex + child]], particles->y[tree->child[POW_DIM * bodyIndex + child]],
+                                   particles->z[tree->child[POW_DIM * bodyIndex + child]]);
+                        }
+                    }
+                }
+                */
 
                 if (proc != subDomainKeyTree->rank && proc >= 0 && particles->mass[bodyIndex] > 0.f) {
                     //printf("[rank = %i] proc = %i, key = %lu for x = (%f, %f, %f)\n", subDomainKeyTree->rank, proc, key, particles->x[bodyIndex], particles->y[bodyIndex], particles->z[bodyIndex]);

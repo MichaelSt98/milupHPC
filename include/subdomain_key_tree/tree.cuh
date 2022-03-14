@@ -636,4 +636,17 @@ namespace TreeNS {
     }
 }
 
+#if UNIT_TESTING
+namespace UnitTesting {
+    namespace Kernel {
+
+        __global__ void test_localTree(Tree *tree, Particles *particles, int n, int m);
+
+        namespace Launch {
+            real test_localTree(Tree *tree, Particles *particles, int n, int m);
+        }
+    }
+}
+#endif
+
 #endif //MILUPHPC_TREE_CUH
