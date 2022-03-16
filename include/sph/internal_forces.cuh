@@ -22,6 +22,9 @@ namespace SPH {
          *
          * > Corresponding wrapper function: ::SPH::Kernel::Launch::internalForces()
          *
+         * Here, similar to the density calculation (::SPH::Kernel::calculateDensity()), all the interaction partner
+         * particles are iterated for each particle and those contributions are summed.
+         *
          * The **artificial viscosity** terms can be taken into account as an additional (artificial) pressure term in the equations for conservation of momentum and energy.
          * The additional term for each interaction pair \f$(a, b)\f$ is
          *

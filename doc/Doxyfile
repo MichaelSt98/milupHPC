@@ -17,7 +17,6 @@
 
 @INCLUDE               = doc/doxyfile.inc
 
-
 USE_MDFILE_AS_MAINPAGE = ./doc/Mainpage.md
 
 
@@ -45,7 +44,7 @@ PROJECT_NUMBER         =
 # for a project that appears at the top of each page and should give viewer
 # a quick idea about the purpose of the project. Keep the description short.
 
-PROJECT_BRIEF          = "This is a brief description of the project!"
+PROJECT_BRIEF          = "Multi-GPU SPH and self-gravity code for distributed memory systems using CUDA-aware MPI"
 
 # With the PROJECT_LOGO tag one can specify an logo or icon that is
 # included in the documentation. The maximum height of the logo should not
@@ -58,7 +57,6 @@ PROJECT_LOGO           =
 # base path where the generated documentation will be put.
 # If a relative path is entered, it will be relative to the location
 # where doxygen was started. If left blank the current directory will be used.
-
 #OUTPUT_DIRECTORY       =
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create
@@ -120,7 +118,7 @@ ALWAYS_DETAILED_SEC    = NO
 # members were ordinary class members. Constructors, destructors and assignment
 # operators of the base classes will not be shown.
 
-INLINE_INHERITED_MEMB  = NO
+INLINE_INHERITED_MEMB  = YES
 
 # If the FULL_PATH_NAMES tag is set to YES then Doxygen will prepend the full
 # path before files name in the file list and in the header files. If set
@@ -190,6 +188,7 @@ SEPARATE_MEMBER_PAGES  = NO
 
 # The TAB_SIZE tag can be used to set the number of spaces in a tab.
 # Doxygen uses this value to replace tabs by spaces in code fragments.
+# was: 8
 
 TAB_SIZE               = 8
 
@@ -534,7 +533,7 @@ SHOW_USED_FILES        = YES
 # then setting the SHOW_DIRECTORIES tag to YES will show the directory hierarchy
 # in the documentation. The default is NO.
 
-SHOW_DIRECTORIES       = NO
+SHOW_DIRECTORIES       = YES
 
 # Set the SHOW_FILES tag to NO to disable the generation of the Files page.
 # This will remove the Files entry from the Quick Index and from the
@@ -684,7 +683,12 @@ RECURSIVE              = YES
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 # Note that relative paths are relative to directory from which doxygen is run.
 
-EXCLUDE                =
+EXCLUDE                = binac/* \
+                         include/utils/cxxopts.h \
+                         doc/* \
+                         documents/* \
+                         resources/* \
+                         testing/* \
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded
@@ -784,7 +788,7 @@ SOURCE_BROWSER         = YES
 # Setting the INLINE_SOURCES tag to YES will include the body
 # of functions and classes directly in the documentation.
 
-INLINE_SOURCES         = YES
+INLINE_SOURCES         = NO
 
 # Setting the STRIP_CODE_COMMENTS tag to YES (the default) will instruct
 # doxygen to hide any special comment blocks from generated source code
@@ -907,7 +911,8 @@ HTML_EXTRA_STYLESHEET  =
 # files. In the HTML_STYLESHEET file, use the file name only. Also note that
 # the files will be copied as-is; there are no commands or markers available.
 
-# HTML_EXTRA_FILES       =
+#HTML_EXTRA_FILES       = doc/highlight/highlight.js doc/highlight/style/github.min.css
+HTML_EXTRA_FILES       =
 
 # The HTML_COLORSTYLE_HUE tag controls the color of the HTML output.
 # Doxygen will adjust the colors in the stylesheet and background images
@@ -952,7 +957,7 @@ HTML_ALIGN_MEMBERS     = YES
 # JavaScript and DHTML is required (for instance Mozilla 1.0+, Firefox
 # Netscape 6.0+, Internet explorer 5.0+, Konqueror, or Safari).
 
-HTML_DYNAMIC_SECTIONS  = NO
+HTML_DYNAMIC_SECTIONS  = YES
 
 # If the GENERATE_DOCSET tag is set to YES, additional index files
 # will be generated that can be used as input for Apple's Xcode 3
@@ -1033,7 +1038,7 @@ BINARY_TOC             = NO
 # The TOC_EXPAND flag can be set to YES to add extra items for group members
 # to the contents of the HTML help documentation and to the tree view.
 
-TOC_EXPAND             = NO
+TOC_EXPAND             = YES
 
 # If the GENERATE_QHP tag is set to YES and both QHP_NAMESPACE and
 # QHP_VIRTUAL_FOLDER are set, an additional index file will be generated
@@ -1167,7 +1172,7 @@ FORMULA_TRANSPARENT    = YES
 # output. When enabled you also need to install MathJax separately and
 # configure the path to it using the MATHJAX_RELPATH option.
 
-USE_MATHJAX            = NO
+# USE_MATHJAX            = YES
 
 # When MathJax is enabled you need to specify the location relative to the
 # HTML output directory using the MATHJAX_RELPATH option. The destination
@@ -1178,7 +1183,11 @@ USE_MATHJAX            = NO
 # MathJax, but it is strongly recommended to install a local copy of MathJax
 # before deployment.
 
-MATHJAX_RELPATH        = http://www.mathjax.org/mathjax
+# MATHJAX_RELPATH        = ../mathjax
+
+USE_MATHJAX       = YES
+MATHJAX_FORMAT    = HTML-CSS
+MATHJAX_RELPATH   = https://cdn.jsdelivr.net/npm/mathjax@2
 
 # The MATHJAX_EXTENSIONS tag can be used to specify one or MathJax extension
 # names that should be enabled during MathJax rendering.
@@ -1652,7 +1661,7 @@ GROUP_GRAPHS           = YES
 # collaboration diagrams in a style similar to the OMG's Unified Modeling
 # Language.
 
-UML_LOOK               = NO
+UML_LOOK               = YES
 
 # If set to YES, the inheritance and collaboration graphs will show the
 # relations between templates and their instances.
@@ -1744,6 +1753,8 @@ MSCFILE_DIRS           =
 # that the size of a graph can be further restricted by MAX_DOT_GRAPH_DEPTH.
 
 DOT_GRAPH_MAX_NODES    = 50
+
+DOT_UML_DETAILS=NONE
 
 # The MAX_DOT_GRAPH_DEPTH tag can be used to set the maximum depth of the
 # graphs generated by dot. A depth value of 3 means that only nodes reachable

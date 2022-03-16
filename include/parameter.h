@@ -2,8 +2,15 @@
  * @file parameter.h
  * @brief Settings via preprocessor directives, typedefs, constants, structs.
  *
- * More detailed description.
- * This file contains ...
+ * Many pre-processor directives are part of the implementation. The code can be used for simulations in one
+ * dimension, two dimensions and three dimensions via conditional compiling in dependence of the pre-processor
+ * directive DIM.
+ *
+ * @warning However, the code is currently not appropriately tested for `DIM 1` and `DIM 2` and therefore no statement
+ * about the functionality and correctness can be made at this point.
+ *
+ * Most important are the flags GRAVITY_SIM and SPH_SIM which enable or disable the gravitational
+ * and SPH part of the code.
  *
  * @author Michael Staneker
  * @bug no known bugs

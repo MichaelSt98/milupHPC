@@ -31,6 +31,10 @@ namespace Gravity {
          * Collect the previous marked indices to be sent by copying to contiguous memory in order to send the
          * particles or rather particle entries using MPI.
          *
+         * The function copies the (pseudo-)particles to contiguous memory as preparation for the communication
+         * process via MPI. Particles and pseudo-particles are copied to distinct buffers and are
+         * distinguishable by checking the index of the node.
+         *
          * @param tree Tree class instance.
          * @param particles Particles class instance.
          * @param sendIndices Marked as to be sent or not.
@@ -69,6 +73,19 @@ namespace Gravity {
         /**
          * @brief Compute gravitational forces according to Barnes-Hut method.
          *
+         * > The algorithm is similar to the one used in [miluphcuda](https://github.com/christophmschaefer/miluphcuda).
+         *
+         * To compute gravitational accelerations it is necessary to traverse the tree and check the
+         * \f$ \theta \f$-criterion in order to decide which particle-(pseudo-)particle interactions
+         * are computed in dependence of $\theta$ and thereby stop the traversal of this sub-tree.
+         * Usually this is implemented in a recursive approach which is not efficient for GPUs.
+         * This is why an explicit stack is utilized for traversing the tree and computing the gravitational
+         * forces in an iterative manner.
+         * Shared memory is utilized to remember the current child and node and the cell size in dependence of
+         * the tree level or depth in order for being able to calculate the $\theta$-criterion.
+         *
+         * @note This part of the overall algorithm is one of the most computational intensive ones!
+         *
          * @param tree Tree class instance.
          * @param particles Particles class instance.
          * @param radius
@@ -85,6 +102,8 @@ namespace Gravity {
 
         /**
          * @brief Compute gravitational forces according to Barnes-Hut method.
+         *
+         * Refer to ::Gravity::Kernel::computeForces_v1().
          *
          * @param tree Tree class instance.
          * @param particles Particles class instance.
@@ -103,6 +122,8 @@ namespace Gravity {
         /**
          * @brief Compute gravitational forces according to Barnes-Hut method.
          *
+         * Refer to ::Gravity::Kernel::computeForces_v1().
+         *
          * @param tree Tree class instance.
          * @param particles Particles class instance.
          * @param radius
@@ -119,6 +140,18 @@ namespace Gravity {
 
         /**
          * @brief Compute gravitational forces according to Barnes-Hut method.
+         *
+         * > The algorithm is similar to the one used in [An Efficient CUDA Implementation of the Tree-Based Barnes Hut n-Body Algorithm](https://iss.oden.utexas.edu/Publications/Papers/burtscher11.pdf).
+         *
+         * To compute gravitational accelerations it is necessary to traverse the tree and check the
+         * \f$ \theta \f$-criterion in order to decide which particle-(pseudo-)particle interactions
+         * are computed in dependence of $\theta$ and thereby stop the traversal of this sub-tree.
+         * Usually this is implemented in a recursive approach which is not efficient for GPUs.
+         * This is why an explicit stack is utilized for traversing the tree and computing the gravitational
+         * forces in an iterative manner.
+         * Shared memory is used to keep track of the current child and the cell size.
+         *
+         * @note This part of the overall algorithm is one of the most computational intensive ones!
          *
          * @param tree Tree class instance.
          * @param particles Particles class instance.
@@ -141,6 +174,8 @@ namespace Gravity {
         /**
          * @brief Compute gravitational forces according to Barnes-Hut method.
          *
+         * Refer to ::Gravity::Kernel::computeForces_v2().
+         *
          * @param tree Tree class instance.
          * @param particles Particles class instance.
          * @param n
@@ -159,6 +194,8 @@ namespace Gravity {
 
         /**
          * @brief Find particles to be sent (part 1).
+         *
+         * For more information refer to ::Gravity::Kernel::symbolicForce().
          *
          * @param subDomainKeyTree SubDomainKeyTree class instance.
          * @param tree Tree class instance.
@@ -182,6 +219,18 @@ namespace Gravity {
         /**
          * @brief Find particles to be sent (part 2).
          *
+         * To avoid race conditions the determination of the (pseudo-)particles
+         * (see ::Gravity::Kernel::compTheta()) to be sent is split into two functions which are iteratively
+         * and mutually called starting at the root and traversing down to the leaf nodes. An additional array
+         * capable of saving an integer for each (pseudo-)particle is initialized with "-1"
+         * (do not send this (pseudo-)particle), (pseudo-)particles to be tested with the extended $\theta$-criterion
+         * from the extended \f$ \theta \f$-criterion are marked as "0", if they fulfill the condition the "0"
+         * is converted to a "3" and the corresponding node's children are marked as "2".
+         * The ::Gravity::Kernel::intermediateSymbolicForce() function will convert the "2"s to "0"s preparing
+         * the next iteration step, while the "3"s will be converted to a "1" and therefore marked as to be sent.
+         *
+         * This seems unjustifiably complex but allows for a tree traversing without locks, fences and explicit stack.
+         *
          * @param subDomainKeyTree SubDomainKeyTree class instance.
          * @param tree Tree class instance.
          * @param particles
@@ -200,8 +249,16 @@ namespace Gravity {
                                       integer n, integer m, integer relevantIndex, integer level,
                                       Curve::Type curveType);
 
+        __global__ void symbolicForce_test(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                           DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                           integer n, integer m, integer relevantIndex, integer level,
+                                           Curve::Type curveType);
+
         /**
          * @brief Find relevant domain list indices for finding particles to be sent.
+         *
+         * In order to get the relevant lowest domain list nodes all of them are checked for process assignment and
+         * if they do not belong to the executing process their indices are remembered.
          *
          * @param subDomainKeyTree SubDomainKeyTree class instance.
          * @param tree
@@ -221,6 +278,12 @@ namespace Gravity {
         /**
          * @brief Insert received pseudo-particles.
          *
+         * The insertion of the pseudo-particles is basically traversing the local tree and inserting them at the
+         * correct position in the tree. Since only whole sub-trees are sent this can be done without any locks
+         * and creation of new cells. However, the correct ordering must be fulfilled, hence this kernel is called
+         * iteratively and the pseudo-particles are inserted with ascending level, whereas the level information is
+         * also communicated via MPI.
+         *
          * @param subDomainKeyTree SubDomainKeyTree class instance.
          * @param tree
          * @param particles
@@ -234,6 +297,9 @@ namespace Gravity {
 
         /**
          * @brief Insert received particles.
+         *
+         * Similar to the pseudo-particle insertion. Since ordering is irrelevant there is no need for an iterative
+         * approach and level checking before insertion.
          *
          * @param subDomainKeyTree SubDomainKeyTree class instance.
          * @param tree
@@ -282,6 +348,8 @@ namespace Gravity {
 
             /**
              * @brief Wrapper for: Gravity::Kernel::computeForces_v1_1().
+             *
+             * Refer to ::Gravity::Kernel::computeForces_v1().
              *
              * @return Wall time for kernel execution.
              */
@@ -334,6 +402,11 @@ namespace Gravity {
              * @return Wall time for kernel execution.
              */
             real symbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                               DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                               integer n, integer m, integer relevantIndex, integer level,
+                               Curve::Type curveType);
+
+            real symbolicForce_test(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                DomainList *domainList, integer *sendIndices, real diam, real theta_,
                                integer n, integer m, integer relevantIndex, integer level,
                                Curve::Type curveType);

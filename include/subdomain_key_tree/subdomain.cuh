@@ -46,6 +46,9 @@ namespace KeyNS {
     /**
      * @brief Convert the key to the corresponding process
      *
+     * The mapping from a key to a MPI process via ranges can be implemented by checking in between
+     * which successive entries of the range the key is located.
+     *
      * @param key Key to be evaluated
      * @param subDomainKeyTree SubDomainKeyTree class instance
      * @return Process key belongs to
@@ -155,7 +158,18 @@ namespace SubDomainKeyTreeNS {
          * > Corresponding wrapper function: ::SubDomainKeyTreeNS::Kernel::Launch::buildDomainTree()
          *
          * Using the already built tree, marking domain list nodes
-         * and adding them if necessary
+         * and adding them if necessary.
+         *
+         * The common coarse tree construction takes care of the existence of the domain list nodes and saves
+         * this information in an instance of the DomainList class by traversing the tree
+         * specified by the keys derived in ::TreeNS::Kernel::createDomainList() and distinguishes three cases:
+         *
+         * * The corresponding node exists, thus nothing to do
+         * * The corresponding node exists, but is a leaf, which is not allowed, thus insert pseudo-particle in between
+         * * The corresponding node does not exist, thus create/request
+         *
+         * Subsequent the index of the found domain list node is saved. This is possible since the key contains the
+         * path of the node in the tree, which can be used for traversing.
          *
          * @param tree Target Tree class instance
          * @param particles Particle class instance/information
@@ -203,6 +217,10 @@ namespace SubDomainKeyTreeNS {
          * @brief Kernel to mark particle's belonging.
          *
          * > Corresponding wrapper function: ::SubDomainKeyTreeNS::Kernel::Launch::markParticlesProcess()
+         *
+         * To assign particles to the correct process, the key for each particle is computed and translated to a
+         * process via ::KeyNS::key2proc(). This information is saved in an array which can be used for
+         * sorting enabling the subsequent copying into contiguous memory and exchanging via MPI.
          *
          * @param subDomainKeyTree SubDomainKeyTree class instance
          * @param tree Tree class instance
@@ -300,6 +318,13 @@ namespace SubDomainKeyTreeNS {
          * @brief Repair tree by removing received and inserted (pseudo-)particles.
          *
          * > Corresponding wrapper function: ::SubDomainKeyTreeNS::Kernel::Launch::repairTree()
+         *
+         * Deleting the received (pseudo-)particles is inevitable for simulations using a predictor-corrector
+         * scheme or for simulations with self-gravity and SPH. Key part of this is the knowledge of whether a
+         * (pseudo-)particle is received or intrinsically belongs to the process by its index. This information
+         * is saved in the variables `toDeleteLeaf` and `toDeleteNode`.
+         * Only the domain list nodes need to be handled separately, since children of these nodes if they do
+         * not belong to the corresponding process need to be deleted as well.
          *
          * @param subDomainKeyTree SubDomainKeyTree class instance
          * @param tree Tree class instance
@@ -574,6 +599,11 @@ namespace DomainListNS {
          *
          * > Corresponding wrapper function: ::DomainListNS::Kernel::Launch::createDomainList()
          *
+         * In order to create or derive the domain list nodes from the current ranges a (non-existent) tree
+         * is traversed by traversing the SFC via keys, whereas irrelevant parts of the keys are skipped.
+         * If a certain node is a domain list node, the key as well as the level is saved in order to assign
+         * this domain list node to a real node later on.
+         *
          * @param subDomainKeyTree
          * @param domainList
          * @param maxLevel
@@ -586,6 +616,10 @@ namespace DomainListNS {
          * @brief Kernel to create the lowest domain list.
          *
          * > Corresponding wrapper function: ::DomainListNS::Kernel::Launch::lowestDomainList()
+         *
+         * Lowest domain list nodes are identified by checking the common coarse tree node's children.
+         * If at least one child itself is a part of the common coarse tree the corresponding node is not a
+         * lowest domain list node.
          * 
          * @param subDomainKeyTree
          * @param tree

@@ -29,6 +29,9 @@ namespace SPH {
          *
          * > Corresponding wrapper function: ::SPH::Kernel::Launch::calculateDensity()
          *
+         * In order to compute the density, all interaction partners for each particle are iterated and those masses
+         * taken into account weighted with the smoothing kernel.
+         *
          * \f[
          * The density is given by the kernel sum
          *  \begin{equation}

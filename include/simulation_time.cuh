@@ -1,3 +1,10 @@
+/**
+ * @file simulation_time.cuh
+ * @brief Simulation time related variables and functions instantiable on device and host.
+ *
+ * @author Michael Staneker
+ * @bug no known bugs
+ */
 #ifndef MILUPHPC_SIMULATIONTIME_CUH
 #define MILUPHPC_SIMULATIONTIME_CUH
 

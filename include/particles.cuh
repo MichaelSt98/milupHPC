@@ -25,7 +25,27 @@
 
 
 /**
- * Particle(s) class based on SoA (Structur of Arrays).
+ * @brief Particle(s) class based on SoA (Structur of Arrays).
+ *
+ * Since dynamic memory allocation and access to heap objects in GPUs are usually suboptimal,
+ * an array-based data structure is used to store the (pseudo-)particle information as well as the tree
+ * and allows for efficient cache alignment. Consequently, array indices are used instead of pointers
+ * to constitute the tree out of the tree nodes, whereas "-1" represents a null pointer and "-2" is
+ * used for locking nodes. For this purpose an array with the minimum length \f$ 2^{d} \cdot (M - N) \f$
+ * with dimensionality \f$ d \f$ and number of cells \f$ (M -N) \f$ is needed to store the children.
+ * The \f$ i \f$-th child of node \f$ c \f$ can therefore be accessed via index \f$ 2^d \cdot c + i \f$.
+ *
+ * Single-GPU memory layout:
+ *
+ * \image html images/Parallelization/single_gpu_memory_layout.png width=40%
+ *
+ * It is further necessary to exchange particle properties between processes and (temporarily) include them
+ * into the local tree. To combine this requirement with the data structure described it is necessary to
+ * reserve parts of the array or memory for this purpose.
+ *
+ * Multi-GPU memory layout:
+ *
+ * \image html images/Parallelization/multi_gpu_memory_layout.png width=40%
  */
 class Particles {
 

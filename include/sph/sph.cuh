@@ -1,9 +1,13 @@
 /**
- * @file miluphpc.h
- * @brief short description
+ * @file sph.cuh
+ * @brief SPH related functionalities and kernels.
  *
- * More detailed description.
- * This file contains ...
+ * Including:
+ *
+ * * fixed-radius near neighbor search (FRNN)
+ * * finding particles to be sent
+ * * inserting received particles
+ * * ...
  *
  * @author Michael Staneker
  * @bug no known bugs
@@ -38,6 +42,15 @@ namespace SPH {
          *
          * > Corresponding wrapper function: ::SPH::Kernel::Launch::fixedRadiusNN_bruteForce()
          *
+         * @warning This implementation is primarily for comparison purposes and not for production usage!
+         *
+         * Straight-forward brute-force method for the fixed radius near neighbor search!
+         *
+         * Alternative methods:
+         *
+         * * ::SPH::Kernel::fixedRadiusNN() as a tree based algorithm
+         * * ::SPH::Kernel::fixedRadiusNN_withinBox() as a (more sophisticated) tree based algorithm
+         *
          * @param[in] tree Tree class instance
          * @param[in] particles Particles class instance
          * @param[out] interactions interaction partners
@@ -52,6 +65,22 @@ namespace SPH {
          * @brief Fixed-radius near neighbor search (default method via explicit stack).
          *
          * > Corresponding wrapper function: ::SPH::Kernel::Launch::fixedRadiusNN()
+         *
+         * Alternative methods:
+         *
+         * * ::SPH::Kernel::fixedRadiusNN_bruteForce() as brute-force method
+         * * ::SPH::Kernel::fixedRadiusNN_withinBox() as a (more sophisticated) tree based algorithm
+         *
+         * Besides the straightforward brute-force approach to find the neighbors within the smoothing length as
+         * presented in ::SPH::Kernel::fixedRadiusNN_bruteForce(), there are two more sophisticated approaches
+         * for the FRNN search via the tree implemented. This algorithm utilizes an explicit stack for each
+         * particle to traverse the tree. In case of the node being a particle it is checked whether the distance
+         * is smaller than the smoothing length, so that this particle is added to the interaction list. In the
+         * other case of the node being a pseudo-particle, it is tested whether particles within the cell of
+         * this pseudo-particle are possibly within the range of the smoothing length and consequently either
+         * the node added to the stack or the traversal terminated for this node. This possibly early termination
+         * of traversing entire sub-trees is the key component for possible performance advantages in comparison
+         * to the brute-force approach.
          *
          * @param[in] tree Tree class instance
          * @param[in] particles Particles class instance
@@ -68,6 +97,18 @@ namespace SPH {
          * @brief Fixed-radius near neighbor search (nested stack method).
          *
          * > Corresponding wrapper function: ::SPH::Kernel::Launch::fixedRadiusNN_withinBox()
+         *
+         * Alternative methods:
+         *
+         * * ::SPH::Kernel::fixedRadiusNN_bruteForce() as brute-force method
+         * * ::SPH::Kernel::fixedRadiusNN() as a tree based algorithm
+         *
+         * This algorithm is similar to ::SPH::Kernel::fixedRadiusNN(), but in addition for checking whether
+         * the cell of a pseudo-particle is possibly within the smoothing length of the particle for which the
+         * neighbors are searched for, it is checked whether the cell or box of this pseudo-particle may be
+         * in entirely within the range of the smoothing length. If this is fulfilled, all the particles beneath
+         * this pseudo-particle are added to the interaction list. This is done by a second explicit stack for
+         * which the primary explicit stack can be reused as shown
          *
          * @param[in] tree Tree class instance
          * @param[in] particles Particles class instance
@@ -217,7 +258,7 @@ namespace SPH {
          * @brief Insert the received particles into the local tree.
          *
          * Insert the previously received particles into the local tree as similar approach
-         * to the actual tree creation in TreeNS::Kernel::buildTree().
+         * to the actual tree creation in ::TreeNS::Kernel::buildTree().
          *
          * @param[in] subDomainKeyTree SubdomainKeyTree class instance
          * @param[in, out] tree Tree class instance

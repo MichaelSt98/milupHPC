@@ -1214,6 +1214,7 @@ real Miluphpc::parallel_gravity() {
     integer *h_particles2SendCount = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
     integer *h_pseudoParticles2SendCount = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
 
+
     time = 0;
     for (int proc=0; proc<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
         if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
@@ -1269,6 +1270,46 @@ real Miluphpc::parallel_gravity() {
             pseudoParticlesOffset += pseudoParticlesOffsetBuffer;
         }
     }
+
+
+    /*
+    // symbolic force testing
+    time = 0;
+    for (int proc=0; proc<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
+        if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
+            cuda::set(d_markedSendIndices, -1, numNodes);
+            for (int relevantIndex = 0; relevantIndex < relevantIndicesCounter; relevantIndex++) {
+                if (h_relevantDomainListProcess[relevantIndex] == proc) {
+                    time += Gravity::Kernel::Launch::symbolicForce_test(subDomainKeyTreeHandler->d_subDomainKeyTree,
+                                                                   treeHandler->d_tree, particleHandler->d_particles,
+                                                                   lowestDomainListHandler->d_domainList,
+                                                                   d_markedSendIndices, diam,
+                                                                   simulationParameters.theta,
+                                                                   numParticlesLocal, numParticles,
+                                                                   relevantIndex, 0, curveType);
+                }
+            }
+            time += Gravity::Kernel::Launch::collectSendIndices(treeHandler->d_tree, particleHandler->d_particles,
+                                                                d_markedSendIndices,
+                                                                &d_particles2SendIndices[particlesOffset],
+                                                                &d_pseudoParticles2SendIndices[pseudoParticlesOffset],
+                                                                &d_pseudoParticles2SendLevels[pseudoParticlesOffset],
+                                                                &d_particles2SendCount[proc],
+                                                                &d_pseudoParticles2SendCount[proc],
+                                                                numParticles, numNodes, curveType);
+
+            cuda::copy(&particlesOffsetBuffer, &d_particles2SendCount[proc], 1, To::host);
+            cuda::copy(&pseudoParticlesOffsetBuffer, &d_pseudoParticles2SendCount[proc], 1, To::host);
+
+            Logger(DEBUG) << "particles2SendCount[" << proc << "] = " << particlesOffsetBuffer;
+            Logger(DEBUG) << "pseudoParticles2SendCount[" << proc << "] = " << pseudoParticlesOffsetBuffer;
+
+            particlesOffset += particlesOffsetBuffer;
+            pseudoParticlesOffset += pseudoParticlesOffsetBuffer;
+        }
+    }
+    // end: symbolic force testing
+     */
 
 //#if DEBUGGING
 //    Gravity::Kernel::Launch::testSendIndices(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,

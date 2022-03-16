@@ -125,6 +125,17 @@ namespace KeyNS {
  * @brief Tree class.
  *
  * Class to build and store hierarchical tree structure.
+ *
+ * Since dynamic memory allocation and access to heap objects in GPUs are usually suboptimal,
+ * an array-based data structure is used to store the (pseudo-)particle information as well as the tree
+ * and allows for efficient cache alignment. Consequently, array indices are used instead of pointers
+ * to constitute the tree out of the tree nodes, whereas "-1" represents a null pointer and "-2" is
+ * used for locking nodes. For this purpose an array with the minimum length \f$ 2^{d} \cdot (M - N) \f$
+ * with dimensionality \f$ d \f$ and number of cells \f$ (M -N) \f$ is needed to store the children.
+ * The \f$ i \f$-th child of node \f$ c \f$ can therefore be accessed via index \f$ 2^d \cdot c + i \f$.
+ *
+ * \image html images/Parallelization/tree_layout.png width=40%
+ *
  */
 class Tree {
 
@@ -295,6 +306,11 @@ public:
 
     /**
      * @brief Get SFC key of a particle.
+     *
+     * The particle key computation can be accomplished by using the particle's location within the simulation domain,
+     * thus regarding the bounding boxes, which is equivalent to a tree traversing.
+     *
+     * The Lebesgue keys can be converted via tables.
      *
      * @param particles instance of particles (array)
      * @param index desired index in particles to get tree of desired particle
@@ -502,6 +518,16 @@ namespace TreeNS {
          *
          * > Corresponding wrapper function: ::TreeNS::Kernel::Launch::buildTree()
          *
+         * The algorithm shows an iterative tree construction algorithm utilizing lightweight locks for leaf nodes
+         * to avoid race conditions. Particles are assigned to threads, those threads insert its body by traversing
+         * the tree from root to the correct node trying to lock the corresponding child pointer via the array
+         * index "-2" using atomic operations. If the locking is successful the particle is inserted into the tree,
+         * releasing the lock and executing a memory fence to ensure visibility for the other threads. If a particle
+         * is already stored at the desired node, a new cell is automatically generated or rather requested and the
+         * old and new body are inserted correspondingly. However, if the locking is not successful, the thread need
+         * to try again until accomplishing the task. This approach is very similar to the one presented in
+         * [An Efficient CUDA Implementation of the Tree-Based Barnes Hut n-Body Algorithm](https://iss.oden.utexas.edu/Publications/Papers/burtscher11.pdf).
+         *
          * @param tree Tree class target instance
          * @param particles Particles class instance/particles to be inserted in tree
          * @param n number of particles
@@ -511,12 +537,27 @@ namespace TreeNS {
 
         __global__ void prepareSorting(Tree *tree, Particles *particles, integer n, integer m);
 
+        /**
+         * @brief Compute center of masses (level wise).
+         *
+         * The local COM computation kernel is called iteratively starting with the deepest tree level and
+         * finishing at the root. The pseudo-particles children entries are weighted to derive the COM, their
+         * masses are accumulated and finally the position is normalized by dividing through the summed mass.
+         *
+         * @param tree Tree class instance
+         * @param particles Particle class instance
+         * @param n Number of particles
+         * @param level Current (relevant) tree level
+         */
         __global__ void calculateCentersOfMass(Tree *tree, Particles *particles, integer n, integer level);
 
         /**
          * @brief Kernel to compute the bounding box/borders of the tree or rather the particles within the tree
          *
          * > Corresponding wrapper function: ::TreeNS::Kernel::Launch::computeBoundingBox()
+         *
+         * The algorithm to compute the bounding box is basically a parallel reduction primitive to derive the
+         * minimum and maximum for each coordinate axis.
          *
          * @param tree Tree class target instance
          * @param particles Particles class instance/particles within the tree

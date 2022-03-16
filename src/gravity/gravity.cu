@@ -1307,6 +1307,127 @@ namespace Gravity {
             }
         }
 
+        // TODO: add first level if not domain list nodes (or are those always domain list nodes?)
+        __global__ void symbolicForce_test(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                           DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                           integer n, integer m, integer relevantIndex, integer level,
+                                           Curve::Type curveType) {
+
+            int bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            int stride = blockDim.x * gridDim.x;
+            int offset = n; // start with numParticles
+
+            int currentParticleIndex, particleLevel, domainListLevel, currentDomainListIndex, childIndex;
+
+            real min_x, max_x;
+            real dx;
+#if DIM > 1
+            real min_y, max_y;
+            real dy;
+#if DIM == 3
+            real min_z, max_z;
+            real dz;
+#endif
+#endif
+            real r;
+
+            while ((bodyIndex + offset) < *tree->index) {
+
+                currentParticleIndex = bodyIndex + offset;
+
+                min_x = *tree->minX;
+                max_x = *tree->maxX;
+#if DIM > 1
+                min_y = *tree->minY;
+                max_y = *tree->maxY;
+#if DIM == 3
+                min_z = *tree->minZ;
+                max_z = *tree->maxZ;
+#endif
+#endif
+
+                particleLevel = particles->level[currentParticleIndex];
+                domainListLevel = domainList->relevantDomainListLevels[relevantIndex];
+                currentDomainListIndex = domainList->relevantDomainListIndices[relevantIndex];
+
+                for (int j = 0; j < domainListLevel; j++) {
+
+                    //childPath = 0;
+                    if (particles->x[currentDomainListIndex] < 0.5 * (min_x + max_x)) {
+                        //childPath += 1;
+                        max_x = 0.5 * (min_x + max_x);
+                    } else {
+                        min_x = 0.5 * (min_x + max_x);
+                    }
+#if DIM > 1
+                    if (particles->y[currentDomainListIndex] < 0.5 * (min_y + max_y)) {
+                        //childPath += 2;
+                        max_y = 0.5 * (min_y + max_y);
+                    } else {
+                        min_y = 0.5 * (min_y + max_y);
+                    }
+#if DIM == 3
+                    if (particles->z[currentDomainListIndex] < 0.5 * (min_z + max_z)) {
+                        //childPath += 4;
+                        max_z = 0.5 * (min_z + max_z);
+                    } else {
+                        min_z = 0.5 * (min_z + max_z);
+                    }
+#endif
+#endif
+                }
+
+                // determine (smallest) distance between domain list box and (pseudo-) particle
+                if (particles->x[currentParticleIndex] < min_x) {
+                    dx = particles->x[currentParticleIndex] - min_x;
+                } else if (particles->x[currentParticleIndex] > max_x) {
+                    dx = particles->x[currentParticleIndex] - max_x;
+                } else {
+                    dx = 0.;
+                }
+#if DIM > 1
+                if (particles->y[currentParticleIndex] < min_y) {
+                    dy = particles->y[currentParticleIndex] - min_y;
+                } else if (particles->y[currentParticleIndex] > max_y) {
+                    dy = particles->y[currentParticleIndex] - max_y;
+                } else {
+                    dy = 0.;
+                }
+#if DIM == 3
+                if (particles->z[currentParticleIndex] < min_z) {
+                    dz = particles->z[currentParticleIndex] - min_z;
+                } else if (particles->z[currentParticleIndex] > max_z) {
+                    dz = particles->z[currentParticleIndex] - max_z;
+                } else {
+                    dz = 0.;
+                }
+#endif
+#endif
+
+#if DIM == 1
+                r = cuda::math::sqrt(dx*dx);
+#elif DIM == 2
+                r = cuda::math::sqrt(dx*dx + dy*dy);
+#else
+                r = cuda::math::sqrt(dx*dx + dy*dy + dz*dz);
+#endif
+
+                if ((powf(0.5, particleLevel-1) /* * 2*/ * diam) >= (theta_ * r)) {
+                    #pragma unroll
+                    for (int i = 0; i < POW_DIM; i++) {
+                        childIndex = tree->child[POW_DIM * currentParticleIndex + i];
+                        if (childIndex != -1 && /* not domain list node*/particles->nodeType[childIndex] == 0) {
+                            sendIndices[childIndex] = 1;
+                        }
+                    }
+                }
+
+                offset += stride;
+            }
+
+        }
+
+
         __global__ void compTheta(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                   DomainList *domainList, Helper *helper, Curve::Type curveType) {
 
@@ -1814,6 +1935,15 @@ namespace Gravity {
                            Curve::Type curveType) {
             ExecutionPolicy executionPolicy;
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::symbolicForce, subDomainKeyTree, tree,
+                                particles, domainList, sendIndices, diam, theta_, n, m, relevantIndex, level, curveType);
+        }
+
+        real Launch::symbolicForce_test(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                integer n, integer m, integer relevantIndex, integer level,
+                                Curve::Type curveType) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::symbolicForce_test, subDomainKeyTree, tree,
                                 particles, domainList, sendIndices, diam, theta_, n, m, relevantIndex, level, curveType);
         }
 
