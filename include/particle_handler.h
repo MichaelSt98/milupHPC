@@ -17,6 +17,8 @@ class ParticleHandler {
 
 public:
 
+    bool leapfrog { false }; // TODO: how to change that?
+
     /// (host) number of particles
     integer numParticles;
     /// (host) number of nodes
@@ -31,6 +33,7 @@ public:
     /// host x acceleration
     real *h_ax, *_h_ax;
     real *h_g_ax;
+    real *h_ax_old, *h_g_ax_old; // only for leapfrog integrator
 #if DIM > 1
     /// host y position
     real *h_y, *_h_y;
@@ -39,6 +42,7 @@ public:
     /// host y acceleration
     real *h_ay, *_h_ay;
     real *h_g_ay;
+    real *h_ay_old, *h_g_ay_old; // only for leapfrog integrator
 #if DIM == 3
     /// host z position
     real *h_z, *_h_z;
@@ -47,6 +51,7 @@ public:
     /// host z acceleration
     real *h_az, *_h_az;
     real *h_g_az;
+    real *h_az_old, *h_g_az_old; // only for leapfrog integrator
 #endif
 #endif
 
@@ -187,6 +192,7 @@ public:
     /// device x acceleration
     real *d_ax, *_d_ax;
     real *d_g_ax;
+    real *d_ax_old, *d_g_ax_old; // only for leapfrog integrator
 #if DIM > 1
     /// device y position
     real *d_y, *_d_y;
@@ -195,6 +201,7 @@ public:
     /// device y acceleration
     real *d_ay, *_d_ay;
     real *d_g_ay;
+    real *d_ay_old, *d_g_ay_old; // only for leapfrog integrator
 #if DIM == 3
     /// device z position
     real *d_z, *_d_z;
@@ -203,6 +210,7 @@ public:
     /// device z acceleration
     real *d_az, *_d_az;
     real *d_g_az;
+    real *d_az_old, *d_g_az_old; // only for leapfrog integrator
 #endif
 #endif
 
@@ -340,6 +348,9 @@ public:
      * @param numNodes
      */
     ParticleHandler(integer numParticles, integer numNodes);
+
+    void initLeapfrog();
+    void freeLeapfrog();
 
     /**
      * Destructor

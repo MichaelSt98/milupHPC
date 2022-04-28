@@ -509,6 +509,10 @@ public:
     ///
     integer *relevantDomainListProcess;
 
+    integer *relevantDomainListOriginalIndex;
+
+    real *borders;
+
     /**
      * @brief Constructor.
      */
@@ -544,6 +548,9 @@ public:
                                   integer *domainListCounter, keyType *domainListKeys, keyType *sortedDomainListKeys,
                                   integer *relevantDomainListIndices, integer *relevantDomainListLevels,
                                   integer *relevantDomainListProcess);
+
+    CUDA_CALLABLE_MEMBER void setBorders(real *borders, integer *relevantDomainListOriginalIndex);
+
     /**
      * @brief Destructor.
      */
@@ -572,6 +579,8 @@ namespace DomainListNS {
                             integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
                             keyType *sortedDomainListKeys, integer *relevantDomainListIndices,
                             integer *relevantDomainListLevels, integer *relevantDomainListProcess);
+
+        __global__ void setBorders(DomainList *domainList, real *borders, integer *relevantDomainListOriginalIndex);
 
         /**
          * @brief Info kernel (for debugging purposes).
@@ -641,6 +650,8 @@ namespace DomainListNS {
                      integer *domainListIndex, integer *domainListCounter, keyType *domainListKeys,
                      keyType *sortedDomainListKeys, integer *relevantDomainListIndices,
                      integer *relevantDomainListLevels, integer *relevantDomainListProcess);
+
+            void setBorders(DomainList *domainList, real *borders, integer *relevantDomainListOriginalIndex);
 
             /**
              * @brief Wrapper for ::DomainListNS::Kernel::info().

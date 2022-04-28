@@ -64,6 +64,7 @@ public:
     real *vx;
     /// (pointer to) x acceleration (array)
     real *ax;
+    real *ax_old;
 #if DIM > 1
     /// (pointer to) y position (array)
     real *y;
@@ -71,6 +72,7 @@ public:
     real *vy;
     /// (pointer to) y acceleration (array)
     real *ay;
+    real *ay_old;
 #if DIM == 3
     /// (pointer to) z position (array)
     real *z;
@@ -78,19 +80,24 @@ public:
     real *vz;
     /// (pointer to) z acceleration (array)
     real *az;
+    real *az_old;
 #endif
 #endif
 
     /// (pointer to) x gravitational acceleration (array)
     real *g_ax;
+    real *g_ax_old;
 #if DIM > 1
     /// (pointer to) y gravitational acceleration (array)
     real *g_ay;
+    real *g_ay_old;
 #if DIM == 3
     /// (pointer to) z gravitational acceleration (array)
     real *g_az;
+    real *g_az_old;
 #endif
 #endif
+
 
     /// (pointer to) node type
     integer *nodeType;
@@ -350,6 +357,16 @@ public:
      * @param g_az gravitational acceleration \f$ a_{z, grav} \f$ entry
      */
     CUDA_CALLABLE_MEMBER void setGravity(real *g_ax, real *g_ay, real *g_az);
+#endif
+
+#if DIM == 1
+    CUDA_CALLABLE_MEMBER void setLeapfrog(real *ax_old, real *g_ax_old);
+#elif DIM == 2
+    CUDA_CALLABLE_MEMBER void setLeapfrog(real *ax_old, real *ay_old, real *g_ax_old, real *g_ay_old);
+#else
+
+    CUDA_CALLABLE_MEMBER void setLeapfrog(real *ax_old, real *ay_old, real *az_old, real *g_ax_old, real *g_ay_old,
+                                          real *g_az_old);
 #endif
 
     /**
@@ -630,6 +647,29 @@ namespace ParticlesNS {
 
         namespace Launch {
             void setGravity(Particles *particles, real *g_ax, real *g_ay, real *g_az);
+        }
+#endif
+
+#if DIM == 1
+        __global__ void setLeapfrog(Particles *particles, real *ax_old, real *g_ax_old);
+
+        namespace Launch {
+            void setLeapfrog(Particles *particles, real *ax_old, real *g_ax_old);
+        }
+
+#elif DIM == 2
+        __global__ void setLeapfrog(Particles *particles, real *ax_old, real *ay_old, real *g_ax_old, real *g_ay_old);
+
+        namespace Launch {
+            void setLeapfrog(Particles *particles, real *ax_old, real *ay_old, real *g_ax_old, real *g_ay_old);
+        }
+#else
+        __global__ void setLeapfrog(Particles *particles, real *ax_old, real *ay_old, real *az_old, real *g_ax_old,
+                                    real *g_ay_old, real *g_az_old);
+
+        namespace Launch {
+            void setLeapfrog(Particles *particles, real *ax_old, real *ay_old, real *az_old, real *g_ax_old,
+                             real *g_ay_old, real *g_az_old);
         }
 #endif
 

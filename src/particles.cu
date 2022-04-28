@@ -143,6 +143,31 @@ CUDA_CALLABLE_MEMBER void Particles::set(integer *numParticles, integer *numNode
     }
 #endif
 
+#if DIM == 1
+    CUDA_CALLABLE_MEMBER void Particles::setLeapfrog(real *ax_old, real *g_ax_old) {
+        this->ax_old = ax_old;
+        this->g_ax_old = g_ax_old;
+    }
+#elif DIM == 2
+    CUDA_CALLABLE_MEMBER void Particles::setLeapfrog(real *ax_old, real *ay_old, real *g_ax_old, real *g_ay_old) {
+        this->ax_old = ax_old;
+        this->ay_old = ay_old;
+        this->g_ax_old = g_ax_old;
+        this->g_ay_old = g_ay_old;
+    }
+#else
+
+    CUDA_CALLABLE_MEMBER void Particles::setLeapfrog(real *ax_old, real *ay_old, real *az_old, real *g_ax_old, real *g_ay_old,
+                                          real *g_az_old) {
+        this->ax_old = ax_old;
+        this->ay_old = ay_old;
+        this->az_old = az_old;
+        this->g_ax_old = g_ax_old;
+        this->g_ay_old = g_ay_old;
+        this->g_az_old = g_az_old;
+    }
+#endif
+
 CUDA_CALLABLE_MEMBER void Particles::setU(real *u) {
     this->u = u;
 }
@@ -645,6 +670,47 @@ namespace ParticlesNS {
                 ExecutionPolicy executionPolicy(1, 1);
                 cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::setGravity, particles,
                              g_ax, g_ay, g_az);
+            }
+        }
+#endif
+
+#if DIM == 1
+        __global__ void setLeapfrog(Particles *particles, real *ax_old, real *g_ax_old) {
+            particles->setLeapfrog(ax_old, g_ax_old);
+        }
+
+        namespace Launch {
+            void setLeapfrog(Particles *particles, real *ax_old, real *g_ax_old) {
+                ExecutionPolicy executionPolicy(1, 1);
+                cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::setLeapfrog, particles,
+                             ax_old, g_ax_old);
+            }
+        }
+
+#elif DIM == 2
+        __global__ void setLeapfrog(Particles *particles, real *ax_old, real *ay_old, real *g_ax_old, real *g_ay_old) {
+            particles->setLeapfrog(ax_old, ay_old, g_ax_old, g_ay_old);
+        }
+
+        namespace Launch {
+            void setLeapfrog(Particles *particles, real *ax_old, real *ay_old, real *g_ax_old, real *g_ay_old) {
+                 ExecutionPolicy executionPolicy(1, 1);
+                cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::setLeapfrog, particles,
+                             ax_old, ay_old, g_ax_old, g_ay_old);
+            }
+        }
+#else
+        __global__ void setLeapfrog(Particles *particles, real *ax_old, real *ay_old, real *az_old, real *g_ax_old,
+                                    real *g_ay_old, real *g_az_old) {
+            particles->setLeapfrog(ax_old, ay_old, az_old, g_ax_old, g_ay_old, g_az_old);
+        }
+
+        namespace Launch {
+            void setLeapfrog(Particles *particles, real *ax_old, real *ay_old, real *az_old, real *g_ax_old,
+                             real *g_ay_old, real *g_az_old) {
+                ExecutionPolicy executionPolicy(1, 1);
+                cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::setLeapfrog, particles,
+                             ax_old, ay_old, az_old, g_ax_old, g_ay_old, g_az_old);
             }
         }
 #endif

@@ -192,6 +192,11 @@ namespace Gravity {
                                            integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree,
                                            real theta, real smoothing, bool potentialEnergy=false);
 
+        __global__ void computeForces_v3(Tree *tree, Particles *particles, real radius, integer n, integer m,
+                                         integer blockSize, integer warp, integer stackSize,
+                                         SubDomainKeyTree *subDomainKeyTree, real theta,
+                                         real smoothing, bool potentialEnergy=false);
+
         /**
          * @brief Find particles to be sent (part 1).
          *
@@ -253,6 +258,16 @@ namespace Gravity {
                                            DomainList *domainList, integer *sendIndices, real diam, real theta_,
                                            integer n, integer m, integer relevantIndex, integer level,
                                            Curve::Type curveType);
+
+        __global__ void symbolicForce_test2(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                            DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                            integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
+                                            Curve::Type curveType);
+
+        __global__ void symbolicForce_test3(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                            DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                            integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
+                                            Curve::Type curveType);
 
         /**
          * @brief Find relevant domain list indices for finding particles to be sent.
@@ -386,6 +401,12 @@ namespace Gravity {
                                     SubDomainKeyTree *subDomainKeyTree, real theta,
                                     real smoothing, bool potentialEnergy=false);
 
+
+            real computeForces_v3(Tree *tree, Particles *particles, real radius, integer numParticles, integer m,
+                                  integer blockSize, integer warp, integer stackSize,
+                                  SubDomainKeyTree *subDomainKeyTree, real theta,
+                                  real smoothing, bool potentialEnergy=false);
+
             /**
              * @brief Wrapper for: Gravity::Kernel::intermediateSymbolicForce().
              *
@@ -410,6 +431,16 @@ namespace Gravity {
                                DomainList *domainList, integer *sendIndices, real diam, real theta_,
                                integer n, integer m, integer relevantIndex, integer level,
                                Curve::Type curveType);
+
+            real symbolicForce_test2(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                             DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                             integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
+                                             Curve::Type curveType);
+
+            real symbolicForce_test3(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                     DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                     integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
+                                     Curve::Type curveType);
 
             /**
              * @brief Wrapper for: Gravity::Kernel::compTheta().

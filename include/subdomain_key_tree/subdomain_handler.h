@@ -100,6 +100,8 @@ public:
     integer *d_relevantDomainListIndices;
     integer *d_relevantDomainListLevels;
     integer *d_relevantDomainListProcess;
+    integer *d_relevantDomainListOriginalIndex;
+    real *d_borders;
 
     /// device instance of `DomainList` class
     DomainList *d_domainList;

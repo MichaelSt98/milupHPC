@@ -508,6 +508,8 @@ public:
      */
     real particles2file(const std::string& filename, int *particleIndices, int length);
 
+    void getMemoryInfo();
+
 };
 
 #endif //MILUPHPC_MILUPHPC_H

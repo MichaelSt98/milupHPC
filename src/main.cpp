@@ -1,6 +1,7 @@
 #include "../include/miluphpc.h"
 #include "../include/integrator/explicit_euler.h"
 #include "../include/integrator/predictor_corrector_euler.h"
+#include "../include/integrator/leapfrog.h"
 #include "../include/utils/config_parser.h"
 #include <boost/filesystem.hpp>
 
@@ -314,6 +315,9 @@ int main(int argc, char** argv)
         } break;
         case IntegratorSelection::predictor_corrector_euler: {
             miluphpc = new PredictorCorrectorEuler(parameters);
+        } break;
+        case IntegratorSelection::leapfrog: {
+            miluphpc = new Leapfrog(parameters);
         } break;
         default: {
             Logger(ERROR) << "Integrator not available!";

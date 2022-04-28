@@ -8,25 +8,25 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     h_mass = new real[numNodes];
     _h_x = new real[numNodes];
     h_x = _h_x;
-    _h_vx = new real[numNodes];
+    _h_vx = new real[numParticles];
     h_vx = _h_vx;
-    _h_ax = new real[numNodes];
+    _h_ax = new real[numParticles];
     h_ax = _h_ax;
     h_g_ax = new real[numParticles];
 #if DIM > 1
-    _h_y = new real[numNodes];
+    _h_y = new real[numParticles];
     h_y = _h_y;
-    _h_vy = new real[numNodes];
+    _h_vy = new real[numParticles];
     h_vy = _h_vy;
-    _h_ay = new real[numNodes];
+    _h_ay = new real[numParticles];
     h_ay = _h_ay;
     h_g_ay = new real[numParticles];
 #if DIM == 3
     _h_z = new real[numNodes];
     h_z = _h_z;
-    _h_vz = new real[numNodes];
+    _h_vz = new real[numParticles];
     h_vz = _h_vz;
-    _h_az = new real[numNodes];
+    _h_az = new real[numParticles];
     h_az = _h_az;
     h_g_az = new real[numParticles];
 #endif
@@ -37,6 +37,9 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     _h_uid = new idInteger[numParticles];
     h_uid = _h_uid;
     h_materialId = new integer[numParticles];
+
+#if SPH_SIM
+
     _h_sml = new real[numParticles];
     h_sml = _h_sml;
     h_nnl = new integer[numParticles * MAX_NUM_INTERACTIONS];
@@ -117,6 +120,8 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
 #endif
 #endif
 
+#endif // SPH_SIM
+
     h_particles = new Particles();
 
     cuda::malloc(d_numParticles, 1);
@@ -128,27 +133,27 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     cuda::malloc(_d_x, numNodes);
     //_d_x = &d_positions[0];
     d_x = _d_x;
-    cuda::malloc(_d_vx, numNodes);
+    cuda::malloc(_d_vx, numParticles);
     d_vx = _d_vx;
-    cuda::malloc(_d_ax, numNodes);
+    cuda::malloc(_d_ax, numParticles);
     d_ax = _d_ax;
     cuda::malloc(d_g_ax, numParticles);
 #if DIM > 1
     cuda::malloc(_d_y, numNodes);
     //_d_y = &d_positions[numNodes];
     d_y = _d_y;
-    cuda::malloc(_d_vy, numNodes);
+    cuda::malloc(_d_vy, numParticles);
     d_vy = _d_vy;
-    cuda::malloc(_d_ay, numNodes);
+    cuda::malloc(_d_ay, numParticles);
     d_ay = _d_ay;
     cuda::malloc(d_g_ay, numParticles);
 #if DIM == 3
     cuda::malloc(_d_z, numNodes);
     //_d_z = &d_positions[2 * numNodes];
     d_z = _d_z;
-    cuda::malloc(_d_vz, numNodes);
+    cuda::malloc(_d_vz, numParticles);
     d_vz = _d_vz;
-    cuda::malloc(_d_az, numNodes);
+    cuda::malloc(_d_az, numParticles);
     d_az = _d_az;
     cuda::malloc(d_g_az, numParticles);
 #endif
@@ -158,6 +163,9 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     cuda::malloc(_d_uid, numParticles);
     d_uid = _d_uid;
     cuda::malloc(d_materialId, numParticles);
+
+#if SPH_SIM
+
     cuda::malloc(_d_sml, numParticles);
     d_sml = _d_sml;
     cuda::malloc(d_nnl, numParticles * MAX_NUM_INTERACTIONS);
@@ -238,6 +246,8 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
 #endif
 #endif
 
+#endif // SPH_SIM
+
     cuda::malloc(d_particles, 1);
 
 
@@ -275,6 +285,7 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     h_particles->setU(h_u);
     ParticlesNS::Kernel::Launch::setU(d_particles, d_u);
 
+#if SPH_SIM
     h_particles->setArtificialViscosity(h_muijmax);
     ParticlesNS::Kernel::Launch::setArtificialViscosity(d_particles, d_muijmax);
 
@@ -332,6 +343,7 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     ParticlesNS::Kernel::Launch::setPalphaPorosity(d_particles, d_damage_porjutzi, d_ddamage_porjutzidt);
 #endif
 #endif
+#endif // SPH_SIM
 
     cuda::copy(&numParticles, d_numParticles, 1, To::device);
     cuda::copy(&numNodes, d_numNodes, 1, To::device);
@@ -360,6 +372,7 @@ ParticleHandler::~ParticleHandler() {
     delete [] h_nodeType;
     delete [] h_uid;
     delete [] h_materialId;
+#if SPH_SIM
     delete [] _h_sml;
     delete [] h_nnl;
     delete [] h_noi;
@@ -369,6 +382,7 @@ ParticleHandler::~ParticleHandler() {
     delete [] _h_rho;
     delete [] _h_p;
     delete [] h_muijmax;
+#endif // SPH_SIM
 
     // device particle entries
     cuda::free(d_numParticles);
@@ -394,6 +408,7 @@ ParticleHandler::~ParticleHandler() {
     cuda::free(d_nodeType);
     cuda::free(d_uid);
     cuda::free(d_materialId);
+#if SPH_SIM
     cuda::free(_d_sml);
     cuda::free(d_nnl);
     cuda::free(d_noi);
@@ -403,7 +418,9 @@ ParticleHandler::~ParticleHandler() {
     cuda::free(_d_rho);
     cuda::free(_d_p);
     cuda::free(d_muijmax);
+#endif // SPH_SIM
 
+#if SPH_SIM
     delete [] h_muijmax;
     cuda::free(d_muijmax);
 
@@ -503,9 +520,64 @@ ParticleHandler::~ParticleHandler() {
     cuda::free(d_ddamage_porjutzidt);
 #endif
 #endif
+#endif // SPH_SIM
 
     delete h_particles;
     cuda::free(d_particles);
+
+}
+
+void ParticleHandler::initLeapfrog() {
+
+    leapfrog = true;
+
+    // TODO: should be numParticles instead of numNodes
+    h_ax_old = new real[numNodes];
+    h_g_ax_old = new real[numNodes];
+    cuda::malloc(d_ax_old, numNodes);
+    cuda::set(d_ax_old, (real)0, numNodes);
+    cuda::malloc(d_g_ax_old, numNodes);
+    cuda::set(d_g_ax_old, (real)0, numNodes);
+#if DIM > 1
+    h_ay_old = new real[numNodes];
+    h_g_ay_old = new real[numNodes];
+    cuda::malloc(d_ay_old, numNodes);
+    cuda::set(d_ay_old, (real)0, numNodes);
+    cuda::malloc(d_g_ay_old, numNodes);
+    cuda::set(d_g_ay_old, (real)0, numNodes);
+#if DIM == 3
+    h_az_old = new real[numNodes];
+    h_g_az_old = new real[numNodes];
+    cuda::malloc(d_az_old, numNodes);
+    cuda::set(d_az_old, (real)0, numNodes);
+    cuda::malloc(d_g_az_old, numNodes);
+    cuda::set(d_g_az_old, (real)0, numNodes);
+#endif
+#endif
+
+#if DIM == 1
+
+#elif DIM == 2
+
+#else
+    h_particles->setLeapfrog(h_ax_old, h_ay_old, h_az_old, h_g_ax_old, h_g_ay_old, h_g_az_old);
+    ParticlesNS::Kernel::Launch::setLeapfrog(d_particles, d_ax_old, d_ay_old, d_az_old, d_g_ax_old, d_g_ay_old, d_g_az_old);
+#endif
+
+}
+
+void ParticleHandler::freeLeapfrog() {
+
+    delete h_g_ax_old;
+    cuda::free(d_g_ax_old);
+#if DIM > 1
+    delete h_g_ay_old;
+    cuda::free(d_g_ay_old);
+#if DIM == 3
+    delete h_g_az_old;
+    cuda::free(d_g_az_old);
+#endif
+#endif
 
 }
 
@@ -584,6 +656,7 @@ void ParticleHandler::setPointer(IntegratedParticleHandler *integratedParticleHa
 #endif
     d_uid = integratedParticleHandler->d_uid;
 
+#if SPH_SIM
     d_rho = integratedParticleHandler->d_rho;
     d_e = integratedParticleHandler->d_e;
     d_dedt = integratedParticleHandler->d_dedt;
@@ -598,6 +671,7 @@ void ParticleHandler::setPointer(IntegratedParticleHandler *integratedParticleHa
 #if VARIABLE_SML || INTEGRATE_SML
     d_dsmldt = integratedParticleHandler->d_dsmldt;
 #endif
+#endif // SPH_SIM
 
 // Already redirected pointers, thus just call setter like in constructor
 #if DIM == 1
@@ -614,6 +688,8 @@ void ParticleHandler::setPointer(IntegratedParticleHandler *integratedParticleHa
     h_particles->set(&numParticles, &numNodes, h_mass, h_x, h_y, h_z, h_vx, h_vy, h_vz, h_ax, h_ay, h_az,
                      h_level, h_uid, h_materialId, h_sml, h_nnl, h_noi, h_e, h_dedt, h_cs, h_rho, h_p);
     h_particles->setIntegrateDensity(h_drhodt);
+
+#if SPH_SIM
 #if VARIABLE_SML || INTEGRATE_SML
     h_particles->setVariableSML(h_dsmldt);
 #endif
@@ -626,6 +702,7 @@ void ParticleHandler::setPointer(IntegratedParticleHandler *integratedParticleHa
     ParticlesNS::Kernel::Launch::setVariableSML(d_particles, d_dsmldt);
 #endif
 #endif
+#endif // SPH_SIM
 
 }
 
@@ -647,6 +724,7 @@ void ParticleHandler::resetPointer() {
 
     d_uid = _d_uid;
 
+#if SPH_SIM
     d_rho = _d_rho;
     d_e = _d_e;
     d_dedt = _d_dedt;
@@ -661,6 +739,7 @@ void ParticleHandler::resetPointer() {
 #if VARIABLE_SML || INTEGRATE_SML
     d_dsmldt = _d_dsmldt;
 #endif
+#endif // SPH_SIM
 
 #if DIM == 1
     h_particles->set(&numParticles, &numNodes, h_mass, h_x, h_vx, h_ax, h_level, h_uid, h_materialId, h_sml, h_nnl,
@@ -676,6 +755,8 @@ void ParticleHandler::resetPointer() {
     h_particles->set(&numParticles, &numNodes, h_mass, h_x, h_y, h_z, h_vx, h_vy, h_vz, h_ax, h_ay, h_az,
                      h_level, h_uid, h_materialId, h_sml, h_nnl, h_noi, h_e, h_dedt, h_cs, h_rho, h_p);
     h_particles->setIntegrateDensity(h_drhodt);
+
+#if SPH_SIM
 #if VARIABLE_SML || INTEGRATE_SML
     h_particles->setVariableSML(h_dsmldt);
 #endif
@@ -688,6 +769,7 @@ void ParticleHandler::resetPointer() {
     ParticlesNS::Kernel::Launch::setVariableSML(d_particles, d_dsmldt);
 #endif
 #endif
+#endif // SPH_SIM
 
 }
 
@@ -774,7 +856,9 @@ void ParticleHandler::copyDistribution(To::Target target, bool velocity, bool ac
     copyMass(target, includePseudoParticles);
     copyPosition(target, includePseudoParticles);
     copyMatId(target);
+#if SPH_SIM
     copySML(target);
+#endif
     if (velocity) {
         copyVelocity(target, includePseudoParticles);
     }

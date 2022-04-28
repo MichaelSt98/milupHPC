@@ -905,31 +905,75 @@ __global__ void TreeNS::Kernel::sort(Tree *tree, integer n, integer m) {
                 tree->sorted[s] = node;
                 s++;
             }
+            //if (bodyIndex == 0) {
+            //    printf("i = %i, start[%i] = %i (m = %i)\n", i, node, tree->start[node], m);
+            //}
         }
     }
+
+    //__threadfence();
+    //__syncthreads();
+
     integer cell = m + bodyIndex;
     integer ind = *tree->index;
     //integer ind = tree->toDeleteNode[1];
 
-    while ((cell + offset) < ind) {
+    //int counter = 0;
+    while ((cell + offset) < ind /*&& counter <= 500*/) {
+
+        //if ((cell + offset) < (m + POW_DIM)) {
+        //    for (int i=0; i<POW_DIM; i++) {
+        //        printf("cell + offset = %i, start = %i, child = %i, start = %i, stride = %i\n", cell + offset, tree->start[cell + offset],
+        //               tree->child[POW_DIM * (cell + offset) + i], tree->start[cell + offset], stride);
+        //    }
+        //}
 
         s = tree->start[cell + offset];
+        //counter += 1;
+
+        //if (counter >= 500 /*&& s >= 0*/) {
+        //    for (int i=0; i<POW_DIM; i++) {
+        //        printf("counter: %i, cell + offset = %i, start = %i, child = %i, count = %i\n", counter, cell + offset, s,
+        //               tree->child[POW_DIM * (cell + offset) + i], tree->count[tree->child[POW_DIM * (cell + offset) + i]]);
+        //    }
+        //}
 
         if (s >= 0) {
 
-            for (integer i=0; i<POW_DIM; i++) {
-                integer node = tree->child[POW_DIM*(cell+offset) + i];
+            for (integer i_child=0; i_child<POW_DIM; i_child++) {
+                integer node = tree->child[POW_DIM*(cell+offset) + i_child];
                 if (node >= m) { //m // not a leaf node
                     tree->start[node] = s;
                     s += tree->count[node];
+                    //if (tree->count[node] >= 0) {
+                    //    s += tree->count[node];
+                    //}
+                    //else {
+                    //    printf("+= %i\n", tree->count[node]);
+                    //}
                 }
                 else if (node >= 0) { // leaf node
                     tree->sorted[s] = node;
                     s++;
                 }
             }
+            //if (counter >= 0) {
+            //    offset -= counter * stride;
+            //    counter = 0;
+            //}
+            //else {
+            //    offset += stride;
+            //}
+            // //counter = 0;
             offset += stride;
         }
+        //else {
+        //    printf("ATTENTION: s = %i for %i\n", s, cell + offset);
+        //    offset += stride;
+        //    counter++;
+        //    //break;
+        //}
+
     }
 }
 
@@ -1278,7 +1322,7 @@ namespace TreeNS {
             }
 
             real sort(Tree *tree, integer n, integer m, bool time) {
-                ExecutionPolicy executionPolicy;
+                ExecutionPolicy executionPolicy(1024, 1024);
                 return cuda::launch(time, executionPolicy, ::TreeNS::Kernel::sort, tree, n, m);
             }
 
