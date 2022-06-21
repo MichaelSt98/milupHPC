@@ -4,10 +4,14 @@
 
 ## Used submodules/libraries
 
-| library            | licence        | link         | use           |
-| -------------------| -------------- | ------------ | ------------- |
-| CUDA cub           | BSD 3-Clause "New" or "Revised" License | [GitHub: cub](https://github.com/NVIDIA/cub) | Cooperative primitives for CUDA C++ |
-| HighFive           | Boost Software License 1.0 | [GitHub: HighFive](https://github.com/BlueBrain/HighFive) | Parallel HDF5 |
-| Boost | Boost Software License 1.0 | [GitHub: boost](https://github.com/boostorg/boost) | Multi-purpose C++ library/libraries (filesystem, MPI, ...)|
-| cxxopts | MIT licence | [GitHub: cxxopts](https://github.com/jarro2783/cxxopts) | C++ command line option parser |
-| ... | | |
+| library | license | usage | link |
+| ------- | ------- | ----- | ---- |
+| GNU             | GPLv3+ | compiler | [gnu.org](https://www.gnu.org/) |
+| OpenMPI         | BSD 3-Clause | compiler | [open-mpi.org](https://www.open-mpi.org/) |
+| CUDA            | [CUDA Toolkit End User License Agreement](https://docs.nvidia.com/cuda/eula/index.html)| compiler, CUDA Toolkit and API | [developer.nvidia.com](https://developer.nvidia.com/) |
+| CUDA cub        | BSD 3-Clause "New" or "Revised" License | device wide parallel primitives | [github.com/NVIDIA/cub](https://github.com/NVIDIA/cub) |
+| HDF5            | HDF5 License (BSD-Style) | parallel HDF5 for I/O operations |[hdfgroup.org](https://hdfgroup.org/) |
+| HighFive        | Boost Software License 1.0 | C++ wrapper for parallel HDF5 |[github.com/BlueBrain/HighFive](https://github.com/BlueBrain/HighFive) |
+| Boost           | Boost Software License 1.0 | config file parsing, C++ wrapper for MPI |[boost.org](https://www.boost.org/) |
+| cxxopts         | MIT license | command line argument parsing | [github.com/jarro2783/cxxopts](https://github.com/jarro2783/cxxopts) |
+
