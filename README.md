@@ -33,7 +33,7 @@ implemented using **C++ and CUDA-aware MPI**.
 
 <details>
  <summary>
-   **Implementation details**
+   Implementation details
  </summary>
 
 ```c
@@ -149,7 +149,7 @@ For more information and instructions refer to [Prerequisites.md](documents/Prer
 
 <details>
  <summary>
-   **Preprocessor directives: parameter.h**
+   Preprocessor directives: parameter.h
  </summary>
 
 * see `include/parameter.h`
@@ -214,7 +214,7 @@ For more information and instructions refer to [Prerequisites.md](documents/Prer
 
 <details>
  <summary>
-   **Input HDF5 file**
+   Input HDF5 file
  </summary>
  
 * for **gravity only**
@@ -272,7 +272,7 @@ GROUP "/" {
 
 <details>
  <summary>
-   **Config file**
+   Config file
  </summary>
  
 ```
@@ -358,7 +358,7 @@ sphFixedRadiusNNVersion 3
 
 <details>
  <summary>
-   **Material config file**
+   Material config file
  </summary>
  
 ```
@@ -396,7 +396,7 @@ The code validation comprises the correctness of dispatched simulation on one GP
 
 <details>
  <summary>
-   **Plummer**
+   Plummer
  </summary>
 
 * Plummer model: four GPUs with dynamic load balancing every 10th step (top: lebesgue, bottom: hilbert)
@@ -412,7 +412,7 @@ The Plummer model is a gravity only test case, the distribution is stable over t
 
 <details>
  <summary>
-   **Taylor–von Neumann–Sedov blast wave**
+   Taylor–von Neumann–Sedov blast wave
  </summary>
 
 * Sedov explosion: one and two GPUs
@@ -428,7 +428,7 @@ The density in dependence of the radius for t = 0.06 and the semi-analytical sol
 
 <details>
  <summary>
-   **Boss-Bodenheimer: Isothermal collapse**
+   Boss-Bodenheimer: Isothermal collapse
  </summary>
 
 * Boss-Bodenheimer: isothermal collapse
