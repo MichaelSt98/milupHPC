@@ -180,6 +180,13 @@ CUDA_CALLABLE_MEMBER void Particles::setArtificialViscosity(real *muijmax) {
     this->muijmax = muijmax;
 }
 
+#if BALSARA_SWITCH
+    CUDA_CALLABLE_MEMBER void Particles::setDivCurl(real *divv, real *curlv) {
+        this->divv = divv;
+        this->curlv = curlv;
+    }
+#endif
+
 //#if INTEGRATE_DENSITY
     CUDA_CALLABLE_MEMBER void Particles::setIntegrateDensity(real *drhodt) {
         this->drhodt = drhodt;
@@ -747,6 +754,18 @@ namespace ParticlesNS {
                              muijmax);
             }
         }
+
+#if BALSARA_SWITCH
+        __global__ void setDivCurl(Particles *particles, real *divv, real *curlv) {
+            particles->setDivCurl(divv, curlv);
+        }
+        namespace Launch {
+            void setDivCurl(Particles *particles, real *divv, real *curlv) {
+                ExecutionPolicy executionPolicy(1, 1);
+                cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::setDivCurl, particles, divv, curlv);
+            }
+        }
+#endif
 
 //#if INTEGRATE_DENSITY
         __global__ void setIntegrateDensity(Particles *particles, real *drhodt) {

@@ -7,11 +7,7 @@ namespace SPH {
 
         __global__ void calculateDensity(::SPH::SPH_kernel kernel, Tree *tree, Particles *particles, int *interactions, int numParticles) {
 
-            int i;
-            int j;
-            int inc;
-            int ip;
-            int d;
+            int i, j, inc, ip, d, noi;
             real W, Wj, dx[DIM], dWdx[DIM], dWdr;
             real rho, sml;
             real x;
@@ -44,8 +40,11 @@ namespace SPH {
                 // "self-density"
                 rho = particles->mass[i] * W;
 
+                noi = particles->noi[i];
+
                 // sph sum for particle i
-                for (j = 0; j < particles->noi[i]; j++) {
+                for (j = 0; j < noi; j++) {
+
                     ip = interactions[i * MAX_NUM_INTERACTIONS + j];
 
 #if (VARIABLE_SML || INTEGRATE_SML)

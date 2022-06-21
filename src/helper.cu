@@ -6,10 +6,27 @@ CUDA_CALLABLE_MEMBER Helper::Helper() {
 
 }
 
-CUDA_CALLABLE_MEMBER Helper::Helper(integer *integerVal, real *realVal, keyType *keyTypeVal, integer *integerBuffer,
+/*CUDA_CALLABLE_MEMBER Helper::Helper(integer *integerVal, real *realVal, keyType *keyTypeVal, integer *integerBuffer,
                                     real *realBuffer, keyType *keyTypeBuffer) : integerVal(integerVal),
                                     realVal(realVal), keyTypeVal(keyTypeVal), integerBuffer(integerBuffer),
                                     realBuffer(realBuffer) , keyTypeBuffer(keyTypeBuffer) {
+
+}*/
+
+CUDA_CALLABLE_MEMBER Helper::Helper(integer *integerVal, integer *integerVal1, integer *integerVal2,
+                                    real *realVal, real *realVal1, real *realVal2, keyType *keyTypeVal,
+                                    integer *integerBuffer, integer *integerBuffer1, integer *integerBuffer2,
+                                    integer *integerBuffer3, integer *integerBuffer4,
+                                    integer *sendCount, integer *sendCount1, idInteger *idIntegerBuffer,
+                                    idInteger *idIntegerBuffer1, real *realBuffer, real *realBuffer1,
+                                    keyType *keyTypeBuffer, keyType *keyTypeBuffer1, keyType *keyTypeBuffer2) :
+            integerVal(integerVal), integerVal1(integerVal1), integerVal2(integerVal2),
+            realVal(realVal), realVal1(realVal1), realVal2(realVal2), keyTypeVal(keyTypeVal),
+            integerBuffer(integerBuffer), integerBuffer1(integerBuffer1), integerBuffer2(integerBuffer2),
+            integerBuffer3(integerBuffer3), integerBuffer4(integerBuffer4),
+            sendCount(sendCount), sendCount1(sendCount1), idIntegerBuffer(idIntegerBuffer),
+            idIntegerBuffer1(idIntegerBuffer1), realBuffer(realBuffer), realBuffer1(realBuffer1),
+            keyTypeBuffer(keyTypeBuffer), keyTypeBuffer1(keyTypeBuffer1), keyTypeBuffer2(keyTypeBuffer2) {
 
 }
 
@@ -17,7 +34,7 @@ CUDA_CALLABLE_MEMBER Helper::~Helper() {
 
 }
 
-CUDA_CALLABLE_MEMBER void Helper::set(integer *integerVal, real *realVal, keyType *keyTypeVal, integer *integerBuffer,
+/*CUDA_CALLABLE_MEMBER void Helper::set(integer *integerVal, real *realVal, keyType *keyTypeVal, integer *integerBuffer,
                                       real *realBuffer, keyType *keyTypeBuffer) {
     this->integerVal = integerVal;
     this->realVal = realVal;
@@ -25,12 +42,44 @@ CUDA_CALLABLE_MEMBER void Helper::set(integer *integerVal, real *realVal, keyTyp
     this->integerBuffer = integerBuffer;
     this->realBuffer = realBuffer;
     this->keyTypeBuffer = keyTypeBuffer;
+}*/
+
+CUDA_CALLABLE_MEMBER void Helper::set(integer *integerVal, integer *integerVal1, integer *integerVal2,
+                                      real *realVal, real *realVal1, real *realVal2, keyType *keyTypeVal,
+                                      integer *integerBuffer, integer *integerBuffer1, integer *integerBuffer2,
+                                      integer *integerBuffer3, integer *integerBuffer4,
+                                      integer *sendCount, integer *sendCount1, idInteger *idIntegerBuffer,
+                                      idInteger *idIntegerBuffer1, real *realBuffer, real *realBuffer1,
+                                      keyType *keyTypeBuffer, keyType *keyTypeBuffer1, keyType *keyTypeBuffer2) {
+
+    this->integerVal = integerVal;
+    this->integerVal1 = integerVal1;
+    this->integerVal2 = integerVal2;
+    this->realVal = realVal;
+    this->realVal1 = realVal1;
+    this->realVal2 = realVal2;
+    this->keyTypeVal = keyTypeVal;
+    this->integerBuffer = integerBuffer;
+    this->integerBuffer1 = integerBuffer1;
+    this->integerBuffer2 = integerBuffer2;
+    this->integerBuffer3 = integerBuffer3;
+    this->integerBuffer4 = integerBuffer4;
+    this->sendCount = sendCount;
+    this->sendCount1 = sendCount1;
+    this->idIntegerBuffer = idIntegerBuffer;
+    this->idIntegerBuffer1 = idIntegerBuffer1;
+    this->realBuffer = realBuffer;
+    this->realBuffer1 = realBuffer1;
+    this->keyTypeBuffer = keyTypeBuffer;
+    this->keyTypeBuffer1 = keyTypeBuffer1;
+    this->keyTypeBuffer2 = keyTypeBuffer2;
+
 }
 
 namespace HelperNS {
 
     namespace Kernel {
-        __global__ void set(Helper *helper, integer *integerVal, real *realVal, keyType *keyTypeVal,
+        /*__global__ void set(Helper *helper, integer *integerVal, real *realVal, keyType *keyTypeVal,
                             integer *integerBuffer, real *realBuffer, keyType *keyTypeBuffer) {
             helper->set(integerVal, realVal, keyTypeVal, integerBuffer, realBuffer, keyTypeBuffer);
         }
@@ -41,6 +90,41 @@ namespace HelperNS {
             cuda::launch(false, executionPolicy, ::HelperNS::Kernel::set, helper, integerVal, realVal, keyTypeVal,
                          integerBuffer, realBuffer, keyTypeBuffer);
 
+        }*/
+
+        __global__ void set(Helper *helper, integer *integerVal, integer *integerVal1, integer *integerVal2,
+                            real *realVal, real *realVal1, real *realVal2, keyType *keyTypeVal,
+                            integer *integerBuffer, integer *integerBuffer1, integer *integerBuffer2,
+                            integer *integerBuffer3, integer *integerBuffer4,
+                            integer *sendCount, integer *sendCount1, idInteger *idIntegerBuffer,
+                            idInteger *idIntegerBuffer1, real *realBuffer, real *realBuffer1,
+                            keyType *keyTypeBuffer, keyType *keyTypeBuffer1, keyType *keyTypeBuffer2) {
+
+            helper->set(integerVal, integerVal1, integerVal2,
+                        realVal, realVal1, realVal2, keyTypeVal,
+                        integerBuffer, integerBuffer1, integerBuffer2,
+                        integerBuffer3, integerBuffer4,
+                        sendCount, sendCount1, idIntegerBuffer,
+                        idIntegerBuffer1, realBuffer, realBuffer1,
+                        keyTypeBuffer, keyTypeBuffer1, keyTypeBuffer2);
+        }
+
+        void Launch::set(Helper *helper, integer *integerVal, integer *integerVal1, integer *integerVal2,
+                         real *realVal, real *realVal1, real *realVal2, keyType *keyTypeVal,
+                         integer *integerBuffer, integer *integerBuffer1, integer *integerBuffer2,
+                         integer *integerBuffer3, integer *integerBuffer4,
+                         integer *sendCount, integer *sendCount1, idInteger *idIntegerBuffer,
+                         idInteger *idIntegerBuffer1, real *realBuffer, real *realBuffer1,
+                         keyType *keyTypeBuffer, keyType *keyTypeBuffer1, keyType *keyTypeBuffer2) {
+
+            ExecutionPolicy executionPolicy(1, 1);
+            cuda::launch(false, executionPolicy, ::HelperNS::Kernel::set, helper, integerVal, integerVal1, integerVal2,
+                         realVal, realVal1, realVal2, keyTypeVal,
+                         integerBuffer, integerBuffer1, integerBuffer2,
+                         integerBuffer3, integerBuffer4,
+                         sendCount, sendCount1, idIntegerBuffer,
+                         idIntegerBuffer1, realBuffer, realBuffer1,
+                         keyTypeBuffer, keyTypeBuffer1, keyTypeBuffer2);
         }
     }
 }

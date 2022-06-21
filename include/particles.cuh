@@ -167,6 +167,11 @@ public:
     real *localStrain; // local strain
 #endif
 
+#if BALSARA_SWITCH
+    real *divv;
+    real *curlv;
+#endif
+
 #if SOLID || NAVIER_STOKES
     /// (pointer to) sigma/stress tensor (array)
     real *sigma; // stress tensor (DIM * DIM)
@@ -395,6 +400,10 @@ public:
      * @param muijmax
      */
     CUDA_CALLABLE_MEMBER void setArtificialViscosity(real *muijmax);
+
+#if BALSARA_SWITCH
+    CUDA_CALLABLE_MEMBER void setDivCurl(real *divv, real *curlv);
+#endif
 
 //#if INTEGRATE_DENSITY
     /**
@@ -687,6 +696,13 @@ namespace ParticlesNS {
         namespace Launch {
             void setArtificialViscosity(Particles *particles, real *muijmax);
         }
+
+#if BALSARA_SWITCH
+        __global__ void setDivCurl(Particles *particles, real *divv, real *curlv);
+        namespace Launch {
+            void setDivCurl(Particles *particles, real *divv, real *curlv);
+        }
+#endif
 
 //#if INTEGRATE_DENSITY
         /**

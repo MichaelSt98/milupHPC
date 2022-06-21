@@ -991,13 +991,13 @@ namespace SubDomainKeyTreeNS {
             }
         }
 
+        template <typename T>
         __global__ void prepareLowestDomainExchange(Particles *particles, DomainList *lowestDomainList,
-                                                    Helper *helper, Entry::Name entry) {
+                                                    T *buffer, Entry::Name entry) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x*blockDim.x;
             integer stride = blockDim.x*gridDim.x;
             integer offset = 0;
-            integer index;
             integer lowestDomainIndex;
 
             //copy x, y, z, mass of lowest domain list nodes into arrays
@@ -1007,20 +1007,20 @@ namespace SubDomainKeyTreeNS {
                 if (lowestDomainIndex >= 0) {
                     switch (entry) {
                         case Entry::x: {
-                            helper->realBuffer[bodyIndex + offset] = particles->x[lowestDomainIndex];
+                            buffer[bodyIndex + offset] = particles->x[lowestDomainIndex];
                         } break;
 #if DIM > 1
                         case Entry::y: {
-                            helper->realBuffer[bodyIndex + offset] = particles->y[lowestDomainIndex];
+                            buffer[bodyIndex + offset] = particles->y[lowestDomainIndex];
                         } break;
 #if DIM == 3
                         case Entry::z: {
-                            helper->realBuffer[bodyIndex + offset] = particles->z[lowestDomainIndex];
+                            buffer[bodyIndex + offset] = particles->z[lowestDomainIndex];
                         } break;
 #endif
 #endif
                         case Entry::mass: {
-                            helper->realBuffer[bodyIndex + offset] = particles->mass[lowestDomainIndex];
+                            buffer[bodyIndex + offset] = particles->mass[lowestDomainIndex];
                         } break;
                         default:
                             printf("prepareLowestDomainExchange(): Not available!\n");
@@ -1030,8 +1030,9 @@ namespace SubDomainKeyTreeNS {
             }
         }
 
+        template <typename T>
         __global__ void updateLowestDomainListNodes(Particles *particles, DomainList *lowestDomainList,
-                                                    Helper *helper, int domainListSize, Entry::Name entry) {
+                                                    T *buffer, Entry::Name entry) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
             integer stride = blockDim.x * gridDim.x;
@@ -1056,23 +1057,23 @@ namespace SubDomainKeyTreeNS {
                 switch (entry) {
                     case Entry::x: {
                         particles->x[lowestDomainList->domainListIndices[originalIndex]] =
-                                helper->realBuffer[domainListSize + bodyIndex + offset];
+                                buffer[bodyIndex + offset];
                     } break;
 #if DIM > 1
                     case Entry::y: {
                         particles->y[lowestDomainList->domainListIndices[originalIndex]] =
-                                helper->realBuffer[domainListSize + bodyIndex + offset];
+                                buffer[bodyIndex + offset];
                     } break;
 #if DIM == 3
                     case Entry::z: {
                         particles->z[lowestDomainList->domainListIndices[originalIndex]] =
-                                helper->realBuffer[domainListSize + bodyIndex + offset];
+                                buffer[bodyIndex + offset];
                     } break;
 #endif
 #endif
                     case Entry::mass: {
                         particles->mass[lowestDomainList->domainListIndices[originalIndex]] =
-                                helper->realBuffer[domainListSize + bodyIndex + offset];
+                                buffer[bodyIndex + offset];
                     } break;
                     default: {
                         printf("Entry not available!\n");
@@ -1435,21 +1436,21 @@ namespace SubDomainKeyTreeNS {
                 }
                 tree->count[bodyIndex + offset] = 0;
                 particles->x[bodyIndex + offset] = 0.;
-                particles->vx[bodyIndex + offset] = 0.;
-                particles->ax[bodyIndex + offset] = 0.;
+                //particles->vx[bodyIndex + offset] = 0.;
+                //particles->ax[bodyIndex + offset] = 0.;
 #if DIM > 1
                 particles->y[bodyIndex + offset] = 0.;
-                particles->vy[bodyIndex + offset] = 0.;
-                particles->ay[bodyIndex + offset] = 0.;
+                //particles->vy[bodyIndex + offset] = 0.;
+                //particles->ay[bodyIndex + offset] = 0.;
 #if DIM == 3
                 particles->z[bodyIndex + offset] = 0.;
-                particles->vz[bodyIndex + offset] = 0.;
-                particles->az[bodyIndex + offset] = 0.;
+                //particles->vz[bodyIndex + offset] = 0.;
+                //particles->az[bodyIndex + offset] = 0.;
 #endif
 #endif
                 particles->mass[bodyIndex + offset] = 0.;
-                tree->start[bodyIndex + offset] = -1;
-                tree->sorted[bodyIndex + offset] = 0;
+                //tree->start[bodyIndex + offset] = -1;
+                //tree->sorted[bodyIndex + offset] = 0;
 
                 offset += stride;
             }
@@ -1589,20 +1590,28 @@ namespace SubDomainKeyTreeNS {
                                 lowestDomainList);
         }
 
+        template <typename T>
         real Launch::prepareLowestDomainExchange(Particles *particles, DomainList *lowestDomainList,
-                                                 Helper *helper, Entry::Name entry) {
+                                                 T *buffer, Entry::Name entry) {
             ExecutionPolicy executionPolicy;
             return cuda::launch(true, executionPolicy, ::SubDomainKeyTreeNS::Kernel::prepareLowestDomainExchange, particles,
-                                lowestDomainList, helper, entry);
+                                lowestDomainList, buffer, entry);
         }
 
+        template real Launch::prepareLowestDomainExchange<real>(Particles *particles, DomainList *lowestDomainList,
+                real *buffer, Entry::Name entry);
+
+        template <typename T>
         real Launch::updateLowestDomainListNodes(Particles *particles, DomainList *lowestDomainList,
-                                                 Helper *helper, int domainListSize, Entry::Name entry) {
+                                                    T *buffer, Entry::Name entry) {
             ExecutionPolicy executionPolicy;
             return cuda::launch(true, executionPolicy, ::SubDomainKeyTreeNS::Kernel::updateLowestDomainListNodes, particles,
-                                lowestDomainList, helper, domainListSize, entry);
+                                lowestDomainList, buffer, entry);
 
         }
+
+        template real Launch::updateLowestDomainListNodes<real>(Particles *particles, DomainList *lowestDomainList,
+                real *buffer, Entry::Name entry);
 
         real Launch::compLowestDomainListNodes(Tree *tree, Particles *particles, DomainList *lowestDomainList) {
             ExecutionPolicy executionPolicy;
@@ -1822,6 +1831,12 @@ namespace DomainListNS {
 
         }
 
+        /*
+         * //TODO: parallel version
+         *  * either on CPU
+         *  * or distribute key2test = 0UL < keyMax between threads
+         */
+        /*
         __global__ void createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList,
                                          integer maxLevel, Curve::Type curveType) {
 
@@ -1866,7 +1881,160 @@ namespace DomainListNS {
                 }
 
             }
+        }*/
+
+        // Parallel version: testing for now ...
+        /*
+        __global__ void createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList,
+                                         integer maxLevel, Curve::Type curveType) {
+
+            integer index = threadIdx.x + blockIdx.x * blockDim.x;
+
+            //printf("index: %i, threadIdx.x: %i, blockIdx.x: %i, blockDim.x: %i\n", index, threadIdx.x, blockIdx.x, blockDim.x);
+
+            keyType key2test = 0UL;
+            keyType keyMax;
+            int domainListIndex;
+
+            key2test = (keyType)blockIdx.x << (DIM * (maxLevel - 1));
+
+            if (threadIdx.x == 0) {
+
+                domainListIndex = atomicAdd(domainList->domainListIndex, 1);
+                domainList->domainListKeys[domainListIndex] = key2test;
+                domainList->domainListLevels[domainListIndex] = 1;
+            }
+
+            __syncthreads();
+
+            integer level = 2;
+
+            key2test += threadIdx.x << (DIM * maxLevel - 2);
+            if (threadIdx.x == (POW_DIM - 1) && blockIdx.x == (POW_DIM - 1)) {
+#if DIM == 1
+                keyType shiftValue = 1;
+                keyType toShift = 21;
+                keyMax = (shiftValue << toShift) - 1; // 1 << 63 not working!
+#elif DIM == 2
+                keyType shiftValue = 1;
+                keyType toShift = 42;
+                keyMax = (shiftValue << toShift) - 1; // 1 << 63 not working!
+#else
+                keyType shiftValue = 1;
+                keyType toShift = 63;
+                keyMax = (shiftValue << toShift) - 1; // 1 << 63 not working!
+                //keyType keyMax = KEY_MAX;
+#endif
+            }
+            else {
+                keyMax = key2test + 1 << (DIM * maxLevel - 2);
+            }
+
+            // in principle: traversing a (non-existent) octree by walking the 1D spacefilling curve (keys of the tree nodes)
+            while (key2test < keyMax) { // TODO: createDomainList(): key2test < or <= keyMax
+                if (subDomainKeyTree->isDomainListNode(key2test & (~0UL << (DIM * (maxLevel - level + 1))),
+                                                       maxLevel, level-1, curveType)) {
+
+                    //if (level > 1) {
+                    domainListIndex = atomicAdd(domainList->domainListIndex, 1);
+                    printf("adding key2test: %lu | level = %i\n", key2test, level);
+                    domainList->domainListKeys[domainListIndex] = key2test;
+                    // add domain list level
+                    domainList->domainListLevels[domainListIndex] = level;
+                    //}
+                    //*domainList->domainListIndex += 1;
+                    if (subDomainKeyTree->isDomainListNode(key2test, maxLevel, level, curveType)) {
+                        level++;
+                    }
+                    else {
+                        key2test = key2test + (1UL << DIM * (maxLevel - level));
+                        while (((key2test >> (DIM * (maxLevel - level))) & (keyType)(POW_DIM - 1)) == 0UL) {
+                            level--;
+                        }
+                    }
+                } else {
+                    level--;
+                }
+
+            }
+        }*/
+
+        __global__ void createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList,
+                                         integer maxLevel, Curve::Type curveType) {
+
+            integer index = threadIdx.x + blockIdx.x * blockDim.x;
+
+            //printf("index: %i, threadIdx.x: %i, blockIdx.x: %i, blockDim.x: %i\n", index, threadIdx.x, blockIdx.x, blockDim.x);
+
+            keyType key2test = 0UL;
+            keyType keyMax;
+            int domainListIndex;
+
+            key2test = (keyType)blockIdx.x << (DIM * (maxLevel - 1));
+
+            if (threadIdx.x == 0) {
+
+                domainListIndex = atomicAdd(domainList->domainListIndex, 1);
+                domainList->domainListKeys[domainListIndex] = key2test;
+                domainList->domainListLevels[domainListIndex] = 1;
+            }
+
+            __syncthreads();
+
+            integer level = 2;
+
+            key2test += (keyType)threadIdx.x << (DIM * (maxLevel - 2));
+            if (threadIdx.x == (POW_DIM - 1) && blockIdx.x == (POW_DIM - 1)) {
+#if DIM == 1
+                keyType shiftValue = 1;
+                keyType toShift = 21;
+                keyMax = (shiftValue << toShift) - 1; // 1 << 63 not working!
+#elif DIM == 2
+                keyType shiftValue = 1;
+                keyType toShift = 42;
+                keyMax = (shiftValue << toShift) - 1; // 1 << 63 not working!
+#else
+                keyType shiftValue = 1;
+                keyType toShift = 63;
+                keyMax = (shiftValue << toShift) - 1; // 1 << 63 not working!
+                //keyType keyMax = KEY_MAX;
+#endif
+            }
+            else {
+                keyMax = key2test + (1UL << (DIM * (maxLevel - 2)));
+            }
+
+            //printf("threadIdx.x = %i, blockIdx.x = %i, key2test = %lu, keyMax = %lu\n", threadIdx.x, blockIdx.x, key2test, keyMax);
+
+            // in principle: traversing a (non-existent) octree by walking the 1D spacefilling curve (keys of the tree nodes)
+            while (key2test < keyMax && level > 1) { // TODO: createDomainList(): key2test < or <= keyMax
+                if (subDomainKeyTree->isDomainListNode(key2test & (~0UL << (DIM * (maxLevel - level + 1))),
+                                                       maxLevel, level-1, curveType)) {
+
+                    //if (level > 1) {
+                    domainListIndex = atomicAdd(domainList->domainListIndex, 1);
+                    //printf("adding key2test: %lu | level = %i\n", key2test, level);
+                    domainList->domainListKeys[domainListIndex] = key2test;
+                    // add domain list level
+                    domainList->domainListLevels[domainListIndex] = level;
+                    //}
+                    //*domainList->domainListIndex += 1;
+                    if (subDomainKeyTree->isDomainListNode(key2test, maxLevel, level, curveType)) {
+                        level++;
+                    }
+                    else {
+                        key2test = key2test + (1UL << DIM * (maxLevel - level));
+                        while (((key2test >> (DIM * (maxLevel - level))) & (keyType)(POW_DIM - 1)) == 0UL) {
+                            level--;
+                        }
+                    }
+                } else {
+                    level--;
+                }
+
+            }
         }
+
 
         __global__ void lowestDomainList(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                          DomainList *domainList, DomainList *lowestDomainList,
@@ -1973,7 +2141,7 @@ namespace DomainListNS {
         real Launch::createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList, integer maxLevel,
                                       Curve::Type curveType) {
             //TODO: is there any possibility to call kernel createDomainList() with more than one thread?
-            ExecutionPolicy executionPolicy(1,1);
+            ExecutionPolicy executionPolicy(POW_DIM, POW_DIM);
             return cuda::launch(true, executionPolicy, ::DomainListNS::Kernel::createDomainList, subDomainKeyTree,
                                 domainList, maxLevel, curveType);
         }

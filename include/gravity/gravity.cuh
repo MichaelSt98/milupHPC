@@ -269,6 +269,11 @@ namespace Gravity {
                                             integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
                                             Curve::Type curveType);
 
+        __global__ void symbolicForce_test4(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                            DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                            integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
+                                            Curve::Type curveType);
+
         /**
          * @brief Find relevant domain list indices for finding particles to be sent.
          *
@@ -283,7 +288,7 @@ namespace Gravity {
          * @param curveType
          */
         __global__ void compTheta(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
-                                  DomainList *domainList, Helper *helper, Curve::Type curveType=Curve::lebesgue);
+                                  DomainList *domainList, Curve::Type curveType=Curve::lebesgue);
 
         // Version of inserting received pseudo particles, looping over levels within one kernel
         // problem that __syncthreads() corresponds to blocklevel synchronization!
@@ -341,6 +346,14 @@ namespace Gravity {
                                     integer *pseudoParticlesLevel,
                                     integer *particlesCount, integer *pseudoParticlesCount,
                                     integer n, integer length, Curve::Type curveType = Curve::lebesgue);
+
+            real collectSendIndices_test4(Tree *tree, Particles *particles, integer *sendIndices,
+                                          integer *particles2Send, integer *pseudoParticles2Send,
+                                          integer *pseudoParticlesLevel,
+                                          integer *particlesCount, integer *pseudoParticlesCount,
+                                          integer numParticlesLocal, integer numParticles,
+                                          integer treeIndex, int currentProc,
+                                          Curve::Type curveType = Curve::lebesgue);
 
             /**
              * @brief Wrapper for: Gravity::Kernel::testSendIndices().
@@ -442,13 +455,18 @@ namespace Gravity {
                                      integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
                                      Curve::Type curveType);
 
+            real symbolicForce_test4(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                     DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                     integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
+                                     Curve::Type curveType);
+
             /**
              * @brief Wrapper for: Gravity::Kernel::compTheta().
              *
              * @return Wall time for kernel execution.
              */
             real compTheta(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
-                                      DomainList *domainList, Helper *helper, Curve::Type curveType=Curve::lebesgue);
+                                      DomainList *domainList, Curve::Type curveType=Curve::lebesgue);
 
             /**
              * @brief Wrapper for: Gravity::Kernel::insertReceivedPseudoParticles().

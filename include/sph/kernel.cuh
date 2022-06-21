@@ -196,7 +196,12 @@ namespace SPH {
     /**
      * @brief Calculates \f$ \nabla \cdot \vec{v} \f$ and \f$ \nabla \times \vec{v} \f$.
      */
-    __global__ void CalcDivvandCurlv(SPH_kernel kernel, Particles *particles, int *interactions, int numParticles);
+    namespace Kernel {
+        __global__ void CalcDivvandCurlv(SPH_kernel kernel, Particles *particles, int *interactions, int numParticles);
+        namespace Launch {
+            real CalcDivvandCurlv(SPH_kernel kernel, Particles *particles, int *interactions, int numParticles);
+        }
+    }
 #endif
 
 #if ZERO_CONSISTENCY //SHEPARD_CORRECTION

@@ -114,6 +114,10 @@ public:
     /// host tensile instability
     real *h_R;
 #endif
+#if BALSARA_SWITCH
+    real *h_divv;
+    real *h_curlv;
+#endif
 #if POROSITY
     /// host pressure of the sph particle after the last successful timestep
     real *h_pold;
@@ -272,6 +276,10 @@ public:
 #if ARTIFICIAL_STRESS
     /// device tensile instability
     real *d_R;
+#endif
+#if BALSARA_SWITCH
+    real *d_divv;
+    real *d_curlv;
 #endif
 #if POROSITY
     /// device pressure of the sph particle after the last successful timestep

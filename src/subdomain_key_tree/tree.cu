@@ -451,6 +451,7 @@ __global__ void TreeNS::Kernel::sumParticles(Tree *tree) {
 
 #define COMPUTE_DIRECTLY 0
 
+/*
 __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, integer n, integer m) {
 
     integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
@@ -762,6 +763,643 @@ __global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, inte
         __syncthreads();
     }
 }
+*/
+
+__global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, integer n, integer m) {
+
+    integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+    integer stride = blockDim.x * gridDim.x;
+
+    //note: -1 used as "null pointer"
+    //note: -2 used to lock a child (pointer)
+
+    volatile integer *childList = tree->child;
+
+    integer offset;
+    int level;
+    bool newBody = true;
+
+    real min_x;
+    real max_x;
+    real x;
+#if DIM > 1
+    real y;
+    real min_y;
+    real max_y;
+#if DIM == 3
+    real z;
+    real min_z;
+    real max_z;
+#endif
+#endif
+
+    integer childPath;
+    integer temp;
+
+    offset = 0;
+
+    while ((bodyIndex + offset) < n) {
+
+        if (newBody) {
+
+            newBody = false;
+            level = 0;
+
+            // copy bounding box(es)
+            min_x = *tree->minX;
+            max_x = *tree->maxX;
+            x = particles->x[bodyIndex + offset];
+#if DIM > 1
+            y = particles->y[bodyIndex + offset];
+            min_y = *tree->minY;
+            max_y = *tree->maxY;
+#if DIM == 3
+            z = particles->z[bodyIndex + offset];
+            min_z = *tree->minZ;
+            max_z = *tree->maxZ;
+#endif
+#endif
+            temp = 0;
+            childPath = 0;
+
+            // find insertion point for body
+            // x direction
+            if (x < 0.5 * (min_x + max_x)) { // x direction
+                childPath += 1;
+                max_x = 0.5 * (min_x + max_x);
+            }
+            else {
+                min_x = 0.5 * (min_x + max_x);
+            }
+#if DIM > 1
+            // y direction
+            if (y < 0.5 * (min_y + max_y)) { // y direction
+                childPath += 2;
+                max_y = 0.5 * (min_y + max_y);
+            }
+            else {
+                min_y = 0.5 * (min_y + max_y);
+            }
+#if DIM == 3
+            // z direction
+            if (z < 0.5 * (min_z + max_z)) {  // z direction
+                childPath += 4;
+                max_z = 0.5 * (min_z + max_z);
+            }
+            else {
+                min_z = 0.5 * (min_z + max_z);
+            }
+#endif
+#endif
+        }
+
+        register integer childIndex = childList[temp*POW_DIM + childPath];
+
+        // traverse tree until hitting leaf node
+        while (childIndex >= m) { //n
+
+            temp = childIndex;
+            level++;
+
+            childPath = 0;
+
+            // find insertion point for body
+            if (x < 0.5 * (min_x + max_x)) { // x direction
+                childPath += 1;
+                max_x = 0.5 * (min_x + max_x);
+            }
+            else {
+                min_x = 0.5 * (min_x + max_x);
+            }
+#if DIM > 1
+            if (y < 0.5 * (min_y + max_y)) { // y direction
+                childPath += 2;
+                max_y = 0.5 * (min_y + max_y);
+            }
+            else {
+                min_y = 0.5 * (min_y + max_y);
+            }
+#if DIM == 3
+            if (z < 0.5 * (min_z + max_z)) { // z direction
+                childPath += 4;
+                max_z = 0.5 * (min_z + max_z);
+            }
+            else {
+                min_z = 0.5 * (min_z + max_z);
+            }
+#endif
+#endif
+
+#if COMPUTE_DIRECTLY
+            if (particles->mass[bodyIndex + offset] != 0) {
+                //particles->x[temp] += particles->weightedEntry(bodyIndex + offset, Entry::x);
+                atomicAdd(&particles->x[temp], particles->weightedEntry(bodyIndex + offset, Entry::x));
+#if DIM > 1
+                //particles->y[temp] += particles->weightedEntry(bodyIndex + offset, Entry::y);
+                atomicAdd(&particles->y[temp], particles->weightedEntry(bodyIndex + offset, Entry::y));
+#if DIM == 3
+                //particles->z[temp] += particles->weightedEntry(bodyIndex + offset, Entry::z);
+                atomicAdd(&particles->z[temp], particles->weightedEntry(bodyIndex + offset, Entry::z));
+#endif
+#endif
+            }
+
+            //particles->mass[temp] += particles->mass[bodyIndex + offset];
+            atomicAdd(&particles->mass[temp], particles->mass[bodyIndex + offset]);
+#endif // COMPUTE_DIRECTLY
+
+            atomicAdd(&tree->count[temp], 1);
+            childIndex = childList[POW_DIM * temp + childPath];
+        }
+
+        __syncthreads();
+
+        // if child is not locked
+        if (childIndex != -2) {
+
+            integer locked = temp * POW_DIM + childPath;
+
+            if (atomicCAS((int *) &childList[locked], childIndex, -2) == childIndex) {
+
+                // check whether a body is already stored at the location
+                if (childIndex == -1) {
+                    //insert body and release lock
+                    childList[locked] = bodyIndex + offset;
+                    particles->level[bodyIndex + offset] = level + 1;
+
+                }
+                else {
+                    if (childIndex >= n) {
+                        printf("ATTENTION!\n");
+                    }
+                    integer patch = POW_DIM * m; //8*n
+                    while (childIndex >= 0 && childIndex < n) { // was n
+
+                        //create a new cell (by atomically requesting the next unused array index)
+                        integer cell = atomicAdd(tree->index, 1);
+                        patch = min(patch, cell);
+
+                        if (patch != cell) {
+                            childList[POW_DIM * temp + childPath] = cell;
+                        }
+
+                        level++;
+                        // ATTENTION: most likely a problem with level counting (level = level - 1)
+                        // but could be also a problem regarding maximum tree depth...
+                        if (level > (MAX_LEVEL + 1)) {
+#if DIM == 1
+                            cudaAssert("buildTree: level = %i for index %i (%e)", level,
+                                       bodyIndex + offset, particles->x[bodyIndex + offset]);
+#elif DIM == 2
+                            cudaAssert("buildTree: level = %i for index %i (%e, %e)", level,
+                                       bodyIndex + offset, particles->x[bodyIndex + offset],
+                                       particles->y[bodyIndex + offset]);
+#else
+                            cudaAssert("buildTree: level = %i for index %i (%e, %e, %e)", level,
+                                       bodyIndex + offset, particles->x[bodyIndex + offset],
+                                       particles->y[bodyIndex + offset],
+                                       particles->z[bodyIndex + offset]);
+#endif
+                        }
+
+                        // insert old/original particle
+                        childPath = 0;
+                        if (particles->x[childIndex] < 0.5 * (min_x + max_x)) { childPath += 1; }
+#if DIM > 1
+                        if (particles->y[childIndex] < 0.5 * (min_y + max_y)) { childPath += 2; }
+#if DIM == 3
+                        if (particles->z[childIndex] < 0.5 * (min_z + max_z)) { childPath += 4; }
+#endif
+#endif
+#if COMPUTE_DIRECTLY
+                        particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
+                        //particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
+#if DIM > 1
+                        particles->y[cell] += particles->weightedEntry(childIndex, Entry::y);
+                        //particles->y[cell] += particles->weightedEntry(childIndex, Entry::y);
+#if DIM == 3
+                        particles->z[cell] += particles->weightedEntry(childIndex, Entry::z);
+                        //particles->z[cell] += particles->weightedEntry(childIndex, Entry::z);
+#endif
+#endif
+
+                        //if (cell % 1000 == 0) {
+                        //    printf("buildTree: x[%i] = (%f, %f, %f) from x[%i] = (%f, %f, %f) m = %f\n", cell, particles->x[cell], particles->y[cell],
+                        //           particles->z[cell], childIndex, particles->x[childIndex], particles->y[childIndex],
+                        //           particles->z[childIndex], particles->mass[childIndex]);
+                        //}
+
+                        particles->mass[cell] += particles->mass[childIndex];
+#else // COMPUTE_DIRECTLY
+                        //particles->x[cell] = particles->x[childIndex];
+                        particles->x[cell] = 0.5 * (min_x + max_x);
+#if DIM > 1
+                        //particles->y[cell] = particles->y[childIndex];
+                        particles->y[cell] = 0.5 * (min_y + max_y);
+#if DIM == 3
+                        //particles->z[cell] = particles->z[childIndex];
+                        particles->z[cell] = 0.5 * (min_z + max_z);
+#endif
+#endif
+
+#endif // COMPUTE_DIRECTLY
+
+                        tree->count[cell] += tree->count[childIndex];
+
+                        childList[POW_DIM * cell + childPath] = childIndex;
+                        particles->level[cell] = level;
+                        particles->level[childIndex] += 1;
+                        tree->start[cell] = -1;
+
+#if DEBUGGING
+                        if (particles->level[cell] >= particles->level[childIndex]) {
+                            cudaAssert("lvl: %i vs. %i\n", particles->level[cell], particles->level[childIndex]);
+                        }
+#endif
+
+                        // insert new particle
+                        temp = cell;
+                        childPath = 0;
+
+                        // find insertion point for body
+                        //if (particles->x[bodyIndex + offset] < 0.5 * (min_x + max_x)) {
+                        if (x < 0.5 * (min_x + max_x)) {
+                            childPath += 1;
+                            max_x = 0.5 * (min_x + max_x);
+                        } else {
+                            min_x = 0.5 * (min_x + max_x);
+                        }
+#if DIM > 1
+                        //if (particles->y[bodyIndex + offset] < 0.5 * (min_y + max_y)) {
+                        if (y < 0.5 * (min_y + max_y)) {
+                            childPath += 2;
+                            max_y = 0.5 * (min_y + max_y);
+                        } else {
+                            min_y = 0.5 * (min_y + max_y);
+                        }
+#if DIM == 3
+                        //if (particles->z[bodyIndex + offset] < 0.5 * (min_z + max_z)) {
+                        if (z < 0.5 * (min_z + max_z)) {
+                            childPath += 4;
+                            max_z = 0.5 * (min_z + max_z);
+                        } else {
+                            min_z = 0.5 * (min_z + max_z);
+                        }
+#endif
+#endif
+#if COMPUTE_DIRECTLY
+                        // COM / preparing for calculation of COM
+                        if (particles->mass[bodyIndex + offset] != 0) {
+                            //particles->x[cell] += particles->weightedEntry(bodyIndex + offset, Entry::x);
+                            particles->x[cell] += particles->weightedEntry(bodyIndex + offset, Entry::x);
+#if DIM > 1
+                            //particles->y[cell] += particles->weightedEntry(bodyIndex + offset, Entry::y);
+                            particles->y[cell] += particles->weightedEntry(bodyIndex + offset, Entry::y);
+#if DIM == 3
+                            //particles->z[cell] += particles->weightedEntry(bodyIndex + offset, Entry::z);
+                            particles->z[cell] += particles->weightedEntry(bodyIndex + offset, Entry::z);
+#endif
+#endif
+                            particles->mass[cell] += particles->mass[bodyIndex + offset];
+                        }
+#endif // COMPUTE_DIRECTLY
+                        tree->count[cell] += tree->count[bodyIndex + offset];
+                        childIndex = childList[POW_DIM * temp + childPath];
+                    }
+
+                    childList[POW_DIM * temp + childPath] = bodyIndex + offset;
+                    particles->level[bodyIndex + offset] = level + 1;
+
+                    __threadfence();  // written to global memory arrays (child, x, y, mass) thus need to fence
+                    childList[locked] = patch;
+                }
+                offset += stride;
+                newBody = true;
+            }
+        }
+        __syncthreads();
+    }
+}
+
+/*
+__global__ void TreeNS::Kernel::buildTree(Tree *tree, Particles *particles, integer n, integer m)
+{
+    register int inc = blockDim.x * gridDim.x;
+    register int i = threadIdx.x + blockIdx.x * blockDim.x;
+    register int k;
+    register int childIndex, child;
+    register int lockedIndex;
+    register double x;
+    register double min_x, max_x;
+#if DIM > 1
+    register double y;
+    register double min_y, max_y;
+#endif
+    register double r;
+    register double dx;
+#if DIM > 1
+    register double dy;
+#endif
+    register double rootX = 0.5 * (*tree->maxX + *tree->minX);
+    register double rootRadius = 0.5 * (*tree->maxX - *tree->minX);
+#if DIM > 1
+    register double rootY = 0.5 * (*tree->maxY + *tree->minY);
+    rootRadius = cuda::math::max(rootRadius, 0.5 * (*tree->maxY - *tree->minY));
+#endif
+    register int depth = 0;
+    register bool isNewParticle = true;
+    register int currentNodeIndex;
+    register int newNodeIndex;
+    register int subtreeNodeIndex;
+#if DIM == 3
+    register double z;
+    register double min_z, max_z;
+    register double dz;
+    register double rootZ = 0.5 * (*tree->maxZ + *tree->minZ);
+    rootRadius = cuda::math::max(rootRadius, 0.5 * (*tree->maxZ - *tree->minZ));
+#endif
+
+    volatile double *px, *pm;
+#if DIM > 1
+    volatile double *py;
+#if DIM == 3
+    volatile double *pz;
+#endif
+#endif
+
+    px  = particles->x;
+    pm = particles->mass;
+#if DIM > 1
+    py = particles->y;
+#if DIM == 3
+    pz = particles->z;
+#endif
+#endif
+
+    while (i < n) {
+        depth = 0;
+
+        if (isNewParticle) {
+            isNewParticle = false;
+            // cache particle data
+            x = px[i];
+            min_x = *tree->minX;
+            max_x = *tree->maxX;
+            //p.ax[i] = 0.0;
+#if DIM > 1
+            y = py[i];
+            min_y = *tree->minY;
+            max_y = *tree->maxY;
+            //p.ay[i] = 0.0;
+#if DIM == 3
+            z = pz[i];
+            min_z = *tree->minZ;
+            max_z = *tree->maxZ;
+            //p.az[i] = 0.0;
+#endif
+#endif
+
+            // start at root
+            currentNodeIndex = 0;
+            r = rootRadius;
+            childIndex = 0;
+
+//            if (x > rootX) childIndex = 1;
+//#if DIM > 1
+//            if (y > rootY) childIndex += 2;
+//#if DIM == 3
+//            if (z > rootZ) childIndex += 4;
+//#endif
+//#endif
+
+
+            // find insertion point for body
+            // x direction
+            if (x < 0.5 * (min_x + max_x)) { // x direction
+                childIndex += 1;
+                max_x = 0.5 * (min_x + max_x);
+            }
+            else {
+                min_x = 0.5 * (min_x + max_x);
+            }
+#if DIM > 1
+            // y direction
+            if (y < 0.5 * (min_y + max_y)) { // y direction
+                childIndex += 2;
+                max_y = 0.5 * (min_y + max_y);
+            }
+            else {
+                min_y = 0.5 * (min_y + max_y);
+            }
+#if DIM == 3
+            // z direction
+            if (z < 0.5 * (min_z + max_z)) {  // z direction
+                childIndex += 4;
+                max_z = 0.5 * (min_z + max_z);
+            }
+            else {
+                min_z = 0.5 * (min_z + max_z);
+            }
+#endif
+#endif
+
+        }
+
+        // follow path to leaf
+        child = tree->child[POW_DIM * currentNodeIndex + childIndex]; //childList[childListIndex(currentNodeIndex, childIndex)];
+        // leaves are 0 ... numParticles
+        while (child >= m) {
+            currentNodeIndex = child;
+            depth++;
+            r *= 0.5;
+            // which child?
+            childIndex = 0;
+
+//            if (x > px[currentNodeIndex]) childIndex = 1;
+//#if DIM > 1
+//            if (y > py[currentNodeIndex]) childIndex += 2;
+//#if DIM > 2
+//            if (z > pz[currentNodeIndex]) childIndex += 4;
+//#endif
+//#endif
+
+            // find insertion point for body
+            if (x < 0.5 * (min_x + max_x)) { // x direction
+                childIndex += 1;
+                max_x = 0.5 * (min_x + max_x);
+            }
+            else {
+                min_x = 0.5 * (min_x + max_x);
+            }
+#if DIM > 1
+            if (y < 0.5 * (min_y + max_y)) { // y direction
+                childIndex += 2;
+                max_y = 0.5 * (min_y + max_y);
+            }
+            else {
+                min_y = 0.5 * (min_y + max_y);
+            }
+#if DIM == 3
+            if (z < 0.5 * (min_z + max_z)) { // z direction
+                childIndex += 4;
+                max_z = 0.5 * (min_z + max_z);
+            }
+            else {
+                min_z = 0.5 * (min_z + max_z);
+            }
+#endif
+#endif
+
+            child = tree->child[POW_DIM * currentNodeIndex + childIndex]; //childList[childListIndex(currentNodeIndex, childIndex)];
+        }
+
+        // we want to insert the current particle i into currentNodeIndex's child at position childIndex
+        // where child is now empty, locked or a particle
+        // if empty -> simply insert, if particle -> create new subtree
+        if (child != -2) {
+            // the position where we want to place the particle gets locked
+            lockedIndex = tree->child[POW_DIM * currentNodeIndex + childIndex]; //childListIndex(currentNodeIndex, childIndex);
+            // atomic compare and save: compare if child is still the current value of childlist at the index lockedIndex, if so, lock it
+            // atomicCAS returns the old value of child
+            if (child == atomicCAS(&tree->child[lockedIndex], child, -2)) { //&childList[lockedIndex]
+                // if the destination is empty, insert particle
+                if (child == -1) {
+                    // insert the particle into this leaf
+                    tree->child[lockedIndex] = i; //childList[lockedIndex] = i;
+                } else {
+                    // there is already a particle, create new inner node
+                    subtreeNodeIndex = POW_DIM * m;
+                    do {
+                        // get the next free nodeIndex
+                        newNodeIndex = atomicAdd(tree->index, 1); //atomicSub((int * ) &maxNodeIndex, 1) - 1;
+
+                        // throw error if there aren't enough node indices available
+                        //if (newNodeIndex > m) {
+                            //printf("(thread %d): error during tree creation: not enough nodes. newNodeIndex %d, maxNodeIndex %d, numParticles: %d\n", threadIdx.x, newNodeIndex, maxNodeIndex, numParticles);
+                            //assert(0);
+                        //}
+
+                        // the first available free nodeIndex will be the subtree node
+                        subtreeNodeIndex = min(subtreeNodeIndex, newNodeIndex);
+
+                        dx = (childIndex & 1) * r;
+#if DIM > 1
+                        dy = ((childIndex >> 1) & 1) * r;
+#if DIM == 3
+                        dz = ((childIndex >> 2) & 1) * r;
+#endif
+#endif
+                        depth++;
+                        r *= 0.5;
+
+                        // we save the radius here, so we can use it during neighboursearch. we have to set it to EMPTY after the neighboursearch
+                        pm[newNodeIndex] = r;
+
+//                        dx = px[newNodeIndex] = px[currentNodeIndex] - r + dx;
+//#if DIM > 1
+//                        dy = py[newNodeIndex] = py[currentNodeIndex] - r + dy;
+//#if DIM == 3
+//                        dz = pz[newNodeIndex] = pz[currentNodeIndex] - r + dz;
+//#endif
+//#endif
+
+
+                        dx = px[newNodeIndex] = (0.5 * (min_x + max_x)) - r + dx;
+#if DIM > 1
+                        dy = py[newNodeIndex] = (0.5 * (min_y + max_y)) - r + dy;
+#if DIM == 3
+                        dz = pz[newNodeIndex] = (0.5 * (min_z + max_z)) - r + dz;
+#endif
+#endif
+
+                        //for (k = 0; k < POW_DIM; k++) {
+                        //    tree->child[POW_DIM * newNodeIndex + k] = -1; //childList[childListIndex(newNodeIndex, k)] = EMPTY;
+                        //}
+
+                        if (subtreeNodeIndex != newNodeIndex) {
+                            // this condition is true when the two particles are so close to each other, that they are
+                            // again put into the same node, so we have to create another new inner node.
+                            // in this case, currentNodeIndex is the previous newNodeIndex
+                            // and childIndex is the place where the particle i belongs to, relative to the previous newNodeIndex
+                            tree->child[POW_DIM * currentNodeIndex + childIndex] = newNodeIndex; //childList[childListIndex(currentNodeIndex, childIndex)] = newNodeIndex;
+                        }
+
+                        childIndex = 0;
+
+//                        if (px[child] > dx) childIndex = 1;
+//#if DIM > 1
+//                        if (py[child] > dy) childIndex += 2;
+//#if DIM == 3
+//                        if (pz[child] > dz) childIndex += 4;
+//#endif
+//#endif
+
+                        //if (particles->x[bodyIndex + offset] < 0.5 * (min_x + max_x)) {
+                        if (px[child] < 0.5 * (min_x + max_x)) {
+                            childIndex += 1;
+                            max_x = 0.5 * (min_x + max_x);
+                        } else {
+                            min_x = 0.5 * (min_x + max_x);
+                        }
+#if DIM > 1
+                        //if (particles->y[bodyIndex + offset] < 0.5 * (min_y + max_y)) {
+                        if (py[child] < 0.5 * (min_y + max_y)) {
+                            childIndex += 2;
+                            max_y = 0.5 * (min_y + max_y);
+                        } else {
+                            min_y = 0.5 * (min_y + max_y);
+                        }
+#if DIM == 3
+                        //if (particles->z[bodyIndex + offset] < 0.5 * (min_z + max_z)) {
+                        if (pz[child] < 0.5 * (min_z + max_z)) {
+                            childIndex += 4;
+                            max_z = 0.5 * (min_z + max_z);
+                        } else {
+                            min_z = 0.5 * (min_z + max_z);
+                        }
+#endif
+#endif
+                        tree->child[POW_DIM * newNodeIndex + childIndex] = child; //childList[childListIndex(newNodeIndex, childIndex)] = child;
+
+                        // compare positions of particle i to the new node
+                        currentNodeIndex = newNodeIndex;
+                        childIndex = 0;
+
+//                        if (x > dx) childIndex = 1;
+//#if DIM > 1
+//                        if (y > dy) childIndex += 2;
+//#if DIM == 3
+//                        if (z > dz) childIndex += 4;
+//#endif
+//#endif
+
+                        if (x < 0.5 * (min_x + max_x)) { childIndex += 1; }
+#if DIM > 1
+                        if (y < 0.5 * (min_y + max_y)) { childIndex += 2; }
+#if DIM == 3
+                        if (z < 0.5 * (min_z + max_z)) { childIndex += 4; }
+#endif
+#endif
+                        child = tree->child[POW_DIM * currentNodeIndex + childIndex]; //child = childList[childListIndex(currentNodeIndex, childIndex)];
+                        // continue creating new nodes (with half radius each) until the other particle is not in the same spot in the tree
+                    } while (child >= 0 && child < n);
+
+                    tree->child[POW_DIM * currentNodeIndex + childIndex] = i; //childList[childListIndex(currentNodeIndex, childIndex)] = i;
+                    __threadfence();
+                    //__threadfence() is used to halt the current thread until all previous writes to shared and global memory are visible
+                    // by other threads. It does not halt nor affect the position of other threads though!
+                    tree->child[lockedIndex] = subtreeNodeIndex; //childList[lockedIndex] = subtreeNodeIndex;
+                }
+                //p.depth[i] = depth;
+                // continue with next particle
+                i += inc;
+                isNewParticle = true;
+            }
+        }
+        __syncthreads(); // child was locked, wait for other threads to unlock
+    }
+}
+*/
 
 __global__ void TreeNS::Kernel::prepareSorting(Tree *tree, Particles *particles, integer n, integer m) {
     int bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
@@ -1294,7 +1932,7 @@ namespace TreeNS {
             }
 
             real buildTree(Tree *tree, Particles *particles, integer n, integer m, bool time) {
-                ExecutionPolicy executionPolicy;
+                ExecutionPolicy executionPolicy(24, 32);
                 return cuda::launch(time, executionPolicy, ::TreeNS::Kernel::buildTree, tree, particles, n, m);
             }
 

@@ -216,7 +216,12 @@ namespace SPH {
         __global__ void symbolicForce_test(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                            DomainList *lowestDomainList, integer *sendIndices, real searchRadius,
                                            integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
-                                           integer relevantIndex, Curve::Type curveType);
+                                           integer relevantIndexOld, Curve::Type curveType);
+
+        __global__ void symbolicForce_test2(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                            DomainList *domainList, integer *sendIndices, real searchRadius,
+                                            integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
+                                            Curve::Type curveType);
 
         /**
          * @brief Collect the found particles into contiguous memory in order to facilitate sending via MPI.
@@ -236,6 +241,11 @@ namespace SPH {
         __global__ void collectSendIndices(Tree *tree, Particles *particles, integer *sendIndices,
                                            integer *particles2Send, integer *particlesCount,
                                            integer n, integer length, Curve::Type curveType);
+
+        __global__ void collectSendIndices_test2(Tree *tree, Particles *particles, integer *sendIndices,
+                                                 integer *particles2Send, integer *particlesCount,
+                                                 integer numParticlesLocal, integer numParticles,
+                                                 integer treeIndex, int currentProc, Curve::Type curveType);
 
         /**
          * @deprecated
@@ -379,7 +389,12 @@ namespace SPH {
             real symbolicForce_test(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                DomainList *lowestDomainList, integer *sendIndices, real searchRadius,
                                                integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
-                                               integer relevantIndex, Curve::Type curveType);
+                                               integer relevantIndexOld, Curve::Type curveType);
+
+            real symbolicForce_test2(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                     DomainList *domainList, integer *sendIndices, real searchRadius,
+                                     integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
+                                     Curve::Type curveType);
 
             /**
              * @brief Wrapper for ::SPH::Kernel::collectSendIndices().
@@ -389,6 +404,11 @@ namespace SPH {
             real collectSendIndices(Tree *tree, Particles *particles, integer *sendIndices,
                                                integer *particles2Send, integer *particlesCount,
                                                integer n, integer length, Curve::Type curveType);
+
+            real collectSendIndices_test2(Tree *tree, Particles *particles, integer *sendIndices,
+                                          integer *particles2Send, integer *particlesCount,
+                                          integer numParticlesLocal, integer numParticles,
+                                          integer treeIndex, int currentProc, Curve::Type curveType);
 
             /**
              * @brief Wrapper for ::SPH::Kernel::particles2Send().

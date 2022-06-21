@@ -723,6 +723,10 @@ namespace SPH {
 
                 particles->noi[bodyIndex + offset] = noOfInteractions;
 
+                //if (noOfInteractions < 30) {
+                //    particles->sml[bodyIndex + offset] *= 1.5;
+                //}
+
                 __syncthreads();
                 offset += stride;
             }
@@ -1102,6 +1106,7 @@ namespace SPH {
                     lowestDomainList->relevantDomainListIndices[domainIndex] = bodyIndex;
                     lowestDomainList->relevantDomainListLevels[domainIndex] = lowestDomainList->domainListLevels[index + offset];
                     lowestDomainList->relevantDomainListProcess[domainIndex] = proc;
+                    lowestDomainList->relevantDomainListOriginalIndex[domainIndex] = index + offset;
 
                     //printf("[rank %i] Adding relevant domain list node: %i (%f, %f, %f)\n", subDomainKeyTree->rank,
                     //       bodyIndex, particles->x[bodyIndex],
@@ -1258,17 +1263,17 @@ namespace SPH {
         __global__ void symbolicForce_test(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                       DomainList *lowestDomainList, integer *sendIndices, real searchRadius,
                                       integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
-                                      integer relevantIndex, Curve::Type curveType) {
+                                      integer relevantIndexOld, Curve::Type curveType) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
             integer stride = blockDim.x * gridDim.x;
             integer offset = 0;
 
-            integer insertIndex;
-            integer insertIndexOffset;
+            //integer insertIndex;
+            //integer insertIndexOffset;
 
-            integer proc, currentChild;
-            integer childPath;
+            //integer currentChild;
+            //integer childPath;
             integer currentParticleIndex;
 
             real dx, min_x, max_x;
@@ -1298,21 +1303,18 @@ namespace SPH {
 
                     currentParticleIndex = bodyIndex + offset;
 
-                    min_x = lowestDomainList->borders[lowestDomainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM];
-                    max_x = lowestDomainList->borders[lowestDomainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
-                                                1];
+                    min_x = lowestDomainList->borders[lowestDomainList->relevantDomainListOriginalIndex[relevantIndex]*2*DIM];
+                    max_x = lowestDomainList->borders[lowestDomainList->relevantDomainListOriginalIndex[relevantIndex]*2*DIM+1];
 #if DIM > 1
-                    min_y = lowestDomainList->borders[lowestDomainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
-                                                2];
-                    max_y = lowestDomainList->borders[lowestDomainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
-                                                3];
+                    min_y = lowestDomainList->borders[lowestDomainList->relevantDomainListOriginalIndex[relevantIndex]*2*DIM+2];
+                    max_y = lowestDomainList->borders[lowestDomainList->relevantDomainListOriginalIndex[relevantIndex]*2*DIM+3];
 #if DIM == 3
-                    min_z = lowestDomainList->borders[lowestDomainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
-                                                4];
-                    max_z = lowestDomainList->borders[lowestDomainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
-                                                5];
+                    min_z = lowestDomainList->borders[lowestDomainList->relevantDomainListOriginalIndex[relevantIndex]*2*DIM+4];
+                    max_z = lowestDomainList->borders[lowestDomainList->relevantDomainListOriginalIndex[relevantIndex]*2*DIM+5];
 #endif
 #endif
+
+                    //printf("x -> (%e, %e), y -> (%e, %e), z -> (%e, %e)\n", min_x, max_x, min_y, max_y, min_z, max_z);
 
                     // x-direction
                     if (particles->x[currentParticleIndex] < min_x) {
@@ -1357,7 +1359,7 @@ namespace SPH {
 #elif DIM == 2
                     d = dx*dx + dy*dy;
 #else
-                    d = dx * dx + dy * dy + dz * dz;
+                    d = dx*dx + dy*dy + dz*dz;
 #endif
 
                     //if ((bodyIndex + offset) % 500 == 0) {
@@ -1365,10 +1367,14 @@ namespace SPH {
                     //           searchRadius * searchRadius, particles->sml[bodyIndex + offset]);
                     //}
                     //if (d < (particles->sml[bodyIndex + offset] * particles->sml[bodyIndex + offset])) {
+                    //if (currentParticleIndex % 100 == 0) {
+                    //    printf("d = %e < %e\n", d, searchRadius * searchRadius);
+                    //}
                     if (d < (searchRadius * searchRadius)) {
+                        //printf("i = %i: d = %e < %e\n", currentParticleIndex, d, searchRadius * searchRadius);
                         //printf("d = %f < (%f * %f = %f)\n", d, particles->sml[bodyIndex + offset], particles->sml[bodyIndex + offset],
                         //       particles->sml[bodyIndex + offset] * particles->sml[bodyIndex + offset]);
-
+                        added = true;
                         sendIndices[currentParticleIndex] = 1;
                     }
                     //else {
@@ -1377,12 +1383,136 @@ namespace SPH {
 
                 }
 
-                __threadfence();
+                //__threadfence();
                 offset += stride;
             }
 
 
         }
+
+        __global__ void symbolicForce_test2(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                            DomainList *domainList, integer *sendIndices, real searchRadius,
+                                            integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
+                                            Curve::Type curveType) {
+
+            int bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            int stride = blockDim.x * gridDim.x;
+            int offset = 0; // start with numParticles
+
+            int currentParticleIndex, particleLevel, domainListLevel, currentDomainListIndex, childIndex, currentProc;
+
+            real min_x, max_x;
+            real dx;
+#if DIM > 1
+            real min_y, max_y;
+            real dy;
+#if DIM == 3
+            real min_z, max_z;
+            real dz;
+#endif
+#endif
+            real d;
+
+            //bool added;
+            int added = 0;
+
+            //printf("Hallo !!!!! %i \n", n);
+
+            while ((bodyIndex + offset) < n) {
+
+                //added = false;
+
+                for (int relevantIndex = 0; relevantIndex < relevantIndicesCounter; relevantIndex++) {
+
+
+                    currentProc = domainList->relevantDomainListProcess[relevantIndex];
+
+                    //if ((added >> currentProc) & 1) {
+                    //    continue;
+                    //}
+
+
+                    currentParticleIndex = bodyIndex + offset;
+                    //domainListLevel = domainList->relevantDomainListLevels[relevantIndex];
+                    //particleLevel = particles->level[currentParticleIndex];
+                    currentDomainListIndex = domainList->relevantDomainListIndices[relevantIndex];
+
+
+
+                    min_x = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 *
+                                                DIM];
+                    max_x = domainList->borders[
+                            domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
+                            1];
+#if DIM > 1
+                    min_y = domainList->borders[
+                            domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
+                            2];
+                    max_y = domainList->borders[
+                            domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
+                            3];
+#if DIM == 3
+                    min_z = domainList->borders[
+                            domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
+                            4];
+                    max_z = domainList->borders[
+                            domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
+                            5];
+#endif
+#endif
+
+                    // determine (smallest) distance between domain list box and (pseudo-) particle
+                    if (particles->x[currentParticleIndex] < min_x) {
+                        dx = particles->x[currentParticleIndex] - min_x;
+                    } else if (particles->x[currentParticleIndex] > max_x) {
+                        dx = particles->x[currentParticleIndex] - max_x;
+                    } else {
+                        dx = 0.;
+                    }
+#if DIM > 1
+                    if (particles->y[currentParticleIndex] < min_y) {
+                        dy = particles->y[currentParticleIndex] - min_y;
+                    } else if (particles->y[currentParticleIndex] > max_y) {
+                        dy = particles->y[currentParticleIndex] - max_y;
+                    } else {
+                        dy = 0.;
+                    }
+#if DIM == 3
+                    if (particles->z[currentParticleIndex] < min_z) {
+                        dz = particles->z[currentParticleIndex] - min_z;
+                    } else if (particles->z[currentParticleIndex] > max_z) {
+                        dz = particles->z[currentParticleIndex] - max_z;
+                    } else {
+                        dz = 0.;
+                    }
+#endif
+#endif
+
+#if DIM == 1
+                    d = dx*dx;
+#elif DIM == 2
+                    d = dx*dx + dy*dy;
+#else
+                    d = dx * dx + dy * dy + dz * dz;
+#endif
+
+                    //printf("d = %e < %e\n", d, searchRadius * searchRadius);
+                    if (d < (searchRadius * searchRadius)) {
+
+                        //printf("adding ...\n");
+
+                        added = added | (1 << currentProc);
+                        sendIndices[currentParticleIndex] = sendIndices[currentParticleIndex] | (1 << currentProc);
+
+                    }
+                }
+
+                added = 0;
+                offset += stride;
+            }
+
+        }
+
 
         __global__ void collectSendIndices(Tree *tree, Particles *particles, integer *sendIndices,
                                            integer *particles2Send, integer *particlesCount,
@@ -1407,6 +1537,30 @@ namespace SPH {
                 offset += stride;
             }
 
+        }
+
+        __global__ void collectSendIndices_test2(Tree *tree, Particles *particles, integer *sendIndices,
+                                                 integer *particles2Send, integer *particlesCount,
+                                                 integer numParticlesLocal, integer numParticles,
+                                                 integer treeIndex, int currentProc, Curve::Type curveType) {
+
+            integer bodyIndex = threadIdx.x + blockIdx.x*blockDim.x;
+            integer stride = blockDim.x*gridDim.x;
+            integer offset = 0;
+
+            integer particleInsertIndex;
+
+            // it is a particle
+            while ((bodyIndex + offset) < numParticlesLocal) {
+                if ((sendIndices[bodyIndex + offset] >> currentProc) & 1) { // TODO: >= 1 or == 1 (was == 1)
+                    if (bodyIndex + offset < numParticlesLocal) {
+                        particleInsertIndex = atomicAdd(particlesCount, 1);
+                        particles2Send[particleInsertIndex] = bodyIndex + offset;
+                    }
+                }
+                __threadfence();
+                offset += stride;
+            }
         }
 
         // deprecated
@@ -1720,6 +1874,8 @@ namespace SPH {
             //note: -1 used as "null pointer"
             //note: -2 used to lock a child (pointer)
 
+            volatile integer *childList = tree->child;
+
             integer offset;
             int level;
             bool newBody = true;
@@ -1801,7 +1957,7 @@ namespace SPH {
 #endif
                 }
 
-                integer childIndex = tree->child[temp*POW_DIM + childPath];
+                register integer childIndex = childList[temp*POW_DIM + childPath];
 
                 // traverse tree until hitting leaf node
                 while (childIndex >= m) { //n
@@ -1862,20 +2018,22 @@ namespace SPH {
 #endif // COMPUTE_DIRECTLY
 
                     atomicAdd(&tree->count[temp], 1);
-                    childIndex = tree->child[POW_DIM * temp + childPath];
+                    childIndex = childList[POW_DIM * temp + childPath];
                 }
+
+                __syncthreads();
 
                 // if child is not locked
                 if (childIndex != -2) {
 
                     integer locked = temp * POW_DIM + childPath;
 
-                    if (atomicCAS(&tree->child[locked], childIndex, -2) == childIndex) {
+                    if (atomicCAS((int *)&childList[locked], childIndex, -2) == childIndex) {
 
                         // check whether a body is already stored at the location
                         if (childIndex == -1) {
                             //insert body and release lock
-                            tree->child[locked] = bodyIndex + offset;
+                            childList[locked] = bodyIndex + offset;
                             particles->level[bodyIndex + offset] = level + 1;
 
                         }
@@ -1891,7 +2049,7 @@ namespace SPH {
                                 patch = min(patch, cell);
 
                                 if (patch != cell) {
-                                    tree->child[POW_DIM * temp + childPath] = cell;
+                                    childList[POW_DIM * temp + childPath] = cell;
                                 }
 
                                 level++;
@@ -1957,7 +2115,7 @@ namespace SPH {
 
                                 tree->count[cell] += tree->count[childIndex];
 
-                                tree->child[POW_DIM * cell + childPath] = childIndex;
+                                childList[POW_DIM * cell + childPath] = childIndex;
                                 particles->level[cell] = level;
                                 particles->level[childIndex] += 1;
                                 tree->start[cell] = -1;
@@ -2016,14 +2174,14 @@ namespace SPH {
                         }
 #endif // COMPUTE_DIRECTLY
                                 tree->count[cell] += tree->count[bodyIndex + offset];
-                                childIndex = tree->child[POW_DIM * temp + childPath];
+                                childIndex = childList[POW_DIM * temp + childPath];
                             }
 
-                            tree->child[POW_DIM * temp + childPath] = bodyIndex + offset;
+                            childList[POW_DIM * temp + childPath] = bodyIndex + offset;
                             particles->level[bodyIndex + offset] = level + 1;
 
                             __threadfence();  // written to global memory arrays (child, x, y, mass) thus need to fence
-                            tree->child[locked] = patch;
+                            childList[locked] = patch;
                         }
                         offset += stride;
                         newBody = true;
@@ -2987,11 +3145,20 @@ namespace SPH {
             real symbolicForce_test(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                     DomainList *lowestDomainList, integer *sendIndices, real searchRadius,
                                     integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
-                                    integer relevantIndex, Curve::Type curveType) {
+                                    integer relevantIndexOld, Curve::Type curveType) {
                 ExecutionPolicy executionPolicy;
                 return cuda::launch(true, executionPolicy, ::SPH::Kernel::symbolicForce_test, subDomainKeyTree, tree, particles,
                                     lowestDomainList, sendIndices, searchRadius, n, m, relevantProc, relevantIndicesCounter,
-                                    relevantIndex, curveType);
+                                    relevantIndexOld, curveType);
+            }
+
+            real symbolicForce_test2(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                                DomainList *domainList, integer *sendIndices, real searchRadius,
+                                                integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
+                                                Curve::Type curveType) {
+                ExecutionPolicy executionPolicy;
+                return cuda::launch(true, executionPolicy, ::SPH::Kernel::symbolicForce_test2, subDomainKeyTree, tree, particles,
+                                    domainList, sendIndices, searchRadius, n, m, relevantProc, relevantIndicesCounter, curveType);
             }
 
             real collectSendIndices(Tree *tree, Particles *particles, integer *sendIndices,
@@ -3000,6 +3167,16 @@ namespace SPH {
                 ExecutionPolicy executionPolicy;
                 return cuda::launch(true, executionPolicy, ::SPH::Kernel::collectSendIndices, tree, particles,
                                     sendIndices, particles2Send, particlesCount, n, length, curveType);
+            }
+
+            real collectSendIndices_test2(Tree *tree, Particles *particles, integer *sendIndices,
+                                                     integer *particles2Send, integer *particlesCount,
+                                                     integer numParticlesLocal, integer numParticles,
+                                                     integer treeIndex, int currentProc, Curve::Type curveType) {
+                ExecutionPolicy executionPolicy;
+                return cuda::launch(true, executionPolicy, ::SPH::Kernel::collectSendIndices_test2, tree, particles,
+                                    sendIndices, particles2Send, particlesCount, numParticlesLocal, numParticles,
+                                    treeIndex, currentProc, curveType);
             }
 
             real particles2Send(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
@@ -3030,7 +3207,7 @@ namespace SPH {
 
             real insertReceivedParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                  DomainList *domainList, DomainList *lowestDomainList, int n, int m) {
-                ExecutionPolicy executionPolicy;//(1, 1)//(256,1);
+                ExecutionPolicy executionPolicy(24, 32); //(24, 32);//(1, 1)//(256,1);
                 return cuda::launch(true, executionPolicy, ::SPH::Kernel::insertReceivedParticles, subDomainKeyTree,
                                     tree, particles, domainList, lowestDomainList, n, m);
             }

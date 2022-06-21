@@ -8,27 +8,27 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     h_mass = new real[numNodes];
     _h_x = new real[numNodes];
     h_x = _h_x;
-    _h_vx = new real[numParticles];
+    _h_vx = new real[numParticles]; // numNodes
     h_vx = _h_vx;
-    _h_ax = new real[numParticles];
+    _h_ax = new real[numParticles]; // numNodes
     h_ax = _h_ax;
-    h_g_ax = new real[numParticles];
+    h_g_ax = new real[numParticles]; // numNodes
 #if DIM > 1
-    _h_y = new real[numParticles];
+    _h_y = new real[numNodes];
     h_y = _h_y;
-    _h_vy = new real[numParticles];
+    _h_vy = new real[numParticles]; // numNodes
     h_vy = _h_vy;
-    _h_ay = new real[numParticles];
+    _h_ay = new real[numParticles]; // numNodes
     h_ay = _h_ay;
-    h_g_ay = new real[numParticles];
+    h_g_ay = new real[numParticles]; // numNodes
 #if DIM == 3
     _h_z = new real[numNodes];
     h_z = _h_z;
-    _h_vz = new real[numParticles];
+    _h_vz = new real[numParticles]; // numNodes
     h_vz = _h_vz;
-    _h_az = new real[numParticles];
+    _h_az = new real[numParticles]; // numNodes
     h_az = _h_az;
-    h_g_az = new real[numParticles];
+    h_g_az = new real[numParticles]; // numNodes
 #endif
 #endif
 
@@ -133,29 +133,29 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     cuda::malloc(_d_x, numNodes);
     //_d_x = &d_positions[0];
     d_x = _d_x;
-    cuda::malloc(_d_vx, numParticles);
+    cuda::malloc(_d_vx, numParticles); // numNodes
     d_vx = _d_vx;
-    cuda::malloc(_d_ax, numParticles);
+    cuda::malloc(_d_ax, numParticles); // numNodes
     d_ax = _d_ax;
-    cuda::malloc(d_g_ax, numParticles);
+    cuda::malloc(d_g_ax, numParticles); // numNodes
 #if DIM > 1
     cuda::malloc(_d_y, numNodes);
     //_d_y = &d_positions[numNodes];
     d_y = _d_y;
-    cuda::malloc(_d_vy, numParticles);
+    cuda::malloc(_d_vy, numParticles); // numNodes
     d_vy = _d_vy;
-    cuda::malloc(_d_ay, numParticles);
+    cuda::malloc(_d_ay, numParticles); // numNodes
     d_ay = _d_ay;
-    cuda::malloc(d_g_ay, numParticles);
+    cuda::malloc(d_g_ay, numParticles); // numNodes
 #if DIM == 3
     cuda::malloc(_d_z, numNodes);
     //_d_z = &d_positions[2 * numNodes];
     d_z = _d_z;
-    cuda::malloc(_d_vz, numParticles);
+    cuda::malloc(_d_vz, numParticles); // numNodes
     d_vz = _d_vz;
-    cuda::malloc(_d_az, numParticles);
+    cuda::malloc(_d_az, numParticles); // numNodes
     d_az = _d_az;
-    cuda::malloc(d_g_az, numParticles);
+    cuda::malloc(d_g_az, numParticles); // numNodes
 #endif
 #endif
     cuda::malloc(d_nodeType, numNodes);
@@ -247,6 +247,13 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
 #endif
 
 #endif // SPH_SIM
+
+#if BALSARA_SWITCH
+    h_divv = new real[numParticles];
+    h_curlv = new real[numParticles * DIM];
+    cuda::malloc(d_divv, numParticles);
+    cuda::malloc(d_curlv, numParticles * DIM);
+#endif
 
     cuda::malloc(d_particles, 1);
 
@@ -344,6 +351,11 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
 #endif
 #endif
 #endif // SPH_SIM
+
+#if BALSARA_SWITCH
+    h_particles->setDivCurl(h_divv, h_curlv);
+    ParticlesNS::Kernel::Launch::setDivCurl(d_particles, d_divv, d_curlv);
+#endif
 
     cuda::copy(&numParticles, d_numParticles, 1, To::device);
     cuda::copy(&numNodes, d_numNodes, 1, To::device);
@@ -522,6 +534,13 @@ ParticleHandler::~ParticleHandler() {
 #endif
 #endif // SPH_SIM
 
+#if BALSARA_SWITCH
+    delete [] h_divv;
+    delete [] h_curlv;
+    cuda::free(d_divv);
+    cuda::free(d_curlv);
+#endif
+
     delete h_particles;
     cuda::free(d_particles);
 
@@ -592,16 +611,16 @@ T*& ParticleHandler::getEntry(Entry::Name entry, Execution::Location location) {
 #if DIM > 1
                 case Entry::y: {
                     return d_y;
-                } break;
+                }
 #if DIM == 3
                 case Entry::z: {
                     return d_z;
-                } break;
+                }
 #endif
 #endif
                 case Entry::mass: {
                     return d_mass;
-                } break;
+                }
                 default: {
                     printf("Entry is not available!\n");
                     return NULL;
@@ -616,11 +635,11 @@ T*& ParticleHandler::getEntry(Entry::Name entry, Execution::Location location) {
 #if DIM > 1
                 case Entry::y: {
                     return h_y;
-                } break;
+                }
 #if DIM == 3
                 case Entry::z: {
                     return h_z;
-                } break;
+                }
 #endif
 #endif
                 case Entry::mass: {
@@ -818,13 +837,13 @@ void ParticleHandler::copyPosition(To::Target target, bool includePseudoParticle
 }
 
 void ParticleHandler::copyVelocity(To::Target target, bool includePseudoParticles) {
-    int length;
-    if (includePseudoParticles) {
-        length = numNodes;
-    }
-    else {
-        length = numParticles;
-    }
+    int length = numParticles;
+    //if (includePseudoParticles) {
+    //    length = numNodes;
+    //}
+    //else {
+    //    length = numParticles;
+    //}
     cuda::copy(h_vx, d_vx, length, target);
 #if DIM > 1
     cuda::copy(h_vy, d_vy, length, target);
@@ -835,13 +854,13 @@ void ParticleHandler::copyVelocity(To::Target target, bool includePseudoParticle
 }
 
 void ParticleHandler::copyAcceleration(To::Target target, bool includePseudoParticles) {
-    int length;
-    if (includePseudoParticles) {
-        length = numNodes;
-    }
-    else {
-        length = numParticles;
-    }
+    int length = numParticles;
+    //if (includePseudoParticles) {
+    //    length = numNodes;
+    //}
+    //else {
+    //    length = numParticles;
+    //}
     cuda::copy(h_ax, d_ax, length, target);
 #if DIM > 1
     cuda::copy(h_ay, d_ay, length, target);
@@ -883,16 +902,16 @@ IntegratedParticleHandler::IntegratedParticleHandler(integer numParticles, integ
     cuda::malloc(d_uid, numParticles);
 
     cuda::malloc(d_x, numNodes);
-    cuda::malloc(d_vx, numNodes);
-    cuda::malloc(d_ax, numNodes);
+    cuda::malloc(d_vx, numParticles); // numNodes
+    cuda::malloc(d_ax, numParticles); // numNodes
 #if DIM > 1
     cuda::malloc(d_y, numNodes);
-    cuda::malloc(d_vy, numNodes);
-    cuda::malloc(d_ay, numNodes);
+    cuda::malloc(d_vy, numParticles); // numNodes
+    cuda::malloc(d_ay, numParticles); // numNodes
 #if DIM == 3
     cuda::malloc(d_z, numNodes);
-    cuda::malloc(d_vz, numNodes);
-    cuda::malloc(d_az, numNodes);
+    cuda::malloc(d_vz, numParticles); // numNodes
+    cuda::malloc(d_az, numParticles); // numNodes
 #endif
 #endif
 

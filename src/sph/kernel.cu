@@ -221,122 +221,134 @@ namespace SPH {
 
     }
 
-#if (NAVIER_STOKES || BALSARA_SWITCH || INVISCID_SPH || INTEGRATE_ENERGY)
-    __global__ void CalcDivvandCurlv(SPH_kernel kernel, Particles *particles, int *interactions, int numParticles) {
+//#if (NAVIER_STOKES || BALSARA_SWITCH || INVISCID_SPH || INTEGRATE_ENERGY)
+#if BALSARA_SWITCH
+    namespace Kernel {
+        __global__ void CalcDivvandCurlv(SPH_kernel kernel, Particles *particles, int *interactions, int numParticles) {
 
-        int i, inc, j, k, m, d, dd;
-        // absolute values of div v and curl v */
-        real divv;
-        real curlv[DIM];
-        real W, dWdr;
-        real Wj, dWdrj, dWdxj[DIM];
-        real dWdx[DIM], dx[DIM];
-        real sml;
-        real vi[DIM], vj[DIM];
-        real r;
-        inc = blockDim.x * gridDim.x;
-        for (i = threadIdx.x + blockIdx.x * blockDim.x; i < numParticles; i += inc) {
-            //if (EOS_TYPE_IGNORE == matEOS[p_rhs.materialId[i]] || p_rhs.materialId[i] == EOS_TYPE_IGNORE) {
-            //    continue;
-            //}
-            k = particles->noi[i];
-            divv = 0;
-            for (m = 0; m < DIM; m++) {
-                curlv[m] = 0;
-                dWdx[m] = 0;
+            int i, inc, j, k, m, d, dd;
+            // absolute values of div v and curl v */
+            real divv;
+            real curlv[DIM];
+            real W, dWdr;
+            real Wj, dWdrj, dWdxj[DIM];
+            real dWdx[DIM], dx[DIM];
+            real sml;
+            real vi[DIM], vj[DIM];
+            real r;
+            inc = blockDim.x * gridDim.x;
+            for (i = threadIdx.x + blockIdx.x * blockDim.x; i < numParticles; i += inc) {
+                //if (EOS_TYPE_IGNORE == matEOS[p_rhs.materialId[i]] || p_rhs.materialId[i] == EOS_TYPE_IGNORE) {
+                //    continue;
+                //}
+                k = particles->noi[i];
+                divv = 0;
+                for (m = 0; m < DIM; m++) {
+                    curlv[m] = 0;
+                    dWdx[m] = 0;
+                }
+                sml = particles->sml[i];
+                // interaction partner loop
+                for (m = 0; m < k; m++) {
+                    j = interactions[i*MAX_NUM_INTERACTIONS + m];
+                    // get the kernel values
+    #if VARIABLE_SML
+                    sml = 0.5 *(particles->sml[i] + particles->sml[j]);
+    #endif
+                    dx[0] = particles->x[i] - particles->x[j];
+    #if DIM > 1
+                    dx[1] = particles->y[i] - particles->y[j];
+    #if DIM > 2
+                    dx[2] = particles->z[i] - particles->z[j];
+    #endif
+    #endif
+
+
+    #if AVERAGE_KERNELS
+                    kernel(&W, dWdx, &dWdr, dx, particles->sml[i]);
+                    kernel(&Wj, dWdxj, &dWdrj, dx, particles->sml[j]);
+    # if SHEPARD_CORRECTION
+                    //TODO: shephard correction
+                    W /= particles->shepard_correction[i];
+                    Wj /= particles->shepard_correction[j];
+                    for (d = 0; d < DIM; d++) {
+                        dWdx[d] /= p_rhs.shepard_correction[i];
+                        dWdxj[d] /= p_rhs.shepard_correction[j];
+                    }
+    # endif
+                    W = 0.5 * (W + Wj);
+                    for (d = 0; d < DIM; d++) {
+                        dWdx[d] = 0.5 * (dWdx[d] + dWdxj[d]);
+                    }
+    #else
+                    kernel(&W, dWdx, &dWdr, dx, sml);
+    # if SHEPARD_CORRECTION
+                    W /= p_rhs.shepard_correction[i];
+                    for (d = 0; d < DIM; d++) {
+                        dWdx[d] /= particles->shepard_correction[i];
+                    }
+    # endif
+    #endif // AVERAGE_KERNELS
+
+                    vi[0] = particles->vx[i];
+                    vj[0] = particles->vx[j];
+    #if DIM > 1
+                    vi[1] = particles->vy[i];
+                    vj[1] = particles->vy[j];
+    #if DIM > 2
+                    vi[2] = particles->vz[i];
+                    vj[2] = particles->vz[j];
+    #endif
+    #endif
+                    r = 0;
+                    for (d = 0; d < DIM; d++) {
+                        r += dx[d]*dx[d];
+                    }
+                    r = cuda::math::sqrt(r);
+                    // divv
+                    for (d = 0; d < DIM; d++) {
+    #if TENSORIAL_CORRECTION
+                        for (dd = 0; dd < DIM; dd++) {
+                        divv += particles->mass[j]/particles->rho[j] * (vj[d] - vi[d]) * particles->tensorialCorrectionMatrix[i*DIM*DIM+d*DIM+dd] * dWdx[dd];
+                    }
+    #else
+                        divv += particles->mass[j]/particles->rho[j] * (vj[d] - vi[d]) * dWdx[d];
+    #endif
+
+                    }
+                    /* curlv */
+    #if (DIM == 1 && BALSARA_SWITCH)
+    #error unset BALSARA SWITCH in 1D
+    #elif DIM == 2
+                    // only one component in 2D
+                curlv[0] += particles->mass[j]/particles->rho[i] * ((vi[0] - vj[0]) * dWdx[1]
+                            - (vi[1] - vj[1]) * dWdx[0]);
+                curlv[1] = 0;
+    #elif DIM == 3
+                    curlv[0] += particles->mass[j]/particles->rho[i] * ((vi[1] - vj[1]) * dWdx[2]
+                                                   - (vi[2] - vj[2]) * dWdx[1]);
+                    curlv[1] += particles->mass[j]/particles->rho[i] * ((vi[2] - vj[2]) * dWdx[0]
+                                                   - (vi[0] - vj[0]) * dWdx[2]);
+                    curlv[2] += particles->mass[j]/particles->rho[i] * ((vi[0] - vj[0]) * dWdx[1]
+                                                   - (vi[1] - vj[1]) * dWdx[0]);
+    #endif
+                }
+                for (d = 0; d < DIM; d++) {
+                    //TODO: particles or particles_rhs: curlv and divv
+                    particles->curlv[i*DIM+d] = curlv[d];
+                }
+                particles->divv[i] = divv;
             }
-            sml = particles->sml[i];
-            // interaction partner loop
-            for (m = 0; m < k; m++) {
-                j = interactions[i*MAX_NUM_INTERACTIONS + m];
-                // get the kernel values
-#if VARIABLE_SML
-                sml = 0.5 *(particles->sml[i] + particles->sml[j]);
-#endif
-                dx[0] = particles->x[i] - particles->x[j];
-#if DIM > 1
-                dx[1] = particles->y[i] - particles->y[j];
-#if DIM > 2
-                dx[2] = particles->z[i] - particles->z[j];
-#endif
-#endif
-
-
-#if AVERAGE_KERNELS
-                kernel(&W, dWdx, &dWdr, dx, particles->sml[i]);
-                kernel(&Wj, dWdxj, &dWdrj, dx, particles->sml[j]);
-# if SHEPARD_CORRECTION
-                //TODO: shephard correction
-                W /= particles->shepard_correction[i];
-                Wj /= particles->shepard_correction[j];
-                for (d = 0; d < DIM; d++) {
-                    dWdx[d] /= p_rhs.shepard_correction[i];
-                    dWdxj[d] /= p_rhs.shepard_correction[j];
-                }
-# endif
-                W = 0.5 * (W + Wj);
-                for (d = 0; d < DIM; d++) {
-                    dWdx[d] = 0.5 * (dWdx[d] + dWdxj[d]);
-                }
-#else
-                kernel(&W, dWdx, &dWdr, dx, sml);
-# if SHEPARD_CORRECTION
-                W /= p_rhs.shepard_correction[i];
-                for (d = 0; d < DIM; d++) {
-                    dWdx[d] /= particles->shepard_correction[i];
-                }
-# endif
-#endif // AVERAGE_KERNELS
-
-                vi[0] = particles->vx[i];
-                vj[0] = particles->vx[j];
-#if DIM > 1
-                vi[1] = particles->vy[i];
-                vj[1] = particles->vy[j];
-#if DIM > 2
-                vi[2] = particles->vz[i];
-                vj[2] = particles->vz[j];
-#endif
-#endif
-                r = 0;
-                for (d = 0; d < DIM; d++) {
-                    r += dx[d]*dx[d];
-                }
-                r = cuda::math::sqrt(r);
-                // divv
-                for (d = 0; d < DIM; d++) {
-#if TENSORIAL_CORRECTION
-                    for (dd = 0; dd < DIM; dd++) {
-                    divv += particles->mass[j]/particles->rho[j] * (vj[d] - vi[d]) * particles->tensorialCorrectionMatrix[i*DIM*DIM+d*DIM+dd] * dWdx[dd];
-                }
-#else
-                    divv += particles->mass[j]/particles->rho[j] * (vj[d] - vi[d]) * dWdx[d];
-#endif
-
-                }
-                /* curlv */
-#if (DIM == 1 && BALSARA_SWITCH)
-#error unset BALSARA SWITCH in 1D
-#elif DIM == 2
-                // only one component in 2D
-            curlv[0] += particles->mass[j]/particles->rho[i] * ((vi[0] - vj[0]) * dWdx[1]
-                        - (vi[1] - vj[1]) * dWdx[0]);
-            curlv[1] = 0;
-#elif DIM == 3
-                curlv[0] += particles->mass[j]/particles->rho[i] * ((vi[1] - vj[1]) * dWdx[2]
-                                               - (vi[2] - vj[2]) * dWdx[1]);
-                curlv[1] += particles->mass[j]/particles->rho[i] * ((vi[2] - vj[2]) * dWdx[0]
-                                               - (vi[0] - vj[0]) * dWdx[2]);
-                curlv[2] += particles->mass[j]/particles->rho[i] * ((vi[0] - vj[0]) * dWdx[1]
-                                               - (vi[1] - vj[1]) * dWdx[0]);
-#endif
-            }
-            for (d = 0; d < DIM; d++) {
-                //TODO: particles or particles_rhs: curlv and divv
-                //particles->curlv[i*DIM+d] = curlv[d];
-            }
-            //particles->divv[i] = divv;
         }
+
+            namespace Launch {
+                real CalcDivvandCurlv(SPH_kernel kernel, Particles *particles, int *interactions, int numParticles) {
+                    ExecutionPolicy executionPolicy;
+                    return cuda::launch(true, executionPolicy, ::SPH::Kernel::CalcDivvandCurlv, kernel, particles,
+                                        interactions, numParticles);
+                }
+            }
+
     }
 #endif //  (NAVIER_STOKES || BALSARA_SWITCH || INVISCID_SPH)
 

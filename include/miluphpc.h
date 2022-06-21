@@ -321,31 +321,31 @@ public:
 
     /// @todo revise buffer handling
     /// buffer instance
-    HelperHandler *helperHandler;
+    //HelperHandler *helperHandler;
     /// buffer instance
     HelperHandler *buffer;
 
     // testing
     /// buffer (need for revising)
-    integer *d_particles2SendIndices;
+    //integer *d_particles2SendIndices;
     /// buffer (need for revising)
-    integer *d_pseudoParticles2SendIndices;
+    //integer *d_pseudoParticles2SendIndices;
     /// buffer (need for revising)
-    integer *d_pseudoParticles2SendLevels;
+    //integer *d_pseudoParticles2SendLevels;
     /// buffer (need for revising)
-    integer *d_pseudoParticles2ReceiveLevels;
+    //integer *d_pseudoParticles2ReceiveLevels;
     /// buffer (need for revising)
-    integer *d_particles2SendCount;
+    //integer *d_particles2SendCount;
     /// buffer (need for revising)
-    integer *d_pseudoParticles2SendCount;
+    //integer *d_pseudoParticles2SendCount;
     /// buffer (need for revising)
-    int *d_particles2removeBuffer;
+    //int *d_particles2removeBuffer;
     /// buffer (need for revising)
-    int *d_particles2removeVal;
+    //int *d_particles2removeVal;
     /// buffer (need for revising)
-    idInteger *d_idIntegerBuffer;
+    //idInteger *d_idIntegerBuffer;
     /// buffer (need for revising)
-    idInteger *d_idIntegerCopyBuffer;
+    //idInteger *d_idIntegerCopyBuffer;
     // end: testing
 
     /// collected information required to set up the simulation

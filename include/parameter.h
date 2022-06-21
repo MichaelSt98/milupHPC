@@ -24,9 +24,6 @@ typedef int idInteger;
 
 #define MAX_LEVEL 21
 
-/// compile & dispatch unit tests
-#define UNIT_TESTING 0
-
 #define DEBUGGING 0
 
 /**
@@ -85,6 +82,7 @@ typedef int idInteger;
 
 // deprecated flag
 #define ARTIFICIAL_VISCOSITY 1
+#define BALSARA_SWITCH 0
 
 // to be (fully) implemented flags
 #define AVERAGE_KERNELS 0

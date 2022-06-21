@@ -130,14 +130,14 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
         x = particles->x[i];
 #if DIM > 1
         y = particles->y[i];
-#if DIM > 2
+#if DIM == 3
         z = particles->z[i];
 #endif
 #endif
         vx = particles->vx[i];
 #if DIM > 1
         vy = particles->vy[i];
-#if DIM > 2
+#if DIM == 3
         vz = particles->vz[i];
 #endif
 #endif
@@ -148,7 +148,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 #if DIM > 1
         //p.dydt[i] = 0;
         particles->ay[i] = 0;
-#if DIM > 2
+#if DIM == 3
         //p.dzdt[i] = 0;
         particles->az[i] = 0;
 #endif
@@ -172,10 +172,11 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
 #if BALSARA_SWITCH
         curli = 0;
         for (d = 0; d < DIM; d++) {
-            curli += p_rhs.curlv[i*DIM+d]*p_rhs.curlv[i*DIM+d];
+            curli += particles->curlv[i*DIM+d]*particles->curlv[i*DIM+d];
         }
         curli = cuda::math::sqrt(curli);
-        fi = cuda::math::abs(p_rhs.divv[i]) / (cuda::math::abs(p_rhs.divv[i]) + curli + eps_balsara*p.cs[i]/p.h[i]);
+        fi = cuda::math::abs(particles->divv[i]) / (cuda::math::abs(particles->divv[i])
+                + curli + eps_balsara*particles->cs[i]/particles->sml[i]);
 #endif
 
         // THE MAIN SPH LOOP FOR ALL INTERNAL FORCES
@@ -203,7 +204,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             vxj = particles->vx[j];
 #if DIM > 1
             vyj = particles->vy[j];
-#if DIM > 2
+#if DIM == 3
             vzj = particles->vz[j];
 #endif
 #endif
@@ -211,7 +212,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             dr[0] = x - particles->x[j];
 #if DIM > 1
             dr[1] = y - particles->y[j];
-#if DIM > 2
+#if DIM == 3
             dr[2] = z - particles->z[j];
 #endif
 #endif
@@ -266,7 +267,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             dv[0] = dvx = vx - vxj;
 #if DIM > 1
             dv[1] = dvy = vy - vyj;
-#if DIM > 2
+#if DIM == 3
             dv[2] = dvz = vz - vzj;
 #endif
 #endif
@@ -274,7 +275,7 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             vvnablaW = dvx * dWdx[0];
 #if DIM > 1
             vvnablaW += dvy * dWdx[1];
-#if DIM > 2
+#if DIM == 3
             vvnablaW += dvz * dWdx[2];
 #endif
 #endif
@@ -294,9 +295,9 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
             // artificial viscosity force only if v_ij * r_ij < 0
             if (vr < 0) {
                 csbar = 0.5*(particles->cs[i] + particles->cs[j]);
-                if (std::isnan(csbar)) {
-                    printf("csbar = %e, cs[%i] = %e, cs[%i] = %e\n", csbar, i, particles->cs[i], j, particles->cs[j]);
-                }
+                //if (std::isnan(csbar)) {
+                //    printf("csbar = %e, cs[%i] = %e, cs[%i] = %e\n", csbar, i, particles->cs[i], j, particles->cs[j]);
+                //}
                 smooth = 0.5*(sml1 + particles->sml[j]);
 
                 const real eps_artvisc = 1e-2;
@@ -305,14 +306,15 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
                 if (mu > muijmax) {
                     muijmax = mu;
                 }
-                rhobar = 0.5*(particles->rho[i] + particles->rho[j]);
+                rhobar = 0.5 * (particles->rho[i] + particles->rho[j]);
 # if BALSARA_SWITCH
                 curlj = 0;
                 for (d = 0; d < DIM; d++) {
-                    curlj += p_rhs.curlv[j*DIM+d]*p_rhs.curlv[j*DIM+d];
+                    curlj += particles->curlv[j*DIM+d]*particles->curlv[j*DIM+d];
                 }
                 curlj = cuda::math::sqrt(curlj);
-                fj = cuda::math::abs(p_rhs.divv[j]) / (cuda::math::abs(p_rhs.divv[j]) + curlj + eps_balsara*p.cs[j]/p.h[j]);
+                fj = cuda::math::abs(particles->divv[j]) / (cuda::math::abs(particles->divv[j])
+                        + curlj + eps_balsara*particles->cs[j]/particles->sml[j]);
                 mu *= (fi+fj)/2.;
 # endif
                 pij = (beta*mu - alpha*csbar) * mu/rhobar;
@@ -403,6 +405,10 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
                     particles->dsmldt[i] -= 1./DIM * particles->sml[i] * particles->mass[j]/particles->rho[j] * dv[d] * dWdx[dd] * particles->tensorialCorrectionMatrix[i*DIM*DIM+d*DIM+dd];
                 }
             }
+# else
+#  if !SML_CORRECTION
+            particles->dsmldt[i] -= 1./DIM * particles->sml[i] * particles->mass[j]/particles->rho[j] * vvnablaW;
+#  endif // SML_CORRECTION
 #endif
 #endif // INTEGRATE_SML
 
@@ -434,16 +440,16 @@ __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *
         ax = accels[0];
 #if DIM > 1
         ay = accels[1];
-#endif
-#if DIM > 2
+#if DIM == 3
         az = accels[2];
+#endif
 #endif
         particles->ax[i] = ax;
 #if DIM > 1
         particles->ay[i] = ay;
-#endif
-#if DIM > 2
+#if DIM == 3
         particles->az[i] = az;
+#endif
 #endif
 
         //if (std::isnan(ax)) {

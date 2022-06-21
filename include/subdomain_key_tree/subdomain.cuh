@@ -256,8 +256,9 @@ namespace SubDomainKeyTreeNS {
          * @param helper
          * @param entry
          */
+         template <typename T>
         __global__ void prepareLowestDomainExchange(Particles *particles, DomainList *lowestDomainList,
-                                                    Helper *helper, Entry::Name entry);
+                                                    T *buffer, Entry::Name entry);
 
         /**
          * @brief Update lowest domain list nodes.
@@ -270,8 +271,9 @@ namespace SubDomainKeyTreeNS {
          * @param domainListSize
          * @param entry
          */
+        template <typename T>
         __global__ void updateLowestDomainListNodes(Particles *particles, DomainList *lowestDomainList,
-                                                    Helper *helper, int domainListSize, Entry::Name entry);
+                                                    T *buffer, Entry::Name entry);
 
         /**
          * @brief Compute/Find lowest domain list nodes.
@@ -420,16 +422,19 @@ namespace SubDomainKeyTreeNS {
              *
              * @return Wall time of execution
              */
+            template <typename T>
             real prepareLowestDomainExchange(Particles *particles, DomainList *lowestDomainList,
-                                             Helper *helper, Entry::Name entry);
+                                             T *buffer, Entry::Name entry);
+
 
             /**
              * @brief Wrapper for ::SubDomainKeyTreeNS::Kernel::updateLowestDomainListNodes().
              *
              * @return Wall time of execution
              */
+            template <typename T>
             real updateLowestDomainListNodes(Particles *particles, DomainList *lowestDomainList,
-                                             Helper *helper, int domainListSize, Entry::Name entry);
+                                             T *buffer, Entry::Name entry);
 
             /**
              * @brief Wrapper for ::SubDomainKeyTreeNS::Kernel::compLowestDomainListNodes().

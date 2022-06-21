@@ -72,6 +72,11 @@ int main(int argc, char** argv)
     cudaGetDeviceCount(&numDevices);
     cudaDeviceSynchronize();
 
+    cudaDeviceProp deviceProp;
+    cudaGetDeviceProperties(&deviceProp, device);
+    int numberOfMultiprocessors = deviceProp.multiProcessorCount;
+    printf("numberOfMultiprocessors: %i\n", numberOfMultiprocessors);
+
     // testing whether MPI works ...
     //int mpi_test = rank;
     //all_reduce(comm, boost::mpi::inplace_t<int*>(&mpi_test), 1, std::plus<int>());
@@ -151,6 +156,11 @@ int main(int argc, char** argv)
 
     Logger(DEBUG) << "rank: " << rank << " | number of processes: " << numProcesses;
     Logger(DEBUG) << "device: " << device << " | num devices: " << numDevices;
+
+    Logger(INFO) << "sizeof(keyType) = " << (int)sizeof(keyType); // intmax_t, uintmax_t
+    Logger(INFO) << "sizeof(intmax_t) = " << (int)sizeof(intmax_t);
+    Logger(INFO) << "sizeof(uintmax_t) = " << (int)sizeof(uintmax_t); // __int128
+    Logger(INFO) << "sizeof(__int128) = " << (int)sizeof(__int128);
 
     ConfigParser confP{ConfigParser(configFile.c_str())}; //"config/config.info"
     LOGCFG.write2LogFile = confP.getVal<bool>("log");
