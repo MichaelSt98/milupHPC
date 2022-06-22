@@ -38,6 +38,8 @@ namespace Color {
          */
         friend std::ostream& operator<<(std::ostream& os, const Color::Modifier& mod);
     };
+
+    std::ostream& operator<<(std::ostream& os, const Color::Modifier& mod);
 }
 
 /// logging types

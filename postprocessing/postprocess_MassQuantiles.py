@@ -4,19 +4,21 @@ import re
 
 if __name__ == '__main__':
 
-    files = ["pl_N4096_sfc0D_np2",
-             "pl_N4096_sfc0F_np2",
-             "pl_N4096_sfc0D_np4",
-             "pl_N4096_sfc1D_np4",
-             "pl_N4096_sfc1F_np2",
-             "pl_N4096_sfc1D_np2",
-             "pl_N4096_sfc0F_np1"]
+    #files = ["pl_N4096_sfc0D_np2",
+    #         "pl_N4096_sfc0F_np2",
+    #         "pl_N4096_sfc0D_np4",
+    #         "pl_N4096_sfc1D_np4",
+    #         "pl_N4096_sfc1F_np2",
+    #         "pl_N4096_sfc1D_np2",
+    #         "pl_N4096_sfc0F_np1"]
+
+    files = ["pl_N4096_sfc0F_np1"]
 
     data_dic = {}
 
     for file in files:
         per_file_data_dic = {}
-        with open("../master/testcases/plummer/verification/{}/mass_quantiles.csv".format(file), "r") as csvFile:
+        with open("cluster_comparison/binac/{}_mass_quantiles.csv".format(file), "r") as csvFile:
             file_content = csvFile.read()
             file_content = file_content.replace("'", "")
 
@@ -35,7 +37,7 @@ if __name__ == '__main__':
 
     fig, ax1 = plt.subplots(figsize=(12, 9), dpi=200)
     # fig.patch.set_facecolor("black")
-    ax1.set_xlabel("Time")
+    ax1.set_xlabel(r"time $t$")
 
     color = "k"  # "darkgrey"
     for file in files:
@@ -55,7 +57,7 @@ if __name__ == '__main__':
     # Put a legend below current axis
     ax1.legend(loc='upper center', bbox_to_anchor=(0.5, -0.05), fancybox=True, shadow=True, ncol=4)
     # ax1.legend(loc="best")
-    ax1.set_ylabel("Radius")
+    ax1.set_ylabel(r"radius $r$ containing a quantile of the total mass $M$")
     ax1.set_ylim([0.01, 0.7])
 
     plt.show()

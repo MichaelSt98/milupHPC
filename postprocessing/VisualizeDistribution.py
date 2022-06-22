@@ -13,7 +13,7 @@ def particleDistribution(file):
 
     ranges = list(f['hilbertRanges'].value)
     keys = np.array(list(f['hilbertKey'].value))
-    indices = keys.argsort()
+    indices = keys.argsort()q
     keys = keys[indices][::100].copy()
     pos = np.array(list(f['x'].value))[indices][::100].copy()
     #vel = np.array(list(f['v'].value))[indices][::100].copy()

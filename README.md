@@ -8,16 +8,27 @@ _______
 
 This repository implements a **multi-GPU SPH & N-body (via Barnes-Hut) algorithm using C++11 and CUDA-aware MPI** by combining already proven parallelization strategies and available implementations 
 
-* **Single-GPU version inspired/adopted from:**
-	* [Miluphcuda](https://github.com/christophmschaefer/miluphcuda) 
+* **single-GPU version inspired/adopted from:**
+	* [miluphcuda](https://github.com/christophmschaefer/miluphcuda) 
 	* [An Efficient CUDA Implementation of the Tree-Based Barnes Hut n-Body Algorithm](https://iss.oden.utexas.edu/Publications/Papers/burtscher11.pdf)
-* **Multi-Node (or rather Multi-CPU) version inspired/adopted from:**
+* **multi-node (or rather multi-CPU) version inspired/adopted from:**
 	* M. Griebel, S. Knapek, and G. Zumbusch. Numerical Simulation in Molecular Dynamics: Numerics, Algorithms, Parallelization, Applications. 1st. Springer Pub- lishing Company, Incorporated, 2010. isbn: 3642087760
 
 with new ideas and parallelization strategies.
 
 * for a **versatile single-GPU implementation** refer to [miluphcuda](https://github.com/christophmschaefer/miluphcuda) 
 * for a **multi-CPU implementation** (self-gravity via Barnes-Hut only) refer to [jammartin/ParaLoBstar](https://github.com/jammartin/ParaLoBstar)
+
+_______
+
+**See also:**
+
+* [Prerequisites.md](documents/Prerequisites.md): for instructions to install the dependencies 
+* [Compilation.md](documents/Compilation.md): for instructions to compile the code
+* [GettingStarted.md](documents/GettingStarted.md): for getting started, including running some test cases
+* documentation ...
+* [Postprocessing.md](postprocessing/README.md): for information regarding postprocessing
+* [Debugging.md](debug/README.md): for information regarding debugging
 
 _______
 
@@ -379,6 +390,37 @@ materials = (
 ...
 ```
  
+</details>
+
+
+<details>
+ <summary>
+   Command line arguments
+ </summary>
+ 
+* `./bin/runner -h` gives help:
+
+```
+Multi-GPU CUDA Barnes-Hut NBody/SPH code
+Usage:
+  HPC NBody [OPTION...]
+
+  -n, --number-output-files arg
+                                number of output files (default: 100)
+  -t, --max-time-step arg       time step (default: -1.)
+  -l, --load-balancing          load balancing
+  -L, --load-balancing-interval arg
+                                load balancing interval (default: -1)
+  -C, --config arg              config file (default: config/config.info)
+  -m, --material-config arg     material config file (default: 
+                                config/material.cfg)
+  -c, --curve-type arg          curve type (Lebesgue: 0/Hilbert: 1) 
+                                (default: -1)
+  -f, --input-file arg          File name (default: -)
+  -v, --verbosity arg           Verbosity level (default: 0)
+  -h, --help                    Show this help
+```
+
 </details>
 
 

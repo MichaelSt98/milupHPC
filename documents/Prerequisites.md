@@ -14,8 +14,11 @@
 
 * in general there is no need for the usage of the GNU compiler and OpenMPI as MPI implementation, as long as a proper C++ compiler as well as MPI implementation (CUDA-aware) are available and corresponding changes in the Makefile are done
 
+_____
 
-## OpenMPI
+## Installing/Building the dependencies
+
+### OpenMPI
 
 | library         | licence           | usage             | link               |
 | --------------- | ----------------- | ----------------- | ------------------ |
@@ -31,7 +34,7 @@ see also [MPI_Versions.md](MPI_Versions.md)
 	* [Building CUDA-aware Open MPI](https://www.open-mpi.org/faq/?category=buildcuda)
 
 	
-## Boost
+### Boost
 
 | library         | licence           | usage             | link               |
 | --------------- | ----------------- | ----------------- | ------------------ |
@@ -50,7 +53,7 @@ $ ./b2
 $ ./b2 install --prefix=/usr
 ```
 
-## HighFive
+### HighFive
 
 | library         | licence           | usage             | link               |
 | --------------- | ----------------- | ----------------- | ------------------ |
@@ -59,7 +62,7 @@ $ ./b2 install --prefix=/usr
 * `git clone https://github.com/BlueBrain/HighFive.git`
 
 
-## CUDA cub
+### CUDA cub
 
 * included in the CUDA Toolkit since CUDA 11.0
 
@@ -71,7 +74,7 @@ $ ./b2 install --prefix=/usr
 	* in dependence of used CUDA Toolkit e.g. `git checkout 1.8.0` 
 
 
-## Cxxopts
+### Cxxopts
 
 | library         | licence           | usage             | link               |
 | --------------- | ----------------- | ----------------- | ------------------ |
@@ -80,7 +83,7 @@ $ ./b2 install --prefix=/usr
 * `git clone https://github.com/jarro2783/cxxopts.git`
 
 
-## libconfig
+### libconfig
 
 | library         | licence           | usage             | link               |
 | --------------- | ----------------- | ----------------- | ------------------ |
@@ -97,7 +100,7 @@ $ make install
 ```
 
 
-## HDF5
+### HDF5
 
 | library         | licence           | usage             | link               |
 | HDF5            | HDF5 License (BSD-Style) | parallel HDF5 for I/O operations | [hdf5group.org](https://www.hdfgroup.org/solutions/hdf5/) |
@@ -107,16 +110,16 @@ $ make install
 
 _____
 
-## Postprocessing 
+### Postprocessing 
 
 For postprocessing purposes several scripts are available. Some of those scripts require the following.
 
-### Python
+#### Python
 
 * Python: [realpython.com/installing-python](https://realpython.com/installing-python/)
 	* and packages: numpy, matplotlib, ...
 
-### ffmpeg
+#### ffmpeg
 
 ```
 $ sudo wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz

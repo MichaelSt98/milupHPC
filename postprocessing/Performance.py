@@ -172,6 +172,7 @@ class TimeEvaluator(object):
             TimeEntry("sph_symbolicForce", "determine particles to be sent"),
             TimeEntry("sph_sendingParticles", "send particles"),
             TimeEntry("sph_insertReceivedParticles", "insert received particles"),
+            TimeEntry("sph_fixedRadiusNN", "FRNN search"),
             TimeEntry("sph_density", "calculate density"),
             TimeEntry("sph_pressure", "calculate pressure"),
             TimeEntry("sph_soundSpeed", "calculate speed of sound"),
