@@ -33,14 +33,14 @@ const ColorRGB COLORS[16] = {
         ColorRGB(4, 69, 71), // dark turquoise/blue-green
         ColorRGB(116, 120, 13), // "dark" yellow
         ColorRGB(0, 0, 0), // black
-        ColorRGB(~0, 0, ~0), // magenta
+        ColorRGB(176, 83,37), // orange
+        ColorRGB(48, 48, 48), // (dark) greymake
         ColorRGB(13, 67, 120), // light(er) blue
         ColorRGB(43, 120, 13), // light(er) green
         ColorRGB(207, 53, 23), // light(er) red
         ColorRGB(76, 49, 140), // lila
-        ColorRGB(176, 83,37), // orange
+        ColorRGB(~0, 0, ~0), // magenta
         ColorRGB(48, 33, 27), // brown
-        ColorRGB(48, 48, 48), // (dark) grey
         ColorRGB(145, 145, 145), // light(er) grey
         ColorRGB(14, 11, 31) // dark blue/lila
         //ColorRGB(0, ~0, 0), // green
