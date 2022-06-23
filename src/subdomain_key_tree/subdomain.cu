@@ -190,7 +190,6 @@ namespace SubDomainKeyTreeNS {
                                    particles->level[cell]);
 #endif
 #endif
-                            //particles->level[cell] = -2; //TODO: new
                             domainListCounter++;
                         } else {
                             // child is a leaf, thus add node in between
@@ -314,6 +313,7 @@ namespace SubDomainKeyTreeNS {
             }
         }
 
+        /*
         // parallel version
         __global__ void buildDomainTree(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                         DomainList *domainList, integer n, integer m, integer level) {
@@ -362,6 +362,7 @@ namespace SubDomainKeyTreeNS {
                     if (childIndex < n) {
                         if (childIndex == -1) {
                             // no child at all here, thus add node
+                            printf("build domain tree, adding node ...\n");
                             integer cell = atomicAdd(tree->index, 1);
                             tree->child[POW_DIM * temp + path[j-1]] = cell;
                             particles->level[cell] = j;
@@ -369,6 +370,84 @@ namespace SubDomainKeyTreeNS {
                             //domainListCounter = atomicAdd(domainList->domainListCounter, 1);
                             domainList->domainListIndices[index + offset] = childIndex; //cell;
                             particles->nodeType[childIndex] = 1;
+
+                            min_x = *tree->minX;
+                            max_x = *tree->maxX;
+#if DIM > 1
+                            min_y = *tree->minY;
+                            max_y = *tree->maxY;
+#if DIM == 3
+                            min_z = *tree->minZ;
+                            max_z = *tree->maxZ;
+#endif
+#endif
+
+                            // new
+                            int k;
+                            for (k = 0; k < j; k++) {
+
+                                currentChild = path[k];
+                                //printf("[rank %i] currentChild: %i\n", subDomainKeyTree->rank, currentChild);
+                                if (currentChild & 1) {
+                                    max_x = 0.5 * (min_x + max_x);
+                                    //path -= 1;
+                                } else {
+                                    min_x = 0.5 * (min_x + max_x);
+                                }
+#if DIM > 1
+                                if ((currentChild >> 1) & 1) {
+                                    //if (path % 2 == 0 && path % 4 != 0) {
+                                    max_y = 0.5 * (min_y + max_y);
+                                    //path -= 2;
+                                } else {
+                                    min_y = 0.5 * (min_y + max_y);
+                                }
+#if DIM == 3
+                                if ((currentChild >> 2) & 1) {
+                                    //if (path == 4) {
+                                    max_z = 0.5 * (min_z + max_z);
+                                    //path -= 4;
+                                } else {
+                                    min_z = 0.5 * (min_z + max_z);
+                                }
+#endif
+#endif
+
+                                //if (currentChild % 2 != 0) {
+                                //    max_x = 0.5 * (min_x + max_x);
+                                //    currentChild -= 1;
+                                //} else {
+                                //    min_x = 0.5 * (min_x + max_x);
+                                //}
+                                //#if DIM > 1
+                                //if (currentChild % 2 == 0 && currentChild % 4 != 0) {
+                                //    max_y = 0.5 * (min_y + max_y);
+                                //    currentChild -= 2;
+                                //} else {
+                                //    min_y = 0.5 * (min_y + max_y);
+                                //}
+                                //#if DIM == 3
+                                //if (currentChild == 4) {
+                                //    max_z = 0.5 * (min_z + max_z);
+                                //    currentChild -= 4;
+                                //} else {
+                                //    min_z = 0.5 * (min_z + max_z);
+                                //}
+                                //#endif
+                                //#endif
+                            //}
+
+                            //particles->x[cell] = particles->x[childIndex];
+                            particles->x[cell] = 0.5 * (min_x + max_x);
+#if DIM > 1
+                            //particles->y[cell] = particles->y[childIndex];
+                            particles->y[cell] = 0.5 * (min_y + max_y);
+#if DIM == 3
+                            //particles->z[cell] = particles->z[childIndex];
+                            particles->z[cell] = 0.5 * (min_z + max_z);
+#endif
+#endif
+                            // end: new
 #if DEBUGGING
 #if DIM == 3
                             printf("adding node index %i  cell = %i (childPath = %i,  j = %i)! x = (%e, %e, %e) level = %i\n",
@@ -386,9 +465,9 @@ namespace SubDomainKeyTreeNS {
 #endif
 #endif
                         } else {
+                            printf("build domain tree, adding node in between...\n");
                             // child is a leaf, thus add node in between
                             integer cell = atomicAdd(tree->index, 1);
-                            //TODO: ??? j or j-1
                             tree->child[POW_DIM * temp + path[j - 1]] = cell;
 
                             min_x = *tree->minX;
@@ -406,29 +485,64 @@ namespace SubDomainKeyTreeNS {
 
                                 currentChild = path[k];
 
-                                if (currentChild % 2 != 0) {
+                                //if (currentChild % 2 != 0) {
+                                if (currentChild & 1) {
                                     max_x = 0.5 * (min_x + max_x);
-                                    currentChild -= 1;
+                                    //currentChild -= 1;
                                 } else {
                                     min_x = 0.5 * (min_x + max_x);
                                 }
 #if DIM > 1
-                                if (currentChild % 2 == 0 && currentChild % 4 != 0) {
+                                //if (currentChild % 2 == 0 && currentChild % 4 != 0) {
+                                if ((currentChild >> 1) & 1) {
                                     max_y = 0.5 * (min_y + max_y);
-                                    currentChild -= 2;
+                                    //currentChild -= 2;
                                 } else {
                                     min_y = 0.5 * (min_y + max_y);
                                 }
 #if DIM == 3
-                                if (currentChild == 4) {
+                                //if (currentChild == 4) {
+                                if ((currentChild >> 2) & 1) {
                                     max_z = 0.5 * (min_z + max_z);
-                                    currentChild -= 4;
+                                    //currentChild -= 4;
                                 } else {
                                     min_z = 0.5 * (min_z + max_z);
                                 }
 #endif
 #endif
                             }
+
+                            //TODO: was particles->x[cell] = 0.5 * (min_x + max_x);
+                            particles->x[cell] = particles->x[childIndex];
+                            //particles->x[cell] = 0.5 * (min_x + max_x);
+#if DIM > 1
+                            particles->y[cell] = particles->y[childIndex];
+                            //particles->y[cell] = 0.5 * (min_y + max_y);
+#if DIM == 3
+                            particles->z[cell] = particles->z[childIndex];
+                            //particles->z[cell] = 0.5 * (min_z + max_z);
+#endif
+#endif
+                            //particles->mass[cell] = particles->mass[childIndex];
+
+
+                            // //particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
+                            //particles->x[cell] = particles->x[childIndex];
+                            //#if DIM > 1
+                            // //particles->y[cell] += particles->weightedEntry(childIndex, Entry::y);
+                            //particles->y[cell] = particles->y[childIndex];
+                            //#if DIM == 3
+                            // //particles->z[cell] += particles->weightedEntry(childIndex, Entry::z);
+                            //particles->z[cell] = particles->z[childIndex];
+                            //#endif
+                            //#endif
+                            // //particles->mass[cell] += particles->mass[childIndex];
+                            //particles->mass[cell] = particles->mass[childIndex];
+
+                            particles->level[cell] = particles->level[childIndex];
+                            //particles->level[childIndex] += 1;
+                            atomicAdd(&particles->level[childIndex], 1);
+
                             // insert old/original particle
                             childPath = 0; //(int) (domainListKeys[i] >> (21 * 3 - 3 * ((j+1) + 1)) & (int)7); //0; //currentChild; //0;
                             if (particles->x[childIndex] < 0.5 * (min_x + max_x)) {
@@ -452,22 +566,7 @@ namespace SubDomainKeyTreeNS {
 #endif
 
 
-                            //particles->x[cell] += particles->weightedEntry(childIndex, Entry::x);
-                            particles->x[cell] = particles->x[childIndex];
-#if DIM > 1
-                            //particles->y[cell] += particles->weightedEntry(childIndex, Entry::y);
-                            particles->y[cell] = particles->y[childIndex];
-#if DIM == 3
-                            //particles->z[cell] += particles->weightedEntry(childIndex, Entry::z);
-                            particles->z[cell] = particles->z[childIndex];
-#endif
-#endif
-                            //particles->mass[cell] += particles->mass[childIndex];
-                            particles->mass[cell] = particles->mass[childIndex];
 
-                            particles->level[cell] = particles->level[childIndex];
-                            //particles->level[childIndex] += 1;
-                            atomicAdd(&particles->level[childIndex], 1);
 #if DEBUGGING
 #if DIM == 3
                             printf("adding node in between for index %i, temp = %i  cell = %i (childPath = %i,  j = %i)! x = (%e, %e, %e) level = %i vs %i\n",
@@ -478,7 +577,9 @@ namespace SubDomainKeyTreeNS {
 
 
                             tree->child[POW_DIM * cell + childPath] = childIndex;
-                            //printf("child[8 * %i + %i] = %i\n", cell, childPath, childIndex);
+                            printf("child[8 * %i + %i] = %i\n", cell, childPath, childIndex);
+
+                            //particles->nodeType[childIndex] = -10; // just some testing
 
                             childIndex = cell;
                             //domainListCounter = atomicAdd(domainList->domainListCounter, 1);
@@ -491,6 +592,247 @@ namespace SubDomainKeyTreeNS {
 #if DEBUGGING
                         printf("[rank %i] Mark already available node %i: %i, path = %i (level = %i)\n",
                                subDomainKeyTree->rank, index + offset, childIndex, path[j-1], level);
+#endif
+                        domainList->domainListIndices[index + offset] = childIndex; //temp;
+                        particles->nodeType[childIndex] = 1;
+
+                    }
+                    __threadfence();
+                }
+                __syncthreads();
+
+                offset += stride;
+            }
+        }*/
+
+        // parallel version
+        __global__ void buildDomainTree(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                        DomainList *domainList, integer n, integer m, integer level) {
+
+            integer index = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+
+            integer domainListCounter;
+
+            integer path[MAX_LEVEL];
+
+            real min_x, max_x;
+#if DIM > 1
+            real min_y, max_y;
+#if DIM == 3
+            real min_z, max_z;
+#endif
+#endif
+            integer currentChild;
+            integer childPath;
+            bool insert = true;
+
+            integer childIndex;
+            integer temp;
+            int j;
+
+            // loop over domain list indices (over the keys found/generated by createDomainListKernel)
+            while ((index + offset) < *domainList->domainListIndex) {
+
+                #pragma unroll
+                for (j = 0; j < MAX_LEVEL; j++) {
+                    path[j] = 0;
+                }
+                if (domainList->domainListLevels[index + offset] == level) {
+                    //printf("domainListKey[%i] = %lu\n", i, domainList->domainListKeys[i]);
+                    childIndex = 0;
+                    temp = 0;
+
+                    min_x = *tree->minX;
+                    max_x = *tree->maxX;
+#if DIM > 1
+                    min_y = *tree->minY;
+                    max_y = *tree->maxY;
+#if DIM == 3
+                    min_z = *tree->minZ;
+                    max_z = *tree->maxZ;
+#endif
+#endif
+
+                    // iterate through levels (of corresponding domainListIndex)
+                    for (j = 0; j < domainList->domainListLevels[index + offset]; j++) {
+                        path[j] = (integer) (
+                                domainList->domainListKeys[index + offset] >> (MAX_LEVEL * DIM - DIM * (j + 1)) &
+                                (integer) (POW_DIM - 1));
+                        temp = childIndex;
+                        childIndex = tree->child[POW_DIM * childIndex + path[j]];
+                    }
+
+                    int k;
+                    for (k = 0; k < j; k++) {
+
+                        currentChild = path[k];
+                        if (currentChild & 1) {
+                            max_x = 0.5 * (min_x + max_x);
+                        } else {
+                            min_x = 0.5 * (min_x + max_x);
+                        }
+#if DIM > 1
+                        if ((currentChild >> 1) & 1) {
+                            max_y = 0.5 * (min_y + max_y);
+                            //path -= 2;
+                        } else {
+                            min_y = 0.5 * (min_y + max_y);
+                        }
+#if DIM == 3
+                        if ((currentChild >> 2) & 1) {
+                            max_z = 0.5 * (min_z + max_z);
+                        } else {
+                            min_z = 0.5 * (min_z + max_z);
+                        }
+#endif
+#endif
+                    }
+
+                    if (childIndex < n) {
+                        if (childIndex == -1) {
+                            // no child at all here, thus add node
+                            //printf("build domain tree, adding node ...\n");
+                            integer cell = atomicAdd(tree->index, 1);
+                            tree->child[POW_DIM * temp + path[j-1]] = cell;
+                            particles->level[cell] = j;
+                            childIndex = cell;
+
+                            domainList->domainListIndices[index + offset] = childIndex;
+                            particles->nodeType[childIndex] = 1;
+
+                            domainList->borders[(index + offset) * 2 * DIM] = min_x;
+                            domainList->borders[(index + offset) * 2 * DIM + 1] = max_x;
+#if DIM > 1
+                            domainList->borders[(index + offset) * 2 * DIM + 2] = min_y;
+                            domainList->borders[(index + offset) * 2 * DIM + 3] = max_y;
+#if DIM == 3
+                            domainList->borders[(index + offset) * 2 * DIM + 4] = min_z;
+                            domainList->borders[(index + offset) * 2 * DIM + 5] = max_z;
+#endif
+#endif
+
+                            //particles->x[cell] = particles->x[childIndex];
+                            particles->x[cell] = 0.5 * (min_x + max_x);
+#if DIM > 1
+                            //particles->y[cell] = particles->y[childIndex];
+                            particles->y[cell] = 0.5 * (min_y + max_y);
+#if DIM == 3
+                            //particles->z[cell] = particles->z[childIndex];
+                            particles->z[cell] = 0.5 * (min_z + max_z);
+#endif
+#endif
+                            // end: new
+#if DEBUGGING
+                            #if DIM == 3
+                            printf("adding node index %i  cell = %i (childPath = %i,  j = %i)! x = (%e, %e, %e) level = %i\n",
+                                   temp, cell, path[j], j, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex],
+                                   particles->level[cell]);
+#endif
+#endif
+#if DIM == 3
+#if DEBUGGING
+                            printf("[rank %i] adding domainListIndices[%i] = %i, childIndex = %i, path = %i\n", subDomainKeyTree->rank,
+                                   index + offset, domainList->domainListIndices[index + offset], childIndex, path[j-1]);
+                            //printf("adding node index %i  cell = %i (childPath = %i,  j = %i)! x = (%f, %f, %f)\n",
+                            //       childIndex, cell, path[j], j, particles->x[childIndex], particles->y[childIndex],
+                            //       particles->z[childIndex]);
+#endif
+#endif
+                        } else {
+                            //printf("build domain tree, adding node in between...\n");
+                            // child is a leaf, thus add node in between
+                            integer cell = atomicAdd(tree->index, 1);
+                            tree->child[POW_DIM * temp + path[j - 1]] = cell;
+
+                            //TODO: was particles->x[cell] = 0.5 * (min_x + max_x);
+                            particles->x[cell] = particles->x[childIndex];
+                            //particles->x[cell] = 0.5 * (min_x + max_x);
+#if DIM > 1
+                            particles->y[cell] = particles->y[childIndex];
+                            //particles->y[cell] = 0.5 * (min_y + max_y);
+#if DIM == 3
+                            particles->z[cell] = particles->z[childIndex];
+                            //particles->z[cell] = 0.5 * (min_z + max_z);
+#endif
+#endif
+
+                            domainList->borders[(index + offset) * 2 * DIM] = min_x;
+                            domainList->borders[(index + offset) * 2 * DIM + 1] = max_x;
+#if DIM > 1
+                            domainList->borders[(index + offset) * 2 * DIM + 2] = min_y;
+                            domainList->borders[(index + offset) * 2 * DIM + 3] = max_y;
+#if DIM == 3
+                            domainList->borders[(index + offset) * 2 * DIM + 4] = min_z;
+                            domainList->borders[(index + offset) * 2 * DIM + 5] = max_z;
+#endif
+#endif
+
+                            particles->level[cell] = particles->level[childIndex];
+                            //particles->level[childIndex] += 1;
+                            atomicAdd(&particles->level[childIndex], 1);
+
+                            // insert old/original particle
+                            childPath = 0; //(int) (domainListKeys[i] >> (21 * 3 - 3 * ((j+1) + 1)) & (int)7); //0; //currentChild; //0;
+                            if (particles->x[childIndex] < 0.5 * (min_x + max_x)) {
+                                childPath += 1;
+                                //max_x = 0.5 * (min_x + max_x);
+                            }
+                            //else { min_x = 0.5 * (min_x + max_x); }
+#if DIM > 1
+                            if (particles->y[childIndex] < 0.5 * (min_y + max_y)) {
+                                childPath += 2;
+                                //max_y = 0.5 * (min_y + max_y);
+                            }
+                            //else { min_y = 0.5 * (min_y + max_y); }
+#if DIM == 3
+                            if (particles->z[childIndex] < 0.5 * (min_z + max_z)) {
+                                childPath += 4;
+                                //max_z = 0.5 * (min_z + max_z);
+                            }
+                            //else { min_z = 0.5 * (min_z + max_z); }
+#endif
+#endif
+
+
+
+#if DEBUGGING
+                            #if DIM == 3
+                            printf("adding node in between for index %i, temp = %i  cell = %i (childPath = %i,  j = %i)! x = (%e, %e, %e) level = %i vs %i\n",
+                                   childIndex, temp, cell, childPath, j, particles->x[childIndex], particles->y[childIndex], particles->z[childIndex],
+                                   particles->level[cell], particles->level[childIndex]);
+#endif
+#endif
+
+
+                            tree->child[POW_DIM * cell + childPath] = childIndex;
+                            //printf("child[8 * %i + %i] = %i\n", cell, childPath, childIndex);
+
+                            //particles->nodeType[childIndex] = -10; // just some testing
+
+                            childIndex = cell;
+                            //domainListCounter = atomicAdd(domainList->domainListCounter, 1);
+                            domainList->domainListIndices[index + offset] = childIndex; //temp;
+                            particles->nodeType[childIndex] = 1;
+                        }
+                    } else {
+                        // mark/save node as domain list node
+                        //domainListCounter = atomicAdd(domainList->domainListCounter, 1);
+#if DEBUGGING
+                        printf("[rank %i] Mark already available node %i: %i, path = %i (level = %i)\n",
+                               subDomainKeyTree->rank, index + offset, childIndex, path[j-1], level);
+#endif
+
+                        domainList->borders[(index + offset) * 2 * DIM] = min_x;
+                        domainList->borders[(index + offset) * 2 * DIM + 1] = max_x;
+#if DIM > 1
+                        domainList->borders[(index + offset) * 2 * DIM + 2] = min_y;
+                        domainList->borders[(index + offset) * 2 * DIM + 3] = max_y;
+#if DIM == 3
+                        domainList->borders[(index + offset) * 2 * DIM + 4] = min_z;
+                        domainList->borders[(index + offset) * 2 * DIM + 5] = max_z;
+#endif
 #endif
                         domainList->domainListIndices[index + offset] = childIndex; //temp;
                         particles->nodeType[childIndex] = 1;
@@ -632,31 +974,30 @@ namespace SubDomainKeyTreeNS {
                     particles->z[domainIndex] = (real)0;
 #endif
 #endif
-
                     particles->mass[domainIndex] = (real)0;
                 }
-                //else {
+                else {
                 //    //printf("domainIndex = %i *= mass = %f\n", domainIndex, particles->mass[domainIndex]);
-                //    particles->x[domainIndex] *= particles->mass[domainIndex];
-                //#if DIM > 1
-                //    particles->y[domainIndex] *= particles->mass[domainIndex];
-                //#if DIM == 3
-                //    particles->z[domainIndex] *= particles->mass[domainIndex];
-                //#endif
-                //#endif
-                //}
+                    particles->x[domainIndex] *= particles->mass[domainIndex];
+#if DIM > 1
+                    particles->y[domainIndex] *= particles->mass[domainIndex];
+#if DIM == 3
+                    particles->z[domainIndex] *= particles->mass[domainIndex];
+#endif
+#endif
+                }
 
                 offset += stride;
             }
         }
 
+        template <typename T>
         __global__ void prepareLowestDomainExchange(Particles *particles, DomainList *lowestDomainList,
-                                                    Helper *helper, Entry::Name entry) {
+                                                    T *buffer, Entry::Name entry) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x*blockDim.x;
             integer stride = blockDim.x*gridDim.x;
             integer offset = 0;
-            integer index;
             integer lowestDomainIndex;
 
             //copy x, y, z, mass of lowest domain list nodes into arrays
@@ -666,20 +1007,20 @@ namespace SubDomainKeyTreeNS {
                 if (lowestDomainIndex >= 0) {
                     switch (entry) {
                         case Entry::x: {
-                            helper->realBuffer[bodyIndex + offset] = particles->x[lowestDomainIndex];
+                            buffer[bodyIndex + offset] = particles->x[lowestDomainIndex];
                         } break;
 #if DIM > 1
                         case Entry::y: {
-                            helper->realBuffer[bodyIndex + offset] = particles->y[lowestDomainIndex];
+                            buffer[bodyIndex + offset] = particles->y[lowestDomainIndex];
                         } break;
 #if DIM == 3
                         case Entry::z: {
-                            helper->realBuffer[bodyIndex + offset] = particles->z[lowestDomainIndex];
+                            buffer[bodyIndex + offset] = particles->z[lowestDomainIndex];
                         } break;
 #endif
 #endif
                         case Entry::mass: {
-                            helper->realBuffer[bodyIndex + offset] = particles->mass[lowestDomainIndex];
+                            buffer[bodyIndex + offset] = particles->mass[lowestDomainIndex];
                         } break;
                         default:
                             printf("prepareLowestDomainExchange(): Not available!\n");
@@ -689,8 +1030,9 @@ namespace SubDomainKeyTreeNS {
             }
         }
 
+        template <typename T>
         __global__ void updateLowestDomainListNodes(Particles *particles, DomainList *lowestDomainList,
-                                                    Helper *helper, int domainListSize, Entry::Name entry) {
+                                                    T *buffer, Entry::Name entry) {
 
             integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
             integer stride = blockDim.x * gridDim.x;
@@ -715,23 +1057,23 @@ namespace SubDomainKeyTreeNS {
                 switch (entry) {
                     case Entry::x: {
                         particles->x[lowestDomainList->domainListIndices[originalIndex]] =
-                                helper->realBuffer[domainListSize + bodyIndex + offset];
+                                buffer[bodyIndex + offset];
                     } break;
 #if DIM > 1
                     case Entry::y: {
                         particles->y[lowestDomainList->domainListIndices[originalIndex]] =
-                                helper->realBuffer[domainListSize + bodyIndex + offset];
+                                buffer[bodyIndex + offset];
                     } break;
 #if DIM == 3
                     case Entry::z: {
                         particles->z[lowestDomainList->domainListIndices[originalIndex]] =
-                                helper->realBuffer[domainListSize + bodyIndex + offset];
+                                buffer[bodyIndex + offset];
                     } break;
 #endif
 #endif
                     case Entry::mass: {
                         particles->mass[lowestDomainList->domainListIndices[originalIndex]] =
-                                helper->realBuffer[domainListSize + bodyIndex + offset];
+                                buffer[bodyIndex + offset];
                     } break;
                     default: {
                         printf("Entry not available!\n");
@@ -773,13 +1115,13 @@ namespace SubDomainKeyTreeNS {
                     //       particles->y[lowestDomainIndex], particles->z[lowestDomainIndex], particles->mass[lowestDomainIndex]);
 #endif
 
-                    //particles->x[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
-                    //#if DIM > 1
-                    //particles->y[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
-                    //#if DIM == 3
-                    //particles->z[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
-                    //#endif
-                    //#endif
+                    particles->x[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
+#if DIM > 1
+                    particles->y[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
+#if DIM == 3
+                    particles->z[lowestDomainIndex] /= particles->mass[lowestDomainIndex];
+#endif
+#endif
 
 #if DIM == 3
                     //printf("lowestDomainIndex: %i (%f, %f, %f) %f\n", lowestDomainIndex, particles->x[lowestDomainIndex],
@@ -907,10 +1249,16 @@ namespace SubDomainKeyTreeNS {
                 //}
                 if (compute && domainList->domainListLevels[bodyIndex + offset] == level) {
                     // do the calculation
-                    //particles->x[domainIndex] = 0.;
-                    //particles->y[domainIndex] = 0.;
-                    //particles->z[domainIndex] = 0.;
-                    //particles->mass[domainIndex] = 0.;
+                    /*
+                    particles->x[domainIndex] += 0.;
+#if DIM > 1
+                    particles->y[domainIndex] += 0.;
+#if DIM == 3
+                    particles->z[domainIndex] += 0.;
+#endif
+#endif
+                    particles->mass[domainIndex] += 0.;
+                    */
                     for (int i=0; i<POW_DIM; i++) {
                         particles->x[domainIndex] += particles->x[tree->child[POW_DIM*domainIndex + i]] *
                                                      particles->mass[tree->child[POW_DIM*domainIndex + i]];
@@ -925,7 +1273,7 @@ namespace SubDomainKeyTreeNS {
                         particles->mass[domainIndex] += particles->mass[tree->child[POW_DIM*domainIndex + i]];
                     }
 
-                    if (particles->mass[domainIndex] != 0.f) {
+                    if (particles->mass[domainIndex] > 0.) {
                         particles->x[domainIndex] /= particles->mass[domainIndex];
 #if DIM > 1
                         particles->y[domainIndex] /= particles->mass[domainIndex];
@@ -1088,21 +1436,21 @@ namespace SubDomainKeyTreeNS {
                 }
                 tree->count[bodyIndex + offset] = 0;
                 particles->x[bodyIndex + offset] = 0.;
-                particles->vx[bodyIndex + offset] = 0.;
-                particles->ax[bodyIndex + offset] = 0.;
+                //particles->vx[bodyIndex + offset] = 0.;
+                //particles->ax[bodyIndex + offset] = 0.;
 #if DIM > 1
                 particles->y[bodyIndex + offset] = 0.;
-                particles->vy[bodyIndex + offset] = 0.;
-                particles->ay[bodyIndex + offset] = 0.;
+                //particles->vy[bodyIndex + offset] = 0.;
+                //particles->ay[bodyIndex + offset] = 0.;
 #if DIM == 3
                 particles->z[bodyIndex + offset] = 0.;
-                particles->vz[bodyIndex + offset] = 0.;
-                particles->az[bodyIndex + offset] = 0.;
+                //particles->vz[bodyIndex + offset] = 0.;
+                //particles->az[bodyIndex + offset] = 0.;
 #endif
 #endif
                 particles->mass[bodyIndex + offset] = 0.;
-                tree->start[bodyIndex + offset] = -1;
-                tree->sorted[bodyIndex + offset] = 0;
+                //tree->start[bodyIndex + offset] = -1;
+                //tree->sorted[bodyIndex + offset] = 0;
 
                 offset += stride;
             }
@@ -1176,10 +1524,7 @@ namespace SubDomainKeyTreeNS {
 
                 for (integer i=1; i<subDomainKeyTree->numProcesses; i++) {
                     if ((sum + helper->integerBuffer[bodyIndex + offset]) >= (i*n) && sum < (i*n)) {
-#if DEBUGGING
-                        printf("[rank %i] new range: %lu\n", subDomainKeyTree->rank,
-                               helper->keyTypeBuffer[bodyIndex + offset]);
-#endif
+
                         subDomainKeyTree->range[i] = (helper->keyTypeBuffer[bodyIndex + offset] >> (1*DIM)) << (1*DIM);
                     }
                 }
@@ -1245,20 +1590,28 @@ namespace SubDomainKeyTreeNS {
                                 lowestDomainList);
         }
 
+        template <typename T>
         real Launch::prepareLowestDomainExchange(Particles *particles, DomainList *lowestDomainList,
-                                                 Helper *helper, Entry::Name entry) {
+                                                 T *buffer, Entry::Name entry) {
             ExecutionPolicy executionPolicy;
             return cuda::launch(true, executionPolicy, ::SubDomainKeyTreeNS::Kernel::prepareLowestDomainExchange, particles,
-                                lowestDomainList, helper, entry);
+                                lowestDomainList, buffer, entry);
         }
 
+        template real Launch::prepareLowestDomainExchange<real>(Particles *particles, DomainList *lowestDomainList,
+                real *buffer, Entry::Name entry);
+
+        template <typename T>
         real Launch::updateLowestDomainListNodes(Particles *particles, DomainList *lowestDomainList,
-                                                 Helper *helper, int domainListSize, Entry::Name entry) {
+                                                    T *buffer, Entry::Name entry) {
             ExecutionPolicy executionPolicy;
             return cuda::launch(true, executionPolicy, ::SubDomainKeyTreeNS::Kernel::updateLowestDomainListNodes, particles,
-                                lowestDomainList, helper, domainListSize, entry);
+                                lowestDomainList, buffer, entry);
 
         }
+
+        template real Launch::updateLowestDomainListNodes<real>(Particles *particles, DomainList *lowestDomainList,
+                real *buffer, Entry::Name entry);
 
         real Launch::compLowestDomainListNodes(Tree *tree, Particles *particles, DomainList *lowestDomainList) {
             ExecutionPolicy executionPolicy;
@@ -1358,6 +1711,11 @@ CUDA_CALLABLE_MEMBER void DomainList::set(integer *domainListIndices, integer *d
     *domainListIndex = 0;
 }
 
+CUDA_CALLABLE_MEMBER void DomainList::setBorders(real *borders, integer *relevantDomainListOriginalIndex) {
+    this->borders = borders;
+    this->relevantDomainListOriginalIndex = relevantDomainListOriginalIndex;
+}
+
 namespace DomainListNS {
 
     namespace Kernel {
@@ -1370,6 +1728,10 @@ namespace DomainListNS {
             domainList->set(domainListIndices, domainListLevels, domainListIndex, domainListCounter, domainListKeys,
                             sortedDomainListKeys, relevantDomainListIndices, relevantDomainListLevels,
                             relevantDomainListProcess);
+        }
+
+        __global__ void setBorders(DomainList *domainList, real *borders, integer *relevantDomainListOriginalIndex) {
+            domainList->setBorders(borders, relevantDomainListOriginalIndex);
         }
 
         __global__ void info(Particles *particles, DomainList *domainList) {
@@ -1469,6 +1831,12 @@ namespace DomainListNS {
 
         }
 
+        /*
+         * //TODO: parallel version
+         *  * either on CPU
+         *  * or distribute key2test = 0UL < keyMax between threads
+         */
+        /*
         __global__ void createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList,
                                          integer maxLevel, Curve::Type curveType) {
 
@@ -1513,7 +1881,160 @@ namespace DomainListNS {
                 }
 
             }
+        }*/
+
+        // Parallel version: testing for now ...
+        /*
+        __global__ void createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList,
+                                         integer maxLevel, Curve::Type curveType) {
+
+            integer index = threadIdx.x + blockIdx.x * blockDim.x;
+
+            //printf("index: %i, threadIdx.x: %i, blockIdx.x: %i, blockDim.x: %i\n", index, threadIdx.x, blockIdx.x, blockDim.x);
+
+            keyType key2test = 0UL;
+            keyType keyMax;
+            int domainListIndex;
+
+            key2test = (keyType)blockIdx.x << (DIM * (maxLevel - 1));
+
+            if (threadIdx.x == 0) {
+
+                domainListIndex = atomicAdd(domainList->domainListIndex, 1);
+                domainList->domainListKeys[domainListIndex] = key2test;
+                domainList->domainListLevels[domainListIndex] = 1;
+            }
+
+            __syncthreads();
+
+            integer level = 2;
+
+            key2test += threadIdx.x << (DIM * maxLevel - 2);
+            if (threadIdx.x == (POW_DIM - 1) && blockIdx.x == (POW_DIM - 1)) {
+#if DIM == 1
+                keyType shiftValue = 1;
+                keyType toShift = 21;
+                keyMax = (shiftValue << toShift) - 1; // 1 << 63 not working!
+#elif DIM == 2
+                keyType shiftValue = 1;
+                keyType toShift = 42;
+                keyMax = (shiftValue << toShift) - 1; // 1 << 63 not working!
+#else
+                keyType shiftValue = 1;
+                keyType toShift = 63;
+                keyMax = (shiftValue << toShift) - 1; // 1 << 63 not working!
+                //keyType keyMax = KEY_MAX;
+#endif
+            }
+            else {
+                keyMax = key2test + 1 << (DIM * maxLevel - 2);
+            }
+
+            // in principle: traversing a (non-existent) octree by walking the 1D spacefilling curve (keys of the tree nodes)
+            while (key2test < keyMax) { // TODO: createDomainList(): key2test < or <= keyMax
+                if (subDomainKeyTree->isDomainListNode(key2test & (~0UL << (DIM * (maxLevel - level + 1))),
+                                                       maxLevel, level-1, curveType)) {
+
+                    //if (level > 1) {
+                    domainListIndex = atomicAdd(domainList->domainListIndex, 1);
+                    printf("adding key2test: %lu | level = %i\n", key2test, level);
+                    domainList->domainListKeys[domainListIndex] = key2test;
+                    // add domain list level
+                    domainList->domainListLevels[domainListIndex] = level;
+                    //}
+                    //*domainList->domainListIndex += 1;
+                    if (subDomainKeyTree->isDomainListNode(key2test, maxLevel, level, curveType)) {
+                        level++;
+                    }
+                    else {
+                        key2test = key2test + (1UL << DIM * (maxLevel - level));
+                        while (((key2test >> (DIM * (maxLevel - level))) & (keyType)(POW_DIM - 1)) == 0UL) {
+                            level--;
+                        }
+                    }
+                } else {
+                    level--;
+                }
+
+            }
+        }*/
+
+        __global__ void createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList,
+                                         integer maxLevel, Curve::Type curveType) {
+
+            integer index = threadIdx.x + blockIdx.x * blockDim.x;
+
+            //printf("index: %i, threadIdx.x: %i, blockIdx.x: %i, blockDim.x: %i\n", index, threadIdx.x, blockIdx.x, blockDim.x);
+
+            keyType key2test = 0UL;
+            keyType keyMax;
+            int domainListIndex;
+
+            key2test = (keyType)blockIdx.x << (DIM * (maxLevel - 1));
+
+            if (threadIdx.x == 0) {
+
+                domainListIndex = atomicAdd(domainList->domainListIndex, 1);
+                domainList->domainListKeys[domainListIndex] = key2test;
+                domainList->domainListLevels[domainListIndex] = 1;
+            }
+
+            __syncthreads();
+
+            integer level = 2;
+
+            key2test += (keyType)threadIdx.x << (DIM * (maxLevel - 2));
+            if (threadIdx.x == (POW_DIM - 1) && blockIdx.x == (POW_DIM - 1)) {
+#if DIM == 1
+                keyType shiftValue = 1;
+                keyType toShift = 21;
+                keyMax = (shiftValue << toShift) - 1; // 1 << 63 not working!
+#elif DIM == 2
+                keyType shiftValue = 1;
+                keyType toShift = 42;
+                keyMax = (shiftValue << toShift) - 1; // 1 << 63 not working!
+#else
+                keyType shiftValue = 1;
+                keyType toShift = 63;
+                keyMax = (shiftValue << toShift) - 1; // 1 << 63 not working!
+                //keyType keyMax = KEY_MAX;
+#endif
+            }
+            else {
+                keyMax = key2test + (1UL << (DIM * (maxLevel - 2)));
+            }
+
+            //printf("threadIdx.x = %i, blockIdx.x = %i, key2test = %lu, keyMax = %lu\n", threadIdx.x, blockIdx.x, key2test, keyMax);
+
+            // in principle: traversing a (non-existent) octree by walking the 1D spacefilling curve (keys of the tree nodes)
+            while (key2test < keyMax && level > 1) { // TODO: createDomainList(): key2test < or <= keyMax
+                if (subDomainKeyTree->isDomainListNode(key2test & (~0UL << (DIM * (maxLevel - level + 1))),
+                                                       maxLevel, level-1, curveType)) {
+
+                    //if (level > 1) {
+                    domainListIndex = atomicAdd(domainList->domainListIndex, 1);
+                    //printf("adding key2test: %lu | level = %i\n", key2test, level);
+                    domainList->domainListKeys[domainListIndex] = key2test;
+                    // add domain list level
+                    domainList->domainListLevels[domainListIndex] = level;
+                    //}
+                    //*domainList->domainListIndex += 1;
+                    if (subDomainKeyTree->isDomainListNode(key2test, maxLevel, level, curveType)) {
+                        level++;
+                    }
+                    else {
+                        key2test = key2test + (1UL << DIM * (maxLevel - level));
+                        while (((key2test >> (DIM * (maxLevel - level))) & (keyType)(POW_DIM - 1)) == 0UL) {
+                            level--;
+                        }
+                    }
+                } else {
+                    level--;
+                }
+
+            }
         }
+
 
         __global__ void lowestDomainList(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                          DomainList *domainList, DomainList *lowestDomainList,
@@ -1570,6 +2091,18 @@ namespace DomainListNS {
                     lowestDomainList->domainListKeys[lowestDomainIndex] = domainList->domainListKeys[index + offset];
                     // add/save level of lowest domain list node
                     lowestDomainList->domainListLevels[lowestDomainIndex] = domainList->domainListLevels[index + offset];
+
+                    lowestDomainList->borders[lowestDomainIndex * 2 * DIM] = domainList->borders[(index + offset) * 2 * DIM];
+                    lowestDomainList->borders[lowestDomainIndex * 2 * DIM + 1] = domainList->borders[(index + offset) * 2 * DIM + 1];
+#if DIM > 1
+                    lowestDomainList->borders[lowestDomainIndex * 2 * DIM + 2] = domainList->borders[(index + offset) * 2 * DIM + 2];
+                    lowestDomainList->borders[lowestDomainIndex * 2 * DIM + 3] = domainList->borders[(index + offset) * 2 * DIM + 3];
+#if DIM == 3
+                    lowestDomainList->borders[lowestDomainIndex * 2 * DIM + 4] = domainList->borders[(index + offset) * 2 * DIM + 4];
+                    lowestDomainList->borders[lowestDomainIndex * 2 * DIM + 5] = domainList->borders[(index + offset) * 2 * DIM + 5];
+#endif
+#endif
+
                     // debugging
                     //printf("[rank %i] Adding lowest domain list node #%i : %i (key = %lu)\n", subDomainKeyTree->rank, lowestDomainIndex, domainIndex,
                     //      lowestDomainList->domainListKeys[lowestDomainIndex]);
@@ -1589,6 +2122,12 @@ namespace DomainListNS {
                          relevantDomainListIndices, relevantDomainListLevels, relevantDomainListProcess);
         }
 
+        void Launch::setBorders(DomainList *domainList, real *borders, integer *relevantDomainListOriginalIndex) {
+            ExecutionPolicy executionPolicy(1, 1);
+            cuda::launch(false, executionPolicy, ::DomainListNS::Kernel::setBorders, domainList, borders,
+                         relevantDomainListOriginalIndex);
+        }
+
         real Launch::info(Particles *particles, DomainList *domainList) {
             ExecutionPolicy executionPolicy;
             return cuda::launch(true, executionPolicy, ::DomainListNS::Kernel::info, particles, domainList);
@@ -1602,7 +2141,7 @@ namespace DomainListNS {
         real Launch::createDomainList(SubDomainKeyTree *subDomainKeyTree, DomainList *domainList, integer maxLevel,
                                       Curve::Type curveType) {
             //TODO: is there any possibility to call kernel createDomainList() with more than one thread?
-            ExecutionPolicy executionPolicy(1,1);
+            ExecutionPolicy executionPolicy(POW_DIM, POW_DIM);
             return cuda::launch(true, executionPolicy, ::DomainListNS::Kernel::createDomainList, subDomainKeyTree,
                                 domainList, maxLevel, curveType);
         }

@@ -1,3 +1,10 @@
+/**
+ * @file simulation_time_handler.h
+ * @brief Handler for SimulationTime class.
+ *
+ * @author Michael Staneker
+ * @bug no known bugs
+ */
 #ifndef MILUPHPC_SIMULATION_TIME_HANDLER_H
 #define MILUPHPC_SIMULATION_TIME_HANDLER_H
 

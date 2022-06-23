@@ -21,21 +21,38 @@ struct ColorRGB {
     char g;
     char b;
 
-    ColorRGB() : r { 0 }, g { 0 }, b { 0 }{};
+    //ColorRGB() : r { 0 }, g { 0 }, b { 0 }{}; // black
+    ColorRGB() : r { ~0 }, g { ~0 }, b { ~0 }{};// white
     ColorRGB(char _r, char _g, char _b) : r { _r }, g { _g }, b { _b }{};
 };
 
-const ColorRGB COLORS[10] = {
-        ColorRGB(0, ~0, 0), // green
-        ColorRGB(0, 0, ~0), // blue
-        ColorRGB(~0, 0, 127), // pink
-        ColorRGB(~0, ~0, 0), // yellow
+const ColorRGB COLORS[16] = {
+        ColorRGB(120, 23, 16), // dark red
+        ColorRGB(7, 14, 82), // dark blue
+        ColorRGB(4, 71, 20), // dark green
+        ColorRGB(4, 69, 71), // dark turquoise/blue-green
+        ColorRGB(116, 120, 13), // "dark" yellow
+        ColorRGB(0, 0, 0), // black
+        ColorRGB(176, 83,37), // orange
+        ColorRGB(48, 48, 48), // (dark) greymake
+        ColorRGB(13, 67, 120), // light(er) blue
+        ColorRGB(43, 120, 13), // light(er) green
+        ColorRGB(207, 53, 23), // light(er) red
+        ColorRGB(76, 49, 140), // lila
         ColorRGB(~0, 0, ~0), // magenta
-        ColorRGB(~0, 0, 0), // red
-        ColorRGB(0, ~0, ~0), // turquoise
-        ColorRGB(~0, 127, 0), //orange
-        ColorRGB(127, 127, 127), // grey
-        ColorRGB(~0, ~0, ~0) //white
+        ColorRGB(48, 33, 27), // brown
+        ColorRGB(145, 145, 145), // light(er) grey
+        ColorRGB(14, 11, 31) // dark blue/lila
+        //ColorRGB(0, ~0, 0), // green
+        //ColorRGB(0, 0, ~0), // blue
+        //ColorRGB(~0, 0, 127), // pink
+        //ColorRGB(~0, ~0, 0), // yellow
+        //ColorRGB(~0, 0, ~0), // magenta
+        //ColorRGB(~0, 0, 0), // red
+        //ColorRGB(0, ~0, ~0), // turquoise
+        //ColorRGB(~0, 127, 0), //orange
+        //ColorRGB(127, 127, 127), // grey
+        //ColorRGB(~0, ~0, ~0) //white
 };
 
 class H5Renderer {

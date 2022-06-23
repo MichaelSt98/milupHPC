@@ -11,8 +11,8 @@ def particleDistribution(file):
     f = h5py.File(file, 'r')
     print(list(f.keys()))
 
-    ranges = list(f['hilbertRanges'].value)
-    keys = np.array(list(f['hilbertKey'].value))
+    ranges = list(f['ranges'].value)
+    keys = np.array(list(f['key'].value))
     indices = keys.argsort()
     keys = keys[indices].copy()
     pos = np.array(list(f['x'].value))[indices].copy()
@@ -77,7 +77,7 @@ if __name__ == '__main__':
 
     #file = '../log/Gravity2SendParticles.h5'
     #file = '../log/Gravity2SendPseudoParticles.h5'
-    #file = '../log/Gravity2SendBoth.h5'
-    file = '../log/SPH2Send.h5'
+    file = 'log/Gravity2SendBoth 2.h5'
+    #file = '../log/SPH2Send.h5'
 
     particleDistribution(file)

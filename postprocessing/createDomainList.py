@@ -69,6 +69,7 @@ def createDomainList(domainListKeys, domainListLevels):
         else:
             level -= 1
 
+
 if __name__ == '__main__':
 
     domainListKeys = []

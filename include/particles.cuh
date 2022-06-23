@@ -1,3 +1,20 @@
+/**
+ * @file particles.cuh
+ * @brief Particle struct as Structure of arrays both instantiable on host and device.
+ *
+ * Particle class to embrace the information and properties of the (SPH) particles including
+ *
+ * * position
+ * * velocity
+ * * acceleration
+ * * density
+ * * pressure
+ * * ...
+ *
+ * @author Michael Staneker
+ * @bug no known bugs
+ * @todo remove deprecated flags and avoid flags that don't match
+ */
 #ifndef MILUPHPC_PARTICLES_CUH
 #define MILUPHPC_PARTICLES_CUH
 
@@ -8,13 +25,35 @@
 
 
 /**
- * Particle(s) class based on SoA (Structur of Arrays).
+ * @brief Particle(s) class based on SoA (Structur of Arrays).
+ *
+ * Since dynamic memory allocation and access to heap objects in GPUs are usually suboptimal,
+ * an array-based data structure is used to store the (pseudo-)particle information as well as the tree
+ * and allows for efficient cache alignment. Consequently, array indices are used instead of pointers
+ * to constitute the tree out of the tree nodes, whereas "-1" represents a null pointer and "-2" is
+ * used for locking nodes. For this purpose an array with the minimum length \f$ 2^{d} \cdot (M - N) \f$
+ * with dimensionality \f$ d \f$ and number of cells \f$ (M -N) \f$ is needed to store the children.
+ * The \f$ i \f$-th child of node \f$ c \f$ can therefore be accessed via index \f$ 2^d \cdot c + i \f$.
+ *
+ * Single-GPU memory layout:
+ *
+ * \image html images/Parallelization/single_gpu_memory_layout.png width=40%
+ *
+ * It is further necessary to exchange particle properties between processes and (temporarily) include them
+ * into the local tree. To combine this requirement with the data structure described it is necessary to
+ * reserve parts of the array or memory for this purpose.
+ *
+ * Multi-GPU memory layout:
+ *
+ * \image html images/Parallelization/multi_gpu_memory_layout.png width=40%
  */
 class Particles {
 
 public:
 
+    /// number of particles
     integer *numParticles;
+    /// number of nodes
     integer *numNodes;
 
     /// (pointer to) mass (array)
@@ -25,6 +64,7 @@ public:
     real *vx;
     /// (pointer to) x acceleration (array)
     real *ax;
+    real *ax_old;
 #if DIM > 1
     /// (pointer to) y position (array)
     real *y;
@@ -32,6 +72,7 @@ public:
     real *vy;
     /// (pointer to) y acceleration (array)
     real *ay;
+    real *ay_old;
 #if DIM == 3
     /// (pointer to) z position (array)
     real *z;
@@ -39,21 +80,29 @@ public:
     real *vz;
     /// (pointer to) z acceleration (array)
     real *az;
+    real *az_old;
 #endif
 #endif
 
     /// (pointer to) x gravitational acceleration (array)
     real *g_ax;
+    real *g_ax_old;
 #if DIM > 1
     /// (pointer to) y gravitational acceleration (array)
     real *g_ay;
+    real *g_ay_old;
 #if DIM == 3
     /// (pointer to) z gravitational acceleration (array)
     real *g_az;
+    real *g_az_old;
 #endif
 #endif
 
+
+    /// (pointer to) node type
     integer *nodeType;
+
+    /// (pointer to) level of the (pseudo-)particles
     integer *level;
 
     /// (pointer to) unique identifier (array)
@@ -116,6 +165,11 @@ public:
     real *dSdt;
     /// (pointer to) local strain (array)
     real *localStrain; // local strain
+#endif
+
+#if BALSARA_SWITCH
+    real *divv;
+    real *curlv;
 #endif
 
 #if SOLID || NAVIER_STOKES
@@ -224,6 +278,32 @@ public:
                                   real *cs, real *rho, real *p);
 #else
 
+    /**
+     * @brief Constructor (`DIM = 3`) assigning variables to pointer members.
+     *
+     * @param numParticles number of particles
+     * @param numNodes number of nodes
+     * @param mass mass entry
+     * @param x position \f$ x \f$ entry
+     * @param y position \f$ y \f$ entry
+     * @param z position \f$ x \f$ entry
+     * @param vx velocity \f$ v_x \f$ entry
+     * @param vy velocity \f$ v_y \f$ entry
+     * @param vz velocity \f$ v_z \f$ entry
+     * @param ax acceleration \f$ a_x \f$ entry
+     * @param ay acceleration \f$ a_y \f$ entry
+     * @param az acceleration \f$ a_z \f$ entry
+     * @param uid unique identifier
+     * @param materialId material identifier
+     * @param sml smoothing length
+     * @param nnl near neighbor list
+     * @param noi number of interaction partners
+     * @param e energy
+     * @param dedt time derivative of the energy \f$ \frac{de}{dt} \f$ entry
+     * @param cs speed of sound
+     * @param rho density \f$ \rho \f$ entry
+     * @param p pressure \f$ p \f$ entry
+     */
     CUDA_CALLABLE_MEMBER Particles(integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *z,
                                    real *vx, real *vy, real *vz, real *ax, real *ay, real *az,
                                    idInteger *uid, integer *materialId, real *sml,
@@ -231,6 +311,35 @@ public:
                                    real *cs, real *rho, real *p);
 
 
+    /**
+     * @brief Setter (`DIM = 3`) assigning variables to pointer members.
+     *
+     * Setter as addition to constructor in order to allow Particles class instance creation
+     * and subsequent assignment of member variables.
+     *
+     * @param numParticles number of particles
+     * @param numNodes number of nodes
+     * @param mass mass entry
+     * @param x position \f$ x \f$ entry
+     * @param y position \f$ y \f$ entry
+     * @param z position \f$ x \f$ entry
+     * @param vx velocity \f$ v_x \f$ entry
+     * @param vy velocity \f$ v_y \f$ entry
+     * @param vz velocity \f$ v_z \f$ entry
+     * @param ax acceleration \f$ a_x \f$ entry
+     * @param ay acceleration \f$ a_y \f$ entry
+     * @param az acceleration \f$ a_z \f$ entry
+     * @param uid unique identifier
+     * @param materialId material identifier
+     * @param sml smoothing length
+     * @param nnl near neighbor list
+     * @param noi number of interaction partners
+     * @param e energy
+     * @param dedt time derivative of the energy \f$ \frac{de}{dt} \f$ entry
+     * @param cs speed of sound
+     * @param rho density \f$ \rho \f$ entry
+     * @param p pressure \f$ p \f$ entry
+     */
     CUDA_CALLABLE_MEMBER void set(integer *numParticles, integer *numNodes, real *mass, real *x, real *y, real *z,
                                   real *vx, real *vy, real *vz, real *ax, real *ay, real *az,
                                   integer *level, idInteger *uid, integer *materialId,
@@ -243,18 +352,62 @@ public:
 #elif DIM == 2
     CUDA_CALLABLE_MEMBER void setGravity(real *g_ax, real *g_ay);
 #else
+    /**
+     * @brief Constructor (`DIM = 3`) assigning gravitational acceleration to member variables.
+     *
+     * @note acceleration and gravitational acceleration separated due to decoupled gravity.
+     *
+     * @param g_ax gravitational acceleration \f$ a_{x, grav} \f$ entry
+     * @param g_ay gravitational acceleration \f$ a_{y, grav} \f$ entry
+     * @param g_az gravitational acceleration \f$ a_{z, grav} \f$ entry
+     */
     CUDA_CALLABLE_MEMBER void setGravity(real *g_ax, real *g_ay, real *g_az);
 #endif
 
+#if DIM == 1
+    CUDA_CALLABLE_MEMBER void setLeapfrog(real *ax_old, real *g_ax_old);
+#elif DIM == 2
+    CUDA_CALLABLE_MEMBER void setLeapfrog(real *ax_old, real *ay_old, real *g_ax_old, real *g_ay_old);
+#else
+
+    CUDA_CALLABLE_MEMBER void setLeapfrog(real *ax_old, real *ay_old, real *az_old, real *g_ax_old, real *g_ay_old,
+                                          real *g_az_old);
+#endif
+
+    /**
+     * @brief Setter for energy.
+     *
+     * @param u energy
+     */
     CUDA_CALLABLE_MEMBER void setU(real *u);
 
+    /**
+     * @brief Setter for node type.
+     *
+     * node types are
+     *
+     * * particle
+     * * pseudo-particle
+     * * (lowest) domain list node
+     *
+     * @param nodeType node type
+     */
     CUDA_CALLABLE_MEMBER void setNodeType(integer *nodeType);
 
+    /**
+     * @brief Setter for artificial viscosity (entry).
+     *
+     * @param muijmax
+     */
     CUDA_CALLABLE_MEMBER void setArtificialViscosity(real *muijmax);
+
+#if BALSARA_SWITCH
+    CUDA_CALLABLE_MEMBER void setDivCurl(real *divv, real *curlv);
+#endif
 
 //#if INTEGRATE_DENSITY
     /**
-     * Setter in dependence of `INTEGRATE_DENSITY`
+     * @brief Setter in dependence of `INTEGRATE_DENSITY`.
      *
      * @param drhodt time derivative of density
      */
@@ -262,7 +415,7 @@ public:
 //#endif
 #if VARIABLE_SML || INTEGRATE_SML
     /**
-     * Setter, in dependence of `VARIABLE_SML`
+     * @brief Setter, in dependence of `VARIABLE_SML`.
      *
      * @param dsmldt time derivative of smoothing length
      */
@@ -367,14 +520,19 @@ public:
 #endif
 
     /**
-     * Reset (specific) entries
+     * @brief Reset (specific) entries.
      *
-     * @param index index of entry to be resetted
+     * Reset entries to default values.
+     *
+     * @param index index of entry to be reset
      */
     CUDA_CALLABLE_MEMBER void reset(integer index);
 
     /**
-     * Distance of two particles
+     * @brief Distance of two particles.
+     *
+     * Calculates the euclidian distance \f$ r = || \vec{x} - \vec{y} ||_2 = \sqrt{\sum_{i=1}^{DIM}(\vec{x}_i - \vec{y}_i)^2}\f$
+     * of two particles at positions \f$ \vec{x} \f$ and \f$ \vec{y} \f$.
      *
      * @param index_1 index of particle 1
      * @param index_2 index of particle 2
@@ -395,10 +553,16 @@ namespace ParticlesNS {
 
     namespace Kernel {
 
+        /**
+         * Debug function to search for *NANs* in the entries.
+         *
+         * @param particles Particle class instance
+         * @param n number of particles (to be searched)
+         */
         __global__ void check4nans(Particles *particles, integer n);
 
         /**
-         * Info Kernel (for debugging purposes)
+         * Debug/Info Kernel (for debugging purposes)
          *
          * @param particles
          * @param n
@@ -409,6 +573,11 @@ namespace ParticlesNS {
 
         namespace Launch {
 
+            /**
+             * Wrapper function for ParticlesNS::check4nans().
+             *
+             * @return Wall time of execution.
+             */
             real check4nans(Particles *particles, integer n);
 
             /**
@@ -490,6 +659,29 @@ namespace ParticlesNS {
         }
 #endif
 
+#if DIM == 1
+        __global__ void setLeapfrog(Particles *particles, real *ax_old, real *g_ax_old);
+
+        namespace Launch {
+            void setLeapfrog(Particles *particles, real *ax_old, real *g_ax_old);
+        }
+
+#elif DIM == 2
+        __global__ void setLeapfrog(Particles *particles, real *ax_old, real *ay_old, real *g_ax_old, real *g_ay_old);
+
+        namespace Launch {
+            void setLeapfrog(Particles *particles, real *ax_old, real *ay_old, real *g_ax_old, real *g_ay_old);
+        }
+#else
+        __global__ void setLeapfrog(Particles *particles, real *ax_old, real *ay_old, real *az_old, real *g_ax_old,
+                                    real *g_ay_old, real *g_az_old);
+
+        namespace Launch {
+            void setLeapfrog(Particles *particles, real *ax_old, real *ay_old, real *az_old, real *g_ax_old,
+                             real *g_ay_old, real *g_az_old);
+        }
+#endif
+
         __global__ void setU(Particles *particles, real *u);
         namespace Launch {
             void setU(Particles *particles, real *u);
@@ -504,6 +696,13 @@ namespace ParticlesNS {
         namespace Launch {
             void setArtificialViscosity(Particles *particles, real *muijmax);
         }
+
+#if BALSARA_SWITCH
+        __global__ void setDivCurl(Particles *particles, real *divv, real *curlv);
+        namespace Launch {
+            void setDivCurl(Particles *particles, real *divv, real *curlv);
+        }
+#endif
 
 //#if INTEGRATE_DENSITY
         /**

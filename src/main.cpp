@@ -1,6 +1,7 @@
 #include "../include/miluphpc.h"
 #include "../include/integrator/explicit_euler.h"
 #include "../include/integrator/predictor_corrector_euler.h"
+#include "../include/integrator/leapfrog.h"
 #include "../include/utils/config_parser.h"
 #include <boost/filesystem.hpp>
 
@@ -30,7 +31,6 @@ bool checkFile(const std::string file, bool terminate, const std::string message
     }
 }
 
-// see: http://fargo.in2p3.fr/manuals/html/communications.html#mpicuda
 void SetDeviceBeforeInit()
 {
     char * localRankStr = NULL;
@@ -71,6 +71,11 @@ int main(int argc, char** argv)
     int numDevices;
     cudaGetDeviceCount(&numDevices);
     cudaDeviceSynchronize();
+
+    cudaDeviceProp deviceProp;
+    cudaGetDeviceProperties(&deviceProp, device);
+    int numberOfMultiprocessors = deviceProp.multiProcessorCount;
+    printf("numberOfMultiprocessors: %i\n", numberOfMultiprocessors);
 
     // testing whether MPI works ...
     //int mpi_test = rank;
@@ -152,6 +157,11 @@ int main(int argc, char** argv)
     Logger(DEBUG) << "rank: " << rank << " | number of processes: " << numProcesses;
     Logger(DEBUG) << "device: " << device << " | num devices: " << numDevices;
 
+    Logger(INFO) << "sizeof(keyType) = " << (int)sizeof(keyType); // intmax_t, uintmax_t
+    Logger(INFO) << "sizeof(intmax_t) = " << (int)sizeof(intmax_t);
+    Logger(INFO) << "sizeof(uintmax_t) = " << (int)sizeof(uintmax_t); // __int128
+    Logger(INFO) << "sizeof(__int128) = " << (int)sizeof(__int128);
+
     ConfigParser confP{ConfigParser(configFile.c_str())}; //"config/config.info"
     LOGCFG.write2LogFile = confP.getVal<bool>("log");
     LOGCFG.omitTime = confP.getVal<bool>("omitTime");
@@ -230,7 +240,7 @@ int main(int argc, char** argv)
     parameters.domainListSize = POW_DIM * MAX_LEVEL * (numProcesses - 1) + 1;
     Logger(DEBUG) << "domainListSize: " << parameters.domainListSize;
 
-    if (checkFile(parameters.materialConfigFile, false)) {
+    if (!checkFile(parameters.materialConfigFile, false)) {
         parameters.materialConfigFile = std::string{"config/material.cfg"};
         checkFile(parameters.materialConfigFile, true,
                   std::string{"Provided material config file and default (config/material.cfg) not available!"});
@@ -301,6 +311,7 @@ int main(int argc, char** argv)
     profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::internalForces, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::repairTree, 1);
 #endif
+    profiler.createValueDataSet<real>(ProfilerIds::Time::integrate, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::IO, 1);
 
 
@@ -314,6 +325,9 @@ int main(int argc, char** argv)
         } break;
         case IntegratorSelection::predictor_corrector_euler: {
             miluphpc = new PredictorCorrectorEuler(parameters);
+        } break;
+        case IntegratorSelection::leapfrog: {
+            miluphpc = new Leapfrog(parameters);
         } break;
         default: {
             Logger(ERROR) << "Integrator not available!";
@@ -351,8 +365,7 @@ int main(int argc, char** argv)
         auto time = miluphpc->particles2file(i_step);
         timeElapsed = timer.elapsed();
         Logger(TIME) << "particles2file: " << timeElapsed << " ms";
-        // TODO: not working properly (why?)
-        //profiler.value2file(ProfilerIds::Time::IO, timeElapsed);
+        profiler.value2file(ProfilerIds::Time::IO, timeElapsed);
 
 
         t += parameters.timeStep;

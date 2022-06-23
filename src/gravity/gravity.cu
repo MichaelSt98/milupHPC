@@ -20,7 +20,7 @@ namespace Gravity {
 
             while ((bodyIndex + offset) < length) {
 
-                if (sendIndices[bodyIndex + offset] == 1) {
+                if (sendIndices[bodyIndex + offset] == 1) { // TODO: >= 1 or == 1 (was == 1)
 
                     // it is a particle
                     if (bodyIndex + offset < n) {
@@ -44,6 +44,56 @@ namespace Gravity {
                         //}
                         // end: debug
                     }
+                }
+                __threadfence();
+                offset += stride;
+            }
+        }
+
+        __global__ void collectSendIndices_test4(Tree *tree, Particles *particles, integer *sendIndices,
+                                           integer *particles2Send, integer *pseudoParticles2Send,
+                                           integer *pseudoParticlesLevel,
+                                           integer *particlesCount, integer *pseudoParticlesCount,
+                                           integer numParticlesLocal, integer numParticles,
+                                           integer treeIndex, int currentProc, Curve::Type curveType) {
+
+            integer bodyIndex = threadIdx.x + blockIdx.x*blockDim.x;
+            integer stride = blockDim.x*gridDim.x;
+            integer offset = 0;
+
+            integer particleInsertIndex;
+            integer pseudoParticleInsertIndex;
+
+            // it is a particle
+            while ((bodyIndex + offset) < numParticlesLocal) {
+                if ((sendIndices[bodyIndex + offset] >> currentProc) & 1) { // TODO: >= 1 or == 1 (was == 1)
+                    if (bodyIndex + offset < numParticlesLocal) {
+                        particleInsertIndex = atomicAdd(particlesCount, 1);
+                        particles2Send[particleInsertIndex] = bodyIndex + offset;
+                    }
+                }
+                __threadfence();
+                offset += stride;
+            }
+
+            // it is a pseudo-particle
+            offset = numParticles;
+            while ((bodyIndex + offset) < treeIndex) {
+                if ((sendIndices[bodyIndex + offset] >> currentProc) & 1) {
+                    pseudoParticleInsertIndex = atomicAdd(pseudoParticlesCount, 1);
+                    pseudoParticles2Send[pseudoParticleInsertIndex] = bodyIndex + offset;
+                    pseudoParticlesLevel[pseudoParticleInsertIndex] = particles->level[bodyIndex + offset];
+                    //printf("pseudo-particle level to be sent: %i (%i)\n", particles->level[bodyIndex + offset],
+                    //       bodyIndex + offset);
+                    //pseudoParticlesLevel[pseudoParticleInsertIndex] = tree->getTreeLevel(particles,
+                    //                                                                     bodyIndex + offset,
+                    //                                                                     MAX_LEVEL, curveType);
+
+                    // debug
+                    //if (pseudoParticlesLevel[pseudoParticleInsertIndex] == -1) {
+                    //    printf("level = -1 within collectSendIndices for index: %i\n", bodyIndex + offset);
+                    //}
+                    // end: debug
                 }
                 __threadfence();
                 offset += stride;
@@ -242,6 +292,7 @@ namespace Gravity {
                 pz = particles->z[i];
 #endif
 #endif
+                // TODO: resetting not really necessary?!
                 //particles->ax[i] = 0.0;
                 particles->g_ax[i] = 0.0;
 #if DIM > 1
@@ -270,12 +321,14 @@ namespace Gravity {
                     nodeIndex = currentNodeIndex[depth];
 
                     while(childNumber < POW_DIM) {
+
                         do {
                             child = tree->child[POW_DIM * nodeIndex + childNumber];
                             childNumber++;
                         } while(child == -1 && childNumber < POW_DIM);
 
                         if (child != -1 && child != i) { // dont do self-gravity with yourself!
+
                             dx = particles->x[child] - px;
                             distance = dx*dx + smoothing;
 #if DIM > 1
@@ -288,6 +341,7 @@ namespace Gravity {
 #endif
                             // if child is leaf or far away
                             if (child < n || distance * thetasq > cellSize[depth]) {
+
                                 distance = cuda::math::sqrt(distance);
 #if SI_UNITS
                                 f = Constants::G * particles->mass[child] / (distance * distance * distance);
@@ -314,7 +368,9 @@ namespace Gravity {
                                 // put child on stack
                                 currentChildNumber[depth] = childNumber;
                                 currentNodeIndex[depth] = nodeIndex;
+                                //if (particles->nodeType[child] != 3) {
                                 depth++;
+                                //}
                                 if (depth == MAX_DEPTH) {
                                     cudaTerminate("depth = %i >= MAX_DEPTH = %i\n", depth, MAX_DEPTH);
                                 }
@@ -425,6 +481,21 @@ namespace Gravity {
 #endif
                             // if child is leaf or far away
                             if (child < n || distance * thetasq > cellSize[depth]) {
+                                if (particles->nodeType[child] == 3 || particles->nodeType[child] == -10) {
+                                    printf("Taking node type %i into account...\n", particles->nodeType[child]);
+                                    if (particles->nodeType[child] == 3) {
+                                        for (int i_test=0; i_test<POW_DIM; ++i_test) {
+                                            printf("%i node type %i: (%e, %e, %e | %e), child %i: %i (%e, %e, %e | %e)\n",
+                                                   child, particles->nodeType[child], particles->x[child], particles->y[child], particles->z[child],
+                                                   particles->mass[child], i_test,
+                                                   tree->child[POW_DIM * child + i_test],
+                                                   particles->x[tree->child[POW_DIM * child + i_test]],
+                                                   particles->y[tree->child[POW_DIM * child + i_test]],
+                                                   particles->z[tree->child[POW_DIM * child + i_test]],
+                                                   particles->mass[tree->child[POW_DIM * child + i_test]]);
+                                        }
+                                    }
+                                }
                                 distance = sqrt(distance);
 #if SI_UNITS
                                 f = Constants::G * particles->mass[child] / (distance * distance * distance);
@@ -1002,6 +1073,304 @@ namespace Gravity {
 
         }
 
+        /*
+        __global__ void computeForces_v3(Tree *tree, Particles *particles, real radius, integer n, integer m,
+                                         integer blockSize, integer warp, integer stackSize,
+                                         SubDomainKeyTree *subDomainKeyTree, real theta,
+                                         real smoothing, bool potentialEnergy) {
+
+            register int i, ii, depth;
+
+            real x, ax, dx;
+#if DIM > 1
+            real y, ay, dy;
+#if DIM == 3
+            real z, az, dz;
+#endif
+#endif
+
+            int child;
+            int currentNodeIndex;
+            int currentChildNumber;
+            int nodeIndex[MAX_DEPTH];
+            int childNumber[MAX_DEPTH];
+
+
+            real f, distance;
+            real thetaSquared = theta * theta;
+            real cellSize = 4 * radius * radius;
+
+            for (ii = threadIdx.x + blockIdx.x * blockDim.x; ii < n; ii += blockDim.x * gridDim.x) {
+
+                i = tree->sorted[ii];
+
+                x = particles->x[i];
+#if DIM > 1
+                y = particles->y[i];
+#if DIM == 3
+                z = particles->z[i];
+#endif
+#endif
+
+                ax = 0.;
+#if DIM > 1
+                ay = 0.;
+#if DIM == 3
+                az = 0.;
+#endif
+#endif
+
+                depth = 0;
+                nodeIndex[depth] = 0;
+                childNumber[depth] = 0;
+
+                do {
+
+                    currentChildNumber = childNumber[depth];
+                    currentNodeIndex = nodeIndex[depth];
+
+                    while (currentChildNumber < POW_DIM) {
+                        do {
+                            child = tree->child[POW_DIM * currentNodeIndex + currentChildNumber];
+                            currentChildNumber++;
+                        } while (child == -1 && currentChildNumber < POW_DIM);
+
+                        if  (child != -1 && child != i) {
+
+                            dx = particles->x[child] - x;
+#if DIM > 1
+                            dy = particles->y[child] - y;
+#if DIM == 3
+                            dz = particles->z[child] - z;
+#endif
+#endif
+
+#if DIM == 1
+                            distance = dx*dx + smoothing;
+#elif DIM == 2
+                            distance = dx*dx + dy*dy + smoothing;
+#else
+                            distance = dx*dx + dy*dy + dz*dz + smoothing;
+#endif
+
+                            if (child < n || distance * thetaSquared > (pow(0.25, (real)(depth + 1)) * cellSize)) {
+                                distance = cuda::math::sqrt(distance);
+
+#if SI_UNITS
+                                f = Constants::G * particles->mass[child] / (distance * distance * distance);
+#else
+                                f = particles->mass[child] / (distance * distance * distance);
+#endif
+
+                                ax += f*dx;
+#if DIM > 1
+                                ay += f*dy;
+#if DIM == 3
+                                az += f*dz;
+#endif
+#endif
+
+                            } else {
+                                childNumber[depth] = currentChildNumber;
+                                nodeIndex[depth] = currentNodeIndex;
+                                depth++;
+                                currentChildNumber = 0;
+                                currentNodeIndex = child;
+                            }
+                        }
+                    }
+                    depth--;
+
+                } while (depth >= 0);
+
+                //particles->ax[i] = ax;
+                particles->g_ax[i] = ax;
+#if DIM > 1
+                //particles->ay[i] = ay;
+                particles->g_ay[i] = ay;
+#if DIM == 3
+                //particles->az[i] = az;
+                particles->g_az[i] = az;
+#endif
+#endif
+            }
+
+        }
+        */
+
+        __global__ void computeForces_v3(Tree *tree, Particles *particles, real radius, integer numParticles, integer m,
+                                         integer blockSize, integer warp, integer stackSize,
+                                         SubDomainKeyTree *subDomainKeyTree, real theta,
+                                         real smoothing, bool potentialEnergy) {
+
+            int i, j, k, n, depth, base, sbase, diff, pd, nd;
+            float x, y, z, ax, ay, az, dx, dy, dz, tmp;
+
+            extern __shared__ real buffer[];
+
+            int* pos = (int*)buffer;
+            int *node = (int*)&pos[stackSize * blockSize/warp];
+            real* dq = (real*)&node[stackSize * blockSize/warp];
+            //__shared__ volatile int pos[stackSize * blockSize/warp], node[stackSize * blockSize/warp];
+            //__shared__ float dq[stackSize * blockSize/warp];
+
+            if (threadIdx.x == 0) {
+                tmp = radius * 2;
+                // precompute values that depend only on tree level
+                dq[0] = tmp * tmp * 4.0;
+                for (i = 1; i < stackSize; i++) {
+                    dq[i] = dq[i - 1] * 0.25;
+                    //dq[i - 1] += smoothing;
+                }
+                //dq[i - 1] += smoothing;
+            }
+            __syncthreads();
+
+            // figure out first thread in each warp (lane 0)
+            base = threadIdx.x / warp;
+            sbase = base * warp;
+            j = base * stackSize;
+
+            diff = threadIdx.x - sbase;
+            // make multiple copies to avoid index calculations later
+            if (diff < stackSize) {
+                dq[diff+j] = dq[diff];
+            }
+            __syncthreads();
+
+            // iterate over all bodies assigned to thread
+            for (k = threadIdx.x + blockIdx.x * blockDim.x; k < numParticles; k += blockDim.x * gridDim.x) {
+
+                i = tree->sorted[k];  // get permuted/sorted index
+
+                x = particles->x[i];
+#if DIM > 1
+                y = particles->y[i];
+#if DIM == 3
+                z = particles->z[i];
+#endif
+#endif
+
+                ax = 0.;
+                ay = 0.;
+                az = 0.;
+
+                // initialize iteration stack, i.e., push root node onto stack
+                depth = j;
+                if (sbase == threadIdx.x) {
+                    pos[j] = 0;
+                    node[j] = m * POW_DIM; // nnodes ??
+                }
+
+                do {
+                    // stack is not empty
+                    pd = pos[depth];
+                    nd = node[depth];
+                    while (pd < POW_DIM) {
+                        // node on top of stack has more children to process
+                        n = tree->child[nd + pd];  // load child pointer
+                        pd++;
+
+                        if (n >= 0) {
+
+                            dx = x - particles->x[n];
+                            dy = y - particles->y[n];
+                            dz = z - particles->z[n];
+                            tmp = dx*dx + (dy*dy + (dz*dz + smoothing));  // compute distance squared (plus softening)
+                            if ((n < numParticles) || __all_sync(__activemask(), tmp >= dq[depth])) {  // check if all threads agree that cell is far enough away (or is a body)
+                                tmp = cuda::math::rsqrt(tmp);  // compute distance
+                                tmp = particles->mass[n] * tmp * tmp * tmp;
+                                ax += dx * tmp;
+                                ay += dy * tmp;
+                                az += dz * tmp;
+                            } else {
+                                // push cell onto stack
+                                if (sbase == threadIdx.x) {
+                                    pos[depth] = pd;
+                                    node[depth] = nd;
+                                }
+                                depth++;
+                                pd = 0;
+                                nd = n * POW_DIM;
+                            }
+                        } else {
+                            pd = POW_DIM;  // early out because all remaining children are also zero
+                        }
+                    }
+                    depth--;  // done with this level
+                } while (depth >= j);
+
+                /*float4 acc = accVeld[i];
+                if (stepd > 0) {
+                    // update velocity
+                    float2 v = veld[i];
+                    v.x += (ax - acc.x) * dthfd;
+                    v.y += (ay - acc.y) * dthfd;
+                    acc.w += (az - acc.z) * dthfd;
+                    veld[i] = v;
+                }*/
+
+                // save computed acceleration
+
+                particles->g_ax[i] = ax;
+#if DIM > 1
+                particles->g_ay[i] = ay;
+#if DIM == 3
+                particles->g_az[i] = az;
+#endif
+#endif
+            }
+
+        }
+
+        __global__ void preSymbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                      DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                      integer n, integer m, integer relevantIndex, integer level,
+                                      Curve::Type curveType) {
+
+
+            int bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            int stride = blockDim.x * gridDim.x;
+            int offset = n; // start with numParticles
+
+            int childIndex;
+
+            while ((bodyIndex + offset) < *tree->index) {
+
+                if (particles->level[bodyIndex + offset] <= 10) {
+                    //sendIndices[bodyIndex + offset] = 2;
+                    for (int i = 0; i < POW_DIM; i++) {
+                        childIndex = tree->child[POW_DIM * (bodyIndex + offset) + i];
+                        if (childIndex != -1 && /* not domain list node*/particles->nodeType[childIndex] == 0) {
+                            sendIndices[childIndex] = 2;
+                        }
+                    }
+                }
+                offset += stride;
+            }
+
+        }
+
+        __global__ void resetSendIndices(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                        DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                        integer n, integer m, integer relevantIndex, integer level,
+                                        Curve::Type curveType) {
+
+
+            int bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            int stride = blockDim.x * gridDim.x;
+            int offset = 0; // start with numParticles
+
+            while ((bodyIndex + offset) < *tree->index) {
+
+                if (sendIndices[bodyIndex + offset] != 2) {
+                    sendIndices[bodyIndex + offset] = -1;
+                }
+                offset += stride;
+            }
+
+        }
+
         __global__ void intermediateSymbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                                   DomainList *domainList, integer *sendIndices, real diam, real theta_,
                                                   integer n, integer m, integer relevantIndex, integer level,
@@ -1161,7 +1530,7 @@ namespace Gravity {
                                        relevantIndex);
                         }
 
-                        min_x = *tree->minX;
+                        /*min_x = *tree->minX;
                         max_x = *tree->maxX;
 #if DIM > 1
                         min_y = *tree->minY;
@@ -1178,20 +1547,6 @@ namespace Gravity {
                         //    assert(0);
                         //}
                         for (int j = 0; j < domainListLevel; j++) {
-
-                            //#if DIM == 3
-                            //if (particles->x[domainList->relevantDomainListIndices[relevantIndex]] <= max_x && particles->x[domainList->relevantDomainListIndices[relevantIndex]] >= min_x &&
-                            //    particles->y[domainList->relevantDomainListIndices[relevantIndex]] <= max_y && particles->y[domainList->relevantDomainListIndices[relevantIndex]] >= min_y &&
-                            //    particles->z[domainList->relevantDomainListIndices[relevantIndex]] <= max_z && particles->z[domainList->relevantDomainListIndices[relevantIndex]] >= min_z) {
-                            //}
-                            //else {
-                            //    printf("not within box %i, %i  level: %i (%f, %f, %f) box (%f, %f), (%f, %f), (%f, %f)!\n", relevantIndex, domainList->relevantDomainListIndices[relevantIndex],
-                            //           domainList->relevantDomainListLevels[relevantIndex],
-                            //           particles->x[domainList->relevantDomainListIndices[relevantIndex]], particles->y[domainList->relevantDomainListIndices[relevantIndex]],
-                            //           particles->z[domainList->relevantDomainListIndices[relevantIndex]],
-                            //           min_x, max_x, min_y, max_y, min_z, max_z);
-                            //    assert(0);
-                            //}
 
                             childPath = 0;
                             if (particles->x[currentDomainListIndex] < 0.5 * (min_x + max_x)) {
@@ -1216,7 +1571,28 @@ namespace Gravity {
                             }
 #endif
 #endif
-                        }
+                        }*/
+
+                        //printf("borders: %e vs %e, %e vs %e\n", min_x, domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM], max_x, domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM + 1]);
+
+                        min_x = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM];
+                        max_x = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM + 1];
+#if DIM > 1
+                        min_y = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM + 2];
+                        max_y = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM + 3];
+#if DIM == 3
+                        min_z = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM + 4];
+                        max_z = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM + 5];
+#endif
+#endif
+
+                        //printf("%i: borders * : (%e, %e), (%e, %e), (%e, %e)\n", relevantIndex, min_x, max_x, min_y, max_y, min_z, max_z);
+                        //printf("%i: borders: (%e, %e), (%e, %e), (%e, %e)\n", relevantIndex, domainList->borders[relevantIndex * 2 * DIM],
+                        //       domainList->borders[relevantIndex * 2 * DIM + 1],
+                        //       domainList->borders[relevantIndex * 2 * DIM + 2],
+                        //       domainList->borders[relevantIndex * 2 * DIM + 3],
+                        //       domainList->borders[relevantIndex * 2 * DIM + 4],
+                        //       domainList->borders[relevantIndex * 2 * DIM + 5]);
 
                         // determine (smallest) distance between domain list box and (pseudo-) particle
                         if (particles->x[currentParticleIndex] < min_x) {
@@ -1284,13 +1660,525 @@ namespace Gravity {
                     __threadfence();
                     offset += stride;
                 }
+            }
+        }
 
+        __global__ void symbolicForce_test(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                           DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                           integer n, integer m, integer relevantIndex, integer level,
+                                           Curve::Type curveType) {
+
+            int bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            int stride = blockDim.x * gridDim.x;
+            int offset = n; // start with numParticles
+
+            int currentParticleIndex, particleLevel, domainListLevel, currentDomainListIndex, childIndex;
+
+            real min_x, max_x;
+            real dx;
+#if DIM > 1
+            real min_y, max_y;
+            real dy;
+#if DIM == 3
+            real min_z, max_z;
+            real dz;
+#endif
+#endif
+            real r;
+
+            while ((bodyIndex + offset) < *tree->index) {
+
+                currentParticleIndex = bodyIndex + offset;
+
+                /*
+                min_x = *tree->minX;
+                max_x = *tree->maxX;
+#if DIM > 1
+                min_y = *tree->minY;
+                max_y = *tree->maxY;
+#if DIM == 3
+                min_z = *tree->minZ;
+                max_z = *tree->maxZ;
+#endif
+#endif
+                 */
+
+                particleLevel = particles->level[currentParticleIndex];
+                domainListLevel = domainList->relevantDomainListLevels[relevantIndex];
+                currentDomainListIndex = domainList->relevantDomainListIndices[relevantIndex];
+
+                /*
+                for (int j = 0; j < domainListLevel; j++) {
+
+
+                    //childPath = 0;
+                    if (particles->x[currentDomainListIndex] < 0.5 * (min_x + max_x)) {
+                        //childPath += 1;
+                        max_x = 0.5 * (min_x + max_x);
+                    } else {
+                        min_x = 0.5 * (min_x + max_x);
+                    }
+#if DIM > 1
+                    if (particles->y[currentDomainListIndex] < 0.5 * (min_y + max_y)) {
+                        //childPath += 2;
+                        max_y = 0.5 * (min_y + max_y);
+                    } else {
+                        min_y = 0.5 * (min_y + max_y);
+                    }
+#if DIM == 3
+                    if (particles->z[currentDomainListIndex] < 0.5 * (min_z + max_z)) {
+                        //childPath += 4;
+                        max_z = 0.5 * (min_z + max_z);
+                    } else {
+                        min_z = 0.5 * (min_z + max_z);
+                    }
+#endif
+#endif
+                }
+                 */
+
+                min_x = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM];
+                max_x = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM + 1];
+#if DIM > 1
+                min_y = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM + 2];
+                max_y = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM + 3];
+#if DIM == 3
+                min_z = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM + 4];
+                max_z = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM + 5];
+#endif
+#endif
+
+                // determine (smallest) distance between domain list box and (pseudo-) particle
+                if (particles->x[currentParticleIndex] < min_x) {
+                    dx = particles->x[currentParticleIndex] - min_x;
+                } else if (particles->x[currentParticleIndex] > max_x) {
+                    dx = particles->x[currentParticleIndex] - max_x;
+                } else {
+                    dx = 0.;
+                }
+#if DIM > 1
+                if (particles->y[currentParticleIndex] < min_y) {
+                    dy = particles->y[currentParticleIndex] - min_y;
+                } else if (particles->y[currentParticleIndex] > max_y) {
+                    dy = particles->y[currentParticleIndex] - max_y;
+                } else {
+                    dy = 0.;
+                }
+#if DIM == 3
+                if (particles->z[currentParticleIndex] < min_z) {
+                    dz = particles->z[currentParticleIndex] - min_z;
+                } else if (particles->z[currentParticleIndex] > max_z) {
+                    dz = particles->z[currentParticleIndex] - max_z;
+                } else {
+                    dz = 0.;
+                }
+#endif
+#endif
+
+#if DIM == 1
+                r = cuda::math::sqrt(dx*dx);
+#elif DIM == 2
+                r = cuda::math::sqrt(dx*dx + dy*dy);
+#else
+                r = cuda::math::sqrt(dx*dx + dy*dy + dz*dz);
+#endif
+
+                if ((powf(0.5, particleLevel-1) /* * 2*/ * diam) >= (theta_ * r)) {
+                    #pragma unroll
+                    for (int i = 0; i < POW_DIM; i++) {
+                        childIndex = tree->child[POW_DIM * currentParticleIndex + i];
+                        if (childIndex != -1 && /* not domain list node*/particles->nodeType[childIndex] == 0) {
+                            sendIndices[childIndex] = 1;
+                        }
+                    }
+                }
+
+                offset += stride;
             }
 
         }
 
+        __global__ void symbolicForce_test2(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                           DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                           integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
+                                           Curve::Type curveType) {
+
+            int bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            int stride = blockDim.x * gridDim.x;
+            int offset = n; // start with numParticles
+
+            int currentParticleIndex, particleLevel, domainListLevel, currentDomainListIndex, childIndex;
+
+            real min_x, max_x;
+            real dx;
+#if DIM > 1
+            real min_y, max_y;
+            real dy;
+#if DIM == 3
+            real min_z, max_z;
+            real dz;
+#endif
+#endif
+            real r;
+
+            bool added;
+
+            while ((bodyIndex + offset) < *tree->index) {
+
+                added = false;
+
+                for (int relevantIndex = 0; relevantIndex < relevantIndicesCounter; relevantIndex++) {
+
+                    if (domainList->relevantDomainListProcess[relevantIndex] != relevantProc) {
+                        continue;
+                    }
+
+                    if (added) {
+                        break;
+                    }
+
+
+                    currentParticleIndex = bodyIndex + offset;
+
+                    particleLevel = particles->level[currentParticleIndex];
+                    domainListLevel = domainList->relevantDomainListLevels[relevantIndex];
+                    currentDomainListIndex = domainList->relevantDomainListIndices[relevantIndex];
+
+
+                    min_x = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM];
+                    max_x = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
+                                                1];
+#if DIM > 1
+                    min_y = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
+                                                2];
+                    max_y = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
+                                                3];
+#if DIM == 3
+                    min_z = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
+                                                4];
+                    max_z = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
+                                                5];
+#endif
+#endif
+
+                    // determine (smallest) distance between domain list box and (pseudo-) particle
+                    if (particles->x[currentParticleIndex] < min_x) {
+                        dx = particles->x[currentParticleIndex] - min_x;
+                    } else if (particles->x[currentParticleIndex] > max_x) {
+                        dx = particles->x[currentParticleIndex] - max_x;
+                    } else {
+                        dx = 0.;
+                    }
+#if DIM > 1
+                    if (particles->y[currentParticleIndex] < min_y) {
+                        dy = particles->y[currentParticleIndex] - min_y;
+                    } else if (particles->y[currentParticleIndex] > max_y) {
+                        dy = particles->y[currentParticleIndex] - max_y;
+                    } else {
+                        dy = 0.;
+                    }
+#if DIM == 3
+                    if (particles->z[currentParticleIndex] < min_z) {
+                        dz = particles->z[currentParticleIndex] - min_z;
+                    } else if (particles->z[currentParticleIndex] > max_z) {
+                        dz = particles->z[currentParticleIndex] - max_z;
+                    } else {
+                        dz = 0.;
+                    }
+#endif
+#endif
+
+#if DIM == 1
+                    r = cuda::math::sqrt(dx*dx);
+#elif DIM == 2
+                    r = cuda::math::sqrt(dx*dx + dy*dy);
+#else
+                    r = cuda::math::sqrt(dx * dx + dy * dy + dz * dz);
+#endif
+
+                    if ((powf(0.5, particleLevel - 1) /* * 2*/ * diam) >= (theta_ * r)) {
+                        added = true;
+                        #pragma unroll
+                        for (int i = 0; i < POW_DIM; i++) {
+                            childIndex = tree->child[POW_DIM * currentParticleIndex + i];
+                            if (childIndex != -1 && /* not domain list node*/particles->nodeType[childIndex] == 0) {
+                                sendIndices[childIndex] = 1;
+                            }
+                        }
+                    }
+                }
+
+                offset += stride;
+            }
+
+        }
+
+        __global__ void symbolicForce_test3(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                            DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                            integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
+                                            Curve::Type curveType) {
+
+            int bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            int stride = blockDim.x * gridDim.x;
+            int offset = n; // start with numParticles
+
+            int currentParticleIndex, particleLevel, domainListLevel, currentDomainListIndex, childIndex;
+
+            real min_x, max_x;
+            real dx;
+#if DIM > 1
+            real min_y, max_y;
+            real dy;
+#if DIM == 3
+            real min_z, max_z;
+            real dz;
+#endif
+#endif
+            real r;
+
+            bool added;
+
+            while ((bodyIndex + offset) < *tree->index) {
+
+                added = false;
+
+                for (int relevantIndex = 0; relevantIndex < relevantIndicesCounter; relevantIndex++) {
+
+                    if (domainList->relevantDomainListProcess[relevantIndex] != relevantProc) {
+                        continue;
+                    }
+
+                    if (added) {
+                        break;
+                    }
+
+
+                    currentParticleIndex = bodyIndex + offset;
+                    domainListLevel = domainList->relevantDomainListLevels[relevantIndex];
+                    particleLevel = particles->level[currentParticleIndex];
+                    currentDomainListIndex = domainList->relevantDomainListIndices[relevantIndex];
+
+                    if (particleLevel <= 6) {
+                        r = 0.;
+                    }
+                    else {
+
+                        min_x = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 *
+                                                    DIM];
+                        max_x = domainList->borders[
+                                domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
+                                1];
+#if DIM > 1
+                        min_y = domainList->borders[
+                                domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
+                                2];
+                        max_y = domainList->borders[
+                                domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
+                                3];
+#if DIM == 3
+                        min_z = domainList->borders[
+                                domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
+                                4];
+                        max_z = domainList->borders[
+                                domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
+                                5];
+#endif
+#endif
+
+                        // determine (smallest) distance between domain list box and (pseudo-) particle
+                        if (particles->x[currentParticleIndex] < min_x) {
+                            dx = particles->x[currentParticleIndex] - min_x;
+                        } else if (particles->x[currentParticleIndex] > max_x) {
+                            dx = particles->x[currentParticleIndex] - max_x;
+                        } else {
+                            dx = 0.;
+                        }
+#if DIM > 1
+                        if (particles->y[currentParticleIndex] < min_y) {
+                            dy = particles->y[currentParticleIndex] - min_y;
+                        } else if (particles->y[currentParticleIndex] > max_y) {
+                            dy = particles->y[currentParticleIndex] - max_y;
+                        } else {
+                            dy = 0.;
+                        }
+#if DIM == 3
+                        if (particles->z[currentParticleIndex] < min_z) {
+                            dz = particles->z[currentParticleIndex] - min_z;
+                        } else if (particles->z[currentParticleIndex] > max_z) {
+                            dz = particles->z[currentParticleIndex] - max_z;
+                        } else {
+                            dz = 0.;
+                        }
+#endif
+#endif
+
+#if DIM == 1
+                        r = cuda::math::sqrt(dx*dx);
+#elif DIM == 2
+                        r = cuda::math::sqrt(dx*dx + dy*dy);
+#else
+                        r = cuda::math::sqrt(dx * dx + dy * dy + dz * dz);
+#endif
+                    }
+
+                    if ((powf(0.5, particleLevel - 1) /* * 2*/ * diam) >= (theta_ * r)) {
+                        added = true;
+#pragma unroll
+                        for (int i = 0; i < POW_DIM; i++) {
+                            childIndex = tree->child[POW_DIM * currentParticleIndex + i];
+                            if (childIndex != -1 && /* not domain list node*/particles->nodeType[childIndex] == 0) {
+                                sendIndices[childIndex] = 1;
+                            }
+                        }
+                    }
+                }
+
+                offset += stride;
+            }
+
+        }
+
+        __global__ void symbolicForce_test4(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                            DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                            integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
+                                            Curve::Type curveType) {
+
+            int bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            int stride = blockDim.x * gridDim.x;
+            int offset = n; // start with numParticles
+
+            int currentParticleIndex, particleLevel, domainListLevel, currentDomainListIndex, childIndex, currentProc;
+
+            real min_x, max_x;
+            real dx;
+#if DIM > 1
+            real min_y, max_y;
+            real dy;
+#if DIM == 3
+            real min_z, max_z;
+            real dz;
+#endif
+#endif
+            real r;
+
+            //bool added;
+            int added = 0;
+
+            while ((bodyIndex + offset) < *tree->index) {
+
+                //added = false;
+
+                for (int relevantIndex = 0; relevantIndex < relevantIndicesCounter; relevantIndex++) {
+
+                    //if (domainList->relevantDomainListProcess[relevantIndex] != relevantProc) {
+                    //    continue;
+                    //}
+
+                    //if (domainList->relevantDomainListProcess[relevantIndex] == subDomainKeyTree->rank) {
+                    //    break;
+                    //}
+
+                    currentProc = domainList->relevantDomainListProcess[relevantIndex];
+
+                    //if ((sendIndices[childIndex] >> currentProc) & 1) {
+                    //    continue;
+                    //}
+
+                    if ((added >> currentProc) & 1) {
+                        continue;
+                    }
+
+
+                    currentParticleIndex = bodyIndex + offset;
+                    domainListLevel = domainList->relevantDomainListLevels[relevantIndex];
+                    particleLevel = particles->level[currentParticleIndex];
+                    currentDomainListIndex = domainList->relevantDomainListIndices[relevantIndex];
+
+                    if (particleLevel <= 6) {
+                        r = 0.;
+                    }
+                    else {
+
+                        min_x = domainList->borders[domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 *
+                                                    DIM];
+                        max_x = domainList->borders[
+                                domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
+                                1];
+#if DIM > 1
+                        min_y = domainList->borders[
+                                domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
+                                2];
+                        max_y = domainList->borders[
+                                domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
+                                3];
+#if DIM == 3
+                        min_z = domainList->borders[
+                                domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
+                                4];
+                        max_z = domainList->borders[
+                                domainList->relevantDomainListOriginalIndex[relevantIndex] * 2 * DIM +
+                                5];
+#endif
+#endif
+
+                        // determine (smallest) distance between domain list box and (pseudo-) particle
+                        if (particles->x[currentParticleIndex] < min_x) {
+                            dx = particles->x[currentParticleIndex] - min_x;
+                        } else if (particles->x[currentParticleIndex] > max_x) {
+                            dx = particles->x[currentParticleIndex] - max_x;
+                        } else {
+                            dx = 0.;
+                        }
+#if DIM > 1
+                        if (particles->y[currentParticleIndex] < min_y) {
+                            dy = particles->y[currentParticleIndex] - min_y;
+                        } else if (particles->y[currentParticleIndex] > max_y) {
+                            dy = particles->y[currentParticleIndex] - max_y;
+                        } else {
+                            dy = 0.;
+                        }
+#if DIM == 3
+                        if (particles->z[currentParticleIndex] < min_z) {
+                            dz = particles->z[currentParticleIndex] - min_z;
+                        } else if (particles->z[currentParticleIndex] > max_z) {
+                            dz = particles->z[currentParticleIndex] - max_z;
+                        } else {
+                            dz = 0.;
+                        }
+#endif
+#endif
+
+#if DIM == 1
+                        r = cuda::math::sqrt(dx*dx);
+#elif DIM == 2
+                        r = cuda::math::sqrt(dx*dx + dy*dy);
+#else
+                        r = cuda::math::sqrt(dx * dx + dy * dy + dz * dz);
+#endif
+                    }
+
+                    if ((powf(0.5, particleLevel - 1) /* * 2*/ * diam) >= (theta_ * r)) {
+                        //added = true;
+                        added = added | (1 << currentProc);
+#pragma unroll
+                        for (int i = 0; i < POW_DIM; i++) {
+                            childIndex = tree->child[POW_DIM * currentParticleIndex + i];
+                            if (childIndex != -1 && /* not domain list node*/particles->nodeType[childIndex] == 0) {
+                                sendIndices[childIndex] = sendIndices[childIndex] | (1 << currentProc);
+                            }
+                        }
+                    }
+                }
+
+                added = 0;
+                offset += stride;
+            }
+
+        }
+
+
         __global__ void compTheta(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
-                                  DomainList *domainList, Helper *helper, Curve::Type curveType) {
+                                  DomainList *domainList, Curve::Type curveType) {
 
             integer index = threadIdx.x + blockIdx.x * blockDim.x;
             integer stride = blockDim.x * gridDim.x;
@@ -1316,12 +2204,31 @@ namespace Gravity {
                 //       bodyIndex, particles->x[bodyIndex],
                 //       particles->y[bodyIndex], particles->z[bodyIndex]);
 
+                // TODO: part of unit testing ...
+                /*
+                if (particles->mass[bodyIndex] == 0.) {
+                    //printf("Masses ... Domain index: %i mass = %e x = (%e, %e, %e)!\n", bodyIndex,
+                    //       particles->mass[bodyIndex], particles->x[bodyIndex], particles->y[bodyIndex],
+                    //       particles->z[bodyIndex]);
+                    for (int child=0; child<POW_DIM; child++) {
+                        if (tree->child[POW_DIM * bodyIndex + child] != -1 && particles->mass[tree->child[POW_DIM * bodyIndex + child]] > 0.) {
+                            printf("Masses ... Domain index: %i (type: %i) mass = %e x = (%e, %e, %e) but child %i not zero (mass = %e x = (%e, %e, %e))!!!\n", bodyIndex, particles->nodeType[bodyIndex],
+                                   particles->mass[bodyIndex], particles->x[bodyIndex], particles->y[bodyIndex],
+                                   particles->z[bodyIndex], child, particles->mass[tree->child[POW_DIM * bodyIndex + child]],
+                                   particles->x[tree->child[POW_DIM * bodyIndex + child]], particles->y[tree->child[POW_DIM * bodyIndex + child]],
+                                   particles->z[tree->child[POW_DIM * bodyIndex + child]]);
+                        }
+                    }
+                }
+                */
+
                 if (proc != subDomainKeyTree->rank && proc >= 0 && particles->mass[bodyIndex] > 0.f) {
                     //printf("[rank = %i] proc = %i, key = %lu for x = (%f, %f, %f)\n", subDomainKeyTree->rank, proc, key, particles->x[bodyIndex], particles->y[bodyIndex], particles->z[bodyIndex]);
                     domainIndex = atomicAdd(domainList->domainListCounter, 1);
                     domainList->relevantDomainListIndices[domainIndex] = bodyIndex;
                     domainList->relevantDomainListLevels[domainIndex] = domainList->domainListLevels[index + offset];
                     domainList->relevantDomainListProcess[domainIndex] = proc;
+                    domainList->relevantDomainListOriginalIndex[domainIndex] = index + offset;
 
                     //printf("[rank %i] Adding relevant domain list node: %i (%f, %f, %f)\n", subDomainKeyTree->rank,
                     //       bodyIndex, particles->x[bodyIndex],
@@ -1438,7 +2345,7 @@ namespace Gravity {
 #endif
 #endif
                     int childIndex = tree->child[temp*POW_DIM + childPath];
-                    atomicAdd(&tree->count[childIndex], 1);
+                    //atomicAdd(&tree->count[childIndex], 1);
                     insertionLevel++;
 
                     // debug
@@ -1494,7 +2401,7 @@ namespace Gravity {
                         }
 #endif
 #endif
-                        atomicAdd(&tree->count[temp], 1); // ? do not count, since particles are just temporarily saved on this process
+                        //atomicAdd(&tree->count[temp], 1); // ? do not count, since particles are just temporarily saved on this process
                         childIndex = tree->child[POW_DIM*temp + childPath];
 
                     }
@@ -1656,7 +2563,7 @@ namespace Gravity {
                     }
 #endif
 #endif
-                    atomicAdd(&tree->count[temp], 1); // do not count, since particles are just temporarily saved on this process
+                    //atomicAdd(&tree->count[temp], 1); // do not count, since particles are just temporarily saved on this process
                     childIndex = tree->child[POW_DIM*temp + childPath];
 
                 }
@@ -1689,6 +2596,19 @@ namespace Gravity {
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::collectSendIndices, tree, particles, sendIndices,
                                 particles2Send, pseudoParticles2Send, pseudoParticlesLevel, particlesCount,
                                 pseudoParticlesCount, n, length, curveType);
+        }
+
+        real Launch::collectSendIndices_test4(Tree *tree, Particles *particles, integer *sendIndices,
+                                                 integer *particles2Send, integer *pseudoParticles2Send,
+                                                 integer *pseudoParticlesLevel,
+                                                 integer *particlesCount, integer *pseudoParticlesCount,
+                                                 integer numParticlesLocal, integer numParticles,
+                                                 integer treeIndex, int currentProc, Curve::Type curveType) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::collectSendIndices_test4, tree, particles, sendIndices,
+                                particles2Send, pseudoParticles2Send, pseudoParticlesLevel, particlesCount,
+                                pseudoParticlesCount, numParticlesLocal, numParticles, treeIndex, currentProc,
+                                curveType);
         }
 
         real Launch::testSendIndices(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
@@ -1754,6 +2674,18 @@ namespace Gravity {
                                 blockSize, warp, stackSize, subDomainKeyTree, theta, smoothing, potentialEnergy);
         }
 
+        real Launch::computeForces_v3(Tree *tree, Particles *particles, real radius, integer n, integer m,
+                                      integer blockSize, integer warp, integer stackSize,
+                                      SubDomainKeyTree *subDomainKeyTree, real theta,
+                                      real smoothing, bool potentialEnergy) {
+            //size_t sharedMemory = sizeof(real) * MAX_DEPTH;
+            size_t sharedMemory = (sizeof(real)+sizeof(integer))*stackSize*blockSize/warp;
+            ExecutionPolicy executionPolicy(256, 256, sharedMemory);
+            //ExecutionPolicy executionPolicy(512, 256, sharedMemory);
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::computeForces_v2_1, tree, particles, n, m,
+                                blockSize, warp, stackSize, subDomainKeyTree, theta, smoothing, potentialEnergy);
+        }
+
         //real Launch::symbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
         //                   DomainList *domainList, integer *sendIndices,
         //                   real diam, real theta_, integer n, integer m, integer relevantIndex,
@@ -1781,11 +2713,53 @@ namespace Gravity {
                                 particles, domainList, sendIndices, diam, theta_, n, m, relevantIndex, level, curveType);
         }
 
+        real Launch::symbolicForce_test(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                integer n, integer m, integer relevantIndex, integer level,
+                                Curve::Type curveType) {
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::symbolicForce_test, subDomainKeyTree, tree,
+                                particles, domainList, sendIndices, diam, theta_, n, m, relevantIndex, level, curveType);
+        }
+
+        real Launch::symbolicForce_test2(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                            DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                            integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
+                                            Curve::Type curveType) {
+
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::symbolicForce_test2, subDomainKeyTree, tree,
+                                particles, domainList, sendIndices, diam, theta_, n, m, relevantProc, relevantIndicesCounter,
+                                curveType);
+        }
+
+        real Launch::symbolicForce_test3(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                         DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                         integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
+                                         Curve::Type curveType) {
+
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::symbolicForce_test3, subDomainKeyTree, tree,
+                                particles, domainList, sendIndices, diam, theta_, n, m, relevantProc, relevantIndicesCounter,
+                                curveType);
+        }
+
+        real Launch::symbolicForce_test4(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                                         DomainList *domainList, integer *sendIndices, real diam, real theta_,
+                                         integer n, integer m, integer relevantProc, integer relevantIndicesCounter,
+                                         Curve::Type curveType) {
+
+            ExecutionPolicy executionPolicy;
+            return cuda::launch(true, executionPolicy, ::Gravity::Kernel::symbolicForce_test4, subDomainKeyTree, tree,
+                                particles, domainList, sendIndices, diam, theta_, n, m, relevantProc, relevantIndicesCounter,
+                                curveType);
+        }
+
         real Launch::compTheta(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
-                       DomainList *domainList, Helper *helper, Curve::Type curveType) {
+                       DomainList *domainList, Curve::Type curveType) {
             ExecutionPolicy executionPolicy;
             return cuda::launch(true, executionPolicy, ::Gravity::Kernel::compTheta, subDomainKeyTree, tree, particles,
-                                domainList, helper, curveType);
+                                domainList, curveType);
         }
 
         //real Launch::insertReceivedPseudoParticles(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,

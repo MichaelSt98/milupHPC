@@ -1,1 +1,1 @@
-Logger.o dep/Logger.d: src/Logger.cpp src/../include/Logger.h src/../include/Color.h
+Logger.o dep/Logger.d: src/Logger.cpp src/../include/Logger.h include/Color.h

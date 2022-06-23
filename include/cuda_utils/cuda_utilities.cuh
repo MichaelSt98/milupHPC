@@ -1,3 +1,20 @@
+/**
+ * @file cuda_utilities.cuh
+ * @brief CUDA utilities.
+ *
+ * CUDA utilities like:
+ *
+ * * preprocessor directives
+ * * preprocessor macros
+ * * CUDA math functions
+ * * general CUDA kernels like
+ *     * finding duplicates
+ *     * copying values from device to device
+ *     * ...
+ *
+ * @author Michael Staneker
+ * @bug no
+*/
 #ifndef MILUPHPC_CUDAUTILITIES_CUH
 #define MILUPHPC_CUDAUTILITIES_CUH
 
@@ -13,8 +30,14 @@
 #define CUDA_CALLABLE_MEMBER
 #endif
 
-
+/**
+ * @brief check CUDA call
+ */
 #define safeCudaCall(call) checkCudaCall(call, #call, __FILE__, __LINE__)
+
+/**
+ * @brief check CUDA call
+ */
 #define gpuErrorcheck(ans) { gpuAssert((ans), __FILE__, __LINE__); }
 
 /**
@@ -54,7 +77,24 @@
 __device__ double atomicAdd(double* address, double val);
 #endif
 
+/**
+ * @brief Check CUDA error codes.
+ *
+ * @param code CUDA error code
+ * @param file File
+ * @param line Line
+ * @param abort Abort in case of error
+ */
 void gpuAssert(cudaError_t code, const char *file, int line, bool abort=true);
+
+/**
+ * @brief Check CUDA call.
+ *
+ * @param command
+ * @param commandName
+ * @param fileName
+ * @param line
+ */
 void checkCudaCall(cudaError_t command, const char * commandName, const char * fileName, int line);
 
 namespace CudaUtils {
@@ -123,19 +163,73 @@ namespace CudaUtils {
 }
 
 namespace cuda {
+    /**
+     * @brief Device/CUDA math functions.
+     *
+     * Wrapping CUDA math functionalities to provide correct function
+     * for both single and double precision.
+     */
     namespace math {
+        /**
+         * @brief Minimum value out of two floating point values.
+         *
+         * @param a Floating point value 1
+         * @param b Floating point value 2
+         * @return Minimum floating point value
+         */
         __device__ real min(real a, real b);
 
+        /**
+         * @brief Minimum value out of three floating point values.
+         *
+         * @param a Floating point value 1
+         * @param b Floating point value 2
+         * @param c Floating point value 3
+         * @return Minimum floating point value
+         */
         __device__ real min(real a, real b, real c);
 
+        /**
+         * @brief Maximum value out of two floating point values.
+         *
+         * @param a Floating point value 1
+         * @param b Floating point value 2
+         * @return Maximum floating point value
+         */
         __device__ real max(real a, real b);
 
+        /**
+         * @brief Maximum value out of three floating point values.
+         *
+         * @param a Floating point value 1
+         * @param b Floating point value 2
+         * @param c Floating point value 3
+         * @return Maximum floating point value
+         */
         __device__ real max(real a, real b, real c);
 
+        /**
+         * @brief Absolute value of a floating point value.
+         *
+         * @param a Floating point value
+         * @return Absolute value of floating point value.
+         */
         __device__ real abs(real a);
 
+        /**
+         * @brief Square root of a floating point value.
+         *
+         * @param a Floating point value
+         * @return Square root of floating point value
+         */
         __device__ real sqrt(real a);
 
+        /**
+         * @brief Inverse square root of a floating point value.
+         *
+         * @param a Floating point value
+         * @return Inverse square root of a floating point value
+         */
         __device__ real rsqrt(real a);
     }
 }

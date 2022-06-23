@@ -143,13 +143,13 @@ void PredictorCorrectorEuler::integrate(int step) {
         simulationTimeHandler->copy(To::device);
 
         Logger(TRACE) << "finished sub step - simulation time: " << *simulationTimeHandler->h_currentTime
-                << " (STEP: " << step << " | subStep: " << subStep
-                << " | time = " << *simulationTimeHandler->h_currentTime << "/"
-                << *simulationTimeHandler->h_subEndTime << "/"
-                << *simulationTimeHandler->h_endTime << ")";
+                      << " (STEP: " << step << " | subStep: " << subStep
+                      << " | time = " << *simulationTimeHandler->h_currentTime << "/"
+                      << *simulationTimeHandler->h_subEndTime << "/"
+                      << *simulationTimeHandler->h_endTime << ")";
 
         //H5Profiler &profiler = H5Profiler::getInstance("log/performance.h5");
-        
+
 
         subDomainKeyTreeHandler->copy(To::host, true, false);
         profiler.vector2file(ProfilerIds::ranges, subDomainKeyTreeHandler->h_range);
@@ -167,4 +167,3 @@ void PredictorCorrectorEuler::integrate(int step) {
     Logger(TIME) << "integration step elapsed: " << timeElapsed << " ms";
 
 }
-

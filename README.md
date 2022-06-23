@@ -4,41 +4,166 @@
 
 The successor of [miluphcuda](https://github.com/christophmschaefer/miluphcuda) targeting GPU cluster via CUDA aware MPI.
 
-____
+_______
 
-This repository aims to implement a **Multi-GPU SPH/NBody algorithm using CUDA aware MPI** by combining ideas from:
+This repository implements a **multi-GPU SPH & N-body (via Barnes-Hut) algorithm using C++11 and CUDA-aware MPI** by combining already proven parallelization strategies and available implementations 
 
-* **Single-GPU version inspired/adopted from:**
-	* [Miluphcuda](https://github.com/christophmschaefer/miluphcuda) 
+* **single-GPU version inspired/adopted from:**
+	* [miluphcuda](https://github.com/christophmschaefer/miluphcuda) 
 	* [An Efficient CUDA Implementation of the Tree-Based Barnes Hut n-Body Algorithm](https://iss.oden.utexas.edu/Publications/Papers/burtscher11.pdf)
-	* [Implementation: MichaelSt98/NNS](https://github.com/MichaelSt98/NNS/tree/main/3D/CUDA/CUDA_NBody) CUDA\_NBody
-* **Multi-Node (or rather Multi-CPU) version inspired/adopted from:**
+* **multi-node (or rather multi-CPU) version inspired/adopted from:**
 	* M. Griebel, S. Knapek, and G. Zumbusch. Numerical Simulation in Molecular Dynamics: Numerics, Algorithms, Parallelization, Applications. 1st. Springer Pub- lishing Company, Incorporated, 2010. isbn: 3642087760
-	* [Implementation: MichaelSt98/NNS (branch: MolecularDynamics)](https://github.com/MichaelSt98/NNS/tree/MolecularDynamics/MolecularDynamics/BarnesHutParallel)
 
-____
+with new ideas and parallelization strategies.
 
-* See [MichaelSt98/SPH](https://github.com/MichaelSt98/SPH) for a proof of concept
+* for a **versatile single-GPU implementation** refer to [miluphcuda](https://github.com/christophmschaefer/miluphcuda) 
+* for a **multi-CPU implementation** (self-gravity via Barnes-Hut only) refer to [jammartin/ParaLoBstar](https://github.com/jammartin/ParaLoBstar)
+
+_______
+
+**See also:**
+
+* **[milupHPC API documentation](https://michaelst98.github.io/milupHPC/)** (Doxygen)
+* [Prerequisites.md](documents/Prerequisites.md): for instructions to install the dependencies 
+* [Compilation.md](documents/Compilation.md): for instructions to compile the code
+* [GettingStarted.md](documents/GettingStarted.md): for getting started, including running some test cases
+* [Postprocessing.md](postprocessing/README.md): for information regarding postprocessing
+* [Debugging.md](debug/README.md): for information regarding debugging
+
+_______
+
+## Parallelization/Implementation
+
+* Parallelization embraces both 
+	* **multi-node** parallelization via message-passing and 
+	* **single-node** parallelization for **GPU**s via CUDA
+
+implemented using **C++ and CUDA-aware MPI**.
+
+<img src="documents/figures/class_miluphpc__coll__graph_small.png" alt="Collaboration diagram" width="100%"/>
+
+<details>
+ <summary>
+   Implementation details
+ </summary>
+
+```c
+include/src
+├── cuda_utils // CUDA utilities
+│   ├── cuda_launcher.cuh/cu
+│   ├── cuda_runtime.h/cpp
+│   ├── cuda_utilities.cuh/cu
+│   └── linalg.cuh/cu
+├── device_rhs.cuh/cu
+├── gravity // Gravity related functions/kernels
+│   └── gravity.cuh/cu
+├── helper.cuh/cu // buffer class
+├── helper_handler.h/cpp // buffer handling
+├── integrator // Integrator classes, inheriting from miluphpc.h/cpp
+│   ├── device_explicit_euler.cuh/cu
+│   ├── device_leapfrog.cuh/cu
+│   ├── device_predictor_corrector_euler.cuh/cu
+│   ├── explicit_euler.h/cpp
+│   ├── leapfrog.h/cpp
+│   └── predictor_corrector_euler.h/cpp
+├── main.cpp // main
+├── materials // material handling (for SPH)
+│   ├── material.cuh/cu
+│   └── material_handler.cuh/cpp
+├── miluphpc.h/cpp // base class for dispatching simulation
+├── particle_handler.h/cpp // particle class handling
+├── particles.cuh/cu // particle information/class
+├── processing
+│   └── kernels.cuh/cu
+├── simulation_time.cuh/cu // simulation time class
+├── simulation_time_handler.cpp // simulation time handling
+├── sph // SPH related functions/kernels
+│   ├── density.cuh/cu
+│   ├── internal_forces.cuh/cu
+│   ├── kernel.cuh/cu
+│   ├── kernel_handler.cuh/cu
+│   ├── pressure.cuh/cu
+│   ├── soundspeed.cuh/cu
+│   ├── sph.cuh/cu
+│   ├── stress.cuh/cu
+│   └── viscosity.cuh/cu
+├── subdomain_key_tree // Tree related functions/kernels as well as domain decomposition
+│   ├── subdomain.cuh/cu
+│   ├── subdomain_handler.h/cpp
+│   ├── tree.cuh/cu
+│   └── tree_handler.h/cpp
+└── utils // C++ utilities
+    ├── config_parser.h/cpp
+    ├── h5profiler.h/cpp
+    ├── logger.h/cpp
+    └── timer.h/cpp
+```
+
+The actual implementation and dispatching of the simulation includes 
+
+* pre-processing (inititial particle distribution, ...)
+* preparation tasks like 
+	* initializing the MPI and CUDA environment
+	* reading the initial particle distribution
+	* memory allocation, ...
+* the actual simulation in dependence of the used integration scheme
+	* encapsulated in the right-hand-side (as depicted in the following picture)  
+	* advancing the particles
+* post-processing
+* ...
+
+However, as the following suggests, the simulation differs for single and multi-node execution, whereas multi-node execution requires more and more sophisticated functionalities to ensure the correctness of the algorithms.
+
+<img src="documents/figures/right-hand-side.png" alt="right-hand-side" width="100%"/>
+
+</details>
+
+
+## Prerequisites/Dependencies
+
+For more information and instructions refer to [Prerequisites.md](documents/Prerequisites.md)
+
+| library         | licence           | usage             | link               |
+| --------------- | ----------------- | ----------------- | ------------------ |
+| GNU             | GPLv3+            | compiler          | [gnu.org](https://www.gnu.org/home.de.html) |
+| OpenMPI         | BSD 3-Clause      | compiler, MPI Implementation | [open-mpi.org](https://www.open-mpi.org/) |
+| CUDA            | CUDA Toolkit End User License Agreement | compiler, CUDA Toolkit and API | [developer.nvidia.com](https://developer.nvidia.com/) |
+| CUDA cub        | BSD 3-Clause "New" or "Revised" License | device wide parallel primitives | [github.com/NVIDIA/cub](https://github.com/NVIDIA/cub) |
+| HDF5            | HDF5 License (BSD-Style) | parallel HDF5 for I/O operations | [hdf5group.org](https://www.hdfgroup.org/solutions/hdf5/) |
+| HighFive        | Boost Software License 1.0 | C++ wrapper for parallel HDF5 | [github.com/BlueBrain/HighFive](https://github.com/BlueBrain/HighFive) |
+| Boost           | Boost Software License 1.0 | config file parsing, C++ wrapper for MPI | [boost.org](https://www.boost.org/) |
+| cxxopts         | MIT license | command line argument parsing | [github.com/jarro2783/cxxopts](https://github.com/jarro2783/cxxopts) |
+| libconfig       |  LGPL-2.1 | material config parsing| [github.io/libconfig](http://hyperrealm.github.io/libconfig/) |
+
+* in general there is no need for the usage of the GNU compiler and OpenMPI as MPI implementation, as long as a proper C++ compiler as well as MPI implementation (CUDA-aware) are available and corresponding changes in the Makefile are done
 
 
 ## Usage 
 
-> you need to provide an appropriate H5 file as initial (particle) distribution
-> 
-> * see [GitHub: ParticleDistributor](https://github.com/MichaelSt98/ParticleDistributor)
 
-* **compile** using the *Makefile* via: `make`
+* you need to provide an appropriate H5 file as initial (particle) distribution 
+	* see e.g. [GitHub: ParticleDistributor](https://github.com/MichaelSt98/ParticleDistributor)
+
+
+* **build/compile** using the *Makefile* via: `make`
 	* for debug: `make debug`
 		* using *cuda-gdb*: `./debug/cuda_debug.sh`
 	* for single-precision: `make single-precision` (default: double-precision)
-* **run** via: `mpirun -np <number of processes> ./bin/runner -f <filename>`
-	* e.g.: `mpirun -np 2 ./bin/runner -f examples/kepler.h5` 
+* **run** via **`mpirun -np <np> <binary> -n <#output files> -f <input hdf5 file> -C <config file> -m <material-config>`**
+	* `<binary>` within `bin/` e.g. `bin/runner` 
+	* `<input hdf5 file>`: appropriate HDF5 file as initial (particle) distribution 
+	* `<config file>`: configurations
+	* `<material-config>` : material configurations
+	* as well as correct preprocessor directives: `include/parameter.h`
 * clean via: `make clean`, `make cleaner`
-* rebuild via: `make remake` 	 
+* rebuild via: `make remake` 	
 
-### Relevant preprocessor directives 
+<details>
+ <summary>
+   Preprocessor directives: parameter.h
+ </summary>
 
-* adjust in *include/parameters.h* and rebuild
+* see `include/parameter.h`
 
 ```c
 #define DEBUGGING 0
@@ -95,9 +220,72 @@ ____
  */
 #define SPH_EQU_VERSION 1
 ```
+</details>
 
-### Config file settings
 
+<details>
+ <summary>
+   Input HDF5 file
+ </summary>
+ 
+* for **gravity only**
+	* provide mass "m", position "x" and velocity "v" 
+
+```
+GROUP "/" {
+   DATASET "m" {
+      DATATYPE  H5T_IEEE_F64LE
+      DATASPACE  SIMPLE { ( <num particles> ) / ( <num particles>  ) }
+   }
+   DATASET "v" {
+      DATATYPE  H5T_IEEE_F64LE
+      DATASPACE  SIMPLE { ( <num particles> , <dim> ) / ( <num particles> , <dim> ) }
+   }
+   DATASET "x" {
+      DATATYPE  H5T_IEEE_F64LE
+      DATASPACE  SIMPLE { ( <num particles> , <dim>  ) / (<num particles> , <dim>  ) }
+   }
+}
+}
+```
+
+* **with SPH** provide (at least)
+	* provide mass "m", material identifier "materialId", internal energy "u", position "x" and velocity "v" 
+
+```
+GROUP "/" {
+   DATASET "m" {
+      DATATYPE  H5T_IEEE_F64LE
+      DATASPACE  SIMPLE { ( <num particles> ) / ( <num particles>  ) }
+   }
+   DATASET "materialId" {
+      DATATYPE  H5T_STD_I8LE
+      DATASPACE  SIMPLE { ( <num particles>  ) / ( <num particles>  ) }
+   }
+   DATASET "u" {
+      DATATYPE  H5T_IEEE_F64LE
+      DATASPACE  SIMPLE { ( <num particles>  ) / ( <num particles>  ) }
+   }
+   DATASET "v" {
+      DATATYPE  H5T_IEEE_F64LE
+      DATASPACE  SIMPLE { ( <num particles> , <dim> ) / ( <num particles> , <dim> ) }
+   }
+   DATASET "x" {
+      DATATYPE  H5T_IEEE_F64LE
+      DATASPACE  SIMPLE { ( <num particles> , <dim>  ) / (<num particles> , <dim>  ) }
+   }
+}
+}
+```
+ 
+</details>
+
+
+<details>
+ <summary>
+   Config file
+ </summary>
+ 
 ```
 ; IO RELATED
 ; ------------------------------------------------------
@@ -119,18 +307,13 @@ particlesSent2H5 true
 ; INTEGRATOR RELATED
 ; ------------------------------------------------------
 ; integrator selection
-; explicit euler [0], predictor-corrector euler [1]
+; explicit euler [0], predictor-corrector euler [1], leapfrog [2]
 integrator 1
 ; initial time step
 timeStep 1e-4
 ; max time step allowed
-maxTimeStep 1e9
+maxTimeStep 1e-4
 ; end time for simulation
-;timeEnd 1.0
-;timeEnd 5.0e7
-timeEnd 6.9e11
-;timeEnd 0.5e10;
-;timeEnd 1e12
 ;timeEnd 6e-2
 
 ; SIMULATION RELATED
@@ -142,10 +325,6 @@ sfc 1
 ; theta-criterion for Barnes-Hut (approximative gravity)
 theta 0.5
 ; smoothing parameter for gravitational forces
-;smoothing 0.025
-;smoothing 3.0e12
-;smoothing 1.6e13
-;smoothing 3.2e13
 smoothing 2.56e+20
 
 ; SPH smoothing kernel selection
@@ -157,15 +336,12 @@ removeParticles true
 ; spherically [0], cubic [1]
 removeParticlesCriterion 0
 ; allowed distance to center (0, 0, 0)
-;removeParticlesDimension 1.0
 removeParticlesDimension 3.6e14
 
 ; execute load balancing
 loadBalancing false
 ; interval for executing load balancing (every Nth step)
 loadBalancingInterval 1
-; amount of bins for load balancing
-loadBalancingBins 2000
 
 ; how much memory to allocate (1.0 -> all particles can in principle be on one process)
 particleMemoryContingent 1.0
@@ -177,11 +353,51 @@ calculateEnergy true
 ; calculate center of mass (and save to output file)
 calculateCenterOfMass false
 
+; IMPLEMENTATION SELECTION
+; ------------------------------------------------------
+; force version for gravity (use [2])
+; burtscher [0], burtscher without presorting [1], miluphcuda with presorting [2],
+; miluphcuda without presorting [3], miluphcuda shared memory (experimental) [4]
+gravityForceVersion 0
+; fixed radius NN version for SPH (use [0])
+; normal [0], brute-force [1], shared-memory [2], within-box [3]
+sphFixedRadiusNNVersion 3
 ```
 
+</details>
 
-### Command line arguments
 
+<details>
+ <summary>
+   Material config file
+ </summary>
+ 
+```
+materials = (
+{
+    ID = 0
+    name = "IsothermalGas"
+    #sml = 1e12
+    sml = 5.2e11
+    interactions = 50
+    artificial_viscosity = { alpha = 1.0; beta = 2.0; };
+    eos = {
+        type = 3
+    };
+}
+);
+
+...
+```
+ 
+</details>
+
+
+<details>
+ <summary>
+   Command line arguments
+ </summary>
+ 
 * `./bin/runner -h` gives help:
 
 ```
@@ -205,154 +421,67 @@ Usage:
   -h, --help                    Show this help
 ```
 
-## Test cases
+</details>
 
-* some samples:
-	* each color represents a process, thus a GPU
 
-### Kepler
 
-* Kepler disk: four GPUs (hilbert curve)
+## Samples/Validation
 
-![](documents/kepler_hilbert_4proc.gif)
 
-### Plummer
+The code validation comprises the correctness of dispatched simulation on one GPU and multiple GPUs, whereas identical simulation on one and multiple GPUs are not mandatorily bitwise-identical. By suitable choice of compiler flags and in dependence of the used architecture this is in principle attainable. However, this is generally not useful to apply for performance reasons and therefore at this point not presupposed. Amongst others, three test cases were used for validating the implementation:
+
+* the Plummer test case is a gravity-only test case
+* the Taylor–von Neumann–Sedov blast wave test case is a pure hydrodynamical SPH test case 
+* the isothermal collapse test case  self-gravitating SPH test case utilizing almost all implemented features
+
+> each color represents a process, thus a GPU
+
+<details>
+ <summary>
+   Plummer
+ </summary>
 
 * Plummer model: four GPUs with dynamic load balancing every 10th step (top: lebesgue, bottom: hilbert)
 
-![](documents/4proc_plummer_dynamic.gif)
+<img src="documents/4proc_plummer_dynamic.gif" alt="Plummer sample" width="100%"/>
 
-### Sedov
+The Plummer model is a gravity only test case, the distribution is stable over time enabling the validation as shown in the following picture.
+
+<img src="documents/figures/long_pl_N10000000_sfc1D_np4_mass_quantiles.png" alt="Plummer sample" width="100%"/>
+
+</details>
+
+
+<details>
+ <summary>
+   Taylor–von Neumann–Sedov blast wave
+ </summary>
 
 * Sedov explosion: one and two GPUs
 
-![](documents/sedov_sample_movie.gif)
+<img src="documents/sedov_sample_movie.gif" alt="Sedov sample" width="100%"/>
 
-### Boss-Bodenheimer: isothermal collapse
+The density in dependence of the radius for t = 0.06 and the semi-analytical solution as comparison.
+
+<img src="documents/figures/sedov_N171_sfc1D_np8_density.png" alt="Sedov sample" width="100%"/>
+
+</details>
+
+
+<details>
+ <summary>
+   Boss-Bodenheimer: Isothermal collapse
+ </summary>
 
 * Boss-Bodenheimer: isothermal collapse
 	* one and two GPUs 
 
-![](documents/bb_sample_movie.gif)
+<img src="documents/bb_sample_movie.gif" alt="Isothermal collapse sample" width="100%"/>
 
-## Implementation
+Contour plot, showing the density at 1.2 x free-fall time.
 
-### Multi-CPU version
+<img src="documents/figures/bb_contour.png" alt="Isothermal collapse sample" width="100%"/>
 
-See: 
-
-> M. Griebel, S. Knapek, and G. Zumbusch. **Numerical Simulation in Molecular Dynamics**: Numerics, Algorithms, Parallelization, Applications. 1st. Springer Pub- lishing Company, Incorporated, 2010. isbn: 3642087760 
-
-within the following sections:
-
-* 8 Tree Algorithms for Long-Range Potentials 
-* 8.1 Series Expansion of the Potential 
-* 8.2 Tree Structures for the Decomposition of the Far Field 
-* 8.3 Particle-Cluster Interactions and the Barnes-Hut Method 
-	* 8.3.1 Method 
-	* 8.3.2 Implementation
-	* 8.3.3 Applications from Astrophysics
-* 8.4 **ParallelTreeMethods**
-	* 8.4.1 **An Implementation with Keys** 
-	* 8.4.2 **Dynamical Load Balancing** 
-	* 8.4.3 **Data Distribution with Space-Filling Curves**
-
-### Single-GPU implementation
-
-#### Miluphcuda
-
-* See [GitHub: Miluphcuda](https://github.com/christophmschaefer/miluphcuda)
-
-#### An Efficient CUDA Implementation of the Tree-Based Barnes Hut n-Body Algorithm
-
-See [An Efficient CUDA Implementation of the Tree-Based Barnes Hut n-Body Algorithm](https://iss.oden.utexas.edu/Publications/Papers/burtscher11.pdf), which describes a CUDA implementation of the classical Barnes Hut n-body algorithm that runs entirely on the GPU. The code builds an irregular treebased data structure and performs complex traversals on it.
-
-**The Barnes Hut algorithm is challenging to implement efficiently in CUDA, since**
-
-1. it repeatedly builds and traverse an irregular tree-based data structure
-2. performs a lot of pointer-chasing memory operatons
-3. is tipically expressed recursively, which is not supported by current GPUs
-4. traversing irregular data structures often results in thread divergence
-
-**Possible solutions to these problems**
-
-* iterations instead of recursion
-* load instructions, caching, and throttling threads to drastically reduce the number of main memory accesses
-* employing array-based techniques to enable
-  some coalescing
-* grouping similar work together to minimize divergence
-
-**Exploit some unique archtictural features of nowadays GPUs:**
-
-* threads in a warp necessarily run in lockstep, having one thread fetch data from main memory and share the data with the other threads without the need for synchronization
-* barriers are implemented in hardware on GPUs and are therefore very fast, therefore it is possible to utilize them to reduce wasted work and main memory accesses in a way that is impossible in current CPUs where barriers have to communicate through memory
-* GPU-specific operations such as thread-voting
-  functions to greatly improve performance and make use of fence instructions to implement lightweight
-  synchronization without atomic operations
+</details>
 
 
-#### Mapping Barnes Hut algoirthm to GPU kernels
-
-**High-level steps:**
-
-* [CPU] Reading input data and transfer to GPU
-* *For each timestep do:*
-    * [GPU] compute bounding box around all bodies
-    * [GPU] build hierarchical decomposition by inserting each body into an octree
-    * [GPU] summarize body information in each internal octree node
-    * [GPU] approximately sort the bodies by spatial distance
-    * [GPU] compute forces acting on each body with help of octree
-    * [GPU] update body positions and velocities
-    * ([CPU] Transfer result to CPU and output)
-* [CPU] Transfer result to CPU and output 
-
-##### Global optimzations
-
-Global optimizations, meaning optimizations and implementations applying to all Kernels.
-
-* Because dynamic allocation of and accesses to heap objects tend to be slow, an **array-based data structure** is used
-* Accesses to arrays cannot be coalesced if the array elements are objects with multiple fields, so several aligned scalar arrays, one per field are used
-    * thus, array indexes instead of pointers to tree nodes
-
-* to simplify and speed up the code, it is important to use the same arrays for both bodies and cells
-*  allocate the bodies at the beginning and the cells at the end of the arrays, and use an index of −1 as a “null pointer”
-    * a simple comparison of the array index with the number of bodies determines whether the index
-      points to a cell or a body
-    *  it is possible to alias arrays that hold only cell information with arrays that hold only body information to reduce the memory consumption while maintaining a one-to-one
-       correspondence between the indexes into the different arrays
-
-* the thread count per block is maximized and rounded down to the nearest multiple of the warp size for each kernel
-* all kernels use at least as many blocks as there are streaming multiprocessors in the GPU, which is automatically detected
-*  all parameters passed to the kernels, such as the starting addresses of the various arrays, stay the same throughout the time step loop, so that they can be copied once into the GPU’s constant memory
-* the code operates on octrees in which nodes can have up to eight children, it contains many loops with a trip count of eight. Therefore the loops are unrolled (e.g. by pragmas or compiler optimization)
-
-##### Kernel 1: computes bounding box around all bodies
-
-Kernel 1 computes the bounding box around all bodies, whic becomes the root node (outermost cell) of the octree.
-
-##### Kernel 2: hierachically subdivides the root cells
-
-Kernel 2 hierarchically subdivides this cell until there is at most one body per innermost cell. This is accomplished by inserting all bodies into the octree.
-
-##### Kernel 3: computes the COM for each cell
-
-Kernel 3 computes, for each cell, the center of gravity and the cumulative mass of all contained bodies.
-
-##### Kernel 4: sorts the bodies
-
-Kernel 4 sorts the bodies according to an in-order traversal of the octree, which typically places spatially close bodies close together
-
-##### Kernel 5: computes the forces
-
-Kernel 5 computes the forces acting on each body.
-Starting from the octree’s root, it checks whether the center of gravity is far enough away from the current body for each encountered cell. If it is not, the subcells are visited to perform a more accurate force calculation, if it is, only one force calculation with the cell’s center of gravity and mass is performed, and the subcells and all bodies within them are not visited, thus greatly reducing the total number of force calculations.
-
-**The fifth kernel requires the vast majority of the runtime and is therefore the most important to optimize.**
-
-For each body, the corresponding thread traverses some prefix of the octree to compute the force acting upon this body.
-
-
-##### Kernel 6: updates the bodies
-
-Kernel 6 nudges all the bodies into their new
-positions and updates their velocities.

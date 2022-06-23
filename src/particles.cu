@@ -143,6 +143,31 @@ CUDA_CALLABLE_MEMBER void Particles::set(integer *numParticles, integer *numNode
     }
 #endif
 
+#if DIM == 1
+    CUDA_CALLABLE_MEMBER void Particles::setLeapfrog(real *ax_old, real *g_ax_old) {
+        this->ax_old = ax_old;
+        this->g_ax_old = g_ax_old;
+    }
+#elif DIM == 2
+    CUDA_CALLABLE_MEMBER void Particles::setLeapfrog(real *ax_old, real *ay_old, real *g_ax_old, real *g_ay_old) {
+        this->ax_old = ax_old;
+        this->ay_old = ay_old;
+        this->g_ax_old = g_ax_old;
+        this->g_ay_old = g_ay_old;
+    }
+#else
+
+    CUDA_CALLABLE_MEMBER void Particles::setLeapfrog(real *ax_old, real *ay_old, real *az_old, real *g_ax_old, real *g_ay_old,
+                                          real *g_az_old) {
+        this->ax_old = ax_old;
+        this->ay_old = ay_old;
+        this->az_old = az_old;
+        this->g_ax_old = g_ax_old;
+        this->g_ay_old = g_ay_old;
+        this->g_az_old = g_az_old;
+    }
+#endif
+
 CUDA_CALLABLE_MEMBER void Particles::setU(real *u) {
     this->u = u;
 }
@@ -154,6 +179,13 @@ CUDA_CALLABLE_MEMBER void Particles::setNodeType(integer *nodeType) {
 CUDA_CALLABLE_MEMBER void Particles::setArtificialViscosity(real *muijmax) {
     this->muijmax = muijmax;
 }
+
+#if BALSARA_SWITCH
+    CUDA_CALLABLE_MEMBER void Particles::setDivCurl(real *divv, real *curlv) {
+        this->divv = divv;
+        this->curlv = curlv;
+    }
+#endif
 
 //#if INTEGRATE_DENSITY
     CUDA_CALLABLE_MEMBER void Particles::setIntegrateDensity(real *drhodt) {
@@ -247,14 +279,14 @@ CUDA_CALLABLE_MEMBER void Particles::setPorosity(real *pold, real *alpha_jutzi, 
 CUDA_CALLABLE_MEMBER void Particles::reset(integer index) {
     level[index] = -1;
     nodeType[index] = 0;
-    x[index] = 0;
+    x[index] = 0.;
 #if DIM > 1
-    y[index] = 0;
+    y[index] = 0.;
 #if DIM == 3
-    z[index] = 0;
+    z[index] = 0.;
 #endif
 #endif
-    mass[index] = 0;
+    mass[index] = 0.;
 }
 
 CUDA_CALLABLE_MEMBER real Particles::distance(integer index_1, integer index_2) {
@@ -649,6 +681,47 @@ namespace ParticlesNS {
         }
 #endif
 
+#if DIM == 1
+        __global__ void setLeapfrog(Particles *particles, real *ax_old, real *g_ax_old) {
+            particles->setLeapfrog(ax_old, g_ax_old);
+        }
+
+        namespace Launch {
+            void setLeapfrog(Particles *particles, real *ax_old, real *g_ax_old) {
+                ExecutionPolicy executionPolicy(1, 1);
+                cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::setLeapfrog, particles,
+                             ax_old, g_ax_old);
+            }
+        }
+
+#elif DIM == 2
+        __global__ void setLeapfrog(Particles *particles, real *ax_old, real *ay_old, real *g_ax_old, real *g_ay_old) {
+            particles->setLeapfrog(ax_old, ay_old, g_ax_old, g_ay_old);
+        }
+
+        namespace Launch {
+            void setLeapfrog(Particles *particles, real *ax_old, real *ay_old, real *g_ax_old, real *g_ay_old) {
+                 ExecutionPolicy executionPolicy(1, 1);
+                cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::setLeapfrog, particles,
+                             ax_old, ay_old, g_ax_old, g_ay_old);
+            }
+        }
+#else
+        __global__ void setLeapfrog(Particles *particles, real *ax_old, real *ay_old, real *az_old, real *g_ax_old,
+                                    real *g_ay_old, real *g_az_old) {
+            particles->setLeapfrog(ax_old, ay_old, az_old, g_ax_old, g_ay_old, g_az_old);
+        }
+
+        namespace Launch {
+            void setLeapfrog(Particles *particles, real *ax_old, real *ay_old, real *az_old, real *g_ax_old,
+                             real *g_ay_old, real *g_az_old) {
+                ExecutionPolicy executionPolicy(1, 1);
+                cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::setLeapfrog, particles,
+                             ax_old, ay_old, az_old, g_ax_old, g_ay_old, g_az_old);
+            }
+        }
+#endif
+
         __global__ void setU(Particles *particles, real *u) {
             particles->setU(u);
         }
@@ -681,6 +754,18 @@ namespace ParticlesNS {
                              muijmax);
             }
         }
+
+#if BALSARA_SWITCH
+        __global__ void setDivCurl(Particles *particles, real *divv, real *curlv) {
+            particles->setDivCurl(divv, curlv);
+        }
+        namespace Launch {
+            void setDivCurl(Particles *particles, real *divv, real *curlv) {
+                ExecutionPolicy executionPolicy(1, 1);
+                cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::setDivCurl, particles, divv, curlv);
+            }
+        }
+#endif
 
 //#if INTEGRATE_DENSITY
         __global__ void setIntegrateDensity(Particles *particles, real *drhodt) {

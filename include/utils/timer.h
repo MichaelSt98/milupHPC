@@ -1,3 +1,11 @@
+/**
+ * @file timer.h
+ * @brief C++ timer based on boost::mpi::timer.
+ *
+ *
+ * @author Michael Staneker
+ * @bug no known bugs
+ */
 #ifndef MILUPHPC_TIMER_H
 #define MILUPHPC_TIMER_H
 
@@ -17,8 +25,19 @@ private:
 
 public:
 
+    /**
+     * @brief Constructor.
+     */
     Timer();
+    /**
+     * @brief Reset timer instance.
+     */
     void reset();
+    /**
+     * @brief Get elapsed time since instantiation/latest reset.
+     *
+     * @return elapsed time since instantiation/latest reset
+     */
     double elapsed() const;
 
 };

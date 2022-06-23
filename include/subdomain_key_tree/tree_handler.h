@@ -1,3 +1,12 @@
+/**
+ * @file tree_handler.h
+ * @brief Tree class handler
+ *
+ * ...
+ *
+ * @author Michael Staneker
+ * @bug no known bugs
+ */
 #ifndef MILUPHPC_TREEHANDLER_H
 #define MILUPHPC_TREEHANDLER_H
 
@@ -76,7 +85,7 @@ public:
     Tree *d_tree;
 
     /**
-     * Constructor
+     * @brief Constructor
      *
      * @param numParticles number of particles
      * @param numNodes number of nodes
@@ -84,19 +93,19 @@ public:
     TreeHandler(integer numParticles, integer numNodes);
 
     /**
-     * Destructor
+     * @brief Destructor
      */
     ~TreeHandler();
 
     /**
-     * all reduce bounding box(es)/borders (among MPI processes)
+     * @brief All reduce bounding box(es)/borders (among MPI processes)
      *
      * @param exLoc execute on device or host
      */
     void globalizeBoundingBox(Execution::Location exLoc=Execution::device);
 
     /**
-     * Copy (parts of the) tree instance(s) between host and device
+     * @brief Copy (parts of the) tree instance(s) between host and device
      *
      * @param target copy to target
      * @param borders flag whether borders should be copied

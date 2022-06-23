@@ -25,7 +25,7 @@ class Helper {
 
 public:
 
-    integer *integerBuffer;
+    /*integer *integerBuffer;
     real *realBuffer;
     keyType *keyTypeBuffer;
 
@@ -40,17 +40,83 @@ public:
     CUDA_CALLABLE_MEMBER void set(integer *integerVal, real *realVal, keyType *keyTypeVal, integer *integerBuffer,
                                   real *realBuffer, keyType *keyTypeBuffer);
 
+  */
+
+    integer *integerVal;
+    integer *integerVal1;
+    integer *integerVal2;
+
+    real *realVal;
+    real *realVal1;
+    real *realVal2;
+
+    keyType  *keyTypeVal;
+
+    integer *integerBuffer;
+    integer *integerBuffer1; // numParticles (or numParticlesLocal)
+    integer *integerBuffer2; // numParticles (or numParticlesLocal)
+    integer *integerBuffer3; // numParticles (or numParticlesLocal)
+    integer *integerBuffer4; // numParticles (or numParticlesLocal)
+
+    integer *sendCount; // subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses
+    integer *sendCount1; // subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses
+
+    idInteger *idIntegerBuffer;
+    idInteger *idIntegerBuffer1;
+
+    real *realBuffer;
+    real *realBuffer1;
+
+    keyType *keyTypeBuffer; // numParticlesLocal
+    keyType *keyTypeBuffer1; // sumParticles
+    keyType *keyTypeBuffer2; //sumParticles
+
+    CUDA_CALLABLE_MEMBER Helper();
+    CUDA_CALLABLE_MEMBER Helper(integer *integerVal, integer *integerVal1, integer *integerVal2,
+                                real *realVal, real *realVal1, real *realVal2, keyType *keyTypeVal,
+                                integer *integerBuffer, integer *integerBuffer1, integer *integerBuffer2,
+                                integer *integerBuffer3, integer *integerBuffer4,
+                                integer *sendCount, integer *sendCount1, idInteger *idIntegerBuffer,
+                                idInteger *idIntegerBuffer1, real *realBuffer, real *realBuffer1,
+                                keyType *keyTypeBuffer, keyType *keyTypeBuffer1, keyType *keyTypeBuffer2);
+
+    CUDA_CALLABLE_MEMBER void set(integer *integerVal, integer *integerVal1, integer *integerVal2,
+                                  real *realVal, real *realVal1, real *realVal2, keyType *keyTypeVal,
+                                  integer *integerBuffer, integer *integerBuffer1, integer *integerBuffer2,
+                                  integer *integerBuffer3, integer *integerBuffer4,
+                                  integer *sendCount, integer *sendCount1, idInteger *idIntegerBuffer,
+                                  idInteger *idIntegerBuffer1, real *realBuffer, real *realBuffer1,
+                                  keyType *keyTypeBuffer, keyType *keyTypeBuffer1, keyType *keyTypeBuffer2);
+
+    CUDA_CALLABLE_MEMBER ~Helper();
+
 };
 
 namespace HelperNS {
 
     namespace Kernel {
-        __global__ void set(Helper *helper, integer *integerVal, real *realVal, keyType *keyTypeVal,
-                            integer *integerBuffer, real *realBuffer, keyType *keyTypeBuffer);
+        //__global__ void set(Helper *helper, integer *integerVal, real *realVal, keyType *keyTypeVal,
+        //                    integer *integerBuffer, real *realBuffer, keyType *keyTypeBuffer);
+
+        __global__ void set(Helper *helper, integer *integerVal, integer *integerVal1, integer *integerVal2,
+                            real *realVal, real *realVal1, real *realVal2, keyType *keyTypeVal,
+                            integer *integerBuffer, integer *integerBuffer1, integer *integerBuffer2,
+                            integer *integerBuffer3, integer *integerBuffer4,
+                            integer *sendCount, integer *sendCount1, idInteger *idIntegerBuffer,
+                            idInteger *idIntegerBuffer1, real *realBuffer, real *realBuffer1,
+                            keyType *keyTypeBuffer, keyType *keyTypeBuffer1, keyType *keyTypeBuffer2);
 
         namespace Launch {
-            void set(Helper *helper, integer *integerVal, real *realVal, keyType *keyTypeVal, integer *integerBuffer,
-                     real *realBuffer, keyType *keyTypeBuffer);
+            //void set(Helper *helper, integer *integerVal, real *realVal, keyType *keyTypeVal, integer *integerBuffer,
+            //         real *realBuffer, keyType *keyTypeBuffer);
+
+            void set(Helper *helper, integer *integerVal, integer *integerVal1, integer *integerVal2,
+                     real *realVal, real *realVal1, real *realVal2, keyType *keyTypeVal,
+                     integer *integerBuffer, integer *integerBuffer1, integer *integerBuffer2,
+                     integer *integerBuffer3, integer *integerBuffer4,
+                     integer *sendCount, integer *sendCount1, idInteger *idIntegerBuffer,
+                     idInteger *idIntegerBuffer1, real *realBuffer, real *realBuffer1,
+                     keyType *keyTypeBuffer, keyType *keyTypeBuffer1, keyType *keyTypeBuffer2);
         }
 
         template <typename T>
@@ -67,6 +133,9 @@ namespace HelperNS {
             real resetArray(T *array, T value, integer n);
         }
     }
+
+    template <typename A>
+    real sortKeys(A *keysToSort, A *sortedKeys, int n);
 
     template <typename A, typename B>
     real sortArray(A *arrayToSort, A *sortedArray, B *keyIn, B *keyOut, integer n);

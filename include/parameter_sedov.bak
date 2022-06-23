@@ -82,6 +82,7 @@ typedef int idInteger;
 
 // deprecated flag
 #define ARTIFICIAL_VISCOSITY 1
+#define BALSARA_SWITCH 1
 
 // to be (fully) implemented flags
 #define AVERAGE_KERNELS 0
@@ -118,6 +119,8 @@ namespace Constants {
 }
 
 typedef struct SimulationParameters {
+    std::string directory;
+    std::string logDirectory;
     int verbosity;
     bool timeKernels;
     int numOutputFiles;
@@ -151,6 +154,7 @@ typedef struct SimulationParameters {
     bool calculateEnergy;
     bool calculateCenterOfMass;
     real particleMemoryContingent;
+    int domainListSize;
 } SimulationParameters;
 
 struct To
@@ -214,7 +218,7 @@ struct IntegratorSelection
 {
     enum Type
     {
-        explicit_euler, predictor_corrector_euler
+        explicit_euler, predictor_corrector_euler, leapfrog
     };
     Type t_;
     IntegratorSelection(Type t) : t_(t) {}

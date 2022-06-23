@@ -1,3 +1,13 @@
+/**
+ * @file viscosity.cuh
+ * @brief Stress.
+ *
+ * More detailed information.
+ *
+ * @author Michael Staneker
+ * @bug no known bugs
+ * @todo implement
+ */
 #ifndef MILUPHPC_VISCOSITY_CUH
 #define MILUPHPC_VISCOSITY_CUH
 
