@@ -1,6 +1,13 @@
 #Compiler/Linker
 CXX            := mpic++
-NVCC           := /usr/local/cuda-11.4/bin/nvcc
+
+CUDADIR        := /usr/local/cuda-11.4
+NVCC           := $(CUDADIR)/bin/nvcc
+
+OPENMPIDIR     := /opt/openmpi-4.1.0
+HDF5DIR        := /usr/include/hdf5/openmpi
+HDF5LIB        := /usr/lib/x86_64-linux-gnu/hdf5/openmpi
+HEADERONLYDIR  := /usr/local/Headeronly
 
 #Target binary
 TARGET         := runner
@@ -15,7 +22,6 @@ IDEASDIR       := ./ideas
 TESTDIR        := ./test
 DOCDIR         := ./doc
 DOCUMENTSDIR   := ./documents
-CUDADIR        := /usr/local/cuda-11.4
 
 SRCEXT         := cpp
 CUDASRCEXT     := cu
@@ -24,13 +30,13 @@ OBJEXT         := o
 
 #Flags, Libraries and Includes
 CXXFLAGS       += -std=c++11 -w -I/usr/include/hdf5/openmpi#-O3
-NVFLAGS        := --std=c++11 -x cu -c -dc -w -Xcompiler "-pthread" -Wno-deprecated-gpu-targets -fmad=false -O3 -I/opt/openmpi-4.1.0/include -I/usr/include/hdf5/openmpi
-LFLAGS         += -lm -L$(CUDADIR)/lib64 -lcudart -lpthread -lconfig -L/usr/local/cuda-11.4/lib64 -L/opt/openmpi-4.1.0/lib -L/usr/lib/x86_64-linux-gnu/hdf5/openmpi -lmpi -lhdf5 -lboost_filesystem -lboost_system
+NVFLAGS        := --std=c++11 -x cu -c -dc -w -Xcompiler "-pthread" -Wno-deprecated-gpu-targets -fmad=false -O3 -I$(OPENMPIDIR)/include -I$(HDF5DIR)
+LFLAGS         += -lm -L$(CUDADIR)/lib64 -lcudart -lpthread -lconfig -L$(OPENMPIDIR)/lib -L$(HDF5LIB) -lmpi -lhdf5 -lboost_filesystem -lboost_system
 GPU_ARCH       := -arch=sm_52
 CUDALFLAGS     := -dlink
 CUDALINKOBJ    := cuLink.o #needed?
 LIB            := -lboost_mpi -lboost_serialization
-INC            := -I$(INCDIR) -I/usr/include -I$(CUDADIR)/include -I/opt/openmpi-4.1.0/include -I/usr/local/Headeronly/ #-L/opt/openmpi-4.1.0/lib -lmpi #-I/usr/local/include
+INC            := -I$(INCDIR) -I/usr/include -I$(CUDADIR)/include -I$(OPENMPIDIR)/include -I$(HEADERONLYDIR)
 INCDEP         := -I$(INCDIR)
 
 #Source and Object files
