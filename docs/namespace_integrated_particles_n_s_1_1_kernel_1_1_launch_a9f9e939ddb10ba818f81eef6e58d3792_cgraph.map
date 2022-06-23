@@ -1,0 +1,6 @@
+<map id="IntegratedParticlesNS::Kernel::Launch::setIntegrateDensity" name="IntegratedParticlesNS::Kernel::Launch::setIntegrateDensity">
+<area shape="rect" id="node1" title=" " alt="" coords="5,20,200,76"/>
+<area shape="rect" id="node2" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="272,5,368,32"/>
+<area shape="rect" id="node3" href="$namespace_particles_n_s_1_1_kernel.html#a60c17acbfaf54cefa7faee8c5e24d072" title=" " alt="" coords="248,57,392,98"/>
+<area shape="rect" id="node4" href="$class_particles.html#af6718bdccbdfa5be82cd146bbae61971" title="Setter in dependence of INTEGRATE_DENSITY." alt="" coords="440,64,635,91"/>
+</map>

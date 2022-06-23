@@ -1,0 +1,4 @@
+<map id="SPH::SmoothingKernel::spiky" name="SPH::SmoothingKernel::spiky">
+<area shape="rect" id="node1" title="Spiky kernel (Desbrun &amp; Cani)." alt="" coords="5,22,163,63"/>
+<area shape="rect" id="node2" href="$namespacecuda_1_1math.html#a706200a3f1b2445d7fd835c2ac504a11" title="Square root of a floating point value." alt="" coords="211,29,328,56"/>
+</map>

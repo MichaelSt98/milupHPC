@@ -1,0 +1,7 @@
+<map id="Miluphpc::angularMomentum" name="Miluphpc::angularMomentum">
+<area shape="rect" id="node1" title="Calculate the angular momentum for all particles." alt="" coords="5,81,195,108"/>
+<area shape="rect" id="node2" href="$namespacecuda_1_1math.html#aa01779064aaf96a9607a87bd52921410" title="Absolute value of a floating point value." alt="" coords="243,5,359,32"/>
+<area shape="rect" id="node3" href="$namespacecuda.html#a87a2b33c156d39ce0a77f845e5988724" title="Copy between host and device and vice&#45;versa." alt="" coords="258,56,345,83"/>
+<area shape="rect" id="node4" href="$namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc" title="Set device memory to a specific value." alt="" coords="263,107,339,133"/>
+<area shape="rect" id="node5" href="$namespacecuda_1_1math.html#a706200a3f1b2445d7fd835c2ac504a11" title="Square root of a floating point value." alt="" coords="243,181,360,208"/>
+</map>

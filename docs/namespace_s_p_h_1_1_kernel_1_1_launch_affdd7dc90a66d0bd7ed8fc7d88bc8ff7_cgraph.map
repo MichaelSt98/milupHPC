@@ -1,0 +1,6 @@
+<map id="SPH::Kernel::Launch::calculateCentersOfMass" name="SPH::Kernel::Launch::calculateCentersOfMass">
+<area shape="rect" id="node1" title="Wrapper for SPH::Kernel::calculateCentersOfMass()." alt="" coords="5,35,180,76"/>
+<area shape="rect" id="node2" href="$namespace_s_p_h_1_1_kernel.html#a20ebf0f22ec1fe57f2c49393e8cb1a55" title=" " alt="" coords="228,5,429,47"/>
+<area shape="rect" id="node4" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="281,71,377,98"/>
+<area shape="rect" id="node3" href="$class_particles.html#a0ea028b81c33a114234c44ff82118f64" title=" " alt="" coords="477,13,641,39"/>
+</map>

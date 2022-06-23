@@ -1,0 +1,5 @@
+<map id="SPH::Kernel::Launch::fixedRadiusNN_bruteForce" name="SPH::Kernel::Launch::fixedRadiusNN_bruteForce">
+<area shape="rect" id="node1" title="Wrapper for SPH::Kernel::fixedRadiusNN_bruteForce()." alt="" coords="5,35,193,76"/>
+<area shape="rect" id="node2" href="$namespace_s_p_h_1_1_kernel.html#af37c5a554f9614a0dfec0ee4f49c5dac" title="Fixed&#45;radius near neighbor search (brute&#45;force method)." alt="" coords="241,5,413,47"/>
+<area shape="rect" id="node3" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="279,71,375,98"/>
+</map>

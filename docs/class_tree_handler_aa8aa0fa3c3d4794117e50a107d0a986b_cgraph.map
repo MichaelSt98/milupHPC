@@ -1,0 +1,4 @@
+<map id="TreeHandler::copy" name="TreeHandler::copy">
+<area shape="rect" id="node1" title="Copy (parts of the) tree instance(s) between host and device." alt="" coords="5,5,135,32"/>
+<area shape="rect" id="node2" href="$namespacecuda.html#a87a2b33c156d39ce0a77f845e5988724" title="Copy between host and device and vice&#45;versa." alt="" coords="183,5,269,32"/>
+</map>

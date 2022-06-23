@@ -1,0 +1,4 @@
+<map id="ParticlesNS::applySphericalCriterion" name="ParticlesNS::applySphericalCriterion">
+<area shape="rect" id="node1" title="Check whether particle(s) are within sphere from simulation center." alt="" coords="5,22,191,63"/>
+<area shape="rect" id="node2" href="$namespacecuda_1_1math.html#a706200a3f1b2445d7fd835c2ac504a11" title="Square root of a floating point value." alt="" coords="239,29,356,56"/>
+</map>

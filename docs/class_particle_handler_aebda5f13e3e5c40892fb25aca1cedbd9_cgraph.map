@@ -1,0 +1,24 @@
+<map id="ParticleHandler::ParticleHandler" name="ParticleHandler::ParticleHandler">
+<area shape="rect" id="node1" title=" " alt="" coords="5,359,168,401"/>
+<area shape="rect" id="node2" href="$namespacecuda.html#a87a2b33c156d39ce0a77f845e5988724" title="Copy between host and device and vice&#45;versa." alt="" coords="272,5,359,32"/>
+<area shape="rect" id="node3" href="$namespacecuda.html#aba186b2049cc77c289e110a45edab71a" title="Allocate device memory." alt="" coords="267,56,363,83"/>
+<area shape="rect" id="node4" href="$class_particles.html#a1dc217530f8929c24269014073596a38" title="Setter (DIM = 3) assigning variables to pointer members." alt="" coords="266,107,365,133"/>
+<area shape="rect" id="node5" href="$namespace_particles_n_s_1_1_kernel_1_1_launch.html#a7deb9e1fb4ad769422cc93f5300bb369" title=" " alt="" coords="247,326,384,367"/>
+<area shape="rect" id="node8" href="$namespace_particles_n_s_1_1_kernel_1_1_launch.html#ae4c8d836b26b0d8db32d7c6d305dbd3c" title=" " alt="" coords="216,209,415,250"/>
+<area shape="rect" id="node10" href="$class_particles.html#ae9f055936cf42cd75b8f1f16cf8a8ec5" title="Setter for artificial viscosity (entry)." alt="" coords="684,179,831,221"/>
+<area shape="rect" id="node11" href="$namespace_particles_n_s_1_1_kernel_1_1_launch.html#a402c8ae77c8e36f1bddf7dd39a9c1f4d" title=" " alt="" coords="245,391,385,433"/>
+<area shape="rect" id="node13" href="$class_particles.html#adea5db5c16688b82458e84cc8dcff300" title="Constructor (DIM = 3) assigning gravitational acceleration to member variables." alt="" coords="687,329,828,356"/>
+<area shape="rect" id="node14" href="$namespace_particles_n_s_1_1_kernel_1_1_launch.html#a3622ffb7ea1722adab3272d9d2e976a4" title=" " alt="" coords="218,457,413,498"/>
+<area shape="rect" id="node16" href="$class_particles.html#af6718bdccbdfa5be82cd146bbae61971" title="Setter in dependence of INTEGRATE_DENSITY." alt="" coords="660,531,855,557"/>
+<area shape="rect" id="node17" href="$class_particles.html#ae4beec44a414bcf4a6fe8ff5e1b0f8a5" title="Setter for node type." alt="" coords="678,648,837,675"/>
+<area shape="rect" id="node18" href="$namespace_particles_n_s_1_1_kernel_1_1_launch.html#a999375c1cf4de0bcff9bfa78211c9f50" title=" " alt="" coords="237,611,394,653"/>
+<area shape="rect" id="node20" href="$namespace_particles_n_s_1_1_kernel_1_1_launch.html#a29142560048cbe9404fe0d60842924d2" title=" " alt="" coords="247,729,384,770"/>
+<area shape="rect" id="node22" href="$class_particles.html#afa58fe6300adfc2d1e78b6e67667fa51" title="Setter for energy." alt="" coords="703,765,812,792"/>
+<area shape="rect" id="node6" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="489,443,585,469"/>
+<area shape="rect" id="node7" href="$namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc" title="Set device memory to a specific value." alt="" coords="499,325,575,352"/>
+<area shape="rect" id="node9" href="$namespace_particles_n_s_1_1_kernel.html#a2d1c6a56e09d4be73a57988a52c28768" title=" " alt="" coords="463,209,612,250"/>
+<area shape="rect" id="node12" href="$namespace_particles_n_s_1_1_kernel.html#a6dcc6e0857410298e33bf073759a54e0" title=" " alt="" coords="469,377,606,418"/>
+<area shape="rect" id="node15" href="$namespace_particles_n_s_1_1_kernel.html#a60c17acbfaf54cefa7faee8c5e24d072" title=" " alt="" coords="465,494,609,535"/>
+<area shape="rect" id="node19" href="$namespace_particles_n_s_1_1_kernel.html#a57bab313e4f8327d388a9b5b909626a4" title=" " alt="" coords="469,611,606,653"/>
+<area shape="rect" id="node21" href="$namespace_particles_n_s_1_1_kernel.html#ab5b48d6c91fd4f3e8f9fd429ed46abab" title=" " alt="" coords="469,729,606,770"/>
+</map>

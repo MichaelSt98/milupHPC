@@ -1,0 +1,6 @@
+<map id="SPH::Kernel::Launch::fixedRadiusNN_withinBox" name="SPH::Kernel::Launch::fixedRadiusNN_withinBox">
+<area shape="rect" id="node1" title="Wrapper for SPH::Kernel::fixedRadiusNN_withinBox()." alt="" coords="5,35,188,76"/>
+<area shape="rect" id="node2" href="$namespace_s_p_h_1_1_kernel.html#ab67721f07abaa2f4b9e890aa7c9b170d" title="Fixed&#45;radius near neighbor search (nested stack method)." alt="" coords="236,5,408,47"/>
+<area shape="rect" id="node4" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="274,71,370,98"/>
+<area shape="rect" id="node3" href="$namespacecuda_1_1math.html#aa01779064aaf96a9607a87bd52921410" title="Absolute value of a floating point value." alt="" coords="456,13,572,39"/>
+</map>

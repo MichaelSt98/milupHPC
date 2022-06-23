@@ -1,0 +1,4 @@
+<map id="Physics::Kernel::Launch::calculateAngularMomentumBlockwise" name="Physics::Kernel::Launch::calculateAngularMomentumBlockwise">
+<area shape="rect" id="node1" title="Wrapper for: Physics::Kernel::calculateAngularMomentumBlockwise()." alt="" coords="5,5,256,47"/>
+<area shape="rect" id="node2" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="304,13,400,39"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="TreeNS::Kernel::Launch::centerOfMass" name="TreeNS::Kernel::Launch::centerOfMass">
+<area shape="rect" id="node1" title="Wrapper for TreeNS::Kernel::centerOfMass()" alt="" coords="5,23,168,65"/>
+<area shape="rect" id="node2" href="$namespace_tree_n_s_1_1_kernel.html#ac9fa3124b25c27e31f9bc642f6682c9a" title=" " alt="" coords="216,5,419,32"/>
+<area shape="rect" id="node3" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="269,56,365,83"/>
+</map>

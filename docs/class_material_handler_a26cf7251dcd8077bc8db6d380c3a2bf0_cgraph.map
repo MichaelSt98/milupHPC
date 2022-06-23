@@ -1,0 +1,6 @@
+<map id="MaterialHandler::MaterialHandler" name="MaterialHandler::MaterialHandler">
+<area shape="rect" id="node1" title="Constructor from config file." alt="" coords="5,35,172,76"/>
+<area shape="rect" id="node2" href="$class_lib_config_reader.html#afd048a159002d37cbc1f16175ae45440" title=" " alt="" coords="220,5,409,47"/>
+<area shape="rect" id="node4" href="$namespacecuda.html#aba186b2049cc77c289e110a45edab71a" title="Allocate device memory." alt="" coords="267,71,363,98"/>
+<area shape="rect" id="node3" href="$namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada" title="Maximum value out of two floating point values." alt="" coords="457,13,577,39"/>
+</map>

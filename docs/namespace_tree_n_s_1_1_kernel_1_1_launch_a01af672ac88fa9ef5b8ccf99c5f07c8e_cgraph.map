@@ -1,0 +1,5 @@
+<map id="TreeNS::Kernel::Launch::set" name="TreeNS::Kernel::Launch::set">
+<area shape="rect" id="node1" title="Wrapper for TreeNS::Kernel::Launch::set()" alt="" coords="5,31,193,57"/>
+<area shape="rect" id="node2" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="241,5,337,32"/>
+<area shape="rect" id="node3" href="$namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc" title="Set device memory to a specific value." alt="" coords="251,56,327,83"/>
+</map>

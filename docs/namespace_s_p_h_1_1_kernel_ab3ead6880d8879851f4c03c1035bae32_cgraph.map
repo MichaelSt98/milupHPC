@@ -1,0 +1,4 @@
+<map id="SPH::Kernel::calculateSoundSpeed" name="SPH::Kernel::calculateSoundSpeed">
+<area shape="rect" id="node1" title="Calculate the speed of sound ." alt="" coords="5,22,197,63"/>
+<area shape="rect" id="node2" href="$namespacecuda_1_1math.html#a706200a3f1b2445d7fd835c2ac504a11" title="Square root of a floating point value." alt="" coords="245,29,363,56"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="IntegratedParticleHandler::IntegratedParticleHandler" name="IntegratedParticleHandler::IntegratedParticleHandler">
+<area shape="rect" id="node1" title=" " alt="" coords="5,101,183,142"/>
+<area shape="rect" id="node2" href="$namespacecuda.html#aba186b2049cc77c289e110a45edab71a" title="Allocate device memory." alt="" coords="280,5,376,32"/>
+<area shape="rect" id="node3" href="$namespace_integrated_particles_n_s_1_1_kernel_1_1_launch.html#adf779d582f85c15c67e8113863a88e68" title=" " alt="" coords="253,137,403,178"/>
+<area shape="rect" id="node6" href="$namespace_integrated_particles_n_s_1_1_kernel_1_1_launch.html#a9f9e939ddb10ba818f81eef6e58d3792" title=" " alt="" coords="231,56,425,112"/>
+<area shape="rect" id="node9" href="$namespace_integrated_particles_n_s_1_1_kernel_1_1_launch.html#a298a09d1a9eaead31825e01f97a8c929" title=" " alt="" coords="243,202,413,243"/>
+<area shape="rect" id="node4" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="501,115,597,141"/>
+<area shape="rect" id="node5" href="$namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc" title="Set device memory to a specific value." alt="" coords="511,165,587,192"/>
+<area shape="rect" id="node7" href="$namespace_particles_n_s_1_1_kernel.html#a60c17acbfaf54cefa7faee8c5e24d072" title=" " alt="" coords="477,49,621,90"/>
+<area shape="rect" id="node8" href="$class_particles.html#af6718bdccbdfa5be82cd146bbae61971" title="Setter in dependence of INTEGRATE_DENSITY." alt="" coords="672,56,867,83"/>
+<area shape="rect" id="node10" href="$namespace_integrated_particles_n_s_1_1_kernel.html#a1c6c7a9d81083f22ded582c871e96d4a" title=" " alt="" coords="473,217,624,258"/>
+<area shape="rect" id="node11" href="$class_integrated_particles.html#a70e2af566ee257a161d3fc8de7e4002e" title=" " alt="" coords="704,217,835,258"/>
+</map>

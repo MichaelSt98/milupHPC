@@ -1,0 +1,13 @@
+<map id="include/simulation_time_handler.h" name="include/simulation_time_handler.h">
+<area shape="rect" id="node1" title="Handler for SimulationTime class." alt="" coords="335,5,461,47"/>
+<area shape="rect" id="node2" href="$miluphpc_8h.html" title="Right&#45;hand&#45;side implementation and CUDA kernel execution via wrapper functions." alt="" coords="254,102,385,129"/>
+<area shape="rect" id="node11" href="$simulation__time__handler_8cpp.html" title=" " alt="" coords="409,95,544,136"/>
+<area shape="rect" id="node3" href="$explicit__euler_8h.html" title="Explicit Euler integrator." alt="" coords="61,191,183,233"/>
+<area shape="rect" id="node5" href="$src_2main_8cpp.html" title=" " alt="" coords="172,295,269,322"/>
+<area shape="rect" id="node6" href="$leapfrog_8h.html" title="Leapfrog integrator." alt="" coords="259,191,380,233"/>
+<area shape="rect" id="node8" href="$predictor__corrector__euler_8h.html" title="Predictor Corrector Euler integrator." alt="" coords="404,184,539,240"/>
+<area shape="rect" id="node10" href="$miluphpc_8cpp.html" title=" " alt="" coords="563,199,684,225"/>
+<area shape="rect" id="node4" href="$explicit__euler_8cpp.html" title=" " alt="" coords="5,288,148,329"/>
+<area shape="rect" id="node7" href="$leapfrog_8cpp.html" title=" " alt="" coords="294,295,467,322"/>
+<area shape="rect" id="node9" href="$predictor__corrector__euler_8cpp.html" title=" " alt="" coords="491,288,643,329"/>
+</map>

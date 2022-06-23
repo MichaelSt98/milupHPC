@@ -1,0 +1,5 @@
+<map id="TreeNS::Kernel::computeBoundingBox" name="TreeNS::Kernel::computeBoundingBox">
+<area shape="rect" id="node1" title="Kernel to compute the bounding box/borders of the tree or rather the particles within the tree." alt="" coords="5,31,252,57"/>
+<area shape="rect" id="node2" href="$namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada" title="Maximum value out of two floating point values." alt="" coords="300,5,420,32"/>
+<area shape="rect" id="node3" href="$namespacecuda_1_1math.html#a129d30e886ca3c7cb2c9b209ce208076" title="Minimum value out of two floating point values." alt="" coords="302,56,418,83"/>
+</map>

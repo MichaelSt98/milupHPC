@@ -1,0 +1,20 @@
+<map id="Miluphpc::dynamicLoadBalancing" name="Miluphpc::dynamicLoadBalancing">
+<area shape="rect" id="node1" title="Pre&#45;calculations for updateRangeApproximately." alt="" coords="5,319,221,346"/>
+<area shape="rect" id="node2" href="$class_miluphpc.html#acf89ebee0c64047d55e91e50fe509a81" title="Update the range in dependence on number of (MPI) processes and aimed particles per process." alt="" coords="269,319,428,346"/>
+<area shape="rect" id="node3" href="$class_miluphpc.html#aeeb5a1aac1048eb56473a3e7ef859de5" title="Calculate bounding boxes/simulation domain." alt="" coords="506,210,663,237"/>
+<area shape="rect" id="node10" href="$namespacecuda.html#a87a2b33c156d39ce0a77f845e5988724" title="Copy between host and device and vice&#45;versa." alt="" coords="1099,290,1185,317"/>
+<area shape="rect" id="node12" href="$class_sub_domain_key_tree_handler.html#af210bfeda325eecd70ca0476d1a0eb08" title="Copy (parts of the) SubDomainKeyTree instance(s) between host and device." alt="" coords="493,341,677,383"/>
+<area shape="rect" id="node13" href="$class_miluphpc.html#ae63b74a387e1e6856d4720a539cf66fe" title=" " alt="" coords="500,407,669,434"/>
+<area shape="rect" id="node14" href="$namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a993a0b0edd1c4d9626bf5803afaa9af9" title="Wrapper for SubDomainKeyTreeNS::Kernel::getParticleKeys()." alt="" coords="476,64,693,105"/>
+<area shape="rect" id="node16" href="$namespace_helper_n_s.html#abf9cda93f63d72f387d768c66ab0b4ab" title=" " alt="" coords="515,458,654,485"/>
+<area shape="rect" id="node4" href="$namespace_tree_n_s_1_1_kernel_1_1_launch.html#acb1fcee1becc94a7cf945401be17109e" title="Wrapper for TreeNS::Kernel::computeBoundingBox()" alt="" coords="775,173,937,215"/>
+<area shape="rect" id="node9" href="$class_tree_handler.html#aa8aa0fa3c3d4794117e50a107d0a986b" title="Copy (parts of the) tree instance(s) between host and device." alt="" coords="791,239,921,266"/>
+<area shape="rect" id="node11" href="$class_tree_handler.html#ae39dc296fd959c47cd14549099b3eccd" title="All reduce bounding box(es)/borders (among MPI processes)" alt="" coords="741,122,971,149"/>
+<area shape="rect" id="node5" href="$namespace_tree_n_s_1_1_kernel.html#a3fc2ba2061d44f078127d7d0461e0bd9" title="Kernel to compute the bounding box/borders of the tree or rather the particles within the tree." alt="" coords="1019,181,1265,207"/>
+<area shape="rect" id="node8" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="1094,101,1190,127"/>
+<area shape="rect" id="node6" href="$namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada" title="Maximum value out of two floating point values." alt="" coords="1313,155,1433,182"/>
+<area shape="rect" id="node7" href="$namespacecuda_1_1math.html#a129d30e886ca3c7cb2c9b209ce208076" title="Minimum value out of two floating point values." alt="" coords="1315,206,1431,233"/>
+<area shape="rect" id="node15" href="$namespace_sub_domain_key_tree_n_s_1_1_kernel.html#a2729bc71e6579423cf48f5476ee7cffc" title="Kernel to get all particle keys (and additional information for debugging purposes)." alt="" coords="773,5,939,47"/>
+<area shape="rect" id="node17" href="$namespacecuda.html#a9a0da8d4e84b94a6893faafbc8cc6dd9" title="Free device memory." alt="" coords="816,483,896,510"/>
+<area shape="rect" id="node18" href="$namespacecuda.html#aba186b2049cc77c289e110a45edab71a" title="Allocate device memory." alt="" coords="808,433,904,459"/>
+</map>

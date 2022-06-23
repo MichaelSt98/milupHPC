@@ -1,0 +1,5 @@
+<map id="SPH::Kernel::Launch::insertReceivedParticles" name="SPH::Kernel::Launch::insertReceivedParticles">
+<area shape="rect" id="node1" title="Wrapper for SPH::Kernel::insertReceivedParticles()." alt="" coords="5,39,173,81"/>
+<area shape="rect" id="node2" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="249,5,345,32"/>
+<area shape="rect" id="node3" href="$namespace_domain_list_n_s_1_1_kernel.html#a262639b50010c293a6c60e75a020f106" title="Kernel to create the lowest domain list." alt="" coords="221,81,373,122"/>
+</map>

@@ -1,0 +1,20 @@
+<map id="include/sph/kernel_handler.cuh" name="include/sph/kernel_handler.cuh">
+<area shape="rect" id="node1" title=" " alt="" coords="38,5,165,47"/>
+<area shape="rect" id="node2" href="$kernel_8cuh.html" title=" " alt="" coords="203,95,285,121"/>
+<area shape="rect" id="node4" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="369,393,460,420"/>
+<area shape="rect" id="node3" href="$particles_8cuh.html" title="Particle struct as Structure of arrays both instantiable on host and device." alt="" coords="145,169,253,196"/>
+<area shape="rect" id="node10" title=" " alt="" coords="205,319,275,345"/>
+<area shape="rect" id="node12" href="$helper_8cuh.html" title=" " alt="" coords="641,169,735,196"/>
+<area shape="rect" id="node18" href="$linalg_8cuh.html" title="Linear algebra CUDA kernels and device functions." alt="" coords="328,169,480,196"/>
+<area shape="rect" id="node7" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="379,244,565,271"/>
+<area shape="rect" id="node11" title=" " alt="" coords="144,244,203,271"/>
+<area shape="rect" id="node5" title=" " alt="" coords="387,468,440,495"/>
+<area shape="rect" id="node6" title=" " alt="" coords="464,468,536,495"/>
+<area shape="rect" id="node8" title=" " alt="" coords="349,319,411,345"/>
+<area shape="rect" id="node9" href="$cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers." alt="" coords="537,319,647,345"/>
+<area shape="rect" id="node13" title=" " alt="" coords="681,244,785,271"/>
+<area shape="rect" id="node14" href="$include_2utils_2_logger_8h.html" title="C++ style logger." alt="" coords="723,319,818,345"/>
+<area shape="rect" id="node15" title=" " alt="" coords="809,393,863,420"/>
+<area shape="rect" id="node16" href="$include_2utils_2_color_8h.html" title=" " alt="" coords="582,393,642,420"/>
+<area shape="rect" id="node17" title=" " alt="" coords="667,393,733,420"/>
+</map>

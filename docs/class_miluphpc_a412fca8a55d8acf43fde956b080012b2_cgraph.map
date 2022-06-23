@@ -1,0 +1,23 @@
+<map id="Miluphpc::assignParticles" name="Miluphpc::assignParticles">
+<area shape="rect" id="node1" title="Assign particles to correct process in dependence of particle key and ranges." alt="" coords="5,363,176,389"/>
+<area shape="rect" id="node2" href="$class_miluphpc.html#a8c3489bcd9856151cda56cbcca5c197d" title="Function to sort an array entry in dependence of another array sortArray" alt="" coords="242,111,411,153"/>
+<area shape="rect" id="node9" href="$class_sub_domain_key_tree_handler.html#af210bfeda325eecd70ca0476d1a0eb08" title="Copy (parts of the) SubDomainKeyTree instance(s) between host and device." alt="" coords="235,439,419,481"/>
+<area shape="rect" id="node11" href="$class_timer.html#a6a89a613c2af9b0d1e5f7e4ba9e46c54" title="Get elapsed time since instantiation/latest reset." alt="" coords="273,505,381,532"/>
+<area shape="rect" id="node12" href="$namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#aaa5802ef56d7a64069d0d8d8bb08a0d7" title="Wrapper for ::SubDomainKeyTreeNS::Kernel::markParticlesPerProcess()." alt="" coords="224,177,429,233"/>
+<area shape="rect" id="node15" href="$namespacempi.html#abf36a33770347629789e1ee4f028406c" title="Send array with length of number of MPI processes across processes." alt="" coords="251,556,402,583"/>
+<area shape="rect" id="node16" href="$namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a12d16486c5c1a90ed3e2ed9c0bd92c34" title="Wrapper for SubDomainKeyTreeNS::Kernel::particlesPerProcess()." alt="" coords="239,257,414,313"/>
+<area shape="rect" id="node18" href="$namespace_helper_n_s_1_1_kernel_1_1_launch.html#afe3645489371d42fe2a80f5399f6e800" title=" " alt="" coords="491,381,666,422"/>
+<area shape="rect" id="node21" href="$class_miluphpc.html#ac96d3c5a28a80de270a7415f637c090d" title="Send particles/Exchange particles among MPI processes." alt="" coords="231,337,423,364"/>
+<area shape="rect" id="node3" href="$namespace_helper_n_s_1_1_kernel_1_1_launch.html#a64912388bfe1d1a0727d33f2629c9c7b" title=" " alt="" coords="491,213,666,254"/>
+<area shape="rect" id="node6" href="$namespace_helper_n_s.html#a72f5fb75d9bcf7a00474765e26ee6e30" title=" " alt="" coords="758,31,898,57"/>
+<area shape="rect" id="node4" href="$namespace_helper_n_s_1_1_kernel.html#a4d969737e930f27906ebfd76c1d56386" title=" " alt="" coords="733,220,923,247"/>
+<area shape="rect" id="node5" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="780,305,876,332"/>
+<area shape="rect" id="node7" href="$namespacecuda.html#a9a0da8d4e84b94a6893faafbc8cc6dd9" title="Free device memory." alt="" coords="989,56,1069,83"/>
+<area shape="rect" id="node8" href="$namespacecuda.html#aba186b2049cc77c289e110a45edab71a" title="Allocate device memory." alt="" coords="981,5,1077,32"/>
+<area shape="rect" id="node10" href="$namespacecuda.html#a87a2b33c156d39ce0a77f845e5988724" title="Copy between host and device and vice&#45;versa." alt="" coords="535,447,622,473"/>
+<area shape="rect" id="node13" href="$namespace_sub_domain_key_tree_n_s_1_1_kernel.html#a09dffeeed8526d8a7d6618c197db494f" title="Kernel to mark particle&#39;s belonging." alt="" coords="477,82,680,123"/>
+<area shape="rect" id="node14" href="$class_sub_domain_key_tree.html#a97cea9227718b239343d6964915015c0" title="Compute particle&#39;s MPI process belonging by it&#39;s key." alt="" coords="728,123,928,149"/>
+<area shape="rect" id="node17" href="$namespace_sub_domain_key_tree_n_s_1_1_kernel.html#a9479952d5b95aa9462017b91d686b166" title="Kernel to check particle&#39;s belonging and count in dependence of belonging/process." alt="" coords="483,147,675,189"/>
+<area shape="rect" id="node19" href="$namespace_helper_n_s_1_1_kernel.html#a3091cbf26f33cb907e2830f8480bfc37" title=" " alt="" coords="732,360,924,387"/>
+<area shape="rect" id="node20" href="$namespacecxxopts.html#a6b58e451713ebbf12866c1cd8e0a66ab" title=" " alt="" coords="976,385,1083,412"/>
+</map>

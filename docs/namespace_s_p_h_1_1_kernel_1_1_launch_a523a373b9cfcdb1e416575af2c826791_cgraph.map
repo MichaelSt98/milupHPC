@@ -1,0 +1,5 @@
+<map id="SPH::Kernel::Launch::collectSendEntriesBackup" name="SPH::Kernel::Launch::collectSendEntriesBackup">
+<area shape="rect" id="node1" title="Wrapper for SPH::Kernel::collectSendEntriesBackup()." alt="" coords="5,35,188,76"/>
+<area shape="rect" id="node2" href="$namespace_s_p_h_1_1_kernel.html#ae58d5e1615c6a0bcc045ab7de10a393b" title=" " alt="" coords="236,5,407,47"/>
+<area shape="rect" id="node3" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="273,71,369,98"/>
+</map>

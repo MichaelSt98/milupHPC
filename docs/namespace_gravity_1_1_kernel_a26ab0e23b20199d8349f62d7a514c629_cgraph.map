@@ -1,0 +1,7 @@
+<map id="Gravity::Kernel::collectSendIndices_test4" name="Gravity::Kernel::collectSendIndices_test4">
+<area shape="rect" id="node1" title=" " alt="" coords="5,39,160,81"/>
+<area shape="rect" id="node2" href="$namespace_s_p_h_1_1_kernel.html#a89b6537f53e3271b87059b7be0d844ee" title=" " alt="" coords="208,47,397,73"/>
+<area shape="rect" id="node3" href="$namespace_key_n_s.html#a749483f8816edaf59cd0f9c15f4b92cc" title="Convert the key to the corresponding process." alt="" coords="459,5,584,32"/>
+<area shape="rect" id="node5" href="$namespace_domain_list_n_s_1_1_kernel.html#a262639b50010c293a6c60e75a020f106" title="Kernel to create the lowest domain list." alt="" coords="445,81,597,122"/>
+<area shape="rect" id="node4" href="$class_sub_domain_key_tree.html#a97cea9227718b239343d6964915015c0" title="Compute particle&#39;s MPI process belonging by it&#39;s key." alt="" coords="645,5,845,32"/>
+</map>

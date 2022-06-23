@@ -1,0 +1,5 @@
+<map id="DomainListNS::Kernel::Launch::set" name="DomainListNS::Kernel::Launch::set">
+<area shape="rect" id="node1" title="Wrapper for DomainListNS::Kernel::set()." alt="" coords="5,23,157,65"/>
+<area shape="rect" id="node2" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="205,5,301,32"/>
+<area shape="rect" id="node3" href="$namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc" title="Set device memory to a specific value." alt="" coords="215,56,291,83"/>
+</map>

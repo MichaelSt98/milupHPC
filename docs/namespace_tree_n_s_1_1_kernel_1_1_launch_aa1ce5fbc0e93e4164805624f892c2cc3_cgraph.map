@@ -1,0 +1,6 @@
+<map id="TreeNS::Kernel::Launch::globalCOM" name="TreeNS::Kernel::Launch::globalCOM">
+<area shape="rect" id="node1" title="Wrapper for TreeNS::Kernel::globalCOM()" alt="" coords="5,23,168,65"/>
+<area shape="rect" id="node2" href="$namespace_tree_n_s_1_1_kernel.html#ac12b396be097c1ba6b2d40ee13c8aefe" title="Compute center of mass for all particles." alt="" coords="216,5,401,32"/>
+<area shape="rect" id="node4" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="261,56,357,83"/>
+<area shape="rect" id="node3" href="$class_particles.html#a0ea028b81c33a114234c44ff82118f64" title=" " alt="" coords="449,5,613,32"/>
+</map>

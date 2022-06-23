@@ -1,0 +1,4 @@
+<map id="Processing::Kernel::Launch::cartesianToRadial" name="Processing::Kernel::Launch::cartesianToRadial">
+<area shape="rect" id="node1" title="Wrapper for Processing::Kernel::cartesianToRadial()." alt="" coords="5,5,189,47"/>
+<area shape="rect" id="node2" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="237,13,333,39"/>
+</map>

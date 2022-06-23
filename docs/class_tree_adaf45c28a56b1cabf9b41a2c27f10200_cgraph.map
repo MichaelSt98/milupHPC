@@ -1,0 +1,5 @@
+<map id="Tree::getTreeLevel" name="Tree::getTreeLevel">
+<area shape="rect" id="node1" title="Get tree level for a (specific) particle." alt="" coords="5,5,136,32"/>
+<area shape="rect" id="node2" href="$class_tree.html#a3ece229873458b3cdfcebc3e23bb5abd" title="Get SFC key of a particle." alt="" coords="184,5,325,32"/>
+<area shape="rect" id="node3" href="$namespace_key_n_s.html#a7c5eec9fc6ce62a2b5f0f5ecc5c1f38f" title="Convert a Lebesgue key to a Hilbert key." alt="" coords="373,5,540,32"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="SPH::Kernel::Launch::collectSendIndices" name="SPH::Kernel::Launch::collectSendIndices">
+<area shape="rect" id="node1" title="Wrapper for SPH::Kernel::collectSendIndices()." alt="" coords="5,81,151,122"/>
+<area shape="rect" id="node2" href="$namespace_gravity_1_1_kernel.html#a80128fb12f982de6677d2ce7dd2e206e" title="Collect the send indices." alt="" coords="199,15,353,57"/>
+<area shape="rect" id="node7" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="448,143,544,169"/>
+<area shape="rect" id="node8" href="$namespace_s_p_h_1_1_kernel_1_1_launch.html#aa52ae5343579950877be5da8fa5bbd40" title="Wrapper for SPH::Kernel::particles2Send()." alt="" coords="203,81,349,122"/>
+<area shape="rect" id="node3" href="$namespace_s_p_h_1_1_kernel.html#a89b6537f53e3271b87059b7be0d844ee" title=" " alt="" coords="401,31,591,57"/>
+<area shape="rect" id="node4" href="$namespace_key_n_s.html#a749483f8816edaf59cd0f9c15f4b92cc" title="Convert the key to the corresponding process." alt="" coords="652,5,777,32"/>
+<area shape="rect" id="node6" href="$namespace_domain_list_n_s_1_1_kernel.html#a262639b50010c293a6c60e75a020f106" title="Kernel to create the lowest domain list." alt="" coords="639,81,791,122"/>
+<area shape="rect" id="node5" href="$class_sub_domain_key_tree.html#a97cea9227718b239343d6964915015c0" title="Compute particle&#39;s MPI process belonging by it&#39;s key." alt="" coords="839,5,1039,32"/>
+</map>

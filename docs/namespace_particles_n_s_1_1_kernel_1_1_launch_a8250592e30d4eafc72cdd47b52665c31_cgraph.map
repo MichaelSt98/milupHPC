@@ -1,0 +1,9 @@
+<map id="ParticlesNS::Kernel::Launch::mark2remove" name="ParticlesNS::Kernel::Launch::mark2remove">
+<area shape="rect" id="node1" title=" " alt="" coords="5,27,164,69"/>
+<area shape="rect" id="node2" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="233,5,329,32"/>
+<area shape="rect" id="node3" href="$namespace_particles_n_s_1_1_kernel.html#ae1efd50573097db8dfbf71c507b20d9b" title=" " alt="" coords="212,57,349,98"/>
+<area shape="rect" id="node4" href="$namespace_particles_n_s.html#adba2eb6a731efdaee85c602b60417473" title="Check whether particle(s) are within cube from simulation center." alt="" coords="397,31,612,57"/>
+<area shape="rect" id="node6" href="$namespace_particles_n_s.html#ad5c18e136fc5e7dc538c852ede7241e0" title="Check whether particle(s) are within sphere from simulation center." alt="" coords="412,86,597,127"/>
+<area shape="rect" id="node5" href="$namespacecuda_1_1math.html#aa01779064aaf96a9607a87bd52921410" title="Absolute value of a floating point value." alt="" coords="661,27,777,53"/>
+<area shape="rect" id="node7" href="$namespacecuda_1_1math.html#a706200a3f1b2445d7fd835c2ac504a11" title="Square root of a floating point value." alt="" coords="660,101,777,128"/>
+</map>

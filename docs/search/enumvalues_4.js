@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['fg_5fblack_0',['FG_BLACK',['../namespace_color.html#a20a7b04657c1d83fae5d54514d3f1622a381297ebb20ba0e64737b44dd27f1164',1,'Color']]],
+  ['fg_5fblue_1',['FG_BLUE',['../namespace_color.html#a20a7b04657c1d83fae5d54514d3f1622a329b72148ea181eceb86340787a4d7cf',1,'Color']]],
+  ['fg_5fcyan_2',['FG_CYAN',['../namespace_color.html#a20a7b04657c1d83fae5d54514d3f1622a649ce929c612dd37de403bc1b8618e78',1,'Color']]],
+  ['fg_5fdark_5fgray_3',['FG_DARK_GRAY',['../namespace_color.html#a20a7b04657c1d83fae5d54514d3f1622a6880204b94fb95bc6efdcacfb78fb067',1,'Color']]],
+  ['fg_5fdefault_4',['FG_DEFAULT',['../namespace_color.html#a20a7b04657c1d83fae5d54514d3f1622aca5f086529146629e8594b7108c12a45',1,'Color']]],
+  ['fg_5fgreen_5',['FG_GREEN',['../namespace_color.html#a20a7b04657c1d83fae5d54514d3f1622a8c53d885df30ceaa7077762f239624b0',1,'Color']]],
+  ['fg_5flight_5fblue_6',['FG_LIGHT_BLUE',['../namespace_color.html#a20a7b04657c1d83fae5d54514d3f1622a5bab99948e0c0668d2231d937394f548',1,'Color']]],
+  ['fg_5flight_5fcyan_7',['FG_LIGHT_CYAN',['../namespace_color.html#a20a7b04657c1d83fae5d54514d3f1622af239692a0b0b62afbd801a85a66b344b',1,'Color']]],
+  ['fg_5flight_5fgray_8',['FG_LIGHT_GRAY',['../namespace_color.html#a20a7b04657c1d83fae5d54514d3f1622acd7d13498d99e98228ad9e2907c11845',1,'Color']]],
+  ['fg_5flight_5fgreen_9',['FG_LIGHT_GREEN',['../namespace_color.html#a20a7b04657c1d83fae5d54514d3f1622a6540bb81a8be34ad314a8653fc025621',1,'Color']]],
+  ['fg_5flight_5fmagenta_10',['FG_LIGHT_MAGENTA',['../namespace_color.html#a20a7b04657c1d83fae5d54514d3f1622a9bdeaf6149f5791ecd4f7025dce11b5e',1,'Color']]],
+  ['fg_5flight_5fred_11',['FG_LIGHT_RED',['../namespace_color.html#a20a7b04657c1d83fae5d54514d3f1622a33745b19f4f1a1dc69e17cb65c4b4aa7',1,'Color']]],
+  ['fg_5flight_5fyellow_12',['FG_LIGHT_YELLOW',['../namespace_color.html#a20a7b04657c1d83fae5d54514d3f1622a0cd1d5aa9329ed93760876a56d7e2b5d',1,'Color']]],
+  ['fg_5fmagenta_13',['FG_MAGENTA',['../namespace_color.html#a20a7b04657c1d83fae5d54514d3f1622a0f5c77758885db1978a5255a11647064',1,'Color']]],
+  ['fg_5fred_14',['FG_RED',['../namespace_color.html#a20a7b04657c1d83fae5d54514d3f1622ab91060e69cc7704947146d1ab48a0b95',1,'Color']]],
+  ['fg_5fwhite_15',['FG_WHITE',['../namespace_color.html#a20a7b04657c1d83fae5d54514d3f1622a43c5e251f838430a1eef1ba7dc2f4c23',1,'Color']]],
+  ['fg_5fyellow_16',['FG_YELLOW',['../namespace_color.html#a20a7b04657c1d83fae5d54514d3f1622a1661c75dd2cfadb87090675c980c22a1',1,'Color']]]
+];

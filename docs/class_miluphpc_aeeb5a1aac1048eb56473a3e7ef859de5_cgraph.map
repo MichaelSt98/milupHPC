@@ -1,0 +1,11 @@
+<map id="Miluphpc::boundingBox" name="Miluphpc::boundingBox">
+<area shape="rect" id="node1" title="Calculate bounding boxes/simulation domain." alt="" coords="5,136,163,163"/>
+<area shape="rect" id="node2" href="$namespace_tree_n_s_1_1_kernel_1_1_launch.html#acb1fcee1becc94a7cf945401be17109e" title="Wrapper for TreeNS::Kernel::computeBoundingBox()" alt="" coords="244,70,407,111"/>
+<area shape="rect" id="node7" href="$class_tree_handler.html#aa8aa0fa3c3d4794117e50a107d0a986b" title="Copy (parts of the) tree instance(s) between host and device." alt="" coords="261,136,390,163"/>
+<area shape="rect" id="node9" href="$class_tree_handler.html#ae39dc296fd959c47cd14549099b3eccd" title="All reduce bounding box(es)/borders (among MPI processes)" alt="" coords="211,187,440,213"/>
+<area shape="rect" id="node3" href="$namespace_tree_n_s_1_1_kernel.html#a3fc2ba2061d44f078127d7d0461e0bd9" title="Kernel to compute the bounding box/borders of the tree or rather the particles within the tree." alt="" coords="488,31,735,57"/>
+<area shape="rect" id="node6" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="563,81,659,108"/>
+<area shape="rect" id="node4" href="$namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada" title="Maximum value out of two floating point values." alt="" coords="783,5,903,32"/>
+<area shape="rect" id="node5" href="$namespacecuda_1_1math.html#a129d30e886ca3c7cb2c9b209ce208076" title="Minimum value out of two floating point values." alt="" coords="785,56,901,83"/>
+<area shape="rect" id="node8" href="$namespacecuda.html#a87a2b33c156d39ce0a77f845e5988724" title="Copy between host and device and vice&#45;versa." alt="" coords="568,136,655,163"/>
+</map>

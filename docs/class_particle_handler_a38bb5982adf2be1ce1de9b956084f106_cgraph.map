@@ -1,0 +1,10 @@
+<map id="ParticleHandler::resetPointer" name="ParticleHandler::resetPointer">
+<area shape="rect" id="node1" title=" " alt="" coords="5,97,195,124"/>
+<area shape="rect" id="node2" href="$class_particles.html#a1dc217530f8929c24269014073596a38" title="Setter (DIM = 3) assigning variables to pointer members." alt="" coords="291,5,389,32"/>
+<area shape="rect" id="node3" href="$namespace_particles_n_s_1_1_kernel_1_1_launch.html#a7deb9e1fb4ad769422cc93f5300bb369" title=" " alt="" coords="271,57,409,98"/>
+<area shape="rect" id="node6" href="$namespace_particles_n_s_1_1_kernel_1_1_launch.html#a3622ffb7ea1722adab3272d9d2e976a4" title=" " alt="" coords="243,122,437,163"/>
+<area shape="rect" id="node8" href="$class_particles.html#af6718bdccbdfa5be82cd146bbae61971" title="Setter in dependence of INTEGRATE_DENSITY." alt="" coords="677,159,872,185"/>
+<area shape="rect" id="node4" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="509,71,605,97"/>
+<area shape="rect" id="node5" href="$namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc" title="Set device memory to a specific value." alt="" coords="519,20,595,47"/>
+<area shape="rect" id="node7" href="$namespace_particles_n_s_1_1_kernel.html#a60c17acbfaf54cefa7faee8c5e24d072" title=" " alt="" coords="485,122,629,163"/>
+</map>

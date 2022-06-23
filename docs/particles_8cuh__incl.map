@@ -1,0 +1,11 @@
+<map id="include/particles.cuh" name="include/particles.cuh">
+<area shape="rect" id="node1" title="Particle struct as Structure of arrays both instantiable on host and device." alt="" coords="200,5,342,32"/>
+<area shape="rect" id="node2" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="132,229,223,256"/>
+<area shape="rect" id="node5" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="112,80,299,107"/>
+<area shape="rect" id="node8" title=" " alt="" coords="344,155,414,181"/>
+<area shape="rect" id="node9" title=" " alt="" coords="374,80,432,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="151,304,204,331"/>
+<area shape="rect" id="node4" title=" " alt="" coords="256,304,328,331"/>
+<area shape="rect" id="node6" title=" " alt="" coords="22,155,83,181"/>
+<area shape="rect" id="node7" href="$cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers." alt="" coords="108,155,218,181"/>
+</map>

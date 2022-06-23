@@ -1,0 +1,20 @@
+<map id="Miluphpc::removeParticles" name="Miluphpc::removeParticles">
+<area shape="rect" id="node1" title="Remove particles in dependence of some criterion." alt="" coords="5,163,181,189"/>
+<area shape="rect" id="node2" href="$namespacecuda.html#a87a2b33c156d39ce0a77f845e5988724" title="Copy between host and device and vice&#45;versa." alt="" coords="273,5,360,32"/>
+<area shape="rect" id="node3" href="$namespace_helper_n_s_1_1_kernel_1_1_launch.html#a64912388bfe1d1a0727d33f2629c9c7b" title=" " alt="" coords="229,57,404,98"/>
+<area shape="rect" id="node6" href="$namespace_particles_n_s_1_1_kernel_1_1_launch.html#a8250592e30d4eafc72cdd47b52665c31" title=" " alt="" coords="237,122,396,163"/>
+<area shape="rect" id="node12" href="$namespace_helper_n_s_1_1_kernel_1_1_launch.html#afe3645489371d42fe2a80f5399f6e800" title=" " alt="" coords="229,187,404,229"/>
+<area shape="rect" id="node15" href="$namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc" title="Set device memory to a specific value." alt="" coords="279,253,355,280"/>
+<area shape="rect" id="node16" href="$namespace_helper_n_s.html#a72f5fb75d9bcf7a00474765e26ee6e30" title=" " alt="" coords="247,304,387,331"/>
+<area shape="rect" id="node4" href="$namespace_helper_n_s_1_1_kernel.html#a4d969737e930f27906ebfd76c1d56386" title=" " alt="" coords="453,27,643,53"/>
+<area shape="rect" id="node5" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="500,144,596,171"/>
+<area shape="rect" id="node7" href="$namespace_particles_n_s_1_1_kernel.html#ae1efd50573097db8dfbf71c507b20d9b" title=" " alt="" coords="479,78,617,119"/>
+<area shape="rect" id="node8" href="$namespace_particles_n_s.html#adba2eb6a731efdaee85c602b60417473" title="Check whether particle(s) are within cube from simulation center." alt="" coords="692,132,907,159"/>
+<area shape="rect" id="node10" href="$namespace_particles_n_s.html#ad5c18e136fc5e7dc538c852ede7241e0" title="Check whether particle(s) are within sphere from simulation center." alt="" coords="707,66,892,107"/>
+<area shape="rect" id="node9" href="$namespacecuda_1_1math.html#aa01779064aaf96a9607a87bd52921410" title="Absolute value of a floating point value." alt="" coords="955,132,1071,159"/>
+<area shape="rect" id="node11" href="$namespacecuda_1_1math.html#a706200a3f1b2445d7fd835c2ac504a11" title="Square root of a floating point value." alt="" coords="955,73,1072,100"/>
+<area shape="rect" id="node13" href="$namespace_helper_n_s_1_1_kernel.html#a3091cbf26f33cb907e2830f8480bfc37" title=" " alt="" coords="452,245,644,272"/>
+<area shape="rect" id="node14" href="$namespacecxxopts.html#a6b58e451713ebbf12866c1cd8e0a66ab" title=" " alt="" coords="746,208,853,235"/>
+<area shape="rect" id="node17" href="$namespacecuda.html#a9a0da8d4e84b94a6893faafbc8cc6dd9" title="Free device memory." alt="" coords="508,351,588,377"/>
+<area shape="rect" id="node18" href="$namespacecuda.html#aba186b2049cc77c289e110a45edab71a" title="Allocate device memory." alt="" coords="500,300,596,327"/>
+</map>

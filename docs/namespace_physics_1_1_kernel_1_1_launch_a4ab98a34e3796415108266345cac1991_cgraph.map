@@ -1,0 +1,4 @@
+<map id="Physics::Kernel::Launch::sumAngularMomentum" name="Physics::Kernel::Launch::sumAngularMomentum">
+<area shape="rect" id="node1" title="Wrapper for: Physics::Kernel::sumAngularMomentum()." alt="" coords="5,5,169,47"/>
+<area shape="rect" id="node2" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="217,13,313,39"/>
+</map>

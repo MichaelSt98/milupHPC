@@ -1,0 +1,15 @@
+<map id="include/sph/sph.cuh" name="include/sph/sph.cuh">
+<area shape="rect" id="node1" title="SPH related functionalities and kernels." alt="" coords="366,5,505,32"/>
+<area shape="rect" id="node2" href="$miluphpc_8h.html" title="Right&#45;hand&#45;side implementation and CUDA kernel execution via wrapper functions." alt="" coords="254,155,385,181"/>
+<area shape="rect" id="node11" href="$density_8cuh.html" title="SPH density calculation." alt="" coords="357,80,514,107"/>
+<area shape="rect" id="node13" href="$sph_8cu.html" title=" " alt="" coords="539,80,647,107"/>
+<area shape="rect" id="node3" href="$explicit__euler_8h.html" title="Explicit Euler integrator." alt="" coords="61,237,183,278"/>
+<area shape="rect" id="node5" href="$src_2main_8cpp.html" title=" " alt="" coords="172,341,269,367"/>
+<area shape="rect" id="node6" href="$leapfrog_8h.html" title="Leapfrog integrator." alt="" coords="259,237,380,278"/>
+<area shape="rect" id="node8" href="$predictor__corrector__euler_8h.html" title="Predictor Corrector Euler integrator." alt="" coords="404,229,539,285"/>
+<area shape="rect" id="node10" href="$miluphpc_8cpp.html" title=" " alt="" coords="563,244,684,271"/>
+<area shape="rect" id="node4" href="$explicit__euler_8cpp.html" title=" " alt="" coords="5,333,148,375"/>
+<area shape="rect" id="node7" href="$leapfrog_8cpp.html" title=" " alt="" coords="294,341,467,367"/>
+<area shape="rect" id="node9" href="$predictor__corrector__euler_8cpp.html" title=" " alt="" coords="491,333,643,375"/>
+<area shape="rect" id="node12" href="$density_8cu.html" title=" " alt="" coords="409,155,536,181"/>
+</map>

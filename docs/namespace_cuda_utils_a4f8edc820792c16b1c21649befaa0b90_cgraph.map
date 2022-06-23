@@ -1,0 +1,8 @@
+<map id="CudaUtils::calculateMaxEigenvalue" name="CudaUtils::calculateMaxEigenvalue">
+<area shape="rect" id="node1" title="Computes the eigenvalues of the symmetric matrix M." alt="" coords="5,81,235,108"/>
+<area shape="rect" id="node2" href="$namespacecuda_1_1math.html#aa01779064aaf96a9607a87bd52921410" title="Absolute value of a floating point value." alt="" coords="490,5,606,32"/>
+<area shape="rect" id="node3" href="$namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada" title="Maximum value out of two floating point values." alt="" coords="488,56,608,83"/>
+<area shape="rect" id="node4" href="$namespace_cuda_utils.html#a382f4052f7c24e4f66411ffed4950031" title="Returns the indices of the greatest non&#45;diagonal element of the matrix M." alt="" coords="287,31,436,57"/>
+<area shape="rect" id="node5" href="$namespace_cuda_utils.html#adb2da123824962ee4b85604e26ef6457" title="Rotate matrix." alt="" coords="283,132,440,159"/>
+<area shape="rect" id="node6" href="$namespacecuda_1_1math.html#a706200a3f1b2445d7fd835c2ac504a11" title="Square root of a floating point value." alt="" coords="303,207,420,233"/>
+</map>

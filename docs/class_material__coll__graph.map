@@ -1,0 +1,5 @@
+<map id="Material" name="Material">
+<area shape="rect" id="node1" title="Material parameters." alt="" coords="103,95,171,121"/>
+<area shape="rect" id="node2" href="$struct_artificial_viscosity.html" title="Artificial viscosity parameters." alt="" coords="5,5,128,32"/>
+<area shape="rect" id="node3" href="$struct_eq_of_st.html" title="Equation of states." alt="" coords="177,5,242,32"/>
+</map>

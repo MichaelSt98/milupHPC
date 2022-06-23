@@ -1,0 +1,7 @@
+<map id="SPH::Kernel::Launch::fixedRadiusNN_variableSML" name="SPH::Kernel::Launch::fixedRadiusNN_variableSML">
+<area shape="rect" id="node1" title="Wrapper for SPH::Kernel::fixedRadiusNN_variableSML()." alt="" coords="5,53,204,94"/>
+<area shape="rect" id="node2" href="$namespace_s_p_h_1_1_kernel.html#a7a3797bbc1c5cf10269d170ce5ca6da9" title="Fixed&#45;radius near neighbor search for iteratively finding appropriate smoothing length." alt="" coords="252,23,424,65"/>
+<area shape="rect" id="node5" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="290,89,386,116"/>
+<area shape="rect" id="node3" href="$namespacecuda_1_1math.html#aa01779064aaf96a9607a87bd52921410" title="Absolute value of a floating point value." alt="" coords="474,5,590,32"/>
+<area shape="rect" id="node4" href="$namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada" title="Maximum value out of two floating point values." alt="" coords="472,56,592,83"/>
+</map>
