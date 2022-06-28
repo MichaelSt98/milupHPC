@@ -192,10 +192,10 @@ namespace Gravity {
                                            integer warp, integer stackSize, SubDomainKeyTree *subDomainKeyTree,
                                            real theta, real smoothing, bool potentialEnergy=false);
 
-        __global__ void computeForces_v3(Tree *tree, Particles *particles, real radius, integer n, integer m,
-                                         integer blockSize, integer warp, integer stackSize,
-                                         SubDomainKeyTree *subDomainKeyTree, real theta,
-                                         real smoothing, bool potentialEnergy=false);
+        //__global__ void computeForces_v3(Tree *tree, Particles *particles, real radius, integer n, integer m,
+        //                                 integer blockSize, integer warp, integer stackSize,
+        //                                 SubDomainKeyTree *subDomainKeyTree, real theta,
+        //                                 real smoothing, bool potentialEnergy=false);
 
         /**
          * @brief Find particles to be sent (part 1).

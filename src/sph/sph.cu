@@ -452,8 +452,12 @@ namespace SPH {
 #endif
 #if DIM == 1
                                 //min_distance = cuda::math::sqrt(dx*dx);
+                                min_distance = min_dx*min_dx;
+                                max_distance = max_dx*max_dx;
 #elif DIM == 2
                                 //r = cuda::math::sqrt(dx*dx + dy*dy);
+                                min_distance = min_dx*min_dx + min_dy*min_dy;
+                                max_distance = max_dx*max_dx + max_dy*max_dy;
 #else
                                 min_distance = min_dx*min_dx + min_dy*min_dy + min_dz*min_dz;
                                 max_distance = max_dx*max_dx + max_dy*max_dy + max_dz*max_dz;
@@ -929,18 +933,22 @@ namespace SPH {
                     }
 
                     if (htmp < 1e-20) {
+#if DIM == 3
                         printf("+++ particle: %d it: %d htmp: %e htmpold: %e wanted: %d current: %d mId: %d uid: %i (%e, %e, %e) n = %i\n", i, nit,
                                 htmp, htmpold, materials[particles->materialId[i]].interactions, numberOfInteractions, particles->materialId[i],
                                 particles->uid[i], particles->x[i], particles->y[i], particles->z[i], numParticlesLocal);
+#endif
                     }
 
                 }
                 if (numberOfInteractions > MAX_NUM_INTERACTIONS || numberOfInteractions == 0) {
+#if DIM == 3
                     printf("+++ particle: %d it: %d htmp: %e htmpold: %e wanted: %d current: %d mId: %d uid: %i (%e, %e, %e) n = %i\n",
                            i, nit,
                            htmp, htmpold, materials[particles->materialId[i]].interactions, numberOfInteractions,
                            particles->materialId[i],
                            particles->uid[i], particles->x[i], particles->y[i], particles->z[i], numParticlesLocal);
+#endif
                     cudaTerminate("numberOfInteractions = %i > MAX_NUM_INTERACTIONS = %i\n", numberOfInteractions,
                                   MAX_NUM_INTERACTIONS);
                 }

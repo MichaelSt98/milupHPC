@@ -678,7 +678,7 @@ real Miluphpc::boundingBox() {
 #if DIM == 1
     Logger(DEBUG) << "Bounding box: x = (" << *treeHandler->h_minX << ", " << *treeHandler->h_maxX << ")";
 #elif DIM == 2
-    Logger(DEBUg) << "Bounding box: x = (" << *treeHandler->h_minX << ", " << *treeHandler->h_maxX << ")" << "y = ("
+    Logger(DEBUG) << "Bounding box: x = (" << *treeHandler->h_minX << ", " << *treeHandler->h_maxX << ")" << "y = ("
                  << *treeHandler->h_minY << ", " << *treeHandler->h_maxY << ")";
 #else
     Logger(DEBUG) << "Bounding box: x = (" << std::setprecision(9) << *treeHandler->h_minX << ", "
