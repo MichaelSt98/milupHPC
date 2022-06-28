@@ -1,4 +1,3 @@
-**/images/
 **/.idea/
 **/build/
 **/bin/
@@ -28,6 +27,5 @@ bb/bb_N*/*
 *.numbers
 *.mp4
 *.csv
-!documents/*.csv
 # ignore MPI-debug lldb pipe
 *.lldb
