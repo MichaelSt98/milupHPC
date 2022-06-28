@@ -23,6 +23,7 @@ def cubicSpline(dx_vec, sml):
 
     return W
 
+
 if __name__ == '__main__':
 
     N = 61  # num particles = N**3
