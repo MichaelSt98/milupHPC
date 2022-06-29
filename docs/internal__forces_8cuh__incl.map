@@ -3,7 +3,7 @@
 <area shape="rect" id="node2" href="$subdomain_8cuh.html" title="Classes and Kernels handling subdomains that distribute the workload among the MPI processes." alt="" coords="515,95,670,136"/>
 <area shape="rect" id="node22" href="$material_8cuh.html" title="Material parameters and settings." alt="" coords="1203,341,1366,367"/>
 <area shape="rect" id="node23" href="$kernel_8cuh.html" title=" " alt="" coords="726,184,809,211"/>
-<area shape="rect" id="node3" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="464,497,567,524"/>
+<area shape="rect" id="node3" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="464,497,567,524"/>
 <area shape="rect" id="node6" href="$cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers." alt="" coords="390,333,515,375"/>
 <area shape="rect" id="node7" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="647,423,770,449"/>
 <area shape="rect" id="node10" href="$helper__handler_8h.html" title=" " alt="" coords="343,184,471,211"/>

@@ -1,7 +1,7 @@
 <map id="include/processing/kernels.cuh" name="include/processing/kernels.cuh">
 <area shape="rect" id="node1" title="..." alt="" coords="160,5,291,47"/>
 <area shape="rect" id="node2" href="$particles_8cuh.html" title="Particle struct as Structure of arrays both instantiable on host and device." alt="" coords="79,95,187,121"/>
-<area shape="rect" id="node3" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="245,319,336,345"/>
+<area shape="rect" id="node3" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="245,319,336,345"/>
 <area shape="rect" id="node6" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="263,169,449,196"/>
 <area shape="rect" id="node8" href="$cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers." alt="" coords="207,244,318,271"/>
 <area shape="rect" id="node11" href="$material_8cuh.html" title="Material parameters and settings." alt="" coords="529,95,692,121"/>

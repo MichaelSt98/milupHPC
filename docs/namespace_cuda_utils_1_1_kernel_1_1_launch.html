@@ -1,26 +1,14 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+-->
 <head>
-	<meta charset="utf-8">
-	<title>CodePortray</title>
-	<base href="/">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: CudaUtils::Kernel::Launch Namespace Reference</title>
-	<title>CudaUtils::Kernel::Launch Namespace Reference</title>
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -34,68 +22,42 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
+	<!-- Add icon library -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- Add font awesome icons -->
+	<!--HIGHLIGHT.JS INSTALL BEGIN
+	<link rel="stylesheet" href="github.min.css">
+	<script src="highlight.js"></script>
+	<script>
+		$(function() {
+			hljs.configure({useBR: false});
+			$(".fragment").each(function(i,node) {
+				$(node).removeClass("fragment");
+				hljs.highlightBlock(node);
+			});
+		});
+	</script>
+	HIGHLIGHT.JS INSTALL END-->
 </head>
 <body>
-<custom-header class="custom-header-class">
-	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
-	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
-	<div shortcuts style="display: table">
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
-		</div>
-		<!-- get the code ... -->
-		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
-		<div style="display: table-cell; padding-right: 2px">
-			<custom-dialog window-width="600px" window-height="400px">
-				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
-				<div title>Get the code: milupHPC!</div>
-				<div style="text-align: center; padding-top: 20px;">
-					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
-					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
-					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
-					<div style="padding-top: 40px">clone via HTTPS:</div>
-					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">clone via SSH:</div>
-					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
-					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
-				</div>
-				<!--<div footer>This is the footer</div>-->
-			</custom-dialog>
-		</div>
-		<!-- end: get the code .... -->
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
-		</div>
-		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
-	</div>
-</custom-header>
-	<!--
-	<custom-side-nav id="side-nav" nav-width="300">
-		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
-		<div>test</div>
-	</custom-side-nav>
-	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation
+				milupHPC documentation <!-- CudaUtils::Kernel::Launch Namespace Reference -->
 			</span>
+			<!-- <span class="search">
+				<input type="text" placeholder="Search" onkeydown="search(this,event);">
+			</span> -->
 		</div>
+    <!--
+	<div class="icon-bar">
+		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
+		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
+		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
+	</div>
+	</div>
+	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -142,45 +104,45 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a8c92b9fd7ef383d0519fa136734edf03"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a8c92b9fd7ef383d0519fa136734edf03">collectValues</a> (<a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *indices, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entries, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *collector, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> count)</td></tr>
+<tr class="memitem:a8c92b9fd7ef383d0519fa136734edf03"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a8c92b9fd7ef383d0519fa136734edf03">collectValues</a> (<a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *indices, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entries, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *collector, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> count)</td></tr>
 <tr class="separator:a8c92b9fd7ef383d0519fa136734edf03"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac56fe71333f4b4f0a4417b6ed86ed88"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aac56fe71333f4b4f0a4417b6ed86ed88">checkValues</a> (<a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *indices, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry1, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry2, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry3, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> count)</td></tr>
+<tr class="memitem:aac56fe71333f4b4f0a4417b6ed86ed88"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aac56fe71333f4b4f0a4417b6ed86ed88">checkValues</a> (<a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *indices, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry1, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry2, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry3, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> count)</td></tr>
 <tr class="separator:aac56fe71333f4b4f0a4417b6ed86ed88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a595a86c2cda59e917465a942378579a9"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a595a86c2cda59e917465a942378579a9"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a595a86c2cda59e917465a942378579a9">findDuplicates</a> (T *array, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, int length)</td></tr>
+<tr class="memitem:a595a86c2cda59e917465a942378579a9"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a595a86c2cda59e917465a942378579a9">findDuplicates</a> (T *array, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, int length)</td></tr>
 <tr class="separator:a595a86c2cda59e917465a942378579a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1e1edc3e254b0451cfeebab4db17ed92"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a1e1edc3e254b0451cfeebab4db17ed92"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a1e1edc3e254b0451cfeebab4db17ed92">findDuplicateEntries</a> (T *array1, T *array2, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, int length)</td></tr>
+<tr class="memitem:a1e1edc3e254b0451cfeebab4db17ed92"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a1e1edc3e254b0451cfeebab4db17ed92">findDuplicateEntries</a> (T *array1, T *array2, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, int length)</td></tr>
 <tr class="separator:a1e1edc3e254b0451cfeebab4db17ed92"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef7f93d1cf4d70b869cd25f1fa489e61"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:aef7f93d1cf4d70b869cd25f1fa489e61"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aef7f93d1cf4d70b869cd25f1fa489e61">findDuplicateEntries</a> (T *array1, T *array2, T *array3, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, int length)</td></tr>
+<tr class="memitem:aef7f93d1cf4d70b869cd25f1fa489e61"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aef7f93d1cf4d70b869cd25f1fa489e61">findDuplicateEntries</a> (T *array1, T *array2, T *array3, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, int length)</td></tr>
 <tr class="separator:aef7f93d1cf4d70b869cd25f1fa489e61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa502ba583fe18b21f09e47b7f298f191"><td class="memTemplParams" colspan="2">template&lt;typename T , typename U &gt; </td></tr>
-<tr class="memitem:aa502ba583fe18b21f09e47b7f298f191"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aa502ba583fe18b21f09e47b7f298f191">findDuplicates</a> (T *array, U *entry1, U *entry2, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, int length)</td></tr>
+<tr class="memitem:aa502ba583fe18b21f09e47b7f298f191"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aa502ba583fe18b21f09e47b7f298f191">findDuplicates</a> (T *array, U *entry1, U *entry2, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, int length)</td></tr>
 <tr class="separator:aa502ba583fe18b21f09e47b7f298f191"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5890ee66c5883806d39d1029eee8569e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a5890ee66c5883806d39d1029eee8569e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a5890ee66c5883806d39d1029eee8569e">markDuplicates</a> (T *array, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, int length)</td></tr>
+<tr class="memitem:a5890ee66c5883806d39d1029eee8569e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a5890ee66c5883806d39d1029eee8569e">markDuplicates</a> (T *array, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, int length)</td></tr>
 <tr class="separator:a5890ee66c5883806d39d1029eee8569e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1e9eadf4a048750cee6558b74de516a"><td class="memTemplParams" colspan="2">template&lt;typename T , typename U &gt; </td></tr>
-<tr class="memitem:ae1e9eadf4a048750cee6558b74de516a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#ae1e9eadf4a048750cee6558b74de516a">markDuplicates</a> (T *array, U *entry1, U *entry2, U *entry3, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *child, int length)</td></tr>
+<tr class="memitem:ae1e9eadf4a048750cee6558b74de516a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#ae1e9eadf4a048750cee6558b74de516a">markDuplicates</a> (T *array, U *entry1, U *entry2, U *entry3, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *child, int length)</td></tr>
 <tr class="separator:ae1e9eadf4a048750cee6558b74de516a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aab0d89d0004bf5806b7aeae358d4c896"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:aab0d89d0004bf5806b7aeae358d4c896"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aab0d89d0004bf5806b7aeae358d4c896">removeDuplicates</a> (T *array, T *removedArray, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, int length)</td></tr>
+<tr class="memitem:aab0d89d0004bf5806b7aeae358d4c896"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aab0d89d0004bf5806b7aeae358d4c896">removeDuplicates</a> (T *array, T *removedArray, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, int length)</td></tr>
 <tr class="separator:aab0d89d0004bf5806b7aeae358d4c896"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fe14db33bf74db87f246f5ba8ee5b4a"><td class="memTemplParams" colspan="2">template&lt;typename T , typename U &gt; </td></tr>
-<tr class="memitem:a3fe14db33bf74db87f246f5ba8ee5b4a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a3fe14db33bf74db87f246f5ba8ee5b4a">markDuplicatesTemp</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, T *array, U *entry1, U *entry2, U *entry3, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *child, int length)</td></tr>
+<tr class="memitem:a3fe14db33bf74db87f246f5ba8ee5b4a"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a3fe14db33bf74db87f246f5ba8ee5b4a">markDuplicatesTemp</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, T *array, U *entry1, U *entry2, U *entry3, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *child, int length)</td></tr>
 <tr class="separator:a3fe14db33bf74db87f246f5ba8ee5b4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59b8dca01dc61f664cc08f926a11fd31"><td class="memTemplParams" colspan="2">template&lt;typename T , unsigned int blockSize&gt; </td></tr>
-<tr class="memitem:a59b8dca01dc61f664cc08f926a11fd31"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a59b8dca01dc61f664cc08f926a11fd31">reduceBlockwise</a> (T *array, T *outputData, int n)</td></tr>
+<tr class="memitem:a59b8dca01dc61f664cc08f926a11fd31"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a59b8dca01dc61f664cc08f926a11fd31">reduceBlockwise</a> (T *array, T *outputData, int n)</td></tr>
 <tr class="separator:a59b8dca01dc61f664cc08f926a11fd31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1eeac4b43506a55e0c77d4ffe7b60b0"><td class="memTemplParams" colspan="2">template&lt;typename T , unsigned int blockSize&gt; </td></tr>
-<tr class="memitem:aa1eeac4b43506a55e0c77d4ffe7b60b0"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aa1eeac4b43506a55e0c77d4ffe7b60b0">blockReduction</a> (const T *indata, T *outdata)</td></tr>
+<tr class="memitem:aa1eeac4b43506a55e0c77d4ffe7b60b0"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aa1eeac4b43506a55e0c77d4ffe7b60b0">blockReduction</a> (const T *indata, T *outdata)</td></tr>
 <tr class="separator:aa1eeac4b43506a55e0c77d4ffe7b60b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb9c6fa42ca46bd92bcae59766c1ff1f"><td class="memItemLeft" align="right" valign="top">template <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#acb9c6fa42ca46bd92bcae59766c1ff1f">markDuplicatesTemp&lt; integer, real &gt;</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *array, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry1, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry2, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry3, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *child, int length)</td></tr>
+<tr class="memitem:acb9c6fa42ca46bd92bcae59766c1ff1f"><td class="memItemLeft" align="right" valign="top">template <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#acb9c6fa42ca46bd92bcae59766c1ff1f">markDuplicatesTemp&lt; integer, real &gt;</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *array, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry1, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry2, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry3, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *child, int length)</td></tr>
 <tr class="separator:acb9c6fa42ca46bd92bcae59766c1ff1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7fdba54e1be03f8bf4640f9daf63f4e4"><td class="memItemLeft" align="right" valign="top">template <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a7fdba54e1be03f8bf4640f9daf63f4e4">reduceBlockwise&lt; real, 256 &gt;</a> (<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *array, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *outputData, int n)</td></tr>
+<tr class="memitem:a7fdba54e1be03f8bf4640f9daf63f4e4"><td class="memItemLeft" align="right" valign="top">template <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a7fdba54e1be03f8bf4640f9daf63f4e4">reduceBlockwise&lt; real, 256 &gt;</a> (<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *array, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *outputData, int n)</td></tr>
 <tr class="separator:a7fdba54e1be03f8bf4640f9daf63f4e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf591e0cc28546dcefd4c684b96432e5"><td class="memItemLeft" align="right" valign="top">template <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#acf591e0cc28546dcefd4c684b96432e5">blockReduction&lt; real, 256 &gt;</a> (const <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *indata, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *outdata)</td></tr>
+<tr class="memitem:acf591e0cc28546dcefd4c684b96432e5"><td class="memItemLeft" align="right" valign="top">template <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#acf591e0cc28546dcefd4c684b96432e5">blockReduction&lt; real, 256 &gt;</a> (const <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *indata, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *outdata)</td></tr>
 <tr class="separator:acf591e0cc28546dcefd4c684b96432e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
@@ -193,7 +155,7 @@ Functions</h2></td></tr>
 template&lt;typename T , unsigned int blockSize&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::blockReduction </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::blockReduction </td>
           <td>(</td>
           <td class="paramtype">const T *&#160;</td>
           <td class="paramname"><em>indata</em>, </td>
@@ -234,15 +196,15 @@ template&lt;typename T , unsigned int blockSize&gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">template <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aa1eeac4b43506a55e0c77d4ffe7b60b0">CudaUtils::Kernel::Launch::blockReduction</a>&lt; <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>, 256 &gt; </td>
+          <td class="memname">template <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aa1eeac4b43506a55e0c77d4ffe7b60b0">CudaUtils::Kernel::Launch::blockReduction</a>&lt; <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>, 256 &gt; </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>indata</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>outdata</em>&#160;</td>
         </tr>
         <tr>
@@ -262,33 +224,33 @@ template&lt;typename T , unsigned int blockSize&gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::checkValues </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::checkValues </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>indices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>entry1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>entry2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>entry3</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>count</em>&#160;</td>
         </tr>
         <tr>
@@ -322,27 +284,27 @@ template&lt;typename T , unsigned int blockSize&gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::collectValues </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::collectValues </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>indices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>entries</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>collector</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>count</em>&#160;</td>
         </tr>
         <tr>
@@ -378,7 +340,7 @@ template&lt;typename T , unsigned int blockSize&gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::findDuplicateEntries </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::findDuplicateEntries </td>
           <td>(</td>
           <td class="paramtype">T *&#160;</td>
           <td class="paramname"><em>array1</em>, </td>
@@ -392,7 +354,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>duplicateCounter</em>, </td>
         </tr>
         <tr>
@@ -433,7 +395,7 @@ template&lt;typename T &gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::findDuplicateEntries </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::findDuplicateEntries </td>
           <td>(</td>
           <td class="paramtype">T *&#160;</td>
           <td class="paramname"><em>array1</em>, </td>
@@ -453,7 +415,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>duplicateCounter</em>, </td>
         </tr>
         <tr>
@@ -494,7 +456,7 @@ template&lt;typename T &gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::findDuplicates </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::findDuplicates </td>
           <td>(</td>
           <td class="paramtype">T *&#160;</td>
           <td class="paramname"><em>array</em>, </td>
@@ -502,7 +464,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>duplicateCounter</em>, </td>
         </tr>
         <tr>
@@ -543,7 +505,7 @@ template&lt;typename T &gt; </div>
 template&lt;typename T , typename U &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::findDuplicates </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::findDuplicates </td>
           <td>(</td>
           <td class="paramtype">T *&#160;</td>
           <td class="paramname"><em>array</em>, </td>
@@ -563,7 +525,7 @@ template&lt;typename T , typename U &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>duplicateCounter</em>, </td>
         </tr>
         <tr>
@@ -604,7 +566,7 @@ template&lt;typename T , typename U &gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::markDuplicates </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::markDuplicates </td>
           <td>(</td>
           <td class="paramtype">T *&#160;</td>
           <td class="paramname"><em>array</em>, </td>
@@ -612,7 +574,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>duplicateCounter</em>, </td>
         </tr>
         <tr>
@@ -653,7 +615,7 @@ template&lt;typename T &gt; </div>
 template&lt;typename T , typename U &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::markDuplicates </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::markDuplicates </td>
           <td>(</td>
           <td class="paramtype">T *&#160;</td>
           <td class="paramname"><em>array</em>, </td>
@@ -679,13 +641,13 @@ template&lt;typename T , typename U &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>duplicateCounter</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>child</em>, </td>
         </tr>
         <tr>
@@ -726,7 +688,7 @@ template&lt;typename T , typename U &gt; </div>
 template&lt;typename T , typename U &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::markDuplicatesTemp </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::markDuplicatesTemp </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -764,13 +726,13 @@ template&lt;typename T , typename U &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>duplicateCounter</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>child</em>, </td>
         </tr>
         <tr>
@@ -809,7 +771,7 @@ template&lt;typename T , typename U &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">template <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a3fe14db33bf74db87f246f5ba8ee5b4a">CudaUtils::Kernel::Launch::markDuplicatesTemp</a>&lt; <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> &gt; </td>
+          <td class="memname">template <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a3fe14db33bf74db87f246f5ba8ee5b4a">CudaUtils::Kernel::Launch::markDuplicatesTemp</a>&lt; <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> &gt; </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -823,37 +785,37 @@ template&lt;typename T , typename U &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>array</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>entry1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>entry2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>entry3</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>duplicateCounter</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>child</em>, </td>
         </tr>
         <tr>
@@ -881,7 +843,7 @@ template&lt;typename T , typename U &gt; </div>
 template&lt;typename T , unsigned int blockSize&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::reduceBlockwise </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::reduceBlockwise </td>
           <td>(</td>
           <td class="paramtype">T *&#160;</td>
           <td class="paramname"><em>array</em>, </td>
@@ -928,15 +890,15 @@ template&lt;typename T , unsigned int blockSize&gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">template <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a59b8dca01dc61f664cc08f926a11fd31">CudaUtils::Kernel::Launch::reduceBlockwise</a>&lt; <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>, 256 &gt; </td>
+          <td class="memname">template <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="el" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a59b8dca01dc61f664cc08f926a11fd31">CudaUtils::Kernel::Launch::reduceBlockwise</a>&lt; <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>, 256 &gt; </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>array</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>outputData</em>, </td>
         </tr>
         <tr>
@@ -964,7 +926,7 @@ template&lt;typename T , unsigned int blockSize&gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::removeDuplicates </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::Kernel::Launch::removeDuplicates </td>
           <td>(</td>
           <td class="paramtype">T *&#160;</td>
           <td class="paramname"><em>array</em>, </td>
@@ -978,7 +940,7 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>duplicateCounter</em>, </td>
         </tr>
         <tr>
@@ -1013,58 +975,19 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
-    <!--
     milupHPC  - CudaUtils::Kernel::Launch Namespace Reference<br />
-    Generated on Wed Jun 29 2022 14:58:38 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    -->
+    Generated on Thu Jun 23 2022 16:11:20 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
   </small></address>
 </body>
 <footer>
-  <custom-footer color="white" background="#2E4053">
-    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
-    <div second>
-      <div style="text-align: center">
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-        </div>
-      </div>
-    </div>
-    <div third>
-      milupHPC  - CudaUtils::Kernel::Launch Namespace Reference<br />
-      Generated on Wed Jun 29 2022 14:58:38 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    </div>
-  </custom-footer>
+  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
+  <div id="banner-footer-first"></div>
+  <div id="banner-footer-second"></div>
+  <script>
+    function topFunction() {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+  </script>
 </footer>
-<!--
-<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
--->
-<script src="components/hamburger/runtime.js" type="text/javascript"></script><script src="components/hamburger/polyfills.js" type="text/javascript"></script><script src="components/hamburger/main.js" type="text/javascript"></script>
-<script src="components/header/runtime.js" type="text/javascript"></script><script src="components/header/polyfills.js" type="text/javascript"></script><script src="components/header/main.js" type="text/javascript"></script>
-<script src="components/icons/runtime.js" type="text/javascript"></script><script src="components/icons/polyfills.js" type="text/javascript"></script><script src="components/icons/main.js" type="text/javascript"></script>
-<script src="components/footer/runtime.js" type="text/javascript"></script><script src="components/footer/polyfills.js" type="text/javascript"></script><script src="components/footer/main.js" type="text/javascript"></script>
-<script src="components/dialog/runtime.js" type="text/javascript"></script><script src="components/dialog/polyfills.js" type="text/javascript"></script><script src="components/dialog/main.js" type="text/javascript"></script>
-<script src="components/copyable/runtime.js" type="text/javascript"></script><script src="components/copyable/polyfills.js" type="text/javascript"></script><script src="components/copyable/main.js" type="text/javascript"></script>
-<!--
-<script>
-  function toggle() {
-    var elem = document.getElementById("side-nav");
-    console.log(elem);
-    elem.toggleSideNav(false);
-  }
-</script>
--->
-<!--
-<script>
-  function topFunction() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  }
-</script>
--->
 </html>

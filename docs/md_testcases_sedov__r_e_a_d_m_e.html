@@ -1,26 +1,14 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+-->
 <head>
-	<meta charset="utf-8">
-	<title>CodePortray</title>
-	<base href="/">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: Sedov test case</title>
-	<title>Sedov test case</title>
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -34,68 +22,42 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
+	<!-- Add icon library -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- Add font awesome icons -->
+	<!--HIGHLIGHT.JS INSTALL BEGIN
+	<link rel="stylesheet" href="github.min.css">
+	<script src="highlight.js"></script>
+	<script>
+		$(function() {
+			hljs.configure({useBR: false});
+			$(".fragment").each(function(i,node) {
+				$(node).removeClass("fragment");
+				hljs.highlightBlock(node);
+			});
+		});
+	</script>
+	HIGHLIGHT.JS INSTALL END-->
 </head>
 <body>
-<custom-header class="custom-header-class">
-	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
-	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
-	<div shortcuts style="display: table">
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
-		</div>
-		<!-- get the code ... -->
-		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
-		<div style="display: table-cell; padding-right: 2px">
-			<custom-dialog window-width="600px" window-height="400px">
-				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
-				<div title>Get the code: milupHPC!</div>
-				<div style="text-align: center; padding-top: 20px;">
-					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
-					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
-					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
-					<div style="padding-top: 40px">clone via HTTPS:</div>
-					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">clone via SSH:</div>
-					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
-					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
-				</div>
-				<!--<div footer>This is the footer</div>-->
-			</custom-dialog>
-		</div>
-		<!-- end: get the code .... -->
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
-		</div>
-		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
-	</div>
-</custom-header>
-	<!--
-	<custom-side-nav id="side-nav" nav-width="300">
-		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
-		<div>test</div>
-	</custom-side-nav>
-	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation
+				milupHPC documentation <!-- Sedov test case -->
 			</span>
+			<!-- <span class="search">
+				<input type="text" placeholder="Search" onkeydown="search(this,event);">
+			</span> -->
 		</div>
+    <!--
+	<div class="icon-bar">
+		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
+		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
+		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
+	</div>
+	</div>
+	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -133,596 +95,27 @@ $(function() {
   <div class="headertitle"><div class="title">Sedov test case </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p >The Taylor-von Neumann-Sedov blast wave describes a blast wave as result of a strong explosion and is a standard test case for <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> codes. A semi-analytical, self-similar solution exists, usable for validation. The problem is set up in a uniform periodically box [-0.5, 0.5] and a high internal energy is induced at the center and smoothed over a smoothing length. An adiabatic <a class="el" href="namespace_e_o_s.html" title="Equation of states.">EOS</a> with gamma = 5/3 is used and the internal energy equation is integrated. </p><hr  />
-<h1><a class="anchor" id="autotoc_md94"></a>
-Overview</h1>
-<p >0. check the <a class="el" href="md_documents__prerequisites.html">prerequisites</a></p><ol type="1">
-<li><b>compile</b> according to the test case<ul>
-<li>either copy <a href="parameter.h">parameter.h</a> to <code>../../include/</code></li>
-<li>or set<ul>
-<li><code>#define SI_UNITS 0</code></li>
-<li><code>#define GRAVITY_SIM 0</code></li>
-<li><code>#define SPH_SIM 1</code></li>
-<li><code>#define INTEGRATE_ENERGY 1</code></li>
-<li><code>#define INTEGRATE_DENSITY 0</code></li>
-<li><code>#define INTEGRATE_SML 1</code> or <code>0</code></li>
-<li><code>#define DECOUPLE_SML 1</code> or <code>0</code></li>
-<li><code>#define VARIABLE_SML 0</code></li>
-<li><code>#define SML_CORRECTION 0</code></li>
-<li><code>#define ARTIFICIAL_VISCOSITY 1</code></li>
-<li><code>#define BALSARA_SWITCH 0</code></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><b>generate initial</b> HDF5 <b>particle distribution</b> (choose amount of particles to be simulated)<ul>
-<li>e.g. execute <code>initial_sedov.py</code></li>
-</ul>
-</li>
-<li><b>adjust <a href="material.cfg">material.cfg</a></b>: especially/at least <code>sml</code> in dependence of particles to be simulated</li>
-<li>adjust <a href="config.info">config.info</a>: especially output <code>directory</code> for the output files</li>
-<li><b>execute simulation</b> via <code>mpirun -np &lt;num processes&gt; bin/runner -n &lt;num output files&gt; -f &lt;generated initial particle distribution&gt; -C testcases/sedov/config.info -m testcases/sedov/material.cfg</code><ul>
-<li>assuming execution from the <code>milupHPC</code> root directory</li>
-</ul>
-</li>
-<li>possibly <a class="el" href="md_postprocessing__r_e_a_d_m_e.html">postprocess</a></li>
-</ol>
-<h2><a class="anchor" id="autotoc_md95"></a>
-Compilation</h2>
-<ul>
-<li>See <a class="el" href="md_documents__compilation.html">Compilation.md</a> for help</li>
-</ul>
-<p >A proper version of <code>parameter.h</code> is shown in the following. It is important to have/copy this version to the <code>include/</code> directory before the compilation.</p>
-<p ><details>
- <summary> parameter.h </summary></details>
-</p>
-<p ><details>
-</p><div class="fragment"><div class="line"><span class="preprocessor">#ifndef MILUPHPC_PARAMETER_H</span></div>
-<div class="line"><span class="preprocessor">#define MILUPHPC_PARAMETER_H</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#include &lt;limits&gt;</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#ifdef SINGLE_PRECISION</span></div>
-<div class="line">    <span class="keyword">typedef</span> <span class="keywordtype">float</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>;</div>
-<div class="line"><span class="preprocessor">#else</span></div>
-<div class="line">    <span class="keyword">typedef</span> <span class="keywordtype">double</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>;</div>
-<div class="line"><span class="preprocessor">#endif</span></div>
-<div class="line"><span class="keyword">typedef</span> <span class="keywordtype">int</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>;</div>
-<div class="line"><span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a>;</div>
-<div class="line"><span class="keyword">typedef</span> <span class="keywordtype">int</span> <a class="code hl_typedef" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a>;</div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
-<div class="line"> </div>
-<div class="line"><span class="comment">//#define theta 0.5</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define MAX_LEVEL 21</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define DEBUGGING 0</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define SAFETY_LEVEL 2</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define DIM 3</span></div>
-<div class="line"><span class="preprocessor">#define power_two(x) (1 &lt;&lt; (x))</span></div>
-<div class="line"><span class="preprocessor">#define POW_DIM power_two(DIM)</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define SI_UNITS 0</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define CUBIC_DOMAINS 1</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define GRAVITY_SIM 0</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define SPH_SIM 1</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define INTEGRATE_ENERGY 1</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define INTEGRATE_DENSITY 0</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define INTEGRATE_SML 1</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define DECOUPLE_SML 1</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define VARIABLE_SML 0</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define SML_CORRECTION 0</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define SPH_EQU_VERSION 1</span></div>
-<div class="line"> </div>
-<div class="line"><span class="comment">// deprecated flag</span></div>
-<div class="line"><span class="preprocessor">#define ARTIFICIAL_VISCOSITY 1</span></div>
-<div class="line"><span class="preprocessor">#define BALSARA_SWITCH 0</span></div>
-<div class="line"> </div>
-<div class="line"><span class="comment">// to be (fully) implemented flags</span></div>
-<div class="line"><span class="preprocessor">#define AVERAGE_KERNELS 0</span></div>
-<div class="line"><span class="preprocessor">#define DEAL_WITH_TOO_MANY_INTERACTIONS 0</span></div>
-<div class="line"><span class="preprocessor">#define SHEPARD_CORRECTION 0</span></div>
-<div class="line"><span class="preprocessor">#define SOLID 0</span></div>
-<div class="line"><span class="preprocessor">#define NAVIER_STOKES 0</span></div>
-<div class="line"><span class="preprocessor">#define ARTIFICIAL_STRESS 0</span></div>
-<div class="line"><span class="preprocessor">#define POROSITY 0</span></div>
-<div class="line"><span class="preprocessor">#define ZERO_CONSISTENCY 0</span></div>
-<div class="line"><span class="preprocessor">#define LINEAR_CONSISTENCY 0</span></div>
-<div class="line"><span class="preprocessor">#define FRAGMENTATION 0</span></div>
-<div class="line"><span class="preprocessor">#define PALPHA_POROSITY 0</span></div>
-<div class="line"><span class="preprocessor">#define PLASTICITY 0</span></div>
-<div class="line"><span class="preprocessor">#define KLEY_VISCOSITY 0</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define KEY_MAX ULONG_MAX</span></div>
-<div class="line"><span class="preprocessor">#define DOMAIN_LIST_SIZE 512</span></div>
-<div class="line"><span class="preprocessor">#define MAX_DEPTH 128</span></div>
-<div class="line"><span class="preprocessor">#define MAX_NUM_INTERACTIONS 180</span></div>
-<div class="line"><span class="preprocessor">#define NUM_THREADS_LIMIT_TIME_STEP 256</span></div>
-<div class="line"><span class="preprocessor">#define NUM_THREADS_CALC_CENTER_OF_MASS 256</span></div>
-<div class="line"> </div>
-<div class="line"><span class="comment">// Courant (CFL) number (note that our sml is defined up to the zero of the kernel, not half of it)</span></div>
-<div class="line"><span class="preprocessor">#define COURANT_FACT 0.4</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define FORCES_FACT 0.2</span></div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">constexpr</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_variable" href="include_2parameter_8h.html#a04c5fddff3aaef7523b3419c171f1884">dbl_max</a> = <a class="code hl_function" href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">std::numeric_limits&lt;real&gt;::max</a>();</div>
-<div class="line"><span class="preprocessor">#define DBL_MAX dbl_max;</span></div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_constants.html">Constants</a> {</div>
-<div class="line">    <span class="keyword">constexpr</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_variable" href="namespace_constants.html#ad17e79c3a9b2da663530274844d9f780">G</a> = 6.67430e-11;</div>
-<div class="line">}</div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_simulation_parameters.html">SimulationParameters</a> {</div>
-<div class="line">    std::string <a class="code hl_variable" href="struct_simulation_parameters.html#a426284c0f3b04b059ec27c5df0092e04">directory</a>;</div>
-<div class="line">    std::string <a class="code hl_variable" href="struct_simulation_parameters.html#a0fb68c84de754d059036a8b32b8a6c89">logDirectory</a>;</div>
-<div class="line">    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#adca3e31867604dc2075bd987e0ec67f2">verbosity</a>;</div>
-<div class="line">    <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_simulation_parameters.html#ab6e04f8e73ccf206f9dd8485c948838c">timeKernels</a>;</div>
-<div class="line">    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#abff695e0a1248782f868c5f57ce14cd9">numOutputFiles</a>;</div>
-<div class="line">    <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_variable" href="struct_simulation_parameters.html#ae1364d65deb6bfffcc11b635bdb21a14">timeStep</a>;</div>
-<div class="line">    <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_variable" href="struct_simulation_parameters.html#a1824843bddf8db4c26409dc20b6e2562">maxTimeStep</a>;</div>
-<div class="line">    <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_variable" href="struct_simulation_parameters.html#a27eeca61f98ea29522b866118ffe914f">timeEnd</a>;</div>
-<div class="line">    <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_simulation_parameters.html#a0b8883f78fbd76ea8aba5b9bdf665db8">loadBalancing</a>;</div>
-<div class="line">    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#a247cfb5067e99555a8968a815911bed9">loadBalancingInterval</a>;</div>
-<div class="line">    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#a68a5daed65925cf16e9dc9b955702f70">loadBalancingBins</a>;</div>
-<div class="line">    std::string <a class="code hl_variable" href="struct_simulation_parameters.html#abf19f8333e75b0609b0688033bbd593d">inputFile</a>;</div>
-<div class="line">    std::string <a class="code hl_variable" href="struct_simulation_parameters.html#a2aaaac5daa0fcbf0c3b84c662c289ea7">materialConfigFile</a>;</div>
-<div class="line">    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#a8205fd6fb7574280b2c5ce61558972bc">outputRank</a>;</div>
-<div class="line">    <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_simulation_parameters.html#abdcc1b44aa3decd70d4d3004e19effda">performanceLog</a>;</div>
-<div class="line">    <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_simulation_parameters.html#a94674a4e3f29261b3735341e5ff86c5e">particlesSent2H5</a>;</div>
-<div class="line">    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#adf0819b5f9a62286cf4687eb0f4495d4">sfcSelection</a>;</div>
-<div class="line">    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#aded0f27ea85d8564f0e824f11242d1e6">integratorSelection</a>;</div>
-<div class="line"><span class="comment">//#if GRAVITY_SIM</span></div>
-<div class="line">    <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_variable" href="struct_simulation_parameters.html#a11a66d8562c6d7cbd83fd4626f0682e9">theta</a>;</div>
-<div class="line">    <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_variable" href="struct_simulation_parameters.html#ad68e6e60476ca7664a6f8d14c2bdd682">smoothing</a>;</div>
-<div class="line">    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#ae7e52c50a385717eb74ff4c83f4d1352">gravityForceVersion</a>;</div>
-<div class="line"><span class="comment">//#endif</span></div>
-<div class="line"><span class="comment">//#if SPH_SIM</span></div>
-<div class="line">    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#a20f8422f80f28cb529406ded5cc23eda">smoothingKernelSelection</a>;</div>
-<div class="line">    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#adcf01f0e69c2c1e99827ee1619c35f2e">sphFixedRadiusNNVersion</a>;</div>
-<div class="line"><span class="comment">//#endif</span></div>
-<div class="line">    <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_simulation_parameters.html#afcade733412d5cb4835e789787242c2c">removeParticles</a>;</div>
-<div class="line">    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#ae8d544384926bc8f46c43082716f090c">removeParticlesCriterion</a>;</div>
-<div class="line">    <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_variable" href="struct_simulation_parameters.html#a1b675216793741f6961ef1d6e6714f38">removeParticlesDimension</a>;</div>
-<div class="line">    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#a74aafed70aa0f308a4da77bdc3a98de0">bins</a>;</div>
-<div class="line">    <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_simulation_parameters.html#a095b20022d67ba1ac26d5bed45a14de5">calculateAngularMomentum</a>;</div>
-<div class="line">    <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_simulation_parameters.html#af561a304f51256a5924bfd17c7820e52">calculateEnergy</a>;</div>
-<div class="line">    <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_simulation_parameters.html#ab4a75e1b06ca4c8d223274ca01115cb1">calculateCenterOfMass</a>;</div>
-<div class="line">    <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_variable" href="struct_simulation_parameters.html#aeb27babde5a25717a11104a3176ff016">particleMemoryContingent</a>;</div>
-<div class="line">    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#a78cd1edd9defeafcd37a4a68535eaed5">domainListSize</a>;</div>
-<div class="line">} <a class="code hl_typedef" href="include_2parameter_8h.html#a2d8e8822fa3f08e0aab03e66949b9faf">SimulationParameters</a>;</div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="struct_to.html">To</a></div>
-<div class="line">{</div>
-<div class="line">    <span class="keyword">enum</span> <a class="code hl_enumeration" href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49">Target</a></div>
-<div class="line">    {</div>
-<div class="line">        <a class="code hl_enumvalue" href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49a8178fb6c32eb3a82f7f25a25196cdbfc">host</a>, <a class="code hl_enumvalue" href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49a4f25ce835a523aaa2b2faedf4960f38c">device</a></div>
-<div class="line">    };</div>
-<div class="line">    <a class="code hl_enumeration" href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49">Target</a> <a class="code hl_variable" href="struct_to.html#a2570d23657d3c2be298d6b6a5857999f">t_</a>;</div>
-<div class="line">    <a class="code hl_function" href="struct_to.html#a91c3877f442bd3b5e110b7cd375589bd">To</a>(<a class="code hl_enumeration" href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49">Target</a> t) : <a class="code hl_variable" href="struct_to.html#a2570d23657d3c2be298d6b6a5857999f">t_</a>(t) {}</div>
-<div class="line">    <span class="keyword">operator</span> <a class="code hl_enumeration" href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49">Target</a> ()<span class="keyword"> const </span>{<span class="keywordflow">return</span> <a class="code hl_variable" href="struct_to.html#a2570d23657d3c2be298d6b6a5857999f">t_</a>;}</div>
-<div class="line"><span class="keyword">private</span>:</div>
-<div class="line">    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line">    <span class="keyword">operator</span> T () <span class="keyword">const</span>;</div>
-<div class="line">};</div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="struct_smoothing.html">Smoothing</a></div>
-<div class="line">{</div>
-<div class="line">    <span class="keyword">enum</span> <a class="code hl_namespace" href="namespace_kernel.html">Kernel</a></div>
-<div class="line">    {</div>
-<div class="line">        <a class="code hl_enumvalue" href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674a6705b4c78679abf5250e1086118ac5b3">spiky</a>, <a class="code hl_enumvalue" href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674a3182e531cc9d04448e8724b428f757ed">cubic_spline</a>, <a class="code hl_enumvalue" href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674afa18ac3b00422f42c6175598807ef675">wendlandc2</a>, <a class="code hl_enumvalue" href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674a4ed43bfbc693f7ee3f10f9021f978d94">wendlandc4</a>, <a class="code hl_enumvalue" href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674ae719e9800f819ac93fa1bd296a73bf15">wendlandc6</a></div>
-<div class="line">    };</div>
-<div class="line">    <a class="code hl_namespace" href="namespace_kernel.html">Kernel</a> <a class="code hl_variable" href="struct_smoothing.html#a947ed1b107f32189a3c839b6c81f956a">t_</a>;</div>
-<div class="line">    <a class="code hl_function" href="struct_smoothing.html#a9014fbe54d67cd4769d9e104def2e934">Smoothing</a>(<a class="code hl_namespace" href="namespace_kernel.html">Kernel</a> t) : <a class="code hl_variable" href="struct_smoothing.html#a947ed1b107f32189a3c839b6c81f956a">t_</a>(t) {}</div>
-<div class="line">    <span class="keyword">operator</span> <a class="code hl_function" href="struct_smoothing.html#a9014fbe54d67cd4769d9e104def2e934">Smoothing</a> ()<span class="keyword"> const </span>{<span class="keywordflow">return</span> <a class="code hl_variable" href="struct_smoothing.html#a947ed1b107f32189a3c839b6c81f956a">t_</a>;}</div>
-<div class="line"><span class="keyword">private</span>:</div>
-<div class="line">    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line">    <span class="keyword">operator</span> T () <span class="keyword">const</span>;</div>
-<div class="line">};</div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="struct_execution.html">Execution</a></div>
-<div class="line">{</div>
-<div class="line">    <span class="keyword">enum</span> <a class="code hl_enumeration" href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100f">Location</a></div>
-<div class="line">    {</div>
-<div class="line">        <a class="code hl_enumvalue" href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100fae0020bb2711374b27bf9dfec719b6493">host</a>, <a class="code hl_enumvalue" href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100fa4a101b0184d25b94e46b08fd0f657db9">device</a></div>
-<div class="line">    };</div>
-<div class="line">    <a class="code hl_enumeration" href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100f">Location</a> <a class="code hl_variable" href="struct_execution.html#afaa3257b73ea9959e64b3bf427c739cb">t_</a>;</div>
-<div class="line">    <a class="code hl_function" href="struct_execution.html#a304006bcace8db453da0844ae1ca82b7">Execution</a>(<a class="code hl_enumeration" href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100f">Location</a> t) : <a class="code hl_variable" href="struct_execution.html#afaa3257b73ea9959e64b3bf427c739cb">t_</a>(t) {}</div>
-<div class="line">    <span class="keyword">operator</span> <a class="code hl_enumeration" href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100f">Location</a> ()<span class="keyword"> const </span>{<span class="keywordflow">return</span> <a class="code hl_variable" href="struct_execution.html#afaa3257b73ea9959e64b3bf427c739cb">t_</a>;}</div>
-<div class="line"><span class="keyword">private</span>:</div>
-<div class="line">    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line">    <span class="keyword">operator</span> T () <span class="keyword">const</span>;</div>
-<div class="line">};</div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="struct_curve.html">Curve</a></div>
-<div class="line">{</div>
-<div class="line">    <span class="keyword">enum</span> <a class="code hl_enumeration" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a></div>
-<div class="line">    {</div>
-<div class="line">        <a class="code hl_enumvalue" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">lebesgue</a>, <a class="code hl_enumvalue" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">hilbert</a></div>
-<div class="line">    };</div>
-<div class="line">    <a class="code hl_enumeration" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a> <a class="code hl_variable" href="struct_curve.html#a7d7b6984a47618a0eb5bccbc84888d43">t_</a>;</div>
-<div class="line">    <a class="code hl_function" href="struct_curve.html#aa23fab9ccef7e492b1e279582ba026c0">Curve</a>(<a class="code hl_enumeration" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a> t) : <a class="code hl_variable" href="struct_curve.html#a7d7b6984a47618a0eb5bccbc84888d43">t_</a>(t) {}</div>
-<div class="line">    <span class="keyword">operator</span> <a class="code hl_enumeration" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a> ()<span class="keyword"> const </span>{<span class="keywordflow">return</span> <a class="code hl_variable" href="struct_curve.html#a7d7b6984a47618a0eb5bccbc84888d43">t_</a>;}</div>
-<div class="line">    <span class="comment">//friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const Curve::Type curveType);</span></div>
-<div class="line"><span class="keyword">private</span>:</div>
-<div class="line">    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line">    <span class="keyword">operator</span> T () <span class="keyword">const</span>;</div>
-<div class="line">};</div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="struct_integrator_selection.html">IntegratorSelection</a></div>
-<div class="line">{</div>
-<div class="line">    <span class="keyword">enum</span> <a class="code hl_enumeration" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">Type</a></div>
-<div class="line">    {</div>
-<div class="line">        <a class="code hl_enumvalue" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">explicit_euler</a>, <a class="code hl_enumvalue" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce">predictor_corrector_euler</a>, <a class="code hl_enumvalue" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca">leapfrog</a></div>
-<div class="line">    };</div>
-<div class="line">    <a class="code hl_enumeration" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">Type</a> <a class="code hl_variable" href="struct_integrator_selection.html#a2eaf4db317d5a1d54fdc31c380cb4cfa">t_</a>;</div>
-<div class="line">    <a class="code hl_function" href="struct_integrator_selection.html#a8d1ddbcd7b499bd6addcfe088d079da7">IntegratorSelection</a>(<a class="code hl_enumeration" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">Type</a> t) : <a class="code hl_variable" href="struct_integrator_selection.html#a2eaf4db317d5a1d54fdc31c380cb4cfa">t_</a>(t) {}</div>
-<div class="line">    <span class="keyword">operator</span> <a class="code hl_enumeration" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">Type</a> ()<span class="keyword"> const </span>{<span class="keywordflow">return</span> <a class="code hl_variable" href="struct_integrator_selection.html#a2eaf4db317d5a1d54fdc31c380cb4cfa">t_</a>;}</div>
-<div class="line"><span class="keyword">private</span>:</div>
-<div class="line">    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line">    <span class="keyword">operator</span> T () <span class="keyword">const</span>;</div>
-<div class="line">};</div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">enum</span> <a class="code hl_enumeration" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6c">EquationOfStates</a> {</div>
-<div class="line">    <span class="comment">//EOS_TYPE_ACCRETED = -2, /// special flag for particles that got accreted by a gravitating point mass</span></div>
-<div class="line">    <span class="comment">//EOS_TYPE_IGNORE = -1, /// particle is ignored</span></div>
-<div class="line">    <a class="code hl_enumvalue" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c">EOS_TYPE_POLYTROPIC_GAS</a> = 0, </div>
-<div class="line">    <span class="comment">//EOS_TYPE_MURNAGHAN = 1, /// Murnaghan EOS for solid bodies, see Melosh &quot;Impact Cratering&quot;, needs in material.cfg: rho_0, bulk_modulus, n</span></div>
-<div class="line">    <span class="comment">//EOS_TYPE_TILLOTSON = 2, /// Tillotson EOS for solid bodies, see Melosh &quot;Impact Cratering&quot;, needs in material.cfg: till_rho_0, till_A, till_B, till_E_0, till_E_iv, till_E_cv, till_a, till_b, till_alpha, till_beta; bulk_modulus and shear_modulus are needed to calculate the sound speed and crack growth speed for FRAGMENTATION</span></div>
-<div class="line">    <a class="code hl_enumvalue" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57">EOS_TYPE_ISOTHERMAL_GAS</a> = 3, </div>
-<div class="line">    <span class="comment">//EOS_TYPE_REGOLITH = 4, /// The Bui et al. 2008 soil model</span></div>
-<div class="line">    <span class="comment">//EOS_TYPE_JUTZI = 5, /// Tillotson EOS with p-alpha model by Jutzi et al.</span></div>
-<div class="line">    <span class="comment">//EOS_TYPE_JUTZI_MURNAGHAN = 6, /// Murnaghan EOS with p-alpha model by Jutzi et al.</span></div>
-<div class="line">    <span class="comment">//EOS_TYPE_ANEOS = 7, /// ANEOS (or tabulated EOS in ANEOS format)</span></div>
-<div class="line">    <span class="comment">//EOS_TYPE_VISCOUS_REGOLITH = 8, /// describe regolith as a viscous material -&gt; EXPERIMENTAL DO NOT USE</span></div>
-<div class="line">    <a class="code hl_enumvalue" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c">EOS_TYPE_IDEAL_GAS</a> = 9, </div>
-<div class="line">    <span class="comment">//EOS_TYPE_SIRONO = 10, /// Sirono EOS modifed by Geretshauser in 2009/10</span></div>
-<div class="line">    <span class="comment">//EOS_TYPE_EPSILON = 11, /// Tillotson EOS with epsilon-alpha model by Wuennemann, Collins et al.</span></div>
-<div class="line">    <a class="code hl_enumvalue" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c">EOS_TYPE_LOCALLY_ISOTHERMAL_GAS</a> = 12, </div>
-<div class="line">    <span class="comment">//EOS_TYPE_JUTZI_ANEOS = 13/// ANEOS EOS with p-alpha model by Jutzi et al.</span></div>
-<div class="line">};</div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">struct </span><a class="code hl_struct" href="struct_entry.html">Entry</a></div>
-<div class="line">{</div>
-<div class="line">    <span class="keyword">enum</span> <a class="code hl_enumeration" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bf">Name</a></div>
-<div class="line">    {</div>
-<div class="line">        <a class="code hl_enumvalue" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bfa6998ccdf8a8d12398cbbae194e97e764">x</a>,</div>
-<div class="line"><span class="preprocessor">#if DIM &gt; 1</span></div>
-<div class="line">        <a class="code hl_enumvalue" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bfa4c1569387ceb30b45800d7f6cbb9648f">y</a>,</div>
-<div class="line"><span class="preprocessor">#if DIM == 3</span></div>
-<div class="line">        <a class="code hl_enumvalue" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bfaf36a092fd001bc7e24a364ce53619ec1">z</a>,</div>
-<div class="line"><span class="preprocessor">#endif</span></div>
-<div class="line"><span class="preprocessor">#endif</span></div>
-<div class="line">        <a class="code hl_enumvalue" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bfa32d4940452c87bb8b4a5774fd6927ba0">mass</a></div>
-<div class="line">    };</div>
-<div class="line">    <a class="code hl_enumeration" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bf">Name</a> <a class="code hl_variable" href="struct_entry.html#ad1695080775559b42b398ac3c3e4413d">t_</a>;</div>
-<div class="line">    <a class="code hl_function" href="struct_entry.html#a2d5eaea842f105f7d13c1d6df7d9d331">Entry</a>(<a class="code hl_enumeration" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bf">Name</a> t) : <a class="code hl_variable" href="struct_entry.html#ad1695080775559b42b398ac3c3e4413d">t_</a>(t) {}</div>
-<div class="line">    <span class="keyword">operator</span> <a class="code hl_enumeration" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bf">Name</a> ()<span class="keyword"> const </span>{<span class="keywordflow">return</span> <a class="code hl_variable" href="struct_entry.html#ad1695080775559b42b398ac3c3e4413d">t_</a>;}</div>
-<div class="line"><span class="keyword">private</span>:</div>
-<div class="line">    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line">    <span class="keyword">operator</span> T () <span class="keyword">const</span>;</div>
-<div class="line">};</div>
-<div class="line"><span class="preprocessor">#endif </span><span class="comment">//MILUPHPC_PARAMETER_H</span></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_a04c5fddff3aaef7523b3419c171f1884"><div class="ttname"><a href="include_2parameter_8h.html#a04c5fddff3aaef7523b3419c171f1884">dbl_max</a></div><div class="ttdeci">constexpr real dbl_max</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00115">parameter.h:115</a></div></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_a11d147c64891830c9e79b3315b1b2e21"><div class="ttname"><a href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a></div><div class="ttdeci">double real</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00015">parameter.h:15</a></div></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_a2d83a9d6677f42e2572510c1a14e58ed"><div class="ttname"><a href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a></div><div class="ttdeci">unsigned long keyType</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00018">parameter.h:18</a></div></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_a2d8e8822fa3f08e0aab03e66949b9faf"><div class="ttname"><a href="include_2parameter_8h.html#a2d8e8822fa3f08e0aab03e66949b9faf">SimulationParameters</a></div><div class="ttdeci">struct SimulationParameters SimulationParameters</div></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_a3b6ee100a473e8866bcea6d1fc4041d9"><div class="ttname"><a href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a></div><div class="ttdeci">int integer</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00017">parameter.h:17</a></div></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_a5a8162808ef47c46eaf46274eab03e6c"><div class="ttname"><a href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6c">EquationOfStates</a></div><div class="ttdeci">EquationOfStates</div><div class="ttdoc">implemented equation of states</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00233">parameter.h:233</a></div></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c"><div class="ttname"><a href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c">EOS_TYPE_LOCALLY_ISOTHERMAL_GAS</a></div><div class="ttdeci">@ EOS_TYPE_LOCALLY_ISOTHERMAL_GAS</div><div class="ttdoc">ideal gas equation, set polytropic_gamma in material.cfg</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00248">parameter.h:248</a></div></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c"><div class="ttname"><a href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c">EOS_TYPE_IDEAL_GAS</a></div><div class="ttdeci">@ EOS_TYPE_IDEAL_GAS</div><div class="ttdoc">this is pure molecular hydrogen at 10 K</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00245">parameter.h:245</a></div></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57"><div class="ttname"><a href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57">EOS_TYPE_ISOTHERMAL_GAS</a></div><div class="ttdeci">@ EOS_TYPE_ISOTHERMAL_GAS</div><div class="ttdoc">polytropic EOS for gas, needs polytropic_K and polytropic_gamma in material.cfg file</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00239">parameter.h:239</a></div></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c"><div class="ttname"><a href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c">EOS_TYPE_POLYTROPIC_GAS</a></div><div class="ttdeci">@ EOS_TYPE_POLYTROPIC_GAS</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00236">parameter.h:236</a></div></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_ae84a801cb4761e9d8f613b66a73c4b98"><div class="ttname"><a href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a></div><div class="ttdeci">int idInteger</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00019">parameter.h:19</a></div></div>
-<div class="ttc" id="anamespace_constants_html"><div class="ttname"><a href="namespace_constants.html">Constants</a></div><div class="ttdoc">(Physical) constants</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00118">parameter.h:118</a></div></div>
-<div class="ttc" id="anamespace_constants_html_ad17e79c3a9b2da663530274844d9f780"><div class="ttname"><a href="namespace_constants.html#ad17e79c3a9b2da663530274844d9f780">Constants::G</a></div><div class="ttdeci">constexpr real G</div><div class="ttdoc">Gravitational constant.</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00119">parameter.h:119</a></div></div>
-<div class="ttc" id="anamespace_kernel_html"><div class="ttname"><a href="namespace_kernel.html">Kernel</a></div><div class="ttdef"><b>Definition:</b> <a href="device__rhs_8cuh_source.html#l00007">device_rhs.cuh:7</a></div></div>
-<div class="ttc" id="anamespacecuda_1_1math_html_ae45b7a0e96687aa98c58a3ee386b2ada"><div class="ttname"><a href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">cuda::math::max</a></div><div class="ttdeci">__device__ real max(real a, real b)</div><div class="ttdoc">Maximum value out of two floating point values.</div><div class="ttdef"><b>Definition:</b> <a href="cuda__utilities_8cu_source.html#l00431">cuda_utilities.cu:431</a></div></div>
-<div class="ttc" id="astruct_curve_html"><div class="ttname"><a href="struct_curve.html">Curve</a></div><div class="ttdoc">Available space-filling curves.</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00203">parameter.h:204</a></div></div>
-<div class="ttc" id="astruct_curve_html_a4269858acf8d67e3cd222466771848b9"><div class="ttname"><a href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a></div><div class="ttdeci">Type</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00205">parameter.h:206</a></div></div>
-<div class="ttc" id="astruct_curve_html_a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052"><div class="ttname"><a href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">Curve::lebesgue</a></div><div class="ttdeci">@ lebesgue</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00207">parameter.h:207</a></div></div>
-<div class="ttc" id="astruct_curve_html_a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a"><div class="ttname"><a href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">Curve::hilbert</a></div><div class="ttdeci">@ hilbert</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00208">parameter.h:207</a></div></div>
-<div class="ttc" id="astruct_curve_html_a7d7b6984a47618a0eb5bccbc84888d43"><div class="ttname"><a href="struct_curve.html#a7d7b6984a47618a0eb5bccbc84888d43">Curve::t_</a></div><div class="ttdeci">Type t_</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00209">parameter.h:209</a></div></div>
-<div class="ttc" id="astruct_curve_html_aa23fab9ccef7e492b1e279582ba026c0"><div class="ttname"><a href="struct_curve.html#aa23fab9ccef7e492b1e279582ba026c0">Curve::Curve</a></div><div class="ttdeci">Curve(Type t)</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00210">parameter.h:210</a></div></div>
-<div class="ttc" id="astruct_entry_html"><div class="ttname"><a href="struct_entry.html">Entry</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00252">parameter.h:253</a></div></div>
-<div class="ttc" id="astruct_entry_html_a1cfdb441b3e1d3be86d339cf45f940bf"><div class="ttname"><a href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bf">Entry::Name</a></div><div class="ttdeci">Name</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00254">parameter.h:255</a></div></div>
-<div class="ttc" id="astruct_entry_html_a1cfdb441b3e1d3be86d339cf45f940bfa32d4940452c87bb8b4a5774fd6927ba0"><div class="ttname"><a href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bfa32d4940452c87bb8b4a5774fd6927ba0">Entry::mass</a></div><div class="ttdeci">@ mass</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00264">parameter.h:263</a></div></div>
-<div class="ttc" id="astruct_entry_html_a1cfdb441b3e1d3be86d339cf45f940bfa4c1569387ceb30b45800d7f6cbb9648f"><div class="ttname"><a href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bfa4c1569387ceb30b45800d7f6cbb9648f">Entry::y</a></div><div class="ttdeci">@ y</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00258">parameter.h:258</a></div></div>
-<div class="ttc" id="astruct_entry_html_a1cfdb441b3e1d3be86d339cf45f940bfa6998ccdf8a8d12398cbbae194e97e764"><div class="ttname"><a href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bfa6998ccdf8a8d12398cbbae194e97e764">Entry::x</a></div><div class="ttdeci">@ x</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00256">parameter.h:256</a></div></div>
-<div class="ttc" id="astruct_entry_html_a1cfdb441b3e1d3be86d339cf45f940bfaf36a092fd001bc7e24a364ce53619ec1"><div class="ttname"><a href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bfaf36a092fd001bc7e24a364ce53619ec1">Entry::z</a></div><div class="ttdeci">@ z</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00260">parameter.h:260</a></div></div>
-<div class="ttc" id="astruct_entry_html_a2d5eaea842f105f7d13c1d6df7d9d331"><div class="ttname"><a href="struct_entry.html#a2d5eaea842f105f7d13c1d6df7d9d331">Entry::Entry</a></div><div class="ttdeci">Entry(Name t)</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00266">parameter.h:266</a></div></div>
-<div class="ttc" id="astruct_entry_html_ad1695080775559b42b398ac3c3e4413d"><div class="ttname"><a href="struct_entry.html#ad1695080775559b42b398ac3c3e4413d">Entry::t_</a></div><div class="ttdeci">Name t_</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00265">parameter.h:265</a></div></div>
-<div class="ttc" id="astruct_execution_html"><div class="ttname"><a href="struct_execution.html">Execution</a></div><div class="ttdoc">Execution location (host/device).</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00189">parameter.h:190</a></div></div>
-<div class="ttc" id="astruct_execution_html_a304006bcace8db453da0844ae1ca82b7"><div class="ttname"><a href="struct_execution.html#a304006bcace8db453da0844ae1ca82b7">Execution::Execution</a></div><div class="ttdeci">Execution(Location t)</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00196">parameter.h:196</a></div></div>
-<div class="ttc" id="astruct_execution_html_a3592ced8214a617baf4bc8267dbc100f"><div class="ttname"><a href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100f">Execution::Location</a></div><div class="ttdeci">Location</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00191">parameter.h:192</a></div></div>
-<div class="ttc" id="astruct_execution_html_a3592ced8214a617baf4bc8267dbc100fa4a101b0184d25b94e46b08fd0f657db9"><div class="ttname"><a href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100fa4a101b0184d25b94e46b08fd0f657db9">Execution::device</a></div><div class="ttdeci">@ device</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00194">parameter.h:193</a></div></div>
-<div class="ttc" id="astruct_execution_html_a3592ced8214a617baf4bc8267dbc100fae0020bb2711374b27bf9dfec719b6493"><div class="ttname"><a href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100fae0020bb2711374b27bf9dfec719b6493">Execution::host</a></div><div class="ttdeci">@ host</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00193">parameter.h:193</a></div></div>
-<div class="ttc" id="astruct_execution_html_afaa3257b73ea9959e64b3bf427c739cb"><div class="ttname"><a href="struct_execution.html#afaa3257b73ea9959e64b3bf427c739cb">Execution::t_</a></div><div class="ttdeci">Location t_</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00195">parameter.h:195</a></div></div>
-<div class="ttc" id="astruct_integrator_selection_html"><div class="ttname"><a href="struct_integrator_selection.html">IntegratorSelection</a></div><div class="ttdoc">Available integrators.</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00218">parameter.h:219</a></div></div>
-<div class="ttc" id="astruct_integrator_selection_html_a22b2e895a1a87c3aabe7afd055a51603"><div class="ttname"><a href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">IntegratorSelection::Type</a></div><div class="ttdeci">Type</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00220">parameter.h:221</a></div></div>
-<div class="ttc" id="astruct_integrator_selection_html_a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce"><div class="ttname"><a href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce">IntegratorSelection::predictor_corrector_euler</a></div><div class="ttdeci">@ predictor_corrector_euler</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00222">parameter.h:222</a></div></div>
-<div class="ttc" id="astruct_integrator_selection_html_a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15"><div class="ttname"><a href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">IntegratorSelection::explicit_euler</a></div><div class="ttdeci">@ explicit_euler</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00222">parameter.h:222</a></div></div>
-<div class="ttc" id="astruct_integrator_selection_html_a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca"><div class="ttname"><a href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca">IntegratorSelection::leapfrog</a></div><div class="ttdeci">@ leapfrog</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00223">parameter.h:222</a></div></div>
-<div class="ttc" id="astruct_integrator_selection_html_a2eaf4db317d5a1d54fdc31c380cb4cfa"><div class="ttname"><a href="struct_integrator_selection.html#a2eaf4db317d5a1d54fdc31c380cb4cfa">IntegratorSelection::t_</a></div><div class="ttdeci">Type t_</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00224">parameter.h:224</a></div></div>
-<div class="ttc" id="astruct_integrator_selection_html_a8d1ddbcd7b499bd6addcfe088d079da7"><div class="ttname"><a href="struct_integrator_selection.html#a8d1ddbcd7b499bd6addcfe088d079da7">IntegratorSelection::IntegratorSelection</a></div><div class="ttdeci">IntegratorSelection(Type t)</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00225">parameter.h:225</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html"><div class="ttname"><a href="struct_simulation_parameters.html">SimulationParameters</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00122">parameter.h:122</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_a095b20022d67ba1ac26d5bed45a14de5"><div class="ttname"><a href="struct_simulation_parameters.html#a095b20022d67ba1ac26d5bed45a14de5">SimulationParameters::calculateAngularMomentum</a></div><div class="ttdeci">bool calculateAngularMomentum</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00154">parameter.h:154</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_a0b8883f78fbd76ea8aba5b9bdf665db8"><div class="ttname"><a href="struct_simulation_parameters.html#a0b8883f78fbd76ea8aba5b9bdf665db8">SimulationParameters::loadBalancing</a></div><div class="ttdeci">bool loadBalancing</div><div class="ttdoc">apply load balancing</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00131">parameter.h:131</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_a0fb68c84de754d059036a8b32b8a6c89"><div class="ttname"><a href="struct_simulation_parameters.html#a0fb68c84de754d059036a8b32b8a6c89">SimulationParameters::logDirectory</a></div><div class="ttdeci">std::string logDirectory</div><div class="ttdoc">log file(s) directory</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00124">parameter.h:124</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_a11a66d8562c6d7cbd83fd4626f0682e9"><div class="ttname"><a href="struct_simulation_parameters.html#a11a66d8562c6d7cbd83fd4626f0682e9">SimulationParameters::theta</a></div><div class="ttdeci">real theta</div><div class="ttdoc">clumping parameter/</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00142">parameter.h:142</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_a1824843bddf8db4c26409dc20b6e2562"><div class="ttname"><a href="struct_simulation_parameters.html#a1824843bddf8db4c26409dc20b6e2562">SimulationParameters::maxTimeStep</a></div><div class="ttdeci">real maxTimeStep</div><div class="ttdoc">max (allowed) time step</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00129">parameter.h:129</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_a1b675216793741f6961ef1d6e6714f38"><div class="ttname"><a href="struct_simulation_parameters.html#a1b675216793741f6961ef1d6e6714f38">SimulationParameters::removeParticlesDimension</a></div><div class="ttdeci">real removeParticlesDimension</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00152">parameter.h:152</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_a20f8422f80f28cb529406ded5cc23eda"><div class="ttname"><a href="struct_simulation_parameters.html#a20f8422f80f28cb529406ded5cc23eda">SimulationParameters::smoothingKernelSelection</a></div><div class="ttdeci">int smoothingKernelSelection</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00147">parameter.h:147</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_a247cfb5067e99555a8968a815911bed9"><div class="ttname"><a href="struct_simulation_parameters.html#a247cfb5067e99555a8968a815911bed9">SimulationParameters::loadBalancingInterval</a></div><div class="ttdeci">int loadBalancingInterval</div><div class="ttdoc">apply load balancing each x interval/simulation step</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00132">parameter.h:132</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_a27eeca61f98ea29522b866118ffe914f"><div class="ttname"><a href="struct_simulation_parameters.html#a27eeca61f98ea29522b866118ffe914f">SimulationParameters::timeEnd</a></div><div class="ttdeci">real timeEnd</div><div class="ttdoc">end time of simulation</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00130">parameter.h:130</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_a2aaaac5daa0fcbf0c3b84c662c289ea7"><div class="ttname"><a href="struct_simulation_parameters.html#a2aaaac5daa0fcbf0c3b84c662c289ea7">SimulationParameters::materialConfigFile</a></div><div class="ttdeci">std::string materialConfigFile</div><div class="ttdoc">input file containing material configurations/parameters</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00135">parameter.h:135</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_a426284c0f3b04b059ec27c5df0092e04"><div class="ttname"><a href="struct_simulation_parameters.html#a426284c0f3b04b059ec27c5df0092e04">SimulationParameters::directory</a></div><div class="ttdeci">std::string directory</div><div class="ttdoc">output file(s) directory</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00123">parameter.h:123</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_a68a5daed65925cf16e9dc9b955702f70"><div class="ttname"><a href="struct_simulation_parameters.html#a68a5daed65925cf16e9dc9b955702f70">SimulationParameters::loadBalancingBins</a></div><div class="ttdeci">int loadBalancingBins</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00133">parameter.h:133</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_a74aafed70aa0f308a4da77bdc3a98de0"><div class="ttname"><a href="struct_simulation_parameters.html#a74aafed70aa0f308a4da77bdc3a98de0">SimulationParameters::bins</a></div><div class="ttdeci">int bins</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00153">parameter.h:153</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_a78cd1edd9defeafcd37a4a68535eaed5"><div class="ttname"><a href="struct_simulation_parameters.html#a78cd1edd9defeafcd37a4a68535eaed5">SimulationParameters::domainListSize</a></div><div class="ttdeci">int domainListSize</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00158">parameter.h:158</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_a8205fd6fb7574280b2c5ce61558972bc"><div class="ttname"><a href="struct_simulation_parameters.html#a8205fd6fb7574280b2c5ce61558972bc">SimulationParameters::outputRank</a></div><div class="ttdeci">int outputRank</div><div class="ttdoc">specify a (MPI) rank for console logging (default: -1 logging all ranks)</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00136">parameter.h:136</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_a94674a4e3f29261b3735341e5ff86c5e"><div class="ttname"><a href="struct_simulation_parameters.html#a94674a4e3f29261b3735341e5ff86c5e">SimulationParameters::particlesSent2H5</a></div><div class="ttdeci">bool particlesSent2H5</div><div class="ttdoc">log particles sent to HDF5 file</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00138">parameter.h:138</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_ab4a75e1b06ca4c8d223274ca01115cb1"><div class="ttname"><a href="struct_simulation_parameters.html#ab4a75e1b06ca4c8d223274ca01115cb1">SimulationParameters::calculateCenterOfMass</a></div><div class="ttdeci">bool calculateCenterOfMass</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00156">parameter.h:156</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_ab6e04f8e73ccf206f9dd8485c948838c"><div class="ttname"><a href="struct_simulation_parameters.html#ab6e04f8e73ccf206f9dd8485c948838c">SimulationParameters::timeKernels</a></div><div class="ttdeci">bool timeKernels</div><div class="ttdoc">time the CUDA kernels</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00126">parameter.h:126</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_abdcc1b44aa3decd70d4d3004e19effda"><div class="ttname"><a href="struct_simulation_parameters.html#abdcc1b44aa3decd70d4d3004e19effda">SimulationParameters::performanceLog</a></div><div class="ttdeci">bool performanceLog</div><div class="ttdoc">log performance to HDF5 file</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00137">parameter.h:137</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_abf19f8333e75b0609b0688033bbd593d"><div class="ttname"><a href="struct_simulation_parameters.html#abf19f8333e75b0609b0688033bbd593d">SimulationParameters::inputFile</a></div><div class="ttdeci">std::string inputFile</div><div class="ttdoc">input file containing initial particle distribution</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00134">parameter.h:134</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_abff695e0a1248782f868c5f57ce14cd9"><div class="ttname"><a href="struct_simulation_parameters.html#abff695e0a1248782f868c5f57ce14cd9">SimulationParameters::numOutputFiles</a></div><div class="ttdeci">int numOutputFiles</div><div class="ttdoc">number of output files</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00127">parameter.h:127</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_ad68e6e60476ca7664a6f8d14c2bdd682"><div class="ttname"><a href="struct_simulation_parameters.html#ad68e6e60476ca7664a6f8d14c2bdd682">SimulationParameters::smoothing</a></div><div class="ttdeci">real smoothing</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00143">parameter.h:143</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_adca3e31867604dc2075bd987e0ec67f2"><div class="ttname"><a href="struct_simulation_parameters.html#adca3e31867604dc2075bd987e0ec67f2">SimulationParameters::verbosity</a></div><div class="ttdeci">int verbosity</div><div class="ttdoc">verbosity level</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00125">parameter.h:125</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_adcf01f0e69c2c1e99827ee1619c35f2e"><div class="ttname"><a href="struct_simulation_parameters.html#adcf01f0e69c2c1e99827ee1619c35f2e">SimulationParameters::sphFixedRadiusNNVersion</a></div><div class="ttdeci">int sphFixedRadiusNNVersion</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00148">parameter.h:148</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_aded0f27ea85d8564f0e824f11242d1e6"><div class="ttname"><a href="struct_simulation_parameters.html#aded0f27ea85d8564f0e824f11242d1e6">SimulationParameters::integratorSelection</a></div><div class="ttdeci">int integratorSelection</div><div class="ttdoc">integrator selection</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00140">parameter.h:140</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_adf0819b5f9a62286cf4687eb0f4495d4"><div class="ttname"><a href="struct_simulation_parameters.html#adf0819b5f9a62286cf4687eb0f4495d4">SimulationParameters::sfcSelection</a></div><div class="ttdeci">int sfcSelection</div><div class="ttdoc">space-filling curve selection</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00139">parameter.h:139</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_ae1364d65deb6bfffcc11b635bdb21a14"><div class="ttname"><a href="struct_simulation_parameters.html#ae1364d65deb6bfffcc11b635bdb21a14">SimulationParameters::timeStep</a></div><div class="ttdeci">real timeStep</div><div class="ttdoc">time step</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00128">parameter.h:128</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_ae7e52c50a385717eb74ff4c83f4d1352"><div class="ttname"><a href="struct_simulation_parameters.html#ae7e52c50a385717eb74ff4c83f4d1352">SimulationParameters::gravityForceVersion</a></div><div class="ttdeci">int gravityForceVersion</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00144">parameter.h:144</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_ae8d544384926bc8f46c43082716f090c"><div class="ttname"><a href="struct_simulation_parameters.html#ae8d544384926bc8f46c43082716f090c">SimulationParameters::removeParticlesCriterion</a></div><div class="ttdeci">int removeParticlesCriterion</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00151">parameter.h:151</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_aeb27babde5a25717a11104a3176ff016"><div class="ttname"><a href="struct_simulation_parameters.html#aeb27babde5a25717a11104a3176ff016">SimulationParameters::particleMemoryContingent</a></div><div class="ttdeci">real particleMemoryContingent</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00157">parameter.h:157</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_af561a304f51256a5924bfd17c7820e52"><div class="ttname"><a href="struct_simulation_parameters.html#af561a304f51256a5924bfd17c7820e52">SimulationParameters::calculateEnergy</a></div><div class="ttdeci">bool calculateEnergy</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00155">parameter.h:155</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_afcade733412d5cb4835e789787242c2c"><div class="ttname"><a href="struct_simulation_parameters.html#afcade733412d5cb4835e789787242c2c">SimulationParameters::removeParticles</a></div><div class="ttdeci">bool removeParticles</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00150">parameter.h:150</a></div></div>
-<div class="ttc" id="astruct_smoothing_html"><div class="ttname"><a href="struct_smoothing.html">Smoothing</a></div><div class="ttdoc">(SPH) available smoothing kernels.</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00175">parameter.h:176</a></div></div>
-<div class="ttc" id="astruct_smoothing_html_a05fad46587223c7477ee9e66b26f7674a3182e531cc9d04448e8724b428f757ed"><div class="ttname"><a href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674a3182e531cc9d04448e8724b428f757ed">Smoothing::cubic_spline</a></div><div class="ttdeci">@ cubic_spline</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00179">parameter.h:179</a></div></div>
-<div class="ttc" id="astruct_smoothing_html_a05fad46587223c7477ee9e66b26f7674a4ed43bfbc693f7ee3f10f9021f978d94"><div class="ttname"><a href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674a4ed43bfbc693f7ee3f10f9021f978d94">Smoothing::wendlandc4</a></div><div class="ttdeci">@ wendlandc4</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00179">parameter.h:179</a></div></div>
-<div class="ttc" id="astruct_smoothing_html_a05fad46587223c7477ee9e66b26f7674a6705b4c78679abf5250e1086118ac5b3"><div class="ttname"><a href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674a6705b4c78679abf5250e1086118ac5b3">Smoothing::spiky</a></div><div class="ttdeci">@ spiky</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00179">parameter.h:179</a></div></div>
-<div class="ttc" id="astruct_smoothing_html_a05fad46587223c7477ee9e66b26f7674ae719e9800f819ac93fa1bd296a73bf15"><div class="ttname"><a href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674ae719e9800f819ac93fa1bd296a73bf15">Smoothing::wendlandc6</a></div><div class="ttdeci">@ wendlandc6</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00180">parameter.h:179</a></div></div>
-<div class="ttc" id="astruct_smoothing_html_a05fad46587223c7477ee9e66b26f7674afa18ac3b00422f42c6175598807ef675"><div class="ttname"><a href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674afa18ac3b00422f42c6175598807ef675">Smoothing::wendlandc2</a></div><div class="ttdeci">@ wendlandc2</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00179">parameter.h:179</a></div></div>
-<div class="ttc" id="astruct_smoothing_html_a9014fbe54d67cd4769d9e104def2e934"><div class="ttname"><a href="struct_smoothing.html#a9014fbe54d67cd4769d9e104def2e934">Smoothing::Smoothing</a></div><div class="ttdeci">Smoothing(Kernel t)</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00182">parameter.h:182</a></div></div>
-<div class="ttc" id="astruct_smoothing_html_a947ed1b107f32189a3c839b6c81f956a"><div class="ttname"><a href="struct_smoothing.html#a947ed1b107f32189a3c839b6c81f956a">Smoothing::t_</a></div><div class="ttdeci">Kernel t_</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00181">parameter.h:181</a></div></div>
-<div class="ttc" id="astruct_to_html"><div class="ttname"><a href="struct_to.html">To</a></div><div class="ttdoc">Specify target: device or host.</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00161">parameter.h:162</a></div></div>
-<div class="ttc" id="astruct_to_html_a2570d23657d3c2be298d6b6a5857999f"><div class="ttname"><a href="struct_to.html#a2570d23657d3c2be298d6b6a5857999f">To::t_</a></div><div class="ttdeci">Target t_</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00167">parameter.h:167</a></div></div>
-<div class="ttc" id="astruct_to_html_a82e3c3ef1bbdd48b77f63af4813b6e49"><div class="ttname"><a href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49">To::Target</a></div><div class="ttdeci">Target</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00163">parameter.h:164</a></div></div>
-<div class="ttc" id="astruct_to_html_a82e3c3ef1bbdd48b77f63af4813b6e49a4f25ce835a523aaa2b2faedf4960f38c"><div class="ttname"><a href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49a4f25ce835a523aaa2b2faedf4960f38c">To::device</a></div><div class="ttdeci">@ device</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00166">parameter.h:165</a></div></div>
-<div class="ttc" id="astruct_to_html_a82e3c3ef1bbdd48b77f63af4813b6e49a8178fb6c32eb3a82f7f25a25196cdbfc"><div class="ttname"><a href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49a8178fb6c32eb3a82f7f25a25196cdbfc">To::host</a></div><div class="ttdeci">@ host</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00165">parameter.h:165</a></div></div>
-<div class="ttc" id="astruct_to_html_a91c3877f442bd3b5e110b7cd375589bd"><div class="ttname"><a href="struct_to.html#a91c3877f442bd3b5e110b7cd375589bd">To::To</a></div><div class="ttdeci">To(Target t)</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00168">parameter.h:168</a></div></div>
-</div><!-- fragment --><p></details>
-</p>
-<p ><details>
-</details>
-</p>
-<h2><a class="anchor" id="autotoc_md96"></a>
-Generate initial particle distribution</h2>
-<ul>
-<li>necessary Python3 packages:<ul>
-<li>seagen</li>
-<li>numpy</li>
-<li>h5py</li>
-</ul>
-</li>
-</ul>
-<p >Within <a href="initial_sedov.py">initial_sedov.py</a> adjust:</p>
-<div class="fragment"><div class="line">N = 61  <span class="comment"># num particles = N**3</span></div>
-<div class="line"> </div>
-<div class="line">sml = 0.041833  <span class="comment"># for n = 61**3  = 226981  = ca. 2e5</span></div>
-<div class="line"><span class="comment"># sml = 0.031375  # for n = 81**3  = 531441  = ca. 5e5</span></div>
-<div class="line"><span class="comment"># sml = 0.0251    # for n = 101**3 = 1030301 = ca. 1e6</span></div>
-<div class="line"><span class="comment"># sml = 0.02      # for n = 126**3 = 2000376 = ca 2e6</span></div>
-<div class="line"><span class="comment"># sml = 0.01476   # for n = 171**3 = 5000211 = ca 5e6</span></div>
-</div><!-- fragment --><ul>
-<li>usage: <code>python3 initial_sedov.py</code></li>
-<li>if wanted rename generated HDF5 file</li>
-</ul>
-<h2><a class="anchor" id="autotoc_md97"></a>
-Material config file</h2>
-<ul>
-<li>adjust the <code>sml</code> in dependence of the number of particles</li>
-</ul>
-<p >Within <a href="material.cfg">material.cfg</a> adjust:</p>
-<div class="fragment"><div class="line">materials = (</div>
-<div class="line">{</div>
-<div class="line">    ID = 0</div>
-<div class="line">    name = &quot;IdealGas&quot;</div>
-<div class="line">    sml = 0.041833  # for n = 61**3  = 226981  = ca. 2e5</div>
-<div class="line">    # sml = 0.031375  # for n = 81**3  = 531441  = ca. 5e5</div>
-<div class="line">    # sml = 0.0251    # for n = 101**3 = 1030301 = ca. 1e6</div>
-<div class="line">    # sml = 0.02      # for n = 126**3 = 2000376 = ca 2e6</div>
-<div class="line">    # sml = 0.01476   # for n = 171**3 = 5000211 = ca 5e6</div>
-<div class="line">    interactions = 50</div>
-<div class="line">    artificial_viscosity = { alpha = 1.0; beta = 2.0; };</div>
-<div class="line">    eos = {</div>
-<div class="line">            polytropic_K = 0.0</div>
-<div class="line">        polytropic_gamma = 1.6666666</div>
-<div class="line">        type = 9</div>
-<div class="line">    };</div>
-<div class="line">}</div>
-<div class="line">);</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md98"></a>
-Config file</h2>
-<p >Within <a href="config.info">config.info</a> adjust <code>directory</code> and possibly more:</p>
-<p ><details>
- <summary> config.info </summary></details>
-</p>
-<p ><details>
-</p><div class="fragment"><div class="line">; IO RELATED</div>
-<div class="line">; ------------------------------------------------------</div>
-<div class="line">; output directory (will be created if it does not exist)</div>
-<div class="line">directory &lt;TODO: directory&gt;</div>
-<div class="line"> </div>
-<div class="line">; outputRank (-1 corresponds to all)</div>
-<div class="line">outputRank -1</div>
-<div class="line"> </div>
-<div class="line">; omit logType::TIME for standard output</div>
-<div class="line">omitTime true</div>
-<div class="line"> </div>
-<div class="line">; create log file (including warnings, errors, ...)</div>
-<div class="line">log false</div>
-<div class="line"> </div>
-<div class="line">; create performance log</div>
-<div class="line">performanceLog true</div>
-<div class="line"> </div>
-<div class="line">; write particles to be sent to h5 file</div>
-<div class="line">particlesSent2H5 false</div>
-<div class="line"> </div>
-<div class="line"> </div>
-<div class="line">; INTEGRATOR RELATED</div>
-<div class="line">; ------------------------------------------------------</div>
-<div class="line">; integrator selection</div>
-<div class="line">; explicit euler [0], predictor-corrector euler [1]</div>
-<div class="line">integrator 1</div>
-<div class="line">; initial time step</div>
-<div class="line">timeStep 0.0005</div>
-<div class="line">; max time step allowed</div>
-<div class="line">maxTimeStep 1e-3</div>
-<div class="line">; end time for simulation</div>
-<div class="line">timeEnd 0.06</div>
-<div class="line"> </div>
-<div class="line">; SIMULATION RELATED</div>
-<div class="line">; ------------------------------------------------------</div>
-<div class="line">; space-filling curve selection</div>
-<div class="line">; lebesgue [0], hilbert [1]</div>
-<div class="line">sfc 0</div>
-<div class="line"> </div>
-<div class="line">; theta-criterion for Barnes-Hut (approximative gravity)</div>
-<div class="line">theta 1.0</div>
-<div class="line">; smoothing parameter for gravitational forces</div>
-<div class="line">;smoothing 0.032</div>
-<div class="line">smoothing 0.001024</div>
-<div class="line"> </div>
-<div class="line">; SPH smoothing kernel selection</div>
-<div class="line">; spiky [0], cubic spline [1], wendlandc2 [3], wendlandc4 [4], wendlandc6 [5]</div>
-<div class="line">smoothingKernel 1</div>
-<div class="line"> </div>
-<div class="line">; remove particles (corresponding to some criterion)</div>
-<div class="line">removeParticles false</div>
-<div class="line">; spherically [0], cubic [1]</div>
-<div class="line">removeParticlesCriterion 0</div>
-<div class="line">; allowed distance to center (0, 0, 0)</div>
-<div class="line">removeParticlesDimension 10.0</div>
-<div class="line"> </div>
-<div class="line">; execute load balancing</div>
-<div class="line">loadBalancing false</div>
-<div class="line">; interval for executing load balancing (every Nth step)</div>
-<div class="line">loadBalancingInterval 1</div>
-<div class="line">; amount of bins for load balancing</div>
-<div class="line">loadBalancingBins 2000</div>
-<div class="line"> </div>
-<div class="line">; how much memory to allocate (1.0 -&gt; all particles can in principle be on one process)</div>
-<div class="line">particleMemoryContingent 1.0</div>
-<div class="line"> </div>
-<div class="line">; calculate angular momentum (and save to output file)</div>
-<div class="line">calculateAngularMomentum false</div>
-<div class="line">; calculate (total) energy (and save to output file)</div>
-<div class="line">calculateEnergy false</div>
-<div class="line">; calculate center of mass (and save to output file)</div>
-<div class="line">calculateCenterOfMass true</div>
-<div class="line"> </div>
-<div class="line"> </div>
-<div class="line">; THESE SHOULD PROBABLY NOT EXIST IN A PRODUCTION VERSION</div>
-<div class="line">; ------------------------------------------------------</div>
-<div class="line">; ------------------------------------------------------</div>
-<div class="line">; force version for gravity (use [0] or [2])</div>
-<div class="line">; burtscher [0], burtscher without presorting [1], miluphcuda with presorting [2],</div>
-<div class="line">; miluphcuda without presorting [3], miluphcuda shared memory (NOT working properly) [4]</div>
-<div class="line">gravityForceVersion 0</div>
-<div class="line">; fixed radius NN version for SPH (use [0])</div>
-<div class="line">; normal [0], brute-force [1], shared-memory [2], within-box [3]</div>
-<div class="line">sphFixedRadiusNNVersion 3</div>
-</div><!-- fragment --><p></details>
-</p>
-<p ><details>
-</details>
-</p>
-<h1><a class="anchor" id="autotoc_md99"></a>
-Postprocessing</h1>
-<p >For more information refer to <a class="el" href="md_postprocessing__r_e_a_d_m_e.html">postprocessing</a></p>
-<ul>
-<li>some scripts are available within <a href="../../postprocessing/">postprocessing/</a><ul>
-<li><a href="../../postprocessing//PlotSedov.py">postprocessing/PlotSedov.py</a>: plot density, pressure and internal energy in dependence of the radius for the sedov test case, including the semi-analytical solution<ul>
-<li>usage: e.g. <code>./PlotSedov.py -i &lt;input HDF5 particle file&gt; -o &lt;output directory&gt; -a -p 1</code></li>
-<li>for applying script for all output files: e.g. &lsquo;find &lt;directory with input files&gt; -type f -name 'ts*.h5&rsquo; -print0 | parallel -0 -j 1 ./PlotSedov.py -i {} -o &lt;output directory&gt; -a -p 1 \;<code><ul>
-<li>combining those to a video:ffmpeg -r 24 -i &lt;input directory&gt;/ts%06d.h5.png -vf 'pad=ceil(iw/2)*2:ceil(ih/2)*2' -pix_fmt yuv420p -vcodec libx264 -y -an &lt;output directory&gt;/evolution.mp4` </li>
-</ul>
-</code></li>
-</ul>
-</li>
-</ul>
-</li>
+<div class="textblock"><ul>
+<li>execute <code>initial_sedov.py</code></li>
+<li><code>mpirun -np &lt;num processes&gt; bin/runner -n &lt;num output files&gt; -f sedov/initial_sedov/sedovN61.h5 -C sedov/sedov_N61_sfc0F_np1/config.info -m sedov/sedov_N61_sfc0F_np1/material.cfg</code> </li>
 </ul>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
-    <!--
     milupHPC  - Sedov test case<br />
-    Generated on Wed Jun 29 2022 14:58:38 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    -->
+    Generated on Thu Jun 23 2022 16:11:20 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
   </small></address>
 </body>
 <footer>
-  <custom-footer color="white" background="#2E4053">
-    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
-    <div second>
-      <div style="text-align: center">
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-        </div>
-      </div>
-    </div>
-    <div third>
-      milupHPC  - Sedov test case<br />
-      Generated on Wed Jun 29 2022 14:58:38 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    </div>
-  </custom-footer>
+  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
+  <div id="banner-footer-first"></div>
+  <div id="banner-footer-second"></div>
+  <script>
+    function topFunction() {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+  </script>
 </footer>
-<!--
-<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
--->
-<script src="components/hamburger/runtime.js" type="text/javascript"></script><script src="components/hamburger/polyfills.js" type="text/javascript"></script><script src="components/hamburger/main.js" type="text/javascript"></script>
-<script src="components/header/runtime.js" type="text/javascript"></script><script src="components/header/polyfills.js" type="text/javascript"></script><script src="components/header/main.js" type="text/javascript"></script>
-<script src="components/icons/runtime.js" type="text/javascript"></script><script src="components/icons/polyfills.js" type="text/javascript"></script><script src="components/icons/main.js" type="text/javascript"></script>
-<script src="components/footer/runtime.js" type="text/javascript"></script><script src="components/footer/polyfills.js" type="text/javascript"></script><script src="components/footer/main.js" type="text/javascript"></script>
-<script src="components/dialog/runtime.js" type="text/javascript"></script><script src="components/dialog/polyfills.js" type="text/javascript"></script><script src="components/dialog/main.js" type="text/javascript"></script>
-<script src="components/copyable/runtime.js" type="text/javascript"></script><script src="components/copyable/polyfills.js" type="text/javascript"></script><script src="components/copyable/main.js" type="text/javascript"></script>
-<!--
-<script>
-  function toggle() {
-    var elem = document.getElementById("side-nav");
-    console.log(elem);
-    elem.toggleSideNav(false);
-  }
-</script>
--->
-<!--
-<script>
-  function topFunction() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  }
-</script>
--->
 </html>

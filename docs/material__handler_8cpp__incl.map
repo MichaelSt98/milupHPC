@@ -3,7 +3,7 @@
 <area shape="rect" id="node2" href="$material__handler_8h.html" title="Handler for material parameters and settings." alt="" coords="761,95,905,136"/>
 <area shape="rect" id="node3" href="$material_8cuh.html" title="Material parameters and settings." alt="" coords="225,184,319,211"/>
 <area shape="rect" id="node7" href="$cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers." alt="" coords="422,348,533,375"/>
-<area shape="rect" id="node8" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="473,423,575,449"/>
+<area shape="rect" id="node8" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="473,423,575,449"/>
 <area shape="rect" id="node13" href="$include_2utils_2_logger_8h.html" title="C++ style logger." alt="" coords="720,184,827,211"/>
 <area shape="rect" id="node16" title=" " alt="" coords="853,266,920,293"/>
 <area shape="rect" id="node17" title=" " alt="" coords="995,184,1077,211"/>
