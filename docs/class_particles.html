@@ -1,14 +1,26 @@
-<!DOCTYPE html>
-<html>
-<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
--->
+<!doctype html>
+<html lang="en">
 <head>
+	<meta charset="utf-8">
+	<title>CodePortray</title>
+	<base href="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: Particles Class Reference</title>
+	<title>Particles Class Reference</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -22,42 +34,68 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
-	<!-- Add icon library -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<!-- Add font awesome icons -->
-	<!--HIGHLIGHT.JS INSTALL BEGIN
-	<link rel="stylesheet" href="github.min.css">
-	<script src="highlight.js"></script>
-	<script>
-		$(function() {
-			hljs.configure({useBR: false});
-			$(".fragment").each(function(i,node) {
-				$(node).removeClass("fragment");
-				hljs.highlightBlock(node);
-			});
-		});
-	</script>
-	HIGHLIGHT.JS INSTALL END-->
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<custom-header class="custom-header-class">
+	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
+	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
+	<div shortcuts style="display: table">
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
+		</div>
+		<!-- get the code ... -->
+		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
+		<div style="display: table-cell; padding-right: 2px">
+			<custom-dialog window-width="600px" window-height="400px">
+				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
+				<div title>Get the code: milupHPC!</div>
+				<div style="text-align: center; padding-top: 20px;">
+					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
+					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
+					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
+					<div style="padding-top: 40px">clone via HTTPS:</div>
+					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">clone via SSH:</div>
+					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
+					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
+				</div>
+				<!--<div footer>This is the footer</div>-->
+			</custom-dialog>
+		</div>
+		<!-- end: get the code .... -->
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
+		</div>
+		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
+	</div>
+</custom-header>
+	<!--
+	<custom-side-nav id="side-nav" nav-width="300">
+		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
+		<div>test</div>
+	</custom-side-nav>
+	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation <!-- Particles Class Reference -->
+				milupHPC documentation
 			</span>
-			<!-- <span class="search">
-				<input type="text" placeholder="Search" onkeydown="search(this,event);">
-			</span> -->
 		</div>
-    <!--
-	<div class="icon-bar">
-		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
-		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
-		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
-	</div>
-	</div>
-	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -117,142 +155,142 @@ $(function() {
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aa0ee5a5efba1b7ee070bac7241e45f55"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#aa0ee5a5efba1b7ee070bac7241e45f55">Particles</a> ()</td></tr>
 <tr class="separator:aa0ee5a5efba1b7ee070bac7241e45f55"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4bbc07fe7ca4a49b6b21a21244c7f345"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a4bbc07fe7ca4a49b6b21a21244c7f345">Particles</a> (<a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#ac8c056094dd62649a12151c247183e5f">numParticles</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#ac943ee534ac8b132324d6178ee1e8a27">numNodes</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#ab65623c55daecdf520fe921621d57bf2">mass</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a122a9985fed39c45d3a151dba2794299">x</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a745f3d6ed2124a0c2edb724231d555eb">y</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#abff3b199228c5f95c78d5e23ad64d2b3">z</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#ae2c12e58da9938a9e0a193b1c70e31a4">vx</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#ae8ae4d6463ea93ab4e6e1216176d1b94">vy</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#ac9ed449c2707196c7252610c95f05630">vz</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a7874050ba3d35c512f646562b31dceb9">ax</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a29e210e7aab1fa0be4c777f67dd60ebd">ay</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a536e242fb4574be508b83958c1ef3133">az</a>, <a class="el" href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *<a class="el" href="class_particles.html#a1aa045b7463fae24d5dff5b2cd5e63ec">uid</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#a1145dd5954ddaeb85c64bb3eec0c5776">materialId</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#aa6d17649179dbfe2e79bcd66f4779f90">sml</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#a3c610d1d6d7790e75126080ad8bab56a">nnl</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#a02158d015225ce8b97f44f2d654edafc">noi</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a02b7640101eba3d9ef68ca0f21dcaf32">e</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#aa960150cbb1b385c1e00f787810d24f9">dedt</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a606b92183a77591ea3024006a5d741d7">cs</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a137c296b1c9c623e8d5378e9bce65a09">rho</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a5800bb8ee7ce5536f09bf6042bc8f6be">p</a>)</td></tr>
+<tr class="memitem:a4bbc07fe7ca4a49b6b21a21244c7f345"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a4bbc07fe7ca4a49b6b21a21244c7f345">Particles</a> (<a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#ac8c056094dd62649a12151c247183e5f">numParticles</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#ac943ee534ac8b132324d6178ee1e8a27">numNodes</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#ab65623c55daecdf520fe921621d57bf2">mass</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a122a9985fed39c45d3a151dba2794299">x</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a745f3d6ed2124a0c2edb724231d555eb">y</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#abff3b199228c5f95c78d5e23ad64d2b3">z</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#ae2c12e58da9938a9e0a193b1c70e31a4">vx</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#ae8ae4d6463ea93ab4e6e1216176d1b94">vy</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#ac9ed449c2707196c7252610c95f05630">vz</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a7874050ba3d35c512f646562b31dceb9">ax</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a29e210e7aab1fa0be4c777f67dd60ebd">ay</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a536e242fb4574be508b83958c1ef3133">az</a>, <a class="el" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *<a class="el" href="class_particles.html#a1aa045b7463fae24d5dff5b2cd5e63ec">uid</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#a1145dd5954ddaeb85c64bb3eec0c5776">materialId</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#aa6d17649179dbfe2e79bcd66f4779f90">sml</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#a3c610d1d6d7790e75126080ad8bab56a">nnl</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#a02158d015225ce8b97f44f2d654edafc">noi</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a02b7640101eba3d9ef68ca0f21dcaf32">e</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#aa960150cbb1b385c1e00f787810d24f9">dedt</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a606b92183a77591ea3024006a5d741d7">cs</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a137c296b1c9c623e8d5378e9bce65a09">rho</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a5800bb8ee7ce5536f09bf6042bc8f6be">p</a>)</td></tr>
 <tr class="memdesc:a4bbc07fe7ca4a49b6b21a21244c7f345"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor (<code>DIM = 3</code>) assigning variables to pointer members.  <a href="class_particles.html#a4bbc07fe7ca4a49b6b21a21244c7f345">More...</a><br /></td></tr>
 <tr class="separator:a4bbc07fe7ca4a49b6b21a21244c7f345"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1dc217530f8929c24269014073596a38"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a1dc217530f8929c24269014073596a38">set</a> (<a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#ac8c056094dd62649a12151c247183e5f">numParticles</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#ac943ee534ac8b132324d6178ee1e8a27">numNodes</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#ab65623c55daecdf520fe921621d57bf2">mass</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a122a9985fed39c45d3a151dba2794299">x</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a745f3d6ed2124a0c2edb724231d555eb">y</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#abff3b199228c5f95c78d5e23ad64d2b3">z</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#ae2c12e58da9938a9e0a193b1c70e31a4">vx</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#ae8ae4d6463ea93ab4e6e1216176d1b94">vy</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#ac9ed449c2707196c7252610c95f05630">vz</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a7874050ba3d35c512f646562b31dceb9">ax</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a29e210e7aab1fa0be4c777f67dd60ebd">ay</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a536e242fb4574be508b83958c1ef3133">az</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#a19adbbf68f6c36892dee44dd76a2b0d3">level</a>, <a class="el" href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *<a class="el" href="class_particles.html#a1aa045b7463fae24d5dff5b2cd5e63ec">uid</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#a1145dd5954ddaeb85c64bb3eec0c5776">materialId</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#aa6d17649179dbfe2e79bcd66f4779f90">sml</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#a3c610d1d6d7790e75126080ad8bab56a">nnl</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#a02158d015225ce8b97f44f2d654edafc">noi</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a02b7640101eba3d9ef68ca0f21dcaf32">e</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#aa960150cbb1b385c1e00f787810d24f9">dedt</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a606b92183a77591ea3024006a5d741d7">cs</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a137c296b1c9c623e8d5378e9bce65a09">rho</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a5800bb8ee7ce5536f09bf6042bc8f6be">p</a>)</td></tr>
+<tr class="memitem:a1dc217530f8929c24269014073596a38"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a1dc217530f8929c24269014073596a38">set</a> (<a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#ac8c056094dd62649a12151c247183e5f">numParticles</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#ac943ee534ac8b132324d6178ee1e8a27">numNodes</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#ab65623c55daecdf520fe921621d57bf2">mass</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a122a9985fed39c45d3a151dba2794299">x</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a745f3d6ed2124a0c2edb724231d555eb">y</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#abff3b199228c5f95c78d5e23ad64d2b3">z</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#ae2c12e58da9938a9e0a193b1c70e31a4">vx</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#ae8ae4d6463ea93ab4e6e1216176d1b94">vy</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#ac9ed449c2707196c7252610c95f05630">vz</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a7874050ba3d35c512f646562b31dceb9">ax</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a29e210e7aab1fa0be4c777f67dd60ebd">ay</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a536e242fb4574be508b83958c1ef3133">az</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#a19adbbf68f6c36892dee44dd76a2b0d3">level</a>, <a class="el" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *<a class="el" href="class_particles.html#a1aa045b7463fae24d5dff5b2cd5e63ec">uid</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#a1145dd5954ddaeb85c64bb3eec0c5776">materialId</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#aa6d17649179dbfe2e79bcd66f4779f90">sml</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#a3c610d1d6d7790e75126080ad8bab56a">nnl</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#a02158d015225ce8b97f44f2d654edafc">noi</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a02b7640101eba3d9ef68ca0f21dcaf32">e</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#aa960150cbb1b385c1e00f787810d24f9">dedt</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a606b92183a77591ea3024006a5d741d7">cs</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a137c296b1c9c623e8d5378e9bce65a09">rho</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a5800bb8ee7ce5536f09bf6042bc8f6be">p</a>)</td></tr>
 <tr class="memdesc:a1dc217530f8929c24269014073596a38"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter (<code>DIM = 3</code>) assigning variables to pointer members.  <a href="class_particles.html#a1dc217530f8929c24269014073596a38">More...</a><br /></td></tr>
 <tr class="separator:a1dc217530f8929c24269014073596a38"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adea5db5c16688b82458e84cc8dcff300"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#adea5db5c16688b82458e84cc8dcff300">setGravity</a> (<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#aa0081a57dbe2053fae1d331641d8bacd">g_ax</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a1fb75739bd93384823a2f8e958f59cbf">g_ay</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#ae00fcd5b4197a57b0a1112a7be4e8de0">g_az</a>)</td></tr>
+<tr class="memitem:adea5db5c16688b82458e84cc8dcff300"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#adea5db5c16688b82458e84cc8dcff300">setGravity</a> (<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#aa0081a57dbe2053fae1d331641d8bacd">g_ax</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a1fb75739bd93384823a2f8e958f59cbf">g_ay</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#ae00fcd5b4197a57b0a1112a7be4e8de0">g_az</a>)</td></tr>
 <tr class="memdesc:adea5db5c16688b82458e84cc8dcff300"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor (<code>DIM = 3</code>) assigning gravitational acceleration to member variables.  <a href="class_particles.html#adea5db5c16688b82458e84cc8dcff300">More...</a><br /></td></tr>
 <tr class="separator:adea5db5c16688b82458e84cc8dcff300"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2220cf0bea6532ddcede8b024da75d9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ad2220cf0bea6532ddcede8b024da75d9">setLeapfrog</a> (<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a05c284ce1be84c235540b2cf33e9cbf7">ax_old</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a55db3bd864872c8d11b2209cf869c608">ay_old</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a6411842472d8f4af86743066fd9fc507">az_old</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a1dd66b67b0ed13b1c599a14c3b4185c1">g_ax_old</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a783a9f735fbfb799752cfe6140a05852">g_ay_old</a>, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a020e9016994877a2557e8c3e5a47e7e3">g_az_old</a>)</td></tr>
+<tr class="memitem:ad2220cf0bea6532ddcede8b024da75d9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ad2220cf0bea6532ddcede8b024da75d9">setLeapfrog</a> (<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a05c284ce1be84c235540b2cf33e9cbf7">ax_old</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a55db3bd864872c8d11b2209cf869c608">ay_old</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a6411842472d8f4af86743066fd9fc507">az_old</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a1dd66b67b0ed13b1c599a14c3b4185c1">g_ax_old</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a783a9f735fbfb799752cfe6140a05852">g_ay_old</a>, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a020e9016994877a2557e8c3e5a47e7e3">g_az_old</a>)</td></tr>
 <tr class="separator:ad2220cf0bea6532ddcede8b024da75d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa58fe6300adfc2d1e78b6e67667fa51"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#afa58fe6300adfc2d1e78b6e67667fa51">setU</a> (<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a9e1b9e80538c2b745216b67ae79fc66a">u</a>)</td></tr>
+<tr class="memitem:afa58fe6300adfc2d1e78b6e67667fa51"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#afa58fe6300adfc2d1e78b6e67667fa51">setU</a> (<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a9e1b9e80538c2b745216b67ae79fc66a">u</a>)</td></tr>
 <tr class="memdesc:afa58fe6300adfc2d1e78b6e67667fa51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter for energy.  <a href="class_particles.html#afa58fe6300adfc2d1e78b6e67667fa51">More...</a><br /></td></tr>
 <tr class="separator:afa58fe6300adfc2d1e78b6e67667fa51"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4beec44a414bcf4a6fe8ff5e1b0f8a5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ae4beec44a414bcf4a6fe8ff5e1b0f8a5">setNodeType</a> (<a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#a2b2230019fb5f5e34d2ba256d9469272">nodeType</a>)</td></tr>
+<tr class="memitem:ae4beec44a414bcf4a6fe8ff5e1b0f8a5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ae4beec44a414bcf4a6fe8ff5e1b0f8a5">setNodeType</a> (<a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_particles.html#a2b2230019fb5f5e34d2ba256d9469272">nodeType</a>)</td></tr>
 <tr class="memdesc:ae4beec44a414bcf4a6fe8ff5e1b0f8a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter for node type.  <a href="class_particles.html#ae4beec44a414bcf4a6fe8ff5e1b0f8a5">More...</a><br /></td></tr>
 <tr class="separator:ae4beec44a414bcf4a6fe8ff5e1b0f8a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9f055936cf42cd75b8f1f16cf8a8ec5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ae9f055936cf42cd75b8f1f16cf8a8ec5">setArtificialViscosity</a> (<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#ad6bcc3a3dee00cb8f449db17578f44c4">muijmax</a>)</td></tr>
+<tr class="memitem:ae9f055936cf42cd75b8f1f16cf8a8ec5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ae9f055936cf42cd75b8f1f16cf8a8ec5">setArtificialViscosity</a> (<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#ad6bcc3a3dee00cb8f449db17578f44c4">muijmax</a>)</td></tr>
 <tr class="memdesc:ae9f055936cf42cd75b8f1f16cf8a8ec5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter for artificial viscosity (entry).  <a href="class_particles.html#ae9f055936cf42cd75b8f1f16cf8a8ec5">More...</a><br /></td></tr>
 <tr class="separator:ae9f055936cf42cd75b8f1f16cf8a8ec5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6718bdccbdfa5be82cd146bbae61971"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#af6718bdccbdfa5be82cd146bbae61971">setIntegrateDensity</a> (<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a1aa24ad55b4018884dcf4d8360ad1a8a">drhodt</a>)</td></tr>
+<tr class="memitem:af6718bdccbdfa5be82cd146bbae61971"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#af6718bdccbdfa5be82cd146bbae61971">setIntegrateDensity</a> (<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_particles.html#a1aa24ad55b4018884dcf4d8360ad1a8a">drhodt</a>)</td></tr>
 <tr class="memdesc:af6718bdccbdfa5be82cd146bbae61971"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter in dependence of <code>INTEGRATE_DENSITY</code>.  <a href="class_particles.html#af6718bdccbdfa5be82cd146bbae61971">More...</a><br /></td></tr>
 <tr class="separator:af6718bdccbdfa5be82cd146bbae61971"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c6bde1c60f991b5daf734522233e2e1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a8c6bde1c60f991b5daf734522233e2e1">reset</a> (<a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> index)</td></tr>
+<tr class="memitem:a8c6bde1c60f991b5daf734522233e2e1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a8c6bde1c60f991b5daf734522233e2e1">reset</a> (<a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> index)</td></tr>
 <tr class="memdesc:a8c6bde1c60f991b5daf734522233e2e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset (specific) entries.  <a href="class_particles.html#a8c6bde1c60f991b5daf734522233e2e1">More...</a><br /></td></tr>
 <tr class="separator:a8c6bde1c60f991b5daf734522233e2e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb7fffad1199c01bee986adc1004722d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#acb7fffad1199c01bee986adc1004722d">distance</a> (<a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> index_1, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> index_2)</td></tr>
+<tr class="memitem:acb7fffad1199c01bee986adc1004722d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#acb7fffad1199c01bee986adc1004722d">distance</a> (<a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> index_1, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> index_2)</td></tr>
 <tr class="memdesc:acb7fffad1199c01bee986adc1004722d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Distance of two particles.  <a href="class_particles.html#acb7fffad1199c01bee986adc1004722d">More...</a><br /></td></tr>
 <tr class="separator:acb7fffad1199c01bee986adc1004722d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0ea028b81c33a114234c44ff82118f64"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a0ea028b81c33a114234c44ff82118f64">weightedEntry</a> (<a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> index, <a class="el" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bf">Entry::Name</a> entry)</td></tr>
+<tr class="memitem:a0ea028b81c33a114234c44ff82118f64"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a0ea028b81c33a114234c44ff82118f64">weightedEntry</a> (<a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> index, <a class="el" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bf">Entry::Name</a> entry)</td></tr>
 <tr class="separator:a0ea028b81c33a114234c44ff82118f64"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4e3eed417b6a9dfa2b2a9462a1c1b6b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#aa4e3eed417b6a9dfa2b2a9462a1c1b6b">~Particles</a> ()</td></tr>
 <tr class="separator:aa4e3eed417b6a9dfa2b2a9462a1c1b6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ac8c056094dd62649a12151c247183e5f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ac8c056094dd62649a12151c247183e5f">numParticles</a></td></tr>
+<tr class="memitem:ac8c056094dd62649a12151c247183e5f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ac8c056094dd62649a12151c247183e5f">numParticles</a></td></tr>
 <tr class="memdesc:ac8c056094dd62649a12151c247183e5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of particles  <a href="class_particles.html#ac8c056094dd62649a12151c247183e5f">More...</a><br /></td></tr>
 <tr class="separator:ac8c056094dd62649a12151c247183e5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac943ee534ac8b132324d6178ee1e8a27"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ac943ee534ac8b132324d6178ee1e8a27">numNodes</a></td></tr>
+<tr class="memitem:ac943ee534ac8b132324d6178ee1e8a27"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ac943ee534ac8b132324d6178ee1e8a27">numNodes</a></td></tr>
 <tr class="memdesc:ac943ee534ac8b132324d6178ee1e8a27"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of nodes  <a href="class_particles.html#ac943ee534ac8b132324d6178ee1e8a27">More...</a><br /></td></tr>
 <tr class="separator:ac943ee534ac8b132324d6178ee1e8a27"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab65623c55daecdf520fe921621d57bf2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ab65623c55daecdf520fe921621d57bf2">mass</a></td></tr>
+<tr class="memitem:ab65623c55daecdf520fe921621d57bf2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ab65623c55daecdf520fe921621d57bf2">mass</a></td></tr>
 <tr class="memdesc:ab65623c55daecdf520fe921621d57bf2"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) mass (array)  <a href="class_particles.html#ab65623c55daecdf520fe921621d57bf2">More...</a><br /></td></tr>
 <tr class="separator:ab65623c55daecdf520fe921621d57bf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a122a9985fed39c45d3a151dba2794299"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a122a9985fed39c45d3a151dba2794299">x</a></td></tr>
+<tr class="memitem:a122a9985fed39c45d3a151dba2794299"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a122a9985fed39c45d3a151dba2794299">x</a></td></tr>
 <tr class="memdesc:a122a9985fed39c45d3a151dba2794299"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) x position (array)  <a href="class_particles.html#a122a9985fed39c45d3a151dba2794299">More...</a><br /></td></tr>
 <tr class="separator:a122a9985fed39c45d3a151dba2794299"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae2c12e58da9938a9e0a193b1c70e31a4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ae2c12e58da9938a9e0a193b1c70e31a4">vx</a></td></tr>
+<tr class="memitem:ae2c12e58da9938a9e0a193b1c70e31a4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ae2c12e58da9938a9e0a193b1c70e31a4">vx</a></td></tr>
 <tr class="memdesc:ae2c12e58da9938a9e0a193b1c70e31a4"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) x velocity (array)  <a href="class_particles.html#ae2c12e58da9938a9e0a193b1c70e31a4">More...</a><br /></td></tr>
 <tr class="separator:ae2c12e58da9938a9e0a193b1c70e31a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7874050ba3d35c512f646562b31dceb9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a7874050ba3d35c512f646562b31dceb9">ax</a></td></tr>
+<tr class="memitem:a7874050ba3d35c512f646562b31dceb9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a7874050ba3d35c512f646562b31dceb9">ax</a></td></tr>
 <tr class="memdesc:a7874050ba3d35c512f646562b31dceb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) x acceleration (array)  <a href="class_particles.html#a7874050ba3d35c512f646562b31dceb9">More...</a><br /></td></tr>
 <tr class="separator:a7874050ba3d35c512f646562b31dceb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05c284ce1be84c235540b2cf33e9cbf7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a05c284ce1be84c235540b2cf33e9cbf7">ax_old</a></td></tr>
+<tr class="memitem:a05c284ce1be84c235540b2cf33e9cbf7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a05c284ce1be84c235540b2cf33e9cbf7">ax_old</a></td></tr>
 <tr class="separator:a05c284ce1be84c235540b2cf33e9cbf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a745f3d6ed2124a0c2edb724231d555eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a745f3d6ed2124a0c2edb724231d555eb">y</a></td></tr>
+<tr class="memitem:a745f3d6ed2124a0c2edb724231d555eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a745f3d6ed2124a0c2edb724231d555eb">y</a></td></tr>
 <tr class="memdesc:a745f3d6ed2124a0c2edb724231d555eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) y position (array)  <a href="class_particles.html#a745f3d6ed2124a0c2edb724231d555eb">More...</a><br /></td></tr>
 <tr class="separator:a745f3d6ed2124a0c2edb724231d555eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8ae4d6463ea93ab4e6e1216176d1b94"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ae8ae4d6463ea93ab4e6e1216176d1b94">vy</a></td></tr>
+<tr class="memitem:ae8ae4d6463ea93ab4e6e1216176d1b94"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ae8ae4d6463ea93ab4e6e1216176d1b94">vy</a></td></tr>
 <tr class="memdesc:ae8ae4d6463ea93ab4e6e1216176d1b94"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) y velocity (array)  <a href="class_particles.html#ae8ae4d6463ea93ab4e6e1216176d1b94">More...</a><br /></td></tr>
 <tr class="separator:ae8ae4d6463ea93ab4e6e1216176d1b94"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29e210e7aab1fa0be4c777f67dd60ebd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a29e210e7aab1fa0be4c777f67dd60ebd">ay</a></td></tr>
+<tr class="memitem:a29e210e7aab1fa0be4c777f67dd60ebd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a29e210e7aab1fa0be4c777f67dd60ebd">ay</a></td></tr>
 <tr class="memdesc:a29e210e7aab1fa0be4c777f67dd60ebd"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) y acceleration (array)  <a href="class_particles.html#a29e210e7aab1fa0be4c777f67dd60ebd">More...</a><br /></td></tr>
 <tr class="separator:a29e210e7aab1fa0be4c777f67dd60ebd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55db3bd864872c8d11b2209cf869c608"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a55db3bd864872c8d11b2209cf869c608">ay_old</a></td></tr>
+<tr class="memitem:a55db3bd864872c8d11b2209cf869c608"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a55db3bd864872c8d11b2209cf869c608">ay_old</a></td></tr>
 <tr class="separator:a55db3bd864872c8d11b2209cf869c608"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abff3b199228c5f95c78d5e23ad64d2b3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#abff3b199228c5f95c78d5e23ad64d2b3">z</a></td></tr>
+<tr class="memitem:abff3b199228c5f95c78d5e23ad64d2b3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#abff3b199228c5f95c78d5e23ad64d2b3">z</a></td></tr>
 <tr class="memdesc:abff3b199228c5f95c78d5e23ad64d2b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) z position (array)  <a href="class_particles.html#abff3b199228c5f95c78d5e23ad64d2b3">More...</a><br /></td></tr>
 <tr class="separator:abff3b199228c5f95c78d5e23ad64d2b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9ed449c2707196c7252610c95f05630"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ac9ed449c2707196c7252610c95f05630">vz</a></td></tr>
+<tr class="memitem:ac9ed449c2707196c7252610c95f05630"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ac9ed449c2707196c7252610c95f05630">vz</a></td></tr>
 <tr class="memdesc:ac9ed449c2707196c7252610c95f05630"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) z velocity (array)  <a href="class_particles.html#ac9ed449c2707196c7252610c95f05630">More...</a><br /></td></tr>
 <tr class="separator:ac9ed449c2707196c7252610c95f05630"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a536e242fb4574be508b83958c1ef3133"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a536e242fb4574be508b83958c1ef3133">az</a></td></tr>
+<tr class="memitem:a536e242fb4574be508b83958c1ef3133"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a536e242fb4574be508b83958c1ef3133">az</a></td></tr>
 <tr class="memdesc:a536e242fb4574be508b83958c1ef3133"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) z acceleration (array)  <a href="class_particles.html#a536e242fb4574be508b83958c1ef3133">More...</a><br /></td></tr>
 <tr class="separator:a536e242fb4574be508b83958c1ef3133"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6411842472d8f4af86743066fd9fc507"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a6411842472d8f4af86743066fd9fc507">az_old</a></td></tr>
+<tr class="memitem:a6411842472d8f4af86743066fd9fc507"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a6411842472d8f4af86743066fd9fc507">az_old</a></td></tr>
 <tr class="separator:a6411842472d8f4af86743066fd9fc507"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa0081a57dbe2053fae1d331641d8bacd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#aa0081a57dbe2053fae1d331641d8bacd">g_ax</a></td></tr>
+<tr class="memitem:aa0081a57dbe2053fae1d331641d8bacd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#aa0081a57dbe2053fae1d331641d8bacd">g_ax</a></td></tr>
 <tr class="memdesc:aa0081a57dbe2053fae1d331641d8bacd"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) x gravitational acceleration (array)  <a href="class_particles.html#aa0081a57dbe2053fae1d331641d8bacd">More...</a><br /></td></tr>
 <tr class="separator:aa0081a57dbe2053fae1d331641d8bacd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1dd66b67b0ed13b1c599a14c3b4185c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a1dd66b67b0ed13b1c599a14c3b4185c1">g_ax_old</a></td></tr>
+<tr class="memitem:a1dd66b67b0ed13b1c599a14c3b4185c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a1dd66b67b0ed13b1c599a14c3b4185c1">g_ax_old</a></td></tr>
 <tr class="separator:a1dd66b67b0ed13b1c599a14c3b4185c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1fb75739bd93384823a2f8e958f59cbf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a1fb75739bd93384823a2f8e958f59cbf">g_ay</a></td></tr>
+<tr class="memitem:a1fb75739bd93384823a2f8e958f59cbf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a1fb75739bd93384823a2f8e958f59cbf">g_ay</a></td></tr>
 <tr class="memdesc:a1fb75739bd93384823a2f8e958f59cbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) y gravitational acceleration (array)  <a href="class_particles.html#a1fb75739bd93384823a2f8e958f59cbf">More...</a><br /></td></tr>
 <tr class="separator:a1fb75739bd93384823a2f8e958f59cbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a783a9f735fbfb799752cfe6140a05852"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a783a9f735fbfb799752cfe6140a05852">g_ay_old</a></td></tr>
+<tr class="memitem:a783a9f735fbfb799752cfe6140a05852"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a783a9f735fbfb799752cfe6140a05852">g_ay_old</a></td></tr>
 <tr class="separator:a783a9f735fbfb799752cfe6140a05852"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae00fcd5b4197a57b0a1112a7be4e8de0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ae00fcd5b4197a57b0a1112a7be4e8de0">g_az</a></td></tr>
+<tr class="memitem:ae00fcd5b4197a57b0a1112a7be4e8de0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ae00fcd5b4197a57b0a1112a7be4e8de0">g_az</a></td></tr>
 <tr class="memdesc:ae00fcd5b4197a57b0a1112a7be4e8de0"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) z gravitational acceleration (array)  <a href="class_particles.html#ae00fcd5b4197a57b0a1112a7be4e8de0">More...</a><br /></td></tr>
 <tr class="separator:ae00fcd5b4197a57b0a1112a7be4e8de0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a020e9016994877a2557e8c3e5a47e7e3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a020e9016994877a2557e8c3e5a47e7e3">g_az_old</a></td></tr>
+<tr class="memitem:a020e9016994877a2557e8c3e5a47e7e3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a020e9016994877a2557e8c3e5a47e7e3">g_az_old</a></td></tr>
 <tr class="separator:a020e9016994877a2557e8c3e5a47e7e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b2230019fb5f5e34d2ba256d9469272"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a2b2230019fb5f5e34d2ba256d9469272">nodeType</a></td></tr>
+<tr class="memitem:a2b2230019fb5f5e34d2ba256d9469272"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a2b2230019fb5f5e34d2ba256d9469272">nodeType</a></td></tr>
 <tr class="memdesc:a2b2230019fb5f5e34d2ba256d9469272"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) node type  <a href="class_particles.html#a2b2230019fb5f5e34d2ba256d9469272">More...</a><br /></td></tr>
 <tr class="separator:a2b2230019fb5f5e34d2ba256d9469272"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a19adbbf68f6c36892dee44dd76a2b0d3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a19adbbf68f6c36892dee44dd76a2b0d3">level</a></td></tr>
+<tr class="memitem:a19adbbf68f6c36892dee44dd76a2b0d3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a19adbbf68f6c36892dee44dd76a2b0d3">level</a></td></tr>
 <tr class="memdesc:a19adbbf68f6c36892dee44dd76a2b0d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) level of the (pseudo-)particles  <a href="class_particles.html#a19adbbf68f6c36892dee44dd76a2b0d3">More...</a><br /></td></tr>
 <tr class="separator:a19adbbf68f6c36892dee44dd76a2b0d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1aa045b7463fae24d5dff5b2cd5e63ec"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a1aa045b7463fae24d5dff5b2cd5e63ec">uid</a></td></tr>
+<tr class="memitem:a1aa045b7463fae24d5dff5b2cd5e63ec"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a1aa045b7463fae24d5dff5b2cd5e63ec">uid</a></td></tr>
 <tr class="memdesc:a1aa045b7463fae24d5dff5b2cd5e63ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) unique identifier (array)  <a href="class_particles.html#a1aa045b7463fae24d5dff5b2cd5e63ec">More...</a><br /></td></tr>
 <tr class="separator:a1aa045b7463fae24d5dff5b2cd5e63ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1145dd5954ddaeb85c64bb3eec0c5776"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a1145dd5954ddaeb85c64bb3eec0c5776">materialId</a></td></tr>
+<tr class="memitem:a1145dd5954ddaeb85c64bb3eec0c5776"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a1145dd5954ddaeb85c64bb3eec0c5776">materialId</a></td></tr>
 <tr class="memdesc:a1145dd5954ddaeb85c64bb3eec0c5776"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) material identifier (array)  <a href="class_particles.html#a1145dd5954ddaeb85c64bb3eec0c5776">More...</a><br /></td></tr>
 <tr class="separator:a1145dd5954ddaeb85c64bb3eec0c5776"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa6d17649179dbfe2e79bcd66f4779f90"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#aa6d17649179dbfe2e79bcd66f4779f90">sml</a></td></tr>
+<tr class="memitem:aa6d17649179dbfe2e79bcd66f4779f90"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#aa6d17649179dbfe2e79bcd66f4779f90">sml</a></td></tr>
 <tr class="memdesc:aa6d17649179dbfe2e79bcd66f4779f90"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) smoothing length (array)  <a href="class_particles.html#aa6d17649179dbfe2e79bcd66f4779f90">More...</a><br /></td></tr>
 <tr class="separator:aa6d17649179dbfe2e79bcd66f4779f90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c610d1d6d7790e75126080ad8bab56a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a3c610d1d6d7790e75126080ad8bab56a">nnl</a></td></tr>
+<tr class="memitem:a3c610d1d6d7790e75126080ad8bab56a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a3c610d1d6d7790e75126080ad8bab56a">nnl</a></td></tr>
 <tr class="memdesc:a3c610d1d6d7790e75126080ad8bab56a"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) near(est) neighbor list (array)  <a href="class_particles.html#a3c610d1d6d7790e75126080ad8bab56a">More...</a><br /></td></tr>
 <tr class="separator:a3c610d1d6d7790e75126080ad8bab56a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02158d015225ce8b97f44f2d654edafc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a02158d015225ce8b97f44f2d654edafc">noi</a></td></tr>
+<tr class="memitem:a02158d015225ce8b97f44f2d654edafc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a02158d015225ce8b97f44f2d654edafc">noi</a></td></tr>
 <tr class="memdesc:a02158d015225ce8b97f44f2d654edafc"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) number of interactions (array)  <a href="class_particles.html#a02158d015225ce8b97f44f2d654edafc">More...</a><br /></td></tr>
 <tr class="separator:a02158d015225ce8b97f44f2d654edafc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02b7640101eba3d9ef68ca0f21dcaf32"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a02b7640101eba3d9ef68ca0f21dcaf32">e</a></td></tr>
+<tr class="memitem:a02b7640101eba3d9ef68ca0f21dcaf32"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a02b7640101eba3d9ef68ca0f21dcaf32">e</a></td></tr>
 <tr class="memdesc:a02b7640101eba3d9ef68ca0f21dcaf32"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) internal energy (array)  <a href="class_particles.html#a02b7640101eba3d9ef68ca0f21dcaf32">More...</a><br /></td></tr>
 <tr class="separator:a02b7640101eba3d9ef68ca0f21dcaf32"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa960150cbb1b385c1e00f787810d24f9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#aa960150cbb1b385c1e00f787810d24f9">dedt</a></td></tr>
+<tr class="memitem:aa960150cbb1b385c1e00f787810d24f9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#aa960150cbb1b385c1e00f787810d24f9">dedt</a></td></tr>
 <tr class="memdesc:aa960150cbb1b385c1e00f787810d24f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) time derivative of internal energy (array)  <a href="class_particles.html#aa960150cbb1b385c1e00f787810d24f9">More...</a><br /></td></tr>
 <tr class="separator:aa960150cbb1b385c1e00f787810d24f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e1b9e80538c2b745216b67ae79fc66a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a9e1b9e80538c2b745216b67ae79fc66a">u</a></td></tr>
+<tr class="memitem:a9e1b9e80538c2b745216b67ae79fc66a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a9e1b9e80538c2b745216b67ae79fc66a">u</a></td></tr>
 <tr class="memdesc:a9e1b9e80538c2b745216b67ae79fc66a"><td class="mdescLeft">&#160;</td><td class="mdescRight">energy (kinetic + gravitational for now)  <a href="class_particles.html#a9e1b9e80538c2b745216b67ae79fc66a">More...</a><br /></td></tr>
 <tr class="separator:a9e1b9e80538c2b745216b67ae79fc66a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a606b92183a77591ea3024006a5d741d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a606b92183a77591ea3024006a5d741d7">cs</a></td></tr>
+<tr class="memitem:a606b92183a77591ea3024006a5d741d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a606b92183a77591ea3024006a5d741d7">cs</a></td></tr>
 <tr class="memdesc:a606b92183a77591ea3024006a5d741d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) sound of speed (array)  <a href="class_particles.html#a606b92183a77591ea3024006a5d741d7">More...</a><br /></td></tr>
 <tr class="separator:a606b92183a77591ea3024006a5d741d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a137c296b1c9c623e8d5378e9bce65a09"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a137c296b1c9c623e8d5378e9bce65a09">rho</a></td></tr>
+<tr class="memitem:a137c296b1c9c623e8d5378e9bce65a09"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a137c296b1c9c623e8d5378e9bce65a09">rho</a></td></tr>
 <tr class="memdesc:a137c296b1c9c623e8d5378e9bce65a09"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) density (array)  <a href="class_particles.html#a137c296b1c9c623e8d5378e9bce65a09">More...</a><br /></td></tr>
 <tr class="separator:a137c296b1c9c623e8d5378e9bce65a09"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5800bb8ee7ce5536f09bf6042bc8f6be"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a5800bb8ee7ce5536f09bf6042bc8f6be">p</a></td></tr>
+<tr class="memitem:a5800bb8ee7ce5536f09bf6042bc8f6be"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a5800bb8ee7ce5536f09bf6042bc8f6be">p</a></td></tr>
 <tr class="memdesc:a5800bb8ee7ce5536f09bf6042bc8f6be"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) pressure (array)  <a href="class_particles.html#a5800bb8ee7ce5536f09bf6042bc8f6be">More...</a><br /></td></tr>
 <tr class="separator:a5800bb8ee7ce5536f09bf6042bc8f6be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad6bcc3a3dee00cb8f449db17578f44c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ad6bcc3a3dee00cb8f449db17578f44c4">muijmax</a></td></tr>
+<tr class="memitem:ad6bcc3a3dee00cb8f449db17578f44c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#ad6bcc3a3dee00cb8f449db17578f44c4">muijmax</a></td></tr>
 <tr class="memdesc:ad6bcc3a3dee00cb8f449db17578f44c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer) to max(mu_ij) (array) needed for artificial viscosity and determining timestp  <a href="class_particles.html#ad6bcc3a3dee00cb8f449db17578f44c4">More...</a><br /></td></tr>
 <tr class="separator:ad6bcc3a3dee00cb8f449db17578f44c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1aa24ad55b4018884dcf4d8360ad1a8a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a1aa24ad55b4018884dcf4d8360ad1a8a">drhodt</a></td></tr>
+<tr class="memitem:a1aa24ad55b4018884dcf4d8360ad1a8a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particles.html#a1aa24ad55b4018884dcf4d8360ad1a8a">drhodt</a></td></tr>
 <tr class="memdesc:a1aa24ad55b4018884dcf4d8360ad1a8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">(pointer to) time derivative of density (array)  <a href="class_particles.html#a1aa24ad55b4018884dcf4d8360ad1a8a">More...</a><br /></td></tr>
 <tr class="separator:a1aa24ad55b4018884dcf4d8360ad1a8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -300,133 +338,133 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> Particles::Particles </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>numParticles</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>numNodes</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>mass</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>z</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>vx</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>vy</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>vz</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>ax</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>ay</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>az</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *&#160;</td>
           <td class="paramname"><em>uid</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>materialId</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>sml</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>nnl</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>noi</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>e</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>dedt</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>cs</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>rho</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>p</em>&#160;</td>
         </tr>
         <tr>
@@ -498,15 +536,15 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Particles::distance </td>
+          <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Particles::distance </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>index_1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>index_2</em>&#160;</td>
         </tr>
         <tr>
@@ -552,7 +590,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void Particles::reset </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>index</em></td><td>)</td>
           <td></td>
         </tr>
@@ -581,139 +619,139 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void Particles::set </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>numParticles</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>numNodes</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>mass</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>z</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>vx</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>vy</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>vz</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>ax</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>ay</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>az</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>level</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *&#160;</td>
           <td class="paramname"><em>uid</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>materialId</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>sml</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>nnl</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>noi</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>e</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>dedt</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>cs</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>rho</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>p</em>&#160;</td>
         </tr>
         <tr>
@@ -767,7 +805,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void Particles::setArtificialViscosity </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>muijmax</em></td><td>)</td>
           <td></td>
         </tr>
@@ -795,19 +833,19 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void Particles::setGravity </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>g_ax</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>g_ay</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>g_az</em>&#160;</td>
         </tr>
         <tr>
@@ -842,7 +880,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void Particles::setIntegrateDensity </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>drhodt</em></td><td>)</td>
           <td></td>
         </tr>
@@ -870,37 +908,37 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void Particles::setLeapfrog </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>ax_old</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>ay_old</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>az_old</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>g_ax_old</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>g_ay_old</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>g_az_old</em>&#160;</td>
         </tr>
         <tr>
@@ -924,7 +962,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void Particles::setNodeType </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>nodeType</em></td><td>)</td>
           <td></td>
         </tr>
@@ -958,7 +996,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void Particles::setU </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>u</em></td><td>)</td>
           <td></td>
         </tr>
@@ -984,9 +1022,9 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Particles::weightedEntry </td>
+          <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Particles::weightedEntry </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>index</em>, </td>
         </tr>
         <tr>
@@ -1015,7 +1053,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::ax</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::ax</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1033,7 +1071,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::ax_old</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::ax_old</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1049,7 +1087,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::ay</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::ay</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1067,7 +1105,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::ay_old</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::ay_old</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1083,7 +1121,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::az</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::az</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1101,7 +1139,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::az_old</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::az_old</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1117,7 +1155,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::cs</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::cs</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1135,7 +1173,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::dedt</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::dedt</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1153,7 +1191,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::drhodt</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::drhodt</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1171,7 +1209,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::e</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::e</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1189,7 +1227,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::g_ax</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::g_ax</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1207,7 +1245,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::g_ax_old</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::g_ax_old</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1223,7 +1261,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::g_ay</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::g_ay</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1241,7 +1279,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::g_ay_old</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::g_ay_old</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1257,7 +1295,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::g_az</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::g_az</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1275,7 +1313,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::g_az_old</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::g_az_old</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1291,7 +1329,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* Particles::level</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* Particles::level</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1309,7 +1347,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::mass</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::mass</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1327,7 +1365,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* Particles::materialId</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* Particles::materialId</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1345,7 +1383,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::muijmax</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::muijmax</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1363,7 +1401,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* Particles::nnl</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* Particles::nnl</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1381,7 +1419,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* Particles::nodeType</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* Particles::nodeType</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1399,7 +1437,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* Particles::noi</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* Particles::noi</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1417,7 +1455,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* Particles::numNodes</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* Particles::numNodes</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1435,7 +1473,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* Particles::numParticles</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* Particles::numParticles</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1453,7 +1491,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::p</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::p</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1471,7 +1509,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::rho</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::rho</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1489,7 +1527,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::sml</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::sml</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1507,7 +1545,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::u</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::u</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1525,7 +1563,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a>* Particles::uid</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a>* Particles::uid</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1543,7 +1581,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::vx</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::vx</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1561,7 +1599,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::vy</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::vy</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1579,7 +1617,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::vz</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::vz</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1597,7 +1635,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::x</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::x</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1615,7 +1653,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::y</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::y</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1633,7 +1671,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::z</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* Particles::z</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1651,19 +1689,58 @@ Public Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
+    <!--
     milupHPC  - Particles Class Reference<br />
-    Generated on Thu Jun 23 2022 16:11:20 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    Generated on Wed Jun 29 2022 14:58:38 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    -->
   </small></address>
 </body>
 <footer>
-  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
-  <div id="banner-footer-first"></div>
-  <div id="banner-footer-second"></div>
-  <script>
-    function topFunction() {
-      document.body.scrollTop = 0; // For Safari
-      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    }
-  </script>
+  <custom-footer color="white" background="#2E4053">
+    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
+    <div second>
+      <div style="text-align: center">
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+        </div>
+      </div>
+    </div>
+    <div third>
+      milupHPC  - Particles Class Reference<br />
+      Generated on Wed Jun 29 2022 14:58:38 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    </div>
+  </custom-footer>
 </footer>
+<!--
+<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
+-->
+<script src="components/hamburger/runtime.js" type="text/javascript"></script><script src="components/hamburger/polyfills.js" type="text/javascript"></script><script src="components/hamburger/main.js" type="text/javascript"></script>
+<script src="components/header/runtime.js" type="text/javascript"></script><script src="components/header/polyfills.js" type="text/javascript"></script><script src="components/header/main.js" type="text/javascript"></script>
+<script src="components/icons/runtime.js" type="text/javascript"></script><script src="components/icons/polyfills.js" type="text/javascript"></script><script src="components/icons/main.js" type="text/javascript"></script>
+<script src="components/footer/runtime.js" type="text/javascript"></script><script src="components/footer/polyfills.js" type="text/javascript"></script><script src="components/footer/main.js" type="text/javascript"></script>
+<script src="components/dialog/runtime.js" type="text/javascript"></script><script src="components/dialog/polyfills.js" type="text/javascript"></script><script src="components/dialog/main.js" type="text/javascript"></script>
+<script src="components/copyable/runtime.js" type="text/javascript"></script><script src="components/copyable/polyfills.js" type="text/javascript"></script><script src="components/copyable/main.js" type="text/javascript"></script>
+<!--
+<script>
+  function toggle() {
+    var elem = document.getElementById("side-nav");
+    console.log(elem);
+    elem.toggleSideNav(false);
+  }
+</script>
+-->
+<!--
+<script>
+  function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  }
+</script>
+-->
 </html>

@@ -1,14 +1,26 @@
-<!DOCTYPE html>
-<html>
-<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
--->
+<!doctype html>
+<html lang="en">
 <head>
+	<meta charset="utf-8">
+	<title>CodePortray</title>
+	<base href="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: TreeHandler Class Reference</title>
+	<title>TreeHandler Class Reference</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -22,42 +34,68 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
-	<!-- Add icon library -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<!-- Add font awesome icons -->
-	<!--HIGHLIGHT.JS INSTALL BEGIN
-	<link rel="stylesheet" href="github.min.css">
-	<script src="highlight.js"></script>
-	<script>
-		$(function() {
-			hljs.configure({useBR: false});
-			$(".fragment").each(function(i,node) {
-				$(node).removeClass("fragment");
-				hljs.highlightBlock(node);
-			});
-		});
-	</script>
-	HIGHLIGHT.JS INSTALL END-->
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<custom-header class="custom-header-class">
+	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
+	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
+	<div shortcuts style="display: table">
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
+		</div>
+		<!-- get the code ... -->
+		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
+		<div style="display: table-cell; padding-right: 2px">
+			<custom-dialog window-width="600px" window-height="400px">
+				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
+				<div title>Get the code: milupHPC!</div>
+				<div style="text-align: center; padding-top: 20px;">
+					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
+					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
+					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
+					<div style="padding-top: 40px">clone via HTTPS:</div>
+					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">clone via SSH:</div>
+					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
+					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
+				</div>
+				<!--<div footer>This is the footer</div>-->
+			</custom-dialog>
+		</div>
+		<!-- end: get the code .... -->
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
+		</div>
+		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
+	</div>
+</custom-header>
+	<!--
+	<custom-side-nav id="side-nav" nav-width="300">
+		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
+		<div>test</div>
+	</custom-side-nav>
+	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation <!-- TreeHandler Class Reference -->
+				milupHPC documentation
 			</span>
-			<!-- <span class="search">
-				<input type="text" placeholder="Search" onkeydown="search(this,event);">
-			</span> -->
 		</div>
-    <!--
-	<div class="icon-bar">
-		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
-		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
-		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
-	</div>
-	</div>
-	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -115,7 +153,7 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aac8e313e23e4178381207c7340d66863"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#aac8e313e23e4178381207c7340d66863">TreeHandler</a> (<a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="class_tree_handler.html#a7194992756736862f1e256499d15921f">numParticles</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="class_tree_handler.html#ab002e9f23bd2efabdd8c4737ae1d53cb">numNodes</a>)</td></tr>
+<tr class="memitem:aac8e313e23e4178381207c7340d66863"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#aac8e313e23e4178381207c7340d66863">TreeHandler</a> (<a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="class_tree_handler.html#a7194992756736862f1e256499d15921f">numParticles</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="class_tree_handler.html#ab002e9f23bd2efabdd8c4737ae1d53cb">numNodes</a>)</td></tr>
 <tr class="memdesc:aac8e313e23e4178381207c7340d66863"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="class_tree_handler.html#aac8e313e23e4178381207c7340d66863">More...</a><br /></td></tr>
 <tr class="separator:aac8e313e23e4178381207c7340d66863"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8ee57a35aa3a8b3ed155999365bea57"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#ac8ee57a35aa3a8b3ed155999365bea57">~TreeHandler</a> ()</td></tr>
@@ -130,79 +168,79 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a7194992756736862f1e256499d15921f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a7194992756736862f1e256499d15921f">numParticles</a></td></tr>
+<tr class="memitem:a7194992756736862f1e256499d15921f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a7194992756736862f1e256499d15921f">numParticles</a></td></tr>
 <tr class="memdesc:a7194992756736862f1e256499d15921f"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of particles  <a href="class_tree_handler.html#a7194992756736862f1e256499d15921f">More...</a><br /></td></tr>
 <tr class="separator:a7194992756736862f1e256499d15921f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab002e9f23bd2efabdd8c4737ae1d53cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#ab002e9f23bd2efabdd8c4737ae1d53cb">numNodes</a></td></tr>
+<tr class="memitem:ab002e9f23bd2efabdd8c4737ae1d53cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#ab002e9f23bd2efabdd8c4737ae1d53cb">numNodes</a></td></tr>
 <tr class="memdesc:ab002e9f23bd2efabdd8c4737ae1d53cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of nodes  <a href="class_tree_handler.html#ab002e9f23bd2efabdd8c4737ae1d53cb">More...</a><br /></td></tr>
 <tr class="separator:ab002e9f23bd2efabdd8c4737ae1d53cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad36916d62d2685148b121c64ab4b6cbf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#ad36916d62d2685148b121c64ab4b6cbf">d_count</a></td></tr>
+<tr class="memitem:ad36916d62d2685148b121c64ab4b6cbf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#ad36916d62d2685148b121c64ab4b6cbf">d_count</a></td></tr>
 <tr class="memdesc:ad36916d62d2685148b121c64ab4b6cbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">device (pointer to) count (array)  <a href="class_tree_handler.html#ad36916d62d2685148b121c64ab4b6cbf">More...</a><br /></td></tr>
 <tr class="separator:ad36916d62d2685148b121c64ab4b6cbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89bb8551c32ed7f70255116ff7b52bbf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a89bb8551c32ed7f70255116ff7b52bbf">d_start</a></td></tr>
+<tr class="memitem:a89bb8551c32ed7f70255116ff7b52bbf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a89bb8551c32ed7f70255116ff7b52bbf">d_start</a></td></tr>
 <tr class="memdesc:a89bb8551c32ed7f70255116ff7b52bbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">device (pointer to) start (array)  <a href="class_tree_handler.html#a89bb8551c32ed7f70255116ff7b52bbf">More...</a><br /></td></tr>
 <tr class="separator:a89bb8551c32ed7f70255116ff7b52bbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2dd8eee9793ff94b94d011faf40bbd63"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a2dd8eee9793ff94b94d011faf40bbd63">d_sorted</a></td></tr>
+<tr class="memitem:a2dd8eee9793ff94b94d011faf40bbd63"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a2dd8eee9793ff94b94d011faf40bbd63">d_sorted</a></td></tr>
 <tr class="memdesc:a2dd8eee9793ff94b94d011faf40bbd63"><td class="mdescLeft">&#160;</td><td class="mdescRight">device (pointer to) sorted (array)  <a href="class_tree_handler.html#a2dd8eee9793ff94b94d011faf40bbd63">More...</a><br /></td></tr>
 <tr class="separator:a2dd8eee9793ff94b94d011faf40bbd63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea66bd1fa472a6caef535a76aa203589"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#aea66bd1fa472a6caef535a76aa203589">d_child</a></td></tr>
+<tr class="memitem:aea66bd1fa472a6caef535a76aa203589"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#aea66bd1fa472a6caef535a76aa203589">d_child</a></td></tr>
 <tr class="memdesc:aea66bd1fa472a6caef535a76aa203589"><td class="mdescLeft">&#160;</td><td class="mdescRight">device (pointer to) child/children (array)  <a href="class_tree_handler.html#aea66bd1fa472a6caef535a76aa203589">More...</a><br /></td></tr>
 <tr class="separator:aea66bd1fa472a6caef535a76aa203589"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9a1053d74791c3ef3d6544a1d6342c3a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a9a1053d74791c3ef3d6544a1d6342c3a">d_index</a></td></tr>
+<tr class="memitem:a9a1053d74791c3ef3d6544a1d6342c3a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a9a1053d74791c3ef3d6544a1d6342c3a">d_index</a></td></tr>
 <tr class="memdesc:a9a1053d74791c3ef3d6544a1d6342c3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">device (pointer to) index  <a href="class_tree_handler.html#a9a1053d74791c3ef3d6544a1d6342c3a">More...</a><br /></td></tr>
 <tr class="separator:a9a1053d74791c3ef3d6544a1d6342c3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4de6c07ae4351edc9e8d97e0f122508f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a4de6c07ae4351edc9e8d97e0f122508f">h_index</a></td></tr>
+<tr class="memitem:a4de6c07ae4351edc9e8d97e0f122508f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a4de6c07ae4351edc9e8d97e0f122508f">h_index</a></td></tr>
 <tr class="memdesc:a4de6c07ae4351edc9e8d97e0f122508f"><td class="mdescLeft">&#160;</td><td class="mdescRight">host (pointer to) index  <a href="class_tree_handler.html#a4de6c07ae4351edc9e8d97e0f122508f">More...</a><br /></td></tr>
 <tr class="separator:a4de6c07ae4351edc9e8d97e0f122508f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22ef5e630a69cf0dd6d688cbc0f4d424"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a22ef5e630a69cf0dd6d688cbc0f4d424">d_mutex</a></td></tr>
+<tr class="memitem:a22ef5e630a69cf0dd6d688cbc0f4d424"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a22ef5e630a69cf0dd6d688cbc0f4d424">d_mutex</a></td></tr>
 <tr class="memdesc:a22ef5e630a69cf0dd6d688cbc0f4d424"><td class="mdescLeft">&#160;</td><td class="mdescRight">device (pointer to) mutex/lock  <a href="class_tree_handler.html#a22ef5e630a69cf0dd6d688cbc0f4d424">More...</a><br /></td></tr>
 <tr class="separator:a22ef5e630a69cf0dd6d688cbc0f4d424"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59e569e243b0d297ac24a731d7ecf988"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a59e569e243b0d297ac24a731d7ecf988">h_toDeleteLeaf</a></td></tr>
+<tr class="memitem:a59e569e243b0d297ac24a731d7ecf988"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a59e569e243b0d297ac24a731d7ecf988">h_toDeleteLeaf</a></td></tr>
 <tr class="memdesc:a59e569e243b0d297ac24a731d7ecf988"><td class="mdescLeft">&#160;</td><td class="mdescRight">host (pointer to) array remembering leaf indices for rebuilding after temporarily inserting particles  <a href="class_tree_handler.html#a59e569e243b0d297ac24a731d7ecf988">More...</a><br /></td></tr>
 <tr class="separator:a59e569e243b0d297ac24a731d7ecf988"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81a4f277769ebfc7ec428ef27863c0fa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a81a4f277769ebfc7ec428ef27863c0fa">h_toDeleteNode</a></td></tr>
+<tr class="memitem:a81a4f277769ebfc7ec428ef27863c0fa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a81a4f277769ebfc7ec428ef27863c0fa">h_toDeleteNode</a></td></tr>
 <tr class="memdesc:a81a4f277769ebfc7ec428ef27863c0fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">host (pointer to) array remembering leaf indices for rebuilding after temporarily inserting particles  <a href="class_tree_handler.html#a81a4f277769ebfc7ec428ef27863c0fa">More...</a><br /></td></tr>
 <tr class="separator:a81a4f277769ebfc7ec428ef27863c0fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8df4e5f00f58e68a1081b99c040d17b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a8df4e5f00f58e68a1081b99c040d17b8">d_toDeleteLeaf</a></td></tr>
+<tr class="memitem:a8df4e5f00f58e68a1081b99c040d17b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a8df4e5f00f58e68a1081b99c040d17b8">d_toDeleteLeaf</a></td></tr>
 <tr class="memdesc:a8df4e5f00f58e68a1081b99c040d17b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">device (pointer to) array remembering leaf indices for rebuilding after temporarily inserting particles  <a href="class_tree_handler.html#a8df4e5f00f58e68a1081b99c040d17b8">More...</a><br /></td></tr>
 <tr class="separator:a8df4e5f00f58e68a1081b99c040d17b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af93e9b21162af1f4be7866fe06a4165f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#af93e9b21162af1f4be7866fe06a4165f">d_toDeleteNode</a></td></tr>
+<tr class="memitem:af93e9b21162af1f4be7866fe06a4165f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#af93e9b21162af1f4be7866fe06a4165f">d_toDeleteNode</a></td></tr>
 <tr class="memdesc:af93e9b21162af1f4be7866fe06a4165f"><td class="mdescLeft">&#160;</td><td class="mdescRight">device (pointer to) array remembering leaf indices for rebuilding after temporarily inserting particles  <a href="class_tree_handler.html#af93e9b21162af1f4be7866fe06a4165f">More...</a><br /></td></tr>
 <tr class="separator:af93e9b21162af1f4be7866fe06a4165f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3d5bb9319ce9d1e9322b1a7dcee91c6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#aa3d5bb9319ce9d1e9322b1a7dcee91c6">d_minX</a></td></tr>
+<tr class="memitem:aa3d5bb9319ce9d1e9322b1a7dcee91c6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#aa3d5bb9319ce9d1e9322b1a7dcee91c6">d_minX</a></td></tr>
 <tr class="memdesc:aa3d5bb9319ce9d1e9322b1a7dcee91c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">device (pointer to) bounding box minimal x  <a href="class_tree_handler.html#aa3d5bb9319ce9d1e9322b1a7dcee91c6">More...</a><br /></td></tr>
 <tr class="separator:aa3d5bb9319ce9d1e9322b1a7dcee91c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6325f18255766714de0b3b3fd4cbdce8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a6325f18255766714de0b3b3fd4cbdce8">d_maxX</a></td></tr>
+<tr class="memitem:a6325f18255766714de0b3b3fd4cbdce8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a6325f18255766714de0b3b3fd4cbdce8">d_maxX</a></td></tr>
 <tr class="memdesc:a6325f18255766714de0b3b3fd4cbdce8"><td class="mdescLeft">&#160;</td><td class="mdescRight">device (pointer to) bounding box maximal x  <a href="class_tree_handler.html#a6325f18255766714de0b3b3fd4cbdce8">More...</a><br /></td></tr>
 <tr class="separator:a6325f18255766714de0b3b3fd4cbdce8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08e6812c8b07d966ddb142f793a4da4d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a08e6812c8b07d966ddb142f793a4da4d">h_minX</a></td></tr>
+<tr class="memitem:a08e6812c8b07d966ddb142f793a4da4d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a08e6812c8b07d966ddb142f793a4da4d">h_minX</a></td></tr>
 <tr class="memdesc:a08e6812c8b07d966ddb142f793a4da4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">host (pointer to) bounding box minimal x  <a href="class_tree_handler.html#a08e6812c8b07d966ddb142f793a4da4d">More...</a><br /></td></tr>
 <tr class="separator:a08e6812c8b07d966ddb142f793a4da4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4871afb297064b0fc6ec876fd7977d16"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a4871afb297064b0fc6ec876fd7977d16">h_maxX</a></td></tr>
+<tr class="memitem:a4871afb297064b0fc6ec876fd7977d16"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a4871afb297064b0fc6ec876fd7977d16">h_maxX</a></td></tr>
 <tr class="memdesc:a4871afb297064b0fc6ec876fd7977d16"><td class="mdescLeft">&#160;</td><td class="mdescRight">host (pointer to) bounding box maximal x  <a href="class_tree_handler.html#a4871afb297064b0fc6ec876fd7977d16">More...</a><br /></td></tr>
 <tr class="separator:a4871afb297064b0fc6ec876fd7977d16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4b6fb9264a8266adff2c83dbbac2c7f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#ab4b6fb9264a8266adff2c83dbbac2c7f">d_minY</a></td></tr>
+<tr class="memitem:ab4b6fb9264a8266adff2c83dbbac2c7f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#ab4b6fb9264a8266adff2c83dbbac2c7f">d_minY</a></td></tr>
 <tr class="memdesc:ab4b6fb9264a8266adff2c83dbbac2c7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">device (pointer to) bounding box minimal y  <a href="class_tree_handler.html#ab4b6fb9264a8266adff2c83dbbac2c7f">More...</a><br /></td></tr>
 <tr class="separator:ab4b6fb9264a8266adff2c83dbbac2c7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4c5fc0cc09b3616026767737340108a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#ac4c5fc0cc09b3616026767737340108a">d_maxY</a></td></tr>
+<tr class="memitem:ac4c5fc0cc09b3616026767737340108a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#ac4c5fc0cc09b3616026767737340108a">d_maxY</a></td></tr>
 <tr class="memdesc:ac4c5fc0cc09b3616026767737340108a"><td class="mdescLeft">&#160;</td><td class="mdescRight">device (pointer to) bounding box maximal y  <a href="class_tree_handler.html#ac4c5fc0cc09b3616026767737340108a">More...</a><br /></td></tr>
 <tr class="separator:ac4c5fc0cc09b3616026767737340108a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0cd776f7071f13ac07d4731125b90dc4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a0cd776f7071f13ac07d4731125b90dc4">h_minY</a></td></tr>
+<tr class="memitem:a0cd776f7071f13ac07d4731125b90dc4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a0cd776f7071f13ac07d4731125b90dc4">h_minY</a></td></tr>
 <tr class="memdesc:a0cd776f7071f13ac07d4731125b90dc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">host (pointer to) bounding box minimal y  <a href="class_tree_handler.html#a0cd776f7071f13ac07d4731125b90dc4">More...</a><br /></td></tr>
 <tr class="separator:a0cd776f7071f13ac07d4731125b90dc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaadfce2c873551da3cd4503aa3d911f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#aaadfce2c873551da3cd4503aa3d911f5">h_maxY</a></td></tr>
+<tr class="memitem:aaadfce2c873551da3cd4503aa3d911f5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#aaadfce2c873551da3cd4503aa3d911f5">h_maxY</a></td></tr>
 <tr class="memdesc:aaadfce2c873551da3cd4503aa3d911f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">host (pointer to) bounding box maximal y  <a href="class_tree_handler.html#aaadfce2c873551da3cd4503aa3d911f5">More...</a><br /></td></tr>
 <tr class="separator:aaadfce2c873551da3cd4503aa3d911f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a955cd5ec3cebd25f13dce7e1e21676e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a955cd5ec3cebd25f13dce7e1e21676e4">d_minZ</a></td></tr>
+<tr class="memitem:a955cd5ec3cebd25f13dce7e1e21676e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a955cd5ec3cebd25f13dce7e1e21676e4">d_minZ</a></td></tr>
 <tr class="memdesc:a955cd5ec3cebd25f13dce7e1e21676e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">device (pointer to) bounding box minimal z  <a href="class_tree_handler.html#a955cd5ec3cebd25f13dce7e1e21676e4">More...</a><br /></td></tr>
 <tr class="separator:a955cd5ec3cebd25f13dce7e1e21676e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a69db129c965109afbdbd31aa1043a64c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a69db129c965109afbdbd31aa1043a64c">d_maxZ</a></td></tr>
+<tr class="memitem:a69db129c965109afbdbd31aa1043a64c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a69db129c965109afbdbd31aa1043a64c">d_maxZ</a></td></tr>
 <tr class="memdesc:a69db129c965109afbdbd31aa1043a64c"><td class="mdescLeft">&#160;</td><td class="mdescRight">device (pointer to) bounding box maximal z  <a href="class_tree_handler.html#a69db129c965109afbdbd31aa1043a64c">More...</a><br /></td></tr>
 <tr class="separator:a69db129c965109afbdbd31aa1043a64c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf9fddbeae8087ee623f6e6ab338a396"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#abf9fddbeae8087ee623f6e6ab338a396">h_minZ</a></td></tr>
+<tr class="memitem:abf9fddbeae8087ee623f6e6ab338a396"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#abf9fddbeae8087ee623f6e6ab338a396">h_minZ</a></td></tr>
 <tr class="memdesc:abf9fddbeae8087ee623f6e6ab338a396"><td class="mdescLeft">&#160;</td><td class="mdescRight">host (pointer to) bounding box minimal z  <a href="class_tree_handler.html#abf9fddbeae8087ee623f6e6ab338a396">More...</a><br /></td></tr>
 <tr class="separator:abf9fddbeae8087ee623f6e6ab338a396"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2c7a2670cf9225a541789dfd84b8ec3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#ad2c7a2670cf9225a541789dfd84b8ec3">h_maxZ</a></td></tr>
+<tr class="memitem:ad2c7a2670cf9225a541789dfd84b8ec3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#ad2c7a2670cf9225a541789dfd84b8ec3">h_maxZ</a></td></tr>
 <tr class="memdesc:ad2c7a2670cf9225a541789dfd84b8ec3"><td class="mdescLeft">&#160;</td><td class="mdescRight">host (pointer to) bounding box maximal x  <a href="class_tree_handler.html#ad2c7a2670cf9225a541789dfd84b8ec3">More...</a><br /></td></tr>
 <tr class="separator:ad2c7a2670cf9225a541789dfd84b8ec3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a06999862a87d58a11a853dda62b0f125"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_tree.html">Tree</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_tree_handler.html#a06999862a87d58a11a853dda62b0f125">d_tree</a></td></tr>
@@ -223,13 +261,13 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">TreeHandler::TreeHandler </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numParticles</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numNodes</em>&#160;</td>
         </tr>
         <tr>
@@ -400,7 +438,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::d_child</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::d_child</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -418,7 +456,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::d_count</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::d_count</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -436,7 +474,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::d_index</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::d_index</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -454,7 +492,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::d_maxX</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::d_maxX</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -472,7 +510,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::d_maxY</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::d_maxY</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -490,7 +528,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::d_maxZ</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::d_maxZ</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -508,7 +546,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::d_minX</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::d_minX</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -526,7 +564,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::d_minY</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::d_minY</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -544,7 +582,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::d_minZ</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::d_minZ</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -562,7 +600,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::d_mutex</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::d_mutex</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -580,7 +618,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::d_sorted</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::d_sorted</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -598,7 +636,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::d_start</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::d_start</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -616,7 +654,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::d_toDeleteLeaf</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::d_toDeleteLeaf</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -634,7 +672,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::d_toDeleteNode</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::d_toDeleteNode</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -670,7 +708,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::h_index</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::h_index</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -688,7 +726,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::h_maxX</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::h_maxX</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -706,7 +744,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::h_maxY</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::h_maxY</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -724,7 +762,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::h_maxZ</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::h_maxZ</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -742,7 +780,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::h_minX</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::h_minX</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -760,7 +798,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::h_minY</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::h_minY</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -778,7 +816,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::h_minZ</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* TreeHandler::h_minZ</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -796,7 +834,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::h_toDeleteLeaf</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::h_toDeleteLeaf</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -814,7 +852,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::h_toDeleteNode</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* TreeHandler::h_toDeleteNode</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -832,7 +870,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> TreeHandler::numNodes</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> TreeHandler::numNodes</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -850,7 +888,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> TreeHandler::numParticles</td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> TreeHandler::numParticles</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -868,19 +906,58 @@ Public Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
+    <!--
     milupHPC  - TreeHandler Class Reference<br />
-    Generated on Thu Jun 23 2022 16:11:20 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    Generated on Wed Jun 29 2022 14:58:38 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    -->
   </small></address>
 </body>
 <footer>
-  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
-  <div id="banner-footer-first"></div>
-  <div id="banner-footer-second"></div>
-  <script>
-    function topFunction() {
-      document.body.scrollTop = 0; // For Safari
-      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    }
-  </script>
+  <custom-footer color="white" background="#2E4053">
+    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
+    <div second>
+      <div style="text-align: center">
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+        </div>
+      </div>
+    </div>
+    <div third>
+      milupHPC  - TreeHandler Class Reference<br />
+      Generated on Wed Jun 29 2022 14:58:38 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    </div>
+  </custom-footer>
 </footer>
+<!--
+<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
+-->
+<script src="components/hamburger/runtime.js" type="text/javascript"></script><script src="components/hamburger/polyfills.js" type="text/javascript"></script><script src="components/hamburger/main.js" type="text/javascript"></script>
+<script src="components/header/runtime.js" type="text/javascript"></script><script src="components/header/polyfills.js" type="text/javascript"></script><script src="components/header/main.js" type="text/javascript"></script>
+<script src="components/icons/runtime.js" type="text/javascript"></script><script src="components/icons/polyfills.js" type="text/javascript"></script><script src="components/icons/main.js" type="text/javascript"></script>
+<script src="components/footer/runtime.js" type="text/javascript"></script><script src="components/footer/polyfills.js" type="text/javascript"></script><script src="components/footer/main.js" type="text/javascript"></script>
+<script src="components/dialog/runtime.js" type="text/javascript"></script><script src="components/dialog/polyfills.js" type="text/javascript"></script><script src="components/dialog/main.js" type="text/javascript"></script>
+<script src="components/copyable/runtime.js" type="text/javascript"></script><script src="components/copyable/polyfills.js" type="text/javascript"></script><script src="components/copyable/main.js" type="text/javascript"></script>
+<!--
+<script>
+  function toggle() {
+    var elem = document.getElementById("side-nav");
+    console.log(elem);
+    elem.toggleSideNav(false);
+  }
+</script>
+-->
+<!--
+<script>
+  function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  }
+</script>
+-->
 </html>

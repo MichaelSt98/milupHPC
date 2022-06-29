@@ -1,6 +1,6 @@
 <map id="include/particle_handler.h" name="include/particle_handler.h">
 <area shape="rect" id="node1" title=" " alt="" coords="299,5,467,32"/>
-<area shape="rect" id="node2" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="148,304,239,331"/>
+<area shape="rect" id="node2" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="148,304,239,331"/>
 <area shape="rect" id="node5" href="$particles_8cuh.html" title="Particle struct as Structure of arrays both instantiable on host and device." alt="" coords="268,80,364,107"/>
 <area shape="rect" id="node8" href="$cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers." alt="" coords="21,229,132,256"/>
 <area shape="rect" id="node11" href="$include_2utils_2_logger_8h.html" title="C++ style logger." alt="" coords="488,229,582,256"/>

@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>CodePortray</title>
+	<base href="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--
+	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+	-->
+	<meta name="generator" content="Doxygen 1.9.3"/>
+	<title>milupHPC: include/parameter.h Source File</title>
+	<title>include/parameter.h Source File</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+	<link href="tabs.css" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="dynsections.js"></script>
+	<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+	<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<custom-header class="custom-header-class">
+	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
+	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
+	<div shortcuts style="display: table">
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
+		</div>
+		<!-- get the code ... -->
+		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
+		<div style="display: table-cell; padding-right: 2px">
+			<custom-dialog window-width="600px" window-height="400px">
+				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
+				<div title>Get the code: milupHPC!</div>
+				<div style="text-align: center; padding-top: 20px;">
+					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
+					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
+					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
+					<div style="padding-top: 40px">clone via HTTPS:</div>
+					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">clone via SSH:</div>
+					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
+					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
+				</div>
+				<!--<div footer>This is the footer</div>-->
+			</custom-dialog>
+		</div>
+		<!-- end: get the code .... -->
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
+		</div>
+		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
+	</div>
+</custom-header>
+	<!--
+	<custom-side-nav id="side-nav" nav-width="300">
+		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
+		<div>test</div>
+	</custom-side-nav>
+	-->
+	<div id="banner">
+		<div class="logo">
+			<span class="subtitle">
+				milupHPC documentation
+			</span>
+		</div>
+	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<!-- Generated by Doxygen 1.9.3 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Search','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle"><div class="title">parameter.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="include_2parameter_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef MILUPHPC_PARAMETER_H</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define MILUPHPC_PARAMETER_H</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;limits&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#ifdef SINGLE_PRECISION</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keyword">typedef</span> <span class="keywordtype">float</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>;</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#else</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">   15</a></span>    <span class="keyword">typedef</span> <span class="keywordtype">double</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">   17</a></span><span class="keyword">typedef</span> <span class="keywordtype">int</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">   18</a></span><span class="keyword">typedef</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">long</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a>;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">   19</a></span><span class="keyword">typedef</span> <span class="keywordtype">int</span> <a class="code hl_typedef" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a>;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">//#define theta 0.5</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a5bb4257ca9fa4bfcf9391b7895b97761">   25</a></span><span class="preprocessor">#define MAX_LEVEL 21</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a7180786c98af534f76855fef6f1b97ab">   27</a></span><span class="preprocessor">#define DEBUGGING 0</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a2729380bfdb6b0dd9a3397b9289efa48">   35</a></span><span class="preprocessor">#define SAFETY_LEVEL 1</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">   38</a></span><span class="preprocessor">#define DIM 3</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#aeba852fb02971e4482e14c08ee713d2e">   39</a></span><span class="preprocessor">#define power_two(x) (1 &lt;&lt; (x))</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#aaf01a8b5289af20025d06e3fed70cc94">   40</a></span><span class="preprocessor">#define POW_DIM power_two(DIM)</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a7f8a323fd4f2e0f27e75f64a2fc89560">   43</a></span><span class="preprocessor">#define SI_UNITS 0</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a2e7133ed5de6112e76e418c53e250f8d">   46</a></span><span class="preprocessor">#define CUBIC_DOMAINS 1</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#aa28b620aee5a74f09f2b3cac50b9fb63">   49</a></span><span class="preprocessor">#define GRAVITY_SIM 1</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#aee098c78a6f351cbe4286338f58f2330">   52</a></span><span class="preprocessor">#define SPH_SIM 0</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#aef31c618487f04f7fbfb716e4c13545b">   55</a></span><span class="preprocessor">#define INTEGRATE_ENERGY 0</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a23a8396515412900c7a0ac5899efe984">   58</a></span><span class="preprocessor">#define INTEGRATE_DENSITY 0</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#ad2c4751f0383439ba8403f9b6735dd16">   61</a></span><span class="preprocessor">#define INTEGRATE_SML 0</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a930039a1a620a721f9bc0f0a884574dd">   64</a></span><span class="preprocessor">#define DECOUPLE_SML 0</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a908e2164c823365528caa4263006a2dc">   67</a></span><span class="preprocessor">#define VARIABLE_SML 0</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a6aa17c07e431d51128212d435abe8fa7">   70</a></span><span class="preprocessor">#define SML_CORRECTION 0</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#adfcbe08a8478076a0a1e81f0f18a5eec">   81</a></span><span class="preprocessor">#define SPH_EQU_VERSION 1</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment">// deprecated flag</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a7132b7f55f65be67016d71073417ddac">   84</a></span><span class="preprocessor">#define ARTIFICIAL_VISCOSITY 1</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a2cae5c1e6713981cd887c0128bf8344e">   85</a></span><span class="preprocessor">#define BALSARA_SWITCH 0</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment">// to be (fully) implemented flags</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a14f0c1706287bea4992f1cc4624daafe">   88</a></span><span class="preprocessor">#define AVERAGE_KERNELS 0</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#ae04c60518447e20dc504bed2b41bc6b8">   89</a></span><span class="preprocessor">#define DEAL_WITH_TOO_MANY_INTERACTIONS 0</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a9ccf4fc298f663e26a4113cba801d309">   90</a></span><span class="preprocessor">#define SHEPARD_CORRECTION 0</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#aa8abfd58ea514228abd69d8f6330e91d">   91</a></span><span class="preprocessor">#define SOLID 0</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a945507ea94c77f3c72a042048b4a4ef0">   92</a></span><span class="preprocessor">#define NAVIER_STOKES 0</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#ac8bcf3d24e69483eae9d2a54be4d0f6e">   93</a></span><span class="preprocessor">#define ARTIFICIAL_STRESS 0</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a26614e169d24b4c9d5efba420f4fc961">   94</a></span><span class="preprocessor">#define POROSITY 0</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a023199b47f10b9b13d03469b251c69b0">   95</a></span><span class="preprocessor">#define ZERO_CONSISTENCY 0</span></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#aa0e93327fde519c548e775b622e707c9">   96</a></span><span class="preprocessor">#define LINEAR_CONSISTENCY 0</span></div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#ab26977fab12ff2724cf9efd5ba6390e8">   97</a></span><span class="preprocessor">#define FRAGMENTATION 0</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#ae40edb8e9ac4ed9e625cb81767ed9e9c">   98</a></span><span class="preprocessor">#define PALPHA_POROSITY 0</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a08f60ca4ce42b5b1301db797d364507e">   99</a></span><span class="preprocessor">#define PLASTICITY 0</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#ac4427158132a8d91048acfca8c56e9de">  100</a></span><span class="preprocessor">#define KLEY_VISCOSITY 0</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a609683a0c8de0ce9cdd1e696e71a6f07">  102</a></span><span class="preprocessor">#define KEY_MAX ULONG_MAX</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="comment">//TODO: make domain list size to run time constant</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a8b5552a5108e6c6bed3addeb9daa0d36">  104</a></span><span class="preprocessor">#define DOMAIN_LIST_SIZE 512</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a5db49eeef5c9bb774f02996f684df238">  105</a></span><span class="preprocessor">#define MAX_DEPTH 128</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a173e5a522f62a96b7508f1f4139b2479">  106</a></span><span class="preprocessor">#define MAX_NUM_INTERACTIONS 180</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a12947b6362cba90f3716bb4f25880add">  107</a></span><span class="preprocessor">#define NUM_THREADS_LIMIT_TIME_STEP 256</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a264da86aad42159f5195f1be566607c9">  108</a></span><span class="preprocessor">#define NUM_THREADS_CALC_CENTER_OF_MASS 256</span></div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment">// Courant (CFL) number (note that our sml is defined up to the zero of the kernel, not half of it)</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a6ffbcf2ba306e9583d21988f8a1acaaa">  111</a></span><span class="preprocessor">#define COURANT_FACT 0.4</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#ae9a0ef30d7f55ac5740a18f33c60ba28">  113</a></span><span class="preprocessor">#define FORCES_FACT 0.2</span></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span> </div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a04c5fddff3aaef7523b3419c171f1884">  115</a></span><span class="keyword">constexpr</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_variable" href="include_2parameter_8h.html#a04c5fddff3aaef7523b3419c171f1884">dbl_max</a> = <a class="code hl_function" href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">std::numeric_limits&lt;real&gt;::max</a>();</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#af78670ee54c1203d613f8fb0e022d214">  116</a></span><span class="preprocessor">#define DBL_MAX dbl_max;</span></div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> </div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno"><a class="line" href="namespace_constants.html">  118</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_constants.html">Constants</a> {</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno"><a class="line" href="namespace_constants.html#ad17e79c3a9b2da663530274844d9f780">  119</a></span>    <span class="keyword">constexpr</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_variable" href="namespace_constants.html#ad17e79c3a9b2da663530274844d9f780">G</a> = 6.67430e-11;</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>}</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html">  122</a></span><span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code hl_struct" href="struct_simulation_parameters.html">SimulationParameters</a> {</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#a426284c0f3b04b059ec27c5df0092e04">  123</a></span>    std::string <a class="code hl_variable" href="struct_simulation_parameters.html#a426284c0f3b04b059ec27c5df0092e04">directory</a>;</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#a0fb68c84de754d059036a8b32b8a6c89">  124</a></span>    std::string <a class="code hl_variable" href="struct_simulation_parameters.html#a0fb68c84de754d059036a8b32b8a6c89">logDirectory</a>;</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#adca3e31867604dc2075bd987e0ec67f2">  125</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#adca3e31867604dc2075bd987e0ec67f2">verbosity</a>;</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#ab6e04f8e73ccf206f9dd8485c948838c">  126</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_simulation_parameters.html#ab6e04f8e73ccf206f9dd8485c948838c">timeKernels</a>;</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#abff695e0a1248782f868c5f57ce14cd9">  127</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#abff695e0a1248782f868c5f57ce14cd9">numOutputFiles</a>;</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#ae1364d65deb6bfffcc11b635bdb21a14">  128</a></span>    <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_variable" href="struct_simulation_parameters.html#ae1364d65deb6bfffcc11b635bdb21a14">timeStep</a>;</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#a1824843bddf8db4c26409dc20b6e2562">  129</a></span>    <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_variable" href="struct_simulation_parameters.html#a1824843bddf8db4c26409dc20b6e2562">maxTimeStep</a>;</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#a27eeca61f98ea29522b866118ffe914f">  130</a></span>    <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_variable" href="struct_simulation_parameters.html#a27eeca61f98ea29522b866118ffe914f">timeEnd</a>;</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#a0b8883f78fbd76ea8aba5b9bdf665db8">  131</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_simulation_parameters.html#a0b8883f78fbd76ea8aba5b9bdf665db8">loadBalancing</a>;</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#a247cfb5067e99555a8968a815911bed9">  132</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#a247cfb5067e99555a8968a815911bed9">loadBalancingInterval</a>;</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#a68a5daed65925cf16e9dc9b955702f70">  133</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#a68a5daed65925cf16e9dc9b955702f70">loadBalancingBins</a>;</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#abf19f8333e75b0609b0688033bbd593d">  134</a></span>    std::string <a class="code hl_variable" href="struct_simulation_parameters.html#abf19f8333e75b0609b0688033bbd593d">inputFile</a>;</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#a2aaaac5daa0fcbf0c3b84c662c289ea7">  135</a></span>    std::string <a class="code hl_variable" href="struct_simulation_parameters.html#a2aaaac5daa0fcbf0c3b84c662c289ea7">materialConfigFile</a>;</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#a8205fd6fb7574280b2c5ce61558972bc">  136</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#a8205fd6fb7574280b2c5ce61558972bc">outputRank</a>;</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#abdcc1b44aa3decd70d4d3004e19effda">  137</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_simulation_parameters.html#abdcc1b44aa3decd70d4d3004e19effda">performanceLog</a>;</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#a94674a4e3f29261b3735341e5ff86c5e">  138</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_simulation_parameters.html#a94674a4e3f29261b3735341e5ff86c5e">particlesSent2H5</a>;</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#adf0819b5f9a62286cf4687eb0f4495d4">  139</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#adf0819b5f9a62286cf4687eb0f4495d4">sfcSelection</a>;</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#aded0f27ea85d8564f0e824f11242d1e6">  140</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#aded0f27ea85d8564f0e824f11242d1e6">integratorSelection</a>;</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="comment">//#if GRAVITY_SIM</span></div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#a11a66d8562c6d7cbd83fd4626f0682e9">  142</a></span>    <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_variable" href="struct_simulation_parameters.html#a11a66d8562c6d7cbd83fd4626f0682e9">theta</a>;</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#ad68e6e60476ca7664a6f8d14c2bdd682">  143</a></span>    <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_variable" href="struct_simulation_parameters.html#ad68e6e60476ca7664a6f8d14c2bdd682">smoothing</a>;</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#ae7e52c50a385717eb74ff4c83f4d1352">  144</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#ae7e52c50a385717eb74ff4c83f4d1352">gravityForceVersion</a>;</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="comment">//#endif</span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span><span class="comment">//#if SPH_SIM</span></div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#a20f8422f80f28cb529406ded5cc23eda">  147</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#a20f8422f80f28cb529406ded5cc23eda">smoothingKernelSelection</a>;</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#adcf01f0e69c2c1e99827ee1619c35f2e">  148</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#adcf01f0e69c2c1e99827ee1619c35f2e">sphFixedRadiusNNVersion</a>;</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span><span class="comment">//#endif</span></div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#afcade733412d5cb4835e789787242c2c">  150</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_simulation_parameters.html#afcade733412d5cb4835e789787242c2c">removeParticles</a>;</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#ae8d544384926bc8f46c43082716f090c">  151</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#ae8d544384926bc8f46c43082716f090c">removeParticlesCriterion</a>;</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#a1b675216793741f6961ef1d6e6714f38">  152</a></span>    <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_variable" href="struct_simulation_parameters.html#a1b675216793741f6961ef1d6e6714f38">removeParticlesDimension</a>;</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#a74aafed70aa0f308a4da77bdc3a98de0">  153</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#a74aafed70aa0f308a4da77bdc3a98de0">bins</a>;</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#a095b20022d67ba1ac26d5bed45a14de5">  154</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_simulation_parameters.html#a095b20022d67ba1ac26d5bed45a14de5">calculateAngularMomentum</a>;</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#af561a304f51256a5924bfd17c7820e52">  155</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_simulation_parameters.html#af561a304f51256a5924bfd17c7820e52">calculateEnergy</a>;</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#ab4a75e1b06ca4c8d223274ca01115cb1">  156</a></span>    <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_simulation_parameters.html#ab4a75e1b06ca4c8d223274ca01115cb1">calculateCenterOfMass</a>;</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#aeb27babde5a25717a11104a3176ff016">  157</a></span>    <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_variable" href="struct_simulation_parameters.html#aeb27babde5a25717a11104a3176ff016">particleMemoryContingent</a>;</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno"><a class="line" href="struct_simulation_parameters.html#a78cd1edd9defeafcd37a4a68535eaed5">  158</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="struct_simulation_parameters.html#a78cd1edd9defeafcd37a4a68535eaed5">domainListSize</a>;</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a2d8e8822fa3f08e0aab03e66949b9faf">  159</a></span>} <a class="code hl_typedef" href="include_2parameter_8h.html#a2d8e8822fa3f08e0aab03e66949b9faf">SimulationParameters</a>;</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span> </div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno"><a class="line" href="struct_to.html">  161</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_to.html">To</a></div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>{</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno"><a class="line" href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49">  163</a></span>    <span class="keyword">enum</span> <a class="code hl_enumeration" href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49">Target</a></div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    {</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno"><a class="line" href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49a8178fb6c32eb3a82f7f25a25196cdbfc">  165</a></span>        <a class="code hl_enumvalue" href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49a8178fb6c32eb3a82f7f25a25196cdbfc">host</a>, <a class="code hl_enumvalue" href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49a4f25ce835a523aaa2b2faedf4960f38c">device</a></div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno"><a class="line" href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49a4f25ce835a523aaa2b2faedf4960f38c">  166</a></span>    };</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno"><a class="line" href="struct_to.html#a2570d23657d3c2be298d6b6a5857999f">  167</a></span>    <a class="code hl_enumeration" href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49">Target</a> <a class="code hl_variable" href="struct_to.html#a2570d23657d3c2be298d6b6a5857999f">t_</a>;</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno"><a class="line" href="struct_to.html#a91c3877f442bd3b5e110b7cd375589bd">  168</a></span>    <a class="code hl_function" href="struct_to.html#a91c3877f442bd3b5e110b7cd375589bd">To</a>(<a class="code hl_enumeration" href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49">Target</a> t) : <a class="code hl_variable" href="struct_to.html#a2570d23657d3c2be298d6b6a5857999f">t_</a>(t) {}</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno"><a class="line" href="struct_to.html#a0619a753b9bd6cc0b2960f33ebb4dbf8">  169</a></span>    <span class="keyword">operator</span> <a class="code hl_enumeration" href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49">Target</a> ()<span class="keyword"> const </span>{<span class="keywordflow">return</span> <a class="code hl_variable" href="struct_to.html#a2570d23657d3c2be298d6b6a5857999f">t_</a>;}</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno"><a class="line" href="struct_to.html#a6d397f678e1245b4df60ca5af133c5ae">  172</a></span>    <span class="keyword">operator</span> T () <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>};</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span> </div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno"><a class="line" href="struct_smoothing.html">  175</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_smoothing.html">Smoothing</a></div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>{</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno"><a class="line" href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674">  177</a></span>    <span class="keyword">enum</span> <a class="code hl_namespace" href="namespace_kernel.html">Kernel</a></div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>    {</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno"><a class="line" href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674a3182e531cc9d04448e8724b428f757ed">  179</a></span>        <a class="code hl_enumvalue" href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674a6705b4c78679abf5250e1086118ac5b3">spiky</a>, <a class="code hl_enumvalue" href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674a3182e531cc9d04448e8724b428f757ed">cubic_spline</a>, <a class="code hl_enumvalue" href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674afa18ac3b00422f42c6175598807ef675">wendlandc2</a>, <a class="code hl_enumvalue" href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674a4ed43bfbc693f7ee3f10f9021f978d94">wendlandc4</a>, <a class="code hl_enumvalue" href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674ae719e9800f819ac93fa1bd296a73bf15">wendlandc6</a></div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno"><a class="line" href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674ae719e9800f819ac93fa1bd296a73bf15">  180</a></span>    };</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno"><a class="line" href="struct_smoothing.html#a947ed1b107f32189a3c839b6c81f956a">  181</a></span>    <a class="code hl_namespace" href="namespace_kernel.html">Kernel</a> <a class="code hl_variable" href="struct_smoothing.html#a947ed1b107f32189a3c839b6c81f956a">t_</a>;</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno"><a class="line" href="struct_smoothing.html#a9014fbe54d67cd4769d9e104def2e934">  182</a></span>    <a class="code hl_function" href="struct_smoothing.html#a9014fbe54d67cd4769d9e104def2e934">Smoothing</a>(<a class="code hl_namespace" href="namespace_kernel.html">Kernel</a> t) : <a class="code hl_variable" href="struct_smoothing.html#a947ed1b107f32189a3c839b6c81f956a">t_</a>(t) {}</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno"><a class="line" href="struct_smoothing.html#a8da3e337b67c3d440ff2626ce8f9422a">  183</a></span>    <span class="keyword">operator</span> <a class="code hl_function" href="struct_smoothing.html#a9014fbe54d67cd4769d9e104def2e934">Smoothing</a> ()<span class="keyword"> const </span>{<span class="keywordflow">return</span> <a class="code hl_variable" href="struct_smoothing.html#a947ed1b107f32189a3c839b6c81f956a">t_</a>;}</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno"><a class="line" href="struct_smoothing.html#a00ea8bc2a550114643afa1697570c429">  186</a></span>    <span class="keyword">operator</span> T () <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>};</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span> </div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno"><a class="line" href="struct_execution.html">  189</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_execution.html">Execution</a></div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>{</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno"><a class="line" href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100f">  191</a></span>    <span class="keyword">enum</span> <a class="code hl_enumeration" href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100f">Location</a></div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    {</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno"><a class="line" href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100fae0020bb2711374b27bf9dfec719b6493">  193</a></span>        <a class="code hl_enumvalue" href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100fae0020bb2711374b27bf9dfec719b6493">host</a>, <a class="code hl_enumvalue" href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100fa4a101b0184d25b94e46b08fd0f657db9">device</a></div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno"><a class="line" href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100fa4a101b0184d25b94e46b08fd0f657db9">  194</a></span>    };</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno"><a class="line" href="struct_execution.html#afaa3257b73ea9959e64b3bf427c739cb">  195</a></span>    <a class="code hl_enumeration" href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100f">Location</a> <a class="code hl_variable" href="struct_execution.html#afaa3257b73ea9959e64b3bf427c739cb">t_</a>;</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno"><a class="line" href="struct_execution.html#a304006bcace8db453da0844ae1ca82b7">  196</a></span>    <a class="code hl_function" href="struct_execution.html#a304006bcace8db453da0844ae1ca82b7">Execution</a>(<a class="code hl_enumeration" href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100f">Location</a> t) : <a class="code hl_variable" href="struct_execution.html#afaa3257b73ea9959e64b3bf427c739cb">t_</a>(t) {}</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno"><a class="line" href="struct_execution.html#adae5230ca9500ea0bb34f002e9b50f6f">  197</a></span>    <span class="keyword">operator</span> <a class="code hl_enumeration" href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100f">Location</a> ()<span class="keyword"> const </span>{<span class="keywordflow">return</span> <a class="code hl_variable" href="struct_execution.html#afaa3257b73ea9959e64b3bf427c739cb">t_</a>;}</div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno"><a class="line" href="struct_execution.html#a8e503ec55a257a6a3a33e2dfa6531e94">  200</a></span>    <span class="keyword">operator</span> T () <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>};</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span> </div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno"><a class="line" href="struct_curve.html">  203</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_curve.html">Curve</a></div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>{</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno"><a class="line" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">  205</a></span>    <span class="keyword">enum</span> <a class="code hl_enumeration" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a></div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    {</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno"><a class="line" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">  207</a></span>        <a class="code hl_enumvalue" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">lebesgue</a>, <a class="code hl_enumvalue" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">hilbert</a></div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno"><a class="line" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">  208</a></span>    };</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno"><a class="line" href="struct_curve.html#a7d7b6984a47618a0eb5bccbc84888d43">  209</a></span>    <a class="code hl_enumeration" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a> <a class="code hl_variable" href="struct_curve.html#a7d7b6984a47618a0eb5bccbc84888d43">t_</a>;</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno"><a class="line" href="struct_curve.html#aa23fab9ccef7e492b1e279582ba026c0">  210</a></span>    <a class="code hl_function" href="struct_curve.html#aa23fab9ccef7e492b1e279582ba026c0">Curve</a>(<a class="code hl_enumeration" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a> t) : <a class="code hl_variable" href="struct_curve.html#a7d7b6984a47618a0eb5bccbc84888d43">t_</a>(t) {}</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno"><a class="line" href="struct_curve.html#a7b5efbd786934b5e4812cc4421b70b48">  211</a></span>    <span class="keyword">operator</span> <a class="code hl_enumeration" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a> ()<span class="keyword"> const </span>{<span class="keywordflow">return</span> <a class="code hl_variable" href="struct_curve.html#a7d7b6984a47618a0eb5bccbc84888d43">t_</a>;}</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>    <span class="comment">//friend std::ostream&amp; operator&lt;&lt;(std::ostream&amp; out, const Curve::Type curveType);</span></div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno"><a class="line" href="struct_curve.html#ade00eb3bca60d1575cd034bfbb7bb1d7">  215</a></span>    <span class="keyword">operator</span> T () <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>};</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span> </div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno"><a class="line" href="struct_integrator_selection.html">  218</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_integrator_selection.html">IntegratorSelection</a></div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>{</div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno"><a class="line" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">  220</a></span>    <span class="keyword">enum</span> <a class="code hl_enumeration" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">Type</a></div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    {</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno"><a class="line" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">  222</a></span>        <a class="code hl_enumvalue" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">explicit_euler</a>, <a class="code hl_enumvalue" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce">predictor_corrector_euler</a>, <a class="code hl_enumvalue" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca">leapfrog</a></div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno"><a class="line" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca">  223</a></span>    };</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno"><a class="line" href="struct_integrator_selection.html#a2eaf4db317d5a1d54fdc31c380cb4cfa">  224</a></span>    <a class="code hl_enumeration" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">Type</a> <a class="code hl_variable" href="struct_integrator_selection.html#a2eaf4db317d5a1d54fdc31c380cb4cfa">t_</a>;</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno"><a class="line" href="struct_integrator_selection.html#a8d1ddbcd7b499bd6addcfe088d079da7">  225</a></span>    <a class="code hl_function" href="struct_integrator_selection.html#a8d1ddbcd7b499bd6addcfe088d079da7">IntegratorSelection</a>(<a class="code hl_enumeration" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">Type</a> t) : <a class="code hl_variable" href="struct_integrator_selection.html#a2eaf4db317d5a1d54fdc31c380cb4cfa">t_</a>(t) {}</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno"><a class="line" href="struct_integrator_selection.html#a26f612d153be32b152665b427be3d276">  226</a></span>    <span class="keyword">operator</span> <a class="code hl_enumeration" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">Type</a> ()<span class="keyword"> const </span>{<span class="keywordflow">return</span> <a class="code hl_variable" href="struct_integrator_selection.html#a2eaf4db317d5a1d54fdc31c380cb4cfa">t_</a>;}</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno"><a class="line" href="struct_integrator_selection.html#a955007a22bc40204bb57c22d0a743547">  229</a></span>    <span class="keyword">operator</span> T () <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>};</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span> </div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6c">  233</a></span><span class="keyword">enum</span> <a class="code hl_enumeration" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6c">EquationOfStates</a> {</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    <span class="comment">//EOS_TYPE_ACCRETED = -2, /// special flag for particles that got accreted by a gravitating point mass</span></div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    <span class="comment">//EOS_TYPE_IGNORE = -1, /// particle is ignored</span></div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c">  236</a></span>    <a class="code hl_enumvalue" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c">EOS_TYPE_POLYTROPIC_GAS</a> = 0, </div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    <span class="comment">//EOS_TYPE_MURNAGHAN = 1, /// Murnaghan EOS for solid bodies, see Melosh &quot;Impact Cratering&quot;, needs in material.cfg: rho_0, bulk_modulus, n</span></div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>    <span class="comment">//EOS_TYPE_TILLOTSON = 2, /// Tillotson EOS for solid bodies, see Melosh &quot;Impact Cratering&quot;, needs in material.cfg: till_rho_0, till_A, till_B, till_E_0, till_E_iv, till_E_cv, till_a, till_b, till_alpha, till_beta; bulk_modulus and shear_modulus are needed to calculate the sound speed and crack growth speed for FRAGMENTATION</span></div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57">  239</a></span>    <a class="code hl_enumvalue" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57">EOS_TYPE_ISOTHERMAL_GAS</a> = 3, </div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>    <span class="comment">//EOS_TYPE_REGOLITH = 4, /// The Bui et al. 2008 soil model</span></div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>    <span class="comment">//EOS_TYPE_JUTZI = 5, /// Tillotson EOS with p-alpha model by Jutzi et al.</span></div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>    <span class="comment">//EOS_TYPE_JUTZI_MURNAGHAN = 6, /// Murnaghan EOS with p-alpha model by Jutzi et al.</span></div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>    <span class="comment">//EOS_TYPE_ANEOS = 7, /// ANEOS (or tabulated EOS in ANEOS format)</span></div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>    <span class="comment">//EOS_TYPE_VISCOUS_REGOLITH = 8, /// describe regolith as a viscous material -&gt; EXPERIMENTAL DO NOT USE</span></div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c">  245</a></span>    <a class="code hl_enumvalue" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c">EOS_TYPE_IDEAL_GAS</a> = 9, </div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>    <span class="comment">//EOS_TYPE_SIRONO = 10, /// Sirono EOS modifed by Geretshauser in 2009/10</span></div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>    <span class="comment">//EOS_TYPE_EPSILON = 11, /// Tillotson EOS with epsilon-alpha model by Wuennemann, Collins et al.</span></div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno"><a class="line" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c">  248</a></span>    <a class="code hl_enumvalue" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c">EOS_TYPE_LOCALLY_ISOTHERMAL_GAS</a> = 12, </div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>    <span class="comment">//EOS_TYPE_JUTZI_ANEOS = 13/// ANEOS EOS with p-alpha model by Jutzi et al.</span></div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>};</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span> </div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno"><a class="line" href="struct_entry.html">  252</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_entry.html">Entry</a></div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>{</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno"><a class="line" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bf">  254</a></span>    <span class="keyword">enum</span> <a class="code hl_enumeration" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bf">Name</a></div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>    {</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno"><a class="line" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bfa6998ccdf8a8d12398cbbae194e97e764">  256</a></span>        <a class="code hl_enumvalue" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bfa6998ccdf8a8d12398cbbae194e97e764">x</a>,</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span><span class="preprocessor">#if DIM &gt; 1</span></div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno"><a class="line" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bfa4c1569387ceb30b45800d7f6cbb9648f">  258</a></span>        <a class="code hl_enumvalue" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bfa4c1569387ceb30b45800d7f6cbb9648f">y</a>,</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span><span class="preprocessor">#if DIM == 3</span></div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno"><a class="line" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bfaf36a092fd001bc7e24a364ce53619ec1">  260</a></span>        <a class="code hl_enumvalue" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bfaf36a092fd001bc7e24a364ce53619ec1">z</a>,</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>        <a class="code hl_enumvalue" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bfa32d4940452c87bb8b4a5774fd6927ba0">mass</a></div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno"><a class="line" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bfa32d4940452c87bb8b4a5774fd6927ba0">  264</a></span>    };</div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno"><a class="line" href="struct_entry.html#ad1695080775559b42b398ac3c3e4413d">  265</a></span>    <a class="code hl_enumeration" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bf">Name</a> <a class="code hl_variable" href="struct_entry.html#ad1695080775559b42b398ac3c3e4413d">t_</a>;</div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno"><a class="line" href="struct_entry.html#a2d5eaea842f105f7d13c1d6df7d9d331">  266</a></span>    <a class="code hl_function" href="struct_entry.html#a2d5eaea842f105f7d13c1d6df7d9d331">Entry</a>(<a class="code hl_enumeration" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bf">Name</a> t) : <a class="code hl_variable" href="struct_entry.html#ad1695080775559b42b398ac3c3e4413d">t_</a>(t) {}</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno"><a class="line" href="struct_entry.html#a55855c96f9c1f40d2435a65dd834e0cd">  267</a></span>    <span class="keyword">operator</span> <a class="code hl_enumeration" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bf">Name</a> ()<span class="keyword"> const </span>{<span class="keywordflow">return</span> <a class="code hl_variable" href="struct_entry.html#ad1695080775559b42b398ac3c3e4413d">t_</a>;}</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno"><a class="line" href="struct_entry.html#a3f38ba297549c7dc71dc2c42c08f3c0e">  270</a></span>    <span class="keyword">operator</span> T () <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>};</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span> </div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span> </div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span><span class="comment">//#define SOLID</span></div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span><span class="comment">// ideal hydro, navier stokes</span></div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span><span class="comment">//#define HYDRO</span></div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span><span class="comment">//#define PLASTICITY // no changes for particles (class) itself, but for material config</span></div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span> </div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span><span class="comment">// Basic physical model, choose one of the following:</span></div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span><span class="comment">// SOLID solves continuum mechanics with material strength, and stress tensor \sigma^{\alpha \beta} = -p \delta^{\alpha \beta} + S^{\alpha \beta}</span></div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span><span class="comment">// HYDRO solves only the Euler equation, and there is only (scalar) pressure</span></div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span><span class="comment">#define SOLID 1</span></div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span><span class="comment">#define HYDRO 0</span></div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span><span class="comment">// set additionally p to 0 if p &lt; 0</span></div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span><span class="comment">#define REAL_HYDRO 0</span></div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span><span class="comment"></span> </div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span><span class="comment">// add additional point masses to the simulation, read from file &lt;filename&gt;.mass</span></div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span><span class="comment">// format is location velocities mass r_min r_max, where location and velocities are vectors with size DIM and</span></div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span><span class="comment">// r_min/r_max are min/max distances of sph particles to the bodies before they are taken out of the simulation</span></div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span><span class="comment">#define GRAVITATING_POINT_MASSES 0</span></div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span><span class="comment"></span> </div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span><span class="comment">// sink particles (set point masses to be sink particles)</span></div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span><span class="comment">#define PARTICLE_ACCRETION 0 // check if particle is bound to one of the sink particles (crossed the accretion radius, rmin); if also UPDATE_SINK_VALUES 1: particle is accreted and ignored afterwards, else: continues orbiting without being accreted</span></div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span><span class="comment">#define UPDATE_SINK_VALUES 0 // add to sink the quantities of the accreted particle: mass, velocity and COM</span></div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span><span class="comment"></span> </div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span><span class="comment">// integrate the energy equation</span></div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span><span class="comment">// when setting up a SOLID simulation with Tillotson or ANEOS, it must be set to 1</span></div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span><span class="comment">#define INTEGRATE_ENERGY 0</span></div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span><span class="comment"></span> </div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span><span class="comment">// integrate the continuity equation</span></div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span><span class="comment">// if set to 0, the density will be calculated using the standard SPH sum \sum_i m_j W_ij</span></div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span><span class="comment">#define INTEGRATE_DENSITY 1</span></div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span><span class="comment"></span> </div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span><span class="comment">// adds viscosity to the Euler equation</span></div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span><span class="comment">#define NAVIER_STOKES 0</span></div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span><span class="comment">// choose between two different viscosity models</span></div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span><span class="comment">#define SHAKURA_SUNYAEV_ALPHA 0</span></div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span><span class="comment">#define CONSTANT_KINEMATIC_VISCOSITY 0</span></div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span><span class="comment">// artificial bulk viscosity according to Schaefer et al. (2004)</span></div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span><span class="comment">#define KLEY_VISCOSITY 0</span></div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span><span class="comment"></span> </div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span><span class="comment">// This is the damage model following Benz &amp; Asphaug (1995). Set FRAGMENTATION to activate it.</span></div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span><span class="comment">// The damage acts always on pressure, but only on deviator stresses if DAMAGE_ACTS_ON_S is</span></div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span><span class="comment">// activated too, which is an important switch depending on the plasticity model (see comments there).</span></div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span><span class="comment">// Note: The damage model needs distribution of activation thresholds in the input file.</span></div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span><span class="comment">#define FRAGMENTATION 0</span></div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span><span class="comment">#define DAMAGE_ACTS_ON_S 0</span></div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span><span class="comment"></span> </div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span><span class="comment">// Choose the SPH representation to solve the momentum and energy equation:</span></div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span><span class="comment">// SPH_EQU_VERSION 1: original version with HYDRO dv_a/dt ~ - (p_a/rho_a**2 + p_b/rho_b**2)  \nabla_a W_ab</span></div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span><span class="comment">//                                     SOLID dv_a/dt ~ (sigma_a/rho_a**2 + sigma_b/rho_b**2) \nabla_a W_ab</span></div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span><span class="comment">// SPH_EQU_VERSION 2: slighty different version with</span></div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span><span class="comment">//                                     HYDRO dv_a/dt ~ - (p_a+p_b)/(rho_a*rho_b)  \nabla_a W_ab</span></div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span><span class="comment">//                                     SOLID dv_a/dt ~ (sigma_a+sigma_b)/(rho_a*rho_b)  \nabla_a W_ab</span></div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span><span class="comment">// If you do not know what to do, choose SPH_EQU_VERSION 1.</span></div>
+<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span><span class="comment">#define SPH_EQU_VERSION 1</span></div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span><span class="comment"></span> </div>
+<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span><span class="comment">// for the tensile instability fix</span></div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span><span class="comment">// you do not need this</span></div>
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span><span class="comment">#define ARTIFICIAL_STRESS 0</span></div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span><span class="comment"></span> </div>
+<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span><span class="comment">// standard SPH alpha/beta viscosity</span></div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span><span class="comment">#define ARTIFICIAL_VISCOSITY 1</span></div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span><span class="comment">// Balsara switch: lowers the artificial viscosity in regions without shocks</span></div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span><span class="comment">#define BALSARA_SWITCH 0</span></div>
+<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span><span class="comment"></span> </div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span><span class="comment">// INVISCID SPH (see Cullen &amp; Dehnen paper)</span></div>
+<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span><span class="comment">#define INVISCID_SPH 0</span></div>
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span><span class="comment"></span> </div>
+<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span><span class="comment">// consistency switches</span></div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span><span class="comment">// for zeroth order consistency</span></div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span><span class="comment">#define SHEPARD_CORRECTION 0</span></div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span><span class="comment">// for linear consistency</span></div>
+<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span><span class="comment">// add tensorial correction tensor to dSdt calculation -&gt; better conservation of angular momentum</span></div>
+<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span><span class="comment">#define TENSORIAL_CORRECTION 1</span></div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span><span class="comment"></span> </div>
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span><span class="comment">// Available plastic flow conditions:</span></div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span><span class="comment">// (if you do not know what this is, choose (1) or nothing)</span></div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span><span class="comment">//   (1) Simple von Mises plasticity with a constant yield strength:</span></div>
+<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span><span class="comment">#define VON_MISES_PLASTICITY 0</span></div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span><span class="comment">//   (2) Drucker-Prager (DP) yield criterion -&gt; yield strength is given by the condition \sqrt(J_2) + A * I_1 + B = 0</span></div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span><span class="comment">//       with I_1: first invariant of stress tensor</span></div>
+<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span><span class="comment">//          J_2: second invariant of stress tensor</span></div>
+<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span><span class="comment">//          A, B: DP constants, which are calculated from angle of internal friction and cohesion</span></div>
+<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span><span class="comment">#define DRUCKER_PRAGER_PLASTICITY 0</span></div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span><span class="comment">//   (3) Mohr-Coulomb (MC) yield criterion</span></div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span><span class="comment">//       -&gt; yield strength is given by yield_stress = tan(friction_angle) \times pressure + cohesion</span></div>
+<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span><span class="comment">#define MOHR_COULOMB_PLASTICITY 0</span></div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span><span class="comment">//       Note: DP and MC are intended for granular-like materials, therefore the yield strength simply decreases (linearly) to zero for p&lt;0.</span></div>
+<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span><span class="comment">//       Note: For DP and MC you can additionally choose (1) to impose an upper limit for the yield stress.</span></div>
+<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span><span class="comment">//   (4) Pressure dependent yield strength following Collins et al. (2004) and the implementation in Jutzi (2015)</span></div>
+<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span><span class="comment">//       -&gt; yield strength is different for damaged (Y_d) and intact material (Y_i), and averaged mean (Y) in between:</span></div>
+<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span><span class="comment">//              Y_i = cohesion + \mu P / (1 + \mu P / (yield_stress - cohesion) )</span></div>
+<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span><span class="comment">//          where *cohesion* is the yield strength for P=0 and *yield_stress* the asymptotic limit for P=\infty</span></div>
+<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span><span class="comment">//          \mu is the coefficient of internal friction (= tan(friction_angle))</span></div>
+<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span><span class="comment">//              Y_d = cohesion_damaged + \mu_d \times P</span></div>
+<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span><span class="comment">//          where \mu_d is the coefficient of friction of the *damaged* material</span></div>
+<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span><span class="comment">//              Y = (1-damage)*Y_i + damage*Y_d</span></div>
+<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span><span class="comment">//              Y is limited to &lt;= Y_i</span></div>
+<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span><span class="comment">//       Note: If FRAGMENTATION is not activated only Y_i is used.</span></div>
+<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span><span class="comment">//             DAMAGE_ACTS_ON_S is not allowed for this model, since the limiting of S already depends on damage.</span></div>
+<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span><span class="comment">//       If you want to additionally model the influence of some (single) melt energy on the yield strength, then activate</span></div>
+<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span><span class="comment">//       COLLINS_PLASTICITY_INCLUDE_MELT_ENERGY, which adds a factor (1-e/e_melt) to the yield strength.</span></div>
+<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span><span class="comment">#define COLLINS_PLASTICITY 0</span></div>
+<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span><span class="comment">#define COLLINS_PLASTICITY_INCLUDE_MELT_ENERGY 0</span></div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span><span class="comment">//   (5) Simplified version of the Collins et al. (2004) model, which uses only the</span></div>
+<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span><span class="comment">//       strength representation for intact material (Y_i), irrespective of damage.</span></div>
+<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span><span class="comment">//       Unlike in (4), Y decreases to zero (following a linear yield strength curve) for p&lt;0.</span></div>
+<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span><span class="comment">//       In addition, negative pressures are limited to the pressure corresponding to</span></div>
+<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span><span class="comment">//       yield strength = 0 (i.e., are set to this value when they get more negative).</span></div>
+<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span><span class="comment">#define COLLINS_PLASTICITY_SIMPLE 0</span></div>
+<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span><span class="comment">// Note: The deviator stress tensor is additionally reduced by FRAGMENTATION (i.e., damage) only if</span></div>
+<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span><span class="comment">//       DAMAGE_ACTS_ON_S is set. For most plasticity models it depends on the use case whether this</span></div>
+<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span><span class="comment">//       is desired, only for COLLINS_PLASTICITY it is not reasonable (and therefore not allowed).</span></div>
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span><span class="comment"></span> </div>
+<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span><span class="comment">// model regolith as viscous fluid -&gt; experimental setup, only for powerusers</span></div>
+<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span><span class="comment">#define VISCOUS_REGOLITH 0</span></div>
+<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span><span class="comment">// use Bui model for regolith -&gt; experimental setup, only for powerusers</span></div>
+<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span><span class="comment">#define PURE_REGOLITH 0</span></div>
+<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span><span class="comment">// use Johnson-Cook plasticity model -&gt; experimental setup, only for powerusers</span></div>
+<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span><span class="comment">#define JC_PLASTICITY 0</span></div>
+<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span><span class="comment"></span> </div>
+<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span><span class="comment">// Porosity models:</span></div>
+<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span><span class="comment">// p-alpha model implemented following Jutzi (200x)</span></div>
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span><span class="comment">#define PALPHA_POROSITY 0         // pressure depends on distention</span></div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span><span class="comment">#define STRESS_PALPHA_POROSITY 0  // deviatoric stress is also affected by distention</span></div>
+<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span><span class="comment">// Sirono model modified by Geretshauser (2009/10)</span></div>
+<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span><span class="comment">#define SIRONO_POROSITY 0</span></div>
+<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span><span class="comment">// eps-alpha model implemented following Wuennemann</span></div>
+<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span><span class="comment">#define EPSALPHA_POROSITY 0</span></div>
+<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span><span class="comment"></span> </div>
+<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span><span class="comment">// max number of activation thresholds per particle, only required for FRAGMENTATION, otherwise set to 1</span></div>
+<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span><span class="comment">#define MAX_NUM_FLAWS 1</span></div>
+<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span><span class="comment">// maximum number of interactions per particle -&gt; fixed array size</span></div>
+<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span><span class="comment">#define MAX_NUM_INTERACTIONS 128</span></div>
+<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span><span class="comment"></span> </div>
+<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span><span class="comment">// if set to 1, the smoothing length is not fixed for each material type</span></div>
+<div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span><span class="comment">// choose either FIXED_NOI for a fixed number of interaction partners following</span></div>
+<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span><span class="comment">// the ansatz by Hernquist and Katz</span></div>
+<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span><span class="comment">// or choose INTEGRATE_SML if you want to additionally integrate an ODE for</span></div>
+<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span><span class="comment">// the sml following the ansatz by Benz and integrate the ODE for the smoothing length</span></div>
+<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span><span class="comment">// d sml / dt  = sml/DIM * 1/rho  \nabla velocity</span></div>
+<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span><span class="comment">// if you want to specify an individual initial smoothing length for each particle (instead of the material</span></div>
+<div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span><span class="comment">// specific one in material.cfg) in the initial particle file, set READ_INITIAL_SML_FROM_PARTICLE_FILE to 1</span></div>
+<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span><span class="comment">#define VARIABLE_SML 0</span></div>
+<div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span><span class="comment">#define FIXED_NOI 0</span></div>
+<div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span><span class="comment">#define INTEGRATE_SML 0</span></div>
+<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span><span class="comment">#define READ_INITIAL_SML_FROM_PARTICLE_FILE 0</span></div>
+<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span><span class="comment"></span> </div>
+<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span><span class="comment">// correction terms for sml calculation: adds gradient of the smoothing length to continuity equation, equation of motion, internal energy equation</span></div>
+<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span><span class="comment">#define SML_CORRECTION 0</span></div>
+<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span><span class="comment"></span> </div>
+<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span><span class="comment">// if set to 0, h = (h_i + h_j)/2  is used to calculate W_ij</span></div>
+<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span><span class="comment">// if set to 1, W_ij = ( W(h_i) + W(h_j) ) / 2</span></div>
+<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span><span class="comment">#define AVERAGE_KERNELS 1</span></div>
+<div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span><span class="comment"></span> </div>
+<div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span><span class="comment"></span> </div>
+<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span><span class="comment">// important switch: if the simulations yields at some point too many interactions for</span></div>
+<div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span><span class="comment">// one particle (given by MAX_NUM_INTERACTIONS), then its smoothing length will be set to 0</span></div>
+<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span><span class="comment">// and the simulation continues. It will be announced on *stdout* when this happens</span></div>
+<div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span><span class="comment">// if set to 0, the simulation stops in such a case unless DEAL_WITH_TOO_MANY_INTERACTIONS is used</span></div>
+<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span><span class="comment">#define TOO_MANY_INTERACTIONS_KILL_PARTICLE 0</span></div>
+<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span><span class="comment">// important switch: if the simulations yields at some point too many interactions for</span></div>
+<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span><span class="comment">// one particle (given by MAX_NUM_INTERACTIONS), then its smoothing length will be lowered until</span></div>
+<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span><span class="comment">// the interactions are lower than MAX_NUM_INTERACTIONS</span></div>
+<div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span><span class="comment">#define DEAL_WITH_TOO_MANY_INTERACTIONS 0</span></div>
+<div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span><span class="comment"></span> </div>
+<div class="line"><a id="l00439" name="l00439"></a><span class="lineno">  439</span><span class="comment">// additional smoothing of the velocity field</span></div>
+<div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span><span class="comment">// hinders particle penetration</span></div>
+<div class="line"><a id="l00441" name="l00441"></a><span class="lineno">  441</span><span class="comment">// see Morris and Monaghan 1984</span></div>
+<div class="line"><a id="l00442" name="l00442"></a><span class="lineno">  442</span><span class="comment">#define XSPH 0</span></div>
+<div class="line"><a id="l00443" name="l00443"></a><span class="lineno">  443</span><span class="comment"></span> </div>
+<div class="line"><a id="l00444" name="l00444"></a><span class="lineno">  444</span><span class="comment">// boundaries EXPERIMENTAL, please do not use this....</span></div>
+<div class="line"><a id="l00445" name="l00445"></a><span class="lineno">  445</span><span class="comment">#define BOUNDARY_PARTICLE_ID -1</span></div>
+<div class="line"><a id="l00446" name="l00446"></a><span class="lineno">  446</span><span class="comment">#define GHOST_BOUNDARIES 0</span></div>
+<div class="line"><a id="l00447" name="l00447"></a><span class="lineno">  447</span><span class="comment">// note: see additionally boundaries.cu with functions beforeRHS and afterRHS for boundary conditions</span></div>
+<div class="line"><a id="l00448" name="l00448"></a><span class="lineno">  448</span><span class="comment"></span> </div>
+<div class="line"><a id="l00449" name="l00449"></a><span class="lineno">  449</span><span class="comment">// IO options</span></div>
+<div class="line"><a id="l00450" name="l00450"></a><span class="lineno">  450</span><span class="comment">#define HDF5IO 1    // use HDF5 (needs libhdf5-dev and libhdf5)</span></div>
+<div class="line"><a id="l00451" name="l00451"></a><span class="lineno">  451</span><span class="comment">#define MORE_OUTPUT 0   //produce additional output to HDF5 files (p_max, p_min, rho_max, rho_min); only ueful when HDF5IO is set</span></div>
+<div class="line"><a id="l00452" name="l00452"></a><span class="lineno">  452</span><span class="comment">#define MORE_ANEOS_OUTPUT 0 // produce additional output to HDF5 files (T, cs, entropy, phase-flag); only useful when HDF5IO is set; set only if you use the ANEOS eos, but currently not supported for porosity+ANEOS</span></div>
+<div class="line"><a id="l00453" name="l00453"></a><span class="lineno">  453</span><span class="comment">#define OUTPUT_GRAV_ENERGY 0    // compute and output gravitational energy (at times when output files are written); of all SPH particles (and also w.r.t. gravitating point masses and between them); direct particle-particle summation, not tree; option exists to control costly computation for high particle numbers</span></div>
+<div class="line"><a id="l00454" name="l00454"></a><span class="lineno">  454</span><span class="comment">#define BINARY_INFO 0   // generates additional output file (binary_system.log) with info regarding binary system: semi-major axis, eccentricity if GRAVITATING_POINT_MASSES == 1</span></div>
+<div class="line"><a id="l00455" name="l00455"></a><span class="lineno">  455</span><span class="comment">*/</span></div>
+<div class="line"><a id="l00456" name="l00456"></a><span class="lineno">  456</span> </div>
+<div class="line"><a id="l00457" name="l00457"></a><span class="lineno">  457</span><span class="preprocessor">#endif </span><span class="comment">//MILUPHPC_PARAMETER_H</span></div>
+<div class="ttc" id="ainclude_2parameter_8h_html_a04c5fddff3aaef7523b3419c171f1884"><div class="ttname"><a href="include_2parameter_8h.html#a04c5fddff3aaef7523b3419c171f1884">dbl_max</a></div><div class="ttdeci">constexpr real dbl_max</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00115">parameter.h:115</a></div></div>
+<div class="ttc" id="ainclude_2parameter_8h_html_a11d147c64891830c9e79b3315b1b2e21"><div class="ttname"><a href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a></div><div class="ttdeci">double real</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00015">parameter.h:15</a></div></div>
+<div class="ttc" id="ainclude_2parameter_8h_html_a2d83a9d6677f42e2572510c1a14e58ed"><div class="ttname"><a href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a></div><div class="ttdeci">unsigned long keyType</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00018">parameter.h:18</a></div></div>
+<div class="ttc" id="ainclude_2parameter_8h_html_a2d8e8822fa3f08e0aab03e66949b9faf"><div class="ttname"><a href="include_2parameter_8h.html#a2d8e8822fa3f08e0aab03e66949b9faf">SimulationParameters</a></div><div class="ttdeci">struct SimulationParameters SimulationParameters</div></div>
+<div class="ttc" id="ainclude_2parameter_8h_html_a3b6ee100a473e8866bcea6d1fc4041d9"><div class="ttname"><a href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a></div><div class="ttdeci">int integer</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00017">parameter.h:17</a></div></div>
+<div class="ttc" id="ainclude_2parameter_8h_html_a5a8162808ef47c46eaf46274eab03e6c"><div class="ttname"><a href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6c">EquationOfStates</a></div><div class="ttdeci">EquationOfStates</div><div class="ttdoc">implemented equation of states</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00233">parameter.h:233</a></div></div>
+<div class="ttc" id="ainclude_2parameter_8h_html_a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c"><div class="ttname"><a href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c">EOS_TYPE_LOCALLY_ISOTHERMAL_GAS</a></div><div class="ttdeci">@ EOS_TYPE_LOCALLY_ISOTHERMAL_GAS</div><div class="ttdoc">ideal gas equation, set polytropic_gamma in material.cfg</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00248">parameter.h:248</a></div></div>
+<div class="ttc" id="ainclude_2parameter_8h_html_a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c"><div class="ttname"><a href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c">EOS_TYPE_IDEAL_GAS</a></div><div class="ttdeci">@ EOS_TYPE_IDEAL_GAS</div><div class="ttdoc">this is pure molecular hydrogen at 10 K</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00245">parameter.h:245</a></div></div>
+<div class="ttc" id="ainclude_2parameter_8h_html_a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57"><div class="ttname"><a href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57">EOS_TYPE_ISOTHERMAL_GAS</a></div><div class="ttdeci">@ EOS_TYPE_ISOTHERMAL_GAS</div><div class="ttdoc">polytropic EOS for gas, needs polytropic_K and polytropic_gamma in material.cfg file</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00239">parameter.h:239</a></div></div>
+<div class="ttc" id="ainclude_2parameter_8h_html_a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c"><div class="ttname"><a href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c">EOS_TYPE_POLYTROPIC_GAS</a></div><div class="ttdeci">@ EOS_TYPE_POLYTROPIC_GAS</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00236">parameter.h:236</a></div></div>
+<div class="ttc" id="ainclude_2parameter_8h_html_ae84a801cb4761e9d8f613b66a73c4b98"><div class="ttname"><a href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a></div><div class="ttdeci">int idInteger</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00019">parameter.h:19</a></div></div>
+<div class="ttc" id="anamespace_constants_html"><div class="ttname"><a href="namespace_constants.html">Constants</a></div><div class="ttdoc">(Physical) constants</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00118">parameter.h:118</a></div></div>
+<div class="ttc" id="anamespace_constants_html_ad17e79c3a9b2da663530274844d9f780"><div class="ttname"><a href="namespace_constants.html#ad17e79c3a9b2da663530274844d9f780">Constants::G</a></div><div class="ttdeci">constexpr real G</div><div class="ttdoc">Gravitational constant.</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00119">parameter.h:119</a></div></div>
+<div class="ttc" id="anamespace_kernel_html"><div class="ttname"><a href="namespace_kernel.html">Kernel</a></div><div class="ttdef"><b>Definition:</b> <a href="device__rhs_8cuh_source.html#l00007">device_rhs.cuh:7</a></div></div>
+<div class="ttc" id="anamespacecuda_1_1math_html_ae45b7a0e96687aa98c58a3ee386b2ada"><div class="ttname"><a href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">cuda::math::max</a></div><div class="ttdeci">__device__ real max(real a, real b)</div><div class="ttdoc">Maximum value out of two floating point values.</div><div class="ttdef"><b>Definition:</b> <a href="cuda__utilities_8cu_source.html#l00431">cuda_utilities.cu:431</a></div></div>
+<div class="ttc" id="astruct_curve_html"><div class="ttname"><a href="struct_curve.html">Curve</a></div><div class="ttdoc">Available space-filling curves.</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00203">parameter.h:204</a></div></div>
+<div class="ttc" id="astruct_curve_html_a4269858acf8d67e3cd222466771848b9"><div class="ttname"><a href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a></div><div class="ttdeci">Type</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00205">parameter.h:206</a></div></div>
+<div class="ttc" id="astruct_curve_html_a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052"><div class="ttname"><a href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">Curve::lebesgue</a></div><div class="ttdeci">@ lebesgue</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00207">parameter.h:207</a></div></div>
+<div class="ttc" id="astruct_curve_html_a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a"><div class="ttname"><a href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">Curve::hilbert</a></div><div class="ttdeci">@ hilbert</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00208">parameter.h:207</a></div></div>
+<div class="ttc" id="astruct_curve_html_a7d7b6984a47618a0eb5bccbc84888d43"><div class="ttname"><a href="struct_curve.html#a7d7b6984a47618a0eb5bccbc84888d43">Curve::t_</a></div><div class="ttdeci">Type t_</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00209">parameter.h:209</a></div></div>
+<div class="ttc" id="astruct_curve_html_aa23fab9ccef7e492b1e279582ba026c0"><div class="ttname"><a href="struct_curve.html#aa23fab9ccef7e492b1e279582ba026c0">Curve::Curve</a></div><div class="ttdeci">Curve(Type t)</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00210">parameter.h:210</a></div></div>
+<div class="ttc" id="astruct_entry_html"><div class="ttname"><a href="struct_entry.html">Entry</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00252">parameter.h:253</a></div></div>
+<div class="ttc" id="astruct_entry_html_a1cfdb441b3e1d3be86d339cf45f940bf"><div class="ttname"><a href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bf">Entry::Name</a></div><div class="ttdeci">Name</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00254">parameter.h:255</a></div></div>
+<div class="ttc" id="astruct_entry_html_a1cfdb441b3e1d3be86d339cf45f940bfa32d4940452c87bb8b4a5774fd6927ba0"><div class="ttname"><a href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bfa32d4940452c87bb8b4a5774fd6927ba0">Entry::mass</a></div><div class="ttdeci">@ mass</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00264">parameter.h:263</a></div></div>
+<div class="ttc" id="astruct_entry_html_a1cfdb441b3e1d3be86d339cf45f940bfa4c1569387ceb30b45800d7f6cbb9648f"><div class="ttname"><a href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bfa4c1569387ceb30b45800d7f6cbb9648f">Entry::y</a></div><div class="ttdeci">@ y</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00258">parameter.h:258</a></div></div>
+<div class="ttc" id="astruct_entry_html_a1cfdb441b3e1d3be86d339cf45f940bfa6998ccdf8a8d12398cbbae194e97e764"><div class="ttname"><a href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bfa6998ccdf8a8d12398cbbae194e97e764">Entry::x</a></div><div class="ttdeci">@ x</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00256">parameter.h:256</a></div></div>
+<div class="ttc" id="astruct_entry_html_a1cfdb441b3e1d3be86d339cf45f940bfaf36a092fd001bc7e24a364ce53619ec1"><div class="ttname"><a href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bfaf36a092fd001bc7e24a364ce53619ec1">Entry::z</a></div><div class="ttdeci">@ z</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00260">parameter.h:260</a></div></div>
+<div class="ttc" id="astruct_entry_html_a2d5eaea842f105f7d13c1d6df7d9d331"><div class="ttname"><a href="struct_entry.html#a2d5eaea842f105f7d13c1d6df7d9d331">Entry::Entry</a></div><div class="ttdeci">Entry(Name t)</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00266">parameter.h:266</a></div></div>
+<div class="ttc" id="astruct_entry_html_ad1695080775559b42b398ac3c3e4413d"><div class="ttname"><a href="struct_entry.html#ad1695080775559b42b398ac3c3e4413d">Entry::t_</a></div><div class="ttdeci">Name t_</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00265">parameter.h:265</a></div></div>
+<div class="ttc" id="astruct_execution_html"><div class="ttname"><a href="struct_execution.html">Execution</a></div><div class="ttdoc">Execution location (host/device).</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00189">parameter.h:190</a></div></div>
+<div class="ttc" id="astruct_execution_html_a304006bcace8db453da0844ae1ca82b7"><div class="ttname"><a href="struct_execution.html#a304006bcace8db453da0844ae1ca82b7">Execution::Execution</a></div><div class="ttdeci">Execution(Location t)</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00196">parameter.h:196</a></div></div>
+<div class="ttc" id="astruct_execution_html_a3592ced8214a617baf4bc8267dbc100f"><div class="ttname"><a href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100f">Execution::Location</a></div><div class="ttdeci">Location</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00191">parameter.h:192</a></div></div>
+<div class="ttc" id="astruct_execution_html_a3592ced8214a617baf4bc8267dbc100fa4a101b0184d25b94e46b08fd0f657db9"><div class="ttname"><a href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100fa4a101b0184d25b94e46b08fd0f657db9">Execution::device</a></div><div class="ttdeci">@ device</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00194">parameter.h:193</a></div></div>
+<div class="ttc" id="astruct_execution_html_a3592ced8214a617baf4bc8267dbc100fae0020bb2711374b27bf9dfec719b6493"><div class="ttname"><a href="struct_execution.html#a3592ced8214a617baf4bc8267dbc100fae0020bb2711374b27bf9dfec719b6493">Execution::host</a></div><div class="ttdeci">@ host</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00193">parameter.h:193</a></div></div>
+<div class="ttc" id="astruct_execution_html_afaa3257b73ea9959e64b3bf427c739cb"><div class="ttname"><a href="struct_execution.html#afaa3257b73ea9959e64b3bf427c739cb">Execution::t_</a></div><div class="ttdeci">Location t_</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00195">parameter.h:195</a></div></div>
+<div class="ttc" id="astruct_integrator_selection_html"><div class="ttname"><a href="struct_integrator_selection.html">IntegratorSelection</a></div><div class="ttdoc">Available integrators.</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00218">parameter.h:219</a></div></div>
+<div class="ttc" id="astruct_integrator_selection_html_a22b2e895a1a87c3aabe7afd055a51603"><div class="ttname"><a href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">IntegratorSelection::Type</a></div><div class="ttdeci">Type</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00220">parameter.h:221</a></div></div>
+<div class="ttc" id="astruct_integrator_selection_html_a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce"><div class="ttname"><a href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce">IntegratorSelection::predictor_corrector_euler</a></div><div class="ttdeci">@ predictor_corrector_euler</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00222">parameter.h:222</a></div></div>
+<div class="ttc" id="astruct_integrator_selection_html_a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15"><div class="ttname"><a href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">IntegratorSelection::explicit_euler</a></div><div class="ttdeci">@ explicit_euler</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00222">parameter.h:222</a></div></div>
+<div class="ttc" id="astruct_integrator_selection_html_a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca"><div class="ttname"><a href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca">IntegratorSelection::leapfrog</a></div><div class="ttdeci">@ leapfrog</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00223">parameter.h:222</a></div></div>
+<div class="ttc" id="astruct_integrator_selection_html_a2eaf4db317d5a1d54fdc31c380cb4cfa"><div class="ttname"><a href="struct_integrator_selection.html#a2eaf4db317d5a1d54fdc31c380cb4cfa">IntegratorSelection::t_</a></div><div class="ttdeci">Type t_</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00224">parameter.h:224</a></div></div>
+<div class="ttc" id="astruct_integrator_selection_html_a8d1ddbcd7b499bd6addcfe088d079da7"><div class="ttname"><a href="struct_integrator_selection.html#a8d1ddbcd7b499bd6addcfe088d079da7">IntegratorSelection::IntegratorSelection</a></div><div class="ttdeci">IntegratorSelection(Type t)</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00225">parameter.h:225</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html"><div class="ttname"><a href="struct_simulation_parameters.html">SimulationParameters</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00122">parameter.h:122</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_a095b20022d67ba1ac26d5bed45a14de5"><div class="ttname"><a href="struct_simulation_parameters.html#a095b20022d67ba1ac26d5bed45a14de5">SimulationParameters::calculateAngularMomentum</a></div><div class="ttdeci">bool calculateAngularMomentum</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00154">parameter.h:154</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_a0b8883f78fbd76ea8aba5b9bdf665db8"><div class="ttname"><a href="struct_simulation_parameters.html#a0b8883f78fbd76ea8aba5b9bdf665db8">SimulationParameters::loadBalancing</a></div><div class="ttdeci">bool loadBalancing</div><div class="ttdoc">apply load balancing</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00131">parameter.h:131</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_a0fb68c84de754d059036a8b32b8a6c89"><div class="ttname"><a href="struct_simulation_parameters.html#a0fb68c84de754d059036a8b32b8a6c89">SimulationParameters::logDirectory</a></div><div class="ttdeci">std::string logDirectory</div><div class="ttdoc">log file(s) directory</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00124">parameter.h:124</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_a11a66d8562c6d7cbd83fd4626f0682e9"><div class="ttname"><a href="struct_simulation_parameters.html#a11a66d8562c6d7cbd83fd4626f0682e9">SimulationParameters::theta</a></div><div class="ttdeci">real theta</div><div class="ttdoc">clumping parameter/</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00142">parameter.h:142</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_a1824843bddf8db4c26409dc20b6e2562"><div class="ttname"><a href="struct_simulation_parameters.html#a1824843bddf8db4c26409dc20b6e2562">SimulationParameters::maxTimeStep</a></div><div class="ttdeci">real maxTimeStep</div><div class="ttdoc">max (allowed) time step</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00129">parameter.h:129</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_a1b675216793741f6961ef1d6e6714f38"><div class="ttname"><a href="struct_simulation_parameters.html#a1b675216793741f6961ef1d6e6714f38">SimulationParameters::removeParticlesDimension</a></div><div class="ttdeci">real removeParticlesDimension</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00152">parameter.h:152</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_a20f8422f80f28cb529406ded5cc23eda"><div class="ttname"><a href="struct_simulation_parameters.html#a20f8422f80f28cb529406ded5cc23eda">SimulationParameters::smoothingKernelSelection</a></div><div class="ttdeci">int smoothingKernelSelection</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00147">parameter.h:147</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_a247cfb5067e99555a8968a815911bed9"><div class="ttname"><a href="struct_simulation_parameters.html#a247cfb5067e99555a8968a815911bed9">SimulationParameters::loadBalancingInterval</a></div><div class="ttdeci">int loadBalancingInterval</div><div class="ttdoc">apply load balancing each x interval/simulation step</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00132">parameter.h:132</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_a27eeca61f98ea29522b866118ffe914f"><div class="ttname"><a href="struct_simulation_parameters.html#a27eeca61f98ea29522b866118ffe914f">SimulationParameters::timeEnd</a></div><div class="ttdeci">real timeEnd</div><div class="ttdoc">end time of simulation</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00130">parameter.h:130</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_a2aaaac5daa0fcbf0c3b84c662c289ea7"><div class="ttname"><a href="struct_simulation_parameters.html#a2aaaac5daa0fcbf0c3b84c662c289ea7">SimulationParameters::materialConfigFile</a></div><div class="ttdeci">std::string materialConfigFile</div><div class="ttdoc">input file containing material configurations/parameters</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00135">parameter.h:135</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_a426284c0f3b04b059ec27c5df0092e04"><div class="ttname"><a href="struct_simulation_parameters.html#a426284c0f3b04b059ec27c5df0092e04">SimulationParameters::directory</a></div><div class="ttdeci">std::string directory</div><div class="ttdoc">output file(s) directory</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00123">parameter.h:123</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_a68a5daed65925cf16e9dc9b955702f70"><div class="ttname"><a href="struct_simulation_parameters.html#a68a5daed65925cf16e9dc9b955702f70">SimulationParameters::loadBalancingBins</a></div><div class="ttdeci">int loadBalancingBins</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00133">parameter.h:133</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_a74aafed70aa0f308a4da77bdc3a98de0"><div class="ttname"><a href="struct_simulation_parameters.html#a74aafed70aa0f308a4da77bdc3a98de0">SimulationParameters::bins</a></div><div class="ttdeci">int bins</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00153">parameter.h:153</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_a78cd1edd9defeafcd37a4a68535eaed5"><div class="ttname"><a href="struct_simulation_parameters.html#a78cd1edd9defeafcd37a4a68535eaed5">SimulationParameters::domainListSize</a></div><div class="ttdeci">int domainListSize</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00158">parameter.h:158</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_a8205fd6fb7574280b2c5ce61558972bc"><div class="ttname"><a href="struct_simulation_parameters.html#a8205fd6fb7574280b2c5ce61558972bc">SimulationParameters::outputRank</a></div><div class="ttdeci">int outputRank</div><div class="ttdoc">specify a (MPI) rank for console logging (default: -1 logging all ranks)</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00136">parameter.h:136</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_a94674a4e3f29261b3735341e5ff86c5e"><div class="ttname"><a href="struct_simulation_parameters.html#a94674a4e3f29261b3735341e5ff86c5e">SimulationParameters::particlesSent2H5</a></div><div class="ttdeci">bool particlesSent2H5</div><div class="ttdoc">log particles sent to HDF5 file</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00138">parameter.h:138</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_ab4a75e1b06ca4c8d223274ca01115cb1"><div class="ttname"><a href="struct_simulation_parameters.html#ab4a75e1b06ca4c8d223274ca01115cb1">SimulationParameters::calculateCenterOfMass</a></div><div class="ttdeci">bool calculateCenterOfMass</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00156">parameter.h:156</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_ab6e04f8e73ccf206f9dd8485c948838c"><div class="ttname"><a href="struct_simulation_parameters.html#ab6e04f8e73ccf206f9dd8485c948838c">SimulationParameters::timeKernels</a></div><div class="ttdeci">bool timeKernels</div><div class="ttdoc">time the CUDA kernels</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00126">parameter.h:126</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_abdcc1b44aa3decd70d4d3004e19effda"><div class="ttname"><a href="struct_simulation_parameters.html#abdcc1b44aa3decd70d4d3004e19effda">SimulationParameters::performanceLog</a></div><div class="ttdeci">bool performanceLog</div><div class="ttdoc">log performance to HDF5 file</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00137">parameter.h:137</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_abf19f8333e75b0609b0688033bbd593d"><div class="ttname"><a href="struct_simulation_parameters.html#abf19f8333e75b0609b0688033bbd593d">SimulationParameters::inputFile</a></div><div class="ttdeci">std::string inputFile</div><div class="ttdoc">input file containing initial particle distribution</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00134">parameter.h:134</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_abff695e0a1248782f868c5f57ce14cd9"><div class="ttname"><a href="struct_simulation_parameters.html#abff695e0a1248782f868c5f57ce14cd9">SimulationParameters::numOutputFiles</a></div><div class="ttdeci">int numOutputFiles</div><div class="ttdoc">number of output files</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00127">parameter.h:127</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_ad68e6e60476ca7664a6f8d14c2bdd682"><div class="ttname"><a href="struct_simulation_parameters.html#ad68e6e60476ca7664a6f8d14c2bdd682">SimulationParameters::smoothing</a></div><div class="ttdeci">real smoothing</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00143">parameter.h:143</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_adca3e31867604dc2075bd987e0ec67f2"><div class="ttname"><a href="struct_simulation_parameters.html#adca3e31867604dc2075bd987e0ec67f2">SimulationParameters::verbosity</a></div><div class="ttdeci">int verbosity</div><div class="ttdoc">verbosity level</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00125">parameter.h:125</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_adcf01f0e69c2c1e99827ee1619c35f2e"><div class="ttname"><a href="struct_simulation_parameters.html#adcf01f0e69c2c1e99827ee1619c35f2e">SimulationParameters::sphFixedRadiusNNVersion</a></div><div class="ttdeci">int sphFixedRadiusNNVersion</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00148">parameter.h:148</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_aded0f27ea85d8564f0e824f11242d1e6"><div class="ttname"><a href="struct_simulation_parameters.html#aded0f27ea85d8564f0e824f11242d1e6">SimulationParameters::integratorSelection</a></div><div class="ttdeci">int integratorSelection</div><div class="ttdoc">integrator selection</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00140">parameter.h:140</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_adf0819b5f9a62286cf4687eb0f4495d4"><div class="ttname"><a href="struct_simulation_parameters.html#adf0819b5f9a62286cf4687eb0f4495d4">SimulationParameters::sfcSelection</a></div><div class="ttdeci">int sfcSelection</div><div class="ttdoc">space-filling curve selection</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00139">parameter.h:139</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_ae1364d65deb6bfffcc11b635bdb21a14"><div class="ttname"><a href="struct_simulation_parameters.html#ae1364d65deb6bfffcc11b635bdb21a14">SimulationParameters::timeStep</a></div><div class="ttdeci">real timeStep</div><div class="ttdoc">time step</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00128">parameter.h:128</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_ae7e52c50a385717eb74ff4c83f4d1352"><div class="ttname"><a href="struct_simulation_parameters.html#ae7e52c50a385717eb74ff4c83f4d1352">SimulationParameters::gravityForceVersion</a></div><div class="ttdeci">int gravityForceVersion</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00144">parameter.h:144</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_ae8d544384926bc8f46c43082716f090c"><div class="ttname"><a href="struct_simulation_parameters.html#ae8d544384926bc8f46c43082716f090c">SimulationParameters::removeParticlesCriterion</a></div><div class="ttdeci">int removeParticlesCriterion</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00151">parameter.h:151</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_aeb27babde5a25717a11104a3176ff016"><div class="ttname"><a href="struct_simulation_parameters.html#aeb27babde5a25717a11104a3176ff016">SimulationParameters::particleMemoryContingent</a></div><div class="ttdeci">real particleMemoryContingent</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00157">parameter.h:157</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_af561a304f51256a5924bfd17c7820e52"><div class="ttname"><a href="struct_simulation_parameters.html#af561a304f51256a5924bfd17c7820e52">SimulationParameters::calculateEnergy</a></div><div class="ttdeci">bool calculateEnergy</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00155">parameter.h:155</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_afcade733412d5cb4835e789787242c2c"><div class="ttname"><a href="struct_simulation_parameters.html#afcade733412d5cb4835e789787242c2c">SimulationParameters::removeParticles</a></div><div class="ttdeci">bool removeParticles</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00150">parameter.h:150</a></div></div>
+<div class="ttc" id="astruct_smoothing_html"><div class="ttname"><a href="struct_smoothing.html">Smoothing</a></div><div class="ttdoc">(SPH) available smoothing kernels.</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00175">parameter.h:176</a></div></div>
+<div class="ttc" id="astruct_smoothing_html_a05fad46587223c7477ee9e66b26f7674a3182e531cc9d04448e8724b428f757ed"><div class="ttname"><a href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674a3182e531cc9d04448e8724b428f757ed">Smoothing::cubic_spline</a></div><div class="ttdeci">@ cubic_spline</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00179">parameter.h:179</a></div></div>
+<div class="ttc" id="astruct_smoothing_html_a05fad46587223c7477ee9e66b26f7674a4ed43bfbc693f7ee3f10f9021f978d94"><div class="ttname"><a href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674a4ed43bfbc693f7ee3f10f9021f978d94">Smoothing::wendlandc4</a></div><div class="ttdeci">@ wendlandc4</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00179">parameter.h:179</a></div></div>
+<div class="ttc" id="astruct_smoothing_html_a05fad46587223c7477ee9e66b26f7674a6705b4c78679abf5250e1086118ac5b3"><div class="ttname"><a href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674a6705b4c78679abf5250e1086118ac5b3">Smoothing::spiky</a></div><div class="ttdeci">@ spiky</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00179">parameter.h:179</a></div></div>
+<div class="ttc" id="astruct_smoothing_html_a05fad46587223c7477ee9e66b26f7674ae719e9800f819ac93fa1bd296a73bf15"><div class="ttname"><a href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674ae719e9800f819ac93fa1bd296a73bf15">Smoothing::wendlandc6</a></div><div class="ttdeci">@ wendlandc6</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00180">parameter.h:179</a></div></div>
+<div class="ttc" id="astruct_smoothing_html_a05fad46587223c7477ee9e66b26f7674afa18ac3b00422f42c6175598807ef675"><div class="ttname"><a href="struct_smoothing.html#a05fad46587223c7477ee9e66b26f7674afa18ac3b00422f42c6175598807ef675">Smoothing::wendlandc2</a></div><div class="ttdeci">@ wendlandc2</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00179">parameter.h:179</a></div></div>
+<div class="ttc" id="astruct_smoothing_html_a9014fbe54d67cd4769d9e104def2e934"><div class="ttname"><a href="struct_smoothing.html#a9014fbe54d67cd4769d9e104def2e934">Smoothing::Smoothing</a></div><div class="ttdeci">Smoothing(Kernel t)</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00182">parameter.h:182</a></div></div>
+<div class="ttc" id="astruct_smoothing_html_a947ed1b107f32189a3c839b6c81f956a"><div class="ttname"><a href="struct_smoothing.html#a947ed1b107f32189a3c839b6c81f956a">Smoothing::t_</a></div><div class="ttdeci">Kernel t_</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00181">parameter.h:181</a></div></div>
+<div class="ttc" id="astruct_to_html"><div class="ttname"><a href="struct_to.html">To</a></div><div class="ttdoc">Specify target: device or host.</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00161">parameter.h:162</a></div></div>
+<div class="ttc" id="astruct_to_html_a2570d23657d3c2be298d6b6a5857999f"><div class="ttname"><a href="struct_to.html#a2570d23657d3c2be298d6b6a5857999f">To::t_</a></div><div class="ttdeci">Target t_</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00167">parameter.h:167</a></div></div>
+<div class="ttc" id="astruct_to_html_a82e3c3ef1bbdd48b77f63af4813b6e49"><div class="ttname"><a href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49">To::Target</a></div><div class="ttdeci">Target</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00163">parameter.h:164</a></div></div>
+<div class="ttc" id="astruct_to_html_a82e3c3ef1bbdd48b77f63af4813b6e49a4f25ce835a523aaa2b2faedf4960f38c"><div class="ttname"><a href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49a4f25ce835a523aaa2b2faedf4960f38c">To::device</a></div><div class="ttdeci">@ device</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00166">parameter.h:165</a></div></div>
+<div class="ttc" id="astruct_to_html_a82e3c3ef1bbdd48b77f63af4813b6e49a8178fb6c32eb3a82f7f25a25196cdbfc"><div class="ttname"><a href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49a8178fb6c32eb3a82f7f25a25196cdbfc">To::host</a></div><div class="ttdeci">@ host</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00165">parameter.h:165</a></div></div>
+<div class="ttc" id="astruct_to_html_a91c3877f442bd3b5e110b7cd375589bd"><div class="ttname"><a href="struct_to.html#a91c3877f442bd3b5e110b7cd375589bd">To::To</a></div><div class="ttdeci">To(Target t)</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00168">parameter.h:168</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+  <hr class="footer"/><address class="footer"><small>
+    <!--
+    milupHPC  - include/parameter.h Source File<br />
+    Generated on Wed Jun 29 2022 14:58:37 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    -->
+  </small></address>
+</body>
+<footer>
+  <custom-footer color="white" background="#2E4053">
+    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
+    <div second>
+      <div style="text-align: center">
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+        </div>
+      </div>
+    </div>
+    <div third>
+      milupHPC  - include/parameter.h Source File<br />
+      Generated on Wed Jun 29 2022 14:58:37 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    </div>
+  </custom-footer>
+</footer>
+<!--
+<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
+-->
+<script src="components/hamburger/runtime.js" type="text/javascript"></script><script src="components/hamburger/polyfills.js" type="text/javascript"></script><script src="components/hamburger/main.js" type="text/javascript"></script>
+<script src="components/header/runtime.js" type="text/javascript"></script><script src="components/header/polyfills.js" type="text/javascript"></script><script src="components/header/main.js" type="text/javascript"></script>
+<script src="components/icons/runtime.js" type="text/javascript"></script><script src="components/icons/polyfills.js" type="text/javascript"></script><script src="components/icons/main.js" type="text/javascript"></script>
+<script src="components/footer/runtime.js" type="text/javascript"></script><script src="components/footer/polyfills.js" type="text/javascript"></script><script src="components/footer/main.js" type="text/javascript"></script>
+<script src="components/dialog/runtime.js" type="text/javascript"></script><script src="components/dialog/polyfills.js" type="text/javascript"></script><script src="components/dialog/main.js" type="text/javascript"></script>
+<script src="components/copyable/runtime.js" type="text/javascript"></script><script src="components/copyable/polyfills.js" type="text/javascript"></script><script src="components/copyable/main.js" type="text/javascript"></script>
+<!--
+<script>
+  function toggle() {
+    var elem = document.getElementById("side-nav");
+    console.log(elem);
+    elem.toggleSideNav(false);
+  }
+</script>
+-->
+<!--
+<script>
+  function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  }
+</script>
+-->
+</html>

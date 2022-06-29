@@ -1,0 +1,35 @@
+
+#page-content {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.fa {
+	padding: 10px;
+	font-size: 20px;
+	width: 20px;
+	height: 20px;
+	text-align: center;
+	text-decoration: none;
+}
+
+/* Add a hover effect if you want */
+.fa:hover {
+	opacity: 0.7;
+	color: black;
+}
+
+#dialog-copy-button {
+  height: 15px;
+  background: #000000;
+  color: #FFFFFF;
+  text-align: center;
+  /*line-height: 33px;
+  border: 1px solid black;
+  padding-left: 2px;
+  padding-right: 2px;*/
+}
+
+#dialog-copy-button:hover {
+  color: #737272;
+}

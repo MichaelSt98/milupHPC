@@ -1,7 +1,7 @@
 <map id="src/subdomain_key_tree/subdomain_handler.cpp" name="src/subdomain_key_tree/subdomain_handler.cpp">
 <area shape="rect" id="node1" title=" " alt="" coords="455,5,619,47"/>
 <area shape="rect" id="node2" href="$subdomain__handler_8h.html" title="Classes and Kernels handling subdomains that distribute the workload among the MPI processes." alt="" coords="434,95,639,136"/>
-<area shape="rect" id="node3" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="379,572,481,599"/>
+<area shape="rect" id="node3" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="379,572,481,599"/>
 <area shape="rect" id="node6" href="$subdomain_8cuh.html" title="Classes and Kernels handling subdomains that distribute the workload among the MPI processes." alt="" coords="481,184,592,211"/>
 <area shape="rect" id="node13" title=" " alt="" coords="639,415,743,442"/>
 <area shape="rect" id="node4" title=" " alt="" coords="403,647,457,673"/>

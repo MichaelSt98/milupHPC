@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>CodePortray</title>
+	<base href="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--
+	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+	-->
+	<meta name="generator" content="Doxygen 1.9.3"/>
+	<title>milupHPC: Miluphcuda</title>
+	<title>Miluphcuda</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+	<link href="tabs.css" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="dynsections.js"></script>
+	<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+	<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<custom-header class="custom-header-class">
+	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
+	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
+	<div shortcuts style="display: table">
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
+		</div>
+		<!-- get the code ... -->
+		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
+		<div style="display: table-cell; padding-right: 2px">
+			<custom-dialog window-width="600px" window-height="400px">
+				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
+				<div title>Get the code: milupHPC!</div>
+				<div style="text-align: center; padding-top: 20px;">
+					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
+					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
+					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
+					<div style="padding-top: 40px">clone via HTTPS:</div>
+					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">clone via SSH:</div>
+					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
+					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
+				</div>
+				<!--<div footer>This is the footer</div>-->
+			</custom-dialog>
+		</div>
+		<!-- end: get the code .... -->
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
+		</div>
+		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
+	</div>
+</custom-header>
+	<!--
+	<custom-side-nav id="side-nav" nav-width="300">
+		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
+		<div>test</div>
+	</custom-side-nav>
+	-->
+	<div id="banner">
+		<div class="logo">
+			<span class="subtitle">
+				milupHPC documentation
+			</span>
+		</div>
+	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<!-- Generated by Doxygen 1.9.3 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Search','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div><div class="header">
+  <div class="headertitle"><div class="title">Miluphcuda </div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><p >Miluphcuda is the CUDA port of the original miluph code, therefore a <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> hydro and solid code, including self-gravity (via Barnes-Hut tree) and porosity models.</p>
+<ul>
+<li><a href="https://github.com/christophmschaefer/miluphcuda">GitHub: christophmschaefer/miluphcuda</a></li>
+<li><a href="https://christophmschaefer.github.io/miluphcuda/index.html">Documentation (Doxygen)</a></li>
+<li><a href="https://christophmschaefer.github.io/miluphcuda/miluphcuda_documentation.pdf">Documentation (PDF)</a> - mostly outdated</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md68"></a>
+Project structure</h1>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">File/Directory   </th><th class="markdownTableHeadNone">Content   </th><th class="markdownTableHeadNone">Comment    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><em>doc/</em>   </td><td class="markdownTableBodyNone">documentation   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><em>examples/</em>   </td><td class="markdownTableBodyNone">examples   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><em>material-config/</em>   </td><td class="markdownTableBodyNone">material config files   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><em>utils/</em>   </td><td class="markdownTableBodyNone">utitlities   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>aneos.cu/h</code>   </td><td class="markdownTableBodyNone">ANEOS <a class="el" href="namespace_e_o_s.html" title="Equation of states.">EOS</a>   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>artificial_stress.cu/h</code>   </td><td class="markdownTableBodyNone">artificial stress   </td><td class="markdownTableBodyNone"> -    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>boundary.cu/h</code>   </td><td class="markdownTableBodyNone">boundary conditions   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>checks.h</code>   </td><td class="markdownTableBodyNone">checks (combinations of) settings   </td><td class="markdownTableBodyNone">settings via preprocessor directives    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>config_parameter.cu/h</code>   </td><td class="markdownTableBodyNone">allocate/intialize config/material parameters   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>coupled_heun_rk4_sph_nbody.cu/h</code>   </td><td class="markdownTableBodyNone"><b>Integrator</b> heun for <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> particles and RK4 for N-Bodys   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>cuda_utils.h</code>   </td><td class="markdownTableBodyNone">CUDA macros   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>damage.cu/h</code>   </td><td class="markdownTableBodyNone">damage handling for <b>Fragmentation</b>   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code><a class="el" href="density_8cu.html">density.cu</a>/h</code>   </td><td class="markdownTableBodyNone">density   </td><td class="markdownTableBodyNone"><b>Basic <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a></b>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>device_tools.cu/h</code>   </td><td class="markdownTableBodyNone">GPU device information   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>euler.cu/h</code>   </td><td class="markdownTableBodyNone"><b>Integrator</b> euler   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>extrema.cu/h</code>   </td><td class="markdownTableBodyNone">determine extrema   </td><td class="markdownTableBodyNone">extrema for pressure, density, energy, soundspeed    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code><a class="el" href="gravity_8cu.html">gravity.cu</a>/h</code>   </td><td class="markdownTableBodyNone">handling gravitational forces   </td><td class="markdownTableBodyNone">direct self-gravity, and self-gravity via Barnes-Hut    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code><a class="el" href="internal__forces_8cu.html">internal_forces.cu</a>/h</code>   </td><td class="markdownTableBodyNone">internal forces   </td><td class="markdownTableBodyNone">?    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>io.cu/h</code>   </td><td class="markdownTableBodyNone">input/output (operations)   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code><a class="el" href="kernel_8cu.html">kernel.cu</a>/h</code>   </td><td class="markdownTableBodyNone"><a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> kernel(s)   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code><a class="el" href="linalg_8cu.html">linalg.cu</a>/h</code>   </td><td class="markdownTableBodyNone">linear algebra   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>little_helpers.cu/h</code>   </td><td class="markdownTableBodyNone">helper functions/(CUDA) kernels   </td><td class="markdownTableBodyNone">checking for NaNs, sigterm handler, printing tensorial correction matrix    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>memory_handling.cu/h</code>   </td><td class="markdownTableBodyNone">(device) memory (de)allocation   </td><td class="markdownTableBodyNone">device memory and pinned (host) memory via <code>cudaMallocHost()</code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>miluph.cu/h</code>   </td><td class="markdownTableBodyNone"><em>main</em> function   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>parameter.h</code>   </td><td class="markdownTableBodyNone">settings via preprocessor directives   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>plasticity.cu/h</code>   </td><td class="markdownTableBodyNone">plasticity (models)   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>porosity.cu/h</code>   </td><td class="markdownTableBodyNone">porosity (models)   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>predictor_corrector.cu/h</code>   </td><td class="markdownTableBodyNone"><b>Integrator</b> predictor-corrector   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>predictor_corrector_euler.cu/h</code>   </td><td class="markdownTableBodyNone"><b>Integrator</b> predictor-corrector   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code><a class="el" href="pressure_8cu.html">pressure.cu</a>/h</code>   </td><td class="markdownTableBodyNone">pressure   </td><td class="markdownTableBodyNone"><b>Basic <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a></b> extended using all kind of other information/models    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>rhs.cu/h</code>   </td><td class="markdownTableBodyNone">right hand side needed (several times) for time integration   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>rk2adaptive.cu/h</code>   </td><td class="markdownTableBodyNone"><b>Integrator</b> RK2 adaptive   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code>sinking.cu/h</code>   </td><td class="markdownTableBodyNone">particle sinking/accretion   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code><a class="el" href="soundspeed_8cu.html">soundspeed.cu</a>/h</code>   </td><td class="markdownTableBodyNone">speed of sound   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code><a class="el" href="stress_8cu.html">stress.cu</a>/h</code>   </td><td class="markdownTableBodyNone">(determining) stress tensor   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>timeintegration.cu/h</code>   </td><td class="markdownTableBodyNone">time integration calling (corresponding) integrator   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code><a class="el" href="tree_8cu.html">tree.cu</a>/h</code>   </td><td class="markdownTableBodyNone">tree construction, traversing, NNS, ...   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>velocity.cu/h</code>   </td><td class="markdownTableBodyNone">setting location changes   </td><td class="markdownTableBodyNone">?    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code><a class="el" href="viscosity_8cu.html">viscosity.cu</a>/h</code>   </td><td class="markdownTableBodyNone">viscosity   </td><td class="markdownTableBodyNone">shear stress and kinematic viscosity    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code>xsph.cu/h</code>   </td><td class="markdownTableBodyNone">(alternative) artificial viscosity model   </td><td class="markdownTableBodyNone">second derivative not needed   </td></tr>
+</table>
+<h1><a class="anchor" id="autotoc_md69"></a>
+Settings</h1>
+<h2><a class="anchor" id="autotoc_md70"></a>
+Preprocessor directives</h2>
+<div class="fragment"><div class="line"><span class="comment">// Dimension of the problem</span></div>
+<div class="line"><span class="preprocessor">#define DIM 3</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#define SOLID 1</span></div>
+<div class="line"><span class="preprocessor">#define HYDRO 0</span></div>
+<div class="line"><span class="preprocessor">#define REAL_HYDRO 0 </span><span class="comment">// set additionally p to 0 if p &lt; 0</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// add additional point masses to the simulation, read from file &lt;filename&gt;.mass</span></div>
+<div class="line"><span class="preprocessor">#define GRAVITATING_POINT_MASSES 0</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// sink particles (set point masses to be sink particles)</span></div>
+<div class="line"><span class="preprocessor">#define PARTICLE_ACCRETION 0 </span></div>
+<div class="line"><span class="preprocessor">#define UPDATE_SINK_VALUES 0 </span><span class="comment">// add to sink the quantities of the accreted particle: mass, velocity and COM</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// integrate the energy equation</span></div>
+<div class="line"><span class="preprocessor">#define INTEGRATE_ENERGY 0 </span><span class="comment">// needed for SOLID with Tillotson and ANEOS</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// integrate the continuity equation</span></div>
+<div class="line"><span class="preprocessor">#define INTEGRATE_DENSITY 1 </span><span class="comment">// otherwise: the density will be calculated using the standard SPH sum \sum_i m_j W_ij</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// adds viscosity to the Euler equation</span></div>
+<div class="line"><span class="preprocessor">#define NAVIER_STOKES 0</span></div>
+<div class="line"><span class="comment">// choose between two different viscosity models</span></div>
+<div class="line"><span class="preprocessor">#define SHAKURA_SUNYAEV_ALPHA 0</span></div>
+<div class="line"><span class="preprocessor">#define CONSTANT_KINEMATIC_VISCOSITY 0</span></div>
+<div class="line"><span class="comment">// artificial bulk viscosity according to Schaefer et al. (2004)</span></div>
+<div class="line"><span class="preprocessor">#define KLEY_VISCOSITY 0</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// This is the damage model following Benz &amp; Asphaug (1995). Set FRAGMENTATION to activate it.</span></div>
+<div class="line"><span class="comment">// The damage acts always on pressure, but only on deviator stresses if </span></div>
+<div class="line"><span class="preprocessor">#define FRAGMENTATION 0</span></div>
+<div class="line"><span class="preprocessor">#define DAMAGE_ACTS_ON_S 0</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Choose the SPH representation to solve the momentum and energy equation</span></div>
+<div class="line"><span class="preprocessor">#define SPH_EQU_VERSION 1</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#define ARTIFICIAL_STRESS 0</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// standard SPH alpha/beta viscosity</span></div>
+<div class="line"><span class="preprocessor">#define ARTIFICIAL_VISCOSITY 1</span></div>
+<div class="line"><span class="comment">// Balsara switch: lowers the artificial viscosity in regions without shocks</span></div>
+<div class="line"><span class="preprocessor">#define BALSARA_SWITCH 0</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// INVISCID SPH (see Cullen &amp; Dehnen paper)</span></div>
+<div class="line"><span class="preprocessor">#define INVISCID_SPH 0</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// consistency switches</span></div>
+<div class="line"><span class="preprocessor">#define SHEPARD_CORRECTION 0 </span><span class="comment">// for zeroth order consistency</span></div>
+<div class="line"><span class="preprocessor">#define TENSORIAL_CORRECTION 1 </span><span class="comment">// for linear consistency</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Available plastic flow conditions</span></div>
+<div class="line"><span class="preprocessor">#define VON_MISES_PLASTICITY 0</span></div>
+<div class="line"><span class="preprocessor">#define DRUCKER_PRAGER_PLASTICITY 0</span></div>
+<div class="line"><span class="preprocessor">#define MOHR_COULOMB_PLASTICITY 0</span></div>
+<div class="line"><span class="preprocessor">#define COLLINS_PLASTICITY 0</span></div>
+<div class="line"><span class="preprocessor">#define COLLINS_PLASTICITY_INCLUDE_MELT_ENERGY 0</span></div>
+<div class="line"><span class="preprocessor">#define COLLINS_PLASTICITY_SIMPLE 0</span></div>
+<div class="line"><span class="preprocessor">#define VISCOUS_REGOLITH 0</span></div>
+<div class="line"><span class="preprocessor">#define PURE_REGOLITH 0</span></div>
+<div class="line"><span class="preprocessor">#define JC_PLASTICITY 0</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// Porosity models:</span></div>
+<div class="line"><span class="preprocessor">#define PALPHA_POROSITY 0         </span><span class="comment">// pressure depends on distention</span></div>
+<div class="line"><span class="preprocessor">#define STRESS_PALPHA_POROSITY 0  </span><span class="comment">// deviatoric stress is also affected by distention</span></div>
+<div class="line"><span class="comment">// Sirono model modified by Geretshauser (2009/10)</span></div>
+<div class="line"><span class="preprocessor">#define SIRONO_POROSITY 0</span></div>
+<div class="line"><span class="comment">// eps-alpha model implemented following Wuennemann</span></div>
+<div class="line"><span class="preprocessor">#define EPSALPHA_POROSITY 0</span></div>
+<div class="line"><span class="preprocessor">#define MAX_NUM_FLAWS 1 </span><span class="comment">// only required for FRAGMENTATION</span></div>
+<div class="line"><span class="comment">// maximum number of interactions per particle -&gt; fixed array size</span></div>
+<div class="line"><span class="preprocessor">#define MAX_NUM_INTERACTIONS 128</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#define VARIABLE_SML 0</span></div>
+<div class="line"><span class="preprocessor">#define FIXED_NOI 0</span></div>
+<div class="line"><span class="preprocessor">#define INTEGRATE_SML 0</span></div>
+<div class="line"><span class="preprocessor">#define READ_INITIAL_SML_FROM_PARTICLE_FILE 0</span></div>
+<div class="line"><span class="preprocessor">#define SML_CORRECTION 0</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// if set to 0, h = (h_i + h_j)/2  is used to calculate W_ij</span></div>
+<div class="line"><span class="comment">// if set to 1, W_ij = ( W(h_i) + W(h_j) ) / 2</span></div>
+<div class="line"><span class="preprocessor">#define AVERAGE_KERNELS 1</span></div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// important switch: if the simulations yields at some point too many interactions for</span></div>
+<div class="line"><span class="comment">// one particle (given by MAX_NUM_INTERACTIONS), then its smoothing length will be set to 0</span></div>
+<div class="line"><span class="comment">// and the simulation continues. It will be announced on *stdout* when this happens</span></div>
+<div class="line"><span class="comment">// if set to 0, the simulation stops in such a case unless DEAL_WITH_TOO_MANY_INTERACTIONS is used</span></div>
+<div class="line"><span class="preprocessor">#define TOO_MANY_INTERACTIONS_KILL_PARTICLE 0</span></div>
+<div class="line"><span class="comment">// important switch: if the simulations yields at some point too many interactions for</span></div>
+<div class="line"><span class="comment">// one particle (given by MAX_NUM_INTERACTIONS), then its smoothing length will be lowered until</span></div>
+<div class="line"><span class="comment">// the interactions are lower than MAX_NUM_INTERACTIONS</span></div>
+<div class="line"><span class="preprocessor">#define DEAL_WITH_TOO_MANY_INTERACTIONS 0</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// additional smoothing of the velocity field, hinders particle penetration (see Morris and Monaghan 1984)</span></div>
+<div class="line"><span class="preprocessor">#define XSPH 0</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// EXPERIMENTAL</span></div>
+<div class="line"><span class="preprocessor">#define BOUNDARY_PARTICLE_ID -1</span></div>
+<div class="line"><span class="preprocessor">#define GHOST_BOUNDARIES 0</span></div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// IO options</span></div>
+<div class="line"><span class="preprocessor">#define HDF5IO 1    </span><span class="comment">// use HDF5 (needs libhdf5-dev and libhdf5)</span></div>
+<div class="line"><span class="preprocessor">#define MORE_OUTPUT 0   </span><span class="comment">//produce additional output to HDF5 files (p_max, p_min, rho_max, rho_min); only useful when HDF5IO is set</span></div>
+<div class="line"><span class="preprocessor">#define MORE_ANEOS_OUTPUT 0 </span><span class="comment">// produce additional output to HDF5 files (T, cs, entropy, phase-flag); only useful when HDF5IO is set; set only if you use the ANEOS eos, but currently not supported for porosity+ANEOS</span></div>
+<div class="line"><span class="preprocessor">#define OUTPUT_GRAV_ENERGY 0    </span><span class="comment">// compute and output gravitational energy (at times when output files are written); of all SPH particles (and also w.r.t. gravitating point masses and between them); direct particle-particle summation, not tree; option exists to control costly computation for high particle numbers</span></div>
+<div class="line"><span class="preprocessor">#define BINARY_INFO 0   </span><span class="comment">// generates additional output file (binary_system.log) with info regarding binary system: semi-major axis, eccentricity if GRAVITATING_POINT_MASSES == 1</span></div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md71"></a>
+Kernels</h1>
+<ul>
+<li>wendlandc2</li>
+<li>wendlandc4</li>
+<li>wendlandc6</li>
+<li>cubic_spline</li>
+<li>spiky</li>
+<li>quartic_spline</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md72"></a>
+Integrators</h1>
+<ul>
+<li>rk2_adaptive</li>
+<li>euler</li>
+<li>monaghan_pc</li>
+<li>heun_rk4</li>
+<li>euler_pc</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md73"></a>
+Physics</h1>
+<p >sorted by priorization:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Prio   </th><th class="markdownTableHeadNone">Keyword   </th><th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Notes   </th><th class="markdownTableHeadNone">Links    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">0   </td><td class="markdownTableBodyNone"><b>Hydro</b>   </td><td class="markdownTableBodyNone">standard inviscid Euler equations   </td><td class="markdownTableBodyNone">no shear forces   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">0   </td><td class="markdownTableBodyNone"><b>Solid</b>   </td><td class="markdownTableBodyNone">simulate solid behavior   </td><td class="markdownTableBodyNone">stress tensor   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">0   </td><td class="markdownTableBodyNone"><b>self-gravity</b>   </td><td class="markdownTableBodyNone">gravitational forces (long range force)   </td><td class="markdownTableBodyNone">approximative implementation via Barnes-Hut method   </td><td class="markdownTableBodyNone"><a href="https://github.com/MichaelSt98/NNS/tree/main">NNS</a>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">0   </td><td class="markdownTableBodyNone"><b>Integrate energy</b>   </td><td class="markdownTableBodyNone">integration of energy equation in order to conserve internal energy   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">0   </td><td class="markdownTableBodyNone"><b>Integrate density</b>   </td><td class="markdownTableBodyNone">integration of density   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">0   </td><td class="markdownTableBodyNone"><b>Fragmentation</b>   </td><td class="markdownTableBodyNone">Fragmentation as damage model   </td><td class="markdownTableBodyNone">depends on Solid   </td><td class="markdownTableBodyNone">Benz &amp; Asphaug 1994    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">0   </td><td class="markdownTableBodyNone"><b>artificial viscosity</b>   </td><td class="markdownTableBodyNone">prevent particle interpenetration   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">Monaghan 1992    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">0   </td><td class="markdownTableBodyNone"><b>artificial stress</b>   </td><td class="markdownTableBodyNone">overcome tensile instability   </td><td class="markdownTableBodyNone">required for fully elastic solids   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">0   </td><td class="markdownTableBodyNone"><b>Shepard correction</b>   </td><td class="markdownTableBodyNone">provide zeroth order and linear consistency   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">0   </td><td class="markdownTableBodyNone"><b>Tensorial correction</b>   </td><td class="markdownTableBodyNone">provide zeroth order and linear consistency   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">0   </td><td class="markdownTableBodyNone"><b>Plasiticity</b>   </td><td class="markdownTableBodyNone">Plasticity models: von Mises plasticity   </td><td class="markdownTableBodyNone">depends on Solid   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">0   </td><td class="markdownTableBodyNone"><b>Porosity</b>   </td><td class="markdownTableBodyNone">Porosity models: p-alpha porosity   </td><td class="markdownTableBodyNone">depends on Solid   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">0   </td><td class="markdownTableBodyNone"><b>variable SML</b>   </td><td class="markdownTableBodyNone">variable and possibly different smoothing lengths for different particles   </td><td class="markdownTableBodyNone">including FIXED_NOI, INTEGRATE_SML, READ_INITIAL_FROM_PARTICLE_FILE   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">0   </td><td class="markdownTableBodyNone"><b>average kernels</b>   </td><td class="markdownTableBodyNone">average kernels instead of smoothing lengths   </td><td class="markdownTableBodyNone">depends on variable SML   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">0   </td><td class="markdownTableBodyNone"><b>damage acts on S</b>   </td><td class="markdownTableBodyNone">damage acts on stress tensor   </td><td class="markdownTableBodyNone">depends on Fragmentation   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">0   </td><td class="markdownTableBodyNone"><b><a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> version</b>   </td><td class="markdownTableBodyNone">(choosing between) different versions of <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> equations   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone"><b>Navier Stokes</b>   </td><td class="markdownTableBodyNone">solving navier stokes equation for viscous flows   </td><td class="markdownTableBodyNone">set of PDEs describing the motion of viscous fluids   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone"><b>Plasticity</b>   </td><td class="markdownTableBodyNone">Plasticity models: Drucker-Prager, Mohr-Coloumb, Collins, Collins including melt energy, Collins-simple   </td><td class="markdownTableBodyNone">depends on Solid   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone"><b>Porosity</b>   </td><td class="markdownTableBodyNone">Porosity models: stress p-alpha, epsilon p-alpha   </td><td class="markdownTableBodyNone">depends on Solid   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone"><b>Kley viscosity</b>   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">depends on Navier Stokes and XSPH   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"><b>Constant kinematic viscosity</b>   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">depends on Navier Stokes   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone"><b>Balsara</b>   </td><td class="markdownTableBodyNone">Balsara switch for reducing artificial viscosity where not needed   </td><td class="markdownTableBodyNone">depends on artificial viscosity   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone"><b>Shakura-Sunayev-alpha</b>   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">depends on Navier Stokes   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone"><b>SML correction</b>   </td><td class="markdownTableBodyNone">correction factors for variable smoothing length   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">Evitas master thesis    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone"><b>XSPH</b>   </td><td class="markdownTableBodyNone">additional smoothing of velocity field   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">2   </td><td class="markdownTableBodyNone"><b>gravitating point masses</b>   </td><td class="markdownTableBodyNone">additional point masses interacting gravitationally with themselves and the <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> particles   </td><td class="markdownTableBodyNone">no need for parallelization, since at most 4 additional point masses   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">2   </td><td class="markdownTableBodyNone"><b>particle accretion</b>   </td><td class="markdownTableBodyNone">removing (and adding) particles (through accretion)   </td><td class="markdownTableBodyNone">depends on gravitating point masses   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">2   </td><td class="markdownTableBodyNone"><b>updating sink values</b>   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">depends on particle accretion   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">2   </td><td class="markdownTableBodyNone"><b>inviscid <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a></b>   </td><td class="markdownTableBodyNone">modern version of the balsara switch with shock capture   </td><td class="markdownTableBodyNone">time dependent artificial viscosity coefficients   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">3   </td><td class="markdownTableBodyNone"><b>Boundary particles</b>   </td><td class="markdownTableBodyNone">boundary approach   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">3   </td><td class="markdownTableBodyNone"><b>Ghost boundaries</b>   </td><td class="markdownTableBodyNone">boundary approach   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">4   </td><td class="markdownTableBodyNone"><b>Plasticity</b>   </td><td class="markdownTableBodyNone">Plasticity models: viscous regolith, pure regolith, JC-plasticity   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">4   </td><td class="markdownTableBodyNone"><b>Porosity</b>   </td><td class="markdownTableBodyNone">Porosity models: Sirono porosity   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">5   </td><td class="markdownTableBodyNone"><b>real Hydro</b>   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"></td></tr>
+</table>
+<h2><a class="anchor" id="autotoc_md74"></a>
+Equation of states</h2>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><a class="el" href="namespace_e_o_s.html" title="Equation of states.">EOS</a>   </th><th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Coverage   </th><th class="markdownTableHeadNone">Notes    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Liquid <a class="el" href="namespace_e_o_s.html" title="Equation of states.">EOS</a></b>   </td><td class="markdownTableBodyNone">pressure depends linearly on the change of density   </td><td class="markdownTableBodyNone">small compressions and expansions of liquid   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>Murnaghan <a class="el" href="namespace_e_o_s.html" title="Equation of states.">EOS</a></b>   </td><td class="markdownTableBodyNone">extension of the liquid <a class="el" href="namespace_e_o_s.html" title="Equation of states.">EOS</a>, where the pressure depends nonlinearly on the density   </td><td class="markdownTableBodyNone">limited to isothermal compression   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Tillotson <a class="el" href="namespace_e_o_s.html" title="Equation of states.">EOS</a></b>   </td><td class="markdownTableBodyNone">originally derived for high-velocity impact simulations, distinguishing two domains and interpolating inbetween   </td><td class="markdownTableBodyNone">phase transitions are not handled (appropriately)   </td><td class="markdownTableBodyNone">computationally simple while sophisticated enough for a wide regime of physical conditions    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>ANEOS</b>   </td><td class="markdownTableBodyNone">tabulated <a class="el" href="namespace_e_o_s.html" title="Equation of states.">EOS</a> generated by an ancient Fortran code   </td><td class="markdownTableBodyNone">depending on the generation   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Locally-isothermal gas</b>   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">locally isothermal gas   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>Perfect gas equation</b>   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">ideal gas   </td><td class="markdownTableBodyNone"></td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>Polytropic gas</b>   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">ideal gas   </td><td class="markdownTableBodyNone"></td></tr>
+</table>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
+<!-- start footer part -->
+  <hr class="footer"/><address class="footer"><small>
+    <!--
+    milupHPC  - Miluphcuda<br />
+    Generated on Wed Jun 29 2022 14:58:38 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    -->
+  </small></address>
+</body>
+<footer>
+  <custom-footer color="white" background="#2E4053">
+    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
+    <div second>
+      <div style="text-align: center">
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+        </div>
+      </div>
+    </div>
+    <div third>
+      milupHPC  - Miluphcuda<br />
+      Generated on Wed Jun 29 2022 14:58:38 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    </div>
+  </custom-footer>
+</footer>
+<!--
+<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
+-->
+<script src="components/hamburger/runtime.js" type="text/javascript"></script><script src="components/hamburger/polyfills.js" type="text/javascript"></script><script src="components/hamburger/main.js" type="text/javascript"></script>
+<script src="components/header/runtime.js" type="text/javascript"></script><script src="components/header/polyfills.js" type="text/javascript"></script><script src="components/header/main.js" type="text/javascript"></script>
+<script src="components/icons/runtime.js" type="text/javascript"></script><script src="components/icons/polyfills.js" type="text/javascript"></script><script src="components/icons/main.js" type="text/javascript"></script>
+<script src="components/footer/runtime.js" type="text/javascript"></script><script src="components/footer/polyfills.js" type="text/javascript"></script><script src="components/footer/main.js" type="text/javascript"></script>
+<script src="components/dialog/runtime.js" type="text/javascript"></script><script src="components/dialog/polyfills.js" type="text/javascript"></script><script src="components/dialog/main.js" type="text/javascript"></script>
+<script src="components/copyable/runtime.js" type="text/javascript"></script><script src="components/copyable/polyfills.js" type="text/javascript"></script><script src="components/copyable/main.js" type="text/javascript"></script>
+<!--
+<script>
+  function toggle() {
+    var elem = document.getElementById("side-nav");
+    console.log(elem);
+    elem.toggleSideNav(false);
+  }
+</script>
+-->
+<!--
+<script>
+  function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  }
+</script>
+-->
+</html>

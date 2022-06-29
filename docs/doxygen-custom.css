@@ -17,6 +17,20 @@
 	--border-color: #B3B6B7;
 }
 
+.section.note {
+	background: rgba(161, 180, 217, 0.5);
+	border-color: rgb(161, 180, 217);
+}
+
+.section.note:before {
+	content: 'Info:'
+}
+
+.section.warning {
+	background: rgba(245, 157, 84, 0.5);
+	border-color: rgb(245, 157, 84);
+}
+
 /* alter search box by overriding */
 #MSearchBox {
 	border-radius: 0px;
@@ -49,7 +63,14 @@ a.SRScope {
 }
 /* end: search box by overriding */
 
-body { min-height: 100vh; position:absolute; top:0; bottom:0; right:0; left:0; }
+.custom-header-class {
+	position: fixed;
+	top: 0; /*position: fixed;*/
+	background: white;
+	z-index:10002;
+	width: 100%;
+}
+/*body { min-height: 100vh; position:absolute; top:0; bottom:0; right:0; left:0; }*/
 
 body, table, div, p, dl {
 	font: 400 14px/22px "Noto Sans",Arial,sans-serif;
@@ -239,6 +260,7 @@ h4 a:hover, a:active, h5 a:hover, a:active, h6 a:hover, a:active {
 	left: 0;
 	height: 90px; /*100 px*/
 	background: var(--main-color);
+	padding-top: 100px;
 }
 
 #banner-footer-first {

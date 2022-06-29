@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>CodePortray</title>
+	<base href="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--
+	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+	-->
+	<meta name="generator" content="Doxygen 1.9.3"/>
+	<title>milupHPC: Features of miluphcuda and their importance/priority</title>
+	<title>Features of miluphcuda and their importance/priority</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+	<link href="tabs.css" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="dynsections.js"></script>
+	<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+	<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<custom-header class="custom-header-class">
+	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
+	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
+	<div shortcuts style="display: table">
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
+		</div>
+		<!-- get the code ... -->
+		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
+		<div style="display: table-cell; padding-right: 2px">
+			<custom-dialog window-width="600px" window-height="400px">
+				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
+				<div title>Get the code: milupHPC!</div>
+				<div style="text-align: center; padding-top: 20px;">
+					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
+					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
+					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
+					<div style="padding-top: 40px">clone via HTTPS:</div>
+					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">clone via SSH:</div>
+					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
+					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
+				</div>
+				<!--<div footer>This is the footer</div>-->
+			</custom-dialog>
+		</div>
+		<!-- end: get the code .... -->
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
+		</div>
+		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
+	</div>
+</custom-header>
+	<!--
+	<custom-side-nav id="side-nav" nav-width="300">
+		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
+		<div>test</div>
+	</custom-side-nav>
+	-->
+	<div id="banner">
+		<div class="logo">
+			<span class="subtitle">
+				milupHPC documentation
+			</span>
+		</div>
+	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<!-- Generated by Doxygen 1.9.3 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Search','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div><div class="header">
+  <div class="headertitle"><div class="title">Features of miluphcuda and their importance/priority </div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><p >This overview should be the help to prioritize the order of implementations in the new code. The <code>#defines</code> are taken from</p>
+<ul>
+<li>miluphcuda devel version from timestamp <em>2021-03-26</em></li>
+</ul>
+<hr  />
+<h2><a class="anchor" id="autotoc_md77"></a>
+Sorted by priority</h2>
+<h3><a class="anchor" id="autotoc_md78"></a>
+Prio0</h3>
+<ul>
+<li>SOLID</li>
+<li>HYDRO</li>
+<li>INTEGRATE_ENERGY</li>
+<li>INTEGRATE_DENSITY</li>
+<li>FRAGMENTATION</li>
+<li>DAMAGE_ACTS_ON_S</li>
+<li>SPH_EQU_VERSION</li>
+<li>ARTIFICIAL_STRESS</li>
+<li>ARTIFICIAL_VISCOSITY</li>
+<li>SHEPARD_CORRECTION &amp; TENSORIAL_CORRECTION</li>
+<li><b>Plasticity models</b><ul>
+<li>VON_MISES_PLASTICITY</li>
+</ul>
+</li>
+<li><b>Porosity models</b><ul>
+<li>PALPHA_POROSITY</li>
+</ul>
+</li>
+<li>VARIABLE_SML</li>
+<li>FIXED_NOI</li>
+<li>INTEGRATE_SML</li>
+<li>READINITIAL_SML_FROMPARTICLE_FILE</li>
+<li>AVERAGE_KERNELS</li>
+</ul>
+<h3><a class="anchor" id="autotoc_md79"></a>
+Prio1</h3>
+<ul>
+<li>NAVIER_STOKES</li>
+<li>SHAKURA_SUNYAEV_ALPHA</li>
+<li>CONSTANT_KINEMATIC_VISCOSITY</li>
+<li>KLEY_VISCOSITY</li>
+<li>BALSARA_SWITCH</li>
+<li><b>Plasticity models</b><ul>
+<li>DRUCKER_PRAGER_PLASTICITY</li>
+<li>MOHR_COULOMB_PLASTICITY</li>
+<li>COLLINS_PLASTICITY</li>
+<li>COLLINS_PLASTICITY_INCLUDE_MELT_ENERGY</li>
+<li>COLLINS_PLASTICITY_SIMPLE</li>
+</ul>
+</li>
+<li><b>Porosity models</b><ul>
+<li>STRESS_PALPHA_POROSITY</li>
+<li>EPSALPHA_POROSITY</li>
+</ul>
+</li>
+<li>SML_CORRECTION</li>
+<li>XSPH</li>
+</ul>
+<h3><a class="anchor" id="autotoc_md80"></a>
+Prio2</h3>
+<ul>
+<li>GRAVITATING_POINT_MASSES</li>
+<li>PARTICLE_ACCRETION</li>
+<li>UPDATE_SINK_VALUES</li>
+<li>INVISCID_SPH</li>
+</ul>
+<h3><a class="anchor" id="autotoc_md81"></a>
+Prio3</h3>
+<ul>
+<li>BOUNDARY_PARTICLE_ID</li>
+<li>GHOST_BOUNDARIES</li>
+</ul>
+<h3><a class="anchor" id="autotoc_md82"></a>
+Prio4</h3>
+<ul>
+<li><b>Plasticity models</b><ul>
+<li>VISCOUS_REGOLITH</li>
+<li>PURE_REGOLITH</li>
+<li>JC_PLASTICITY</li>
+</ul>
+</li>
+<li><b>Porosity models</b><ul>
+<li>SIRONO_POROSITY</li>
+</ul>
+</li>
+</ul>
+<h3><a class="anchor" id="autotoc_md83"></a>
+Not needed</h3>
+<ul>
+<li>REAL_HYDRO</li>
+</ul>
+<hr  />
+<h2><a class="anchor" id="autotoc_md85"></a>
+Randomly sorted with explanation</h2>
+<p ><b>SOLID</b></p>
+<ul>
+<li><span style="color:red">prio0</span></li>
+</ul>
+<p >simulate solid body behaviour, i.e. stress tensor is given by $\sigma^{ab} = -p \delta^{ab} + S^{ab}$ particle specific values are: $\vec{x}$, $\vec{v}$, dim $x$ dim matrix $\sigma$ and $S$ where one can save some memory since S is symmetric and traceless, so in 3 dim, one needs only 5 doubles instead of 9.</p>
+<p ><b>HYDRO</b></p>
+<ul>
+<li><span style="color:red">prio0</span></li>
+</ul>
+<p >solve the standard inviscid Euler equations, no shear forces</p>
+<p ><b>REAL_HYDRO</b></p>
+<ul>
+<li><span style="color:orange">not needed</span></li>
+</ul>
+<p >allow only positive pressure</p>
+<p ><b>GRAVITATING_POINT_MASSES</b></p>
+<ul>
+<li><span style="color:red">prio2</span></li>
+</ul>
+<p >adds additional point masses to the simulation which interact gravitationally with themselves and with the sph particles imho</p>
+<blockquote class="doxtable">
+<p >&zwj;we do not have more than 2 or 3 additional point masses, so no need for parallelization here, probably fastest to </p>
+</blockquote>
+<p>integrate them on all nodes individually</p>
+<p ><b>PARTICLE_ACCRETION</b></p>
+<ul>
+<li><span style="color:red">prio2</span></li>
+</ul>
+<p >requires gravitating point masses of boundary conditions. not needed from the very beginning. however, keep in mind that we need to be able to remove and add particles to the simulation.</p>
+<p ><b>UPDATE_SINK_VALUES</b></p>
+<ul>
+<li><span style="color:red">prio2</span></li>
+</ul>
+<p >depends on <b>PARTICLE ACCRETION</b></p>
+<p ><b>INTEGRATE_ENERGY</b></p>
+<ul>
+<li><span style="color:red">prio0</span></li>
+</ul>
+<p >integrate energy equation, we need this from the very beginning</p>
+<p ><b>INTEGRATE_DENSITY</b></p>
+<ul>
+<li><span style="color:red">prio0</span></li>
+</ul>
+<p >integrate continuity equation, we need this from the very beginning</p>
+<p ><b>NAVIER_STOKES</b></p>
+<ul>
+<li><span style="color:red">prio1</span></li>
+</ul>
+<p >solve the Navier Stokes equation, viscous flows</p>
+<p ><b>SHAKURA_SUNYAEV_ALPHA</b></p>
+<ul>
+<li><span style="color:red">prio1</span></li>
+</ul>
+<p >depends on NAVIER_STOKES</p>
+<p ><b>CONSTANT_KINEMATIC_VISCOSITY</b></p>
+<ul>
+<li><span style="color:red">prio1</span></li>
+</ul>
+<p >depends on NAVIER_STOKES</p>
+<p ><b>KLEY_VISCOSITY</b></p>
+<ul>
+<li><span style="color:red">prio1</span></li>
+</ul>
+<p >depends on NAVIER_STOKES</p>
+<p ><b>FRAGMENTATION</b></p>
+<ul>
+<li><span style="color:red">prio0</span></li>
+</ul>
+<p >damage model following Benz &amp; Asphaug 1994, essential to model rocks, depends on SOLID</p>
+<p ><b>DAMAGE_ACTS_ON_S</b></p>
+<ul>
+<li><span style="color:red">prio0</span></li>
+</ul>
+<p >depends on FRAGMENTATION</p>
+<p ><b>SPH_EQU_VERSION</b></p>
+<ul>
+<li><span style="color:red">prio0</span></li>
+</ul>
+<p >we've implemented two different versions of the <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> equations, ask cms for reference or lecture notes</p>
+<p ><b>ARTIFICIAL_STRESS</b></p>
+<ul>
+<li><span style="color:red">prio0</span></li>
+</ul>
+<p >artificial stress to overcome the tensile instability, required for fully elastic solids (rubber ring collision simulation)</p>
+<p ><b>ARTIFICIAL_VISCOSITY</b></p>
+<ul>
+<li><span style="color:red">prio0</span></li>
+</ul>
+<p >the one and only artificial viscosity by Monaghan (see review from 1992), we need this from the very beginning</p>
+<p ><b>BALSARA_SWITCH</b></p>
+<ul>
+<li><span style="color:red">prio1</span></li>
+</ul>
+<p >reduce artificial viscosity where not needed</p>
+<p ><b>INVISCID_SPH</b></p>
+<ul>
+<li><span style="color:red">prio2</span></li>
+</ul>
+<p >modern version of the balsara switch with shock capture and time dependent artificial viscosity coefficients</p>
+<p ><b>SHEPARD_CORRECTION &amp; TENSORIAL_CORRECTION</b></p>
+<ul>
+<li><span style="color:red">prio0</span></li>
+</ul>
+<p >improve standard <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> to provide zeroth order and linear consistency. see standard sph textbooks or latest code paper</p>
+<p ><b>VON_MISES_PLASTICITY \ DRUCKER_PRAGER_PLASTICITY \ MOHR_COULOMB_PLASTICITY \ COLLINS_PLASTICITY \ COLLINS_PLASTICITY_INCLUDE_MELT_ENERGY \ COLLINS_PLASTICITY_SIMPLE</b></p>
+<ul>
+<li><span style="color:red">prio0-1</span></li>
+</ul>
+<p >these are all models for plasticity. Eventually we need all of them, for starters VON_MISES_PLASTICITY will do.</p>
+<p ><b>VISCOUS_REGOLITH \ PURE_REGOLITH \ JC_PLASTICITY</b></p>
+<ul>
+<li><span style="color:red">prio4</span></li>
+</ul>
+<p >these are all models for plasticity which we currently do not use</p>
+<p ><b>PALPHA_POROSITY \ <br  />
+ STRESS_PALPHA_POROSITY \ EPSALPHA_POROSITY</b></p>
+<ul>
+<li><span style="color:red">prio0-1</span></li>
+</ul>
+<p >these are all models for porosity, p-alpha is <em>prio0</em>, epsilon alpha is <em>prio1</em> and</p>
+<p ><b>SIRONO_POROSITY</b></p>
+<ul>
+<li><span style="color:red">prio4</span></li>
+</ul>
+<p >Sirono is currently not needed.</p>
+<p ><b>VARIABLE_SML \ FIXED_NOI \ INTEGRATE_SML\ READ_INITIAL_SML_FROM_PARTICLE_FILE</b></p>
+<ul>
+<li><span style="color:red">prio0</span></li>
+</ul>
+<p ><b>SML_CORRECTION</b></p>
+<ul>
+<li><span style="color:red">prio1</span></li>
+</ul>
+<p >correction factors for variable smoothing length. documented in Evita's master thesis and references therein, or see PHANTOM paper</p>
+<p ><b>AVERAGE_KERNELS</b></p>
+<ul>
+<li><span style="color:red">prio0</span></li>
+</ul>
+<p >for varying smoothing length, the values of the kernels are averaged and not the smoothing lengths</p>
+<p ><b>XSPH</b></p>
+<ul>
+<li><span style="color:red">prio1</span></li>
+</ul>
+<p >additional smoothing of the velocity field. required for KLEY_VISCOSITY, nice to have but not prio0</p>
+<p ><b>BOUNDARY_PARTICLE_ID \ GHOST_BOUNDARIES</b></p>
+<ul>
+<li><span style="color:red">prio3</span></li>
+</ul>
+<p >boundary particles. a chapter on its own. leave it be for starters </p>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
+<!-- start footer part -->
+  <hr class="footer"/><address class="footer"><small>
+    <!--
+    milupHPC  - Features of miluphcuda and their importance/priority<br />
+    Generated on Wed Jun 29 2022 14:58:38 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    -->
+  </small></address>
+</body>
+<footer>
+  <custom-footer color="white" background="#2E4053">
+    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
+    <div second>
+      <div style="text-align: center">
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+        </div>
+      </div>
+    </div>
+    <div third>
+      milupHPC  - Features of miluphcuda and their importance/priority<br />
+      Generated on Wed Jun 29 2022 14:58:38 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    </div>
+  </custom-footer>
+</footer>
+<!--
+<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
+-->
+<script src="components/hamburger/runtime.js" type="text/javascript"></script><script src="components/hamburger/polyfills.js" type="text/javascript"></script><script src="components/hamburger/main.js" type="text/javascript"></script>
+<script src="components/header/runtime.js" type="text/javascript"></script><script src="components/header/polyfills.js" type="text/javascript"></script><script src="components/header/main.js" type="text/javascript"></script>
+<script src="components/icons/runtime.js" type="text/javascript"></script><script src="components/icons/polyfills.js" type="text/javascript"></script><script src="components/icons/main.js" type="text/javascript"></script>
+<script src="components/footer/runtime.js" type="text/javascript"></script><script src="components/footer/polyfills.js" type="text/javascript"></script><script src="components/footer/main.js" type="text/javascript"></script>
+<script src="components/dialog/runtime.js" type="text/javascript"></script><script src="components/dialog/polyfills.js" type="text/javascript"></script><script src="components/dialog/main.js" type="text/javascript"></script>
+<script src="components/copyable/runtime.js" type="text/javascript"></script><script src="components/copyable/polyfills.js" type="text/javascript"></script><script src="components/copyable/main.js" type="text/javascript"></script>
+<!--
+<script>
+  function toggle() {
+    var elem = document.getElementById("side-nav");
+    console.log(elem);
+    elem.toggleSideNav(false);
+  }
+</script>
+-->
+<!--
+<script>
+  function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  }
+</script>
+-->
+</html>

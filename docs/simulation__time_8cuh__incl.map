@@ -1,6 +1,6 @@
 <map id="include/simulation_time.cuh" name="include/simulation_time.cuh">
 <area shape="rect" id="node1" title="Simulation time related variables and functions instantiable on device and host." alt="" coords="5,5,132,47"/>
-<area shape="rect" id="node2" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="49,244,139,271"/>
+<area shape="rect" id="node2" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="49,244,139,271"/>
 <area shape="rect" id="node5" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="47,95,234,121"/>
 <area shape="rect" id="node3" title=" " alt="" coords="67,319,121,345"/>
 <area shape="rect" id="node4" title=" " alt="" coords="171,319,243,345"/>

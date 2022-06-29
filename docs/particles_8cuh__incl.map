@@ -1,6 +1,6 @@
 <map id="include/particles.cuh" name="include/particles.cuh">
 <area shape="rect" id="node1" title="Particle struct as Structure of arrays both instantiable on host and device." alt="" coords="200,5,342,32"/>
-<area shape="rect" id="node2" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="132,229,223,256"/>
+<area shape="rect" id="node2" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="132,229,223,256"/>
 <area shape="rect" id="node5" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="112,80,299,107"/>
 <area shape="rect" id="node8" title=" " alt="" coords="344,155,414,181"/>
 <area shape="rect" id="node9" title=" " alt="" coords="374,80,432,107"/>

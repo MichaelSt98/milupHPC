@@ -1,0 +1,1249 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>CodePortray</title>
+	<base href="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--
+	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+	-->
+	<meta name="generator" content="Doxygen 1.9.3"/>
+	<title>milupHPC: testcases/plummer/parameter.h File Reference</title>
+	<title>testcases/plummer/parameter.h File Reference</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
+	<link href="tabs.css" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="jquery.js"></script>
+	<script type="text/javascript" src="dynsections.js"></script>
+	<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+	<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<custom-header class="custom-header-class">
+	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
+	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
+	<div shortcuts style="display: table">
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
+		</div>
+		<!-- get the code ... -->
+		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
+		<div style="display: table-cell; padding-right: 2px">
+			<custom-dialog window-width="600px" window-height="400px">
+				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
+				<div title>Get the code: milupHPC!</div>
+				<div style="text-align: center; padding-top: 20px;">
+					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
+					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
+					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
+					<div style="padding-top: 40px">clone via HTTPS:</div>
+					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">clone via SSH:</div>
+					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
+					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
+				</div>
+				<!--<div footer>This is the footer</div>-->
+			</custom-dialog>
+		</div>
+		<!-- end: get the code .... -->
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
+		</div>
+		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
+	</div>
+</custom-header>
+	<!--
+	<custom-side-nav id="side-nav" nav-width="300">
+		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
+		<div>test</div>
+	</custom-side-nav>
+	-->
+	<div id="banner">
+		<div class="logo">
+			<span class="subtitle">
+				milupHPC documentation
+			</span>
+		</div>
+	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<!-- Generated by Doxygen 1.9.3 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search",'Search','.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Search');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_3450b51b0255f2d786d81b960ed30292.html">testcases</a></li><li class="navelem"><a class="el" href="dir_a5e5d6781d91da019fa5c3646007a34b.html">plummer</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#var-members">Variables</a>  </div>
+  <div class="headertitle"><div class="title">parameter.h File Reference</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;limits&gt;</code><br />
+<code>#include &lt;iostream&gt;</code><br />
+</div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for parameter.h:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="testcases_2plummer_2parameter_8h__incl.png" border="0" usemap="#atestcases_2plummer_2parameter_8h" alt=""/></div>
+<map name="atestcases_2plummer_2parameter_8h" id="atestcases_2plummer_2parameter_8h">
+<area shape="rect" title=" " alt="" coords="5,5,211,32"/>
+<area shape="rect" title=" " alt="" coords="39,80,92,107"/>
+<area shape="rect" title=" " alt="" coords="116,80,188,107"/>
+</map>
+</div>
+</div>
+<p><a href="testcases_2plummer_2parameter_8h_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_simulation_parameters.html">SimulationParameters</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_to.html">To</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specify target: device or host.  <a href="struct_to.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_smoothing.html">Smoothing</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">(<a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a>) available smoothing kernels.  <a href="struct_smoothing.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_execution.html">Execution</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="struct_execution.html" title="Execution location (host/device).">Execution</a> location (host/device).  <a href="struct_execution.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_curve.html">Curve</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Available space-filling curves.  <a href="struct_curve.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_integrator_selection.html">IntegratorSelection</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Available integrators.  <a href="struct_integrator_selection.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_entry.html">Entry</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="namespaces" name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespace_constants"><td class="memItemLeft" align="right" valign="top">namespace &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_constants.html">Constants</a></td></tr>
+<tr class="memdesc:namespace_constants"><td class="mdescLeft">&#160;</td><td class="mdescRight">(Physical) constants <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a5bb4257ca9fa4bfcf9391b7895b97761"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a5bb4257ca9fa4bfcf9391b7895b97761">MAX_LEVEL</a>&#160;&#160;&#160;21</td></tr>
+<tr class="separator:a5bb4257ca9fa4bfcf9391b7895b97761"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7180786c98af534f76855fef6f1b97ab"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a7180786c98af534f76855fef6f1b97ab">DEBUGGING</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:a7180786c98af534f76855fef6f1b97ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2729380bfdb6b0dd9a3397b9289efa48"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a2729380bfdb6b0dd9a3397b9289efa48">SAFETY_LEVEL</a>&#160;&#160;&#160;1</td></tr>
+<tr class="separator:a2729380bfdb6b0dd9a3397b9289efa48"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac25189db92959bff3c6c2adf4c34b50a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>&#160;&#160;&#160;3</td></tr>
+<tr class="memdesc:ac25189db92959bff3c6c2adf4c34b50a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dimension of the problem.  <a href="testcases_2plummer_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">More...</a><br /></td></tr>
+<tr class="separator:ac25189db92959bff3c6c2adf4c34b50a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeba852fb02971e4482e14c08ee713d2e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#aeba852fb02971e4482e14c08ee713d2e">power_two</a>(x)&#160;&#160;&#160;(1 &lt;&lt; (x))</td></tr>
+<tr class="separator:aeba852fb02971e4482e14c08ee713d2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf01a8b5289af20025d06e3fed70cc94"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#aaf01a8b5289af20025d06e3fed70cc94">POW_DIM</a>&#160;&#160;&#160;<a class="el" href="testcases_2sedov_2parameter_8h.html#aeba852fb02971e4482e14c08ee713d2e">power_two</a>(<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>)</td></tr>
+<tr class="separator:aaf01a8b5289af20025d06e3fed70cc94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f8a323fd4f2e0f27e75f64a2fc89560"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a7f8a323fd4f2e0f27e75f64a2fc89560">SI_UNITS</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:a7f8a323fd4f2e0f27e75f64a2fc89560"><td class="mdescLeft">&#160;</td><td class="mdescRight">[0]: natural units, [1]: SI units  <a href="testcases_2plummer_2parameter_8h.html#a7f8a323fd4f2e0f27e75f64a2fc89560">More...</a><br /></td></tr>
+<tr class="separator:a7f8a323fd4f2e0f27e75f64a2fc89560"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e7133ed5de6112e76e418c53e250f8d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a2e7133ed5de6112e76e418c53e250f8d">CUBIC_DOMAINS</a>&#160;&#160;&#160;1</td></tr>
+<tr class="separator:a2e7133ed5de6112e76e418c53e250f8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa28b620aee5a74f09f2b3cac50b9fb63"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#aa28b620aee5a74f09f2b3cac50b9fb63">GRAVITY_SIM</a>&#160;&#160;&#160;1</td></tr>
+<tr class="memdesc:aa28b620aee5a74f09f2b3cac50b9fb63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simulation with gravitational forces.  <a href="testcases_2plummer_2parameter_8h.html#aa28b620aee5a74f09f2b3cac50b9fb63">More...</a><br /></td></tr>
+<tr class="separator:aa28b620aee5a74f09f2b3cac50b9fb63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee098c78a6f351cbe4286338f58f2330"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#aee098c78a6f351cbe4286338f58f2330">SPH_SIM</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:aee098c78a6f351cbe4286338f58f2330"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> simulation.  <a href="testcases_2plummer_2parameter_8h.html#aee098c78a6f351cbe4286338f58f2330">More...</a><br /></td></tr>
+<tr class="separator:aee098c78a6f351cbe4286338f58f2330"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef31c618487f04f7fbfb716e4c13545b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#aef31c618487f04f7fbfb716e4c13545b">INTEGRATE_ENERGY</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:aef31c618487f04f7fbfb716e4c13545b"><td class="mdescLeft">&#160;</td><td class="mdescRight">integrate energy equation  <a href="testcases_2plummer_2parameter_8h.html#aef31c618487f04f7fbfb716e4c13545b">More...</a><br /></td></tr>
+<tr class="separator:aef31c618487f04f7fbfb716e4c13545b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23a8396515412900c7a0ac5899efe984"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a23a8396515412900c7a0ac5899efe984">INTEGRATE_DENSITY</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:a23a8396515412900c7a0ac5899efe984"><td class="mdescLeft">&#160;</td><td class="mdescRight">integrate density equation  <a href="testcases_2plummer_2parameter_8h.html#a23a8396515412900c7a0ac5899efe984">More...</a><br /></td></tr>
+<tr class="separator:a23a8396515412900c7a0ac5899efe984"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2c4751f0383439ba8403f9b6735dd16"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#ad2c4751f0383439ba8403f9b6735dd16">INTEGRATE_SML</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:ad2c4751f0383439ba8403f9b6735dd16"><td class="mdescLeft">&#160;</td><td class="mdescRight">integrate smoothing length  <a href="testcases_2plummer_2parameter_8h.html#ad2c4751f0383439ba8403f9b6735dd16">More...</a><br /></td></tr>
+<tr class="separator:ad2c4751f0383439ba8403f9b6735dd16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a930039a1a620a721f9bc0f0a884574dd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a930039a1a620a721f9bc0f0a884574dd">DECOUPLE_SML</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:a930039a1a620a721f9bc0f0a884574dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">decouple smoothing length for pc integrator(s)  <a href="testcases_2plummer_2parameter_8h.html#a930039a1a620a721f9bc0f0a884574dd">More...</a><br /></td></tr>
+<tr class="separator:a930039a1a620a721f9bc0f0a884574dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a908e2164c823365528caa4263006a2dc"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a908e2164c823365528caa4263006a2dc">VARIABLE_SML</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:a908e2164c823365528caa4263006a2dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">variable smoothing length  <a href="testcases_2plummer_2parameter_8h.html#a908e2164c823365528caa4263006a2dc">More...</a><br /></td></tr>
+<tr class="separator:a908e2164c823365528caa4263006a2dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6aa17c07e431d51128212d435abe8fa7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a6aa17c07e431d51128212d435abe8fa7">SML_CORRECTION</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:a6aa17c07e431d51128212d435abe8fa7"><td class="mdescLeft">&#160;</td><td class="mdescRight">correct smoothing length  <a href="testcases_2plummer_2parameter_8h.html#a6aa17c07e431d51128212d435abe8fa7">More...</a><br /></td></tr>
+<tr class="separator:a6aa17c07e431d51128212d435abe8fa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfcbe08a8478076a0a1e81f0f18a5eec"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#adfcbe08a8478076a0a1e81f0f18a5eec">SPH_EQU_VERSION</a>&#160;&#160;&#160;1</td></tr>
+<tr class="separator:adfcbe08a8478076a0a1e81f0f18a5eec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7132b7f55f65be67016d71073417ddac"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a7132b7f55f65be67016d71073417ddac">ARTIFICIAL_VISCOSITY</a>&#160;&#160;&#160;1</td></tr>
+<tr class="separator:a7132b7f55f65be67016d71073417ddac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cae5c1e6713981cd887c0128bf8344e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a2cae5c1e6713981cd887c0128bf8344e">BALSARA_SWITCH</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:a2cae5c1e6713981cd887c0128bf8344e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14f0c1706287bea4992f1cc4624daafe"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a14f0c1706287bea4992f1cc4624daafe">AVERAGE_KERNELS</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:a14f0c1706287bea4992f1cc4624daafe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae04c60518447e20dc504bed2b41bc6b8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#ae04c60518447e20dc504bed2b41bc6b8">DEAL_WITH_TOO_MANY_INTERACTIONS</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:ae04c60518447e20dc504bed2b41bc6b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ccf4fc298f663e26a4113cba801d309"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a9ccf4fc298f663e26a4113cba801d309">SHEPARD_CORRECTION</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:a9ccf4fc298f663e26a4113cba801d309"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8abfd58ea514228abd69d8f6330e91d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#aa8abfd58ea514228abd69d8f6330e91d">SOLID</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:aa8abfd58ea514228abd69d8f6330e91d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a945507ea94c77f3c72a042048b4a4ef0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a945507ea94c77f3c72a042048b4a4ef0">NAVIER_STOKES</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:a945507ea94c77f3c72a042048b4a4ef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8bcf3d24e69483eae9d2a54be4d0f6e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#ac8bcf3d24e69483eae9d2a54be4d0f6e">ARTIFICIAL_STRESS</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:ac8bcf3d24e69483eae9d2a54be4d0f6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26614e169d24b4c9d5efba420f4fc961"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a26614e169d24b4c9d5efba420f4fc961">POROSITY</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:a26614e169d24b4c9d5efba420f4fc961"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a023199b47f10b9b13d03469b251c69b0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a023199b47f10b9b13d03469b251c69b0">ZERO_CONSISTENCY</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:a023199b47f10b9b13d03469b251c69b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0e93327fde519c548e775b622e707c9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#aa0e93327fde519c548e775b622e707c9">LINEAR_CONSISTENCY</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:aa0e93327fde519c548e775b622e707c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab26977fab12ff2724cf9efd5ba6390e8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#ab26977fab12ff2724cf9efd5ba6390e8">FRAGMENTATION</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:ab26977fab12ff2724cf9efd5ba6390e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae40edb8e9ac4ed9e625cb81767ed9e9c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#ae40edb8e9ac4ed9e625cb81767ed9e9c">PALPHA_POROSITY</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:ae40edb8e9ac4ed9e625cb81767ed9e9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08f60ca4ce42b5b1301db797d364507e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a08f60ca4ce42b5b1301db797d364507e">PLASTICITY</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:a08f60ca4ce42b5b1301db797d364507e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac4427158132a8d91048acfca8c56e9de"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#ac4427158132a8d91048acfca8c56e9de">KLEY_VISCOSITY</a>&#160;&#160;&#160;0</td></tr>
+<tr class="separator:ac4427158132a8d91048acfca8c56e9de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a609683a0c8de0ce9cdd1e696e71a6f07"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a609683a0c8de0ce9cdd1e696e71a6f07">KEY_MAX</a>&#160;&#160;&#160;ULONG_MAX</td></tr>
+<tr class="separator:a609683a0c8de0ce9cdd1e696e71a6f07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b5552a5108e6c6bed3addeb9daa0d36"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a8b5552a5108e6c6bed3addeb9daa0d36">DOMAIN_LIST_SIZE</a>&#160;&#160;&#160;512</td></tr>
+<tr class="separator:a8b5552a5108e6c6bed3addeb9daa0d36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5db49eeef5c9bb774f02996f684df238"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a5db49eeef5c9bb774f02996f684df238">MAX_DEPTH</a>&#160;&#160;&#160;128</td></tr>
+<tr class="separator:a5db49eeef5c9bb774f02996f684df238"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a173e5a522f62a96b7508f1f4139b2479"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a173e5a522f62a96b7508f1f4139b2479">MAX_NUM_INTERACTIONS</a>&#160;&#160;&#160;180</td></tr>
+<tr class="separator:a173e5a522f62a96b7508f1f4139b2479"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12947b6362cba90f3716bb4f25880add"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a12947b6362cba90f3716bb4f25880add">NUM_THREADS_LIMIT_TIME_STEP</a>&#160;&#160;&#160;256</td></tr>
+<tr class="separator:a12947b6362cba90f3716bb4f25880add"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a264da86aad42159f5195f1be566607c9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a264da86aad42159f5195f1be566607c9">NUM_THREADS_CALC_CENTER_OF_MASS</a>&#160;&#160;&#160;256</td></tr>
+<tr class="separator:a264da86aad42159f5195f1be566607c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ffbcf2ba306e9583d21988f8a1acaaa"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a6ffbcf2ba306e9583d21988f8a1acaaa">COURANT_FACT</a>&#160;&#160;&#160;0.4</td></tr>
+<tr class="separator:a6ffbcf2ba306e9583d21988f8a1acaaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9a0ef30d7f55ac5740a18f33c60ba28"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#ae9a0ef30d7f55ac5740a18f33c60ba28">FORCES_FACT</a>&#160;&#160;&#160;0.2</td></tr>
+<tr class="separator:ae9a0ef30d7f55ac5740a18f33c60ba28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af78670ee54c1203d613f8fb0e022d214"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#af78670ee54c1203d613f8fb0e022d214">DBL_MAX</a>&#160;&#160;&#160;<a class="el" href="testcases_2sedov_2parameter_8h.html#a04c5fddff3aaef7523b3419c171f1884">dbl_max</a>;</td></tr>
+<tr class="separator:af78670ee54c1203d613f8fb0e022d214"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a11d147c64891830c9e79b3315b1b2e21"><td class="memItemLeft" align="right" valign="top">typedef double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a></td></tr>
+<tr class="separator:a11d147c64891830c9e79b3315b1b2e21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b6ee100a473e8866bcea6d1fc4041d9"><td class="memItemLeft" align="right" valign="top">typedef int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a></td></tr>
+<tr class="separator:a3b6ee100a473e8866bcea6d1fc4041d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d83a9d6677f42e2572510c1a14e58ed"><td class="memItemLeft" align="right" valign="top">typedef unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a></td></tr>
+<tr class="separator:a2d83a9d6677f42e2572510c1a14e58ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae84a801cb4761e9d8f613b66a73c4b98"><td class="memItemLeft" align="right" valign="top">typedef int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a></td></tr>
+<tr class="separator:ae84a801cb4761e9d8f613b66a73c4b98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d8e8822fa3f08e0aab03e66949b9faf"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="struct_simulation_parameters.html">SimulationParameters</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a2d8e8822fa3f08e0aab03e66949b9faf">SimulationParameters</a></td></tr>
+<tr class="separator:a2d8e8822fa3f08e0aab03e66949b9faf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a5a8162808ef47c46eaf46274eab03e6c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6c">EquationOfStates</a> { <br />
+&#160;&#160;<a class="el" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c">EOS_TYPE_POLYTROPIC_GAS</a> = 0
+, <a class="el" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57">EOS_TYPE_ISOTHERMAL_GAS</a> = 3
+, <a class="el" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c">EOS_TYPE_IDEAL_GAS</a> = 9
+, <a class="el" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c">EOS_TYPE_LOCALLY_ISOTHERMAL_GAS</a> = 12
+, <br />
+&#160;&#160;<a class="el" href="parameter__backup_8h.html#a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c">EOS_TYPE_POLYTROPIC_GAS</a> = 0
+, <a class="el" href="parameter__backup_8h.html#a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57">EOS_TYPE_ISOTHERMAL_GAS</a> = 3
+, <a class="el" href="parameter__backup_8h.html#a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c">EOS_TYPE_IDEAL_GAS</a> = 9
+, <a class="el" href="parameter__backup_8h.html#a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c">EOS_TYPE_LOCALLY_ISOTHERMAL_GAS</a> = 12
+, <br />
+&#160;&#160;<a class="el" href="testcases_2plummer_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c">EOS_TYPE_POLYTROPIC_GAS</a> = 0
+, <a class="el" href="testcases_2plummer_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57">EOS_TYPE_ISOTHERMAL_GAS</a> = 3
+, <a class="el" href="testcases_2plummer_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c">EOS_TYPE_IDEAL_GAS</a> = 9
+, <a class="el" href="testcases_2plummer_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c">EOS_TYPE_LOCALLY_ISOTHERMAL_GAS</a> = 12
+, <br />
+&#160;&#160;<a class="el" href="testcases_2sedov_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c">EOS_TYPE_POLYTROPIC_GAS</a> = 0
+, <a class="el" href="testcases_2sedov_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57">EOS_TYPE_ISOTHERMAL_GAS</a> = 3
+, <a class="el" href="testcases_2sedov_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c">EOS_TYPE_IDEAL_GAS</a> = 9
+, <a class="el" href="testcases_2sedov_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c">EOS_TYPE_LOCALLY_ISOTHERMAL_GAS</a> = 12
+<br />
+ }</td></tr>
+<tr class="memdesc:a5a8162808ef47c46eaf46274eab03e6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">implemented equation of states  <a href="testcases_2plummer_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6c">More...</a><br /></td></tr>
+<tr class="separator:a5a8162808ef47c46eaf46274eab03e6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a04c5fddff3aaef7523b3419c171f1884"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="testcases_2plummer_2parameter_8h.html#a04c5fddff3aaef7523b3419c171f1884">dbl_max</a> = std::numeric_limits&lt;<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&gt;::max()</td></tr>
+<tr class="separator:a04c5fddff3aaef7523b3419c171f1884"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="ac8bcf3d24e69483eae9d2a54be4d0f6e" name="ac8bcf3d24e69483eae9d2a54be4d0f6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8bcf3d24e69483eae9d2a54be4d0f6e">&#9670;&nbsp;</a></span>ARTIFICIAL_STRESS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ARTIFICIAL_STRESS&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00093">93</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a7132b7f55f65be67016d71073417ddac" name="a7132b7f55f65be67016d71073417ddac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7132b7f55f65be67016d71073417ddac">&#9670;&nbsp;</a></span>ARTIFICIAL_VISCOSITY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ARTIFICIAL_VISCOSITY&#160;&#160;&#160;1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00084">84</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a14f0c1706287bea4992f1cc4624daafe" name="a14f0c1706287bea4992f1cc4624daafe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14f0c1706287bea4992f1cc4624daafe">&#9670;&nbsp;</a></span>AVERAGE_KERNELS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define AVERAGE_KERNELS&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00088">88</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a2cae5c1e6713981cd887c0128bf8344e" name="a2cae5c1e6713981cd887c0128bf8344e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cae5c1e6713981cd887c0128bf8344e">&#9670;&nbsp;</a></span>BALSARA_SWITCH</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define BALSARA_SWITCH&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00085">85</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a6ffbcf2ba306e9583d21988f8a1acaaa" name="a6ffbcf2ba306e9583d21988f8a1acaaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ffbcf2ba306e9583d21988f8a1acaaa">&#9670;&nbsp;</a></span>COURANT_FACT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define COURANT_FACT&#160;&#160;&#160;0.4</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00111">111</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a2e7133ed5de6112e76e418c53e250f8d" name="a2e7133ed5de6112e76e418c53e250f8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e7133ed5de6112e76e418c53e250f8d">&#9670;&nbsp;</a></span>CUBIC_DOMAINS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CUBIC_DOMAINS&#160;&#160;&#160;1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00046">46</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="af78670ee54c1203d613f8fb0e022d214" name="af78670ee54c1203d613f8fb0e022d214"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af78670ee54c1203d613f8fb0e022d214">&#9670;&nbsp;</a></span>DBL_MAX</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DBL_MAX&#160;&#160;&#160;<a class="el" href="testcases_2sedov_2parameter_8h.html#a04c5fddff3aaef7523b3419c171f1884">dbl_max</a>;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00116">116</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="ae04c60518447e20dc504bed2b41bc6b8" name="ae04c60518447e20dc504bed2b41bc6b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae04c60518447e20dc504bed2b41bc6b8">&#9670;&nbsp;</a></span>DEAL_WITH_TOO_MANY_INTERACTIONS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DEAL_WITH_TOO_MANY_INTERACTIONS&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00089">89</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a7180786c98af534f76855fef6f1b97ab" name="a7180786c98af534f76855fef6f1b97ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7180786c98af534f76855fef6f1b97ab">&#9670;&nbsp;</a></span>DEBUGGING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DEBUGGING&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00027">27</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a930039a1a620a721f9bc0f0a884574dd" name="a930039a1a620a721f9bc0f0a884574dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a930039a1a620a721f9bc0f0a884574dd">&#9670;&nbsp;</a></span>DECOUPLE_SML</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DECOUPLE_SML&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>decouple smoothing length for pc integrator(s) </p>
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00064">64</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="ac25189db92959bff3c6c2adf4c34b50a" name="ac25189db92959bff3c6c2adf4c34b50a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac25189db92959bff3c6c2adf4c34b50a">&#9670;&nbsp;</a></span>DIM</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DIM&#160;&#160;&#160;3</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Dimension of the problem. </p>
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00038">38</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a8b5552a5108e6c6bed3addeb9daa0d36" name="a8b5552a5108e6c6bed3addeb9daa0d36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b5552a5108e6c6bed3addeb9daa0d36">&#9670;&nbsp;</a></span>DOMAIN_LIST_SIZE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DOMAIN_LIST_SIZE&#160;&#160;&#160;512</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00104">104</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="ae9a0ef30d7f55ac5740a18f33c60ba28" name="ae9a0ef30d7f55ac5740a18f33c60ba28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9a0ef30d7f55ac5740a18f33c60ba28">&#9670;&nbsp;</a></span>FORCES_FACT</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FORCES_FACT&#160;&#160;&#160;0.2</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00113">113</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="ab26977fab12ff2724cf9efd5ba6390e8" name="ab26977fab12ff2724cf9efd5ba6390e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab26977fab12ff2724cf9efd5ba6390e8">&#9670;&nbsp;</a></span>FRAGMENTATION</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define FRAGMENTATION&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00097">97</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="aa28b620aee5a74f09f2b3cac50b9fb63" name="aa28b620aee5a74f09f2b3cac50b9fb63"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa28b620aee5a74f09f2b3cac50b9fb63">&#9670;&nbsp;</a></span>GRAVITY_SIM</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define GRAVITY_SIM&#160;&#160;&#160;1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Simulation with gravitational forces. </p>
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00049">49</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a23a8396515412900c7a0ac5899efe984" name="a23a8396515412900c7a0ac5899efe984"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23a8396515412900c7a0ac5899efe984">&#9670;&nbsp;</a></span>INTEGRATE_DENSITY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define INTEGRATE_DENSITY&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>integrate density equation </p>
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00058">58</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="aef31c618487f04f7fbfb716e4c13545b" name="aef31c618487f04f7fbfb716e4c13545b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef31c618487f04f7fbfb716e4c13545b">&#9670;&nbsp;</a></span>INTEGRATE_ENERGY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define INTEGRATE_ENERGY&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>integrate energy equation </p>
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00055">55</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="ad2c4751f0383439ba8403f9b6735dd16" name="ad2c4751f0383439ba8403f9b6735dd16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2c4751f0383439ba8403f9b6735dd16">&#9670;&nbsp;</a></span>INTEGRATE_SML</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define INTEGRATE_SML&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>integrate smoothing length </p>
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00061">61</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a609683a0c8de0ce9cdd1e696e71a6f07" name="a609683a0c8de0ce9cdd1e696e71a6f07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a609683a0c8de0ce9cdd1e696e71a6f07">&#9670;&nbsp;</a></span>KEY_MAX</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define KEY_MAX&#160;&#160;&#160;ULONG_MAX</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00102">102</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="ac4427158132a8d91048acfca8c56e9de" name="ac4427158132a8d91048acfca8c56e9de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4427158132a8d91048acfca8c56e9de">&#9670;&nbsp;</a></span>KLEY_VISCOSITY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define KLEY_VISCOSITY&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00100">100</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="aa0e93327fde519c548e775b622e707c9" name="aa0e93327fde519c548e775b622e707c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0e93327fde519c548e775b622e707c9">&#9670;&nbsp;</a></span>LINEAR_CONSISTENCY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define LINEAR_CONSISTENCY&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00096">96</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a5db49eeef5c9bb774f02996f684df238" name="a5db49eeef5c9bb774f02996f684df238"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5db49eeef5c9bb774f02996f684df238">&#9670;&nbsp;</a></span>MAX_DEPTH</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MAX_DEPTH&#160;&#160;&#160;128</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00105">105</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a5bb4257ca9fa4bfcf9391b7895b97761" name="a5bb4257ca9fa4bfcf9391b7895b97761"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5bb4257ca9fa4bfcf9391b7895b97761">&#9670;&nbsp;</a></span>MAX_LEVEL</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MAX_LEVEL&#160;&#160;&#160;21</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00025">25</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a173e5a522f62a96b7508f1f4139b2479" name="a173e5a522f62a96b7508f1f4139b2479"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a173e5a522f62a96b7508f1f4139b2479">&#9670;&nbsp;</a></span>MAX_NUM_INTERACTIONS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MAX_NUM_INTERACTIONS&#160;&#160;&#160;180</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00106">106</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a945507ea94c77f3c72a042048b4a4ef0" name="a945507ea94c77f3c72a042048b4a4ef0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a945507ea94c77f3c72a042048b4a4ef0">&#9670;&nbsp;</a></span>NAVIER_STOKES</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define NAVIER_STOKES&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00092">92</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a264da86aad42159f5195f1be566607c9" name="a264da86aad42159f5195f1be566607c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a264da86aad42159f5195f1be566607c9">&#9670;&nbsp;</a></span>NUM_THREADS_CALC_CENTER_OF_MASS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define NUM_THREADS_CALC_CENTER_OF_MASS&#160;&#160;&#160;256</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00108">108</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a12947b6362cba90f3716bb4f25880add" name="a12947b6362cba90f3716bb4f25880add"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12947b6362cba90f3716bb4f25880add">&#9670;&nbsp;</a></span>NUM_THREADS_LIMIT_TIME_STEP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define NUM_THREADS_LIMIT_TIME_STEP&#160;&#160;&#160;256</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00107">107</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="ae40edb8e9ac4ed9e625cb81767ed9e9c" name="ae40edb8e9ac4ed9e625cb81767ed9e9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae40edb8e9ac4ed9e625cb81767ed9e9c">&#9670;&nbsp;</a></span>PALPHA_POROSITY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PALPHA_POROSITY&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00098">98</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a08f60ca4ce42b5b1301db797d364507e" name="a08f60ca4ce42b5b1301db797d364507e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08f60ca4ce42b5b1301db797d364507e">&#9670;&nbsp;</a></span>PLASTICITY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PLASTICITY&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00099">99</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a26614e169d24b4c9d5efba420f4fc961" name="a26614e169d24b4c9d5efba420f4fc961"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26614e169d24b4c9d5efba420f4fc961">&#9670;&nbsp;</a></span>POROSITY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define POROSITY&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00094">94</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="aaf01a8b5289af20025d06e3fed70cc94" name="aaf01a8b5289af20025d06e3fed70cc94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf01a8b5289af20025d06e3fed70cc94">&#9670;&nbsp;</a></span>POW_DIM</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define POW_DIM&#160;&#160;&#160;<a class="el" href="testcases_2sedov_2parameter_8h.html#aeba852fb02971e4482e14c08ee713d2e">power_two</a>(<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00040">40</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="aeba852fb02971e4482e14c08ee713d2e" name="aeba852fb02971e4482e14c08ee713d2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeba852fb02971e4482e14c08ee713d2e">&#9670;&nbsp;</a></span>power_two</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define power_two</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td>&#160;&#160;&#160;(1 &lt;&lt; (x))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00039">39</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a2729380bfdb6b0dd9a3397b9289efa48" name="a2729380bfdb6b0dd9a3397b9289efa48"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2729380bfdb6b0dd9a3397b9289efa48">&#9670;&nbsp;</a></span>SAFETY_LEVEL</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SAFETY_LEVEL&#160;&#160;&#160;1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<ul>
+<li><code>SAFETY_LEVEL 0</code>: almost no safety measures</li>
+<li><code>SAFETY_LEVEL 1</code>: most relevant/important safety measures</li>
+<li><code>SAFETY_LEVEL 2</code>: more safety measures, including assertions</li>
+<li><code>SAFETY_LEVEL 3</code>: many security measures, including all assertions </li>
+</ul>
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00035">35</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a9ccf4fc298f663e26a4113cba801d309" name="a9ccf4fc298f663e26a4113cba801d309"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ccf4fc298f663e26a4113cba801d309">&#9670;&nbsp;</a></span>SHEPARD_CORRECTION</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SHEPARD_CORRECTION&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00090">90</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a7f8a323fd4f2e0f27e75f64a2fc89560" name="a7f8a323fd4f2e0f27e75f64a2fc89560"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f8a323fd4f2e0f27e75f64a2fc89560">&#9670;&nbsp;</a></span>SI_UNITS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SI_UNITS&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>[0]: natural units, [1]: SI units </p>
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00043">43</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a6aa17c07e431d51128212d435abe8fa7" name="a6aa17c07e431d51128212d435abe8fa7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6aa17c07e431d51128212d435abe8fa7">&#9670;&nbsp;</a></span>SML_CORRECTION</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SML_CORRECTION&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>correct smoothing length </p>
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00070">70</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="aa8abfd58ea514228abd69d8f6330e91d" name="aa8abfd58ea514228abd69d8f6330e91d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8abfd58ea514228abd69d8f6330e91d">&#9670;&nbsp;</a></span>SOLID</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SOLID&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00091">91</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="adfcbe08a8478076a0a1e81f0f18a5eec" name="adfcbe08a8478076a0a1e81f0f18a5eec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfcbe08a8478076a0a1e81f0f18a5eec">&#9670;&nbsp;</a></span>SPH_EQU_VERSION</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SPH_EQU_VERSION&#160;&#160;&#160;1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Choose the <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> representation to solve the momentum and energy equation:</p><ul>
+<li><b>SPH_EQU_VERSION 1:</b> original version with<ul>
+<li>HYDRO $dv_a/dt ~ - (p_a/rho_a**2 + p_b/rho_b**2) \nabla_a W_ab$</li>
+<li>SOLID $dv_a/dt ~ (sigma_a/rho_a**2 + sigma_b/rho_b**2) \nabla_a W_ab$</li>
+</ul>
+</li>
+<li><b>SPH_EQU_VERSION 2:</b> slighty different version with<ul>
+<li>HYDRO $dv_a/dt ~ - (p_a+p_b)/(rho_a*rho_b) \nabla_a W_ab$</li>
+<li>SOLID $dv_a/dt ~ (sigma_a+sigma_b)/(rho_a*rho_b) \nabla_a W_ab$ </li>
+</ul>
+</li>
+</ul>
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00081">81</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="aee098c78a6f351cbe4286338f58f2330" name="aee098c78a6f351cbe4286338f58f2330"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee098c78a6f351cbe4286338f58f2330">&#9670;&nbsp;</a></span>SPH_SIM</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define SPH_SIM&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> simulation. </p>
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00052">52</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a908e2164c823365528caa4263006a2dc" name="a908e2164c823365528caa4263006a2dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a908e2164c823365528caa4263006a2dc">&#9670;&nbsp;</a></span>VARIABLE_SML</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define VARIABLE_SML&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>variable smoothing length </p>
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00067">67</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a023199b47f10b9b13d03469b251c69b0" name="a023199b47f10b9b13d03469b251c69b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a023199b47f10b9b13d03469b251c69b0">&#9670;&nbsp;</a></span>ZERO_CONSISTENCY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ZERO_CONSISTENCY&#160;&#160;&#160;0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00095">95</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a id="ae84a801cb4761e9d8f613b66a73c4b98" name="ae84a801cb4761e9d8f613b66a73c4b98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae84a801cb4761e9d8f613b66a73c4b98">&#9670;&nbsp;</a></span>idInteger</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef int <a class="el" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00019">19</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a3b6ee100a473e8866bcea6d1fc4041d9" name="a3b6ee100a473e8866bcea6d1fc4041d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b6ee100a473e8866bcea6d1fc4041d9">&#9670;&nbsp;</a></span>integer</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef int <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00017">17</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a2d83a9d6677f42e2572510c1a14e58ed" name="a2d83a9d6677f42e2572510c1a14e58ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d83a9d6677f42e2572510c1a14e58ed">&#9670;&nbsp;</a></span>keyType</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef unsigned long <a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00018">18</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a11d147c64891830c9e79b3315b1b2e21" name="a11d147c64891830c9e79b3315b1b2e21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11d147c64891830c9e79b3315b1b2e21">&#9670;&nbsp;</a></span>real</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef double <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Type definitions</p><ul>
+<li><code>real</code> corresponds to floating point precision for whole program</li>
+<li><code>keyType</code> influences the maximal tree depth<ul>
+<li>maximal tree depth: (sizeof(keyType) - (sizeof(keyType) % DIM))/DIM </li>
+</ul>
+</li>
+</ul>
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00015">15</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a2d8e8822fa3f08e0aab03e66949b9faf" name="a2d8e8822fa3f08e0aab03e66949b9faf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d8e8822fa3f08e0aab03e66949b9faf">&#9670;&nbsp;</a></span>SimulationParameters</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct <a class="el" href="struct_simulation_parameters.html">SimulationParameters</a> <a class="el" href="struct_simulation_parameters.html">SimulationParameters</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="a5a8162808ef47c46eaf46274eab03e6c" name="a5a8162808ef47c46eaf46274eab03e6c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a8162808ef47c46eaf46274eab03e6c">&#9670;&nbsp;</a></span>EquationOfStates</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6c">EquationOfStates</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>implemented equation of states </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c" name="a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c"></a>EOS_TYPE_POLYTROPIC_GAS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57" name="a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57"></a>EOS_TYPE_ISOTHERMAL_GAS&#160;</td><td class="fielddoc"><p >polytropic <a class="el" href="namespace_e_o_s.html" title="Equation of states.">EOS</a> for gas, needs polytropic_K and polytropic_gamma in material.cfg file </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c" name="a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c"></a>EOS_TYPE_IDEAL_GAS&#160;</td><td class="fielddoc"><p >this is pure molecular hydrogen at 10 K </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c" name="a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c"></a>EOS_TYPE_LOCALLY_ISOTHERMAL_GAS&#160;</td><td class="fielddoc"><p >ideal gas equation, set polytropic_gamma in material.cfg </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c" name="a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c"></a>EOS_TYPE_POLYTROPIC_GAS&#160;</td><td class="fielddoc"><p >polytropic <a class="el" href="namespace_e_o_s.html" title="Equation of states.">EOS</a> for gas, needs polytropic_K and polytropic_gamma in material.cfg file </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57" name="a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57"></a>EOS_TYPE_ISOTHERMAL_GAS&#160;</td><td class="fielddoc"><p >this is pure molecular hydrogen at 10 K </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c" name="a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c"></a>EOS_TYPE_IDEAL_GAS&#160;</td><td class="fielddoc"><p >ideal gas equation, set polytropic_gamma in material.cfg </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c" name="a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c"></a>EOS_TYPE_LOCALLY_ISOTHERMAL_GAS&#160;</td><td class="fielddoc"><p >locally isothermal gas: \( p = c_s^2 \cdot \rho \) </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c" name="a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c"></a>EOS_TYPE_POLYTROPIC_GAS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57" name="a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57"></a>EOS_TYPE_ISOTHERMAL_GAS&#160;</td><td class="fielddoc"><p >polytropic <a class="el" href="namespace_e_o_s.html" title="Equation of states.">EOS</a> for gas, needs polytropic_K and polytropic_gamma in material.cfg file </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c" name="a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c"></a>EOS_TYPE_IDEAL_GAS&#160;</td><td class="fielddoc"><p >this is pure molecular hydrogen at 10 K </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c" name="a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c"></a>EOS_TYPE_LOCALLY_ISOTHERMAL_GAS&#160;</td><td class="fielddoc"><p >ideal gas equation, set polytropic_gamma in material.cfg </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c" name="a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c"></a>EOS_TYPE_POLYTROPIC_GAS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57" name="a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57"></a>EOS_TYPE_ISOTHERMAL_GAS&#160;</td><td class="fielddoc"><p >polytropic <a class="el" href="namespace_e_o_s.html" title="Equation of states.">EOS</a> for gas, needs polytropic_K and polytropic_gamma in material.cfg file </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c" name="a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c"></a>EOS_TYPE_IDEAL_GAS&#160;</td><td class="fielddoc"><p >this is pure molecular hydrogen at 10 K </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c" name="a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c"></a>EOS_TYPE_LOCALLY_ISOTHERMAL_GAS&#160;</td><td class="fielddoc"><p >ideal gas equation, set polytropic_gamma in material.cfg </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00233">233</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="a04c5fddff3aaef7523b3419c171f1884" name="a04c5fddff3aaef7523b3419c171f1884"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04c5fddff3aaef7523b3419c171f1884">&#9670;&nbsp;</a></span>dbl_max</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dbl_max = std::numeric_limits&lt;<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&gt;::max()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00115">115</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+  <hr class="footer"/><address class="footer"><small>
+    <!--
+    milupHPC  - testcases/plummer/parameter.h File Reference<br />
+    Generated on Wed Jun 29 2022 14:58:38 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    -->
+  </small></address>
+</body>
+<footer>
+  <custom-footer color="white" background="#2E4053">
+    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
+    <div second>
+      <div style="text-align: center">
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+        </div>
+      </div>
+    </div>
+    <div third>
+      milupHPC  - testcases/plummer/parameter.h File Reference<br />
+      Generated on Wed Jun 29 2022 14:58:38 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    </div>
+  </custom-footer>
+</footer>
+<!--
+<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
+-->
+<script src="components/hamburger/runtime.js" type="text/javascript"></script><script src="components/hamburger/polyfills.js" type="text/javascript"></script><script src="components/hamburger/main.js" type="text/javascript"></script>
+<script src="components/header/runtime.js" type="text/javascript"></script><script src="components/header/polyfills.js" type="text/javascript"></script><script src="components/header/main.js" type="text/javascript"></script>
+<script src="components/icons/runtime.js" type="text/javascript"></script><script src="components/icons/polyfills.js" type="text/javascript"></script><script src="components/icons/main.js" type="text/javascript"></script>
+<script src="components/footer/runtime.js" type="text/javascript"></script><script src="components/footer/polyfills.js" type="text/javascript"></script><script src="components/footer/main.js" type="text/javascript"></script>
+<script src="components/dialog/runtime.js" type="text/javascript"></script><script src="components/dialog/polyfills.js" type="text/javascript"></script><script src="components/dialog/main.js" type="text/javascript"></script>
+<script src="components/copyable/runtime.js" type="text/javascript"></script><script src="components/copyable/polyfills.js" type="text/javascript"></script><script src="components/copyable/main.js" type="text/javascript"></script>
+<!--
+<script>
+  function toggle() {
+    var elem = document.getElementById("side-nav");
+    console.log(elem);
+    elem.toggleSideNav(false);
+  }
+</script>
+-->
+<!--
+<script>
+  function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  }
+</script>
+-->
+</html>

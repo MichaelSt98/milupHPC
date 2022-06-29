@@ -1,7 +1,7 @@
 <map id="include/sph/viscosity.cuh" name="include/sph/viscosity.cuh">
 <area shape="rect" id="node1" title="Stress." alt="" coords="441,5,607,32"/>
 <area shape="rect" id="node2" href="$particles_8cuh.html" title="Particle struct as Structure of arrays both instantiable on host and device." alt="" coords="790,155,898,181"/>
-<area shape="rect" id="node3" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="575,379,665,405"/>
+<area shape="rect" id="node3" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="575,379,665,405"/>
 <area shape="rect" id="node6" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="269,229,456,256"/>
 <area shape="rect" id="node8" href="$cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers." alt="" coords="446,304,557,331"/>
 <area shape="rect" id="node11" href="$material_8cuh.html" title="Material parameters and settings." alt="" coords="5,155,168,181"/>

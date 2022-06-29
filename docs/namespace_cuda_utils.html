@@ -1,14 +1,26 @@
-<!DOCTYPE html>
-<html>
-<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
--->
+<!doctype html>
+<html lang="en">
 <head>
+	<meta charset="utf-8">
+	<title>CodePortray</title>
+	<base href="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: CudaUtils Namespace Reference</title>
+	<title>CudaUtils Namespace Reference</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -22,42 +34,68 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
-	<!-- Add icon library -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<!-- Add font awesome icons -->
-	<!--HIGHLIGHT.JS INSTALL BEGIN
-	<link rel="stylesheet" href="github.min.css">
-	<script src="highlight.js"></script>
-	<script>
-		$(function() {
-			hljs.configure({useBR: false});
-			$(".fragment").each(function(i,node) {
-				$(node).removeClass("fragment");
-				hljs.highlightBlock(node);
-			});
-		});
-	</script>
-	HIGHLIGHT.JS INSTALL END-->
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<custom-header class="custom-header-class">
+	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
+	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
+	<div shortcuts style="display: table">
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
+		</div>
+		<!-- get the code ... -->
+		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
+		<div style="display: table-cell; padding-right: 2px">
+			<custom-dialog window-width="600px" window-height="400px">
+				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
+				<div title>Get the code: milupHPC!</div>
+				<div style="text-align: center; padding-top: 20px;">
+					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
+					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
+					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
+					<div style="padding-top: 40px">clone via HTTPS:</div>
+					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">clone via SSH:</div>
+					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
+					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
+				</div>
+				<!--<div footer>This is the footer</div>-->
+			</custom-dialog>
+		</div>
+		<!-- end: get the code .... -->
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
+		</div>
+		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
+	</div>
+</custom-header>
+	<!--
+	<custom-side-nav id="side-nav" nav-width="300">
+		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
+		<div>test</div>
+	</custom-side-nav>
+	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation <!-- CudaUtils Namespace Reference -->
+				milupHPC documentation
 			</span>
-			<!-- <span class="search">
-				<input type="text" placeholder="Search" onkeydown="search(this,event);">
-			</span> -->
 		</div>
-    <!--
-	<div class="icon-bar">
-		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
-		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
-		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
-	</div>
-	</div>
-	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -106,41 +144,41 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a8aeb7e0c30b9fc75f02145d06a56ddc8"><td class="memItemLeft" align="right" valign="top">__device__ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#a8aeb7e0c30b9fc75f02145d06a56ddc8">sign</a> (<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> x)</td></tr>
+<tr class="memitem:a8aeb7e0c30b9fc75f02145d06a56ddc8"><td class="memItemLeft" align="right" valign="top">__device__ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#a8aeb7e0c30b9fc75f02145d06a56ddc8">sign</a> (<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> x)</td></tr>
 <tr class="memdesc:a8aeb7e0c30b9fc75f02145d06a56ddc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get sign of floating point variable.  <a href="namespace_cuda_utils.html#a8aeb7e0c30b9fc75f02145d06a56ddc8">More...</a><br /></td></tr>
 <tr class="separator:a8aeb7e0c30b9fc75f02145d06a56ddc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3bcbf0a1bc8cec054592b8fb1c4749a8"><td class="memItemLeft" align="right" valign="top">__device__ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#a3bcbf0a1bc8cec054592b8fb1c4749a8">stressIndex</a> (int particleIndex, int row, int col)</td></tr>
 <tr class="memdesc:a3bcbf0a1bc8cec054592b8fb1c4749a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">map <code>[i][j]</code> to <code>[i*DIM*DIM+j]</code> for the tensors  <a href="namespace_cuda_utils.html#a3bcbf0a1bc8cec054592b8fb1c4749a8">More...</a><br /></td></tr>
 <tr class="separator:a3bcbf0a1bc8cec054592b8fb1c4749a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85061666bd4ff673117abb526f7070f5"><td class="memItemLeft" align="right" valign="top">__device__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#a85061666bd4ff673117abb526f7070f5">copyMatrix</a> (<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> src[<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dst[<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>])</td></tr>
+<tr class="memitem:a85061666bd4ff673117abb526f7070f5"><td class="memItemLeft" align="right" valign="top">__device__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#a85061666bd4ff673117abb526f7070f5">copyMatrix</a> (<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> src[<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dst[<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>])</td></tr>
 <tr class="memdesc:a85061666bd4ff673117abb526f7070f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deep copy of matrix.  <a href="namespace_cuda_utils.html#a85061666bd4ff673117abb526f7070f5">More...</a><br /></td></tr>
 <tr class="separator:a85061666bd4ff673117abb526f7070f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59e1eafcc742ea4bc83059c7718de79d"><td class="memItemLeft" align="right" valign="top">__device__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#a59e1eafcc742ea4bc83059c7718de79d">transposeMatrix</a> (<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> m[<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>])</td></tr>
+<tr class="memitem:a59e1eafcc742ea4bc83059c7718de79d"><td class="memItemLeft" align="right" valign="top">__device__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#a59e1eafcc742ea4bc83059c7718de79d">transposeMatrix</a> (<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> m[<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>])</td></tr>
 <tr class="memdesc:a59e1eafcc742ea4bc83059c7718de79d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transpose matrix.  <a href="namespace_cuda_utils.html#a59e1eafcc742ea4bc83059c7718de79d">More...</a><br /></td></tr>
 <tr class="separator:a59e1eafcc742ea4bc83059c7718de79d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abfa36f97bfa5efa4cf038a7af28ba65c"><td class="memItemLeft" align="right" valign="top">__device__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#abfa36f97bfa5efa4cf038a7af28ba65c">multiplyMatrix</a> (<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> A[<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> B[<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> C[<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>])</td></tr>
+<tr class="memitem:abfa36f97bfa5efa4cf038a7af28ba65c"><td class="memItemLeft" align="right" valign="top">__device__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#abfa36f97bfa5efa4cf038a7af28ba65c">multiplyMatrix</a> (<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> A[<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> B[<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> C[<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>])</td></tr>
 <tr class="separator:abfa36f97bfa5efa4cf038a7af28ba65c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade06d392eb186078a29f9362c0e1cfe4"><td class="memItemLeft" align="right" valign="top">__device__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#ade06d392eb186078a29f9362c0e1cfe4">multiply</a> (<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> A[][<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> B[][<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> C[][<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>])</td></tr>
+<tr class="memitem:ade06d392eb186078a29f9362c0e1cfe4"><td class="memItemLeft" align="right" valign="top">__device__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#ade06d392eb186078a29f9362c0e1cfe4">multiply</a> (<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> A[][<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> B[][<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> C[][<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>])</td></tr>
 <tr class="separator:ade06d392eb186078a29f9362c0e1cfe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf7cf363515e4ca76b4094c3ed8ededb"><td class="memItemLeft" align="right" valign="top">__device__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#adf7cf363515e4ca76b4094c3ed8ededb">identityMatrix</a> (<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> A[<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>])</td></tr>
+<tr class="memitem:adf7cf363515e4ca76b4094c3ed8ededb"><td class="memItemLeft" align="right" valign="top">__device__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#adf7cf363515e4ca76b4094c3ed8ededb">identityMatrix</a> (<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> A[<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>])</td></tr>
 <tr class="memdesc:adf7cf363515e4ca76b4094c3ed8ededb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return identity matrix.  <a href="namespace_cuda_utils.html#adf7cf363515e4ca76b4094c3ed8ededb">More...</a><br /></td></tr>
 <tr class="separator:adf7cf363515e4ca76b4094c3ed8ededb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a382f4052f7c24e4f66411ffed4950031"><td class="memItemLeft" align="right" valign="top">__device__ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#a382f4052f7c24e4f66411ffed4950031">maxMatrix</a> (<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> M[<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], int *e, int *f, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *elmax)</td></tr>
+<tr class="memitem:a382f4052f7c24e4f66411ffed4950031"><td class="memItemLeft" align="right" valign="top">__device__ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#a382f4052f7c24e4f66411ffed4950031">maxMatrix</a> (<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> M[<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], int *e, int *f, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *elmax)</td></tr>
 <tr class="memdesc:a382f4052f7c24e4f66411ffed4950031"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the indices of the greatest non-diagonal element of the matrix <code>M</code>.  <a href="namespace_cuda_utils.html#a382f4052f7c24e4f66411ffed4950031">More...</a><br /></td></tr>
 <tr class="separator:a382f4052f7c24e4f66411ffed4950031"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb2da123824962ee4b85604e26ef6457"><td class="memItemLeft" align="right" valign="top">__device__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#adb2da123824962ee4b85604e26ef6457">rotateMatrix</a> (volatile <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> m[<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], volatile <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> c, volatile <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> s, volatile int e, volatile int f)</td></tr>
+<tr class="memitem:adb2da123824962ee4b85604e26ef6457"><td class="memItemLeft" align="right" valign="top">__device__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#adb2da123824962ee4b85604e26ef6457">rotateMatrix</a> (volatile <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> m[<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], volatile <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> c, volatile <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> s, volatile int e, volatile int f)</td></tr>
 <tr class="memdesc:adb2da123824962ee4b85604e26ef6457"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotate matrix.  <a href="namespace_cuda_utils.html#adb2da123824962ee4b85604e26ef6457">More...</a><br /></td></tr>
 <tr class="separator:adb2da123824962ee4b85604e26ef6457"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18c0f25a14827dd8b4feeb0a88147b16"><td class="memItemLeft" align="right" valign="top">__device__ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#a18c0f25a14827dd8b4feeb0a88147b16">calculateAllEigenvalues</a> (<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> M[<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> eigenvalues[<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> v[<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>])</td></tr>
+<tr class="memitem:a18c0f25a14827dd8b4feeb0a88147b16"><td class="memItemLeft" align="right" valign="top">__device__ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#a18c0f25a14827dd8b4feeb0a88147b16">calculateAllEigenvalues</a> (<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> M[<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> eigenvalues[<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> v[<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>])</td></tr>
 <tr class="memdesc:a18c0f25a14827dd8b4feeb0a88147b16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes all eigenvalues and eigenvectors of the symmetric matrix <code>M</code>.  <a href="namespace_cuda_utils.html#a18c0f25a14827dd8b4feeb0a88147b16">More...</a><br /></td></tr>
 <tr class="separator:a18c0f25a14827dd8b4feeb0a88147b16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f8edc820792c16b1c21649befaa0b90"><td class="memItemLeft" align="right" valign="top">__device__ <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#a4f8edc820792c16b1c21649befaa0b90">calculateMaxEigenvalue</a> (<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> M[<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>])</td></tr>
+<tr class="memitem:a4f8edc820792c16b1c21649befaa0b90"><td class="memItemLeft" align="right" valign="top">__device__ <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#a4f8edc820792c16b1c21649befaa0b90">calculateMaxEigenvalue</a> (<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> M[<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>])</td></tr>
 <tr class="memdesc:a4f8edc820792c16b1c21649befaa0b90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the eigenvalues of the symmetric matrix <code>M</code>.  <a href="namespace_cuda_utils.html#a4f8edc820792c16b1c21649befaa0b90">More...</a><br /></td></tr>
 <tr class="separator:a4f8edc820792c16b1c21649befaa0b90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aab831968a9745b09bac2ec72a3684475"><td class="memItemLeft" align="right" valign="top">__device__ <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#aab831968a9745b09bac2ec72a3684475">det2x2</a> (<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> a, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> b, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> c, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> d)</td></tr>
+<tr class="memitem:aab831968a9745b09bac2ec72a3684475"><td class="memItemLeft" align="right" valign="top">__device__ <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#aab831968a9745b09bac2ec72a3684475">det2x2</a> (<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> a, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> b, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> c, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> d)</td></tr>
 <tr class="memdesc:aab831968a9745b09bac2ec72a3684475"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determinant of a 2x2 matrix.  <a href="namespace_cuda_utils.html#aab831968a9745b09bac2ec72a3684475">More...</a><br /></td></tr>
 <tr class="separator:aab831968a9745b09bac2ec72a3684475"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb110bae80a79fbf923e4917d75ef6ee"><td class="memItemLeft" align="right" valign="top">__device__ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#adb110bae80a79fbf923e4917d75ef6ee">invertMatrix</a> (<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *m, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *inverted)</td></tr>
+<tr class="memitem:adb110bae80a79fbf923e4917d75ef6ee"><td class="memItemLeft" align="right" valign="top">__device__ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_cuda_utils.html#adb110bae80a79fbf923e4917d75ef6ee">invertMatrix</a> (<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *m, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *inverted)</td></tr>
 <tr class="memdesc:adb110bae80a79fbf923e4917d75ef6ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Invert matrix.  <a href="namespace_cuda_utils.html#adb110bae80a79fbf923e4917d75ef6ee">More...</a><br /></td></tr>
 <tr class="separator:adb110bae80a79fbf923e4917d75ef6ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -154,19 +192,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">__device__ int CudaUtils::calculateAllEigenvalues </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>M</em>[DIM][DIM], </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>eigenvalues</em>[DIM], </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>v</em>[DIM][DIM]&#160;</td>
         </tr>
         <tr>
@@ -218,9 +256,9 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">__device__ <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::calculateMaxEigenvalue </td>
+          <td class="memname">__device__ <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::calculateMaxEigenvalue </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>M</em>[DIM][DIM]</td><td>)</td>
           <td></td>
         </tr>
@@ -265,13 +303,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">__device__ void CudaUtils::copyMatrix </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>src</em>[DIM][DIM], </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>dst</em>[DIM][DIM]&#160;</td>
         </tr>
         <tr>
@@ -302,27 +340,27 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">__device__ <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::det2x2 </td>
+          <td class="memname">__device__ <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CudaUtils::det2x2 </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>a</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>b</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>c</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>d</em>&#160;</td>
         </tr>
         <tr>
@@ -358,7 +396,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">__device__ void CudaUtils::identityMatrix </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>A</em>[DIM][DIM]</td><td>)</td>
           <td></td>
         </tr>
@@ -386,13 +424,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">__device__ int CudaUtils::invertMatrix </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>inverted</em>&#160;</td>
         </tr>
         <tr>
@@ -437,7 +475,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">__device__ int CudaUtils::maxMatrix </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>M</em>[DIM][DIM], </td>
         </tr>
         <tr>
@@ -455,7 +493,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>elmax</em>&#160;</td>
         </tr>
         <tr>
@@ -503,19 +541,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">__device__ void CudaUtils::multiply </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>A</em>[][DIM], </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>B</em>[][DIM], </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>C</em>[][DIM]&#160;</td>
         </tr>
         <tr>
@@ -548,19 +586,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">__device__ void CudaUtils::multiplyMatrix </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>A</em>[DIM][DIM], </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>B</em>[DIM][DIM], </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>C</em>[DIM][DIM]&#160;</td>
         </tr>
         <tr>
@@ -593,19 +631,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">__device__ void CudaUtils::rotateMatrix </td>
           <td>(</td>
-          <td class="paramtype">volatile <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype">volatile <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>m</em>[DIM][DIM], </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">volatile <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype">volatile <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>c</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">volatile <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype">volatile <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>s</em>, </td>
         </tr>
         <tr>
@@ -654,7 +692,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">__device__ int CudaUtils::sign </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>x</em></td><td>)</td>
           <td></td>
         </tr>
@@ -721,7 +759,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">__device__ void CudaUtils::transposeMatrix </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>m</em>[DIM][DIM]</td><td>)</td>
           <td></td>
         </tr>
@@ -743,19 +781,58 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
+    <!--
     milupHPC  - CudaUtils Namespace Reference<br />
-    Generated on Thu Jun 23 2022 16:11:20 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    Generated on Wed Jun 29 2022 14:58:38 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    -->
   </small></address>
 </body>
 <footer>
-  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
-  <div id="banner-footer-first"></div>
-  <div id="banner-footer-second"></div>
-  <script>
-    function topFunction() {
-      document.body.scrollTop = 0; // For Safari
-      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    }
-  </script>
+  <custom-footer color="white" background="#2E4053">
+    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
+    <div second>
+      <div style="text-align: center">
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+        </div>
+      </div>
+    </div>
+    <div third>
+      milupHPC  - CudaUtils Namespace Reference<br />
+      Generated on Wed Jun 29 2022 14:58:38 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    </div>
+  </custom-footer>
 </footer>
+<!--
+<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
+-->
+<script src="components/hamburger/runtime.js" type="text/javascript"></script><script src="components/hamburger/polyfills.js" type="text/javascript"></script><script src="components/hamburger/main.js" type="text/javascript"></script>
+<script src="components/header/runtime.js" type="text/javascript"></script><script src="components/header/polyfills.js" type="text/javascript"></script><script src="components/header/main.js" type="text/javascript"></script>
+<script src="components/icons/runtime.js" type="text/javascript"></script><script src="components/icons/polyfills.js" type="text/javascript"></script><script src="components/icons/main.js" type="text/javascript"></script>
+<script src="components/footer/runtime.js" type="text/javascript"></script><script src="components/footer/polyfills.js" type="text/javascript"></script><script src="components/footer/main.js" type="text/javascript"></script>
+<script src="components/dialog/runtime.js" type="text/javascript"></script><script src="components/dialog/polyfills.js" type="text/javascript"></script><script src="components/dialog/main.js" type="text/javascript"></script>
+<script src="components/copyable/runtime.js" type="text/javascript"></script><script src="components/copyable/polyfills.js" type="text/javascript"></script><script src="components/copyable/main.js" type="text/javascript"></script>
+<!--
+<script>
+  function toggle() {
+    var elem = document.getElementById("side-nav");
+    console.log(elem);
+    elem.toggleSideNav(false);
+  }
+</script>
+-->
+<!--
+<script>
+  function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  }
+</script>
+-->
 </html>

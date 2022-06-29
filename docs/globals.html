@@ -1,14 +1,26 @@
-<!DOCTYPE html>
-<html>
-<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
--->
+<!doctype html>
+<html lang="en">
 <head>
+	<meta charset="utf-8">
+	<title>CodePortray</title>
+	<base href="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: File Members</title>
+	<title>File Members</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -22,42 +34,68 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
-	<!-- Add icon library -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<!-- Add font awesome icons -->
-	<!--HIGHLIGHT.JS INSTALL BEGIN
-	<link rel="stylesheet" href="github.min.css">
-	<script src="highlight.js"></script>
-	<script>
-		$(function() {
-			hljs.configure({useBR: false});
-			$(".fragment").each(function(i,node) {
-				$(node).removeClass("fragment");
-				hljs.highlightBlock(node);
-			});
-		});
-	</script>
-	HIGHLIGHT.JS INSTALL END-->
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<custom-header class="custom-header-class">
+	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
+	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
+	<div shortcuts style="display: table">
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
+		</div>
+		<!-- get the code ... -->
+		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
+		<div style="display: table-cell; padding-right: 2px">
+			<custom-dialog window-width="600px" window-height="400px">
+				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
+				<div title>Get the code: milupHPC!</div>
+				<div style="text-align: center; padding-top: 20px;">
+					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
+					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
+					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
+					<div style="padding-top: 40px">clone via HTTPS:</div>
+					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">clone via SSH:</div>
+					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
+					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
+				</div>
+				<!--<div footer>This is the footer</div>-->
+			</custom-dialog>
+		</div>
+		<!-- end: get the code .... -->
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
+		</div>
+		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
+	</div>
+</custom-header>
+	<!--
+	<custom-side-nav id="side-nav" nav-width="300">
+		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
+		<div>test</div>
+	</custom-side-nav>
+	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation <!-- File Members -->
+				milupHPC documentation
 			</span>
-			<!-- <span class="search">
-				<input type="text" placeholder="Search" onkeydown="search(this,event);">
-			</span> -->
 		</div>
-    <!--
-	<div class="icon-bar">
-		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
-		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
-		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
-	</div>
-	</div>
-	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -95,219 +133,65 @@ $(function() {
 <div class="textblock">Here is a list of all file members with links to the files they belong to:</div>
 
 <h3><a id="index_a" name="index_a"></a>- a -</h3><ul>
-<li>ARTIFICIAL_STRESS&#160;:&#160;<a class="el" href="parameter_8h.html#ac8bcf3d24e69483eae9d2a54be4d0f6e">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#ac8bcf3d24e69483eae9d2a54be4d0f6e">parameter_backup.h</a></li>
-<li>ARTIFICIAL_VISCOSITY&#160;:&#160;<a class="el" href="parameter_8h.html#a7132b7f55f65be67016d71073417ddac">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a7132b7f55f65be67016d71073417ddac">parameter_backup.h</a></li>
-<li>AVERAGE_KERNELS&#160;:&#160;<a class="el" href="parameter_8h.html#a14f0c1706287bea4992f1cc4624daafe">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a14f0c1706287bea4992f1cc4624daafe">parameter_backup.h</a></li>
-</ul>
-
-
-<h3><a id="index_b" name="index_b"></a>- b -</h3><ul>
-<li>BALSARA_SWITCH&#160;:&#160;<a class="el" href="parameter_8h.html#a2cae5c1e6713981cd887c0128bf8344e">parameter.h</a></li>
-</ul>
-
-
-<h3><a id="index_c" name="index_c"></a>- c -</h3><ul>
-<li>checkCudaCall()&#160;:&#160;<a class="el" href="cuda__utilities_8cuh.html#ae662091cff3c7c55d3372448898a7376">cuda_utilities.cuh</a>, <a class="el" href="cuda__utilities_8cu.html#ae662091cff3c7c55d3372448898a7376">cuda_utilities.cu</a></li>
-<li>checkFile()&#160;:&#160;<a class="el" href="src_2main_8cpp.html#ae33ad7ea1ab3559bdb9152d7679b1cba">main.cpp</a></li>
-<li>COLORS&#160;:&#160;<a class="el" href="_h5_renderer_8h.html#a0331820fb1060ad140efbe96d079cc74">H5Renderer.h</a></li>
-<li>compTheta()&#160;:&#160;<a class="el" href="parallel_force_concept_8cpp.html#a525c7922f7ca729e0735918e0f639bb7">parallelForceConcept.cpp</a></li>
-<li>COMPUTE_DIRECTLY&#160;:&#160;<a class="el" href="sph_8cu.html#a5bb40d18dc6b963688fd0db2f9c963b3">sph.cu</a>, <a class="el" href="tree_8cu.html#a5bb40d18dc6b963688fd0db2f9c963b3">tree.cu</a></li>
-<li>COURANT_FACT&#160;:&#160;<a class="el" href="parameter_8h.html#a6ffbcf2ba306e9583d21988f8a1acaaa">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a6ffbcf2ba306e9583d21988f8a1acaaa">parameter_backup.h</a></li>
-<li>CUBIC_DOMAINS&#160;:&#160;<a class="el" href="parameter_8h.html#a2e7133ed5de6112e76e418c53e250f8d">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a2e7133ed5de6112e76e418c53e250f8d">parameter_backup.h</a></li>
-<li>cubicSpline_p&#160;:&#160;<a class="el" href="kernel_8cu.html#a95ecf76c6143da1c316812fa0729e992">kernel.cu</a>, <a class="el" href="kernel__handler_8cu.html#a95ecf76c6143da1c316812fa0729e992">kernel_handler.cu</a></li>
-<li>CUDA_CALLABLE_MEMBER&#160;:&#160;<a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">cuda_utilities.cuh</a></li>
-<li>cudaAssert&#160;:&#160;<a class="el" href="cuda__utilities_8cuh.html#a18f09c8175084d073dc810de445cdf3e">cuda_utilities.cuh</a></li>
-<li>cudaTerminate&#160;:&#160;<a class="el" href="cuda__utilities_8cuh.html#a0269abaf8e197ef5b7f85bd16c19bbf8">cuda_utilities.cuh</a></li>
-<li>CXXOPTS__VERSION_MAJOR&#160;:&#160;<a class="el" href="cxxopts_8h.html#a00d4ee40bcf31ae271e78a9c52632bc7">cxxopts.h</a></li>
-<li>CXXOPTS__VERSION_MINOR&#160;:&#160;<a class="el" href="cxxopts_8h.html#aa67ae10831707133de2518234e695084">cxxopts.h</a></li>
-<li>CXXOPTS__VERSION_PATCH&#160;:&#160;<a class="el" href="cxxopts_8h.html#ab3de1a4b00ea1ddee4799e6382992e79">cxxopts.h</a></li>
-<li>CXXOPTS_NODISCARD&#160;:&#160;<a class="el" href="cxxopts_8h.html#a6d9ad4f693e16a4c6cdce8373f403e5d">cxxopts.h</a></li>
-<li>CXXOPTS_VECTOR_DELIMITER&#160;:&#160;<a class="el" href="cxxopts_8h.html#a564e0c1dcc7d9a5202f36755f4fb07c7">cxxopts.h</a></li>
-</ul>
-
-
-<h3><a id="index_d" name="index_d"></a>- d -</h3><ul>
-<li>d_particle2SendIndices&#160;:&#160;<a class="el" href="parallel_force_concept_8cpp.html#adda468ec24f011384d35d13a7051636f">parallelForceConcept.cpp</a></li>
-<li>d_pseudoParticles2SendIndices&#160;:&#160;<a class="el" href="parallel_force_concept_8cpp.html#a7c96f2f907457255a70020494db5b398">parallelForceConcept.cpp</a></li>
-<li>dbl_max&#160;:&#160;<a class="el" href="parameter_8h.html#a04c5fddff3aaef7523b3419c171f1884">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a04c5fddff3aaef7523b3419c171f1884">parameter_backup.h</a></li>
-<li>DBL_MAX&#160;:&#160;<a class="el" href="parameter_8h.html#af78670ee54c1203d613f8fb0e022d214">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#af78670ee54c1203d613f8fb0e022d214">parameter_backup.h</a></li>
-<li>DEAL_WITH_TOO_MANY_INTERACTIONS&#160;:&#160;<a class="el" href="parameter_8h.html#ae04c60518447e20dc504bed2b41bc6b8">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#ae04c60518447e20dc504bed2b41bc6b8">parameter_backup.h</a></li>
-<li>DEBUG&#160;:&#160;<a class="el" href="_h5_renderer_2include_2_logger_8h.html#ad128d497a8c1df5354c605d14677248da0593585da9181e972974c1274d8f2b4f">Logger.h</a>, <a class="el" href="include_2utils_2_logger_8h.html#ac475e37d7ead782f5f80864a2156b631a0593585da9181e972974c1274d8f2b4f">logger.h</a></li>
-<li>DEBUGGING&#160;:&#160;<a class="el" href="parameter_8h.html#a7180786c98af534f76855fef6f1b97ab">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a7180786c98af534f76855fef6f1b97ab">parameter_backup.h</a></li>
-<li>DECOUPLE_SML&#160;:&#160;<a class="el" href="parameter_8h.html#a930039a1a620a721f9bc0f0a884574dd">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a930039a1a620a721f9bc0f0a884574dd">parameter_backup.h</a></li>
-<li>DIM&#160;:&#160;<a class="el" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">parameter_backup.h</a></li>
-<li>DOMAIN_LIST_SIZE&#160;:&#160;<a class="el" href="parameter_8h.html#a8b5552a5108e6c6bed3addeb9daa0d36">parameter.h</a></li>
-</ul>
-
-
-<h3><a id="index_e" name="index_e"></a>- e -</h3><ul>
-<li>ENV_LOCAL_RANK&#160;:&#160;<a class="el" href="src_2main_8cpp.html#a1cf673c1febd6ac97dd8aefadf00b5f7">main.cpp</a></li>
-<li>EOS_TYPE_IDEAL_GAS&#160;:&#160;<a class="el" href="parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c">parameter_backup.h</a></li>
-<li>EOS_TYPE_ISOTHERMAL_GAS&#160;:&#160;<a class="el" href="parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57">parameter_backup.h</a></li>
-<li>EOS_TYPE_LOCALLY_ISOTHERMAL_GAS&#160;:&#160;<a class="el" href="parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c">parameter_backup.h</a></li>
-<li>EOS_TYPE_POLYTROPIC_GAS&#160;:&#160;<a class="el" href="parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c">parameter_backup.h</a></li>
-<li>EPS_JACOBI&#160;:&#160;<a class="el" href="linalg_8cu.html#a986f2217c83e5fe112bcad9726c52b8e">linalg.cu</a></li>
-<li>EquationOfStates&#160;:&#160;<a class="el" href="parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6c">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a5a8162808ef47c46eaf46274eab03e6c">parameter_backup.h</a></li>
-<li>ERROR&#160;:&#160;<a class="el" href="_h5_renderer_2include_2_logger_8h.html#ad128d497a8c1df5354c605d14677248da2fd6f336d08340583bd620a7f5694c90">Logger.h</a>, <a class="el" href="include_2utils_2_logger_8h.html#ac475e37d7ead782f5f80864a2156b631a2fd6f336d08340583bd620a7f5694c90">logger.h</a></li>
-</ul>
-
-
-<h3><a id="index_f" name="index_f"></a>- f -</h3><ul>
-<li>for()&#160;:&#160;<a class="el" href="parallel_force_concept_8cpp.html#ab261ac6865af689deadcb8619660ab77">parallelForceConcept.cpp</a></li>
-<li>FORCES_FACT&#160;:&#160;<a class="el" href="parameter_8h.html#ae9a0ef30d7f55ac5740a18f33c60ba28">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#ae9a0ef30d7f55ac5740a18f33c60ba28">parameter_backup.h</a></li>
-<li>FRAGMENTATION&#160;:&#160;<a class="el" href="parameter_8h.html#ab26977fab12ff2724cf9efd5ba6390e8">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#ab26977fab12ff2724cf9efd5ba6390e8">parameter_backup.h</a></li>
-</ul>
-
-
-<h3><a id="index_g" name="index_g"></a>- g -</h3><ul>
-<li>gpuAssert()&#160;:&#160;<a class="el" href="cuda__utilities_8cuh.html#ab3e90881a2476fd461eb2bcfcaa7cf63">cuda_utilities.cuh</a>, <a class="el" href="cuda__utilities_8cu.html#a77be0fbaffb45e6994a717d9f923083f">cuda_utilities.cu</a></li>
-<li>gpuErrorcheck&#160;:&#160;<a class="el" href="cuda__utilities_8cuh.html#aaac1c24ae9df6e95c57eba046e11953d">cuda_utilities.cuh</a></li>
-<li>GRAVITY_SIM&#160;:&#160;<a class="el" href="parameter_8h.html#aa28b620aee5a74f09f2b3cac50b9fb63">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#aa28b620aee5a74f09f2b3cac50b9fb63">parameter_backup.h</a></li>
-</ul>
-
-
-<h3><a id="index_i" name="index_i"></a>- i -</h3><ul>
-<li>idInteger&#160;:&#160;<a class="el" href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">parameter_backup.h</a></li>
-<li>INFO&#160;:&#160;<a class="el" href="_h5_renderer_2include_2_logger_8h.html#ad128d497a8c1df5354c605d14677248da748005382152808a72b1a9177d9dc806">Logger.h</a>, <a class="el" href="include_2utils_2_logger_8h.html#ac475e37d7ead782f5f80864a2156b631a748005382152808a72b1a9177d9dc806">logger.h</a></li>
-<li>integer&#160;:&#160;<a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">parameter_backup.h</a></li>
-<li>INTEGRATE_DENSITY&#160;:&#160;<a class="el" href="parameter_8h.html#a23a8396515412900c7a0ac5899efe984">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a23a8396515412900c7a0ac5899efe984">parameter_backup.h</a></li>
-<li>INTEGRATE_ENERGY&#160;:&#160;<a class="el" href="parameter_8h.html#aef31c618487f04f7fbfb716e4c13545b">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#aef31c618487f04f7fbfb716e4c13545b">parameter_backup.h</a></li>
-<li>INTEGRATE_SML&#160;:&#160;<a class="el" href="parameter_8h.html#ad2c4751f0383439ba8403f9b6735dd16">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#ad2c4751f0383439ba8403f9b6735dd16">parameter_backup.h</a></li>
-</ul>
-
-
-<h3><a id="index_k" name="index_k"></a>- k -</h3><ul>
-<li>KEY_MAX&#160;:&#160;<a class="el" href="parameter_8h.html#a609683a0c8de0ce9cdd1e696e71a6f07">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a609683a0c8de0ce9cdd1e696e71a6f07">parameter_backup.h</a></li>
-<li>keyType&#160;:&#160;<a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">parameter_backup.h</a></li>
-<li>KLEY_VISCOSITY&#160;:&#160;<a class="el" href="parameter_8h.html#ac4427158132a8d91048acfca8c56e9de">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#ac4427158132a8d91048acfca8c56e9de">parameter_backup.h</a></li>
-</ul>
-
-
-<h3><a id="index_l" name="index_l"></a>- l -</h3><ul>
-<li>LINEAR_CONSISTENCY&#160;:&#160;<a class="el" href="parameter_8h.html#aa0e93327fde519c548e775b622e707c9">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#aa0e93327fde519c548e775b622e707c9">parameter_backup.h</a></li>
-<li>LOGCFG&#160;:&#160;<a class="el" href="_h5_renderer_2include_2_logger_8h.html#a24e21689739d23c96d9dd767669133b9">Logger.h</a>, <a class="el" href="_h5_renderer_2src_2main_8cpp.html#a24e21689739d23c96d9dd767669133b9">main.cpp</a>, <a class="el" href="include_2utils_2_logger_8h.html#af4d61a0d9c769b2eeb212478e96765ee">logger.h</a>, <a class="el" href="src_2main_8cpp.html#af4d61a0d9c769b2eeb212478e96765ee">main.cpp</a></li>
-</ul>
-
-
-<h3><a id="index_m" name="index_m"></a>- m -</h3><ul>
-<li>main()&#160;:&#160;<a class="el" href="main_8cu.html#a0ddf1224851353fc92bfbff6f499fa97">main.cu</a>, <a class="el" href="_h5_renderer_2src_2main_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97">main.cpp</a></li>
-<li>MAX_DEPTH&#160;:&#160;<a class="el" href="parameter_8h.html#a5db49eeef5c9bb774f02996f684df238">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a5db49eeef5c9bb774f02996f684df238">parameter_backup.h</a></li>
-<li>MAX_LEVEL&#160;:&#160;<a class="el" href="parameter_8h.html#a5bb4257ca9fa4bfcf9391b7895b97761">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a5bb4257ca9fa4bfcf9391b7895b97761">parameter_backup.h</a></li>
-<li>MAX_NUM_INTERACTIONS&#160;:&#160;<a class="el" href="parameter_8h.html#a173e5a522f62a96b7508f1f4139b2479">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a173e5a522f62a96b7508f1f4139b2479">parameter_backup.h</a></li>
-<li>MAX_VARIABLE_SML_ITERATIONS&#160;:&#160;<a class="el" href="sph_8cu.html#a0b1d85c0cd0fff8e2520d4ddb0aad6a8">sph.cu</a></li>
-<li>MILUPHPC_CUDALAUNCHER_CUH&#160;:&#160;<a class="el" href="cuda__launcher_8cuh.html#abb4c0d600c2cb4c68e127d7a26f321d4">cuda_launcher.cuh</a></li>
-<li>MILUPHPC_CUDAUTILITIES_CUH&#160;:&#160;<a class="el" href="cuda__utilities_8cuh.html#a64ca94774b7b65296bb99a8f3a6efd8f">cuda_utilities.cuh</a></li>
-<li>MILUPHPC_DENSITY_CUH&#160;:&#160;<a class="el" href="density_8cuh.html#aaa448e5ac81cbf47d501a6e2deb945f8">density.cuh</a></li>
-<li>MILUPHPC_DEVICE_EXPLICIT_EULER_CUH&#160;:&#160;<a class="el" href="device__explicit__euler_8cuh.html#a7809200b522fee9c53541b3e2297ca9e">device_explicit_euler.cuh</a></li>
-<li>MILUPHPC_DEVICE_LEAPFROG_CUH&#160;:&#160;<a class="el" href="device__leapfrog_8cuh.html#a53cd592546c7ebc1f38fd5e82ec07202">device_leapfrog.cuh</a></li>
-<li>MILUPHPC_DEVICE_PREDICTOR_CORRECTOR_EULER_CUH&#160;:&#160;<a class="el" href="device__predictor__corrector__euler_8cuh.html#a021cb927869eac1d708e9b2928d4262d">device_predictor_corrector_euler.cuh</a></li>
-<li>MILUPHPC_DEVICE_RHS_CUH&#160;:&#160;<a class="el" href="device__rhs_8cuh.html#a47e2ccef39d6a1775a9afd73b4397023">device_rhs.cuh</a></li>
-<li>MILUPHPC_DOMAIN_CUH&#160;:&#160;<a class="el" href="subdomain_8cuh.html#acbadba2361dbcbc832bd74a5ef0c6bef">subdomain.cuh</a></li>
-<li>MILUPHPC_GRAVITY_CUH&#160;:&#160;<a class="el" href="gravity_8cuh.html#aa1957565a37c72b7f7e7c88a772a81ee">gravity.cuh</a></li>
-<li>MILUPHPC_HELPER_CUH&#160;:&#160;<a class="el" href="helper_8cuh.html#afdbbf5d2f3c07a27c2652ca2578afcfb">helper.cuh</a></li>
-<li>MILUPHPC_INTERNAL_FORCES_CUH&#160;:&#160;<a class="el" href="internal__forces_8cuh.html#a6e2af3d340fa3f4b164be733d2367562">internal_forces.cuh</a></li>
-<li>MILUPHPC_KERNEL_CUH&#160;:&#160;<a class="el" href="kernel_8cuh.html#ae9d124713ae65bb1393a388c3b351811">kernel.cuh</a></li>
-<li>MILUPHPC_KERNEL_HANDLER_H&#160;:&#160;<a class="el" href="kernel__handler_8cuh.html#a17cb5b70d9b2be5b4fc0c82ab3b2d169">kernel_handler.cuh</a></li>
-<li>MILUPHPC_KERNELS_CUH&#160;:&#160;<a class="el" href="kernels_8cuh.html#a7ce64f11de2d474bc8d5c5021fb38f97">kernels.cuh</a></li>
-<li>MILUPHPC_LINALG_CUH&#160;:&#160;<a class="el" href="linalg_8cuh.html#a37adc1096a37f07687b19ab7aeb42494">linalg.cuh</a></li>
-<li>MILUPHPC_MATERIAL_CUH&#160;:&#160;<a class="el" href="material_8cuh.html#ab32288078cbe7ee52429945d7511035f">material.cuh</a></li>
-<li>MILUPHPC_PARTICLES_CUH&#160;:&#160;<a class="el" href="particles_8cuh.html#ac3a8589ea7084b06b4349bb4378764e0">particles.cuh</a></li>
-<li>MILUPHPC_PRESSURE_CUH&#160;:&#160;<a class="el" href="pressure_8cuh.html#ac44a79e2859102db5825fd3627dad241">pressure.cuh</a></li>
-<li>MILUPHPC_SIMULATIONTIME_CUH&#160;:&#160;<a class="el" href="simulation__time_8cuh.html#a9886bf5d4c948218e90a3b1479973866">simulation_time.cuh</a></li>
-<li>MILUPHPC_SOUNDSPEED_CUH&#160;:&#160;<a class="el" href="soundspeed_8cuh.html#aa672f0ff19a455b5eb1397c17a53144f">soundspeed.cuh</a></li>
-<li>MILUPHPC_SPH_CUH&#160;:&#160;<a class="el" href="sph_8cuh.html#a12ee157b98dab6b69c6a1c6120bc2ee6">sph.cuh</a></li>
-<li>MILUPHPC_STRESS_CUH&#160;:&#160;<a class="el" href="stress_8cuh.html#a42909d16acd88e145796f516a24982fc">stress.cuh</a></li>
-<li>MILUPHPC_TREE_CUH&#160;:&#160;<a class="el" href="tree_8cuh.html#af3e143673ba803e56abbbbe2ea179183">tree.cuh</a></li>
-<li>MILUPHPC_VISCOSITY_CUH&#160;:&#160;<a class="el" href="viscosity_8cuh.html#a1c18fddecb60c75d5ac7261c345e7e4a">viscosity.cuh</a></li>
-<li>MIN_NUMBER_OF_INTERACTIONS_FOR_TENSORIAL_CORRECTION_TO_WORK&#160;:&#160;<a class="el" href="kernel_8cu.html#a5e674cc6c838836326b343ac0b92e7df">kernel.cu</a></li>
-</ul>
-
-
-<h3><a id="index_n" name="index_n"></a>- n -</h3><ul>
-<li>NAVIER_STOKES&#160;:&#160;<a class="el" href="parameter_8h.html#a945507ea94c77f3c72a042048b4a4ef0">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a945507ea94c77f3c72a042048b4a4ef0">parameter_backup.h</a></li>
-<li>NUM_THREADS_CALC_CENTER_OF_MASS&#160;:&#160;<a class="el" href="parameter_8h.html#a264da86aad42159f5195f1be566607c9">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a264da86aad42159f5195f1be566607c9">parameter_backup.h</a></li>
-<li>NUM_THREADS_LIMIT_TIME_STEP&#160;:&#160;<a class="el" href="parameter_8h.html#a12947b6362cba90f3716bb4f25880add">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a12947b6362cba90f3716bb4f25880add">parameter_backup.h</a></li>
-</ul>
-
-
-<h3><a id="index_p" name="index_p"></a>- p -</h3><ul>
-<li>PALPHA_POROSITY&#160;:&#160;<a class="el" href="parameter_8h.html#ae40edb8e9ac4ed9e625cb81767ed9e9c">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#ae40edb8e9ac4ed9e625cb81767ed9e9c">parameter_backup.h</a></li>
-<li>PLASTICITY&#160;:&#160;<a class="el" href="parameter_8h.html#a08f60ca4ce42b5b1301db797d364507e">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a08f60ca4ce42b5b1301db797d364507e">parameter_backup.h</a></li>
-<li>POROSITY&#160;:&#160;<a class="el" href="parameter_8h.html#a26614e169d24b4c9d5efba420f4fc961">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a26614e169d24b4c9d5efba420f4fc961">parameter_backup.h</a></li>
-<li>POW_DIM&#160;:&#160;<a class="el" href="parameter_8h.html#aaf01a8b5289af20025d06e3fed70cc94">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#aaf01a8b5289af20025d06e3fed70cc94">parameter_backup.h</a></li>
-<li>power_two&#160;:&#160;<a class="el" href="parameter_8h.html#aeba852fb02971e4482e14c08ee713d2e">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#aeba852fb02971e4482e14c08ee713d2e">parameter_backup.h</a></li>
-</ul>
-
-
-<h3><a id="index_r" name="index_r"></a>- r -</h3><ul>
-<li>real&#160;:&#160;<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a11d147c64891830c9e79b3315b1b2e21">parameter_backup.h</a></li>
-<li>relevantIndicesCounter&#160;:&#160;<a class="el" href="parallel_force_concept_8cpp.html#a82a080d0cd98e3ade9b2452814f99256">parallelForceConcept.cpp</a></li>
-</ul>
-
-
-<h3><a id="index_s" name="index_s"></a>- s -</h3><ul>
-<li>safeCudaCall&#160;:&#160;<a class="el" href="cuda__utilities_8cuh.html#abe7771cb08cf22f359b62a0e2360c73a">cuda_utilities.cuh</a></li>
-<li>SAFETY_FIRST&#160;:&#160;<a class="el" href="device__predictor__corrector__euler_8cu.html#a426db07191c557d04f722b524e1c2750">device_predictor_corrector_euler.cu</a></li>
-<li>SAFETY_LEVEL&#160;:&#160;<a class="el" href="parameter_8h.html#a2729380bfdb6b0dd9a3397b9289efa48">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a2729380bfdb6b0dd9a3397b9289efa48">parameter_backup.h</a></li>
-<li>SetDeviceBeforeInit()&#160;:&#160;<a class="el" href="src_2main_8cpp.html#ac7925a5469b04c01679b20577671c975">main.cpp</a></li>
-<li>SHEPARD_CORRECTION&#160;:&#160;<a class="el" href="parameter_8h.html#a9ccf4fc298f663e26a4113cba801d309">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a9ccf4fc298f663e26a4113cba801d309">parameter_backup.h</a></li>
-<li>SI_UNITS&#160;:&#160;<a class="el" href="parameter_8h.html#a7f8a323fd4f2e0f27e75f64a2fc89560">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a7f8a323fd4f2e0f27e75f64a2fc89560">parameter_backup.h</a></li>
-<li>SimulationParameters&#160;:&#160;<a class="el" href="parameter_8h.html#a2d8e8822fa3f08e0aab03e66949b9faf">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a2d8e8822fa3f08e0aab03e66949b9faf">parameter_backup.h</a></li>
-<li>SML_CORRECTION&#160;:&#160;<a class="el" href="parameter_8h.html#a6aa17c07e431d51128212d435abe8fa7">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a6aa17c07e431d51128212d435abe8fa7">parameter_backup.h</a></li>
-<li>SOLID&#160;:&#160;<a class="el" href="parameter_8h.html#aa8abfd58ea514228abd69d8f6330e91d">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#aa8abfd58ea514228abd69d8f6330e91d">parameter_backup.h</a></li>
-<li>SPH_EQU_VERSION&#160;:&#160;<a class="el" href="parameter_8h.html#adfcbe08a8478076a0a1e81f0f18a5eec">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#adfcbe08a8478076a0a1e81f0f18a5eec">parameter_backup.h</a></li>
-<li>SPH_SIM&#160;:&#160;<a class="el" href="parameter_8h.html#aee098c78a6f351cbe4286338f58f2330">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#aee098c78a6f351cbe4286338f58f2330">parameter_backup.h</a></li>
-<li>spiky_p&#160;:&#160;<a class="el" href="kernel_8cu.html#a92252b0433c1b484f52a9c44291dc833">kernel.cu</a>, <a class="el" href="kernel__handler_8cu.html#a92252b0433c1b484f52a9c44291dc833">kernel_handler.cu</a></li>
-<li>symbolicForce()&#160;:&#160;<a class="el" href="parallel_force_concept_8cpp.html#a5ad90577a90240259fc6ba230b4f276c">parallelForceConcept.cpp</a></li>
-</ul>
-
-
-<h3><a id="index_t" name="index_t"></a>- t -</h3><ul>
-<li>TIME&#160;:&#160;<a class="el" href="include_2utils_2_logger_8h.html#ac475e37d7ead782f5f80864a2156b631ae9e4c627760f36823cdd153c24229157">logger.h</a></li>
-<li>TOLERANCE_WANTED_NUMBER_OF_INTERACTIONS&#160;:&#160;<a class="el" href="sph_8cu.html#a61d84c41303fab5ba05f476d4078024b">sph.cu</a></li>
-<li>TRACE&#160;:&#160;<a class="el" href="include_2utils_2_logger_8h.html#ac475e37d7ead782f5f80864a2156b631a7fa27e82c6c4f69434225ed81e5d151e">logger.h</a></li>
-<li>typeLog&#160;:&#160;<a class="el" href="include_2utils_2_logger_8h.html#ac475e37d7ead782f5f80864a2156b631">logger.h</a></li>
-<li>typelog&#160;:&#160;<a class="el" href="_h5_renderer_2include_2_logger_8h.html#ad128d497a8c1df5354c605d14677248d">Logger.h</a></li>
-</ul>
-
-
-<h3><a id="index_u" name="index_u"></a>- u -</h3><ul>
-<li>UNIT_TESTING&#160;:&#160;<a class="el" href="parameter__backup_8h.html#a3178042a14309a5af3336234b7b0a9d1">parameter_backup.h</a></li>
-</ul>
-
-
-<h3><a id="index_v" name="index_v"></a>- v -</h3><ul>
-<li>VARIABLE_SML&#160;:&#160;<a class="el" href="parameter_8h.html#a908e2164c823365528caa4263006a2dc">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a908e2164c823365528caa4263006a2dc">parameter_backup.h</a></li>
-</ul>
-
-
-<h3><a id="index_w" name="index_w"></a>- w -</h3><ul>
-<li>WARN&#160;:&#160;<a class="el" href="_h5_renderer_2include_2_logger_8h.html#ad128d497a8c1df5354c605d14677248da74dac7ac23d5b810db6d4067f14e8676">Logger.h</a>, <a class="el" href="include_2utils_2_logger_8h.html#ac475e37d7ead782f5f80864a2156b631a74dac7ac23d5b810db6d4067f14e8676">logger.h</a></li>
-<li>wendlandc2_p&#160;:&#160;<a class="el" href="kernel_8cu.html#a97f116d97c81dd75423bce346322358d">kernel.cu</a>, <a class="el" href="kernel__handler_8cu.html#a97f116d97c81dd75423bce346322358d">kernel_handler.cu</a></li>
-<li>wendlandc4_p&#160;:&#160;<a class="el" href="kernel_8cu.html#aa99528049be73f4475232eb0ee5ba90b">kernel.cu</a>, <a class="el" href="kernel__handler_8cu.html#aa99528049be73f4475232eb0ee5ba90b">kernel_handler.cu</a></li>
-<li>wendlandc6_p&#160;:&#160;<a class="el" href="kernel_8cu.html#a3ef3bb999e399e707f35cbb68b70d279">kernel.cu</a>, <a class="el" href="kernel__handler_8cu.html#a3ef3bb999e399e707f35cbb68b70d279">kernel_handler.cu</a></li>
-</ul>
-
-
-<h3><a id="index_z" name="index_z"></a>- z -</h3><ul>
-<li>ZERO_CONSISTENCY&#160;:&#160;<a class="el" href="parameter_8h.html#a023199b47f10b9b13d03469b251c69b0">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a023199b47f10b9b13d03469b251c69b0">parameter_backup.h</a></li>
+<li>ARTIFICIAL_STRESS&#160;:&#160;<a class="el" href="include_2parameter_8h.html#ac8bcf3d24e69483eae9d2a54be4d0f6e">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#ac8bcf3d24e69483eae9d2a54be4d0f6e">parameter_backup.h</a>, <a class="el" href="testcases_2plummer_2parameter_8h.html#ac8bcf3d24e69483eae9d2a54be4d0f6e">parameter.h</a></li>
+<li>ARTIFICIAL_VISCOSITY&#160;:&#160;<a class="el" href="include_2parameter_8h.html#a7132b7f55f65be67016d71073417ddac">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a7132b7f55f65be67016d71073417ddac">parameter_backup.h</a>, <a class="el" href="testcases_2plummer_2parameter_8h.html#a7132b7f55f65be67016d71073417ddac">parameter.h</a></li>
+<li>AVERAGE_KERNELS&#160;:&#160;<a class="el" href="include_2parameter_8h.html#a14f0c1706287bea4992f1cc4624daafe">parameter.h</a>, <a class="el" href="parameter__backup_8h.html#a14f0c1706287bea4992f1cc4624daafe">parameter_backup.h</a>, <a class="el" href="testcases_2plummer_2parameter_8h.html#a14f0c1706287bea4992f1cc4624daafe">parameter.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
+    <!--
     milupHPC  - File Members<br />
-    Generated on Thu Jun 23 2022 16:11:21 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    Generated on Wed Jun 29 2022 14:58:39 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    -->
   </small></address>
 </body>
 <footer>
-  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
-  <div id="banner-footer-first"></div>
-  <div id="banner-footer-second"></div>
-  <script>
-    function topFunction() {
-      document.body.scrollTop = 0; // For Safari
-      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    }
-  </script>
+  <custom-footer color="white" background="#2E4053">
+    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
+    <div second>
+      <div style="text-align: center">
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+        </div>
+      </div>
+    </div>
+    <div third>
+      milupHPC  - File Members<br />
+      Generated on Wed Jun 29 2022 14:58:39 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    </div>
+  </custom-footer>
 </footer>
+<!--
+<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
+-->
+<script src="components/hamburger/runtime.js" type="text/javascript"></script><script src="components/hamburger/polyfills.js" type="text/javascript"></script><script src="components/hamburger/main.js" type="text/javascript"></script>
+<script src="components/header/runtime.js" type="text/javascript"></script><script src="components/header/polyfills.js" type="text/javascript"></script><script src="components/header/main.js" type="text/javascript"></script>
+<script src="components/icons/runtime.js" type="text/javascript"></script><script src="components/icons/polyfills.js" type="text/javascript"></script><script src="components/icons/main.js" type="text/javascript"></script>
+<script src="components/footer/runtime.js" type="text/javascript"></script><script src="components/footer/polyfills.js" type="text/javascript"></script><script src="components/footer/main.js" type="text/javascript"></script>
+<script src="components/dialog/runtime.js" type="text/javascript"></script><script src="components/dialog/polyfills.js" type="text/javascript"></script><script src="components/dialog/main.js" type="text/javascript"></script>
+<script src="components/copyable/runtime.js" type="text/javascript"></script><script src="components/copyable/polyfills.js" type="text/javascript"></script><script src="components/copyable/main.js" type="text/javascript"></script>
+<!--
+<script>
+  function toggle() {
+    var elem = document.getElementById("side-nav");
+    console.log(elem);
+    elem.toggleSideNav(false);
+  }
+</script>
+-->
+<!--
+<script>
+  function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  }
+</script>
+-->
 </html>
