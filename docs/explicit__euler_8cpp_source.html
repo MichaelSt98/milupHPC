@@ -1,14 +1,26 @@
-<!DOCTYPE html>
-<html>
-<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
--->
+<!doctype html>
+<html lang="en">
 <head>
+	<meta charset="utf-8">
+	<title>CodePortray</title>
+	<base href="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: src/integrator/explicit_euler.cpp Source File</title>
+	<title>src/integrator/explicit_euler.cpp Source File</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -22,42 +34,68 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
-	<!-- Add icon library -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<!-- Add font awesome icons -->
-	<!--HIGHLIGHT.JS INSTALL BEGIN
-	<link rel="stylesheet" href="github.min.css">
-	<script src="highlight.js"></script>
-	<script>
-		$(function() {
-			hljs.configure({useBR: false});
-			$(".fragment").each(function(i,node) {
-				$(node).removeClass("fragment");
-				hljs.highlightBlock(node);
-			});
-		});
-	</script>
-	HIGHLIGHT.JS INSTALL END-->
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<custom-header class="custom-header-class">
+	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
+	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
+	<div shortcuts style="display: table">
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
+		</div>
+		<!-- get the code ... -->
+		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
+		<div style="display: table-cell; padding-right: 2px">
+			<custom-dialog window-width="600px" window-height="400px">
+				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
+				<div title>Get the code: milupHPC!</div>
+				<div style="text-align: center; padding-top: 20px;">
+					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
+					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
+					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
+					<div style="padding-top: 40px">clone via HTTPS:</div>
+					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">clone via SSH:</div>
+					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
+					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
+				</div>
+				<!--<div footer>This is the footer</div>-->
+			</custom-dialog>
+		</div>
+		<!-- end: get the code .... -->
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
+		</div>
+		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
+	</div>
+</custom-header>
+	<!--
+	<custom-side-nav id="side-nav" nav-width="300">
+		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
+		<div>test</div>
+	</custom-side-nav>
+	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation <!-- src/integrator/explicit_euler.cpp Source File -->
+				milupHPC documentation
 			</span>
-			<!-- <span class="search">
-				<input type="text" placeholder="Search" onkeydown="search(this,event);">
-			</span> -->
 		</div>
-    <!--
-	<div class="icon-bar">
-		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
-		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
-		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
-	</div>
-	</div>
-	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -118,9 +156,9 @@ $(function() {
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="class_explicit_euler.html#ae0806733df0fb1fb0e5969faf32f94a3">   17</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_explicit_euler.html#ae0806733df0fb1fb0e5969faf32f94a3">ExplicitEuler::integrate</a>(<span class="keywordtype">int</span> step) {</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <a class="code hl_class" href="class_timer.html">Timer</a> timer;</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> time = 0.;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> time = 0.;</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> timeElapsed;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> timeElapsed;</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <a class="code hl_class" href="class_logger.html">Logger</a>(<a class="code hl_enumvalue" href="_h5_renderer_2include_2_logger_8h.html#ad128d497a8c1df5354c605d14677248da748005382152808a72b1a9177d9dc806">INFO</a>) &lt;&lt; <span class="stringliteral">&quot;ExplicitEuler::integrate()... currentTime: &quot;</span> &lt;&lt; *<a class="code hl_variable" href="class_miluphpc.html#adf0eff88f1bda011347b3d25069c95c5">simulationTimeHandler</a>-&gt;<a class="code hl_variable" href="class_simulation_time_handler.html#af4b1d834af3e1b0e8ff845fdf7ea4eac">h_currentTime</a></div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        &lt;&lt; <span class="stringliteral">&quot; | subEndTime: &quot;</span> &lt;&lt; *<a class="code hl_variable" href="class_miluphpc.html#adf0eff88f1bda011347b3d25069c95c5">simulationTimeHandler</a>-&gt;<a class="code hl_variable" href="class_simulation_time_handler.html#a9c4c4444bcfbb9e7ac93f60626005dd0">h_subEndTime</a></div>
@@ -146,7 +184,7 @@ $(function() {
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="class_miluphpc.html#ab40227f656a96808e4eca94cbae79280">simulationParameters</a>.<a class="code hl_variable" href="struct_simulation_parameters.html#a0b8883f78fbd76ea8aba5b9bdf665db8">loadBalancing</a> &amp;&amp; step != 0 &amp;&amp; step % <a class="code hl_variable" href="class_miluphpc.html#ab40227f656a96808e4eca94cbae79280">simulationParameters</a>.<a class="code hl_variable" href="struct_simulation_parameters.html#a247cfb5067e99555a8968a815911bed9">loadBalancingInterval</a> == 0) {</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>            <a class="code hl_function" href="class_miluphpc.html#a5d381afc3f62c196111e6a67cdeeedf5">dynamicLoadBalancing</a>(<a class="code hl_variable" href="class_miluphpc.html#ab40227f656a96808e4eca94cbae79280">simulationParameters</a>.<a class="code hl_variable" href="struct_simulation_parameters.html#a68a5daed65925cf16e9dc9b955702f70">loadBalancingBins</a>);</div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        }</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> elapsed = timer.<a class="code hl_function" href="class_timer.html#a6a89a613c2af9b0d1e5f7e4ba9e46c54">elapsed</a>();</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> elapsed = timer.<a class="code hl_function" href="class_timer.html#a6a89a613c2af9b0d1e5f7e4ba9e46c54">elapsed</a>();</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="comment">//totalTime += elapsed;</span></div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        <a class="code hl_class" href="class_logger.html">Logger</a>(<a class="code hl_enumvalue" href="include_2utils_2_logger_8h.html#ac475e37d7ead782f5f80864a2156b631ae9e4c627760f36823cdd153c24229157">TIME</a>) &lt;&lt; <span class="stringliteral">&quot;rhs::loadBalancing(): &quot;</span> &lt;&lt; elapsed &lt;&lt; <span class="stringliteral">&quot; ms&quot;</span>;</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <a class="code hl_variable" href="class_miluphpc.html#a498d9d13a75046f84623a6a8d16dda04">profiler</a>.<a class="code hl_function" href="class_h5_profiler.html#ae68abdc532941ad9cde82fee6534c9aa">value2file</a>(<a class="code hl_variable" href="namespace_profiler_ids_1_1_time.html#a77125d66b1e6d0a1056e05c1f52dcf82">ProfilerIds::Time::loadBalancing</a>, elapsed);</div>
@@ -176,7 +214,7 @@ $(function() {
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        <a class="code hl_variable" href="class_miluphpc.html#adf0eff88f1bda011347b3d25069c95c5">simulationTimeHandler</a>-&gt;<a class="code hl_function" href="class_simulation_time_handler.html#a403c2134ccf50387921bfec954404408">copy</a>(<a class="code hl_enumvalue" href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49a4f25ce835a523aaa2b2faedf4960f38c">To::device</a>);</div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="preprocessor">#if INTEGRATE_SML</span></div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_miluphpc.html#a25f5add3551272933e4ec733bc8bed03">particleHandler</a>-&gt;d_dsmldt, (<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>)0, <a class="code hl_variable" href="class_miluphpc.html#a79e77ce7b60388f4ea58e92b75bfb9de">numParticles</a>);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_miluphpc.html#a25f5add3551272933e4ec733bc8bed03">particleHandler</a>-&gt;d_dsmldt, (<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>)0, <a class="code hl_variable" href="class_miluphpc.html#a79e77ce7b60388f4ea58e92b75bfb9de">numParticles</a>);</div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        <a class="code hl_class" href="class_logger.html">Logger</a>(<a class="code hl_enumvalue" href="include_2utils_2_logger_8h.html#ac475e37d7ead782f5f80864a2156b631a7fa27e82c6c4f69434225ed81e5d151e">TRACE</a>) &lt;&lt; <span class="stringliteral">&quot;finished sub step - simulation time: &quot;</span> &lt;&lt; *<a class="code hl_variable" href="class_miluphpc.html#adf0eff88f1bda011347b3d25069c95c5">simulationTimeHandler</a>-&gt;<a class="code hl_variable" href="class_simulation_time_handler.html#af4b1d834af3e1b0e8ff845fdf7ea4eac">h_currentTime</a></div>
@@ -235,6 +273,7 @@ $(function() {
 <div class="ttc" id="aclass_timer_html"><div class="ttname"><a href="class_timer.html">Timer</a></div><div class="ttdef"><b>Definition:</b> <a href="timer_8h_source.html#l00015">timer.h:15</a></div></div>
 <div class="ttc" id="aclass_timer_html_a6a89a613c2af9b0d1e5f7e4ba9e46c54"><div class="ttname"><a href="class_timer.html#a6a89a613c2af9b0d1e5f7e4ba9e46c54">Timer::elapsed</a></div><div class="ttdeci">double elapsed() const</div><div class="ttdoc">Get elapsed time since instantiation/latest reset.</div><div class="ttdef"><b>Definition:</b> <a href="timer_8cpp_source.html#l00022">timer.cpp:22</a></div></div>
 <div class="ttc" id="aclass_timer_html_a9020542d73357a4eef512eefaf57524b"><div class="ttname"><a href="class_timer.html#a9020542d73357a4eef512eefaf57524b">Timer::reset</a></div><div class="ttdeci">void reset()</div><div class="ttdoc">Reset timer instance.</div><div class="ttdef"><b>Definition:</b> <a href="timer_8cpp_source.html#l00011">timer.cpp:11</a></div></div>
+<div class="ttc" id="ainclude_2parameter_8h_html_a11d147c64891830c9e79b3315b1b2e21"><div class="ttname"><a href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a></div><div class="ttdeci">double real</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00015">parameter.h:15</a></div></div>
 <div class="ttc" id="ainclude_2utils_2_logger_8h_html_ac475e37d7ead782f5f80864a2156b631a7fa27e82c6c4f69434225ed81e5d151e"><div class="ttname"><a href="include_2utils_2_logger_8h.html#ac475e37d7ead782f5f80864a2156b631a7fa27e82c6c4f69434225ed81e5d151e">TRACE</a></div><div class="ttdeci">@ TRACE</div><div class="ttdoc">info log type</div><div class="ttdef"><b>Definition:</b> <a href="include_2utils_2_logger_8h_source.html#l00049">logger.h:49</a></div></div>
 <div class="ttc" id="ainclude_2utils_2_logger_8h_html_ac475e37d7ead782f5f80864a2156b631ae9e4c627760f36823cdd153c24229157"><div class="ttname"><a href="include_2utils_2_logger_8h.html#ac475e37d7ead782f5f80864a2156b631ae9e4c627760f36823cdd153c24229157">TIME</a></div><div class="ttdeci">@ TIME</div><div class="ttdoc">error log type</div><div class="ttdef"><b>Definition:</b> <a href="include_2utils_2_logger_8h_source.html#l00053">logger.h:52</a></div></div>
 <div class="ttc" id="anamespace_explicit_euler_n_s_1_1_kernel_1_1_launch_html_ae57106fe187c020d2882ffe65faecc25"><div class="ttname"><a href="namespace_explicit_euler_n_s_1_1_kernel_1_1_launch.html#ae57106fe187c020d2882ffe65faecc25">ExplicitEulerNS::Kernel::Launch::update</a></div><div class="ttdeci">real update(Particles *particles, integer n, real dt)</div><div class="ttdoc">Wrapper for ExplicitEulerNS::Kernel::update().</div><div class="ttdef"><b>Definition:</b> <a href="device__explicit__euler_8cu_source.html#l00056">device_explicit_euler.cu:56</a></div></div>
@@ -247,30 +286,68 @@ $(function() {
 <div class="ttc" id="anamespace_profiler_ids_html_a75011decb303041b957c240bdd40026d"><div class="ttname"><a href="namespace_profiler_ids.html#a75011decb303041b957c240bdd40026d">ProfilerIds::ranges</a></div><div class="ttdeci">const char *const ranges</div><div class="ttdef"><b>Definition:</b> <a href="h5profiler_8h_source.html#l00031">h5profiler.h:31</a></div></div>
 <div class="ttc" id="anamespace_profiler_ids_html_ad13e3eace63e610c1eb36461ae4c86fd"><div class="ttname"><a href="namespace_profiler_ids.html#ad13e3eace63e610c1eb36461ae4c86fd">ProfilerIds::numParticles</a></div><div class="ttdeci">const char *const numParticles</div><div class="ttdef"><b>Definition:</b> <a href="h5profiler_8h_source.html#l00029">h5profiler.h:29</a></div></div>
 <div class="ttc" id="anamespacecuda_html_a96edb690f1eb4317fc5a936169735bfc"><div class="ttname"><a href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a></div><div class="ttdeci">void set(T *d_var, T val, std::size_t count=1)</div><div class="ttdoc">Set device memory to a specific value.</div><div class="ttdef"><b>Definition:</b> <a href="cuda__runtime_8h_source.html#l00056">cuda_runtime.h:56</a></div></div>
-<div class="ttc" id="aparameter_8h_html_a11d147c64891830c9e79b3315b1b2e21"><div class="ttname"><a href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a></div><div class="ttdeci">double real</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00015">parameter.h:15</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html"><div class="ttname"><a href="struct_simulation_parameters.html">SimulationParameters</a></div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00122">parameter.h:122</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_a0b8883f78fbd76ea8aba5b9bdf665db8"><div class="ttname"><a href="struct_simulation_parameters.html#a0b8883f78fbd76ea8aba5b9bdf665db8">SimulationParameters::loadBalancing</a></div><div class="ttdeci">bool loadBalancing</div><div class="ttdoc">apply load balancing</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00131">parameter.h:131</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_a247cfb5067e99555a8968a815911bed9"><div class="ttname"><a href="struct_simulation_parameters.html#a247cfb5067e99555a8968a815911bed9">SimulationParameters::loadBalancingInterval</a></div><div class="ttdeci">int loadBalancingInterval</div><div class="ttdoc">apply load balancing each x interval/simulation step</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00132">parameter.h:132</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_a68a5daed65925cf16e9dc9b955702f70"><div class="ttname"><a href="struct_simulation_parameters.html#a68a5daed65925cf16e9dc9b955702f70">SimulationParameters::loadBalancingBins</a></div><div class="ttdeci">int loadBalancingBins</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00133">parameter.h:133</a></div></div>
-<div class="ttc" id="astruct_simulation_parameters_html_afcade733412d5cb4835e789787242c2c"><div class="ttname"><a href="struct_simulation_parameters.html#afcade733412d5cb4835e789787242c2c">SimulationParameters::removeParticles</a></div><div class="ttdeci">bool removeParticles</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00150">parameter.h:150</a></div></div>
-<div class="ttc" id="astruct_to_html_a82e3c3ef1bbdd48b77f63af4813b6e49a4f25ce835a523aaa2b2faedf4960f38c"><div class="ttname"><a href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49a4f25ce835a523aaa2b2faedf4960f38c">To::device</a></div><div class="ttdeci">@ device</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00166">parameter.h:165</a></div></div>
-<div class="ttc" id="astruct_to_html_a82e3c3ef1bbdd48b77f63af4813b6e49a8178fb6c32eb3a82f7f25a25196cdbfc"><div class="ttname"><a href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49a8178fb6c32eb3a82f7f25a25196cdbfc">To::host</a></div><div class="ttdeci">@ host</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00165">parameter.h:165</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html"><div class="ttname"><a href="struct_simulation_parameters.html">SimulationParameters</a></div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00122">parameter.h:122</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_a0b8883f78fbd76ea8aba5b9bdf665db8"><div class="ttname"><a href="struct_simulation_parameters.html#a0b8883f78fbd76ea8aba5b9bdf665db8">SimulationParameters::loadBalancing</a></div><div class="ttdeci">bool loadBalancing</div><div class="ttdoc">apply load balancing</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00131">parameter.h:131</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_a247cfb5067e99555a8968a815911bed9"><div class="ttname"><a href="struct_simulation_parameters.html#a247cfb5067e99555a8968a815911bed9">SimulationParameters::loadBalancingInterval</a></div><div class="ttdeci">int loadBalancingInterval</div><div class="ttdoc">apply load balancing each x interval/simulation step</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00132">parameter.h:132</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_a68a5daed65925cf16e9dc9b955702f70"><div class="ttname"><a href="struct_simulation_parameters.html#a68a5daed65925cf16e9dc9b955702f70">SimulationParameters::loadBalancingBins</a></div><div class="ttdeci">int loadBalancingBins</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00133">parameter.h:133</a></div></div>
+<div class="ttc" id="astruct_simulation_parameters_html_afcade733412d5cb4835e789787242c2c"><div class="ttname"><a href="struct_simulation_parameters.html#afcade733412d5cb4835e789787242c2c">SimulationParameters::removeParticles</a></div><div class="ttdeci">bool removeParticles</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00150">parameter.h:150</a></div></div>
+<div class="ttc" id="astruct_to_html_a82e3c3ef1bbdd48b77f63af4813b6e49a4f25ce835a523aaa2b2faedf4960f38c"><div class="ttname"><a href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49a4f25ce835a523aaa2b2faedf4960f38c">To::device</a></div><div class="ttdeci">@ device</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00166">parameter.h:165</a></div></div>
+<div class="ttc" id="astruct_to_html_a82e3c3ef1bbdd48b77f63af4813b6e49a8178fb6c32eb3a82f7f25a25196cdbfc"><div class="ttname"><a href="struct_to.html#a82e3c3ef1bbdd48b77f63af4813b6e49a8178fb6c32eb3a82f7f25a25196cdbfc">To::host</a></div><div class="ttdeci">@ host</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00165">parameter.h:165</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
+    <!--
     milupHPC  - src/integrator/explicit_euler.cpp Source File<br />
-    Generated on Thu Jun 23 2022 16:11:19 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    Generated on Wed Jun 29 2022 11:18:49 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    -->
   </small></address>
 </body>
 <footer>
-  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
-  <div id="banner-footer-first"></div>
-  <div id="banner-footer-second"></div>
-  <script>
-    function topFunction() {
-      document.body.scrollTop = 0; // For Safari
-      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    }
-  </script>
+  <custom-footer color="white" background="#2E4053">
+    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
+    <div second>
+      <div style="text-align: center">
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+        </div>
+      </div>
+    </div>
+    <div third>
+      milupHPC  - src/integrator/explicit_euler.cpp Source File<br />
+      Generated on Wed Jun 29 2022 11:18:49 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    </div>
+  </custom-footer>
 </footer>
+<!--
+<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
+-->
+<script src="components/hamburger/runtime.js" type="module"></script><script src="components/hamburger/polyfills.js" type="module"></script><script src="components/hamburger/main.js" type="module"></script>
+<script src="components/header/runtime.js" type="module"></script><script src="components/header/polyfills.js" type="module"></script><script src="components/header/main.js" type="module"></script>
+<script src="components/icons/runtime.js" type="module"></script><script src="components/icons/polyfills.js" type="module"></script><script src="components/icons/main.js" type="module"></script>
+<script src="components/footer/runtime.js" type="module"></script><script src="components/footer/polyfills.js" type="module"></script><script src="components/footer/main.js" type="module"></script>
+<script src="components/dialog/runtime.js" type="module"></script><script src="components/dialog/polyfills.js" type="module"></script><script src="components/dialog/main.js" type="module"></script>
+<script src="components/copyable/runtime.js" type="module"></script><script src="components/copyable/polyfills.js" type="module"></script><script src="components/copyable/main.js" type="module"></script>
+<!--
+<script>
+  function toggle() {
+    var elem = document.getElementById("side-nav");
+    console.log(elem);
+    elem.toggleSideNav(false);
+  }
+</script>
+-->
+<!--
+<script>
+  function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  }
+</script>
+-->
 </html>

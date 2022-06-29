@@ -1,14 +1,26 @@
-<!DOCTYPE html>
-<html>
-<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
--->
+<!doctype html>
+<html lang="en">
 <head>
+	<meta charset="utf-8">
+	<title>CodePortray</title>
+	<base href="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: include/parameter_backup.h File Reference</title>
+	<title>include/parameter_backup.h File Reference</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -22,42 +34,68 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
-	<!-- Add icon library -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<!-- Add font awesome icons -->
-	<!--HIGHLIGHT.JS INSTALL BEGIN
-	<link rel="stylesheet" href="github.min.css">
-	<script src="highlight.js"></script>
-	<script>
-		$(function() {
-			hljs.configure({useBR: false});
-			$(".fragment").each(function(i,node) {
-				$(node).removeClass("fragment");
-				hljs.highlightBlock(node);
-			});
-		});
-	</script>
-	HIGHLIGHT.JS INSTALL END-->
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<custom-header class="custom-header-class">
+	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
+	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
+	<div shortcuts style="display: table">
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
+		</div>
+		<!-- get the code ... -->
+		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
+		<div style="display: table-cell; padding-right: 2px">
+			<custom-dialog window-width="600px" window-height="400px">
+				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
+				<div title>Get the code: milupHPC!</div>
+				<div style="text-align: center; padding-top: 20px;">
+					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
+					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
+					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
+					<div style="padding-top: 40px">clone via HTTPS:</div>
+					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">clone via SSH:</div>
+					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
+					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
+				</div>
+				<!--<div footer>This is the footer</div>-->
+			</custom-dialog>
+		</div>
+		<!-- end: get the code .... -->
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
+		</div>
+		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
+	</div>
+</custom-header>
+	<!--
+	<custom-side-nav id="side-nav" nav-width="300">
+		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
+		<div>test</div>
+	</custom-side-nav>
+	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation <!-- include/parameter_backup.h File Reference -->
+				milupHPC documentation
 			</span>
-			<!-- <span class="search">
-				<input type="text" placeholder="Search" onkeydown="search(this,event);">
-			</span> -->
 		</div>
-    <!--
-	<div class="icon-bar">
-		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
-		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
-		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
-	</div>
-	</div>
-	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -170,7 +208,7 @@ Macros</h2></td></tr>
 <tr class="memitem:aeba852fb02971e4482e14c08ee713d2e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parameter__backup_8h.html#aeba852fb02971e4482e14c08ee713d2e">power_two</a>(x)&#160;&#160;&#160;(1 &lt;&lt; (x))</td></tr>
 <tr class="memdesc:aeba852fb02971e4482e14c08ee713d2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">function: \( 2^{x} \)  <a href="parameter__backup_8h.html#aeba852fb02971e4482e14c08ee713d2e">More...</a><br /></td></tr>
 <tr class="separator:aeba852fb02971e4482e14c08ee713d2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf01a8b5289af20025d06e3fed70cc94"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parameter__backup_8h.html#aaf01a8b5289af20025d06e3fed70cc94">POW_DIM</a>&#160;&#160;&#160;<a class="el" href="parameter__backup_8h.html#aeba852fb02971e4482e14c08ee713d2e">power_two</a>(<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>)</td></tr>
+<tr class="memitem:aaf01a8b5289af20025d06e3fed70cc94"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parameter__backup_8h.html#aaf01a8b5289af20025d06e3fed70cc94">POW_DIM</a>&#160;&#160;&#160;<a class="el" href="testcases_2sedov_2parameter_8h.html#aeba852fb02971e4482e14c08ee713d2e">power_two</a>(<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>)</td></tr>
 <tr class="memdesc:aaf01a8b5289af20025d06e3fed70cc94"><td class="mdescLeft">&#160;</td><td class="mdescRight">\( 2^{DIM} \) which corresponds to the number of children for each node  <a href="parameter__backup_8h.html#aaf01a8b5289af20025d06e3fed70cc94">More...</a><br /></td></tr>
 <tr class="separator:aaf01a8b5289af20025d06e3fed70cc94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7f8a323fd4f2e0f27e75f64a2fc89560"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parameter__backup_8h.html#a7f8a323fd4f2e0f27e75f64a2fc89560">SI_UNITS</a>&#160;&#160;&#160;1</td></tr>
@@ -247,7 +285,7 @@ Macros</h2></td></tr>
 <tr class="separator:a6ffbcf2ba306e9583d21988f8a1acaaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9a0ef30d7f55ac5740a18f33c60ba28"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parameter__backup_8h.html#ae9a0ef30d7f55ac5740a18f33c60ba28">FORCES_FACT</a>&#160;&#160;&#160;0.2</td></tr>
 <tr class="separator:ae9a0ef30d7f55ac5740a18f33c60ba28"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af78670ee54c1203d613f8fb0e022d214"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parameter__backup_8h.html#af78670ee54c1203d613f8fb0e022d214">DBL_MAX</a>&#160;&#160;&#160;<a class="el" href="parameter__backup_8h.html#a04c5fddff3aaef7523b3419c171f1884">dbl_max</a>;</td></tr>
+<tr class="memitem:af78670ee54c1203d613f8fb0e022d214"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parameter__backup_8h.html#af78670ee54c1203d613f8fb0e022d214">DBL_MAX</a>&#160;&#160;&#160;<a class="el" href="testcases_2sedov_2parameter_8h.html#a04c5fddff3aaef7523b3419c171f1884">dbl_max</a>;</td></tr>
 <tr class="separator:af78670ee54c1203d613f8fb0e022d214"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
@@ -267,15 +305,25 @@ Typedefs</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:a5a8162808ef47c46eaf46274eab03e6c"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parameter__backup_8h.html#a5a8162808ef47c46eaf46274eab03e6c">EquationOfStates</a> { <br />
-&#160;&#160;<a class="el" href="parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c">EOS_TYPE_POLYTROPIC_GAS</a> = 0
-, <a class="el" href="parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57">EOS_TYPE_ISOTHERMAL_GAS</a> = 3
-, <a class="el" href="parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c">EOS_TYPE_IDEAL_GAS</a> = 9
-, <a class="el" href="parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c">EOS_TYPE_LOCALLY_ISOTHERMAL_GAS</a> = 12
+&#160;&#160;<a class="el" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c">EOS_TYPE_POLYTROPIC_GAS</a> = 0
+, <a class="el" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57">EOS_TYPE_ISOTHERMAL_GAS</a> = 3
+, <a class="el" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c">EOS_TYPE_IDEAL_GAS</a> = 9
+, <a class="el" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c">EOS_TYPE_LOCALLY_ISOTHERMAL_GAS</a> = 12
 , <br />
 &#160;&#160;<a class="el" href="parameter__backup_8h.html#a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c">EOS_TYPE_POLYTROPIC_GAS</a> = 0
 , <a class="el" href="parameter__backup_8h.html#a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57">EOS_TYPE_ISOTHERMAL_GAS</a> = 3
 , <a class="el" href="parameter__backup_8h.html#a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c">EOS_TYPE_IDEAL_GAS</a> = 9
 , <a class="el" href="parameter__backup_8h.html#a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c">EOS_TYPE_LOCALLY_ISOTHERMAL_GAS</a> = 12
+, <br />
+&#160;&#160;<a class="el" href="testcases_2plummer_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c">EOS_TYPE_POLYTROPIC_GAS</a> = 0
+, <a class="el" href="testcases_2plummer_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57">EOS_TYPE_ISOTHERMAL_GAS</a> = 3
+, <a class="el" href="testcases_2plummer_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c">EOS_TYPE_IDEAL_GAS</a> = 9
+, <a class="el" href="testcases_2plummer_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c">EOS_TYPE_LOCALLY_ISOTHERMAL_GAS</a> = 12
+, <br />
+&#160;&#160;<a class="el" href="testcases_2sedov_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c">EOS_TYPE_POLYTROPIC_GAS</a> = 0
+, <a class="el" href="testcases_2sedov_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57">EOS_TYPE_ISOTHERMAL_GAS</a> = 3
+, <a class="el" href="testcases_2sedov_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c">EOS_TYPE_IDEAL_GAS</a> = 9
+, <a class="el" href="testcases_2sedov_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c">EOS_TYPE_LOCALLY_ISOTHERMAL_GAS</a> = 12
 <br />
  }</td></tr>
 <tr class="memdesc:a5a8162808ef47c46eaf46274eab03e6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implemented equation of states.  <a href="parameter__backup_8h.html#a5a8162808ef47c46eaf46274eab03e6c">More...</a><br /></td></tr>
@@ -283,7 +331,7 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a04c5fddff3aaef7523b3419c171f1884"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parameter__backup_8h.html#a04c5fddff3aaef7523b3419c171f1884">dbl_max</a> = std::numeric_limits&lt;<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&gt;::max()</td></tr>
+<tr class="memitem:a04c5fddff3aaef7523b3419c171f1884"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="parameter__backup_8h.html#a04c5fddff3aaef7523b3419c171f1884">dbl_max</a> = std::numeric_limits&lt;<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&gt;::max()</td></tr>
 <tr class="separator:a04c5fddff3aaef7523b3419c171f1884"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
@@ -378,7 +426,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define DBL_MAX&#160;&#160;&#160;<a class="el" href="parameter__backup_8h.html#a04c5fddff3aaef7523b3419c171f1884">dbl_max</a>;</td>
+          <td class="memname">#define DBL_MAX&#160;&#160;&#160;<a class="el" href="testcases_2sedov_2parameter_8h.html#a04c5fddff3aaef7523b3419c171f1884">dbl_max</a>;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -762,7 +810,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define POW_DIM&#160;&#160;&#160;<a class="el" href="parameter__backup_8h.html#aeba852fb02971e4482e14c08ee713d2e">power_two</a>(<a class="el" href="parameter__backup_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>)</td>
+          <td class="memname">#define POW_DIM&#160;&#160;&#160;<a class="el" href="testcases_2sedov_2parameter_8h.html#aeba852fb02971e4482e14c08ee713d2e">power_two</a>(<a class="el" href="testcases_2sedov_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -991,7 +1039,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef int <a class="el" href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a></td>
+          <td class="memname">typedef int <a class="el" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1007,7 +1055,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef int <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a></td>
+          <td class="memname">typedef int <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1023,7 +1071,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef unsigned long <a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a></td>
+          <td class="memname">typedef unsigned long <a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1039,7 +1087,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef double <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a></td>
+          <td class="memname">typedef double <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1087,7 +1135,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6c">EquationOfStates</a></td>
+          <td class="memname">enum <a class="el" href="include_2parameter_8h.html#a5a8162808ef47c46eaf46274eab03e6c">EquationOfStates</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1116,6 +1164,20 @@ Variables</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c" name="a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c"></a>EOS_TYPE_LOCALLY_ISOTHERMAL_GAS&#160;</td><td class="fielddoc"><p >locally isothermal gas: \( p = c_s^2 \cdot \rho \) </p>
 </td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c" name="a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c"></a>EOS_TYPE_POLYTROPIC_GAS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57" name="a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57"></a>EOS_TYPE_ISOTHERMAL_GAS&#160;</td><td class="fielddoc"><p >polytropic <a class="el" href="namespace_e_o_s.html" title="Equation of states.">EOS</a> for gas, needs polytropic_K and polytropic_gamma in material.cfg file </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c" name="a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c"></a>EOS_TYPE_IDEAL_GAS&#160;</td><td class="fielddoc"><p >this is pure molecular hydrogen at 10 K </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c" name="a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c"></a>EOS_TYPE_LOCALLY_ISOTHERMAL_GAS&#160;</td><td class="fielddoc"><p >ideal gas equation, set polytropic_gamma in material.cfg </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c" name="a5a8162808ef47c46eaf46274eab03e6caff17993e00b44a893c5aa827f4d8b54c"></a>EOS_TYPE_POLYTROPIC_GAS&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57" name="a5a8162808ef47c46eaf46274eab03e6ca91836d27e4a5f1c4e02931e04e12ab57"></a>EOS_TYPE_ISOTHERMAL_GAS&#160;</td><td class="fielddoc"><p >polytropic <a class="el" href="namespace_e_o_s.html" title="Equation of states.">EOS</a> for gas, needs polytropic_K and polytropic_gamma in material.cfg file </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c" name="a5a8162808ef47c46eaf46274eab03e6ca702d27dfbcdb45b468403a544448b14c"></a>EOS_TYPE_IDEAL_GAS&#160;</td><td class="fielddoc"><p >this is pure molecular hydrogen at 10 K </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c" name="a5a8162808ef47c46eaf46274eab03e6ca2603e214a79450f54ff467b62ee8c14c"></a>EOS_TYPE_LOCALLY_ISOTHERMAL_GAS&#160;</td><td class="fielddoc"><p >ideal gas equation, set polytropic_gamma in material.cfg </p>
+</td></tr>
 </table>
 
 <p class="definition">Definition at line <a class="el" href="parameter__backup_8h_source.html#l00350">350</a> of file <a class="el" href="parameter__backup_8h_source.html">parameter_backup.h</a>.</p>
@@ -1133,7 +1195,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dbl_max = std::numeric_limits&lt;<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&gt;::max()</td>
+          <td class="memname">constexpr <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dbl_max = std::numeric_limits&lt;<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&gt;::max()</td>
         </tr>
       </table>
   </td>
@@ -1150,19 +1212,58 @@ Variables</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
+    <!--
     milupHPC  - include/parameter_backup.h File Reference<br />
-    Generated on Thu Jun 23 2022 16:11:19 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    Generated on Wed Jun 29 2022 11:18:50 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    -->
   </small></address>
 </body>
 <footer>
-  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
-  <div id="banner-footer-first"></div>
-  <div id="banner-footer-second"></div>
-  <script>
-    function topFunction() {
-      document.body.scrollTop = 0; // For Safari
-      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    }
-  </script>
+  <custom-footer color="white" background="#2E4053">
+    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
+    <div second>
+      <div style="text-align: center">
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+        </div>
+      </div>
+    </div>
+    <div third>
+      milupHPC  - include/parameter_backup.h File Reference<br />
+      Generated on Wed Jun 29 2022 11:18:50 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    </div>
+  </custom-footer>
 </footer>
+<!--
+<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
+-->
+<script src="components/hamburger/runtime.js" type="module"></script><script src="components/hamburger/polyfills.js" type="module"></script><script src="components/hamburger/main.js" type="module"></script>
+<script src="components/header/runtime.js" type="module"></script><script src="components/header/polyfills.js" type="module"></script><script src="components/header/main.js" type="module"></script>
+<script src="components/icons/runtime.js" type="module"></script><script src="components/icons/polyfills.js" type="module"></script><script src="components/icons/main.js" type="module"></script>
+<script src="components/footer/runtime.js" type="module"></script><script src="components/footer/polyfills.js" type="module"></script><script src="components/footer/main.js" type="module"></script>
+<script src="components/dialog/runtime.js" type="module"></script><script src="components/dialog/polyfills.js" type="module"></script><script src="components/dialog/main.js" type="module"></script>
+<script src="components/copyable/runtime.js" type="module"></script><script src="components/copyable/polyfills.js" type="module"></script><script src="components/copyable/main.js" type="module"></script>
+<!--
+<script>
+  function toggle() {
+    var elem = document.getElementById("side-nav");
+    console.log(elem);
+    elem.toggleSideNav(false);
+  }
+</script>
+-->
+<!--
+<script>
+  function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  }
+</script>
+-->
 </html>

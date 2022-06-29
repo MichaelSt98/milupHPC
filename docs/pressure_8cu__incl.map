@@ -3,7 +3,7 @@
 <area shape="rect" id="node2" href="$pressure_8cuh.html" title="Pressure calculation in dependence of the equation of states." alt="" coords="130,87,321,114"/>
 <area shape="rect" id="node15" title=" " alt="" coords="345,80,484,121"/>
 <area shape="rect" id="node3" href="$particles_8cuh.html" title="Particle struct as Structure of arrays both instantiable on host and device." alt="" coords="79,169,187,196"/>
-<area shape="rect" id="node4" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="245,393,336,420"/>
+<area shape="rect" id="node4" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="245,393,336,420"/>
 <area shape="rect" id="node7" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="263,244,449,271"/>
 <area shape="rect" id="node9" href="$cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers." alt="" coords="207,319,318,345"/>
 <area shape="rect" id="node12" href="$material_8cuh.html" title="Material parameters and settings." alt="" coords="529,169,692,196"/>

@@ -10,6 +10,5 @@ var searchData=
   ['device_5fpredictor_5fcorrector_5feuler_2ecuh_7',['device_predictor_corrector_euler.cuh',['../device__predictor__corrector__euler_8cuh.html',1,'']]],
   ['device_5frhs_2ecu_8',['device_rhs.cu',['../device__rhs_8cu.html',1,'']]],
   ['device_5frhs_2ecuh_9',['device_rhs.cuh',['../device__rhs_8cuh.html',1,'']]],
-  ['digests_2emd_10',['DIGESTS.md',['../_d_i_g_e_s_t_s_8md.html',1,'']]],
-  ['doxyfile_2einc_11',['doxyfile.inc',['../doxyfile_8inc.html',1,'']]]
+  ['doxyfile_2einc_10',['doxyfile.inc',['../doxyfile_8inc.html',1,'']]]
 ];

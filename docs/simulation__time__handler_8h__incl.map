@@ -3,7 +3,7 @@
 <area shape="rect" id="node2" href="$simulation__time_8cuh.html" title="Simulation time related variables and functions instantiable on device and host." alt="" coords="139,95,278,121"/>
 <area shape="rect" id="node8" href="$cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers." alt="" coords="5,244,116,271"/>
 <area shape="rect" id="node10" title=" " alt="" coords="302,95,406,121"/>
-<area shape="rect" id="node3" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="238,319,329,345"/>
+<area shape="rect" id="node3" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="238,319,329,345"/>
 <area shape="rect" id="node6" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="115,169,302,196"/>
 <area shape="rect" id="node4" title=" " alt="" coords="257,393,310,420"/>
 <area shape="rect" id="node5" title=" " alt="" coords="146,393,218,420"/>

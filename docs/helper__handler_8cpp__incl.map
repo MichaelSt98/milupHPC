@@ -2,7 +2,7 @@
 <area shape="rect" id="node1" title=" " alt="" coords="56,5,208,32"/>
 <area shape="rect" id="node2" href="$helper__handler_8h.html" title=" " alt="" coords="45,80,218,107"/>
 <area shape="rect" id="node3" href="$helper_8cuh.html" title=" " alt="" coords="91,155,172,181"/>
-<area shape="rect" id="node4" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="68,379,158,405"/>
+<area shape="rect" id="node4" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="68,379,158,405"/>
 <area shape="rect" id="node16" title=" " alt="" coords="196,155,251,181"/>
 <area shape="rect" id="node7" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="104,229,290,256"/>
 <area shape="rect" id="node9" href="$cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers." alt="" coords="30,304,140,331"/>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>CodePortray</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <!-- Angular Material icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dialog/styles.css">
+  <link rel="stylesheet" href="icons/styles.css">
+  <!--<link rel="stylesheet" href="copyable/styles.css">-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<body>
+<custom-dialog window-width="600px" window-height="400px">
+  <span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
+  this is also an div
+  <div>is this displaying???</div>
+  <custom-icon icon="github" color="white" background="#2A2D32"></custom-icon>
+</custom-dialog>
+
+<custom-icon icon="github" color="white" background="#2A2D32"></custom-icon>
+<custom-icon icon="linkedin" color="white" background="#2A2D32"></custom-icon>
+<div content style="display: flex; margin: 0; padding: 0;">
+  <custom-icon icon="github" color="white" background="#2A2D32"></custom-icon>
+  <custom-icon icon="linkedin" color="white" background="#2A2D32"></custom-icon>
+</div>
+
+<div><custom-icon icon="linkedin" color="white" background="#2A2D32"></custom-icon></div>
+
+<ng-template modal>This is a template</ng-template>
+
+<script src="icons/runtime.js" type="module"></script><script src="icons/polyfills.js" type="module"></script><script src="icons/main.js" type="module"></script>
+<script src="dialog/runtime.js" type="module"></script><script src="dialog/polyfills.js" type="module"></script><script src="dialog/main.js" type="module"></script>
+
+</body>
+</html>

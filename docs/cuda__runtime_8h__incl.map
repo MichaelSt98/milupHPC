@@ -1,7 +1,7 @@
 <map id="include/cuda_utils/cuda_runtime.h" name="include/cuda_utils/cuda_runtime.h">
 <area shape="rect" id="node1" title="CUDA runtime functionalities and wrappers." alt="" coords="79,5,206,47"/>
 <area shape="rect" id="node2" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="81,95,204,121"/>
-<area shape="rect" id="node5" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="202,169,305,196"/>
+<area shape="rect" id="node5" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="202,169,305,196"/>
 <area shape="rect" id="node3" title=" " alt="" coords="40,244,112,271"/>
 <area shape="rect" id="node4" title=" " alt="" coords="23,169,84,196"/>
 <area shape="rect" id="node7" title=" " alt="" coords="108,169,177,196"/>

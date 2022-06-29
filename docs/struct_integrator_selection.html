@@ -1,14 +1,26 @@
-<!DOCTYPE html>
-<html>
-<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
--->
+<!doctype html>
+<html lang="en">
 <head>
+	<meta charset="utf-8">
+	<title>CodePortray</title>
+	<base href="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: IntegratorSelection Struct Reference</title>
+	<title>IntegratorSelection Struct Reference</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -22,42 +34,68 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
-	<!-- Add icon library -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<!-- Add font awesome icons -->
-	<!--HIGHLIGHT.JS INSTALL BEGIN
-	<link rel="stylesheet" href="github.min.css">
-	<script src="highlight.js"></script>
-	<script>
-		$(function() {
-			hljs.configure({useBR: false});
-			$(".fragment").each(function(i,node) {
-				$(node).removeClass("fragment");
-				hljs.highlightBlock(node);
-			});
-		});
-	</script>
-	HIGHLIGHT.JS INSTALL END-->
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<custom-header class="custom-header-class">
+	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
+	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
+	<div shortcuts style="display: table">
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
+		</div>
+		<!-- get the code ... -->
+		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
+		<div style="display: table-cell; padding-right: 2px">
+			<custom-dialog window-width="600px" window-height="400px">
+				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
+				<div title>Get the code: milupHPC!</div>
+				<div style="text-align: center; padding-top: 20px;">
+					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
+					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
+					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
+					<div style="padding-top: 40px">clone via HTTPS:</div>
+					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">clone via SSH:</div>
+					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
+					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
+				</div>
+				<!--<div footer>This is the footer</div>-->
+			</custom-dialog>
+		</div>
+		<!-- end: get the code .... -->
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
+		</div>
+		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
+	</div>
+</custom-header>
+	<!--
+	<custom-side-nav id="side-nav" nav-width="300">
+		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
+		<div>test</div>
+	</custom-side-nav>
+	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation <!-- IntegratorSelection Struct Reference -->
+				milupHPC documentation
 			</span>
-			<!-- <span class="search">
-				<input type="text" placeholder="Search" onkeydown="search(this,event);">
-			</span> -->
 		</div>
-    <!--
-	<div class="icon-bar">
-		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
-		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
-		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
-	</div>
-	</div>
-	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -105,7 +143,7 @@ $(function() {
 <p>Available integrators.  
  <a href="struct_integrator_selection.html#details">More...</a></p>
 
-<p><code>#include &quot;<a class="el" href="parameter_8h_source.html">parameter.h</a>&quot;</code></p>
+<p><code>#include &quot;<a class="el" href="include_2parameter_8h_source.html">parameter.h</a>&quot;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for IntegratorSelection:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -122,26 +160,82 @@ Public Types</h2></td></tr>
 <tr class="memitem:a22b2e895a1a87c3aabe7afd055a51603"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">Type</a> { <br />
 &#160;&#160;<a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">explicit_euler</a>
 , <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce">predictor_corrector_euler</a>
-, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a950b141c056a65298415076fd64e1495">leapfrog</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca">leapfrog</a>
 , <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">explicit_euler</a>
 , <br />
 &#160;&#160;<a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce">predictor_corrector_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">explicit_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce">predictor_corrector_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca">leapfrog</a>
+, <br />
+&#160;&#160;<a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">explicit_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce">predictor_corrector_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca">leapfrog</a>
 <br />
  }</td></tr>
 <tr class="separator:a22b2e895a1a87c3aabe7afd055a51603"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a22b2e895a1a87c3aabe7afd055a51603"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">Type</a> { <br />
 &#160;&#160;<a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">explicit_euler</a>
 , <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce">predictor_corrector_euler</a>
-, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a950b141c056a65298415076fd64e1495">leapfrog</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca">leapfrog</a>
 , <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">explicit_euler</a>
 , <br />
 &#160;&#160;<a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce">predictor_corrector_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">explicit_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce">predictor_corrector_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca">leapfrog</a>
+, <br />
+&#160;&#160;<a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">explicit_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce">predictor_corrector_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca">leapfrog</a>
+<br />
+ }</td></tr>
+<tr class="separator:a22b2e895a1a87c3aabe7afd055a51603"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22b2e895a1a87c3aabe7afd055a51603"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">Type</a> { <br />
+&#160;&#160;<a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">explicit_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce">predictor_corrector_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca">leapfrog</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">explicit_euler</a>
+, <br />
+&#160;&#160;<a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce">predictor_corrector_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">explicit_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce">predictor_corrector_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca">leapfrog</a>
+, <br />
+&#160;&#160;<a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">explicit_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce">predictor_corrector_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca">leapfrog</a>
+<br />
+ }</td></tr>
+<tr class="separator:a22b2e895a1a87c3aabe7afd055a51603"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22b2e895a1a87c3aabe7afd055a51603"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">Type</a> { <br />
+&#160;&#160;<a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">explicit_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce">predictor_corrector_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca">leapfrog</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">explicit_euler</a>
+, <br />
+&#160;&#160;<a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce">predictor_corrector_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">explicit_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce">predictor_corrector_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca">leapfrog</a>
+, <br />
+&#160;&#160;<a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15">explicit_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce">predictor_corrector_euler</a>
+, <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca">leapfrog</a>
 <br />
  }</td></tr>
 <tr class="separator:a22b2e895a1a87c3aabe7afd055a51603"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a8d1ddbcd7b499bd6addcfe088d079da7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_integrator_selection.html#a8d1ddbcd7b499bd6addcfe088d079da7">IntegratorSelection</a> (<a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">Type</a> t)</td></tr>
+<tr class="separator:a8d1ddbcd7b499bd6addcfe088d079da7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26f612d153be32b152665b427be3d276"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_integrator_selection.html#a26f612d153be32b152665b427be3d276">operator Type</a> () const</td></tr>
+<tr class="separator:a26f612d153be32b152665b427be3d276"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d1ddbcd7b499bd6addcfe088d079da7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_integrator_selection.html#a8d1ddbcd7b499bd6addcfe088d079da7">IntegratorSelection</a> (<a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">Type</a> t)</td></tr>
+<tr class="separator:a8d1ddbcd7b499bd6addcfe088d079da7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26f612d153be32b152665b427be3d276"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_integrator_selection.html#a26f612d153be32b152665b427be3d276">operator Type</a> () const</td></tr>
+<tr class="separator:a26f612d153be32b152665b427be3d276"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d1ddbcd7b499bd6addcfe088d079da7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_integrator_selection.html#a8d1ddbcd7b499bd6addcfe088d079da7">IntegratorSelection</a> (<a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">Type</a> t)</td></tr>
 <tr class="separator:a8d1ddbcd7b499bd6addcfe088d079da7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26f612d153be32b152665b427be3d276"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_integrator_selection.html#a26f612d153be32b152665b427be3d276">operator Type</a> () const</td></tr>
@@ -164,6 +258,12 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a955007a22bc40204bb57c22d0a743547"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a955007a22bc40204bb57c22d0a743547"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="struct_integrator_selection.html#a955007a22bc40204bb57c22d0a743547">operator T</a> () const</td></tr>
 <tr class="separator:a955007a22bc40204bb57c22d0a743547"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a955007a22bc40204bb57c22d0a743547"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a955007a22bc40204bb57c22d0a743547"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="struct_integrator_selection.html#a955007a22bc40204bb57c22d0a743547">operator T</a> () const</td></tr>
+<tr class="separator:a955007a22bc40204bb57c22d0a743547"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a955007a22bc40204bb57c22d0a743547"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a955007a22bc40204bb57c22d0a743547"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="struct_integrator_selection.html#a955007a22bc40204bb57c22d0a743547">operator T</a> () const</td></tr>
+<tr class="separator:a955007a22bc40204bb57c22d0a743547"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Available integrators. </p>
@@ -174,10 +274,10 @@ Private Member Functions</h2></td></tr>
 </ul>
 <dl class="section note"><dt>Note</dt><dd>The gravitational part is currently separated and not included in the predictor-corrector integration scheme for several reasons. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="parameter_8h_source.html#l00218">218</a> of file <a class="el" href="parameter_8h_source.html">parameter.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2parameter_8h_source.html#l00218">218</a> of file <a class="el" href="include_2parameter_8h_source.html">parameter.h</a>.</p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a22b2e895a1a87c3aabe7afd055a51603" name="a22b2e895a1a87c3aabe7afd055a51603"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a22b2e895a1a87c3aabe7afd055a51603">&#9670;&nbsp;</a></span>Type <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a22b2e895a1a87c3aabe7afd055a51603">&#9670;&nbsp;</a></span>Type <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -190,17 +290,23 @@ Private Member Functions</h2></td></tr>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15" name="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15"></a>explicit_euler&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce" name="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce"></a>predictor_corrector_euler&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603a950b141c056a65298415076fd64e1495" name="a22b2e895a1a87c3aabe7afd055a51603a950b141c056a65298415076fd64e1495"></a>leapfrog&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca" name="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca"></a>leapfrog&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15" name="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15"></a>explicit_euler&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce" name="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce"></a>predictor_corrector_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15" name="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15"></a>explicit_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce" name="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce"></a>predictor_corrector_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca" name="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca"></a>leapfrog&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15" name="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15"></a>explicit_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce" name="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce"></a>predictor_corrector_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca" name="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca"></a>leapfrog&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="parameter_8h_source.html#l00220">220</a> of file <a class="el" href="parameter_8h_source.html">parameter.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2parameter_8h_source.html#l00220">220</a> of file <a class="el" href="include_2parameter_8h_source.html">parameter.h</a>.</p>
 
 </div>
 </div>
 <a id="a22b2e895a1a87c3aabe7afd055a51603" name="a22b2e895a1a87c3aabe7afd055a51603"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a22b2e895a1a87c3aabe7afd055a51603">&#9670;&nbsp;</a></span>Type <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a22b2e895a1a87c3aabe7afd055a51603">&#9670;&nbsp;</a></span>Type <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -213,18 +319,82 @@ Private Member Functions</h2></td></tr>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15" name="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15"></a>explicit_euler&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce" name="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce"></a>predictor_corrector_euler&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603a950b141c056a65298415076fd64e1495" name="a22b2e895a1a87c3aabe7afd055a51603a950b141c056a65298415076fd64e1495"></a>leapfrog&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca" name="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca"></a>leapfrog&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15" name="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15"></a>explicit_euler&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce" name="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce"></a>predictor_corrector_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15" name="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15"></a>explicit_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce" name="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce"></a>predictor_corrector_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca" name="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca"></a>leapfrog&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15" name="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15"></a>explicit_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce" name="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce"></a>predictor_corrector_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca" name="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca"></a>leapfrog&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 <p class="definition">Definition at line <a class="el" href="parameter__backup_8h_source.html#l00327">327</a> of file <a class="el" href="parameter__backup_8h_source.html">parameter_backup.h</a>.</p>
 
 </div>
 </div>
+<a id="a22b2e895a1a87c3aabe7afd055a51603" name="a22b2e895a1a87c3aabe7afd055a51603"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22b2e895a1a87c3aabe7afd055a51603">&#9670;&nbsp;</a></span>Type <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">IntegratorSelection::Type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15" name="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15"></a>explicit_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce" name="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce"></a>predictor_corrector_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca" name="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca"></a>leapfrog&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15" name="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15"></a>explicit_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce" name="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce"></a>predictor_corrector_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15" name="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15"></a>explicit_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce" name="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce"></a>predictor_corrector_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca" name="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca"></a>leapfrog&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15" name="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15"></a>explicit_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce" name="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce"></a>predictor_corrector_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca" name="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca"></a>leapfrog&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00220">220</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a22b2e895a1a87c3aabe7afd055a51603" name="a22b2e895a1a87c3aabe7afd055a51603"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22b2e895a1a87c3aabe7afd055a51603">&#9670;&nbsp;</a></span>Type <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">IntegratorSelection::Type</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15" name="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15"></a>explicit_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce" name="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce"></a>predictor_corrector_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca" name="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca"></a>leapfrog&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15" name="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15"></a>explicit_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce" name="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce"></a>predictor_corrector_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15" name="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15"></a>explicit_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce" name="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce"></a>predictor_corrector_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca" name="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca"></a>leapfrog&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15" name="a22b2e895a1a87c3aabe7afd055a51603abc6e38f4cb17dd522e104b43093b5a15"></a>explicit_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce" name="a22b2e895a1a87c3aabe7afd055a51603a35c3814d09a741aaf9da7efc2b6035ce"></a>predictor_corrector_euler&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca" name="a22b2e895a1a87c3aabe7afd055a51603aeb20f2794dce8737c3d44916dba2a9ca"></a>leapfrog&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="testcases_2sedov_2parameter_8h_source.html#l00219">219</a> of file <a class="el" href="testcases_2sedov_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a8d1ddbcd7b499bd6addcfe088d079da7" name="a8d1ddbcd7b499bd6addcfe088d079da7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d1ddbcd7b499bd6addcfe088d079da7">&#9670;&nbsp;</a></span>IntegratorSelection() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d1ddbcd7b499bd6addcfe088d079da7">&#9670;&nbsp;</a></span>IntegratorSelection() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -247,12 +417,12 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="parameter_8h_source.html#l00225">225</a> of file <a class="el" href="parameter_8h_source.html">parameter.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2parameter_8h_source.html#l00225">225</a> of file <a class="el" href="include_2parameter_8h_source.html">parameter.h</a>.</p>
 
 </div>
 </div>
 <a id="a8d1ddbcd7b499bd6addcfe088d079da7" name="a8d1ddbcd7b499bd6addcfe088d079da7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d1ddbcd7b499bd6addcfe088d079da7">&#9670;&nbsp;</a></span>IntegratorSelection() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d1ddbcd7b499bd6addcfe088d079da7">&#9670;&nbsp;</a></span>IntegratorSelection() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -279,9 +449,65 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a8d1ddbcd7b499bd6addcfe088d079da7" name="a8d1ddbcd7b499bd6addcfe088d079da7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d1ddbcd7b499bd6addcfe088d079da7">&#9670;&nbsp;</a></span>IntegratorSelection() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IntegratorSelection::IntegratorSelection </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">Type</a>&#160;</td>
+          <td class="paramname"><em>t</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00225">225</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a8d1ddbcd7b499bd6addcfe088d079da7" name="a8d1ddbcd7b499bd6addcfe088d079da7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d1ddbcd7b499bd6addcfe088d079da7">&#9670;&nbsp;</a></span>IntegratorSelection() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IntegratorSelection::IntegratorSelection </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">Type</a>&#160;</td>
+          <td class="paramname"><em>t</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2sedov_2parameter_8h_source.html#l00224">224</a> of file <a class="el" href="testcases_2sedov_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a955007a22bc40204bb57c22d0a743547" name="a955007a22bc40204bb57c22d0a743547"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a955007a22bc40204bb57c22d0a743547">&#9670;&nbsp;</a></span>operator T() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a955007a22bc40204bb57c22d0a743547">&#9670;&nbsp;</a></span>operator T() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -308,7 +534,61 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <a id="a955007a22bc40204bb57c22d0a743547" name="a955007a22bc40204bb57c22d0a743547"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a955007a22bc40204bb57c22d0a743547">&#9670;&nbsp;</a></span>operator T() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a955007a22bc40204bb57c22d0a743547">&#9670;&nbsp;</a></span>operator T() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IntegratorSelection::operator T </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a955007a22bc40204bb57c22d0a743547" name="a955007a22bc40204bb57c22d0a743547"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a955007a22bc40204bb57c22d0a743547">&#9670;&nbsp;</a></span>operator T() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IntegratorSelection::operator T </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a955007a22bc40204bb57c22d0a743547" name="a955007a22bc40204bb57c22d0a743547"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a955007a22bc40204bb57c22d0a743547">&#9670;&nbsp;</a></span>operator T() <span class="overload">[4/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -335,7 +615,7 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <a id="a26f612d153be32b152665b427be3d276" name="a26f612d153be32b152665b427be3d276"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a26f612d153be32b152665b427be3d276">&#9670;&nbsp;</a></span>operator Type() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a26f612d153be32b152665b427be3d276">&#9670;&nbsp;</a></span>operator Type() <span class="overload">[1/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -357,12 +637,12 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="parameter_8h_source.html#l00226">226</a> of file <a class="el" href="parameter_8h_source.html">parameter.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2parameter_8h_source.html#l00226">226</a> of file <a class="el" href="include_2parameter_8h_source.html">parameter.h</a>.</p>
 
 </div>
 </div>
 <a id="a26f612d153be32b152665b427be3d276" name="a26f612d153be32b152665b427be3d276"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a26f612d153be32b152665b427be3d276">&#9670;&nbsp;</a></span>operator Type() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a26f612d153be32b152665b427be3d276">&#9670;&nbsp;</a></span>operator Type() <span class="overload">[2/4]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -388,6 +668,60 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a id="a26f612d153be32b152665b427be3d276" name="a26f612d153be32b152665b427be3d276"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26f612d153be32b152665b427be3d276">&#9670;&nbsp;</a></span>operator Type() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IntegratorSelection::operator <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">Type</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00226">226</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
+<a id="a26f612d153be32b152665b427be3d276" name="a26f612d153be32b152665b427be3d276"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26f612d153be32b152665b427be3d276">&#9670;&nbsp;</a></span>operator Type() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IntegratorSelection::operator <a class="el" href="struct_integrator_selection.html#a22b2e895a1a87c3aabe7afd055a51603">Type</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="testcases_2sedov_2parameter_8h_source.html#l00225">225</a> of file <a class="el" href="testcases_2sedov_2parameter_8h_source.html">parameter.h</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a2eaf4db317d5a1d54fdc31c380cb4cfa" name="a2eaf4db317d5a1d54fdc31c380cb4cfa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2eaf4db317d5a1d54fdc31c380cb4cfa">&#9670;&nbsp;</a></span>t_</h2>
@@ -401,30 +735,71 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="parameter_8h_source.html#l00224">224</a> of file <a class="el" href="parameter_8h_source.html">parameter.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="include_2parameter_8h_source.html#l00224">224</a> of file <a class="el" href="include_2parameter_8h_source.html">parameter.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
-<li>include/<a class="el" href="parameter_8h_source.html">parameter.h</a></li>
+<li>include/<a class="el" href="include_2parameter_8h_source.html">parameter.h</a></li>
 <li>include/<a class="el" href="parameter__backup_8h_source.html">parameter_backup.h</a></li>
+<li>testcases/plummer/<a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a></li>
+<li>testcases/sedov/<a class="el" href="testcases_2sedov_2parameter_8h_source.html">parameter.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
+    <!--
     milupHPC  - IntegratorSelection Struct Reference<br />
-    Generated on Thu Jun 23 2022 16:11:20 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    Generated on Wed Jun 29 2022 11:18:50 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    -->
   </small></address>
 </body>
 <footer>
-  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
-  <div id="banner-footer-first"></div>
-  <div id="banner-footer-second"></div>
-  <script>
-    function topFunction() {
-      document.body.scrollTop = 0; // For Safari
-      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    }
-  </script>
+  <custom-footer color="white" background="#2E4053">
+    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
+    <div second>
+      <div style="text-align: center">
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+        </div>
+      </div>
+    </div>
+    <div third>
+      milupHPC  - IntegratorSelection Struct Reference<br />
+      Generated on Wed Jun 29 2022 11:18:50 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    </div>
+  </custom-footer>
 </footer>
+<!--
+<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
+-->
+<script src="components/hamburger/runtime.js" type="module"></script><script src="components/hamburger/polyfills.js" type="module"></script><script src="components/hamburger/main.js" type="module"></script>
+<script src="components/header/runtime.js" type="module"></script><script src="components/header/polyfills.js" type="module"></script><script src="components/header/main.js" type="module"></script>
+<script src="components/icons/runtime.js" type="module"></script><script src="components/icons/polyfills.js" type="module"></script><script src="components/icons/main.js" type="module"></script>
+<script src="components/footer/runtime.js" type="module"></script><script src="components/footer/polyfills.js" type="module"></script><script src="components/footer/main.js" type="module"></script>
+<script src="components/dialog/runtime.js" type="module"></script><script src="components/dialog/polyfills.js" type="module"></script><script src="components/dialog/main.js" type="module"></script>
+<script src="components/copyable/runtime.js" type="module"></script><script src="components/copyable/polyfills.js" type="module"></script><script src="components/copyable/main.js" type="module"></script>
+<!--
+<script>
+  function toggle() {
+    var elem = document.getElementById("side-nav");
+    console.log(elem);
+    elem.toggleSideNav(false);
+  }
+</script>
+-->
+<!--
+<script>
+  function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  }
+</script>
+-->
 </html>

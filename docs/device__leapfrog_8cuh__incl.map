@@ -2,7 +2,7 @@
 <area shape="rect" id="node1" title="Device functions and kernels for the leapfrog integrator." alt="" coords="249,5,391,47"/>
 <area shape="rect" id="node2" href="$particles_8cuh.html" title="Particle struct as Structure of arrays both instantiable on host and device." alt="" coords="199,95,307,121"/>
 <area shape="rect" id="node9" title=" " alt="" coords="339,244,408,271"/>
-<area shape="rect" id="node3" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="31,319,121,345"/>
+<area shape="rect" id="node3" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="31,319,121,345"/>
 <area shape="rect" id="node6" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="29,169,216,196"/>
 <area shape="rect" id="node10" title=" " alt="" coords="291,169,349,196"/>
 <area shape="rect" id="node4" title=" " alt="" coords="49,393,103,420"/>

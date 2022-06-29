@@ -1,14 +1,26 @@
-<!DOCTYPE html>
-<html>
-<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
--->
+<!doctype html>
+<html lang="en">
 <head>
+	<meta charset="utf-8">
+	<title>CodePortray</title>
+	<base href="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: SubDomainKeyTreeNS::Kernel::Launch Namespace Reference</title>
+	<title>SubDomainKeyTreeNS::Kernel::Launch Namespace Reference</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -22,42 +34,68 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
-	<!-- Add icon library -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<!-- Add font awesome icons -->
-	<!--HIGHLIGHT.JS INSTALL BEGIN
-	<link rel="stylesheet" href="github.min.css">
-	<script src="highlight.js"></script>
-	<script>
-		$(function() {
-			hljs.configure({useBR: false});
-			$(".fragment").each(function(i,node) {
-				$(node).removeClass("fragment");
-				hljs.highlightBlock(node);
-			});
-		});
-	</script>
-	HIGHLIGHT.JS INSTALL END-->
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<custom-header class="custom-header-class">
+	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
+	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
+	<div shortcuts style="display: table">
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
+		</div>
+		<!-- get the code ... -->
+		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
+		<div style="display: table-cell; padding-right: 2px">
+			<custom-dialog window-width="600px" window-height="400px">
+				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
+				<div title>Get the code: milupHPC!</div>
+				<div style="text-align: center; padding-top: 20px;">
+					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
+					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
+					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
+					<div style="padding-top: 40px">clone via HTTPS:</div>
+					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">clone via SSH:</div>
+					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
+					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
+				</div>
+				<!--<div footer>This is the footer</div>-->
+			</custom-dialog>
+		</div>
+		<!-- end: get the code .... -->
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
+		</div>
+		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
+	</div>
+</custom-header>
+	<!--
+	<custom-side-nav id="side-nav" nav-width="300">
+		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
+		<div>test</div>
+	</custom-side-nav>
+	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation <!-- SubDomainKeyTreeNS::Kernel::Launch Namespace Reference -->
+				milupHPC documentation
 			</span>
-			<!-- <span class="search">
-				<input type="text" placeholder="Search" onkeydown="search(this,event);">
-			</span> -->
 		</div>
-    <!--
-	<div class="icon-bar">
-		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
-		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
-		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
-	</div>
-	</div>
-	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -107,57 +145,57 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aed391966103cc82daae02645cc45bbd6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#aed391966103cc82daae02645cc45bbd6">set</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> rank, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numProcesses, <a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *range, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *procParticleCounter)</td></tr>
+<tr class="memitem:aed391966103cc82daae02645cc45bbd6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#aed391966103cc82daae02645cc45bbd6">set</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> rank, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numProcesses, <a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *range, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *procParticleCounter)</td></tr>
 <tr class="memdesc:aed391966103cc82daae02645cc45bbd6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel.html#a3496a5d0449817b7a50506673f501361" title="Kernel call to setter.">SubDomainKeyTreeNS::Kernel::set()</a>.  <a href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#aed391966103cc82daae02645cc45bbd6">More...</a><br /></td></tr>
 <tr class="separator:aed391966103cc82daae02645cc45bbd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af49cdcf49317e5d105d7b4b04d85db36"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#af49cdcf49317e5d105d7b4b04d85db36">test</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree)</td></tr>
 <tr class="memdesc:af49cdcf49317e5d105d7b4b04d85db36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel.html#a0d4123229b33ee8ba91dd5a05649888c" title="Test kernel call (for debugging/testing purposes).">SubDomainKeyTreeNS::Kernel::test()</a>.  <a href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#af49cdcf49317e5d105d7b4b04d85db36">More...</a><br /></td></tr>
 <tr class="separator:af49cdcf49317e5d105d7b4b04d85db36"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2cd9d201e4590a20c381f9a5549af534"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a2cd9d201e4590a20c381f9a5549af534">buildDomainTree</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m)</td></tr>
+<tr class="memitem:a2cd9d201e4590a20c381f9a5549af534"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a2cd9d201e4590a20c381f9a5549af534">buildDomainTree</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m)</td></tr>
 <tr class="memdesc:a2cd9d201e4590a20c381f9a5549af534"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel.html#ad8244db74c90a978045048a7d1d796e1" title="Kernel to build the domain tree.">SubDomainKeyTreeNS::Kernel::buildDomainTree()</a>.  <a href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a2cd9d201e4590a20c381f9a5549af534">More...</a><br /></td></tr>
 <tr class="separator:a2cd9d201e4590a20c381f9a5549af534"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44a129aaafcc9cd832ff06343a36d0dd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a44a129aaafcc9cd832ff06343a36d0dd">buildDomainTree</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> level)</td></tr>
+<tr class="memitem:a44a129aaafcc9cd832ff06343a36d0dd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a44a129aaafcc9cd832ff06343a36d0dd">buildDomainTree</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> level)</td></tr>
 <tr class="separator:a44a129aaafcc9cd832ff06343a36d0dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a993a0b0edd1c4d9626bf5803afaa9af9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a993a0b0edd1c4d9626bf5803afaa9af9">getParticleKeys</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *keys, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> maxLevel, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType=<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">Curve::lebesgue</a>)</td></tr>
+<tr class="memitem:a993a0b0edd1c4d9626bf5803afaa9af9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a993a0b0edd1c4d9626bf5803afaa9af9">getParticleKeys</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *keys, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> maxLevel, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType=<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">Curve::lebesgue</a>)</td></tr>
 <tr class="memdesc:a993a0b0edd1c4d9626bf5803afaa9af9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel.html#a2729bc71e6579423cf48f5476ee7cffc" title="Kernel to get all particle keys (and additional information for debugging purposes).">SubDomainKeyTreeNS::Kernel::getParticleKeys()</a>.  <a href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a993a0b0edd1c4d9626bf5803afaa9af9">More...</a><br /></td></tr>
 <tr class="separator:a993a0b0edd1c4d9626bf5803afaa9af9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12d16486c5c1a90ed3e2ed9c0bd92c34"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a12d16486c5c1a90ed3e2ed9c0bd92c34">particlesPerProcess</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType=<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">Curve::lebesgue</a>)</td></tr>
+<tr class="memitem:a12d16486c5c1a90ed3e2ed9c0bd92c34"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a12d16486c5c1a90ed3e2ed9c0bd92c34">particlesPerProcess</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType=<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">Curve::lebesgue</a>)</td></tr>
 <tr class="memdesc:a12d16486c5c1a90ed3e2ed9c0bd92c34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel.html#a9479952d5b95aa9462017b91d686b166" title="Kernel to check particle&#39;s belonging and count in dependence of belonging/process.">SubDomainKeyTreeNS::Kernel::particlesPerProcess()</a>.  <a href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a12d16486c5c1a90ed3e2ed9c0bd92c34">More...</a><br /></td></tr>
 <tr class="separator:a12d16486c5c1a90ed3e2ed9c0bd92c34"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa5802ef56d7a64069d0d8d8bb08a0d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#aaa5802ef56d7a64069d0d8d8bb08a0d7">markParticlesProcess</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sortArray, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType=<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">Curve::lebesgue</a>)</td></tr>
+<tr class="memitem:aaa5802ef56d7a64069d0d8d8bb08a0d7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#aaa5802ef56d7a64069d0d8d8bb08a0d7">markParticlesProcess</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sortArray, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType=<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">Curve::lebesgue</a>)</td></tr>
 <tr class="memdesc:aaa5802ef56d7a64069d0d8d8bb08a0d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for ::SubDomainKeyTreeNS::Kernel::markParticlesPerProcess().  <a href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#aaa5802ef56d7a64069d0d8d8bb08a0d7">More...</a><br /></td></tr>
 <tr class="separator:aaa5802ef56d7a64069d0d8d8bb08a0d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a4bc3d5c1b490ad93743f8f679dabf8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a2a4bc3d5c1b490ad93743f8f679dabf8">zeroDomainListNodes</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList)</td></tr>
+<tr class="memitem:a2a4bc3d5c1b490ad93743f8f679dabf8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a2a4bc3d5c1b490ad93743f8f679dabf8">zeroDomainListNodes</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList)</td></tr>
 <tr class="memdesc:a2a4bc3d5c1b490ad93743f8f679dabf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel.html#afb9ced706615ea5c4a49282b84b5b741" title="Zero domain list nodes.">SubDomainKeyTreeNS::Kernel::zeroDomainListNodes()</a>.  <a href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a2a4bc3d5c1b490ad93743f8f679dabf8">More...</a><br /></td></tr>
 <tr class="separator:a2a4bc3d5c1b490ad93743f8f679dabf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f9694795f73c4f773dbd35209b7c471"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a1f9694795f73c4f773dbd35209b7c471"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a1f9694795f73c4f773dbd35209b7c471">prepareLowestDomainExchange</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, T *buffer, <a class="el" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bf">Entry::Name</a> entry)</td></tr>
+<tr class="memitem:a1f9694795f73c4f773dbd35209b7c471"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a1f9694795f73c4f773dbd35209b7c471">prepareLowestDomainExchange</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, T *buffer, <a class="el" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bf">Entry::Name</a> entry)</td></tr>
 <tr class="memdesc:a1f9694795f73c4f773dbd35209b7c471"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel.html#a676e8bd4d3849275d58cfa72bd190090" title="Prepare lowest domain exchange via MPI by copying to contiguous memory.">SubDomainKeyTreeNS::Kernel::prepareLowestDomainExchange()</a>.  <a href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a1f9694795f73c4f773dbd35209b7c471">More...</a><br /></td></tr>
 <tr class="separator:a1f9694795f73c4f773dbd35209b7c471"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1acb92d9d92486a1ff49d623486d434e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a1acb92d9d92486a1ff49d623486d434e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a1acb92d9d92486a1ff49d623486d434e">updateLowestDomainListNodes</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, T *buffer, <a class="el" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bf">Entry::Name</a> entry)</td></tr>
+<tr class="memitem:a1acb92d9d92486a1ff49d623486d434e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a1acb92d9d92486a1ff49d623486d434e">updateLowestDomainListNodes</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, T *buffer, <a class="el" href="struct_entry.html#a1cfdb441b3e1d3be86d339cf45f940bf">Entry::Name</a> entry)</td></tr>
 <tr class="memdesc:a1acb92d9d92486a1ff49d623486d434e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel.html#a8d9605a8250aab287aba1dcc8f659d61" title="Update lowest domain list nodes.">SubDomainKeyTreeNS::Kernel::updateLowestDomainListNodes()</a>.  <a href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a1acb92d9d92486a1ff49d623486d434e">More...</a><br /></td></tr>
 <tr class="separator:a1acb92d9d92486a1ff49d623486d434e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac06f612872b317fbfdb6799f50878945"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#ac06f612872b317fbfdb6799f50878945">compLowestDomainListNodes</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList)</td></tr>
+<tr class="memitem:ac06f612872b317fbfdb6799f50878945"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#ac06f612872b317fbfdb6799f50878945">compLowestDomainListNodes</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList)</td></tr>
 <tr class="memdesc:ac06f612872b317fbfdb6799f50878945"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel.html#a415e3c867767c4132f7cab1940c538a5" title="Compute/Find lowest domain list nodes.">SubDomainKeyTreeNS::Kernel::compLowestDomainListNodes()</a>.  <a href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#ac06f612872b317fbfdb6799f50878945">More...</a><br /></td></tr>
 <tr class="separator:ac06f612872b317fbfdb6799f50878945"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0b59ec16568748ccaa7f6f7d9d9046fd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a0b59ec16568748ccaa7f6f7d9d9046fd">compLocalPseudoParticles</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, int n)</td></tr>
+<tr class="memitem:a0b59ec16568748ccaa7f6f7d9d9046fd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a0b59ec16568748ccaa7f6f7d9d9046fd">compLocalPseudoParticles</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, int n)</td></tr>
 <tr class="memdesc:a0b59ec16568748ccaa7f6f7d9d9046fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel.html#aa82da91df6ea61e1b9539594a6f08802" title="Compute local (tree) pseudo particles.">SubDomainKeyTreeNS::Kernel::compLocalPseudoParticles()</a>.  <a href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a0b59ec16568748ccaa7f6f7d9d9046fd">More...</a><br /></td></tr>
 <tr class="separator:a0b59ec16568748ccaa7f6f7d9d9046fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1bbd516656d383a00b199d0ae9304960"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a1bbd516656d383a00b199d0ae9304960">compDomainListPseudoParticlesPerLevel</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, int n, int level)</td></tr>
+<tr class="memitem:a1bbd516656d383a00b199d0ae9304960"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a1bbd516656d383a00b199d0ae9304960">compDomainListPseudoParticlesPerLevel</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, int n, int level)</td></tr>
 <tr class="memdesc:a1bbd516656d383a00b199d0ae9304960"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel.html#ad7caa886e20620649bd546df9b852843" title="Compute domain list pseudo particles (per level).">SubDomainKeyTreeNS::Kernel::compDomainListPseudoParticlesPerLevel()</a>.  <a href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a1bbd516656d383a00b199d0ae9304960">More...</a><br /></td></tr>
 <tr class="separator:a1bbd516656d383a00b199d0ae9304960"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1dacd6386880869cf7a6bd560af94002"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a1dacd6386880869cf7a6bd560af94002">compDomainListPseudoParticles</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, int n)</td></tr>
+<tr class="memitem:a1dacd6386880869cf7a6bd560af94002"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a1dacd6386880869cf7a6bd560af94002">compDomainListPseudoParticles</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, int n)</td></tr>
 <tr class="memdesc:a1dacd6386880869cf7a6bd560af94002"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel.html#a123d7b346507f5087e2508c6cb3125e6">SubDomainKeyTreeNS::Kernel::compDomainListPseudoParticles()</a>.  <a href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a1dacd6386880869cf7a6bd560af94002">More...</a><br /></td></tr>
 <tr class="separator:a1dacd6386880869cf7a6bd560af94002"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a67e0c212680ac04c5c87336ec40f8648"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a67e0c212680ac04c5c87336ec40f8648">repairTree</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, int n, int m, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
+<tr class="memitem:a67e0c212680ac04c5c87336ec40f8648"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a67e0c212680ac04c5c87336ec40f8648">repairTree</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, int n, int m, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
 <tr class="memdesc:a67e0c212680ac04c5c87336ec40f8648"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel.html#a2748b7f1ec53c4f849442c4c29691464" title="Repair tree by removing received and inserted (pseudo-)particles.">SubDomainKeyTreeNS::Kernel::repairTree()</a>.  <a href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a67e0c212680ac04c5c87336ec40f8648">More...</a><br /></td></tr>
 <tr class="separator:a67e0c212680ac04c5c87336ec40f8648"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d20fd03be2a530040df00fdbe01e41e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a3d20fd03be2a530040df00fdbe01e41e">createKeyHistRanges</a> (<a class="el" href="class_helper.html">Helper</a> *helper, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> bins)</td></tr>
+<tr class="memitem:a3d20fd03be2a530040df00fdbe01e41e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a3d20fd03be2a530040df00fdbe01e41e">createKeyHistRanges</a> (<a class="el" href="class_helper.html">Helper</a> *helper, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> bins)</td></tr>
 <tr class="separator:a3d20fd03be2a530040df00fdbe01e41e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa7532a9e882a599714b99e8eadf2b82d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#aa7532a9e882a599714b99e8eadf2b82d">keyHistCounter</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_helper.html">Helper</a> *helper, int bins, int n, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType=<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">Curve::lebesgue</a>)</td></tr>
+<tr class="memitem:aa7532a9e882a599714b99e8eadf2b82d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#aa7532a9e882a599714b99e8eadf2b82d">keyHistCounter</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_helper.html">Helper</a> *helper, int bins, int n, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType=<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">Curve::lebesgue</a>)</td></tr>
 <tr class="separator:aa7532a9e882a599714b99e8eadf2b82d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff826f5d0727f0a859b378506ee8defb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#aff826f5d0727f0a859b378506ee8defb">calculateNewRange</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_helper.html">Helper</a> *helper, int bins, int n, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType=<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">Curve::lebesgue</a>)</td></tr>
+<tr class="memitem:aff826f5d0727f0a859b378506ee8defb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#aff826f5d0727f0a859b378506ee8defb">calculateNewRange</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_helper.html">Helper</a> *helper, int bins, int n, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType=<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">Curve::lebesgue</a>)</td></tr>
 <tr class="separator:aff826f5d0727f0a859b378506ee8defb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -170,7 +208,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::buildDomainTree </td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::buildDomainTree </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -196,19 +234,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>level</em>&#160;</td>
         </tr>
         <tr>
@@ -242,7 +280,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::buildDomainTree </td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::buildDomainTree </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -262,13 +300,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>&#160;</td>
         </tr>
         <tr>
@@ -305,7 +343,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::calculateNewRange </td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::calculateNewRange </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -365,7 +403,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::compDomainListPseudoParticles </td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::compDomainListPseudoParticles </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -429,7 +467,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::compDomainListPseudoParticlesPerLevel </td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::compDomainListPseudoParticlesPerLevel </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -499,7 +537,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::compLocalPseudoParticles </td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::compLocalPseudoParticles </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -556,7 +594,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::compLowestDomainListNodes </td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::compLowestDomainListNodes </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -608,7 +646,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::createKeyHistRanges </td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::createKeyHistRanges </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_helper.html">Helper</a> *&#160;</td>
           <td class="paramname"><em>helper</em>, </td>
@@ -616,7 +654,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>bins</em>&#160;</td>
         </tr>
         <tr>
@@ -650,7 +688,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys </td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -670,19 +708,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td>
           <td class="paramname"><em>keys</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>maxLevel</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
@@ -725,7 +763,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::keyHistCounter </td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::keyHistCounter </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -797,7 +835,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::markParticlesProcess </td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::markParticlesProcess </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -817,19 +855,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>sortArray</em>, </td>
         </tr>
         <tr>
@@ -876,7 +914,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::particlesPerProcess </td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::particlesPerProcess </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -896,13 +934,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
@@ -948,7 +986,7 @@ Functions</h2></td></tr>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::prepareLowestDomainExchange </td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::prepareLowestDomainExchange </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_particles.html">Particles</a> *&#160;</td>
           <td class="paramname"><em>particles</em>, </td>
@@ -1006,7 +1044,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::repairTree </td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::repairTree </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -1095,25 +1133,25 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>rank</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numProcesses</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td>
           <td class="paramname"><em>range</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>procParticleCounter</em>&#160;</td>
         </tr>
         <tr>
@@ -1185,7 +1223,7 @@ template&lt;typename T &gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::updateLowestDomainListNodes </td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::updateLowestDomainListNodes </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_particles.html">Particles</a> *&#160;</td>
           <td class="paramname"><em>particles</em>, </td>
@@ -1243,7 +1281,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::zeroDomainListNodes </td>
+          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SubDomainKeyTreeNS::Kernel::Launch::zeroDomainListNodes </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_particles.html">Particles</a> *&#160;</td>
           <td class="paramname"><em>particles</em>, </td>
@@ -1291,19 +1329,58 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
+    <!--
     milupHPC  - SubDomainKeyTreeNS::Kernel::Launch Namespace Reference<br />
-    Generated on Thu Jun 23 2022 16:11:21 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    Generated on Wed Jun 29 2022 11:18:51 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    -->
   </small></address>
 </body>
 <footer>
-  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
-  <div id="banner-footer-first"></div>
-  <div id="banner-footer-second"></div>
-  <script>
-    function topFunction() {
-      document.body.scrollTop = 0; // For Safari
-      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    }
-  </script>
+  <custom-footer color="white" background="#2E4053">
+    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
+    <div second>
+      <div style="text-align: center">
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+        </div>
+      </div>
+    </div>
+    <div third>
+      milupHPC  - SubDomainKeyTreeNS::Kernel::Launch Namespace Reference<br />
+      Generated on Wed Jun 29 2022 11:18:51 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    </div>
+  </custom-footer>
 </footer>
+<!--
+<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
+-->
+<script src="components/hamburger/runtime.js" type="module"></script><script src="components/hamburger/polyfills.js" type="module"></script><script src="components/hamburger/main.js" type="module"></script>
+<script src="components/header/runtime.js" type="module"></script><script src="components/header/polyfills.js" type="module"></script><script src="components/header/main.js" type="module"></script>
+<script src="components/icons/runtime.js" type="module"></script><script src="components/icons/polyfills.js" type="module"></script><script src="components/icons/main.js" type="module"></script>
+<script src="components/footer/runtime.js" type="module"></script><script src="components/footer/polyfills.js" type="module"></script><script src="components/footer/main.js" type="module"></script>
+<script src="components/dialog/runtime.js" type="module"></script><script src="components/dialog/polyfills.js" type="module"></script><script src="components/dialog/main.js" type="module"></script>
+<script src="components/copyable/runtime.js" type="module"></script><script src="components/copyable/polyfills.js" type="module"></script><script src="components/copyable/main.js" type="module"></script>
+<!--
+<script>
+  function toggle() {
+    var elem = document.getElementById("side-nav");
+    console.log(elem);
+    elem.toggleSideNav(false);
+  }
+</script>
+-->
+<!--
+<script>
+  function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  }
+</script>
+-->
 </html>

@@ -7,6 +7,7 @@ var searchData=
   ['material_2ecuh_4',['material.cuh',['../material_8cuh.html',1,'']]],
   ['material_5fhandler_2ecpp_5',['material_handler.cpp',['../material__handler_8cpp.html',1,'']]],
   ['material_5fhandler_2eh_6',['material_handler.h',['../material__handler_8h.html',1,'']]],
-  ['miluphpc_2ecpp_7',['miluphpc.cpp',['../miluphpc_8cpp.html',1,'']]],
-  ['miluphpc_2eh_8',['miluphpc.h',['../miluphpc_8h.html',1,'']]]
+  ['miluphcuda_2emd_7',['Miluphcuda.md',['../_miluphcuda_8md.html',1,'']]],
+  ['miluphpc_2ecpp_8',['miluphpc.cpp',['../miluphpc_8cpp.html',1,'']]],
+  ['miluphpc_2eh_9',['miluphpc.h',['../miluphpc_8h.html',1,'']]]
 ];

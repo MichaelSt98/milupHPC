@@ -1,14 +1,26 @@
-<!DOCTYPE html>
-<html>
-<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
--->
+<!doctype html>
+<html lang="en">
 <head>
+	<meta charset="utf-8">
+	<title>CodePortray</title>
+	<base href="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: include/utils/logger.h Source File</title>
+	<title>include/utils/logger.h Source File</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -22,42 +34,68 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
-	<!-- Add icon library -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<!-- Add font awesome icons -->
-	<!--HIGHLIGHT.JS INSTALL BEGIN
-	<link rel="stylesheet" href="github.min.css">
-	<script src="highlight.js"></script>
-	<script>
-		$(function() {
-			hljs.configure({useBR: false});
-			$(".fragment").each(function(i,node) {
-				$(node).removeClass("fragment");
-				hljs.highlightBlock(node);
-			});
-		});
-	</script>
-	HIGHLIGHT.JS INSTALL END-->
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<custom-header class="custom-header-class">
+	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
+	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
+	<div shortcuts style="display: table">
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
+		</div>
+		<!-- get the code ... -->
+		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
+		<div style="display: table-cell; padding-right: 2px">
+			<custom-dialog window-width="600px" window-height="400px">
+				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
+				<div title>Get the code: milupHPC!</div>
+				<div style="text-align: center; padding-top: 20px;">
+					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
+					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
+					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
+					<div style="padding-top: 40px">clone via HTTPS:</div>
+					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">clone via SSH:</div>
+					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
+					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
+				</div>
+				<!--<div footer>This is the footer</div>-->
+			</custom-dialog>
+		</div>
+		<!-- end: get the code .... -->
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
+		</div>
+		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
+	</div>
+</custom-header>
+	<!--
+	<custom-side-nav id="side-nav" nav-width="300">
+		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
+		<div>test</div>
+	</custom-side-nav>
+	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation <!-- include/utils/logger.h Source File -->
+				milupHPC documentation
 			</span>
-			<!-- <span class="search">
-				<input type="text" placeholder="Search" onkeydown="search(this,event);">
-			</span> -->
 		</div>
-    <!--
-	<div class="icon-bar">
-		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
-		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
-		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
-	</div>
-	</div>
-	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -168,7 +206,7 @@ $(function() {
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="class_logger.html#a8481565e580c355149b36211a66de89b">msgLevel</a> &gt;= <a class="code hl_variable" href="include_2utils_2_logger_8h.html#af4d61a0d9c769b2eeb212478e96765ee">LOGCFG</a>.<a class="code hl_variable" href="structstruct_log.html#a17940d503997ef6e25015b7c8e22287b">level</a> &amp;&amp; (<a class="code hl_variable" href="include_2utils_2_logger_8h.html#af4d61a0d9c769b2eeb212478e96765ee">LOGCFG</a>.<a class="code hl_variable" href="structstruct_log.html#aff4cce2af933a6fd242a685a254eab06">rank</a> == <a class="code hl_variable" href="include_2utils_2_logger_8h.html#af4d61a0d9c769b2eeb212478e96765ee">LOGCFG</a>.<a class="code hl_variable" href="structstruct_log.html#af21e2531babb9de5a1dd24b0bb254005">outputRank</a> || <a class="code hl_variable" href="include_2utils_2_logger_8h.html#af4d61a0d9c769b2eeb212478e96765ee">LOGCFG</a>.<a class="code hl_variable" href="structstruct_log.html#af21e2531babb9de5a1dd24b0bb254005">outputRank</a> == -1)) {</div>
 <div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>            <span class="keywordtype">int</span> levels [level];</div>
 <div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i&lt;level; i++) {</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>                levels[i] = (key &gt;&gt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>*i) &amp; (<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)(<a class="code hl_define" href="parameter_8h.html#aaf01a8b5289af20025d06e3fed70cc94">POW_DIM</a> - 1);</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>                levels[i] = (key &gt;&gt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>*i) &amp; (<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)(<a class="code hl_define" href="include_2parameter_8h.html#aaf01a8b5289af20025d06e3fed70cc94">POW_DIM</a> - 1);</div>
 <div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>            }</div>
 <div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>            std::string msg = <span class="stringliteral">&quot;#|&quot;</span>;</div>
 <div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = level-1; i&gt;=0; i--) {</div>
@@ -213,6 +251,8 @@ $(function() {
 <div class="ttc" id="aclass_logger_html_acb668a9e186a25fbaad2e4af6d1ed00a"><div class="ttname"><a href="class_logger.html#acb668a9e186a25fbaad2e4af6d1ed00a">Logger::~Logger</a></div><div class="ttdeci">~Logger()</div></div>
 <div class="ttc" id="aclass_logger_html_acc94bd19d6a022e574a5733c87fed67a"><div class="ttname"><a href="class_logger.html#acc94bd19d6a022e574a5733c87fed67a">Logger::logFile</a></div><div class="ttdeci">std::ofstream logFile</div><div class="ttdef"><b>Definition:</b> <a href="include_2utils_2_logger_8h_source.html#l00148">logger.h:148</a></div></div>
 <div class="ttc" id="aclass_logger_html_af20e95309c6fd966ce988f42d78fe522"><div class="ttname"><a href="class_logger.html#af20e95309c6fd966ce988f42d78fe522">Logger::opened</a></div><div class="ttdeci">bool opened</div><div class="ttdef"><b>Definition:</b> <a href="_h5_renderer_2include_2_logger_8h_source.html#l00072">Logger.h:72</a></div></div>
+<div class="ttc" id="ainclude_2parameter_8h_html_aaf01a8b5289af20025d06e3fed70cc94"><div class="ttname"><a href="include_2parameter_8h.html#aaf01a8b5289af20025d06e3fed70cc94">POW_DIM</a></div><div class="ttdeci">#define POW_DIM</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00040">parameter.h:40</a></div></div>
+<div class="ttc" id="ainclude_2parameter_8h_html_ac25189db92959bff3c6c2adf4c34b50a"><div class="ttname"><a href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a></div><div class="ttdeci">#define DIM</div><div class="ttdoc">Dimension of the problem.</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00038">parameter.h:38</a></div></div>
 <div class="ttc" id="ainclude_2utils_2_color_8h_html"><div class="ttname"><a href="include_2utils_2_color_8h.html">color.h</a></div></div>
 <div class="ttc" id="ainclude_2utils_2_logger_8h_html_ac475e37d7ead782f5f80864a2156b631"><div class="ttname"><a href="include_2utils_2_logger_8h.html#ac475e37d7ead782f5f80864a2156b631">typeLog</a></div><div class="ttdeci">typeLog</div><div class="ttdoc">logging types</div><div class="ttdef"><b>Definition:</b> <a href="include_2utils_2_logger_8h_source.html#l00046">logger.h:46</a></div></div>
 <div class="ttc" id="ainclude_2utils_2_logger_8h_html_ac475e37d7ead782f5f80864a2156b631a0593585da9181e972974c1274d8f2b4f"><div class="ttname"><a href="include_2utils_2_logger_8h.html#ac475e37d7ead782f5f80864a2156b631a0593585da9181e972974c1274d8f2b4f">DEBUG</a></div><div class="ttdeci">@ DEBUG</div><div class="ttdef"><b>Definition:</b> <a href="include_2utils_2_logger_8h_source.html#l00047">logger.h:47</a></div></div>
@@ -225,8 +265,6 @@ $(function() {
 <div class="ttc" id="anamespace_color_html"><div class="ttname"><a href="namespace_color.html">Color</a></div><div class="ttdoc">Colors for output formatting.</div><div class="ttdef"><b>Definition:</b> <a href="_h5_renderer_2include_2_color_8h_source.html#l00008">Color.h:8</a></div></div>
 <div class="ttc" id="anamespace_color_html_a0558ba7f634b0ae2fa5bc9c810a9b2f0"><div class="ttname"><a href="namespace_color.html#a0558ba7f634b0ae2fa5bc9c810a9b2f0">Color::operator&lt;&lt;</a></div><div class="ttdeci">std::ostream &amp; operator&lt;&lt;(std::ostream &amp;os, const Color::Modifier &amp;mod)</div><div class="ttdef"><b>Definition:</b> <a href="_h5_renderer_2src_2_logger_8cpp_source.html#l00009">Logger.cpp:9</a></div></div>
 <div class="ttc" id="anamespace_color_html_a20a7b04657c1d83fae5d54514d3f1622"><div class="ttname"><a href="namespace_color.html#a20a7b04657c1d83fae5d54514d3f1622">Color::Code</a></div><div class="ttdeci">Code</div><div class="ttdef"><b>Definition:</b> <a href="_h5_renderer_2include_2_color_8h_source.html#l00009">Color.h:9</a></div></div>
-<div class="ttc" id="aparameter_8h_html_aaf01a8b5289af20025d06e3fed70cc94"><div class="ttname"><a href="parameter_8h.html#aaf01a8b5289af20025d06e3fed70cc94">POW_DIM</a></div><div class="ttdeci">#define POW_DIM</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00040">parameter.h:40</a></div></div>
-<div class="ttc" id="aparameter_8h_html_ac25189db92959bff3c6c2adf4c34b50a"><div class="ttname"><a href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a></div><div class="ttdeci">#define DIM</div><div class="ttdoc">Dimension of the problem.</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00038">parameter.h:38</a></div></div>
 <div class="ttc" id="astructstruct_log_html"><div class="ttname"><a href="structstruct_log.html">structLog</a></div><div class="ttdoc">Logger settings.</div><div class="ttdef"><b>Definition:</b> <a href="include_2utils_2_logger_8h_source.html#l00058">logger.h:58</a></div></div>
 <div class="ttc" id="astructstruct_log_html_a17940d503997ef6e25015b7c8e22287b"><div class="ttname"><a href="structstruct_log.html#a17940d503997ef6e25015b7c8e22287b">structLog::level</a></div><div class="ttdeci">typeLog level</div><div class="ttdoc">Minimum logging level to be shown.</div><div class="ttdef"><b>Definition:</b> <a href="include_2utils_2_logger_8h_source.html#l00062">logger.h:62</a></div></div>
 <div class="ttc" id="astructstruct_log_html_a2cc9fc85b8932e42b7ca78ea6f7f053b"><div class="ttname"><a href="structstruct_log.html#a2cc9fc85b8932e42b7ca78ea6f7f053b">structLog::omitTime</a></div><div class="ttdeci">bool omitTime</div><div class="ttdoc">omit time output/logging</div><div class="ttdef"><b>Definition:</b> <a href="include_2utils_2_logger_8h_source.html#l00072">logger.h:72</a></div></div>
@@ -238,19 +276,58 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
+    <!--
     milupHPC  - include/utils/logger.h Source File<br />
-    Generated on Thu Jun 23 2022 16:11:19 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    Generated on Wed Jun 29 2022 11:18:49 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    -->
   </small></address>
 </body>
 <footer>
-  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
-  <div id="banner-footer-first"></div>
-  <div id="banner-footer-second"></div>
-  <script>
-    function topFunction() {
-      document.body.scrollTop = 0; // For Safari
-      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    }
-  </script>
+  <custom-footer color="white" background="#2E4053">
+    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
+    <div second>
+      <div style="text-align: center">
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+        </div>
+      </div>
+    </div>
+    <div third>
+      milupHPC  - include/utils/logger.h Source File<br />
+      Generated on Wed Jun 29 2022 11:18:49 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    </div>
+  </custom-footer>
 </footer>
+<!--
+<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
+-->
+<script src="components/hamburger/runtime.js" type="module"></script><script src="components/hamburger/polyfills.js" type="module"></script><script src="components/hamburger/main.js" type="module"></script>
+<script src="components/header/runtime.js" type="module"></script><script src="components/header/polyfills.js" type="module"></script><script src="components/header/main.js" type="module"></script>
+<script src="components/icons/runtime.js" type="module"></script><script src="components/icons/polyfills.js" type="module"></script><script src="components/icons/main.js" type="module"></script>
+<script src="components/footer/runtime.js" type="module"></script><script src="components/footer/polyfills.js" type="module"></script><script src="components/footer/main.js" type="module"></script>
+<script src="components/dialog/runtime.js" type="module"></script><script src="components/dialog/polyfills.js" type="module"></script><script src="components/dialog/main.js" type="module"></script>
+<script src="components/copyable/runtime.js" type="module"></script><script src="components/copyable/polyfills.js" type="module"></script><script src="components/copyable/main.js" type="module"></script>
+<!--
+<script>
+  function toggle() {
+    var elem = document.getElementById("side-nav");
+    console.log(elem);
+    elem.toggleSideNav(false);
+  }
+</script>
+-->
+<!--
+<script>
+  function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  }
+</script>
+-->
 </html>

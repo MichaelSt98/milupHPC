@@ -3,7 +3,7 @@
 <area shape="rect" id="node2" href="$viscosity_8cuh.html" title="Stress." alt="" coords="429,87,619,114"/>
 <area shape="rect" id="node22" title=" " alt="" coords="644,80,783,121"/>
 <area shape="rect" id="node3" href="$particles_8cuh.html" title="Particle struct as Structure of arrays both instantiable on host and device." alt="" coords="790,244,898,271"/>
-<area shape="rect" id="node4" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="575,468,665,495"/>
+<area shape="rect" id="node4" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="575,468,665,495"/>
 <area shape="rect" id="node7" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="269,319,456,345"/>
 <area shape="rect" id="node9" href="$cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers." alt="" coords="446,393,557,420"/>
 <area shape="rect" id="node12" href="$material_8cuh.html" title="Material parameters and settings." alt="" coords="5,244,168,271"/>

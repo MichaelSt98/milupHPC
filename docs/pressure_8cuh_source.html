@@ -1,14 +1,26 @@
-<!DOCTYPE html>
-<html>
-<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
--->
+<!doctype html>
+<html lang="en">
 <head>
+	<meta charset="utf-8">
+	<title>CodePortray</title>
+	<base href="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: include/sph/pressure.cuh Source File</title>
+	<title>include/sph/pressure.cuh Source File</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
+	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -22,42 +34,68 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
-	<!-- Add icon library -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<!-- Add font awesome icons -->
-	<!--HIGHLIGHT.JS INSTALL BEGIN
-	<link rel="stylesheet" href="github.min.css">
-	<script src="highlight.js"></script>
-	<script>
-		$(function() {
-			hljs.configure({useBR: false});
-			$(".fragment").each(function(i,node) {
-				$(node).removeClass("fragment");
-				hljs.highlightBlock(node);
-			});
-		});
-	</script>
-	HIGHLIGHT.JS INSTALL END-->
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<custom-header class="custom-header-class">
+	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
+	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
+	<div shortcuts style="display: table">
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+		</div>
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
+		</div>
+		<!-- get the code ... -->
+		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
+		<div style="display: table-cell; padding-right: 2px">
+			<custom-dialog window-width="600px" window-height="400px">
+				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
+				<div title>Get the code: milupHPC!</div>
+				<div style="text-align: center; padding-top: 20px;">
+					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
+					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
+					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
+					<div style="padding-top: 40px">clone via HTTPS:</div>
+					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">clone via SSH:</div>
+					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
+						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
+					</custom-copyable>
+					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
+					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
+				</div>
+				<!--<div footer>This is the footer</div>-->
+			</custom-dialog>
+		</div>
+		<!-- end: get the code .... -->
+		<div style="display: table-cell; padding-right: 2px">
+			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
+		</div>
+		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
+	</div>
+</custom-header>
+	<!--
+	<custom-side-nav id="side-nav" nav-width="300">
+		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
+		<div>test</div>
+	</custom-side-nav>
+	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation <!-- include/sph/pressure.cuh Source File -->
+				milupHPC documentation
 			</span>
-			<!-- <span class="search">
-				<input type="text" placeholder="Search" onkeydown="search(this,event);">
-			</span> -->
 		</div>
-    <!--
-	<div class="icon-bar">
-		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
-		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
-		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
-	</div>
-	</div>
-	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -126,7 +164,7 @@ $(function() {
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        __global__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_s_p_h_1_1_kernel.html#ae4626d08797d48f118456ae8efd3cf9c">calculatePressure</a>(<a class="code hl_class" href="class_material.html">Material</a> *materials, <a class="code hl_class" href="class_particles.html">Particles</a> *particles, <span class="keywordtype">int</span> <a class="code hl_variable" href="namespace_profiler_ids.html#ad13e3eace63e610c1eb36461ae4c86fd">numParticles</a>);</div>
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
 <div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        <span class="keyword">namespace </span>Launch {</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>            <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#adb9bfab7ebee64cebb3b4dfc22d73410">calculatePressure</a>(<a class="code hl_class" href="class_material.html">Material</a> *materials, <a class="code hl_class" href="class_particles.html">Particles</a> *particles, <span class="keywordtype">int</span> <a class="code hl_variable" href="namespace_profiler_ids.html#ad13e3eace63e610c1eb36461ae4c86fd">numParticles</a>);</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#adb9bfab7ebee64cebb3b4dfc22d73410">calculatePressure</a>(<a class="code hl_class" href="class_material.html">Material</a> *materials, <a class="code hl_class" href="class_particles.html">Particles</a> *particles, <span class="keywordtype">int</span> <a class="code hl_variable" href="namespace_profiler_ids.html#ad13e3eace63e610c1eb36461ae4c86fd">numParticles</a>);</div>
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        }</div>
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    }</div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
@@ -141,6 +179,7 @@ $(function() {
 <div class="ttc" id="aclasspressure_html"><div class="ttname"><a href="classpressure.html">pressure</a></div><div class="ttdef"><b>Definition:</b> <a href="pressure_8cuh_source.html#l00020">pressure.cuh:20</a></div></div>
 <div class="ttc" id="acuda__runtime_8h_html"><div class="ttname"><a href="cuda__runtime_8h.html">cuda_runtime.h</a></div><div class="ttdoc">CUDA runtime functionalities and wrappers.</div></div>
 <div class="ttc" id="acuda__utilities_8cuh_html"><div class="ttname"><a href="cuda__utilities_8cuh.html">cuda_utilities.cuh</a></div><div class="ttdoc">CUDA utilities.</div></div>
+<div class="ttc" id="ainclude_2parameter_8h_html_a11d147c64891830c9e79b3315b1b2e21"><div class="ttname"><a href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a></div><div class="ttdeci">double real</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00015">parameter.h:15</a></div></div>
 <div class="ttc" id="anamespace_e_o_s_html"><div class="ttname"><a href="namespace_e_o_s.html">EOS</a></div><div class="ttdoc">Equation of states.</div><div class="ttdef"><b>Definition:</b> <a href="pressure_8cuh_source.html#l00025">pressure.cuh:25</a></div></div>
 <div class="ttc" id="anamespace_e_o_s_html_a3af7c1021c515b34243f91b4c464f69e"><div class="ttname"><a href="namespace_e_o_s.html#a3af7c1021c515b34243f91b4c464f69e">EOS::polytropicGas</a></div><div class="ttdeci">__device__ void polytropicGas(Material *materials, Particles *particles, int index)</div><div class="ttdoc">Polytropic gas.</div><div class="ttdef"><b>Definition:</b> <a href="pressure_8cu_source.html#l00006">pressure.cu:6</a></div></div>
 <div class="ttc" id="anamespace_e_o_s_html_ac7449643a315bf2f78dc844faf57fa1d"><div class="ttname"><a href="namespace_e_o_s.html#ac7449643a315bf2f78dc844faf57fa1d">EOS::idealGas</a></div><div class="ttdeci">__device__ void idealGas(Material *materials, Particles *particles, int index)</div><div class="ttdoc">Ideal gas.</div><div class="ttdef"><b>Definition:</b> <a href="pressure_8cu_source.html#l00022">pressure.cu:22</a></div></div>
@@ -150,23 +189,61 @@ $(function() {
 <div class="ttc" id="anamespace_s_p_h_1_1_kernel_1_1_launch_html_adb9bfab7ebee64cebb3b4dfc22d73410"><div class="ttname"><a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#adb9bfab7ebee64cebb3b4dfc22d73410">SPH::Kernel::Launch::calculatePressure</a></div><div class="ttdeci">real calculatePressure(Material *materials, Particles *particles, int numParticles)</div><div class="ttdoc">Wrapper for SPH::Kernel::calculatePressure().</div><div class="ttdef"><b>Definition:</b> <a href="pressure_8cu_source.html#l00080">pressure.cu:80</a></div></div>
 <div class="ttc" id="anamespace_s_p_h_1_1_kernel_html_ae4626d08797d48f118456ae8efd3cf9c"><div class="ttname"><a href="namespace_s_p_h_1_1_kernel.html#ae4626d08797d48f118456ae8efd3cf9c">SPH::Kernel::calculatePressure</a></div><div class="ttdeci">__global__ void calculatePressure(Material *materials, Particles *particles, int numParticles)</div><div class="ttdoc">Calculate the pressure.</div><div class="ttdef"><b>Definition:</b> <a href="pressure_8cu_source.html#l00043">pressure.cu:43</a></div></div>
 <div class="ttc" id="anamespace_s_p_h_html"><div class="ttname"><a href="namespace_s_p_h.html">SPH</a></div><div class="ttdoc">SPH related functions and kernels.</div><div class="ttdef"><b>Definition:</b> <a href="density_8cuh_source.html#l00023">density.cuh:23</a></div></div>
-<div class="ttc" id="aparameter_8h_html_a11d147c64891830c9e79b3315b1b2e21"><div class="ttname"><a href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a></div><div class="ttdeci">double real</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00015">parameter.h:15</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
+    <!--
     milupHPC  - include/sph/pressure.cuh Source File<br />
-    Generated on Thu Jun 23 2022 16:11:19 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    Generated on Wed Jun 29 2022 11:18:49 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    -->
   </small></address>
 </body>
 <footer>
-  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
-  <div id="banner-footer-first"></div>
-  <div id="banner-footer-second"></div>
-  <script>
-    function topFunction() {
-      document.body.scrollTop = 0; // For Safari
-      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    }
-  </script>
+  <custom-footer color="white" background="#2E4053">
+    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
+    <div second>
+      <div style="text-align: center">
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
+        </div>
+        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
+          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
+        </div>
+      </div>
+    </div>
+    <div third>
+      milupHPC  - include/sph/pressure.cuh Source File<br />
+      Generated on Wed Jun 29 2022 11:18:49 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    </div>
+  </custom-footer>
 </footer>
+<!--
+<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
+-->
+<script src="components/hamburger/runtime.js" type="module"></script><script src="components/hamburger/polyfills.js" type="module"></script><script src="components/hamburger/main.js" type="module"></script>
+<script src="components/header/runtime.js" type="module"></script><script src="components/header/polyfills.js" type="module"></script><script src="components/header/main.js" type="module"></script>
+<script src="components/icons/runtime.js" type="module"></script><script src="components/icons/polyfills.js" type="module"></script><script src="components/icons/main.js" type="module"></script>
+<script src="components/footer/runtime.js" type="module"></script><script src="components/footer/polyfills.js" type="module"></script><script src="components/footer/main.js" type="module"></script>
+<script src="components/dialog/runtime.js" type="module"></script><script src="components/dialog/polyfills.js" type="module"></script><script src="components/dialog/main.js" type="module"></script>
+<script src="components/copyable/runtime.js" type="module"></script><script src="components/copyable/polyfills.js" type="module"></script><script src="components/copyable/main.js" type="module"></script>
+<!--
+<script>
+  function toggle() {
+    var elem = document.getElementById("side-nav");
+    console.log(elem);
+    elem.toggleSideNav(false);
+  }
+</script>
+-->
+<!--
+<script>
+  function topFunction() {
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  }
+</script>
+-->
 </html>

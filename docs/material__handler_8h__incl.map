@@ -2,7 +2,7 @@
 <area shape="rect" id="node1" title="Handler for material parameters and settings." alt="" coords="748,5,919,47"/>
 <area shape="rect" id="node2" href="$material_8cuh.html" title="Material parameters and settings." alt="" coords="225,95,319,121"/>
 <area shape="rect" id="node6" href="$cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers." alt="" coords="422,259,533,285"/>
-<area shape="rect" id="node7" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="473,333,575,360"/>
+<area shape="rect" id="node7" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="473,333,575,360"/>
 <area shape="rect" id="node12" href="$include_2utils_2_logger_8h.html" title="C++ style logger." alt="" coords="720,95,827,121"/>
 <area shape="rect" id="node15" title=" " alt="" coords="853,177,920,203"/>
 <area shape="rect" id="node16" title=" " alt="" coords="995,95,1077,121"/>

@@ -2,7 +2,7 @@ var searchData=
 [
   ['access_0',['access',['../struct_artificial_viscosity.html#ac98d07dd8f7b70e16ccb9a01abf56b9c',1,'ArtificialViscosity::access()'],['../struct_eq_of_st.html#ac98d07dd8f7b70e16ccb9a01abf56b9c',1,'EqOfSt::access()'],['../class_material.html#ac98d07dd8f7b70e16ccb9a01abf56b9c',1,'Material::access()'],['../class_vector3.html#ac98d07dd8f7b70e16ccb9a01abf56b9c',1,'Vector3::access()']]],
   ['b_1',['b',['../struct_color_r_g_b.html#a73ccabcabd1b69fa5c8a3fb7128ec70b',1,'ColorRGB']]],
-  ['balsara_5fswitch_2',['BALSARA_SWITCH',['../parameter_8h.html#a2cae5c1e6713981cd887c0128bf8344e',1,'parameter.h']]],
+  ['balsara_5fswitch_2',['BALSARA_SWITCH',['../testcases_2sedov_2parameter_8h.html#a2cae5c1e6713981cd887c0128bf8344e',1,'BALSARA_SWITCH():&#160;parameter.h'],['../include_2parameter_8h.html#a2cae5c1e6713981cd887c0128bf8344e',1,'BALSARA_SWITCH():&#160;parameter.h'],['../testcases_2plummer_2parameter_8h.html#a2cae5c1e6713981cd887c0128bf8344e',1,'BALSARA_SWITCH():&#160;parameter.h']]],
   ['beta_3',['beta',['../struct_artificial_viscosity.html#a618e59eb7922f24f6239133b588eabf4',1,'ArtificialViscosity']]],
   ['bg_5fblue_4',['BG_BLUE',['../namespace_color.html#a20a7b04657c1d83fae5d54514d3f1622aa8fb86ef8c0e0c24572c42afab555ef8',1,'Color']]],
   ['bg_5fdefault_5',['BG_DEFAULT',['../namespace_color.html#a20a7b04657c1d83fae5d54514d3f1622afc2801265e630985d6a6d24828a7bb08',1,'Color']]],
