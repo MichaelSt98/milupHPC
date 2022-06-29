@@ -1,26 +1,14 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+-->
 <head>
-	<meta charset="utf-8">
-	<title>CodePortray</title>
-	<base href="/">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: src/helper_handler.cpp Source File</title>
-	<title>src/helper_handler.cpp Source File</title>
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -34,68 +22,42 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
+	<!-- Add icon library -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- Add font awesome icons -->
+	<!--HIGHLIGHT.JS INSTALL BEGIN
+	<link rel="stylesheet" href="github.min.css">
+	<script src="highlight.js"></script>
+	<script>
+		$(function() {
+			hljs.configure({useBR: false});
+			$(".fragment").each(function(i,node) {
+				$(node).removeClass("fragment");
+				hljs.highlightBlock(node);
+			});
+		});
+	</script>
+	HIGHLIGHT.JS INSTALL END-->
 </head>
 <body>
-<custom-header class="custom-header-class">
-	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
-	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
-	<div shortcuts style="display: table">
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
-		</div>
-		<!-- get the code ... -->
-		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
-		<div style="display: table-cell; padding-right: 2px">
-			<custom-dialog window-width="600px" window-height="400px">
-				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
-				<div title>Get the code: milupHPC!</div>
-				<div style="text-align: center; padding-top: 20px;">
-					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
-					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
-					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
-					<div style="padding-top: 40px">clone via HTTPS:</div>
-					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">clone via SSH:</div>
-					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
-					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
-				</div>
-				<!--<div footer>This is the footer</div>-->
-			</custom-dialog>
-		</div>
-		<!-- end: get the code .... -->
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
-		</div>
-		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
-	</div>
-</custom-header>
-	<!--
-	<custom-side-nav id="side-nav" nav-width="300">
-		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
-		<div>test</div>
-	</custom-side-nav>
-	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation
+				milupHPC documentation <!-- src/helper_handler.cpp Source File -->
 			</span>
+			<!-- <span class="search">
+				<input type="text" placeholder="Search" onkeydown="search(this,event);">
+			</span> -->
 		</div>
+    <!--
+	<div class="icon-bar">
+		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
+		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
+		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
+	</div>
+	</div>
+	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -228,11 +190,11 @@ $(function() {
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#a88053aa2d7fa8e97293d264e71e6e5d2">d_integerVal1</a>, 0, 1);</div>
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#a4e5020d3b628ae84e3e73fcaa3a4ada4">d_integerVal2</a>, 0, 1);</div>
 <div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#a16e0b8aa85470879ed34cd40ccc5b6ee">d_realVal</a>, (<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>)0, 1);</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#af2098df54c81698d1a12cf515d9d1256">d_realVal1</a>, (<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>)0, 1);</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#a196eca68c428999ac7153fa1e866b7d1">d_realVal2</a>, (<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>)0, 1);</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#a16e0b8aa85470879ed34cd40ccc5b6ee">d_realVal</a>, (<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>)0, 1);</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#af2098df54c81698d1a12cf515d9d1256">d_realVal1</a>, (<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>)0, 1);</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#a196eca68c428999ac7153fa1e866b7d1">d_realVal2</a>, (<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>)0, 1);</div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#a44d0a2338baaae90bc7cc2c752a1f182">d_keyTypeVal</a>, (<a class="code hl_typedef" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a>)0, 1);</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#a44d0a2338baaae90bc7cc2c752a1f182">d_keyTypeVal</a>, (<a class="code hl_typedef" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a>)0, 1);</div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#ada949a5553ee0019237cc1bc485b8816">d_integerBuffer</a>, 0, <a class="code hl_variable" href="class_helper_handler.html#abf4b44dbd899e51f96ede4755eb50c9e">numNodes</a>);</div>
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#ab64dc260cdeedec1ac3fab3692384550">d_integerBuffer1</a>, 0, <a class="code hl_variable" href="class_helper_handler.html#a46349ee086a46430f93eb5a3d16fa0f5">numParticles</a>);</div>
@@ -243,15 +205,15 @@ $(function() {
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#a06bb273757e28a8e8aaf9226e966b2a4">d_sendCount</a>, 0, <a class="code hl_variable" href="class_helper_handler.html#a4157afa6af67e112b313b0188e1a52ae">numProcesses</a>);</div>
 <div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#ac07baf4a2fff67e4a0882e88fb6dafaa">d_sendCount1</a>, 0, <a class="code hl_variable" href="class_helper_handler.html#a4157afa6af67e112b313b0188e1a52ae">numProcesses</a>);</div>
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#a802eb08949c7b12070c2f6be137c9170">d_idIntegerBuffer</a>, (<a class="code hl_typedef" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a>)0, <a class="code hl_variable" href="class_helper_handler.html#a46349ee086a46430f93eb5a3d16fa0f5">numParticles</a>);</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#aab8369ba3cbbce9710f2d43d383d135a">d_idIntegerBuffer1</a>, (<a class="code hl_typedef" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a>)0, <a class="code hl_variable" href="class_helper_handler.html#a46349ee086a46430f93eb5a3d16fa0f5">numParticles</a>);</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#a802eb08949c7b12070c2f6be137c9170">d_idIntegerBuffer</a>, (<a class="code hl_typedef" href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a>)0, <a class="code hl_variable" href="class_helper_handler.html#a46349ee086a46430f93eb5a3d16fa0f5">numParticles</a>);</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#aab8369ba3cbbce9710f2d43d383d135a">d_idIntegerBuffer1</a>, (<a class="code hl_typedef" href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a>)0, <a class="code hl_variable" href="class_helper_handler.html#a46349ee086a46430f93eb5a3d16fa0f5">numParticles</a>);</div>
 <div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#af0d33c8d8c3f7624efdf8a412aba27b2">d_realBuffer</a>, (<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>)0, <a class="code hl_variable" href="class_helper_handler.html#abf4b44dbd899e51f96ede4755eb50c9e">numNodes</a>);</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#abcd23404d9e27e6cb2af112ee4ac2ff5">d_realBuffer1</a>, (<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>)0, <a class="code hl_variable" href="class_helper_handler.html#abf4b44dbd899e51f96ede4755eb50c9e">numNodes</a>);</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#af0d33c8d8c3f7624efdf8a412aba27b2">d_realBuffer</a>, (<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>)0, <a class="code hl_variable" href="class_helper_handler.html#abf4b44dbd899e51f96ede4755eb50c9e">numNodes</a>);</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#abcd23404d9e27e6cb2af112ee4ac2ff5">d_realBuffer1</a>, (<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>)0, <a class="code hl_variable" href="class_helper_handler.html#abf4b44dbd899e51f96ede4755eb50c9e">numNodes</a>);</div>
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#a8cca9ff13c74f00c07d29d8903969e64">d_keyTypeBuffer</a>, (<a class="code hl_typedef" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a>)0, <a class="code hl_variable" href="class_helper_handler.html#a8ee52f5b2e7435ad8d9b435fff55e324">numParticlesLocal</a>);</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#afebb304eb90f97f38d870b4797ecedc0">d_keyTypeBuffer1</a>, (<a class="code hl_typedef" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a>)0, <a class="code hl_variable" href="class_helper_handler.html#a6de811a6b3ee38880e6e377ff5d6bc9a">sumParticles</a>);</div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#abb6e5b8270b87e89387303f5178c2ffe">d_keyTypeBuffer2</a>, (<a class="code hl_typedef" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a>)0, <a class="code hl_variable" href="class_helper_handler.html#a6de811a6b3ee38880e6e377ff5d6bc9a">sumParticles</a>);</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#a8cca9ff13c74f00c07d29d8903969e64">d_keyTypeBuffer</a>, (<a class="code hl_typedef" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a>)0, <a class="code hl_variable" href="class_helper_handler.html#a8ee52f5b2e7435ad8d9b435fff55e324">numParticlesLocal</a>);</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#afebb304eb90f97f38d870b4797ecedc0">d_keyTypeBuffer1</a>, (<a class="code hl_typedef" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a>)0, <a class="code hl_variable" href="class_helper_handler.html#a6de811a6b3ee38880e6e377ff5d6bc9a">sumParticles</a>);</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    <a class="code hl_function" href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a>(<a class="code hl_variable" href="class_helper_handler.html#abb6e5b8270b87e89387303f5178c2ffe">d_keyTypeBuffer2</a>, (<a class="code hl_typedef" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a>)0, <a class="code hl_variable" href="class_helper_handler.html#a6de811a6b3ee38880e6e377ff5d6bc9a">sumParticles</a>);</div>
 <div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span> </div>
 <div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    <span class="comment">//cuda::set(d_integerBuffer, 0, length);</span></div>
 <div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    <span class="comment">//cuda::set(d_realBuffer, (real)0, length);</span></div>
@@ -287,9 +249,6 @@ $(function() {
 <div class="ttc" id="aclass_helper_handler_html_af0d33c8d8c3f7624efdf8a412aba27b2"><div class="ttname"><a href="class_helper_handler.html#af0d33c8d8c3f7624efdf8a412aba27b2">HelperHandler::d_realBuffer</a></div><div class="ttdeci">real * d_realBuffer</div><div class="ttdef"><b>Definition:</b> <a href="helper__handler_8h_source.html#l00042">helper_handler.h:42</a></div></div>
 <div class="ttc" id="aclass_helper_handler_html_af2098df54c81698d1a12cf515d9d1256"><div class="ttname"><a href="class_helper_handler.html#af2098df54c81698d1a12cf515d9d1256">HelperHandler::d_realVal1</a></div><div class="ttdeci">real * d_realVal1</div><div class="ttdef"><b>Definition:</b> <a href="helper__handler_8h_source.html#l00025">helper_handler.h:25</a></div></div>
 <div class="ttc" id="aclass_helper_handler_html_afebb304eb90f97f38d870b4797ecedc0"><div class="ttname"><a href="class_helper_handler.html#afebb304eb90f97f38d870b4797ecedc0">HelperHandler::d_keyTypeBuffer1</a></div><div class="ttdeci">keyType * d_keyTypeBuffer1</div><div class="ttdef"><b>Definition:</b> <a href="helper__handler_8h_source.html#l00046">helper_handler.h:46</a></div></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_a11d147c64891830c9e79b3315b1b2e21"><div class="ttname"><a href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a></div><div class="ttdeci">double real</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00015">parameter.h:15</a></div></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_a2d83a9d6677f42e2572510c1a14e58ed"><div class="ttname"><a href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a></div><div class="ttdeci">unsigned long keyType</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00018">parameter.h:18</a></div></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_ae84a801cb4761e9d8f613b66a73c4b98"><div class="ttname"><a href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a></div><div class="ttdeci">int idInteger</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00019">parameter.h:19</a></div></div>
 <div class="ttc" id="anamespace_helper_n_s_1_1_kernel_1_1_launch_html_afe07066189154ca665cae683a914b9fd"><div class="ttname"><a href="namespace_helper_n_s_1_1_kernel_1_1_launch.html#afe07066189154ca665cae683a914b9fd">HelperNS::Kernel::Launch::set</a></div><div class="ttdeci">void set(Helper *helper, integer *integerVal, integer *integerVal1, integer *integerVal2, real *realVal, real *realVal1, real *realVal2, keyType *keyTypeVal, integer *integerBuffer, integer *integerBuffer1, integer *integerBuffer2, integer *integerBuffer3, integer *integerBuffer4, integer *sendCount, integer *sendCount1, idInteger *idIntegerBuffer, idInteger *idIntegerBuffer1, real *realBuffer, real *realBuffer1, keyType *keyTypeBuffer, keyType *keyTypeBuffer1, keyType *keyTypeBuffer2)</div><div class="ttdef"><b>Definition:</b> <a href="helper_8cu_source.html#l00112">helper.cu:112</a></div></div>
 <div class="ttc" id="anamespace_profiler_ids_html_a09a84c1c2c9df337fb517676c4f5531c"><div class="ttname"><a href="namespace_profiler_ids.html#a09a84c1c2c9df337fb517676c4f5531c">ProfilerIds::numParticlesLocal</a></div><div class="ttdeci">const char *const numParticlesLocal</div><div class="ttdef"><b>Definition:</b> <a href="h5profiler_8h_source.html#l00030">h5profiler.h:30</a></div></div>
 <div class="ttc" id="anamespace_profiler_ids_html_ad13e3eace63e610c1eb36461ae4c86fd"><div class="ttname"><a href="namespace_profiler_ids.html#ad13e3eace63e610c1eb36461ae4c86fd">ProfilerIds::numParticles</a></div><div class="ttdeci">const char *const numParticles</div><div class="ttdef"><b>Definition:</b> <a href="h5profiler_8h_source.html#l00029">h5profiler.h:29</a></div></div>
@@ -297,61 +256,25 @@ $(function() {
 <div class="ttc" id="anamespacecuda_html_a96edb690f1eb4317fc5a936169735bfc"><div class="ttname"><a href="namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc">cuda::set</a></div><div class="ttdeci">void set(T *d_var, T val, std::size_t count=1)</div><div class="ttdoc">Set device memory to a specific value.</div><div class="ttdef"><b>Definition:</b> <a href="cuda__runtime_8h_source.html#l00056">cuda_runtime.h:56</a></div></div>
 <div class="ttc" id="anamespacecuda_html_a9a0da8d4e84b94a6893faafbc8cc6dd9"><div class="ttname"><a href="namespacecuda.html#a9a0da8d4e84b94a6893faafbc8cc6dd9">cuda::free</a></div><div class="ttdeci">void free(T *d_var)</div><div class="ttdoc">Free device memory.</div><div class="ttdef"><b>Definition:</b> <a href="cuda__runtime_8h_source.html#l00081">cuda_runtime.h:81</a></div></div>
 <div class="ttc" id="anamespacecuda_html_aba186b2049cc77c289e110a45edab71a"><div class="ttname"><a href="namespacecuda.html#aba186b2049cc77c289e110a45edab71a">cuda::malloc</a></div><div class="ttdeci">void malloc(T *&amp;d_var, std::size_t count)</div><div class="ttdoc">Allocate device memory.</div><div class="ttdef"><b>Definition:</b> <a href="cuda__runtime_8h_source.html#l00070">cuda_runtime.h:70</a></div></div>
+<div class="ttc" id="aparameter_8h_html_a11d147c64891830c9e79b3315b1b2e21"><div class="ttname"><a href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a></div><div class="ttdeci">double real</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00015">parameter.h:15</a></div></div>
+<div class="ttc" id="aparameter_8h_html_a2d83a9d6677f42e2572510c1a14e58ed"><div class="ttname"><a href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a></div><div class="ttdeci">unsigned long keyType</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00018">parameter.h:18</a></div></div>
+<div class="ttc" id="aparameter_8h_html_ae84a801cb4761e9d8f613b66a73c4b98"><div class="ttname"><a href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a></div><div class="ttdeci">int idInteger</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00019">parameter.h:19</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
-    <!--
     milupHPC  - src/helper_handler.cpp Source File<br />
-    Generated on Wed Jun 29 2022 11:18:49 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    -->
+    Generated on Thu Jun 23 2022 16:11:19 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
   </small></address>
 </body>
 <footer>
-  <custom-footer color="white" background="#2E4053">
-    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
-    <div second>
-      <div style="text-align: center">
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-        </div>
-      </div>
-    </div>
-    <div third>
-      milupHPC  - src/helper_handler.cpp Source File<br />
-      Generated on Wed Jun 29 2022 11:18:49 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    </div>
-  </custom-footer>
+  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
+  <div id="banner-footer-first"></div>
+  <div id="banner-footer-second"></div>
+  <script>
+    function topFunction() {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+  </script>
 </footer>
-<!--
-<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
--->
-<script src="components/hamburger/runtime.js" type="module"></script><script src="components/hamburger/polyfills.js" type="module"></script><script src="components/hamburger/main.js" type="module"></script>
-<script src="components/header/runtime.js" type="module"></script><script src="components/header/polyfills.js" type="module"></script><script src="components/header/main.js" type="module"></script>
-<script src="components/icons/runtime.js" type="module"></script><script src="components/icons/polyfills.js" type="module"></script><script src="components/icons/main.js" type="module"></script>
-<script src="components/footer/runtime.js" type="module"></script><script src="components/footer/polyfills.js" type="module"></script><script src="components/footer/main.js" type="module"></script>
-<script src="components/dialog/runtime.js" type="module"></script><script src="components/dialog/polyfills.js" type="module"></script><script src="components/dialog/main.js" type="module"></script>
-<script src="components/copyable/runtime.js" type="module"></script><script src="components/copyable/polyfills.js" type="module"></script><script src="components/copyable/main.js" type="module"></script>
-<!--
-<script>
-  function toggle() {
-    var elem = document.getElementById("side-nav");
-    console.log(elem);
-    elem.toggleSideNav(false);
-  }
-</script>
--->
-<!--
-<script>
-  function topFunction() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  }
-</script>
--->
 </html>

@@ -1,26 +1,14 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+-->
 <head>
-	<meta charset="utf-8">
-	<title>CodePortray</title>
-	<base href="/">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: SubDomainKeyTree Class Reference</title>
-	<title>SubDomainKeyTree Class Reference</title>
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -34,68 +22,42 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
+	<!-- Add icon library -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- Add font awesome icons -->
+	<!--HIGHLIGHT.JS INSTALL BEGIN
+	<link rel="stylesheet" href="github.min.css">
+	<script src="highlight.js"></script>
+	<script>
+		$(function() {
+			hljs.configure({useBR: false});
+			$(".fragment").each(function(i,node) {
+				$(node).removeClass("fragment");
+				hljs.highlightBlock(node);
+			});
+		});
+	</script>
+	HIGHLIGHT.JS INSTALL END-->
 </head>
 <body>
-<custom-header class="custom-header-class">
-	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
-	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
-	<div shortcuts style="display: table">
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
-		</div>
-		<!-- get the code ... -->
-		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
-		<div style="display: table-cell; padding-right: 2px">
-			<custom-dialog window-width="600px" window-height="400px">
-				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
-				<div title>Get the code: milupHPC!</div>
-				<div style="text-align: center; padding-top: 20px;">
-					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
-					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
-					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
-					<div style="padding-top: 40px">clone via HTTPS:</div>
-					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">clone via SSH:</div>
-					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
-					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
-				</div>
-				<!--<div footer>This is the footer</div>-->
-			</custom-dialog>
-		</div>
-		<!-- end: get the code .... -->
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
-		</div>
-		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
-	</div>
-</custom-header>
-	<!--
-	<custom-side-nav id="side-nav" nav-width="300">
-		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
-		<div>test</div>
-	</custom-side-nav>
-	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation
+				milupHPC documentation <!-- SubDomainKeyTree Class Reference -->
 			</span>
+			<!-- <span class="search">
+				<input type="text" placeholder="Search" onkeydown="search(this,event);">
+			</span> -->
 		</div>
+    <!--
+	<div class="icon-bar">
+		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
+		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
+		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
+	</div>
+	</div>
+	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -156,34 +118,34 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af193ffd4cdee61fb5704e4b910e2c2cd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sub_domain_key_tree.html#af193ffd4cdee61fb5704e4b910e2c2cd">SubDomainKeyTree</a> ()</td></tr>
 <tr class="memdesc:af193ffd4cdee61fb5704e4b910e2c2cd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default Constructor.  <a href="class_sub_domain_key_tree.html#af193ffd4cdee61fb5704e4b910e2c2cd">More...</a><br /></td></tr>
 <tr class="separator:af193ffd4cdee61fb5704e4b910e2c2cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92af027824b5d40dc899feb96f3554ab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sub_domain_key_tree.html#a92af027824b5d40dc899feb96f3554ab">SubDomainKeyTree</a> (<a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="class_sub_domain_key_tree.html#ad364fe0bf3c4c29e3e7c403e1fef200b">rank</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="class_sub_domain_key_tree.html#af2a6c8155e7aa2cacaf08b6a6119f36c">numProcesses</a>, <a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *<a class="el" href="class_sub_domain_key_tree.html#a605aa844050a06650ca0622aaf66c7a8">range</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_sub_domain_key_tree.html#ab27e79bb753a768743aa86ff9db38999">procParticleCounter</a>)</td></tr>
+<tr class="memitem:a92af027824b5d40dc899feb96f3554ab"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sub_domain_key_tree.html#a92af027824b5d40dc899feb96f3554ab">SubDomainKeyTree</a> (<a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="class_sub_domain_key_tree.html#ad364fe0bf3c4c29e3e7c403e1fef200b">rank</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="class_sub_domain_key_tree.html#af2a6c8155e7aa2cacaf08b6a6119f36c">numProcesses</a>, <a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *<a class="el" href="class_sub_domain_key_tree.html#a605aa844050a06650ca0622aaf66c7a8">range</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_sub_domain_key_tree.html#ab27e79bb753a768743aa86ff9db38999">procParticleCounter</a>)</td></tr>
 <tr class="memdesc:a92af027824b5d40dc899feb96f3554ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="class_sub_domain_key_tree.html#a92af027824b5d40dc899feb96f3554ab">More...</a><br /></td></tr>
 <tr class="separator:a92af027824b5d40dc899feb96f3554ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9269bb3f9fd3e01544e21758e94330a0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sub_domain_key_tree.html#a9269bb3f9fd3e01544e21758e94330a0">~SubDomainKeyTree</a> ()</td></tr>
 <tr class="memdesc:a9269bb3f9fd3e01544e21758e94330a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_sub_domain_key_tree.html#a9269bb3f9fd3e01544e21758e94330a0">More...</a><br /></td></tr>
 <tr class="separator:a9269bb3f9fd3e01544e21758e94330a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab1ea9bb9811c56e3782617a7b2fc23a6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sub_domain_key_tree.html#ab1ea9bb9811c56e3782617a7b2fc23a6">set</a> (<a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="class_sub_domain_key_tree.html#ad364fe0bf3c4c29e3e7c403e1fef200b">rank</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="class_sub_domain_key_tree.html#af2a6c8155e7aa2cacaf08b6a6119f36c">numProcesses</a>, <a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *<a class="el" href="class_sub_domain_key_tree.html#a605aa844050a06650ca0622aaf66c7a8">range</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_sub_domain_key_tree.html#ab27e79bb753a768743aa86ff9db38999">procParticleCounter</a>)</td></tr>
+<tr class="memitem:ab1ea9bb9811c56e3782617a7b2fc23a6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sub_domain_key_tree.html#ab1ea9bb9811c56e3782617a7b2fc23a6">set</a> (<a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="class_sub_domain_key_tree.html#ad364fe0bf3c4c29e3e7c403e1fef200b">rank</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="class_sub_domain_key_tree.html#af2a6c8155e7aa2cacaf08b6a6119f36c">numProcesses</a>, <a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *<a class="el" href="class_sub_domain_key_tree.html#a605aa844050a06650ca0622aaf66c7a8">range</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_sub_domain_key_tree.html#ab27e79bb753a768743aa86ff9db38999">procParticleCounter</a>)</td></tr>
 <tr class="memdesc:ab1ea9bb9811c56e3782617a7b2fc23a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter.  <a href="class_sub_domain_key_tree.html#ab1ea9bb9811c56e3782617a7b2fc23a6">More...</a><br /></td></tr>
 <tr class="separator:ab1ea9bb9811c56e3782617a7b2fc23a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97cea9227718b239343d6964915015c0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sub_domain_key_tree.html#a97cea9227718b239343d6964915015c0">key2proc</a> (<a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> key)</td></tr>
+<tr class="memitem:a97cea9227718b239343d6964915015c0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sub_domain_key_tree.html#a97cea9227718b239343d6964915015c0">key2proc</a> (<a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> key)</td></tr>
 <tr class="memdesc:a97cea9227718b239343d6964915015c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute particle's MPI process belonging by it's key.  <a href="class_sub_domain_key_tree.html#a97cea9227718b239343d6964915015c0">More...</a><br /></td></tr>
 <tr class="separator:a97cea9227718b239343d6964915015c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a98b23970a6c512d4c83b93bf24a7af3d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sub_domain_key_tree.html#a98b23970a6c512d4c83b93bf24a7af3d">isDomainListNode</a> (<a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> key, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> maxLevel, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> level, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType=<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">Curve::lebesgue</a>)</td></tr>
+<tr class="memitem:a98b23970a6c512d4c83b93bf24a7af3d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sub_domain_key_tree.html#a98b23970a6c512d4c83b93bf24a7af3d">isDomainListNode</a> (<a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> key, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> maxLevel, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> level, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType=<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">Curve::lebesgue</a>)</td></tr>
 <tr class="memdesc:a98b23970a6c512d4c83b93bf24a7af3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether key, thus particle, represents a domain list node.  <a href="class_sub_domain_key_tree.html#a98b23970a6c512d4c83b93bf24a7af3d">More...</a><br /></td></tr>
 <tr class="separator:a98b23970a6c512d4c83b93bf24a7af3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ad364fe0bf3c4c29e3e7c403e1fef200b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sub_domain_key_tree.html#ad364fe0bf3c4c29e3e7c403e1fef200b">rank</a></td></tr>
+<tr class="memitem:ad364fe0bf3c4c29e3e7c403e1fef200b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sub_domain_key_tree.html#ad364fe0bf3c4c29e3e7c403e1fef200b">rank</a></td></tr>
 <tr class="memdesc:ad364fe0bf3c4c29e3e7c403e1fef200b"><td class="mdescLeft">&#160;</td><td class="mdescRight">MPI rank.  <a href="class_sub_domain_key_tree.html#ad364fe0bf3c4c29e3e7c403e1fef200b">More...</a><br /></td></tr>
 <tr class="separator:ad364fe0bf3c4c29e3e7c403e1fef200b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2a6c8155e7aa2cacaf08b6a6119f36c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sub_domain_key_tree.html#af2a6c8155e7aa2cacaf08b6a6119f36c">numProcesses</a></td></tr>
+<tr class="memitem:af2a6c8155e7aa2cacaf08b6a6119f36c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sub_domain_key_tree.html#af2a6c8155e7aa2cacaf08b6a6119f36c">numProcesses</a></td></tr>
 <tr class="memdesc:af2a6c8155e7aa2cacaf08b6a6119f36c"><td class="mdescLeft">&#160;</td><td class="mdescRight">MPI number of processes.  <a href="class_sub_domain_key_tree.html#af2a6c8155e7aa2cacaf08b6a6119f36c">More...</a><br /></td></tr>
 <tr class="separator:af2a6c8155e7aa2cacaf08b6a6119f36c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a605aa844050a06650ca0622aaf66c7a8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sub_domain_key_tree.html#a605aa844050a06650ca0622aaf66c7a8">range</a></td></tr>
+<tr class="memitem:a605aa844050a06650ca0622aaf66c7a8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sub_domain_key_tree.html#a605aa844050a06650ca0622aaf66c7a8">range</a></td></tr>
 <tr class="memdesc:a605aa844050a06650ca0622aaf66c7a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Space-filling curve ranges, mapping key ranges/borders to MPI processes.  <a href="class_sub_domain_key_tree.html#a605aa844050a06650ca0622aaf66c7a8">More...</a><br /></td></tr>
 <tr class="separator:a605aa844050a06650ca0622aaf66c7a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab27e79bb753a768743aa86ff9db38999"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sub_domain_key_tree.html#ab27e79bb753a768743aa86ff9db38999">procParticleCounter</a></td></tr>
+<tr class="memitem:ab27e79bb753a768743aa86ff9db38999"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sub_domain_key_tree.html#ab27e79bb753a768743aa86ff9db38999">procParticleCounter</a></td></tr>
 <tr class="memdesc:ab27e79bb753a768743aa86ff9db38999"><td class="mdescLeft">&#160;</td><td class="mdescRight">particle counter in dependence of MPI process(es)  <a href="class_sub_domain_key_tree.html#ab27e79bb753a768743aa86ff9db38999">More...</a><br /></td></tr>
 <tr class="separator:ab27e79bb753a768743aa86ff9db38999"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -222,25 +184,25 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> SubDomainKeyTree::SubDomainKeyTree </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>rank</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numProcesses</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td>
           <td class="paramname"><em>range</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>procParticleCounter</em>&#160;</td>
         </tr>
         <tr>
@@ -297,19 +259,19 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> bool SubDomainKeyTree::isDomainListNode </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a>&#160;</td>
           <td class="paramname"><em>key</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>maxLevel</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>level</em>, </td>
         </tr>
         <tr>
@@ -361,9 +323,9 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> SubDomainKeyTree::key2proc </td>
+          <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> SubDomainKeyTree::key2proc </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a>&#160;</td>
           <td class="paramname"><em>key</em></td><td>)</td>
           <td></td>
         </tr>
@@ -392,25 +354,25 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void SubDomainKeyTree::set </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>rank</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numProcesses</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td>
           <td class="paramname"><em>range</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>procParticleCounter</em>&#160;</td>
         </tr>
         <tr>
@@ -444,7 +406,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> SubDomainKeyTree::numProcesses</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> SubDomainKeyTree::numProcesses</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -462,7 +424,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* SubDomainKeyTree::procParticleCounter</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* SubDomainKeyTree::procParticleCounter</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -480,7 +442,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a>* SubDomainKeyTree::range</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a>* SubDomainKeyTree::range</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -498,7 +460,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> SubDomainKeyTree::rank</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> SubDomainKeyTree::rank</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -516,58 +478,19 @@ Public Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
-    <!--
     milupHPC  - SubDomainKeyTree Class Reference<br />
-    Generated on Wed Jun 29 2022 11:18:50 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    -->
+    Generated on Thu Jun 23 2022 16:11:20 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
   </small></address>
 </body>
 <footer>
-  <custom-footer color="white" background="#2E4053">
-    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
-    <div second>
-      <div style="text-align: center">
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-        </div>
-      </div>
-    </div>
-    <div third>
-      milupHPC  - SubDomainKeyTree Class Reference<br />
-      Generated on Wed Jun 29 2022 11:18:50 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    </div>
-  </custom-footer>
+  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
+  <div id="banner-footer-first"></div>
+  <div id="banner-footer-second"></div>
+  <script>
+    function topFunction() {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+  </script>
 </footer>
-<!--
-<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
--->
-<script src="components/hamburger/runtime.js" type="module"></script><script src="components/hamburger/polyfills.js" type="module"></script><script src="components/hamburger/main.js" type="module"></script>
-<script src="components/header/runtime.js" type="module"></script><script src="components/header/polyfills.js" type="module"></script><script src="components/header/main.js" type="module"></script>
-<script src="components/icons/runtime.js" type="module"></script><script src="components/icons/polyfills.js" type="module"></script><script src="components/icons/main.js" type="module"></script>
-<script src="components/footer/runtime.js" type="module"></script><script src="components/footer/polyfills.js" type="module"></script><script src="components/footer/main.js" type="module"></script>
-<script src="components/dialog/runtime.js" type="module"></script><script src="components/dialog/polyfills.js" type="module"></script><script src="components/dialog/main.js" type="module"></script>
-<script src="components/copyable/runtime.js" type="module"></script><script src="components/copyable/polyfills.js" type="module"></script><script src="components/copyable/main.js" type="module"></script>
-<!--
-<script>
-  function toggle() {
-    var elem = document.getElementById("side-nav");
-    console.log(elem);
-    elem.toggleSideNav(false);
-  }
-</script>
--->
-<!--
-<script>
-  function topFunction() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  }
-</script>
--->
 </html>

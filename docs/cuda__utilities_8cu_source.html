@@ -1,26 +1,14 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+-->
 <head>
-	<meta charset="utf-8">
-	<title>CodePortray</title>
-	<base href="/">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: src/cuda_utils/cuda_utilities.cu Source File</title>
-	<title>src/cuda_utils/cuda_utilities.cu Source File</title>
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -34,68 +22,42 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
+	<!-- Add icon library -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- Add font awesome icons -->
+	<!--HIGHLIGHT.JS INSTALL BEGIN
+	<link rel="stylesheet" href="github.min.css">
+	<script src="highlight.js"></script>
+	<script>
+		$(function() {
+			hljs.configure({useBR: false});
+			$(".fragment").each(function(i,node) {
+				$(node).removeClass("fragment");
+				hljs.highlightBlock(node);
+			});
+		});
+	</script>
+	HIGHLIGHT.JS INSTALL END-->
 </head>
 <body>
-<custom-header class="custom-header-class">
-	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
-	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
-	<div shortcuts style="display: table">
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
-		</div>
-		<!-- get the code ... -->
-		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
-		<div style="display: table-cell; padding-right: 2px">
-			<custom-dialog window-width="600px" window-height="400px">
-				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
-				<div title>Get the code: milupHPC!</div>
-				<div style="text-align: center; padding-top: 20px;">
-					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
-					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
-					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
-					<div style="padding-top: 40px">clone via HTTPS:</div>
-					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">clone via SSH:</div>
-					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
-					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
-				</div>
-				<!--<div footer>This is the footer</div>-->
-			</custom-dialog>
-		</div>
-		<!-- end: get the code .... -->
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
-		</div>
-		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
-	</div>
-</custom-header>
-	<!--
-	<custom-side-nav id="side-nav" nav-width="300">
-		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
-		<div>test</div>
-	</custom-side-nav>
-	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation
+				milupHPC documentation <!-- src/cuda_utils/cuda_utilities.cu Source File -->
 			</span>
+			<!-- <span class="search">
+				<input type="text" placeholder="Search" onkeydown="search(this,event);">
+			</span> -->
 		</div>
+    <!--
+	<div class="icon-bar">
+		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
+		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
+		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
+	</div>
+	</div>
+	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -180,11 +142,11 @@ $(function() {
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_kernel.html">Kernel</a> {</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel.html#a1bb2bbe12ed2b19841ea2a0f4c54c586">   44</a></span>        __global__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel.html#a1bb2bbe12ed2b19841ea2a0f4c54c586">collectValues</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *indices, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entries, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *collector, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> count) {</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel.html#a1bb2bbe12ed2b19841ea2a0f4c54c586">   44</a></span>        __global__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel.html#a1bb2bbe12ed2b19841ea2a0f4c54c586">collectValues</a>(<a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *indices, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entries, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *collector, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> count) {</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> index = threadIdx.x + blockIdx.x * blockDim.x;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stride = blockDim.x * gridDim.x;</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> offset = 0;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> index = threadIdx.x + blockIdx.x * blockDim.x;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stride = blockDim.x * gridDim.x;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> offset = 0;</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>            <span class="keywordflow">while</span> ((index + offset) &lt; count) {</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>                collector[index + offset] = entries[indices[index + offset]];</div>
@@ -192,12 +154,12 @@ $(function() {
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>            }</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        }</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel.html#a38bbcbccb21aad7738d77c20b8b6879a">   56</a></span>        __global__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel.html#a38bbcbccb21aad7738d77c20b8b6879a">checkValues</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *indices, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry1, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry2, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry3,</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>                                      <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> count) {</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel.html#a38bbcbccb21aad7738d77c20b8b6879a">   56</a></span>        __global__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel.html#a38bbcbccb21aad7738d77c20b8b6879a">checkValues</a>(<a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *indices, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry1, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry2, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry3,</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>                                      <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> count) {</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> index = threadIdx.x + blockIdx.x * blockDim.x;</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stride = blockDim.x * gridDim.x;</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> offset = 0;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> index = threadIdx.x + blockIdx.x * blockDim.x;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stride = blockDim.x * gridDim.x;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> offset = 0;</div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>            <span class="keywordflow">while</span> ((index + offset) &lt; count) {</div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>                <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;count; i++) {</div>
@@ -212,11 +174,11 @@ $(function() {
 <div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        }</div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel.html#aa0664dabd9182e4d1084f2cc25f0fd08">   76</a></span>        __global__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel.html#aa0664dabd9182e4d1084f2cc25f0fd08">findDuplicates</a>(T *array, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel.html#aa0664dabd9182e4d1084f2cc25f0fd08">   76</a></span>        __global__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel.html#aa0664dabd9182e4d1084f2cc25f0fd08">findDuplicates</a>(T *array, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> index = threadIdx.x + blockIdx.x * blockDim.x;</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stride = blockDim.x * gridDim.x;</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> offset = 0;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> index = threadIdx.x + blockIdx.x * blockDim.x;</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stride = blockDim.x * gridDim.x;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> offset = 0;</div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>            <span class="keywordflow">while</span> ((index + offset) &lt; length) {</div>
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>                <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;length; i++) {</div>
@@ -231,10 +193,10 @@ $(function() {
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>        }</div>
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel.html#a6aa4e285a53b3a22b82b77f379f8b768">   95</a></span>        __global__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel.html#a6aa4e285a53b3a22b82b77f379f8b768">findDuplicateEntries</a>(T *array1, T *array2, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stride = blockDim.x * gridDim.x;</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> offset = 0;</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel.html#a6aa4e285a53b3a22b82b77f379f8b768">   95</a></span>        __global__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel.html#a6aa4e285a53b3a22b82b77f379f8b768">findDuplicateEntries</a>(T *array1, T *array2, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stride = blockDim.x * gridDim.x;</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> offset = 0;</div>
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>            <span class="keywordflow">while</span> ((bodyIndex + offset) &lt; length) {</div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
@@ -252,10 +214,10 @@ $(function() {
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        }</div>
 <div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span> </div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel.html#a4b234f64ded3b110293ce2f63924dca6">  116</a></span>        __global__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel.html#a6aa4e285a53b3a22b82b77f379f8b768">findDuplicateEntries</a>(T *array1, T *array2, T *array3, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stride = blockDim.x * gridDim.x;</div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> offset = 0;</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel.html#a4b234f64ded3b110293ce2f63924dca6">  116</a></span>        __global__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel.html#a6aa4e285a53b3a22b82b77f379f8b768">findDuplicateEntries</a>(T *array1, T *array2, T *array3, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stride = blockDim.x * gridDim.x;</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> offset = 0;</div>
 <div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
 <div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>            <span class="keywordflow">while</span> ((bodyIndex + offset) &lt; length) {</div>
 <div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
@@ -276,10 +238,10 @@ $(function() {
 <div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>        }</div>
 <div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span> </div>
 <div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> U&gt;</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel.html#a1f85196fc4d2fd3ce440a93ee8cccc7c">  140</a></span>        __global__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel.html#aa0664dabd9182e4d1084f2cc25f0fd08">findDuplicates</a>(T *array, U *entry1, U *entry2, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> index = threadIdx.x + blockIdx.x * blockDim.x;</div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stride = blockDim.x * gridDim.x;</div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> offset = 0;</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel.html#a1f85196fc4d2fd3ce440a93ee8cccc7c">  140</a></span>        __global__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel.html#aa0664dabd9182e4d1084f2cc25f0fd08">findDuplicates</a>(T *array, U *entry1, U *entry2, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> index = threadIdx.x + blockIdx.x * blockDim.x;</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stride = blockDim.x * gridDim.x;</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> offset = 0;</div>
 <div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
 <div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>            <span class="keywordflow">while</span> ((index + offset) &lt; length) {</div>
 <div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>                <span class="keywordflow">if</span> ((index + offset) % 100 == 0) {</div>
@@ -299,17 +261,17 @@ $(function() {
 <div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>        }</div>
 <div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span> </div>
 <div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel.html#ab10e8c439cb55c918c538421dc33ec7b">  163</a></span>        __global__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel.html#ab10e8c439cb55c918c538421dc33ec7b">markDuplicates</a>(T *array, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel.html#ab10e8c439cb55c918c538421dc33ec7b">  163</a></span>        __global__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel.html#ab10e8c439cb55c918c538421dc33ec7b">markDuplicates</a>(T *array, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
 <div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span> </div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> index = threadIdx.x + blockIdx.x * blockDim.x;</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stride = blockDim.x * gridDim.x;</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> offset = 0;</div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> maxIndex;</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> index = threadIdx.x + blockIdx.x * blockDim.x;</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stride = blockDim.x * gridDim.x;</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> offset = 0;</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> maxIndex;</div>
 <div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span> </div>
 <div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>            <span class="comment">//remark: check only x, but in principle check all</span></div>
 <div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>            <span class="keywordflow">while</span> ((index + offset) &lt; length) {</div>
 <div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>                <span class="keywordflow">if</span> (array[index + offset] != -1) {</div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>                    <span class="keywordflow">for</span> (<a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> i = 0; i &lt; length; i++) {</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>                    <span class="keywordflow">for</span> (<a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> i = 0; i &lt; length; i++) {</div>
 <div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>                        <span class="keywordflow">if</span> (i != (index + offset)) {</div>
 <div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>                            <span class="keywordflow">if</span> (array[i] != -1 &amp;&amp;  array[index + offset] == array[i]) {</div>
 <div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span> </div>
@@ -367,18 +329,18 @@ $(function() {
 <div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span><span class="comment">        }*/</span></div>
 <div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span> </div>
 <div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> U&gt;</div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel.html#a516f18d50317059d7bef12999384a913">  231</a></span>        __global__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel.html#ab10e8c439cb55c918c538421dc33ec7b">markDuplicates</a>(T *array, U *entry1, U *entry2, U *entry3, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *child, <span class="keywordtype">int</span> length) {</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel.html#a516f18d50317059d7bef12999384a913">  231</a></span>        __global__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel.html#ab10e8c439cb55c918c538421dc33ec7b">markDuplicates</a>(T *array, U *entry1, U *entry2, U *entry3, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *child, <span class="keywordtype">int</span> length) {</div>
 <div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span> </div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> index = threadIdx.x + blockIdx.x * blockDim.x;</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stride = blockDim.x * gridDim.x;</div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> offset = 0;</div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> maxIndex;</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> index = threadIdx.x + blockIdx.x * blockDim.x;</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stride = blockDim.x * gridDim.x;</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> offset = 0;</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>            <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> maxIndex;</div>
 <div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span> </div>
 <div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>            <span class="keywordtype">bool</span> isChild;</div>
 <div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>            <span class="comment">//remark: check only x, but in principle check all</span></div>
 <div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>            <span class="keywordflow">while</span> ((index + offset) &lt; length) {</div>
 <div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>                <span class="keywordflow">if</span> (array[index + offset] != -1) {</div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>                    <span class="keywordflow">for</span> (<a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> i = 0; i &lt; length; i++) {</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>                    <span class="keywordflow">for</span> (<a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> i = 0; i &lt; length; i++) {</div>
 <div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>                        <span class="keywordflow">if</span> (i != (index + offset)) {</div>
 <div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>                            <span class="keywordflow">if</span> (array[i] != -1 &amp;&amp; (array[index + offset] == array[i] || (entry1[array[i]] == entry1[array[index + offset]] &amp;&amp;</div>
 <div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>                                                                                         entry2[array[i]] == entry2[array[index + offset]] &amp;&amp;</div>
@@ -391,8 +353,8 @@ $(function() {
 <div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>                                           entry1[array[index + offset]], entry2[array[index + offset]], entry3[array[index + offset]],</div>
 <div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>                                           entry1[array[i]], entry2[array[i]], entry3[array[i]]);</div>
 <div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span> </div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>                                    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;<a class="code hl_define" href="include_2parameter_8h.html#aaf01a8b5289af20025d06e3fed70cc94">POW_DIM</a>; k++) {</div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>                                        <span class="keywordflow">if</span> (child[<a class="code hl_define" href="include_2parameter_8h.html#aaf01a8b5289af20025d06e3fed70cc94">POW_DIM</a>*array[index + offset] + k] == array[i]) {</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>                                    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;<a class="code hl_define" href="parameter_8h.html#aaf01a8b5289af20025d06e3fed70cc94">POW_DIM</a>; k++) {</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>                                        <span class="keywordflow">if</span> (child[<a class="code hl_define" href="parameter_8h.html#aaf01a8b5289af20025d06e3fed70cc94">POW_DIM</a>*array[index + offset] + k] == array[i]) {</div>
 <div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>                                            printf(<span class="stringliteral">&quot;isChild: index = %i: child %i == i = %i\n&quot;</span>, array[index + offset],</div>
 <div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>                                                   k, array[i]);</div>
 <div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>                                            isChild = <span class="keyword">true</span>;</div>
@@ -436,7 +398,7 @@ $(function() {
 <div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>        }</div>
 <div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span> </div>
 <div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel.html#a07a033c84ade01b70ccc10055423c96b">  300</a></span>        __global__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel.html#a07a033c84ade01b70ccc10055423c96b">removeDuplicates</a>(T *array, T *removedArray, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel.html#a07a033c84ade01b70ccc10055423c96b">  300</a></span>        __global__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel.html#a07a033c84ade01b70ccc10055423c96b">removeDuplicates</a>(T *array, T *removedArray, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
 <div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span> </div>
 <div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>            <span class="keywordtype">int</span> index = threadIdx.x + blockIdx.x * blockDim.x;</div>
 <div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>            <span class="keywordtype">int</span> stride = blockDim.x * gridDim.x;</div>
@@ -456,64 +418,64 @@ $(function() {
 <div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>        }</div>
 <div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span> </div>
 <div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span> </div>
-<div class="line"><a id="l00320" name="l00320"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a8c92b9fd7ef383d0519fa136734edf03">  320</a></span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a8c92b9fd7ef383d0519fa136734edf03">Launch::collectValues</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *indices, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entries, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *collector, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> count) {</div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a8c92b9fd7ef383d0519fa136734edf03">  320</a></span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a8c92b9fd7ef383d0519fa136734edf03">Launch::collectValues</a>(<a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *indices, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entries, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *collector, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> count) {</div>
 <div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>            <a class="code hl_class" href="class_execution_policy.html">ExecutionPolicy</a> executionPolicy;</div>
 <div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>            <span class="keywordflow">return</span> <a class="code hl_function" href="namespacecuda.html#ae129f267f2d83118533c78c712265b58">cuda::launch</a>(<span class="keyword">true</span>, executionPolicy, <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel.html#a1bb2bbe12ed2b19841ea2a0f4c54c586">::CudaUtils::Kernel::collectValues</a>, indices, entries,</div>
 <div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>                                collector, count);</div>
 <div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>        }</div>
 <div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span> </div>
-<div class="line"><a id="l00326" name="l00326"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aac56fe71333f4b4f0a4417b6ed86ed88">  326</a></span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aac56fe71333f4b4f0a4417b6ed86ed88">Launch::checkValues</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *indices, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry1, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry2, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry3, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> count) {</div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aac56fe71333f4b4f0a4417b6ed86ed88">  326</a></span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aac56fe71333f4b4f0a4417b6ed86ed88">Launch::checkValues</a>(<a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *indices, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry1, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry2, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry3, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> count) {</div>
 <div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>            <a class="code hl_class" href="class_execution_policy.html">ExecutionPolicy</a> executionPolicy;</div>
 <div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>            <span class="keywordflow">return</span> <a class="code hl_function" href="namespacecuda.html#ae129f267f2d83118533c78c712265b58">cuda::launch</a>(<span class="keyword">true</span>, executionPolicy, <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel.html#a38bbcbccb21aad7738d77c20b8b6879a">::CudaUtils::Kernel::checkValues</a>, indices, entry1, entry2, entry3,</div>
 <div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>                                count);</div>
 <div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>        }</div>
 <div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span> </div>
 <div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00333" name="l00333"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a595a86c2cda59e917465a942378579a9">  333</a></span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a595a86c2cda59e917465a942378579a9">Launch::findDuplicates</a>(T *array, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
+<div class="line"><a id="l00333" name="l00333"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a595a86c2cda59e917465a942378579a9">  333</a></span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a595a86c2cda59e917465a942378579a9">Launch::findDuplicates</a>(T *array, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
 <div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>            <a class="code hl_class" href="class_execution_policy.html">ExecutionPolicy</a> executionPolicy;</div>
 <div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>            <span class="keywordflow">return</span> <a class="code hl_function" href="namespacecuda.html#ae129f267f2d83118533c78c712265b58">cuda::launch</a>(<span class="keyword">true</span>, executionPolicy, ::CudaUtils::Kernel::findDuplicates&lt;T&gt;, array,</div>
 <div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>                                duplicateCounter, length);</div>
 <div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>        }</div>
 <div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>        <span class="comment">// explicit instantiation for type &quot;integer&quot;</span></div>
-<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>        <span class="keyword">template</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Launch::findDuplicates&lt;integer&gt;(<a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *array, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length);</div>
+<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>        <span class="keyword">template</span> <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Launch::findDuplicates&lt;integer&gt;(<a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *array, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length);</div>
 <div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>        <span class="comment">// explicit instantiation for type &quot;real&quot;</span></div>
-<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>        <span class="keyword">template</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Launch::findDuplicates&lt;real&gt;(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *array, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length);</div>
+<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>        <span class="keyword">template</span> <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Launch::findDuplicates&lt;real&gt;(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *array, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length);</div>
 <div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span> </div>
 <div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00344" name="l00344"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a1e1edc3e254b0451cfeebab4db17ed92">  344</a></span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a1e1edc3e254b0451cfeebab4db17ed92">Launch::findDuplicateEntries</a>(T *array1, T *array2, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a1e1edc3e254b0451cfeebab4db17ed92">  344</a></span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a1e1edc3e254b0451cfeebab4db17ed92">Launch::findDuplicateEntries</a>(T *array1, T *array2, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
 <div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>            <a class="code hl_class" href="class_execution_policy.html">ExecutionPolicy</a> executionPolicy;</div>
 <div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>            <span class="keywordflow">return</span> <a class="code hl_function" href="namespacecuda.html#ae129f267f2d83118533c78c712265b58">cuda::launch</a>(<span class="keyword">true</span>, executionPolicy, ::CudaUtils::Kernel::findDuplicateEntries&lt;T&gt;, array1,</div>
 <div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>                                array2, duplicateCounter, length);</div>
 <div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>        }</div>
-<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>        <span class="keyword">template</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Launch::findDuplicateEntries&lt;real&gt;(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *array1, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *array2, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length);</div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span>        <span class="keyword">template</span> <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Launch::findDuplicateEntries&lt;real&gt;(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *array1, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *array2, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length);</div>
 <div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span> </div>
 <div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00352" name="l00352"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aef7f93d1cf4d70b869cd25f1fa489e61">  352</a></span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a1e1edc3e254b0451cfeebab4db17ed92">Launch::findDuplicateEntries</a>(T *array1, T *array2, T *array3, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aef7f93d1cf4d70b869cd25f1fa489e61">  352</a></span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a1e1edc3e254b0451cfeebab4db17ed92">Launch::findDuplicateEntries</a>(T *array1, T *array2, T *array3, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
 <div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>            <a class="code hl_class" href="class_execution_policy.html">ExecutionPolicy</a> executionPolicy;</div>
 <div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>            <span class="keywordflow">return</span> <a class="code hl_function" href="namespacecuda.html#ae129f267f2d83118533c78c712265b58">cuda::launch</a>(<span class="keyword">true</span>, executionPolicy, ::CudaUtils::Kernel::findDuplicateEntries&lt;T&gt;, array1,</div>
 <div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>                                array2, array3, duplicateCounter, length);</div>
 <div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span>        }</div>
-<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>        <span class="keyword">template</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Launch::findDuplicateEntries&lt;real&gt;(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *array1, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *array2, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *array3, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length);</div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>        <span class="keyword">template</span> <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Launch::findDuplicateEntries&lt;real&gt;(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *array1, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *array2, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *array3, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length);</div>
 <div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span> </div>
 <div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> U&gt;</div>
-<div class="line"><a id="l00360" name="l00360"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aa502ba583fe18b21f09e47b7f298f191">  360</a></span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a595a86c2cda59e917465a942378579a9">Launch::findDuplicates</a>(T *array, U *entry1, U *entry2, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aa502ba583fe18b21f09e47b7f298f191">  360</a></span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a595a86c2cda59e917465a942378579a9">Launch::findDuplicates</a>(T *array, U *entry1, U *entry2, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
 <div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>            <a class="code hl_class" href="class_execution_policy.html">ExecutionPolicy</a> executionPolicy;</div>
 <div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>            <span class="keywordflow">return</span> <a class="code hl_function" href="namespacecuda.html#ae129f267f2d83118533c78c712265b58">cuda::launch</a>(<span class="keyword">true</span>, executionPolicy, ::CudaUtils::Kernel::findDuplicates&lt;T, U&gt;, array, entry1, entry2,</div>
 <div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>                                duplicateCounter, length);</div>
 <div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>        }</div>
-<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>        <span class="keyword">template</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Launch::findDuplicates&lt;integer, real&gt;(<a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *array, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry1, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry2,</div>
-<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>                <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length);</div>
+<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>        <span class="keyword">template</span> <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Launch::findDuplicates&lt;integer, real&gt;(<a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *array, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry1, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry2,</div>
+<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>                <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length);</div>
 <div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span> </div>
 <div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00369" name="l00369"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a5890ee66c5883806d39d1029eee8569e">  369</a></span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a5890ee66c5883806d39d1029eee8569e">Launch::markDuplicates</a>(T *array, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
+<div class="line"><a id="l00369" name="l00369"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a5890ee66c5883806d39d1029eee8569e">  369</a></span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a5890ee66c5883806d39d1029eee8569e">Launch::markDuplicates</a>(T *array, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
 <div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>            <a class="code hl_class" href="class_execution_policy.html">ExecutionPolicy</a> executionPolicy;</div>
 <div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>            <span class="keywordflow">return</span> <a class="code hl_function" href="namespacecuda.html#ae129f267f2d83118533c78c712265b58">cuda::launch</a>(<span class="keyword">true</span>, executionPolicy, ::CudaUtils::Kernel::markDuplicates&lt;T&gt;, array,</div>
 <div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>                                duplicateCounter, length);</div>
 <div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>        }</div>
 <div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>        <span class="comment">// explicit instantiation for type &quot;integer&quot;</span></div>
-<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>        <span class="keyword">template</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Launch::markDuplicates&lt;integer&gt;(<a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *array, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length);</div>
+<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>        <span class="keyword">template</span> <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Launch::markDuplicates&lt;integer&gt;(<a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *array, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length);</div>
 <div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>        <span class="comment">// explicit instantiation for type &quot;real&quot;</span></div>
-<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>        <span class="keyword">template</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Launch::markDuplicates&lt;real&gt;(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *array, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length);</div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>        <span class="keyword">template</span> <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Launch::markDuplicates&lt;real&gt;(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *array, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length);</div>
 <div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span> </div>
 <div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span>        <span class="comment">/*template&lt;typename T, typename U&gt;</span></div>
 <div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span><span class="comment">        real Launch::markDuplicates(T *array, U *entry1, U *entry2, integer *duplicateCounter, int length) {</span></div>
@@ -524,33 +486,33 @@ $(function() {
 <div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span><span class="comment">        template real Launch::markDuplicates&lt;integer, real&gt;(integer *array, real *entry1, real *entry2, integer *duplicateCounter, int length);</span></div>
 <div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span><span class="comment">        */</span></div>
 <div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> U&gt;</div>
-<div class="line"><a id="l00388" name="l00388"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#ae1e9eadf4a048750cee6558b74de516a">  388</a></span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a5890ee66c5883806d39d1029eee8569e">Launch::markDuplicates</a>(T *array, U *entry1, U *entry2, U *entry3, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *child, <span class="keywordtype">int</span> length) {</div>
+<div class="line"><a id="l00388" name="l00388"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#ae1e9eadf4a048750cee6558b74de516a">  388</a></span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a5890ee66c5883806d39d1029eee8569e">Launch::markDuplicates</a>(T *array, U *entry1, U *entry2, U *entry3, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *child, <span class="keywordtype">int</span> length) {</div>
 <div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>            <a class="code hl_class" href="class_execution_policy.html">ExecutionPolicy</a> executionPolicy;</div>
 <div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span>            <span class="keywordflow">return</span> <a class="code hl_function" href="namespacecuda.html#ae129f267f2d83118533c78c712265b58">cuda::launch</a>(<span class="keyword">true</span>, executionPolicy, ::CudaUtils::Kernel::markDuplicates&lt;T, U&gt;, array, entry1, entry2,</div>
 <div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>                                entry3, duplicateCounter, child, length);</div>
 <div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>        }</div>
-<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>        <span class="keyword">template</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Launch::markDuplicates&lt;integer, real&gt;(<a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *array, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry1, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry2, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry3, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *child, <span class="keywordtype">int</span> length);</div>
+<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>        <span class="keyword">template</span> <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Launch::markDuplicates&lt;integer, real&gt;(<a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *array, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry1, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry2, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry3, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *child, <span class="keywordtype">int</span> length);</div>
 <div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span> </div>
 <div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span> </div>
 <div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00397" name="l00397"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aab0d89d0004bf5806b7aeae358d4c896">  397</a></span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aab0d89d0004bf5806b7aeae358d4c896">Launch::removeDuplicates</a>(T *array, T *removedArray, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno"><a class="line" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aab0d89d0004bf5806b7aeae358d4c896">  397</a></span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#aab0d89d0004bf5806b7aeae358d4c896">Launch::removeDuplicates</a>(T *array, T *removedArray, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length) {</div>
 <div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>            <a class="code hl_class" href="class_execution_policy.html">ExecutionPolicy</a> executionPolicy;</div>
 <div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span>            <span class="keywordflow">return</span> <a class="code hl_function" href="namespacecuda.html#ae129f267f2d83118533c78c712265b58">cuda::launch</a>(<span class="keyword">true</span>, executionPolicy, ::CudaUtils::Kernel::removeDuplicates&lt;T&gt;, array, removedArray,</div>
 <div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>                                duplicateCounter, length);</div>
 <div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span>        }</div>
 <div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>        <span class="comment">// explicit instantiation for type &quot;integer&quot;</span></div>
-<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>        <span class="keyword">template</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Launch::removeDuplicates&lt;integer&gt;(<a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *array, <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *removedArray,</div>
-<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>                <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length);</div>
+<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>        <span class="keyword">template</span> <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Launch::removeDuplicates&lt;integer&gt;(<a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *array, <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *removedArray,</div>
+<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>                <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length);</div>
 <div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>        <span class="comment">// explicit instantiation for type &quot;real&quot;</span></div>
-<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>        <span class="keyword">template</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Launch::removeDuplicates&lt;real&gt;(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *array, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *removedArray,</div>
-<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>                <a class="code hl_typedef" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length);</div>
+<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>        <span class="keyword">template</span> <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Launch::removeDuplicates&lt;real&gt;(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *array, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *removedArray,</div>
+<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>                <a class="code hl_typedef" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *duplicateCounter, <span class="keywordtype">int</span> length);</div>
 <div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>    }</div>
 <div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span> </div>
 <div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>}</div>
 <div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span> </div>
 <div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacecuda.html">cuda</a> {</div>
 <div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>    <span class="keyword">namespace </span>math {</div>
-<div class="line"><a id="l00414" name="l00414"></a><span class="lineno"><a class="line" href="namespacecuda_1_1math.html#a129d30e886ca3c7cb2c9b209ce208076">  414</a></span>        __device__ <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespacecuda_1_1math.html#a129d30e886ca3c7cb2c9b209ce208076">min</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> a, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> b) {</div>
+<div class="line"><a id="l00414" name="l00414"></a><span class="lineno"><a class="line" href="namespacecuda_1_1math.html#a129d30e886ca3c7cb2c9b209ce208076">  414</a></span>        __device__ <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespacecuda_1_1math.html#a129d30e886ca3c7cb2c9b209ce208076">min</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> a, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> b) {</div>
 <div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span><span class="preprocessor">#if SINGLE_PRECISION</span></div>
 <div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>            <span class="keywordflow">return</span> fminf(a, b);</div>
 <div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span><span class="preprocessor">#else</span></div>
@@ -558,8 +520,8 @@ $(function() {
 <div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>        }</div>
 <div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span> </div>
-<div class="line"><a id="l00422" name="l00422"></a><span class="lineno"><a class="line" href="namespacecuda_1_1math.html#ad71b91fd0e24f3e7ac864f9472f701d0">  422</a></span>        __device__ <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespacecuda_1_1math.html#a129d30e886ca3c7cb2c9b209ce208076">min</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> a, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> b, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> c) {</div>
-<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> temp = <a class="code hl_function" href="namespacecuda_1_1math.html#a129d30e886ca3c7cb2c9b209ce208076">min</a>(a, b);</div>
+<div class="line"><a id="l00422" name="l00422"></a><span class="lineno"><a class="line" href="namespacecuda_1_1math.html#ad71b91fd0e24f3e7ac864f9472f701d0">  422</a></span>        __device__ <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespacecuda_1_1math.html#a129d30e886ca3c7cb2c9b209ce208076">min</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> a, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> b, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> c) {</div>
+<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>            <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> temp = <a class="code hl_function" href="namespacecuda_1_1math.html#a129d30e886ca3c7cb2c9b209ce208076">min</a>(a, b);</div>
 <div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span><span class="preprocessor">#if SINGLE_PRECISION</span></div>
 <div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>            <span class="keywordflow">return</span> fminf(temp, c);</div>
 <div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span><span class="preprocessor">#else</span></div>
@@ -567,7 +529,7 @@ $(function() {
 <div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>        }</div>
 <div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span> </div>
-<div class="line"><a id="l00431" name="l00431"></a><span class="lineno"><a class="line" href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">  431</a></span>        __device__ <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">max</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> a, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> b) {</div>
+<div class="line"><a id="l00431" name="l00431"></a><span class="lineno"><a class="line" href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">  431</a></span>        __device__ <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">max</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> a, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> b) {</div>
 <div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span><span class="preprocessor">#if SINGLE_PRECISION</span></div>
 <div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>            <span class="keywordflow">return</span> fmaxf(a, b);</div>
 <div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span><span class="preprocessor">#else</span></div>
@@ -575,8 +537,8 @@ $(function() {
 <div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span>        }</div>
 <div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span> </div>
-<div class="line"><a id="l00439" name="l00439"></a><span class="lineno"><a class="line" href="namespacecuda_1_1math.html#a68dee8301819b5bf662f01661159feb1">  439</a></span>        __device__ <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">max</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> a, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> b, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> c) {</div>
-<div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> temp = <a class="code hl_function" href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">max</a>(a, b);</div>
+<div class="line"><a id="l00439" name="l00439"></a><span class="lineno"><a class="line" href="namespacecuda_1_1math.html#a68dee8301819b5bf662f01661159feb1">  439</a></span>        __device__ <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">max</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> a, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> b, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> c) {</div>
+<div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span>            <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> temp = <a class="code hl_function" href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">max</a>(a, b);</div>
 <div class="line"><a id="l00441" name="l00441"></a><span class="lineno">  441</span><span class="preprocessor">#if SINGLE_PRECISION</span></div>
 <div class="line"><a id="l00442" name="l00442"></a><span class="lineno">  442</span>            <span class="keywordflow">return</span> fmaxf(temp, c);</div>
 <div class="line"><a id="l00443" name="l00443"></a><span class="lineno">  443</span><span class="preprocessor">#else</span></div>
@@ -584,7 +546,7 @@ $(function() {
 <div class="line"><a id="l00445" name="l00445"></a><span class="lineno">  445</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00446" name="l00446"></a><span class="lineno">  446</span>        }</div>
 <div class="line"><a id="l00447" name="l00447"></a><span class="lineno">  447</span> </div>
-<div class="line"><a id="l00448" name="l00448"></a><span class="lineno"><a class="line" href="namespacecuda_1_1math.html#aa01779064aaf96a9607a87bd52921410">  448</a></span>        __device__ <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespacecuda_1_1math.html#aa01779064aaf96a9607a87bd52921410">abs</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> a) {</div>
+<div class="line"><a id="l00448" name="l00448"></a><span class="lineno"><a class="line" href="namespacecuda_1_1math.html#aa01779064aaf96a9607a87bd52921410">  448</a></span>        __device__ <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespacecuda_1_1math.html#aa01779064aaf96a9607a87bd52921410">abs</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> a) {</div>
 <div class="line"><a id="l00449" name="l00449"></a><span class="lineno">  449</span><span class="preprocessor">#if SINGLE_PRECISION</span></div>
 <div class="line"><a id="l00450" name="l00450"></a><span class="lineno">  450</span>            <span class="keywordflow">return</span> fabsf(a);</div>
 <div class="line"><a id="l00451" name="l00451"></a><span class="lineno">  451</span><span class="preprocessor">#else</span></div>
@@ -592,7 +554,7 @@ $(function() {
 <div class="line"><a id="l00453" name="l00453"></a><span class="lineno">  453</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00454" name="l00454"></a><span class="lineno">  454</span>        }</div>
 <div class="line"><a id="l00455" name="l00455"></a><span class="lineno">  455</span> </div>
-<div class="line"><a id="l00456" name="l00456"></a><span class="lineno"><a class="line" href="namespacecuda_1_1math.html#a706200a3f1b2445d7fd835c2ac504a11">  456</a></span>        __device__ <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespacecuda_1_1math.html#a706200a3f1b2445d7fd835c2ac504a11">sqrt</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> a) {</div>
+<div class="line"><a id="l00456" name="l00456"></a><span class="lineno"><a class="line" href="namespacecuda_1_1math.html#a706200a3f1b2445d7fd835c2ac504a11">  456</a></span>        __device__ <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespacecuda_1_1math.html#a706200a3f1b2445d7fd835c2ac504a11">sqrt</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> a) {</div>
 <div class="line"><a id="l00457" name="l00457"></a><span class="lineno">  457</span><span class="preprocessor">#if SINGLE_PRECISION</span></div>
 <div class="line"><a id="l00458" name="l00458"></a><span class="lineno">  458</span>            <span class="keywordflow">return</span> sqrtf(a);</div>
 <div class="line"><a id="l00459" name="l00459"></a><span class="lineno">  459</span><span class="preprocessor">#else</span></div>
@@ -600,7 +562,7 @@ $(function() {
 <div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span>        }</div>
 <div class="line"><a id="l00463" name="l00463"></a><span class="lineno">  463</span> </div>
-<div class="line"><a id="l00464" name="l00464"></a><span class="lineno"><a class="line" href="namespacecuda_1_1math.html#a19175dcfac61c20c0914751a44bee73a">  464</a></span>        __device__ <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespacecuda_1_1math.html#a19175dcfac61c20c0914751a44bee73a">rsqrt</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> a) {</div>
+<div class="line"><a id="l00464" name="l00464"></a><span class="lineno"><a class="line" href="namespacecuda_1_1math.html#a19175dcfac61c20c0914751a44bee73a">  464</a></span>        __device__ <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespacecuda_1_1math.html#a19175dcfac61c20c0914751a44bee73a">rsqrt</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> a) {</div>
 <div class="line"><a id="l00465" name="l00465"></a><span class="lineno">  465</span><span class="preprocessor">#if SINGLE_PRECISION</span></div>
 <div class="line"><a id="l00466" name="l00466"></a><span class="lineno">  466</span>            <span class="keywordflow">return</span> rsqrtf(a);</div>
 <div class="line"><a id="l00467" name="l00467"></a><span class="lineno">  467</span><span class="preprocessor">#else</span></div>
@@ -612,9 +574,6 @@ $(function() {
 <div class="ttc" id="aclass_execution_policy_html"><div class="ttname"><a href="class_execution_policy.html">ExecutionPolicy</a></div><div class="ttdoc">Execution policy/instruction for CUDA kernel execution.</div><div class="ttdef"><b>Definition:</b> <a href="cuda__launcher_8cuh_source.html#l00033">cuda_launcher.cuh:33</a></div></div>
 <div class="ttc" id="acuda__utilities_8cu_html_a77be0fbaffb45e6994a717d9f923083f"><div class="ttname"><a href="cuda__utilities_8cu.html#a77be0fbaffb45e6994a717d9f923083f">gpuAssert</a></div><div class="ttdeci">void gpuAssert(cudaError_t code, const char *file, int line, bool abort)</div><div class="ttdoc">Check CUDA error codes.</div><div class="ttdef"><b>Definition:</b> <a href="cuda__utilities_8cu_source.html#l00021">cuda_utilities.cu:21</a></div></div>
 <div class="ttc" id="acuda__utilities_8cu_html_ae662091cff3c7c55d3372448898a7376"><div class="ttname"><a href="cuda__utilities_8cu.html#ae662091cff3c7c55d3372448898a7376">checkCudaCall</a></div><div class="ttdeci">void checkCudaCall(cudaError_t command, const char *commandName, const char *fileName, int line)</div><div class="ttdoc">Check CUDA call.</div><div class="ttdef"><b>Definition:</b> <a href="cuda__utilities_8cu_source.html#l00030">cuda_utilities.cu:30</a></div></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_a11d147c64891830c9e79b3315b1b2e21"><div class="ttname"><a href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a></div><div class="ttdeci">double real</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00015">parameter.h:15</a></div></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_a3b6ee100a473e8866bcea6d1fc4041d9"><div class="ttname"><a href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a></div><div class="ttdeci">int integer</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00017">parameter.h:17</a></div></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_aaf01a8b5289af20025d06e3fed70cc94"><div class="ttname"><a href="include_2parameter_8h.html#aaf01a8b5289af20025d06e3fed70cc94">POW_DIM</a></div><div class="ttdeci">#define POW_DIM</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00040">parameter.h:40</a></div></div>
 <div class="ttc" id="anamespace_cuda_utils_1_1_kernel_1_1_launch_html_a1e1edc3e254b0451cfeebab4db17ed92"><div class="ttname"><a href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a1e1edc3e254b0451cfeebab4db17ed92">CudaUtils::Kernel::Launch::findDuplicateEntries</a></div><div class="ttdeci">real findDuplicateEntries(T *array1, T *array2, integer *duplicateCounter, int length)</div><div class="ttdef"><b>Definition:</b> <a href="cuda__utilities_8cu_source.html#l00344">cuda_utilities.cu:344</a></div></div>
 <div class="ttc" id="anamespace_cuda_utils_1_1_kernel_1_1_launch_html_a5890ee66c5883806d39d1029eee8569e"><div class="ttname"><a href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a5890ee66c5883806d39d1029eee8569e">CudaUtils::Kernel::Launch::markDuplicates</a></div><div class="ttdeci">real markDuplicates(T *array, integer *duplicateCounter, int length)</div><div class="ttdef"><b>Definition:</b> <a href="cuda__utilities_8cu_source.html#l00369">cuda_utilities.cu:369</a></div></div>
 <div class="ttc" id="anamespace_cuda_utils_1_1_kernel_1_1_launch_html_a595a86c2cda59e917465a942378579a9"><div class="ttname"><a href="namespace_cuda_utils_1_1_kernel_1_1_launch.html#a595a86c2cda59e917465a942378579a9">CudaUtils::Kernel::Launch::findDuplicates</a></div><div class="ttdeci">real findDuplicates(T *array, integer *duplicateCounter, int length)</div><div class="ttdef"><b>Definition:</b> <a href="cuda__utilities_8cu_source.html#l00333">cuda_utilities.cu:333</a></div></div>
@@ -636,61 +595,25 @@ $(function() {
 <div class="ttc" id="anamespacecuda_1_1math_html_ae45b7a0e96687aa98c58a3ee386b2ada"><div class="ttname"><a href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">cuda::math::max</a></div><div class="ttdeci">__device__ real max(real a, real b)</div><div class="ttdoc">Maximum value out of two floating point values.</div><div class="ttdef"><b>Definition:</b> <a href="cuda__utilities_8cu_source.html#l00431">cuda_utilities.cu:431</a></div></div>
 <div class="ttc" id="anamespacecuda_html"><div class="ttname"><a href="namespacecuda.html">cuda</a></div><div class="ttdef"><b>Definition:</b> <a href="cuda__launcher_8cuh_source.html#l00101">cuda_launcher.cuh:101</a></div></div>
 <div class="ttc" id="anamespacecuda_html_ae129f267f2d83118533c78c712265b58"><div class="ttname"><a href="namespacecuda.html#ae129f267f2d83118533c78c712265b58">cuda::launch</a></div><div class="ttdeci">real launch(bool timeKernel, const ExecutionPolicy &amp;policy, void(*f)(Arguments...), Arguments... args)</div><div class="ttdoc">CUDA execution wrapper function.</div><div class="ttdef"><b>Definition:</b> <a href="cuda__launcher_8cuh_source.html#l00114">cuda_launcher.cuh:114</a></div></div>
+<div class="ttc" id="aparameter_8h_html_a11d147c64891830c9e79b3315b1b2e21"><div class="ttname"><a href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a></div><div class="ttdeci">double real</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00015">parameter.h:15</a></div></div>
+<div class="ttc" id="aparameter_8h_html_a3b6ee100a473e8866bcea6d1fc4041d9"><div class="ttname"><a href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a></div><div class="ttdeci">int integer</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00017">parameter.h:17</a></div></div>
+<div class="ttc" id="aparameter_8h_html_aaf01a8b5289af20025d06e3fed70cc94"><div class="ttname"><a href="parameter_8h.html#aaf01a8b5289af20025d06e3fed70cc94">POW_DIM</a></div><div class="ttdeci">#define POW_DIM</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00040">parameter.h:40</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
-    <!--
     milupHPC  - src/cuda_utils/cuda_utilities.cu Source File<br />
-    Generated on Wed Jun 29 2022 11:18:49 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    -->
+    Generated on Thu Jun 23 2022 16:11:19 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
   </small></address>
 </body>
 <footer>
-  <custom-footer color="white" background="#2E4053">
-    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
-    <div second>
-      <div style="text-align: center">
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-        </div>
-      </div>
-    </div>
-    <div third>
-      milupHPC  - src/cuda_utils/cuda_utilities.cu Source File<br />
-      Generated on Wed Jun 29 2022 11:18:49 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    </div>
-  </custom-footer>
+  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
+  <div id="banner-footer-first"></div>
+  <div id="banner-footer-second"></div>
+  <script>
+    function topFunction() {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+  </script>
 </footer>
-<!--
-<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
--->
-<script src="components/hamburger/runtime.js" type="module"></script><script src="components/hamburger/polyfills.js" type="module"></script><script src="components/hamburger/main.js" type="module"></script>
-<script src="components/header/runtime.js" type="module"></script><script src="components/header/polyfills.js" type="module"></script><script src="components/header/main.js" type="module"></script>
-<script src="components/icons/runtime.js" type="module"></script><script src="components/icons/polyfills.js" type="module"></script><script src="components/icons/main.js" type="module"></script>
-<script src="components/footer/runtime.js" type="module"></script><script src="components/footer/polyfills.js" type="module"></script><script src="components/footer/main.js" type="module"></script>
-<script src="components/dialog/runtime.js" type="module"></script><script src="components/dialog/polyfills.js" type="module"></script><script src="components/dialog/main.js" type="module"></script>
-<script src="components/copyable/runtime.js" type="module"></script><script src="components/copyable/polyfills.js" type="module"></script><script src="components/copyable/main.js" type="module"></script>
-<!--
-<script>
-  function toggle() {
-    var elem = document.getElementById("side-nav");
-    console.log(elem);
-    elem.toggleSideNav(false);
-  }
-</script>
--->
-<!--
-<script>
-  function topFunction() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  }
-</script>
--->
 </html>

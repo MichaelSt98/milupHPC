@@ -1,26 +1,14 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+-->
 <head>
-	<meta charset="utf-8">
-	<title>CodePortray</title>
-	<base href="/">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: Gravity::Kernel Namespace Reference</title>
-	<title>Gravity::Kernel Namespace Reference</title>
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -34,68 +22,42 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
+	<!-- Add icon library -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- Add font awesome icons -->
+	<!--HIGHLIGHT.JS INSTALL BEGIN
+	<link rel="stylesheet" href="github.min.css">
+	<script src="highlight.js"></script>
+	<script>
+		$(function() {
+			hljs.configure({useBR: false});
+			$(".fragment").each(function(i,node) {
+				$(node).removeClass("fragment");
+				hljs.highlightBlock(node);
+			});
+		});
+	</script>
+	HIGHLIGHT.JS INSTALL END-->
 </head>
 <body>
-<custom-header class="custom-header-class">
-	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
-	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
-	<div shortcuts style="display: table">
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
-		</div>
-		<!-- get the code ... -->
-		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
-		<div style="display: table-cell; padding-right: 2px">
-			<custom-dialog window-width="600px" window-height="400px">
-				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
-				<div title>Get the code: milupHPC!</div>
-				<div style="text-align: center; padding-top: 20px;">
-					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
-					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
-					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
-					<div style="padding-top: 40px">clone via HTTPS:</div>
-					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">clone via SSH:</div>
-					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
-					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
-				</div>
-				<!--<div footer>This is the footer</div>-->
-			</custom-dialog>
-		</div>
-		<!-- end: get the code .... -->
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
-		</div>
-		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
-	</div>
-</custom-header>
-	<!--
-	<custom-side-nav id="side-nav" nav-width="300">
-		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
-		<div>test</div>
-	</custom-side-nav>
-	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation
+				milupHPC documentation <!-- Gravity::Kernel Namespace Reference -->
 			</span>
+			<!-- <span class="search">
+				<input type="text" placeholder="Search" onkeydown="search(this,event);">
+			</span> -->
 		</div>
+    <!--
+	<div class="icon-bar">
+		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
+		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
+		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
+	</div>
+	</div>
+	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -145,43 +107,45 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a80128fb12f982de6677d2ce7dd2e206e"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a80128fb12f982de6677d2ce7dd2e206e">collectSendIndices</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *particles2Send, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *pseudoParticles2Send, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *pseudoParticlesLevel, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *particlesCount, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *pseudoParticlesCount, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> length, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
+<tr class="memitem:a80128fb12f982de6677d2ce7dd2e206e"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a80128fb12f982de6677d2ce7dd2e206e">collectSendIndices</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *particles2Send, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *pseudoParticles2Send, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *pseudoParticlesLevel, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *particlesCount, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *pseudoParticlesCount, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> length, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
 <tr class="memdesc:a80128fb12f982de6677d2ce7dd2e206e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Collect the send indices.  <a href="namespace_gravity_1_1_kernel.html#a80128fb12f982de6677d2ce7dd2e206e">More...</a><br /></td></tr>
 <tr class="separator:a80128fb12f982de6677d2ce7dd2e206e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a34ede88c5a5ddb0e73b9e5989b68c143"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a34ede88c5a5ddb0e73b9e5989b68c143">testSendIndices</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *markedSendIndices, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *levels, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> length)</td></tr>
+<tr class="memitem:a34ede88c5a5ddb0e73b9e5989b68c143"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a34ede88c5a5ddb0e73b9e5989b68c143">testSendIndices</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *markedSendIndices, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *levels, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> length)</td></tr>
 <tr class="memdesc:a34ede88c5a5ddb0e73b9e5989b68c143"><td class="mdescLeft">&#160;</td><td class="mdescRight">Test the send indices.  <a href="namespace_gravity_1_1_kernel.html#a34ede88c5a5ddb0e73b9e5989b68c143">More...</a><br /></td></tr>
 <tr class="separator:a34ede88c5a5ddb0e73b9e5989b68c143"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a26ab0e23b20199d8349f62d7a514c629"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a26ab0e23b20199d8349f62d7a514c629">collectSendIndices_test4</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *particles2Send, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *pseudoParticles2Send, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *pseudoParticlesLevel, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *particlesCount, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *pseudoParticlesCount, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticlesLocal, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> treeIndex, int currentProc, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
+<tr class="memitem:a26ab0e23b20199d8349f62d7a514c629"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a26ab0e23b20199d8349f62d7a514c629">collectSendIndices_test4</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *particles2Send, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *pseudoParticles2Send, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *pseudoParticlesLevel, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *particlesCount, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *pseudoParticlesCount, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticlesLocal, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> treeIndex, int currentProc, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
 <tr class="separator:a26ab0e23b20199d8349f62d7a514c629"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae23b15b70df6db6580d5f998adc8e166"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#ae23b15b70df6db6580d5f998adc8e166">computeForces_v1</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> radius, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> smoothing, bool potentialEnergy)</td></tr>
+<tr class="memitem:ae23b15b70df6db6580d5f998adc8e166"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#ae23b15b70df6db6580d5f998adc8e166">computeForces_v1</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> radius, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> smoothing, bool potentialEnergy)</td></tr>
 <tr class="separator:ae23b15b70df6db6580d5f998adc8e166"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7980d3de6593f4ae52dd8c58a8d82662"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a7980d3de6593f4ae52dd8c58a8d82662">computeForces_v1_1</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> radius, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> smoothing, bool potentialEnergy)</td></tr>
+<tr class="memitem:a7980d3de6593f4ae52dd8c58a8d82662"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a7980d3de6593f4ae52dd8c58a8d82662">computeForces_v1_1</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> radius, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> smoothing, bool potentialEnergy)</td></tr>
 <tr class="separator:a7980d3de6593f4ae52dd8c58a8d82662"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a699bef3e0a95a6ea76f012bee6292561"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a699bef3e0a95a6ea76f012bee6292561">computeForces_v1_2</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> radius, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> smoothing, bool potentialEnergy)</td></tr>
+<tr class="memitem:a699bef3e0a95a6ea76f012bee6292561"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a699bef3e0a95a6ea76f012bee6292561">computeForces_v1_2</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> radius, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> smoothing, bool potentialEnergy)</td></tr>
 <tr class="separator:a699bef3e0a95a6ea76f012bee6292561"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4271b9919654a7d8527c3a505661d97"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#aa4271b9919654a7d8527c3a505661d97">computeForces_v2</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> radius, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> blockSize, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> warp, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stackSize, <a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> smoothing, bool potentialEnergy)</td></tr>
+<tr class="memitem:aa4271b9919654a7d8527c3a505661d97"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#aa4271b9919654a7d8527c3a505661d97">computeForces_v2</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> radius, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> blockSize, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> warp, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stackSize, <a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> smoothing, bool potentialEnergy)</td></tr>
 <tr class="separator:aa4271b9919654a7d8527c3a505661d97"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1c2dcf758d67e76f537ae1f2375d136"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#ad1c2dcf758d67e76f537ae1f2375d136">computeForces_v2_1</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> blockSize, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> warp, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stackSize, <a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> smoothing, bool potentialEnergy)</td></tr>
+<tr class="memitem:ad1c2dcf758d67e76f537ae1f2375d136"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#ad1c2dcf758d67e76f537ae1f2375d136">computeForces_v2_1</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> blockSize, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> warp, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stackSize, <a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> smoothing, bool potentialEnergy)</td></tr>
 <tr class="separator:ad1c2dcf758d67e76f537ae1f2375d136"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b5ee5f2bfe2853b6b822585827b9d08"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a6b5ee5f2bfe2853b6b822585827b9d08">preSymbolicForce</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> diam, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta_, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantIndex, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> level, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
+<tr class="memitem:a713da62c6a8044f22467996a5a54751b"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a713da62c6a8044f22467996a5a54751b">computeForces_v3</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> radius, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> blockSize, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> warp, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> stackSize, <a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> smoothing, bool potentialEnergy)</td></tr>
+<tr class="separator:a713da62c6a8044f22467996a5a54751b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b5ee5f2bfe2853b6b822585827b9d08"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a6b5ee5f2bfe2853b6b822585827b9d08">preSymbolicForce</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> diam, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta_, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantIndex, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> level, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
 <tr class="separator:a6b5ee5f2bfe2853b6b822585827b9d08"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7222f2f8a10dd796eba92022bfe2008"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#ae7222f2f8a10dd796eba92022bfe2008">resetSendIndices</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> diam, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta_, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantIndex, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> level, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
+<tr class="memitem:ae7222f2f8a10dd796eba92022bfe2008"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#ae7222f2f8a10dd796eba92022bfe2008">resetSendIndices</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> diam, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta_, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantIndex, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> level, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
 <tr class="separator:ae7222f2f8a10dd796eba92022bfe2008"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59afdf774d13a5c8b08b792a52eea8ca"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a59afdf774d13a5c8b08b792a52eea8ca">intermediateSymbolicForce</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> diam, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta_, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantIndex, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> level, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
+<tr class="memitem:a59afdf774d13a5c8b08b792a52eea8ca"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a59afdf774d13a5c8b08b792a52eea8ca">intermediateSymbolicForce</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> diam, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta_, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantIndex, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> level, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
 <tr class="separator:a59afdf774d13a5c8b08b792a52eea8ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ff17bca5edbee4c81b7999a17f17850"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a6ff17bca5edbee4c81b7999a17f17850">symbolicForce</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> diam, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta_, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantIndex, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> level, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
+<tr class="memitem:a6ff17bca5edbee4c81b7999a17f17850"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a6ff17bca5edbee4c81b7999a17f17850">symbolicForce</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> diam, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta_, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantIndex, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> level, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
 <tr class="separator:a6ff17bca5edbee4c81b7999a17f17850"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96842a32ac4686a5c081d668b3d31fa6"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a96842a32ac4686a5c081d668b3d31fa6">symbolicForce_test</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> diam, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta_, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantIndex, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> level, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
+<tr class="memitem:a96842a32ac4686a5c081d668b3d31fa6"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a96842a32ac4686a5c081d668b3d31fa6">symbolicForce_test</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> diam, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta_, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantIndex, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> level, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
 <tr class="separator:a96842a32ac4686a5c081d668b3d31fa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa16436ad30d2ee31c570359cdba0b475"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#aa16436ad30d2ee31c570359cdba0b475">symbolicForce_test2</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> diam, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta_, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantProc, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="parallel_force_concept_8cpp.html#a82a080d0cd98e3ade9b2452814f99256">relevantIndicesCounter</a>, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
+<tr class="memitem:aa16436ad30d2ee31c570359cdba0b475"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#aa16436ad30d2ee31c570359cdba0b475">symbolicForce_test2</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> diam, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta_, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantProc, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="parallel_force_concept_8cpp.html#a82a080d0cd98e3ade9b2452814f99256">relevantIndicesCounter</a>, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
 <tr class="separator:aa16436ad30d2ee31c570359cdba0b475"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a787cd0bdb3e668e87944dde44bb5cb34"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a787cd0bdb3e668e87944dde44bb5cb34">symbolicForce_test3</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> diam, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta_, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantProc, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="parallel_force_concept_8cpp.html#a82a080d0cd98e3ade9b2452814f99256">relevantIndicesCounter</a>, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
+<tr class="memitem:a787cd0bdb3e668e87944dde44bb5cb34"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#a787cd0bdb3e668e87944dde44bb5cb34">symbolicForce_test3</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> diam, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta_, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantProc, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="parallel_force_concept_8cpp.html#a82a080d0cd98e3ade9b2452814f99256">relevantIndicesCounter</a>, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
 <tr class="separator:a787cd0bdb3e668e87944dde44bb5cb34"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4691365f379fdf4daf60758d8b2c4fd"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#ae4691365f379fdf4daf60758d8b2c4fd">symbolicForce_test4</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> diam, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta_, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantProc, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="parallel_force_concept_8cpp.html#a82a080d0cd98e3ade9b2452814f99256">relevantIndicesCounter</a>, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
+<tr class="memitem:ae4691365f379fdf4daf60758d8b2c4fd"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#ae4691365f379fdf4daf60758d8b2c4fd">symbolicForce_test4</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> diam, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> theta_, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantProc, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="parallel_force_concept_8cpp.html#a82a080d0cd98e3ade9b2452814f99256">relevantIndicesCounter</a>, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
 <tr class="separator:ae4691365f379fdf4daf60758d8b2c4fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af19754e1b725b700fa24baccd62bb77b"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#af19754e1b725b700fa24baccd62bb77b">compTheta</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
 <tr class="separator:af19754e1b725b700fa24baccd62bb77b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbe6dfc65d9268a74a87f4dcc10f5100"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#acbe6dfc65d9268a74a87f4dcc10f5100">insertReceivedPseudoParticles</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *levels, int level, int n, int m)</td></tr>
+<tr class="memitem:acbe6dfc65d9268a74a87f4dcc10f5100"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#acbe6dfc65d9268a74a87f4dcc10f5100">insertReceivedPseudoParticles</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *levels, int level, int n, int m)</td></tr>
 <tr class="separator:acbe6dfc65d9268a74a87f4dcc10f5100"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2529f45dcf03594d67a01c2ede5bb65"><td class="memItemLeft" align="right" valign="top">__global__ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_gravity_1_1_kernel.html#aa2529f45dcf03594d67a01c2ede5bb65">insertReceivedParticles</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, int n, int m)</td></tr>
 <tr class="separator:aa2529f45dcf03594d67a01c2ede5bb65"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -196,7 +160,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::collectSendIndices </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::collectSendIndices </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -210,49 +174,49 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>sendIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>particles2Send</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>pseudoParticles2Send</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>pseudoParticlesLevel</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>particlesCount</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>pseudoParticlesCount</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>length</em>, </td>
         </tr>
         <tr>
@@ -314,7 +278,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::collectSendIndices_test4 </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::collectSendIndices_test4 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -328,55 +292,55 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>sendIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>particles2Send</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>pseudoParticles2Send</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>pseudoParticlesLevel</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>particlesCount</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>pseudoParticlesCount</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numParticlesLocal</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numParticles</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>treeIndex</em>, </td>
         </tr>
         <tr>
@@ -424,7 +388,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::compTheta </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::compTheta </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -483,7 +447,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::computeForces_v1 </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::computeForces_v1 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -497,19 +461,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>radius</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
@@ -521,13 +485,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>theta</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>smoothing</em>, </td>
         </tr>
         <tr>
@@ -566,7 +530,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::computeForces_v1_1 </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::computeForces_v1_1 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -580,19 +544,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>radius</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
@@ -604,13 +568,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>theta</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>smoothing</em>, </td>
         </tr>
         <tr>
@@ -649,7 +613,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::computeForces_v1_2 </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::computeForces_v1_2 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -663,19 +627,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>radius</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
@@ -687,13 +651,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>theta</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>smoothing</em>, </td>
         </tr>
         <tr>
@@ -732,7 +696,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::computeForces_v2 </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::computeForces_v2 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -746,37 +710,37 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>radius</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>blockSize</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>warp</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>stackSize</em>, </td>
         </tr>
         <tr>
@@ -788,13 +752,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>theta</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>smoothing</em>, </td>
         </tr>
         <tr>
@@ -834,7 +798,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::computeForces_v2_1 </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::computeForces_v2_1 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -848,31 +812,31 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>blockSize</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>warp</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>stackSize</em>, </td>
         </tr>
         <tr>
@@ -884,13 +848,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>theta</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>smoothing</em>, </td>
         </tr>
         <tr>
@@ -924,6 +888,107 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a713da62c6a8044f22467996a5a54751b" name="a713da62c6a8044f22467996a5a54751b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a713da62c6a8044f22467996a5a54751b">&#9670;&nbsp;</a></span>computeForces_v3()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::computeForces_v3 </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
+          <td class="paramname"><em>tree</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_particles.html">Particles</a> *&#160;</td>
+          <td class="paramname"><em>particles</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramname"><em>radius</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramname"><em>numParticles</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramname"><em>blockSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramname"><em>warp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramname"><em>stackSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
+          <td class="paramname"><em>subDomainKeyTree</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramname"><em>theta</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramname"><em>smoothing</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>potentialEnergy</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="gravity_8cu_source.html#l01201">1201</a> of file <a class="el" href="gravity_8cu_source.html">gravity.cu</a>.</p>
+<div id="dynsection-8" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-8-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-8-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-8-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="namespace_gravity_1_1_kernel_a713da62c6a8044f22467996a5a54751b_cgraph.png" border="0" usemap="#anamespace_gravity_1_1_kernel_a713da62c6a8044f22467996a5a54751b_cgraph" alt=""/></div>
+<map name="anamespace_gravity_1_1_kernel_a713da62c6a8044f22467996a5a54751b_cgraph" id="anamespace_gravity_1_1_kernel_a713da62c6a8044f22467996a5a54751b_cgraph">
+<area shape="rect" title=" " alt="" coords="5,22,172,63"/>
+<area shape="rect" href="namespacecuda_1_1math.html#a19175dcfac61c20c0914751a44bee73a" title="Inverse square root of a floating point value." alt="" coords="220,29,341,56"/>
+</map>
+</div>
+
+</div>
+</div>
 <a id="aa2529f45dcf03594d67a01c2ede5bb65" name="aa2529f45dcf03594d67a01c2ede5bb65"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa2529f45dcf03594d67a01c2ede5bb65">&#9670;&nbsp;</a></span>insertReceivedParticles()</h2>
 
@@ -931,7 +996,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::insertReceivedParticles </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::insertReceivedParticles </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -991,7 +1056,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::insertReceivedPseudoParticles </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::insertReceivedPseudoParticles </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -1011,7 +1076,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>levels</em>, </td>
         </tr>
         <tr>
@@ -1051,7 +1116,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::intermediateSymbolicForce </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::intermediateSymbolicForce </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -1077,43 +1142,43 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>sendIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>diam</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>theta_</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>relevantIndex</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>level</em>, </td>
         </tr>
         <tr>
@@ -1167,43 +1232,43 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>sendIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>diam</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>theta_</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>relevantIndex</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>level</em>, </td>
         </tr>
         <tr>
@@ -1257,43 +1322,43 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>sendIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>diam</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>theta_</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>relevantIndex</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>level</em>, </td>
         </tr>
         <tr>
@@ -1321,7 +1386,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::symbolicForce </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::symbolicForce </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -1347,43 +1412,43 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>sendIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>diam</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>theta_</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>relevantIndex</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>level</em>, </td>
         </tr>
         <tr>
@@ -1401,11 +1466,11 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="gravity_8cu_source.html#l01395">1395</a> of file <a class="el" href="gravity_8cu_source.html">gravity.cu</a>.</p>
-<div id="dynsection-8" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-8-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-8-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-9" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-9-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-9-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-8-content" class="dyncontent" style="display:none;">
+<div id="dynsection-9-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="namespace_gravity_1_1_kernel_a6ff17bca5edbee4c81b7999a17f17850_cgraph.png" border="0" usemap="#anamespace_gravity_1_1_kernel_a6ff17bca5edbee4c81b7999a17f17850_cgraph" alt=""/></div>
 <map name="anamespace_gravity_1_1_kernel_a6ff17bca5edbee4c81b7999a17f17850_cgraph" id="anamespace_gravity_1_1_kernel_a6ff17bca5edbee4c81b7999a17f17850_cgraph">
 <area shape="rect" title=" " alt="" coords="5,35,175,77"/>
@@ -1423,7 +1488,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::symbolicForce_test </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::symbolicForce_test </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -1449,43 +1514,43 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>sendIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>diam</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>theta_</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>relevantIndex</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>level</em>, </td>
         </tr>
         <tr>
@@ -1503,11 +1568,11 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="gravity_8cu_source.html#l01666">1666</a> of file <a class="el" href="gravity_8cu_source.html">gravity.cu</a>.</p>
-<div id="dynsection-9" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-9-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-9-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-10" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-10-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-10-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-9-content" class="dyncontent" style="display:none;">
+<div id="dynsection-10-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="namespace_gravity_1_1_kernel_a96842a32ac4686a5c081d668b3d31fa6_cgraph.png" border="0" usemap="#anamespace_gravity_1_1_kernel_a96842a32ac4686a5c081d668b3d31fa6_cgraph" alt=""/></div>
 <map name="anamespace_gravity_1_1_kernel_a96842a32ac4686a5c081d668b3d31fa6_cgraph" id="anamespace_gravity_1_1_kernel_a96842a32ac4686a5c081d668b3d31fa6_cgraph">
 <area shape="rect" title=" " alt="" coords="5,22,175,63"/>
@@ -1524,7 +1589,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::symbolicForce_test2 </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::symbolicForce_test2 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -1550,43 +1615,43 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>sendIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>diam</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>theta_</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>relevantProc</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>relevantIndicesCounter</em>, </td>
         </tr>
         <tr>
@@ -1604,11 +1669,11 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="gravity_8cu_source.html#l01801">1801</a> of file <a class="el" href="gravity_8cu_source.html">gravity.cu</a>.</p>
-<div id="dynsection-10" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-10-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-10-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-11" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-11-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-11-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-10-content" class="dyncontent" style="display:none;">
+<div id="dynsection-11-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="namespace_gravity_1_1_kernel_aa16436ad30d2ee31c570359cdba0b475_cgraph.png" border="0" usemap="#anamespace_gravity_1_1_kernel_aa16436ad30d2ee31c570359cdba0b475_cgraph" alt=""/></div>
 <map name="anamespace_gravity_1_1_kernel_aa16436ad30d2ee31c570359cdba0b475_cgraph" id="anamespace_gravity_1_1_kernel_aa16436ad30d2ee31c570359cdba0b475_cgraph">
 <area shape="rect" title=" " alt="" coords="5,22,175,63"/>
@@ -1625,7 +1690,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::symbolicForce_test3 </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::symbolicForce_test3 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -1651,43 +1716,43 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>sendIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>diam</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>theta_</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>relevantProc</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>relevantIndicesCounter</em>, </td>
         </tr>
         <tr>
@@ -1705,11 +1770,11 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="gravity_8cu_source.html#l01916">1916</a> of file <a class="el" href="gravity_8cu_source.html">gravity.cu</a>.</p>
-<div id="dynsection-11" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-11-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-11-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-12" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-12-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-12-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-11-content" class="dyncontent" style="display:none;">
+<div id="dynsection-12-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="namespace_gravity_1_1_kernel_a787cd0bdb3e668e87944dde44bb5cb34_cgraph.png" border="0" usemap="#anamespace_gravity_1_1_kernel_a787cd0bdb3e668e87944dde44bb5cb34_cgraph" alt=""/></div>
 <map name="anamespace_gravity_1_1_kernel_a787cd0bdb3e668e87944dde44bb5cb34_cgraph" id="anamespace_gravity_1_1_kernel_a787cd0bdb3e668e87944dde44bb5cb34_cgraph">
 <area shape="rect" title=" " alt="" coords="5,22,175,63"/>
@@ -1726,7 +1791,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::symbolicForce_test4 </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::symbolicForce_test4 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -1752,43 +1817,43 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>sendIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>diam</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>theta_</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>relevantProc</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>relevantIndicesCounter</em>, </td>
         </tr>
         <tr>
@@ -1806,11 +1871,11 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="gravity_8cu_source.html#l02041">2041</a> of file <a class="el" href="gravity_8cu_source.html">gravity.cu</a>.</p>
-<div id="dynsection-12" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-12-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-12-summary" class="dynsummary" style="display:block;">
+<div id="dynsection-13" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-13-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-13-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-12-content" class="dyncontent" style="display:none;">
+<div id="dynsection-13-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="namespace_gravity_1_1_kernel_ae4691365f379fdf4daf60758d8b2c4fd_cgraph.png" border="0" usemap="#anamespace_gravity_1_1_kernel_ae4691365f379fdf4daf60758d8b2c4fd_cgraph" alt=""/></div>
 <map name="anamespace_gravity_1_1_kernel_ae4691365f379fdf4daf60758d8b2c4fd_cgraph" id="anamespace_gravity_1_1_kernel_ae4691365f379fdf4daf60758d8b2c4fd_cgraph">
 <area shape="rect" title=" " alt="" coords="5,22,175,63"/>
@@ -1827,7 +1892,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::testSendIndices </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Gravity::Kernel::Launch::testSendIndices </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -1847,19 +1912,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>sendIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>markedSendIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>levels</em>, </td>
         </tr>
         <tr>
@@ -1871,7 +1936,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>length</em>&#160;</td>
         </tr>
         <tr>
@@ -1904,58 +1969,19 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
-    <!--
     milupHPC  - Gravity::Kernel Namespace Reference<br />
-    Generated on Wed Jun 29 2022 11:18:51 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    -->
+    Generated on Thu Jun 23 2022 16:11:21 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
   </small></address>
 </body>
 <footer>
-  <custom-footer color="white" background="#2E4053">
-    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
-    <div second>
-      <div style="text-align: center">
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-        </div>
-      </div>
-    </div>
-    <div third>
-      milupHPC  - Gravity::Kernel Namespace Reference<br />
-      Generated on Wed Jun 29 2022 11:18:51 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    </div>
-  </custom-footer>
+  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
+  <div id="banner-footer-first"></div>
+  <div id="banner-footer-second"></div>
+  <script>
+    function topFunction() {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+  </script>
 </footer>
-<!--
-<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
--->
-<script src="components/hamburger/runtime.js" type="module"></script><script src="components/hamburger/polyfills.js" type="module"></script><script src="components/hamburger/main.js" type="module"></script>
-<script src="components/header/runtime.js" type="module"></script><script src="components/header/polyfills.js" type="module"></script><script src="components/header/main.js" type="module"></script>
-<script src="components/icons/runtime.js" type="module"></script><script src="components/icons/polyfills.js" type="module"></script><script src="components/icons/main.js" type="module"></script>
-<script src="components/footer/runtime.js" type="module"></script><script src="components/footer/polyfills.js" type="module"></script><script src="components/footer/main.js" type="module"></script>
-<script src="components/dialog/runtime.js" type="module"></script><script src="components/dialog/polyfills.js" type="module"></script><script src="components/dialog/main.js" type="module"></script>
-<script src="components/copyable/runtime.js" type="module"></script><script src="components/copyable/polyfills.js" type="module"></script><script src="components/copyable/main.js" type="module"></script>
-<!--
-<script>
-  function toggle() {
-    var elem = document.getElementById("side-nav");
-    console.log(elem);
-    elem.toggleSideNav(false);
-  }
-</script>
--->
-<!--
-<script>
-  function topFunction() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  }
-</script>
--->
 </html>

@@ -1,26 +1,14 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+-->
 <head>
-	<meta charset="utf-8">
-	<title>CodePortray</title>
-	<base href="/">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: ParticlesNS::Kernel::Launch Namespace Reference</title>
-	<title>ParticlesNS::Kernel::Launch Namespace Reference</title>
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -34,68 +22,42 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
+	<!-- Add icon library -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- Add font awesome icons -->
+	<!--HIGHLIGHT.JS INSTALL BEGIN
+	<link rel="stylesheet" href="github.min.css">
+	<script src="highlight.js"></script>
+	<script>
+		$(function() {
+			hljs.configure({useBR: false});
+			$(".fragment").each(function(i,node) {
+				$(node).removeClass("fragment");
+				hljs.highlightBlock(node);
+			});
+		});
+	</script>
+	HIGHLIGHT.JS INSTALL END-->
 </head>
 <body>
-<custom-header class="custom-header-class">
-	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
-	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
-	<div shortcuts style="display: table">
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
-		</div>
-		<!-- get the code ... -->
-		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
-		<div style="display: table-cell; padding-right: 2px">
-			<custom-dialog window-width="600px" window-height="400px">
-				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
-				<div title>Get the code: milupHPC!</div>
-				<div style="text-align: center; padding-top: 20px;">
-					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
-					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
-					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
-					<div style="padding-top: 40px">clone via HTTPS:</div>
-					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">clone via SSH:</div>
-					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
-					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
-				</div>
-				<!--<div footer>This is the footer</div>-->
-			</custom-dialog>
-		</div>
-		<!-- end: get the code .... -->
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
-		</div>
-		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
-	</div>
-</custom-header>
-	<!--
-	<custom-side-nav id="side-nav" nav-width="300">
-		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
-		<div>test</div>
-	</custom-side-nav>
-	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation
+				milupHPC documentation <!-- ParticlesNS::Kernel::Launch Namespace Reference -->
 			</span>
+			<!-- <span class="search">
+				<input type="text" placeholder="Search" onkeydown="search(this,event);">
+			</span> -->
 		</div>
+    <!--
+	<div class="icon-bar">
+		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
+		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
+		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
+	</div>
+	</div>
+	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -142,27 +104,27 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ad9191ca8a69bb91d60a29eeeb176a55f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#ad9191ca8a69bb91d60a29eeeb176a55f">check4nans</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n)</td></tr>
+<tr class="memitem:ad9191ca8a69bb91d60a29eeeb176a55f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#ad9191ca8a69bb91d60a29eeeb176a55f">check4nans</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n)</td></tr>
 <tr class="separator:ad9191ca8a69bb91d60a29eeeb176a55f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab449025ac903bcc29416f7d2ae7c4b48"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#ab449025ac903bcc29416f7d2ae7c4b48">info</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> k)</td></tr>
+<tr class="memitem:ab449025ac903bcc29416f7d2ae7c4b48"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#ab449025ac903bcc29416f7d2ae7c4b48">info</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> k)</td></tr>
 <tr class="separator:ab449025ac903bcc29416f7d2ae7c4b48"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7deb9e1fb4ad769422cc93f5300bb369"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#a7deb9e1fb4ad769422cc93f5300bb369">set</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *numParticles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *numNodes, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *mass, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *x, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *y, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *z, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *vx, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *vy, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *vz, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *ax, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *ay, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *az, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *level, <a class="el" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *uid, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *materialId, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *sml, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *nnl, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *noi, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *e, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *dedt, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *cs, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *rho, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *p)</td></tr>
+<tr class="memitem:a7deb9e1fb4ad769422cc93f5300bb369"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#a7deb9e1fb4ad769422cc93f5300bb369">set</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *numParticles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *numNodes, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *mass, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *x, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *y, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *z, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *vx, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *vy, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *vz, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *ax, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *ay, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *az, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *level, <a class="el" href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *uid, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *materialId, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *sml, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *nnl, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *noi, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *e, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *dedt, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *cs, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *rho, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *p)</td></tr>
 <tr class="separator:a7deb9e1fb4ad769422cc93f5300bb369"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a402c8ae77c8e36f1bddf7dd39a9c1f4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#a402c8ae77c8e36f1bddf7dd39a9c1f4d">setGravity</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *g_ax, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *g_ay, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *g_az)</td></tr>
+<tr class="memitem:a402c8ae77c8e36f1bddf7dd39a9c1f4d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#a402c8ae77c8e36f1bddf7dd39a9c1f4d">setGravity</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *g_ax, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *g_ay, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *g_az)</td></tr>
 <tr class="separator:a402c8ae77c8e36f1bddf7dd39a9c1f4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a783e3fb0ad94e196f2b83b5a59a92bd2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#a783e3fb0ad94e196f2b83b5a59a92bd2">setLeapfrog</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *ax_old, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *ay_old, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *az_old, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *g_ax_old, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *g_ay_old, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *g_az_old)</td></tr>
+<tr class="memitem:a783e3fb0ad94e196f2b83b5a59a92bd2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#a783e3fb0ad94e196f2b83b5a59a92bd2">setLeapfrog</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *ax_old, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *ay_old, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *az_old, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *g_ax_old, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *g_ay_old, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *g_az_old)</td></tr>
 <tr class="separator:a783e3fb0ad94e196f2b83b5a59a92bd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29142560048cbe9404fe0d60842924d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#a29142560048cbe9404fe0d60842924d2">setU</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *u)</td></tr>
+<tr class="memitem:a29142560048cbe9404fe0d60842924d2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#a29142560048cbe9404fe0d60842924d2">setU</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *u)</td></tr>
 <tr class="separator:a29142560048cbe9404fe0d60842924d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a999375c1cf4de0bcff9bfa78211c9f50"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#a999375c1cf4de0bcff9bfa78211c9f50">setNodeType</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *nodeType)</td></tr>
+<tr class="memitem:a999375c1cf4de0bcff9bfa78211c9f50"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#a999375c1cf4de0bcff9bfa78211c9f50">setNodeType</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *nodeType)</td></tr>
 <tr class="separator:a999375c1cf4de0bcff9bfa78211c9f50"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4c8d836b26b0d8db32d7c6d305dbd3c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#ae4c8d836b26b0d8db32d7c6d305dbd3c">setArtificialViscosity</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *muijmax)</td></tr>
+<tr class="memitem:ae4c8d836b26b0d8db32d7c6d305dbd3c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#ae4c8d836b26b0d8db32d7c6d305dbd3c">setArtificialViscosity</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *muijmax)</td></tr>
 <tr class="separator:ae4c8d836b26b0d8db32d7c6d305dbd3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3622ffb7ea1722adab3272d9d2e976a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#a3622ffb7ea1722adab3272d9d2e976a4">setIntegrateDensity</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *drhodt)</td></tr>
+<tr class="memitem:a3622ffb7ea1722adab3272d9d2e976a4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#a3622ffb7ea1722adab3272d9d2e976a4">setIntegrateDensity</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *drhodt)</td></tr>
 <tr class="separator:a3622ffb7ea1722adab3272d9d2e976a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85ddabef5d1567a68bd600036f0a4e8d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#a85ddabef5d1567a68bd600036f0a4e8d">test</a> (<a class="el" href="class_particles.html">Particles</a> *particles, bool time=false)</td></tr>
+<tr class="memitem:a85ddabef5d1567a68bd600036f0a4e8d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#a85ddabef5d1567a68bd600036f0a4e8d">test</a> (<a class="el" href="class_particles.html">Particles</a> *particles, bool time=false)</td></tr>
 <tr class="separator:a85ddabef5d1567a68bd600036f0a4e8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8250592e30d4eafc72cdd47b52665c31"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#a8250592e30d4eafc72cdd47b52665c31">mark2remove</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, int *particles2remove, int *counter, int criterion, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> d, int numParticles)</td></tr>
+<tr class="memitem:a8250592e30d4eafc72cdd47b52665c31"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_particles_n_s_1_1_kernel_1_1_launch.html#a8250592e30d4eafc72cdd47b52665c31">mark2remove</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, int *particles2remove, int *counter, int criterion, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> d, int numParticles)</td></tr>
 <tr class="separator:a8250592e30d4eafc72cdd47b52665c31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
@@ -173,7 +135,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> ParticlesNS::Kernel::Launch::check4nans </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> ParticlesNS::Kernel::Launch::check4nans </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_particles.html">Particles</a> *&#160;</td>
           <td class="paramname"><em>particles</em>, </td>
@@ -181,7 +143,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>&#160;</td>
         </tr>
         <tr>
@@ -217,7 +179,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> ParticlesNS::Kernel::Launch::info </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> ParticlesNS::Kernel::Launch::info </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_particles.html">Particles</a> *&#160;</td>
           <td class="paramname"><em>particles</em>, </td>
@@ -225,19 +187,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>k</em>&#160;</td>
         </tr>
         <tr>
@@ -283,7 +245,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> ParticlesNS::Kernel::Launch::mark2remove </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> ParticlesNS::Kernel::Launch::mark2remove </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -321,7 +283,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>d</em>, </td>
         </tr>
         <tr>
@@ -373,139 +335,139 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>numParticles</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>numNodes</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>mass</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>z</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>vx</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>vy</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>vz</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>ax</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>ay</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>az</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>level</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *&#160;</td>
           <td class="paramname"><em>uid</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>materialId</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>sml</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>nnl</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>noi</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>e</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>dedt</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>cs</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>rho</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>p</em>&#160;</td>
         </tr>
         <tr>
@@ -547,7 +509,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>muijmax</em>&#160;</td>
         </tr>
         <tr>
@@ -590,19 +552,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>g_ax</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>g_ay</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>g_az</em>&#160;</td>
         </tr>
         <tr>
@@ -645,7 +607,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>drhodt</em>&#160;</td>
         </tr>
         <tr>
@@ -696,37 +658,37 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>ax_old</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>ay_old</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>az_old</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>g_ax_old</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>g_ay_old</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>g_az_old</em>&#160;</td>
         </tr>
         <tr>
@@ -769,7 +731,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>nodeType</em>&#160;</td>
         </tr>
         <tr>
@@ -812,7 +774,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>u</em>&#160;</td>
         </tr>
         <tr>
@@ -847,7 +809,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> ParticlesNS::Kernel::Launch::test </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> ParticlesNS::Kernel::Launch::test </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_particles.html">Particles</a> *&#160;</td>
           <td class="paramname"><em>particles</em>, </td>
@@ -892,58 +854,19 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
-    <!--
     milupHPC  - ParticlesNS::Kernel::Launch Namespace Reference<br />
-    Generated on Wed Jun 29 2022 11:18:51 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    -->
+    Generated on Thu Jun 23 2022 16:11:21 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
   </small></address>
 </body>
 <footer>
-  <custom-footer color="white" background="#2E4053">
-    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
-    <div second>
-      <div style="text-align: center">
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-        </div>
-      </div>
-    </div>
-    <div third>
-      milupHPC  - ParticlesNS::Kernel::Launch Namespace Reference<br />
-      Generated on Wed Jun 29 2022 11:18:51 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    </div>
-  </custom-footer>
+  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
+  <div id="banner-footer-first"></div>
+  <div id="banner-footer-second"></div>
+  <script>
+    function topFunction() {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+  </script>
 </footer>
-<!--
-<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
--->
-<script src="components/hamburger/runtime.js" type="module"></script><script src="components/hamburger/polyfills.js" type="module"></script><script src="components/hamburger/main.js" type="module"></script>
-<script src="components/header/runtime.js" type="module"></script><script src="components/header/polyfills.js" type="module"></script><script src="components/header/main.js" type="module"></script>
-<script src="components/icons/runtime.js" type="module"></script><script src="components/icons/polyfills.js" type="module"></script><script src="components/icons/main.js" type="module"></script>
-<script src="components/footer/runtime.js" type="module"></script><script src="components/footer/polyfills.js" type="module"></script><script src="components/footer/main.js" type="module"></script>
-<script src="components/dialog/runtime.js" type="module"></script><script src="components/dialog/polyfills.js" type="module"></script><script src="components/dialog/main.js" type="module"></script>
-<script src="components/copyable/runtime.js" type="module"></script><script src="components/copyable/polyfills.js" type="module"></script><script src="components/copyable/main.js" type="module"></script>
-<!--
-<script>
-  function toggle() {
-    var elem = document.getElementById("side-nav");
-    console.log(elem);
-    elem.toggleSideNav(false);
-  }
-</script>
--->
-<!--
-<script>
-  function topFunction() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  }
-</script>
--->
 </html>

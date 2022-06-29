@@ -1,26 +1,14 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+-->
 <head>
-	<meta charset="utf-8">
-	<title>CodePortray</title>
-	<base href="/">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: DomainList Class Reference</title>
-	<title>DomainList Class Reference</title>
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -34,68 +22,42 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
+	<!-- Add icon library -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- Add font awesome icons -->
+	<!--HIGHLIGHT.JS INSTALL BEGIN
+	<link rel="stylesheet" href="github.min.css">
+	<script src="highlight.js"></script>
+	<script>
+		$(function() {
+			hljs.configure({useBR: false});
+			$(".fragment").each(function(i,node) {
+				$(node).removeClass("fragment");
+				hljs.highlightBlock(node);
+			});
+		});
+	</script>
+	HIGHLIGHT.JS INSTALL END-->
 </head>
 <body>
-<custom-header class="custom-header-class">
-	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
-	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
-	<div shortcuts style="display: table">
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
-		</div>
-		<!-- get the code ... -->
-		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
-		<div style="display: table-cell; padding-right: 2px">
-			<custom-dialog window-width="600px" window-height="400px">
-				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
-				<div title>Get the code: milupHPC!</div>
-				<div style="text-align: center; padding-top: 20px;">
-					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
-					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
-					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
-					<div style="padding-top: 40px">clone via HTTPS:</div>
-					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">clone via SSH:</div>
-					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
-					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
-				</div>
-				<!--<div footer>This is the footer</div>-->
-			</custom-dialog>
-		</div>
-		<!-- end: get the code .... -->
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
-		</div>
-		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
-	</div>
-</custom-header>
-	<!--
-	<custom-side-nav id="side-nav" nav-width="300">
-		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
-		<div>test</div>
-	</custom-side-nav>
-	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation
+				milupHPC documentation <!-- DomainList Class Reference -->
 			</span>
+			<!-- <span class="search">
+				<input type="text" placeholder="Search" onkeydown="search(this,event);">
+			</span> -->
 		</div>
+    <!--
+	<div class="icon-bar">
+		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
+		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
+		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
+	</div>
+	</div>
+	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -153,13 +115,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a645a1ff65257b4e701710fdb7cd6479b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#a645a1ff65257b4e701710fdb7cd6479b">DomainList</a> ()</td></tr>
 <tr class="memdesc:a645a1ff65257b4e701710fdb7cd6479b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="class_domain_list.html#a645a1ff65257b4e701710fdb7cd6479b">More...</a><br /></td></tr>
 <tr class="separator:a645a1ff65257b4e701710fdb7cd6479b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad04b8007070594eebc107670843fc3f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#ad04b8007070594eebc107670843fc3f7">DomainList</a> (<a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#ab2d8ad5eb0c718359b0caaf1da4ef3ae">domainListIndices</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#acf99f56d23d0cb04c995945a450e0143">domainListLevels</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#a3d4763c67f6ee00ce9b2f2c2d5f43000">domainListIndex</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#add20616cc36fe06227783e938d2eb4e4">domainListCounter</a>, <a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *<a class="el" href="class_domain_list.html#a18473be8629b0bc84e395643df9b117a">domainListKeys</a>, <a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *<a class="el" href="class_domain_list.html#a475486ef575648d47b03adf2c01d26ce">sortedDomainListKeys</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#ad4e60b99aad7aa93c474a41e65ef5dc4">relevantDomainListIndices</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#aeed50b7926680d21787841bb670a7b58">relevantDomainListLevels</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#ade39d9a1d5e58ea0e17b093e83fd0285">relevantDomainListProcess</a>)</td></tr>
+<tr class="memitem:ad04b8007070594eebc107670843fc3f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#ad04b8007070594eebc107670843fc3f7">DomainList</a> (<a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#ab2d8ad5eb0c718359b0caaf1da4ef3ae">domainListIndices</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#acf99f56d23d0cb04c995945a450e0143">domainListLevels</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#a3d4763c67f6ee00ce9b2f2c2d5f43000">domainListIndex</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#add20616cc36fe06227783e938d2eb4e4">domainListCounter</a>, <a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *<a class="el" href="class_domain_list.html#a18473be8629b0bc84e395643df9b117a">domainListKeys</a>, <a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *<a class="el" href="class_domain_list.html#a475486ef575648d47b03adf2c01d26ce">sortedDomainListKeys</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#ad4e60b99aad7aa93c474a41e65ef5dc4">relevantDomainListIndices</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#aeed50b7926680d21787841bb670a7b58">relevantDomainListLevels</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#ade39d9a1d5e58ea0e17b093e83fd0285">relevantDomainListProcess</a>)</td></tr>
 <tr class="memdesc:ad04b8007070594eebc107670843fc3f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor, passing pointer to member variables.  <a href="class_domain_list.html#ad04b8007070594eebc107670843fc3f7">More...</a><br /></td></tr>
 <tr class="separator:ad04b8007070594eebc107670843fc3f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf72ec54bffa583b081fcbd27cd5028e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#adf72ec54bffa583b081fcbd27cd5028e">set</a> (<a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#ab2d8ad5eb0c718359b0caaf1da4ef3ae">domainListIndices</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#acf99f56d23d0cb04c995945a450e0143">domainListLevels</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#a3d4763c67f6ee00ce9b2f2c2d5f43000">domainListIndex</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#add20616cc36fe06227783e938d2eb4e4">domainListCounter</a>, <a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *<a class="el" href="class_domain_list.html#a18473be8629b0bc84e395643df9b117a">domainListKeys</a>, <a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *<a class="el" href="class_domain_list.html#a475486ef575648d47b03adf2c01d26ce">sortedDomainListKeys</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#ad4e60b99aad7aa93c474a41e65ef5dc4">relevantDomainListIndices</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#aeed50b7926680d21787841bb670a7b58">relevantDomainListLevels</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#ade39d9a1d5e58ea0e17b093e83fd0285">relevantDomainListProcess</a>)</td></tr>
+<tr class="memitem:adf72ec54bffa583b081fcbd27cd5028e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#adf72ec54bffa583b081fcbd27cd5028e">set</a> (<a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#ab2d8ad5eb0c718359b0caaf1da4ef3ae">domainListIndices</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#acf99f56d23d0cb04c995945a450e0143">domainListLevels</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#a3d4763c67f6ee00ce9b2f2c2d5f43000">domainListIndex</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#add20616cc36fe06227783e938d2eb4e4">domainListCounter</a>, <a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *<a class="el" href="class_domain_list.html#a18473be8629b0bc84e395643df9b117a">domainListKeys</a>, <a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *<a class="el" href="class_domain_list.html#a475486ef575648d47b03adf2c01d26ce">sortedDomainListKeys</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#ad4e60b99aad7aa93c474a41e65ef5dc4">relevantDomainListIndices</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#aeed50b7926680d21787841bb670a7b58">relevantDomainListLevels</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#ade39d9a1d5e58ea0e17b093e83fd0285">relevantDomainListProcess</a>)</td></tr>
 <tr class="memdesc:adf72ec54bffa583b081fcbd27cd5028e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setter, passing pointer to member variables.  <a href="class_domain_list.html#adf72ec54bffa583b081fcbd27cd5028e">More...</a><br /></td></tr>
 <tr class="separator:adf72ec54bffa583b081fcbd27cd5028e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d58fcd747e7cf157016623a2ca2213e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#a3d58fcd747e7cf157016623a2ca2213e">setBorders</a> (<a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_domain_list.html#adfdc82bdd1e726e6513b904b0ca4b657">borders</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#a8906fa6672c46b7ac1064527264fac26">relevantDomainListOriginalIndex</a>)</td></tr>
+<tr class="memitem:a3d58fcd747e7cf157016623a2ca2213e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#a3d58fcd747e7cf157016623a2ca2213e">setBorders</a> (<a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *<a class="el" href="class_domain_list.html#adfdc82bdd1e726e6513b904b0ca4b657">borders</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="class_domain_list.html#a8906fa6672c46b7ac1064527264fac26">relevantDomainListOriginalIndex</a>)</td></tr>
 <tr class="separator:a3d58fcd747e7cf157016623a2ca2213e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae363fbdd9939b702b32e8f282070a4c5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#ae363fbdd9939b702b32e8f282070a4c5">~DomainList</a> ()</td></tr>
 <tr class="memdesc:ae363fbdd9939b702b32e8f282070a4c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="class_domain_list.html#ae363fbdd9939b702b32e8f282070a4c5">More...</a><br /></td></tr>
@@ -167,34 +129,34 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ab2d8ad5eb0c718359b0caaf1da4ef3ae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#ab2d8ad5eb0c718359b0caaf1da4ef3ae">domainListIndices</a></td></tr>
+<tr class="memitem:ab2d8ad5eb0c718359b0caaf1da4ef3ae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#ab2d8ad5eb0c718359b0caaf1da4ef3ae">domainListIndices</a></td></tr>
 <tr class="memdesc:ab2d8ad5eb0c718359b0caaf1da4ef3ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">domain list node indices  <a href="class_domain_list.html#ab2d8ad5eb0c718359b0caaf1da4ef3ae">More...</a><br /></td></tr>
 <tr class="separator:ab2d8ad5eb0c718359b0caaf1da4ef3ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf99f56d23d0cb04c995945a450e0143"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#acf99f56d23d0cb04c995945a450e0143">domainListLevels</a></td></tr>
+<tr class="memitem:acf99f56d23d0cb04c995945a450e0143"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#acf99f56d23d0cb04c995945a450e0143">domainListLevels</a></td></tr>
 <tr class="memdesc:acf99f56d23d0cb04c995945a450e0143"><td class="mdescLeft">&#160;</td><td class="mdescRight">domain list node levels  <a href="class_domain_list.html#acf99f56d23d0cb04c995945a450e0143">More...</a><br /></td></tr>
 <tr class="separator:acf99f56d23d0cb04c995945a450e0143"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3d4763c67f6ee00ce9b2f2c2d5f43000"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#a3d4763c67f6ee00ce9b2f2c2d5f43000">domainListIndex</a></td></tr>
+<tr class="memitem:a3d4763c67f6ee00ce9b2f2c2d5f43000"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#a3d4763c67f6ee00ce9b2f2c2d5f43000">domainListIndex</a></td></tr>
 <tr class="memdesc:a3d4763c67f6ee00ce9b2f2c2d5f43000"><td class="mdescLeft">&#160;</td><td class="mdescRight">domain list node index, thus amount of domain list nodes  <a href="class_domain_list.html#a3d4763c67f6ee00ce9b2f2c2d5f43000">More...</a><br /></td></tr>
 <tr class="separator:a3d4763c67f6ee00ce9b2f2c2d5f43000"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add20616cc36fe06227783e938d2eb4e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#add20616cc36fe06227783e938d2eb4e4">domainListCounter</a></td></tr>
+<tr class="memitem:add20616cc36fe06227783e938d2eb4e4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#add20616cc36fe06227783e938d2eb4e4">domainListCounter</a></td></tr>
 <tr class="memdesc:add20616cc36fe06227783e938d2eb4e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">domain list node counter, usable as buffer  <a href="class_domain_list.html#add20616cc36fe06227783e938d2eb4e4">More...</a><br /></td></tr>
 <tr class="separator:add20616cc36fe06227783e938d2eb4e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18473be8629b0bc84e395643df9b117a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#a18473be8629b0bc84e395643df9b117a">domainListKeys</a></td></tr>
+<tr class="memitem:a18473be8629b0bc84e395643df9b117a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#a18473be8629b0bc84e395643df9b117a">domainListKeys</a></td></tr>
 <tr class="memdesc:a18473be8629b0bc84e395643df9b117a"><td class="mdescLeft">&#160;</td><td class="mdescRight">domain list node keys  <a href="class_domain_list.html#a18473be8629b0bc84e395643df9b117a">More...</a><br /></td></tr>
 <tr class="separator:a18473be8629b0bc84e395643df9b117a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a475486ef575648d47b03adf2c01d26ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#a475486ef575648d47b03adf2c01d26ce">sortedDomainListKeys</a></td></tr>
+<tr class="memitem:a475486ef575648d47b03adf2c01d26ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#a475486ef575648d47b03adf2c01d26ce">sortedDomainListKeys</a></td></tr>
 <tr class="memdesc:a475486ef575648d47b03adf2c01d26ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">sorted domain list node keys, usable as output for sorting the keys  <a href="class_domain_list.html#a475486ef575648d47b03adf2c01d26ce">More...</a><br /></td></tr>
 <tr class="separator:a475486ef575648d47b03adf2c01d26ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad4e60b99aad7aa93c474a41e65ef5dc4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#ad4e60b99aad7aa93c474a41e65ef5dc4">relevantDomainListIndices</a></td></tr>
+<tr class="memitem:ad4e60b99aad7aa93c474a41e65ef5dc4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#ad4e60b99aad7aa93c474a41e65ef5dc4">relevantDomainListIndices</a></td></tr>
 <tr class="memdesc:ad4e60b99aad7aa93c474a41e65ef5dc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">concentrate domain list nodes, usable to reduce domain list indices in respect to some criterion  <a href="class_domain_list.html#ad4e60b99aad7aa93c474a41e65ef5dc4">More...</a><br /></td></tr>
 <tr class="separator:ad4e60b99aad7aa93c474a41e65ef5dc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeed50b7926680d21787841bb670a7b58"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#aeed50b7926680d21787841bb670a7b58">relevantDomainListLevels</a></td></tr>
+<tr class="memitem:aeed50b7926680d21787841bb670a7b58"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#aeed50b7926680d21787841bb670a7b58">relevantDomainListLevels</a></td></tr>
 <tr class="separator:aeed50b7926680d21787841bb670a7b58"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade39d9a1d5e58ea0e17b093e83fd0285"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#ade39d9a1d5e58ea0e17b093e83fd0285">relevantDomainListProcess</a></td></tr>
+<tr class="memitem:ade39d9a1d5e58ea0e17b093e83fd0285"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#ade39d9a1d5e58ea0e17b093e83fd0285">relevantDomainListProcess</a></td></tr>
 <tr class="separator:ade39d9a1d5e58ea0e17b093e83fd0285"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8906fa6672c46b7ac1064527264fac26"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#a8906fa6672c46b7ac1064527264fac26">relevantDomainListOriginalIndex</a></td></tr>
+<tr class="memitem:a8906fa6672c46b7ac1064527264fac26"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#a8906fa6672c46b7ac1064527264fac26">relevantDomainListOriginalIndex</a></td></tr>
 <tr class="separator:a8906fa6672c46b7ac1064527264fac26"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adfdc82bdd1e726e6513b904b0ca4b657"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#adfdc82bdd1e726e6513b904b0ca4b657">borders</a></td></tr>
+<tr class="memitem:adfdc82bdd1e726e6513b904b0ca4b657"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_domain_list.html#adfdc82bdd1e726e6513b904b0ca4b657">borders</a></td></tr>
 <tr class="separator:adfdc82bdd1e726e6513b904b0ca4b657"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -232,55 +194,55 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> DomainList::DomainList </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>domainListIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>domainListLevels</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>domainListIndex</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>domainListCounter</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td>
           <td class="paramname"><em>domainListKeys</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td>
           <td class="paramname"><em>sortedDomainListKeys</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>relevantDomainListIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>relevantDomainListLevels</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>relevantDomainListProcess</em>&#160;</td>
         </tr>
         <tr>
@@ -340,55 +302,55 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void DomainList::set </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>domainListIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>domainListLevels</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>domainListIndex</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>domainListCounter</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td>
           <td class="paramname"><em>domainListKeys</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a> *&#160;</td>
           <td class="paramname"><em>sortedDomainListKeys</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>relevantDomainListIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>relevantDomainListLevels</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>relevantDomainListProcess</em>&#160;</td>
         </tr>
         <tr>
@@ -426,13 +388,13 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname"><a class="el" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> void DomainList::setBorders </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>borders</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>relevantDomainListOriginalIndex</em>&#160;</td>
         </tr>
         <tr>
@@ -455,7 +417,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* DomainList::borders</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* DomainList::borders</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -471,7 +433,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* DomainList::domainListCounter</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* DomainList::domainListCounter</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -489,7 +451,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* DomainList::domainListIndex</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* DomainList::domainListIndex</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -507,7 +469,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* DomainList::domainListIndices</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* DomainList::domainListIndices</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -525,7 +487,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a>* DomainList::domainListKeys</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a>* DomainList::domainListKeys</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -543,7 +505,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* DomainList::domainListLevels</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* DomainList::domainListLevels</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -561,7 +523,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* DomainList::relevantDomainListIndices</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* DomainList::relevantDomainListIndices</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -579,7 +541,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* DomainList::relevantDomainListLevels</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* DomainList::relevantDomainListLevels</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -595,7 +557,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* DomainList::relevantDomainListOriginalIndex</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* DomainList::relevantDomainListOriginalIndex</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -611,7 +573,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* DomainList::relevantDomainListProcess</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* DomainList::relevantDomainListProcess</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -627,7 +589,7 @@ Public Attributes</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a>* DomainList::sortedDomainListKeys</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a2d83a9d6677f42e2572510c1a14e58ed">keyType</a>* DomainList::sortedDomainListKeys</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -645,58 +607,19 @@ Public Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
-    <!--
     milupHPC  - DomainList Class Reference<br />
-    Generated on Wed Jun 29 2022 11:18:50 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    -->
+    Generated on Thu Jun 23 2022 16:11:20 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
   </small></address>
 </body>
 <footer>
-  <custom-footer color="white" background="#2E4053">
-    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
-    <div second>
-      <div style="text-align: center">
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-        </div>
-      </div>
-    </div>
-    <div third>
-      milupHPC  - DomainList Class Reference<br />
-      Generated on Wed Jun 29 2022 11:18:50 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    </div>
-  </custom-footer>
+  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
+  <div id="banner-footer-first"></div>
+  <div id="banner-footer-second"></div>
+  <script>
+    function topFunction() {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+  </script>
 </footer>
-<!--
-<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
--->
-<script src="components/hamburger/runtime.js" type="module"></script><script src="components/hamburger/polyfills.js" type="module"></script><script src="components/hamburger/main.js" type="module"></script>
-<script src="components/header/runtime.js" type="module"></script><script src="components/header/polyfills.js" type="module"></script><script src="components/header/main.js" type="module"></script>
-<script src="components/icons/runtime.js" type="module"></script><script src="components/icons/polyfills.js" type="module"></script><script src="components/icons/main.js" type="module"></script>
-<script src="components/footer/runtime.js" type="module"></script><script src="components/footer/polyfills.js" type="module"></script><script src="components/footer/main.js" type="module"></script>
-<script src="components/dialog/runtime.js" type="module"></script><script src="components/dialog/polyfills.js" type="module"></script><script src="components/dialog/main.js" type="module"></script>
-<script src="components/copyable/runtime.js" type="module"></script><script src="components/copyable/polyfills.js" type="module"></script><script src="components/copyable/main.js" type="module"></script>
-<!--
-<script>
-  function toggle() {
-    var elem = document.getElementById("side-nav");
-    console.log(elem);
-    elem.toggleSideNav(false);
-  }
-</script>
--->
-<!--
-<script>
-  function topFunction() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  }
-</script>
--->
 </html>

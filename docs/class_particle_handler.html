@@ -1,26 +1,14 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+-->
 <head>
-	<meta charset="utf-8">
-	<title>CodePortray</title>
-	<base href="/">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: ParticleHandler Class Reference</title>
-	<title>ParticleHandler Class Reference</title>
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -34,68 +22,42 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
+	<!-- Add icon library -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- Add font awesome icons -->
+	<!--HIGHLIGHT.JS INSTALL BEGIN
+	<link rel="stylesheet" href="github.min.css">
+	<script src="highlight.js"></script>
+	<script>
+		$(function() {
+			hljs.configure({useBR: false});
+			$(".fragment").each(function(i,node) {
+				$(node).removeClass("fragment");
+				hljs.highlightBlock(node);
+			});
+		});
+	</script>
+	HIGHLIGHT.JS INSTALL END-->
 </head>
 <body>
-<custom-header class="custom-header-class">
-	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
-	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
-	<div shortcuts style="display: table">
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
-		</div>
-		<!-- get the code ... -->
-		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
-		<div style="display: table-cell; padding-right: 2px">
-			<custom-dialog window-width="600px" window-height="400px">
-				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
-				<div title>Get the code: milupHPC!</div>
-				<div style="text-align: center; padding-top: 20px;">
-					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
-					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
-					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
-					<div style="padding-top: 40px">clone via HTTPS:</div>
-					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">clone via SSH:</div>
-					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
-					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
-				</div>
-				<!--<div footer>This is the footer</div>-->
-			</custom-dialog>
-		</div>
-		<!-- end: get the code .... -->
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
-		</div>
-		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
-	</div>
-</custom-header>
-	<!--
-	<custom-side-nav id="side-nav" nav-width="300">
-		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
-		<div>test</div>
-	</custom-side-nav>
-	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation
+				milupHPC documentation <!-- ParticleHandler Class Reference -->
 			</span>
+			<!-- <span class="search">
+				<input type="text" placeholder="Search" onkeydown="search(this,event);">
+			</span> -->
 		</div>
+    <!--
+	<div class="icon-bar">
+		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
+		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
+		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
+	</div>
+	</div>
+	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -153,7 +115,7 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aebda5f13e3e5c40892fb25aca1cedbd9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#aebda5f13e3e5c40892fb25aca1cedbd9">ParticleHandler</a> (<a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="class_particle_handler.html#ab7731b15feec33564dad6cd56c5c30d9">numParticles</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="class_particle_handler.html#a7f1039bfd0897bbc91f20f39b06edee4">numNodes</a>)</td></tr>
+<tr class="memitem:aebda5f13e3e5c40892fb25aca1cedbd9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#aebda5f13e3e5c40892fb25aca1cedbd9">ParticleHandler</a> (<a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="class_particle_handler.html#ab7731b15feec33564dad6cd56c5c30d9">numParticles</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="class_particle_handler.html#a7f1039bfd0897bbc91f20f39b06edee4">numNodes</a>)</td></tr>
 <tr class="separator:aebda5f13e3e5c40892fb25aca1cedbd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afac795034109860d4a0f7fa8be18c542"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#afac795034109860d4a0f7fa8be18c542">initLeapfrog</a> ()</td></tr>
 <tr class="separator:afac795034109860d4a0f7fa8be18c542"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -191,267 +153,267 @@ Public Member Functions</h2></td></tr>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a1c21ce77ee8eb013c0b7a9425c8e9116"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a1c21ce77ee8eb013c0b7a9425c8e9116">leapfrog</a> { false }</td></tr>
 <tr class="separator:a1c21ce77ee8eb013c0b7a9425c8e9116"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7731b15feec33564dad6cd56c5c30d9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ab7731b15feec33564dad6cd56c5c30d9">numParticles</a></td></tr>
+<tr class="memitem:ab7731b15feec33564dad6cd56c5c30d9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ab7731b15feec33564dad6cd56c5c30d9">numParticles</a></td></tr>
 <tr class="memdesc:ab7731b15feec33564dad6cd56c5c30d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">(host) number of particles  <a href="class_particle_handler.html#ab7731b15feec33564dad6cd56c5c30d9">More...</a><br /></td></tr>
 <tr class="separator:ab7731b15feec33564dad6cd56c5c30d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f1039bfd0897bbc91f20f39b06edee4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a7f1039bfd0897bbc91f20f39b06edee4">numNodes</a></td></tr>
+<tr class="memitem:a7f1039bfd0897bbc91f20f39b06edee4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a7f1039bfd0897bbc91f20f39b06edee4">numNodes</a></td></tr>
 <tr class="memdesc:a7f1039bfd0897bbc91f20f39b06edee4"><td class="mdescLeft">&#160;</td><td class="mdescRight">(host) number of nodes  <a href="class_particle_handler.html#a7f1039bfd0897bbc91f20f39b06edee4">More...</a><br /></td></tr>
 <tr class="separator:a7f1039bfd0897bbc91f20f39b06edee4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab506854fe5fb35a49a6d2f8599ae9dd8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ab506854fe5fb35a49a6d2f8599ae9dd8">h_mass</a></td></tr>
+<tr class="memitem:ab506854fe5fb35a49a6d2f8599ae9dd8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ab506854fe5fb35a49a6d2f8599ae9dd8">h_mass</a></td></tr>
 <tr class="memdesc:ab506854fe5fb35a49a6d2f8599ae9dd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">host mass  <a href="class_particle_handler.html#ab506854fe5fb35a49a6d2f8599ae9dd8">More...</a><br /></td></tr>
 <tr class="separator:ab506854fe5fb35a49a6d2f8599ae9dd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3de74017840e79e90902206e95fca41"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ab3de74017840e79e90902206e95fca41">h_x</a></td></tr>
+<tr class="memitem:ab3de74017840e79e90902206e95fca41"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ab3de74017840e79e90902206e95fca41">h_x</a></td></tr>
 <tr class="memdesc:ab3de74017840e79e90902206e95fca41"><td class="mdescLeft">&#160;</td><td class="mdescRight">host x position  <a href="class_particle_handler.html#ab3de74017840e79e90902206e95fca41">More...</a><br /></td></tr>
 <tr class="separator:ab3de74017840e79e90902206e95fca41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4edca1f995da5392378879c545b0ab16"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a4edca1f995da5392378879c545b0ab16">_h_x</a></td></tr>
+<tr class="memitem:a4edca1f995da5392378879c545b0ab16"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a4edca1f995da5392378879c545b0ab16">_h_x</a></td></tr>
 <tr class="separator:a4edca1f995da5392378879c545b0ab16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4df6bc158a844177a612ae318091caa1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a4df6bc158a844177a612ae318091caa1">h_vx</a></td></tr>
+<tr class="memitem:a4df6bc158a844177a612ae318091caa1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a4df6bc158a844177a612ae318091caa1">h_vx</a></td></tr>
 <tr class="memdesc:a4df6bc158a844177a612ae318091caa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">host x velocity  <a href="class_particle_handler.html#a4df6bc158a844177a612ae318091caa1">More...</a><br /></td></tr>
 <tr class="separator:a4df6bc158a844177a612ae318091caa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60553af56f8a0f9b8696ba4fd13cd5a8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a60553af56f8a0f9b8696ba4fd13cd5a8">_h_vx</a></td></tr>
+<tr class="memitem:a60553af56f8a0f9b8696ba4fd13cd5a8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a60553af56f8a0f9b8696ba4fd13cd5a8">_h_vx</a></td></tr>
 <tr class="separator:a60553af56f8a0f9b8696ba4fd13cd5a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a118f3da55e1143fbd506b4b13bda6eb1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a118f3da55e1143fbd506b4b13bda6eb1">h_ax</a></td></tr>
+<tr class="memitem:a118f3da55e1143fbd506b4b13bda6eb1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a118f3da55e1143fbd506b4b13bda6eb1">h_ax</a></td></tr>
 <tr class="memdesc:a118f3da55e1143fbd506b4b13bda6eb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">host x acceleration  <a href="class_particle_handler.html#a118f3da55e1143fbd506b4b13bda6eb1">More...</a><br /></td></tr>
 <tr class="separator:a118f3da55e1143fbd506b4b13bda6eb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af02cb64a01bc9111e147ca4a98f2922e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#af02cb64a01bc9111e147ca4a98f2922e">_h_ax</a></td></tr>
+<tr class="memitem:af02cb64a01bc9111e147ca4a98f2922e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#af02cb64a01bc9111e147ca4a98f2922e">_h_ax</a></td></tr>
 <tr class="separator:af02cb64a01bc9111e147ca4a98f2922e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade1253b1313621be79d75b2938f99645"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ade1253b1313621be79d75b2938f99645">h_g_ax</a></td></tr>
+<tr class="memitem:ade1253b1313621be79d75b2938f99645"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ade1253b1313621be79d75b2938f99645">h_g_ax</a></td></tr>
 <tr class="separator:ade1253b1313621be79d75b2938f99645"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9dc84355502a8b32e4c590142938867c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a9dc84355502a8b32e4c590142938867c">h_ax_old</a></td></tr>
+<tr class="memitem:a9dc84355502a8b32e4c590142938867c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a9dc84355502a8b32e4c590142938867c">h_ax_old</a></td></tr>
 <tr class="separator:a9dc84355502a8b32e4c590142938867c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa2ca47776472362fbacd247872922b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#afa2ca47776472362fbacd247872922b1">h_g_ax_old</a></td></tr>
+<tr class="memitem:afa2ca47776472362fbacd247872922b1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#afa2ca47776472362fbacd247872922b1">h_g_ax_old</a></td></tr>
 <tr class="separator:afa2ca47776472362fbacd247872922b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ed9ad47e8359a43d98567dfe6809fe6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a4ed9ad47e8359a43d98567dfe6809fe6">h_y</a></td></tr>
+<tr class="memitem:a4ed9ad47e8359a43d98567dfe6809fe6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a4ed9ad47e8359a43d98567dfe6809fe6">h_y</a></td></tr>
 <tr class="memdesc:a4ed9ad47e8359a43d98567dfe6809fe6"><td class="mdescLeft">&#160;</td><td class="mdescRight">host y position  <a href="class_particle_handler.html#a4ed9ad47e8359a43d98567dfe6809fe6">More...</a><br /></td></tr>
 <tr class="separator:a4ed9ad47e8359a43d98567dfe6809fe6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa078c349b64e041999bdd9f5b14a9bfb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#aa078c349b64e041999bdd9f5b14a9bfb">_h_y</a></td></tr>
+<tr class="memitem:aa078c349b64e041999bdd9f5b14a9bfb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#aa078c349b64e041999bdd9f5b14a9bfb">_h_y</a></td></tr>
 <tr class="separator:aa078c349b64e041999bdd9f5b14a9bfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af498bb94295b2b00e6e8a348fe7e5b6b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#af498bb94295b2b00e6e8a348fe7e5b6b">h_vy</a></td></tr>
+<tr class="memitem:af498bb94295b2b00e6e8a348fe7e5b6b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#af498bb94295b2b00e6e8a348fe7e5b6b">h_vy</a></td></tr>
 <tr class="memdesc:af498bb94295b2b00e6e8a348fe7e5b6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">host y velocity  <a href="class_particle_handler.html#af498bb94295b2b00e6e8a348fe7e5b6b">More...</a><br /></td></tr>
 <tr class="separator:af498bb94295b2b00e6e8a348fe7e5b6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0d9128208520e0f718e1214d0a2fa42"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ac0d9128208520e0f718e1214d0a2fa42">_h_vy</a></td></tr>
+<tr class="memitem:ac0d9128208520e0f718e1214d0a2fa42"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ac0d9128208520e0f718e1214d0a2fa42">_h_vy</a></td></tr>
 <tr class="separator:ac0d9128208520e0f718e1214d0a2fa42"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb4b129bd7fcdfe81ae8c7afd01e82d1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#adb4b129bd7fcdfe81ae8c7afd01e82d1">h_ay</a></td></tr>
+<tr class="memitem:adb4b129bd7fcdfe81ae8c7afd01e82d1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#adb4b129bd7fcdfe81ae8c7afd01e82d1">h_ay</a></td></tr>
 <tr class="memdesc:adb4b129bd7fcdfe81ae8c7afd01e82d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">host y acceleration  <a href="class_particle_handler.html#adb4b129bd7fcdfe81ae8c7afd01e82d1">More...</a><br /></td></tr>
 <tr class="separator:adb4b129bd7fcdfe81ae8c7afd01e82d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb95e63d9c9aa94f6574173509dd04c7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#aeb95e63d9c9aa94f6574173509dd04c7">_h_ay</a></td></tr>
+<tr class="memitem:aeb95e63d9c9aa94f6574173509dd04c7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#aeb95e63d9c9aa94f6574173509dd04c7">_h_ay</a></td></tr>
 <tr class="separator:aeb95e63d9c9aa94f6574173509dd04c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5835777847af87df45ff813f2d0ee2ca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a5835777847af87df45ff813f2d0ee2ca">h_g_ay</a></td></tr>
+<tr class="memitem:a5835777847af87df45ff813f2d0ee2ca"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a5835777847af87df45ff813f2d0ee2ca">h_g_ay</a></td></tr>
 <tr class="separator:a5835777847af87df45ff813f2d0ee2ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e9c4885edd2098d717049a26225b1b3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a4e9c4885edd2098d717049a26225b1b3">h_ay_old</a></td></tr>
+<tr class="memitem:a4e9c4885edd2098d717049a26225b1b3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a4e9c4885edd2098d717049a26225b1b3">h_ay_old</a></td></tr>
 <tr class="separator:a4e9c4885edd2098d717049a26225b1b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad53ca3c766970ea76b0b3d02290fd37f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ad53ca3c766970ea76b0b3d02290fd37f">h_g_ay_old</a></td></tr>
+<tr class="memitem:ad53ca3c766970ea76b0b3d02290fd37f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ad53ca3c766970ea76b0b3d02290fd37f">h_g_ay_old</a></td></tr>
 <tr class="separator:ad53ca3c766970ea76b0b3d02290fd37f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acaaa52d7911adc4bc36fbecfda9ae2a0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#acaaa52d7911adc4bc36fbecfda9ae2a0">h_z</a></td></tr>
+<tr class="memitem:acaaa52d7911adc4bc36fbecfda9ae2a0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#acaaa52d7911adc4bc36fbecfda9ae2a0">h_z</a></td></tr>
 <tr class="memdesc:acaaa52d7911adc4bc36fbecfda9ae2a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">host z position  <a href="class_particle_handler.html#acaaa52d7911adc4bc36fbecfda9ae2a0">More...</a><br /></td></tr>
 <tr class="separator:acaaa52d7911adc4bc36fbecfda9ae2a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92827b5172d256019c13e63530cdbd80"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a92827b5172d256019c13e63530cdbd80">_h_z</a></td></tr>
+<tr class="memitem:a92827b5172d256019c13e63530cdbd80"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a92827b5172d256019c13e63530cdbd80">_h_z</a></td></tr>
 <tr class="separator:a92827b5172d256019c13e63530cdbd80"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d56e28179b625c5fc2d9ad723bee1e1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a8d56e28179b625c5fc2d9ad723bee1e1">h_vz</a></td></tr>
+<tr class="memitem:a8d56e28179b625c5fc2d9ad723bee1e1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a8d56e28179b625c5fc2d9ad723bee1e1">h_vz</a></td></tr>
 <tr class="memdesc:a8d56e28179b625c5fc2d9ad723bee1e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">host z velocity  <a href="class_particle_handler.html#a8d56e28179b625c5fc2d9ad723bee1e1">More...</a><br /></td></tr>
 <tr class="separator:a8d56e28179b625c5fc2d9ad723bee1e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a69b842ce86a19030ff0952faf7d5c23a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a69b842ce86a19030ff0952faf7d5c23a">_h_vz</a></td></tr>
+<tr class="memitem:a69b842ce86a19030ff0952faf7d5c23a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a69b842ce86a19030ff0952faf7d5c23a">_h_vz</a></td></tr>
 <tr class="separator:a69b842ce86a19030ff0952faf7d5c23a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0fbe38163308fc0a2a1bafc8070f22b0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a0fbe38163308fc0a2a1bafc8070f22b0">h_az</a></td></tr>
+<tr class="memitem:a0fbe38163308fc0a2a1bafc8070f22b0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a0fbe38163308fc0a2a1bafc8070f22b0">h_az</a></td></tr>
 <tr class="memdesc:a0fbe38163308fc0a2a1bafc8070f22b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">host z acceleration  <a href="class_particle_handler.html#a0fbe38163308fc0a2a1bafc8070f22b0">More...</a><br /></td></tr>
 <tr class="separator:a0fbe38163308fc0a2a1bafc8070f22b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a667237452ab373b099118338255ca75e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a667237452ab373b099118338255ca75e">_h_az</a></td></tr>
+<tr class="memitem:a667237452ab373b099118338255ca75e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a667237452ab373b099118338255ca75e">_h_az</a></td></tr>
 <tr class="separator:a667237452ab373b099118338255ca75e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9fa50608d6d940a798ebd4f27b6085d6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a9fa50608d6d940a798ebd4f27b6085d6">h_g_az</a></td></tr>
+<tr class="memitem:a9fa50608d6d940a798ebd4f27b6085d6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a9fa50608d6d940a798ebd4f27b6085d6">h_g_az</a></td></tr>
 <tr class="separator:a9fa50608d6d940a798ebd4f27b6085d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c41f5967cef63af645c98c040c27fea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a2c41f5967cef63af645c98c040c27fea">h_az_old</a></td></tr>
+<tr class="memitem:a2c41f5967cef63af645c98c040c27fea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a2c41f5967cef63af645c98c040c27fea">h_az_old</a></td></tr>
 <tr class="separator:a2c41f5967cef63af645c98c040c27fea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9bd1e403c29d3392c8055ffa290d8361"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a9bd1e403c29d3392c8055ffa290d8361">h_g_az_old</a></td></tr>
+<tr class="memitem:a9bd1e403c29d3392c8055ffa290d8361"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a9bd1e403c29d3392c8055ffa290d8361">h_g_az_old</a></td></tr>
 <tr class="separator:a9bd1e403c29d3392c8055ffa290d8361"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac710549c6d06e0ece885acd3a25c0be2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ac710549c6d06e0ece885acd3a25c0be2">h_nodeType</a></td></tr>
+<tr class="memitem:ac710549c6d06e0ece885acd3a25c0be2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ac710549c6d06e0ece885acd3a25c0be2">h_nodeType</a></td></tr>
 <tr class="separator:ac710549c6d06e0ece885acd3a25c0be2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24097ff88e0b313f6227d85bf691c14b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a24097ff88e0b313f6227d85bf691c14b">h_level</a></td></tr>
+<tr class="memitem:a24097ff88e0b313f6227d85bf691c14b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a24097ff88e0b313f6227d85bf691c14b">h_level</a></td></tr>
 <tr class="separator:a24097ff88e0b313f6227d85bf691c14b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af87c0f9899f013f563d18c6ee15cb8f6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#af87c0f9899f013f563d18c6ee15cb8f6">h_uid</a></td></tr>
+<tr class="memitem:af87c0f9899f013f563d18c6ee15cb8f6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#af87c0f9899f013f563d18c6ee15cb8f6">h_uid</a></td></tr>
 <tr class="memdesc:af87c0f9899f013f563d18c6ee15cb8f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">host unique identifier  <a href="class_particle_handler.html#af87c0f9899f013f563d18c6ee15cb8f6">More...</a><br /></td></tr>
 <tr class="separator:af87c0f9899f013f563d18c6ee15cb8f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8eee28aae4f9343cd662d9ec91374432"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a8eee28aae4f9343cd662d9ec91374432">_h_uid</a></td></tr>
+<tr class="memitem:a8eee28aae4f9343cd662d9ec91374432"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a8eee28aae4f9343cd662d9ec91374432">_h_uid</a></td></tr>
 <tr class="separator:a8eee28aae4f9343cd662d9ec91374432"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aadb07b7e0830cf3f24da865ad50b845c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#aadb07b7e0830cf3f24da865ad50b845c">h_materialId</a></td></tr>
+<tr class="memitem:aadb07b7e0830cf3f24da865ad50b845c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#aadb07b7e0830cf3f24da865ad50b845c">h_materialId</a></td></tr>
 <tr class="memdesc:aadb07b7e0830cf3f24da865ad50b845c"><td class="mdescLeft">&#160;</td><td class="mdescRight">host material identifier  <a href="class_particle_handler.html#aadb07b7e0830cf3f24da865ad50b845c">More...</a><br /></td></tr>
 <tr class="separator:aadb07b7e0830cf3f24da865ad50b845c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdf37f56177fbf685f8bd66fc38f4b5c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#abdf37f56177fbf685f8bd66fc38f4b5c">h_sml</a></td></tr>
+<tr class="memitem:abdf37f56177fbf685f8bd66fc38f4b5c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#abdf37f56177fbf685f8bd66fc38f4b5c">h_sml</a></td></tr>
 <tr class="memdesc:abdf37f56177fbf685f8bd66fc38f4b5c"><td class="mdescLeft">&#160;</td><td class="mdescRight">host smoothing length  <a href="class_particle_handler.html#abdf37f56177fbf685f8bd66fc38f4b5c">More...</a><br /></td></tr>
 <tr class="separator:abdf37f56177fbf685f8bd66fc38f4b5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2dd994c32a68f2925eac662b0b640dcb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a2dd994c32a68f2925eac662b0b640dcb">_h_sml</a></td></tr>
+<tr class="memitem:a2dd994c32a68f2925eac662b0b640dcb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a2dd994c32a68f2925eac662b0b640dcb">_h_sml</a></td></tr>
 <tr class="separator:a2dd994c32a68f2925eac662b0b640dcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a97936f054d938f686db02d4793f55f15"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a97936f054d938f686db02d4793f55f15">h_nnl</a></td></tr>
+<tr class="memitem:a97936f054d938f686db02d4793f55f15"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a97936f054d938f686db02d4793f55f15">h_nnl</a></td></tr>
 <tr class="memdesc:a97936f054d938f686db02d4793f55f15"><td class="mdescLeft">&#160;</td><td class="mdescRight">host near(est) neighbor list  <a href="class_particle_handler.html#a97936f054d938f686db02d4793f55f15">More...</a><br /></td></tr>
 <tr class="separator:a97936f054d938f686db02d4793f55f15"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07c61060eb5e3921cbb35e8d402a4289"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a07c61060eb5e3921cbb35e8d402a4289">h_noi</a></td></tr>
+<tr class="memitem:a07c61060eb5e3921cbb35e8d402a4289"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a07c61060eb5e3921cbb35e8d402a4289">h_noi</a></td></tr>
 <tr class="memdesc:a07c61060eb5e3921cbb35e8d402a4289"><td class="mdescLeft">&#160;</td><td class="mdescRight">host number of interactions  <a href="class_particle_handler.html#a07c61060eb5e3921cbb35e8d402a4289">More...</a><br /></td></tr>
 <tr class="separator:a07c61060eb5e3921cbb35e8d402a4289"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a14ddf37128deb570592a051a289ca2f6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a14ddf37128deb570592a051a289ca2f6">h_e</a></td></tr>
+<tr class="memitem:a14ddf37128deb570592a051a289ca2f6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a14ddf37128deb570592a051a289ca2f6">h_e</a></td></tr>
 <tr class="memdesc:a14ddf37128deb570592a051a289ca2f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">host internal energy  <a href="class_particle_handler.html#a14ddf37128deb570592a051a289ca2f6">More...</a><br /></td></tr>
 <tr class="separator:a14ddf37128deb570592a051a289ca2f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ea5015959c0ac9dcb16c98ddffa0b73"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a3ea5015959c0ac9dcb16c98ddffa0b73">_h_e</a></td></tr>
+<tr class="memitem:a3ea5015959c0ac9dcb16c98ddffa0b73"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a3ea5015959c0ac9dcb16c98ddffa0b73">_h_e</a></td></tr>
 <tr class="separator:a3ea5015959c0ac9dcb16c98ddffa0b73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ebe8ebc7d5be7c5d516573ced955750"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a6ebe8ebc7d5be7c5d516573ced955750">h_dedt</a></td></tr>
+<tr class="memitem:a6ebe8ebc7d5be7c5d516573ced955750"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a6ebe8ebc7d5be7c5d516573ced955750">h_dedt</a></td></tr>
 <tr class="memdesc:a6ebe8ebc7d5be7c5d516573ced955750"><td class="mdescLeft">&#160;</td><td class="mdescRight">host time derivative of internal energy  <a href="class_particle_handler.html#a6ebe8ebc7d5be7c5d516573ced955750">More...</a><br /></td></tr>
 <tr class="separator:a6ebe8ebc7d5be7c5d516573ced955750"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99ed6022312cffcbcca02c141cb00693"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a99ed6022312cffcbcca02c141cb00693">_h_dedt</a></td></tr>
+<tr class="memitem:a99ed6022312cffcbcca02c141cb00693"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a99ed6022312cffcbcca02c141cb00693">_h_dedt</a></td></tr>
 <tr class="separator:a99ed6022312cffcbcca02c141cb00693"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a883f814e0fc2f2a558f9609be84bd1cf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a883f814e0fc2f2a558f9609be84bd1cf">h_u</a></td></tr>
+<tr class="memitem:a883f814e0fc2f2a558f9609be84bd1cf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a883f814e0fc2f2a558f9609be84bd1cf">h_u</a></td></tr>
 <tr class="memdesc:a883f814e0fc2f2a558f9609be84bd1cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">energy  <a href="class_particle_handler.html#a883f814e0fc2f2a558f9609be84bd1cf">More...</a><br /></td></tr>
 <tr class="separator:a883f814e0fc2f2a558f9609be84bd1cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6d1ecbc5c8a1467f84d2c546e422371"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ac6d1ecbc5c8a1467f84d2c546e422371">h_cs</a></td></tr>
+<tr class="memitem:ac6d1ecbc5c8a1467f84d2c546e422371"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ac6d1ecbc5c8a1467f84d2c546e422371">h_cs</a></td></tr>
 <tr class="memdesc:ac6d1ecbc5c8a1467f84d2c546e422371"><td class="mdescLeft">&#160;</td><td class="mdescRight">host speed of sound  <a href="class_particle_handler.html#ac6d1ecbc5c8a1467f84d2c546e422371">More...</a><br /></td></tr>
 <tr class="separator:ac6d1ecbc5c8a1467f84d2c546e422371"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7abe7b988d48b013504c5b6bdc8ef4ba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a7abe7b988d48b013504c5b6bdc8ef4ba">_h_cs</a></td></tr>
+<tr class="memitem:a7abe7b988d48b013504c5b6bdc8ef4ba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a7abe7b988d48b013504c5b6bdc8ef4ba">_h_cs</a></td></tr>
 <tr class="separator:a7abe7b988d48b013504c5b6bdc8ef4ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a061362bdbacc08b275450087ec9df50a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a061362bdbacc08b275450087ec9df50a">h_rho</a></td></tr>
+<tr class="memitem:a061362bdbacc08b275450087ec9df50a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a061362bdbacc08b275450087ec9df50a">h_rho</a></td></tr>
 <tr class="memdesc:a061362bdbacc08b275450087ec9df50a"><td class="mdescLeft">&#160;</td><td class="mdescRight">host density  <a href="class_particle_handler.html#a061362bdbacc08b275450087ec9df50a">More...</a><br /></td></tr>
 <tr class="separator:a061362bdbacc08b275450087ec9df50a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a12b79a6dd6612dd69fa514bfc1bd5106"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a12b79a6dd6612dd69fa514bfc1bd5106">_h_rho</a></td></tr>
+<tr class="memitem:a12b79a6dd6612dd69fa514bfc1bd5106"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a12b79a6dd6612dd69fa514bfc1bd5106">_h_rho</a></td></tr>
 <tr class="separator:a12b79a6dd6612dd69fa514bfc1bd5106"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ba9a43cf1b7e406cfc112bf1e5e61d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a4ba9a43cf1b7e406cfc112bf1e5e61d0">h_p</a></td></tr>
+<tr class="memitem:a4ba9a43cf1b7e406cfc112bf1e5e61d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a4ba9a43cf1b7e406cfc112bf1e5e61d0">h_p</a></td></tr>
 <tr class="memdesc:a4ba9a43cf1b7e406cfc112bf1e5e61d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">host pressure  <a href="class_particle_handler.html#a4ba9a43cf1b7e406cfc112bf1e5e61d0">More...</a><br /></td></tr>
 <tr class="separator:a4ba9a43cf1b7e406cfc112bf1e5e61d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9ae9d8db85044db62e00a23e129841d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ae9ae9d8db85044db62e00a23e129841d">_h_p</a></td></tr>
+<tr class="memitem:ae9ae9d8db85044db62e00a23e129841d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ae9ae9d8db85044db62e00a23e129841d">_h_p</a></td></tr>
 <tr class="separator:ae9ae9d8db85044db62e00a23e129841d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec646b0373bea69816141398984d1bea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#aec646b0373bea69816141398984d1bea">h_muijmax</a></td></tr>
+<tr class="memitem:aec646b0373bea69816141398984d1bea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#aec646b0373bea69816141398984d1bea">h_muijmax</a></td></tr>
 <tr class="memdesc:aec646b0373bea69816141398984d1bea"><td class="mdescLeft">&#160;</td><td class="mdescRight">host max(mu_ij)  <a href="class_particle_handler.html#aec646b0373bea69816141398984d1bea">More...</a><br /></td></tr>
 <tr class="separator:aec646b0373bea69816141398984d1bea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3c46eaa1172c85468672f62359c74780"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a3c46eaa1172c85468672f62359c74780">h_drhodt</a></td></tr>
+<tr class="memitem:a3c46eaa1172c85468672f62359c74780"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a3c46eaa1172c85468672f62359c74780">h_drhodt</a></td></tr>
 <tr class="memdesc:a3c46eaa1172c85468672f62359c74780"><td class="mdescLeft">&#160;</td><td class="mdescRight">host time derivative of density  <a href="class_particle_handler.html#a3c46eaa1172c85468672f62359c74780">More...</a><br /></td></tr>
 <tr class="separator:a3c46eaa1172c85468672f62359c74780"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af4665d721d15829f78532f22888a42d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#af4665d721d15829f78532f22888a42d0">_h_drhodt</a></td></tr>
+<tr class="memitem:af4665d721d15829f78532f22888a42d0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#af4665d721d15829f78532f22888a42d0">_h_drhodt</a></td></tr>
 <tr class="separator:af4665d721d15829f78532f22888a42d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a54dff71ed13a34f4dfe0ada7b09ef71a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a54dff71ed13a34f4dfe0ada7b09ef71a">d_numParticles</a></td></tr>
+<tr class="memitem:a54dff71ed13a34f4dfe0ada7b09ef71a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a54dff71ed13a34f4dfe0ada7b09ef71a">d_numParticles</a></td></tr>
 <tr class="memdesc:a54dff71ed13a34f4dfe0ada7b09ef71a"><td class="mdescLeft">&#160;</td><td class="mdescRight">device number of particles  <a href="class_particle_handler.html#a54dff71ed13a34f4dfe0ada7b09ef71a">More...</a><br /></td></tr>
 <tr class="separator:a54dff71ed13a34f4dfe0ada7b09ef71a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08497f6bcbad4c4884eccd58d8c41e09"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a08497f6bcbad4c4884eccd58d8c41e09">d_numNodes</a></td></tr>
+<tr class="memitem:a08497f6bcbad4c4884eccd58d8c41e09"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a08497f6bcbad4c4884eccd58d8c41e09">d_numNodes</a></td></tr>
 <tr class="memdesc:a08497f6bcbad4c4884eccd58d8c41e09"><td class="mdescLeft">&#160;</td><td class="mdescRight">device number of nodes  <a href="class_particle_handler.html#a08497f6bcbad4c4884eccd58d8c41e09">More...</a><br /></td></tr>
 <tr class="separator:a08497f6bcbad4c4884eccd58d8c41e09"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a31ceed2ff83caba9fb0d6969b60c30ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a31ceed2ff83caba9fb0d6969b60c30ce">d_mass</a></td></tr>
+<tr class="memitem:a31ceed2ff83caba9fb0d6969b60c30ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a31ceed2ff83caba9fb0d6969b60c30ce">d_mass</a></td></tr>
 <tr class="memdesc:a31ceed2ff83caba9fb0d6969b60c30ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">device mass array  <a href="class_particle_handler.html#a31ceed2ff83caba9fb0d6969b60c30ce">More...</a><br /></td></tr>
 <tr class="separator:a31ceed2ff83caba9fb0d6969b60c30ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb8bb7dcc0c332d5712138bfb3ac059d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#adb8bb7dcc0c332d5712138bfb3ac059d">d_x</a></td></tr>
+<tr class="memitem:adb8bb7dcc0c332d5712138bfb3ac059d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#adb8bb7dcc0c332d5712138bfb3ac059d">d_x</a></td></tr>
 <tr class="memdesc:adb8bb7dcc0c332d5712138bfb3ac059d"><td class="mdescLeft">&#160;</td><td class="mdescRight">device x position  <a href="class_particle_handler.html#adb8bb7dcc0c332d5712138bfb3ac059d">More...</a><br /></td></tr>
 <tr class="separator:adb8bb7dcc0c332d5712138bfb3ac059d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac361dd8b83d820eaea60bd4fa0730193"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ac361dd8b83d820eaea60bd4fa0730193">_d_x</a></td></tr>
+<tr class="memitem:ac361dd8b83d820eaea60bd4fa0730193"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ac361dd8b83d820eaea60bd4fa0730193">_d_x</a></td></tr>
 <tr class="separator:ac361dd8b83d820eaea60bd4fa0730193"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f5ced0eaa4a83a76d6fa129f7cadd2d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a7f5ced0eaa4a83a76d6fa129f7cadd2d">d_vx</a></td></tr>
+<tr class="memitem:a7f5ced0eaa4a83a76d6fa129f7cadd2d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a7f5ced0eaa4a83a76d6fa129f7cadd2d">d_vx</a></td></tr>
 <tr class="memdesc:a7f5ced0eaa4a83a76d6fa129f7cadd2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">device x velocity  <a href="class_particle_handler.html#a7f5ced0eaa4a83a76d6fa129f7cadd2d">More...</a><br /></td></tr>
 <tr class="separator:a7f5ced0eaa4a83a76d6fa129f7cadd2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa3a04e3db5664be41f48a49b356c06e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#afa3a04e3db5664be41f48a49b356c06e">_d_vx</a></td></tr>
+<tr class="memitem:afa3a04e3db5664be41f48a49b356c06e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#afa3a04e3db5664be41f48a49b356c06e">_d_vx</a></td></tr>
 <tr class="separator:afa3a04e3db5664be41f48a49b356c06e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4b43236e987398ffe74ec4e1a364b59"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ab4b43236e987398ffe74ec4e1a364b59">d_ax</a></td></tr>
+<tr class="memitem:ab4b43236e987398ffe74ec4e1a364b59"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ab4b43236e987398ffe74ec4e1a364b59">d_ax</a></td></tr>
 <tr class="memdesc:ab4b43236e987398ffe74ec4e1a364b59"><td class="mdescLeft">&#160;</td><td class="mdescRight">device x acceleration  <a href="class_particle_handler.html#ab4b43236e987398ffe74ec4e1a364b59">More...</a><br /></td></tr>
 <tr class="separator:ab4b43236e987398ffe74ec4e1a364b59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00cec9dbe07ac569ddc5b601c2dc4772"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a00cec9dbe07ac569ddc5b601c2dc4772">_d_ax</a></td></tr>
+<tr class="memitem:a00cec9dbe07ac569ddc5b601c2dc4772"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a00cec9dbe07ac569ddc5b601c2dc4772">_d_ax</a></td></tr>
 <tr class="separator:a00cec9dbe07ac569ddc5b601c2dc4772"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cce47ada0029c9d0a696d38e4c91814"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a4cce47ada0029c9d0a696d38e4c91814">d_g_ax</a></td></tr>
+<tr class="memitem:a4cce47ada0029c9d0a696d38e4c91814"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a4cce47ada0029c9d0a696d38e4c91814">d_g_ax</a></td></tr>
 <tr class="separator:a4cce47ada0029c9d0a696d38e4c91814"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d7ab044d001acf7089117c0ee8b9a56"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a4d7ab044d001acf7089117c0ee8b9a56">d_ax_old</a></td></tr>
+<tr class="memitem:a4d7ab044d001acf7089117c0ee8b9a56"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a4d7ab044d001acf7089117c0ee8b9a56">d_ax_old</a></td></tr>
 <tr class="separator:a4d7ab044d001acf7089117c0ee8b9a56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ff9c66eca10ad8c9530d6130e01e3f0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a6ff9c66eca10ad8c9530d6130e01e3f0">d_g_ax_old</a></td></tr>
+<tr class="memitem:a6ff9c66eca10ad8c9530d6130e01e3f0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a6ff9c66eca10ad8c9530d6130e01e3f0">d_g_ax_old</a></td></tr>
 <tr class="separator:a6ff9c66eca10ad8c9530d6130e01e3f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab8f724a7c767b103fd77a5f20ad331c0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ab8f724a7c767b103fd77a5f20ad331c0">d_y</a></td></tr>
+<tr class="memitem:ab8f724a7c767b103fd77a5f20ad331c0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ab8f724a7c767b103fd77a5f20ad331c0">d_y</a></td></tr>
 <tr class="memdesc:ab8f724a7c767b103fd77a5f20ad331c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">device y position  <a href="class_particle_handler.html#ab8f724a7c767b103fd77a5f20ad331c0">More...</a><br /></td></tr>
 <tr class="separator:ab8f724a7c767b103fd77a5f20ad331c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ad57fa5a9658648dc7edb90965ee1ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a9ad57fa5a9658648dc7edb90965ee1ee">_d_y</a></td></tr>
+<tr class="memitem:a9ad57fa5a9658648dc7edb90965ee1ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a9ad57fa5a9658648dc7edb90965ee1ee">_d_y</a></td></tr>
 <tr class="separator:a9ad57fa5a9658648dc7edb90965ee1ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abbb879a9fb4025763281e71af07156ac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#abbb879a9fb4025763281e71af07156ac">d_vy</a></td></tr>
+<tr class="memitem:abbb879a9fb4025763281e71af07156ac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#abbb879a9fb4025763281e71af07156ac">d_vy</a></td></tr>
 <tr class="memdesc:abbb879a9fb4025763281e71af07156ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">device y velocity  <a href="class_particle_handler.html#abbb879a9fb4025763281e71af07156ac">More...</a><br /></td></tr>
 <tr class="separator:abbb879a9fb4025763281e71af07156ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4471ce5ea1059140282213adb8d0275"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ac4471ce5ea1059140282213adb8d0275">_d_vy</a></td></tr>
+<tr class="memitem:ac4471ce5ea1059140282213adb8d0275"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ac4471ce5ea1059140282213adb8d0275">_d_vy</a></td></tr>
 <tr class="separator:ac4471ce5ea1059140282213adb8d0275"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a278d35fb0ce923e88c9f7a8730688e7d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a278d35fb0ce923e88c9f7a8730688e7d">d_ay</a></td></tr>
+<tr class="memitem:a278d35fb0ce923e88c9f7a8730688e7d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a278d35fb0ce923e88c9f7a8730688e7d">d_ay</a></td></tr>
 <tr class="memdesc:a278d35fb0ce923e88c9f7a8730688e7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">device y acceleration  <a href="class_particle_handler.html#a278d35fb0ce923e88c9f7a8730688e7d">More...</a><br /></td></tr>
 <tr class="separator:a278d35fb0ce923e88c9f7a8730688e7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab435e1cd663e2f618de6b31b55b7acb4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ab435e1cd663e2f618de6b31b55b7acb4">_d_ay</a></td></tr>
+<tr class="memitem:ab435e1cd663e2f618de6b31b55b7acb4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ab435e1cd663e2f618de6b31b55b7acb4">_d_ay</a></td></tr>
 <tr class="separator:ab435e1cd663e2f618de6b31b55b7acb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8b771836bb67da47b1fbcee053c7259"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#af8b771836bb67da47b1fbcee053c7259">d_g_ay</a></td></tr>
+<tr class="memitem:af8b771836bb67da47b1fbcee053c7259"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#af8b771836bb67da47b1fbcee053c7259">d_g_ay</a></td></tr>
 <tr class="separator:af8b771836bb67da47b1fbcee053c7259"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a528e5bea93ab9ae0af7c49720e4de14a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a528e5bea93ab9ae0af7c49720e4de14a">d_ay_old</a></td></tr>
+<tr class="memitem:a528e5bea93ab9ae0af7c49720e4de14a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a528e5bea93ab9ae0af7c49720e4de14a">d_ay_old</a></td></tr>
 <tr class="separator:a528e5bea93ab9ae0af7c49720e4de14a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeef09dc1a3e486e1e9c3cd3d61c3382b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#aeef09dc1a3e486e1e9c3cd3d61c3382b">d_g_ay_old</a></td></tr>
+<tr class="memitem:aeef09dc1a3e486e1e9c3cd3d61c3382b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#aeef09dc1a3e486e1e9c3cd3d61c3382b">d_g_ay_old</a></td></tr>
 <tr class="separator:aeef09dc1a3e486e1e9c3cd3d61c3382b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d082fc9556257f925b8fbbe8ed6edac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a1d082fc9556257f925b8fbbe8ed6edac">d_z</a></td></tr>
+<tr class="memitem:a1d082fc9556257f925b8fbbe8ed6edac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a1d082fc9556257f925b8fbbe8ed6edac">d_z</a></td></tr>
 <tr class="memdesc:a1d082fc9556257f925b8fbbe8ed6edac"><td class="mdescLeft">&#160;</td><td class="mdescRight">device z position  <a href="class_particle_handler.html#a1d082fc9556257f925b8fbbe8ed6edac">More...</a><br /></td></tr>
 <tr class="separator:a1d082fc9556257f925b8fbbe8ed6edac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af9a03a8e4e014cc6d77f8b63b5029447"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#af9a03a8e4e014cc6d77f8b63b5029447">_d_z</a></td></tr>
+<tr class="memitem:af9a03a8e4e014cc6d77f8b63b5029447"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#af9a03a8e4e014cc6d77f8b63b5029447">_d_z</a></td></tr>
 <tr class="separator:af9a03a8e4e014cc6d77f8b63b5029447"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc7aa459eee270e9dabc691fd429ef22"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#afc7aa459eee270e9dabc691fd429ef22">d_vz</a></td></tr>
+<tr class="memitem:afc7aa459eee270e9dabc691fd429ef22"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#afc7aa459eee270e9dabc691fd429ef22">d_vz</a></td></tr>
 <tr class="memdesc:afc7aa459eee270e9dabc691fd429ef22"><td class="mdescLeft">&#160;</td><td class="mdescRight">device z velocity  <a href="class_particle_handler.html#afc7aa459eee270e9dabc691fd429ef22">More...</a><br /></td></tr>
 <tr class="separator:afc7aa459eee270e9dabc691fd429ef22"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6614d52e1cf097836d36ec03292e3e4c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a6614d52e1cf097836d36ec03292e3e4c">_d_vz</a></td></tr>
+<tr class="memitem:a6614d52e1cf097836d36ec03292e3e4c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a6614d52e1cf097836d36ec03292e3e4c">_d_vz</a></td></tr>
 <tr class="separator:a6614d52e1cf097836d36ec03292e3e4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55132b177eec932c384dc421a2817e89"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a55132b177eec932c384dc421a2817e89">d_az</a></td></tr>
+<tr class="memitem:a55132b177eec932c384dc421a2817e89"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a55132b177eec932c384dc421a2817e89">d_az</a></td></tr>
 <tr class="memdesc:a55132b177eec932c384dc421a2817e89"><td class="mdescLeft">&#160;</td><td class="mdescRight">device z acceleration  <a href="class_particle_handler.html#a55132b177eec932c384dc421a2817e89">More...</a><br /></td></tr>
 <tr class="separator:a55132b177eec932c384dc421a2817e89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada1bd7baeb0978d724e89ac65564e736"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ada1bd7baeb0978d724e89ac65564e736">_d_az</a></td></tr>
+<tr class="memitem:ada1bd7baeb0978d724e89ac65564e736"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ada1bd7baeb0978d724e89ac65564e736">_d_az</a></td></tr>
 <tr class="separator:ada1bd7baeb0978d724e89ac65564e736"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46cf6f6626179f558037c6d4d1b1b206"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a46cf6f6626179f558037c6d4d1b1b206">d_g_az</a></td></tr>
+<tr class="memitem:a46cf6f6626179f558037c6d4d1b1b206"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a46cf6f6626179f558037c6d4d1b1b206">d_g_az</a></td></tr>
 <tr class="separator:a46cf6f6626179f558037c6d4d1b1b206"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a30a46de36923d49d5a7166dfdff976ac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a30a46de36923d49d5a7166dfdff976ac">d_az_old</a></td></tr>
+<tr class="memitem:a30a46de36923d49d5a7166dfdff976ac"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a30a46de36923d49d5a7166dfdff976ac">d_az_old</a></td></tr>
 <tr class="separator:a30a46de36923d49d5a7166dfdff976ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abdb0c75a9f50afa395326d2b315d39be"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#abdb0c75a9f50afa395326d2b315d39be">d_g_az_old</a></td></tr>
+<tr class="memitem:abdb0c75a9f50afa395326d2b315d39be"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#abdb0c75a9f50afa395326d2b315d39be">d_g_az_old</a></td></tr>
 <tr class="separator:abdb0c75a9f50afa395326d2b315d39be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a762d154f5222ff2e97d8a3747484e667"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a762d154f5222ff2e97d8a3747484e667">d_nodeType</a></td></tr>
+<tr class="memitem:a762d154f5222ff2e97d8a3747484e667"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a762d154f5222ff2e97d8a3747484e667">d_nodeType</a></td></tr>
 <tr class="separator:a762d154f5222ff2e97d8a3747484e667"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad70c984398e0e1eec604b7b57312b0cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ad70c984398e0e1eec604b7b57312b0cb">d_level</a></td></tr>
+<tr class="memitem:ad70c984398e0e1eec604b7b57312b0cb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ad70c984398e0e1eec604b7b57312b0cb">d_level</a></td></tr>
 <tr class="separator:ad70c984398e0e1eec604b7b57312b0cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8deccc3e7b52f289c383a3641fdae15"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#aa8deccc3e7b52f289c383a3641fdae15">d_uid</a></td></tr>
+<tr class="memitem:aa8deccc3e7b52f289c383a3641fdae15"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#aa8deccc3e7b52f289c383a3641fdae15">d_uid</a></td></tr>
 <tr class="memdesc:aa8deccc3e7b52f289c383a3641fdae15"><td class="mdescLeft">&#160;</td><td class="mdescRight">device unique identifier  <a href="class_particle_handler.html#aa8deccc3e7b52f289c383a3641fdae15">More...</a><br /></td></tr>
 <tr class="separator:aa8deccc3e7b52f289c383a3641fdae15"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45e24c46761ff11de4b1819b9419de02"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a45e24c46761ff11de4b1819b9419de02">_d_uid</a></td></tr>
+<tr class="memitem:a45e24c46761ff11de4b1819b9419de02"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a45e24c46761ff11de4b1819b9419de02">_d_uid</a></td></tr>
 <tr class="separator:a45e24c46761ff11de4b1819b9419de02"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0082a6a7456a4d98c199440559516961"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a0082a6a7456a4d98c199440559516961">d_materialId</a></td></tr>
+<tr class="memitem:a0082a6a7456a4d98c199440559516961"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a0082a6a7456a4d98c199440559516961">d_materialId</a></td></tr>
 <tr class="memdesc:a0082a6a7456a4d98c199440559516961"><td class="mdescLeft">&#160;</td><td class="mdescRight">device material identifier  <a href="class_particle_handler.html#a0082a6a7456a4d98c199440559516961">More...</a><br /></td></tr>
 <tr class="separator:a0082a6a7456a4d98c199440559516961"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab9c291dbf332c82e3fb5b5a1cc9d4de2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ab9c291dbf332c82e3fb5b5a1cc9d4de2">d_sml</a></td></tr>
+<tr class="memitem:ab9c291dbf332c82e3fb5b5a1cc9d4de2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ab9c291dbf332c82e3fb5b5a1cc9d4de2">d_sml</a></td></tr>
 <tr class="memdesc:ab9c291dbf332c82e3fb5b5a1cc9d4de2"><td class="mdescLeft">&#160;</td><td class="mdescRight">device smoothing length  <a href="class_particle_handler.html#ab9c291dbf332c82e3fb5b5a1cc9d4de2">More...</a><br /></td></tr>
 <tr class="separator:ab9c291dbf332c82e3fb5b5a1cc9d4de2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a638cf266136fd1a88126e30f8ad359fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a638cf266136fd1a88126e30f8ad359fc">_d_sml</a></td></tr>
+<tr class="memitem:a638cf266136fd1a88126e30f8ad359fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a638cf266136fd1a88126e30f8ad359fc">_d_sml</a></td></tr>
 <tr class="separator:a638cf266136fd1a88126e30f8ad359fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a22dd8fd3c7b74d491d41cddda4f40fad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a22dd8fd3c7b74d491d41cddda4f40fad">d_nnl</a></td></tr>
+<tr class="memitem:a22dd8fd3c7b74d491d41cddda4f40fad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a22dd8fd3c7b74d491d41cddda4f40fad">d_nnl</a></td></tr>
 <tr class="memdesc:a22dd8fd3c7b74d491d41cddda4f40fad"><td class="mdescLeft">&#160;</td><td class="mdescRight">device near(est) neighbor list  <a href="class_particle_handler.html#a22dd8fd3c7b74d491d41cddda4f40fad">More...</a><br /></td></tr>
 <tr class="separator:a22dd8fd3c7b74d491d41cddda4f40fad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af103f0ef9ec767016908c4a9c053df1d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#af103f0ef9ec767016908c4a9c053df1d">d_noi</a></td></tr>
+<tr class="memitem:af103f0ef9ec767016908c4a9c053df1d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#af103f0ef9ec767016908c4a9c053df1d">d_noi</a></td></tr>
 <tr class="memdesc:af103f0ef9ec767016908c4a9c053df1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">device number of interaction  <a href="class_particle_handler.html#af103f0ef9ec767016908c4a9c053df1d">More...</a><br /></td></tr>
 <tr class="separator:af103f0ef9ec767016908c4a9c053df1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7482504eb1d7c089370b6ef83fe4ac1c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a7482504eb1d7c089370b6ef83fe4ac1c">d_e</a></td></tr>
+<tr class="memitem:a7482504eb1d7c089370b6ef83fe4ac1c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a7482504eb1d7c089370b6ef83fe4ac1c">d_e</a></td></tr>
 <tr class="memdesc:a7482504eb1d7c089370b6ef83fe4ac1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">device internal energy  <a href="class_particle_handler.html#a7482504eb1d7c089370b6ef83fe4ac1c">More...</a><br /></td></tr>
 <tr class="separator:a7482504eb1d7c089370b6ef83fe4ac1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab4b90695af7fa2a2c15c1dfb9e1051f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ab4b90695af7fa2a2c15c1dfb9e1051f7">_d_e</a></td></tr>
+<tr class="memitem:ab4b90695af7fa2a2c15c1dfb9e1051f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ab4b90695af7fa2a2c15c1dfb9e1051f7">_d_e</a></td></tr>
 <tr class="separator:ab4b90695af7fa2a2c15c1dfb9e1051f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a14d6cf02ba018bda6fbf5c891a6a2dd9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a14d6cf02ba018bda6fbf5c891a6a2dd9">d_dedt</a></td></tr>
+<tr class="memitem:a14d6cf02ba018bda6fbf5c891a6a2dd9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a14d6cf02ba018bda6fbf5c891a6a2dd9">d_dedt</a></td></tr>
 <tr class="memdesc:a14d6cf02ba018bda6fbf5c891a6a2dd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">device time derivative of internal energy  <a href="class_particle_handler.html#a14d6cf02ba018bda6fbf5c891a6a2dd9">More...</a><br /></td></tr>
 <tr class="separator:a14d6cf02ba018bda6fbf5c891a6a2dd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af60026ba18c7d66e7da5745546d88b63"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#af60026ba18c7d66e7da5745546d88b63">_d_dedt</a></td></tr>
+<tr class="memitem:af60026ba18c7d66e7da5745546d88b63"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#af60026ba18c7d66e7da5745546d88b63">_d_dedt</a></td></tr>
 <tr class="separator:af60026ba18c7d66e7da5745546d88b63"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f6c0aa8c628c352b282c9fab6cd9714"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a2f6c0aa8c628c352b282c9fab6cd9714">d_u</a></td></tr>
+<tr class="memitem:a2f6c0aa8c628c352b282c9fab6cd9714"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a2f6c0aa8c628c352b282c9fab6cd9714">d_u</a></td></tr>
 <tr class="memdesc:a2f6c0aa8c628c352b282c9fab6cd9714"><td class="mdescLeft">&#160;</td><td class="mdescRight">energy  <a href="class_particle_handler.html#a2f6c0aa8c628c352b282c9fab6cd9714">More...</a><br /></td></tr>
 <tr class="separator:a2f6c0aa8c628c352b282c9fab6cd9714"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd1b5fa6879cdfa67d897832fa21878b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#acd1b5fa6879cdfa67d897832fa21878b">d_cs</a></td></tr>
+<tr class="memitem:acd1b5fa6879cdfa67d897832fa21878b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#acd1b5fa6879cdfa67d897832fa21878b">d_cs</a></td></tr>
 <tr class="memdesc:acd1b5fa6879cdfa67d897832fa21878b"><td class="mdescLeft">&#160;</td><td class="mdescRight">device speed of sound  <a href="class_particle_handler.html#acd1b5fa6879cdfa67d897832fa21878b">More...</a><br /></td></tr>
 <tr class="separator:acd1b5fa6879cdfa67d897832fa21878b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad450e68afa32c09d27d6bfbf5e48623e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ad450e68afa32c09d27d6bfbf5e48623e">_d_cs</a></td></tr>
+<tr class="memitem:ad450e68afa32c09d27d6bfbf5e48623e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ad450e68afa32c09d27d6bfbf5e48623e">_d_cs</a></td></tr>
 <tr class="separator:ad450e68afa32c09d27d6bfbf5e48623e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:affbc18d267645a3c17616c29626ee0e8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#affbc18d267645a3c17616c29626ee0e8">d_rho</a></td></tr>
+<tr class="memitem:affbc18d267645a3c17616c29626ee0e8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#affbc18d267645a3c17616c29626ee0e8">d_rho</a></td></tr>
 <tr class="memdesc:affbc18d267645a3c17616c29626ee0e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">device density  <a href="class_particle_handler.html#affbc18d267645a3c17616c29626ee0e8">More...</a><br /></td></tr>
 <tr class="separator:affbc18d267645a3c17616c29626ee0e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4ade52c624ba25b89d58f896b3f33eaa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a4ade52c624ba25b89d58f896b3f33eaa">_d_rho</a></td></tr>
+<tr class="memitem:a4ade52c624ba25b89d58f896b3f33eaa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a4ade52c624ba25b89d58f896b3f33eaa">_d_rho</a></td></tr>
 <tr class="separator:a4ade52c624ba25b89d58f896b3f33eaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af13f22eabe80b1a233d90307ae145aa4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#af13f22eabe80b1a233d90307ae145aa4">d_p</a></td></tr>
+<tr class="memitem:af13f22eabe80b1a233d90307ae145aa4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#af13f22eabe80b1a233d90307ae145aa4">d_p</a></td></tr>
 <tr class="memdesc:af13f22eabe80b1a233d90307ae145aa4"><td class="mdescLeft">&#160;</td><td class="mdescRight">device pressure  <a href="class_particle_handler.html#af13f22eabe80b1a233d90307ae145aa4">More...</a><br /></td></tr>
 <tr class="separator:af13f22eabe80b1a233d90307ae145aa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a841de114578f42c513f8d864b173f8a6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a841de114578f42c513f8d864b173f8a6">_d_p</a></td></tr>
+<tr class="memitem:a841de114578f42c513f8d864b173f8a6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a841de114578f42c513f8d864b173f8a6">_d_p</a></td></tr>
 <tr class="separator:a841de114578f42c513f8d864b173f8a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05e15c363515d12595c523514bcc5ac7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a05e15c363515d12595c523514bcc5ac7">d_muijmax</a></td></tr>
+<tr class="memitem:a05e15c363515d12595c523514bcc5ac7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a05e15c363515d12595c523514bcc5ac7">d_muijmax</a></td></tr>
 <tr class="memdesc:a05e15c363515d12595c523514bcc5ac7"><td class="mdescLeft">&#160;</td><td class="mdescRight">device max(mu_ij)  <a href="class_particle_handler.html#a05e15c363515d12595c523514bcc5ac7">More...</a><br /></td></tr>
 <tr class="separator:a05e15c363515d12595c523514bcc5ac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8b34164bb6720bc0d4add9293108954"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ae8b34164bb6720bc0d4add9293108954">d_drhodt</a></td></tr>
+<tr class="memitem:ae8b34164bb6720bc0d4add9293108954"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#ae8b34164bb6720bc0d4add9293108954">d_drhodt</a></td></tr>
 <tr class="memdesc:ae8b34164bb6720bc0d4add9293108954"><td class="mdescLeft">&#160;</td><td class="mdescRight">device time derivative of density  <a href="class_particle_handler.html#ae8b34164bb6720bc0d4add9293108954">More...</a><br /></td></tr>
 <tr class="separator:ae8b34164bb6720bc0d4add9293108954"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3961efcad050e2c9464f03befb156f35"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a3961efcad050e2c9464f03befb156f35">_d_drhodt</a></td></tr>
+<tr class="memitem:a3961efcad050e2c9464f03befb156f35"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a3961efcad050e2c9464f03befb156f35">_d_drhodt</a></td></tr>
 <tr class="separator:a3961efcad050e2c9464f03befb156f35"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80f0598054ecb272e4303bd0974de9fc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_particles.html">Particles</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_particle_handler.html#a80f0598054ecb272e4303bd0974de9fc">h_particles</a></td></tr>
 <tr class="memdesc:a80f0598054ecb272e4303bd0974de9fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">host instance of particles class  <a href="class_particle_handler.html#a80f0598054ecb272e4303bd0974de9fc">More...</a><br /></td></tr>
@@ -475,13 +437,13 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">ParticleHandler::ParticleHandler </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numParticles</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numNodes</em>&#160;</td>
         </tr>
         <tr>
@@ -1130,7 +1092,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_ax</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_ax</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1146,7 +1108,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_ay</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_ay</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1162,7 +1124,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_az</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_az</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1178,7 +1140,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_cs</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_cs</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1194,7 +1156,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_dedt</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_dedt</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1210,7 +1172,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_drhodt</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_drhodt</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1226,7 +1188,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_e</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_e</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1242,7 +1204,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_p</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_p</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1258,7 +1220,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_rho</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_rho</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1274,7 +1236,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_sml</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_sml</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1290,7 +1252,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> * ParticleHandler::_d_uid</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> * ParticleHandler::_d_uid</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1306,7 +1268,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_vx</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_vx</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1322,7 +1284,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_vy</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_vy</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1338,7 +1300,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_vz</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_vz</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1354,7 +1316,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_x</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_x</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1370,7 +1332,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_y</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_y</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1386,7 +1348,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_z</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_d_z</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1402,7 +1364,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_ax</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_ax</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1418,7 +1380,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_ay</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_ay</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1434,7 +1396,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_az</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_az</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1450,7 +1412,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_cs</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_cs</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1466,7 +1428,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_dedt</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_dedt</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1482,7 +1444,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_drhodt</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_drhodt</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1498,7 +1460,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_e</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_e</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1514,7 +1476,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_p</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_p</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1530,7 +1492,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_rho</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_rho</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1546,7 +1508,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_sml</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_sml</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1562,7 +1524,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> * ParticleHandler::_h_uid</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a> * ParticleHandler::_h_uid</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1578,7 +1540,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_vx</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_vx</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1594,7 +1556,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_vy</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_vy</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1610,7 +1572,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_vz</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_vz</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1626,7 +1588,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_x</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_x</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1642,7 +1604,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_y</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_y</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1658,7 +1620,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_z</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::_h_z</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1674,7 +1636,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_ax</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_ax</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1692,7 +1654,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_ax_old</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_ax_old</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1708,7 +1670,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_ay</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_ay</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1726,7 +1688,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_ay_old</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_ay_old</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1742,7 +1704,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_az</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_az</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1760,7 +1722,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_az_old</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_az_old</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1776,7 +1738,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_cs</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_cs</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1794,7 +1756,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_dedt</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_dedt</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1812,7 +1774,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_drhodt</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_drhodt</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1830,7 +1792,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_e</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_e</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1848,7 +1810,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_g_ax</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_g_ax</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1864,7 +1826,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::d_g_ax_old</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::d_g_ax_old</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1880,7 +1842,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_g_ay</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_g_ay</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1896,7 +1858,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::d_g_ay_old</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::d_g_ay_old</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1912,7 +1874,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_g_az</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_g_az</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1928,7 +1890,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::d_g_az_old</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::d_g_az_old</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1944,7 +1906,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::d_level</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::d_level</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1960,7 +1922,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_mass</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_mass</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1978,7 +1940,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::d_materialId</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::d_materialId</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1996,7 +1958,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_muijmax</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_muijmax</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2014,7 +1976,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::d_nnl</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::d_nnl</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2032,7 +1994,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::d_nodeType</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::d_nodeType</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2048,7 +2010,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::d_noi</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::d_noi</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2066,7 +2028,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::d_numNodes</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::d_numNodes</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2084,7 +2046,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::d_numParticles</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::d_numParticles</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2102,7 +2064,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_p</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_p</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2138,7 +2100,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_rho</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_rho</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2156,7 +2118,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_sml</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_sml</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2174,7 +2136,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_u</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_u</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2192,7 +2154,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a>* ParticleHandler::d_uid</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a>* ParticleHandler::d_uid</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2210,7 +2172,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_vx</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_vx</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2228,7 +2190,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_vy</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_vy</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2246,7 +2208,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_vz</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_vz</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2264,7 +2226,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_x</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_x</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2282,7 +2244,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_y</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_y</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2300,7 +2262,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_z</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::d_z</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2318,7 +2280,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_ax</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_ax</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2336,7 +2298,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_ax_old</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_ax_old</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2352,7 +2314,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_ay</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_ay</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2370,7 +2332,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_ay_old</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_ay_old</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2386,7 +2348,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_az</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_az</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2404,7 +2366,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_az_old</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_az_old</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2420,7 +2382,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_cs</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_cs</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2438,7 +2400,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_dedt</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_dedt</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2456,7 +2418,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_drhodt</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_drhodt</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2474,7 +2436,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_e</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_e</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2492,7 +2454,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_g_ax</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_g_ax</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2508,7 +2470,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::h_g_ax_old</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::h_g_ax_old</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2524,7 +2486,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_g_ay</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_g_ay</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2540,7 +2502,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::h_g_ay_old</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::h_g_ay_old</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2556,7 +2518,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_g_az</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_g_az</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2572,7 +2534,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::h_g_az_old</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> * ParticleHandler::h_g_az_old</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2588,7 +2550,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::h_level</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::h_level</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2604,7 +2566,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_mass</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_mass</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2622,7 +2584,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::h_materialId</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::h_materialId</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2640,7 +2602,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_muijmax</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_muijmax</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2658,7 +2620,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::h_nnl</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::h_nnl</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2676,7 +2638,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::h_nodeType</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::h_nodeType</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2692,7 +2654,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::h_noi</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>* ParticleHandler::h_noi</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2710,7 +2672,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_p</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_p</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2746,7 +2708,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_rho</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_rho</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2764,7 +2726,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_sml</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_sml</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2782,7 +2744,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_u</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_u</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2800,7 +2762,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a>* ParticleHandler::h_uid</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#ae84a801cb4761e9d8f613b66a73c4b98">idInteger</a>* ParticleHandler::h_uid</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2818,7 +2780,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_vx</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_vx</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2836,7 +2798,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_vy</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_vy</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2854,7 +2816,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_vz</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_vz</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2872,7 +2834,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_x</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_x</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2890,7 +2852,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_y</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_y</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2908,7 +2870,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_z</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>* ParticleHandler::h_z</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2942,7 +2904,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> ParticleHandler::numNodes</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> ParticleHandler::numNodes</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2960,7 +2922,7 @@ template&lt;typename T &gt; </div>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> ParticleHandler::numParticles</td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> ParticleHandler::numParticles</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2978,58 +2940,19 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
-    <!--
     milupHPC  - ParticleHandler Class Reference<br />
-    Generated on Wed Jun 29 2022 11:18:50 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    -->
+    Generated on Thu Jun 23 2022 16:11:20 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
   </small></address>
 </body>
 <footer>
-  <custom-footer color="white" background="#2E4053">
-    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
-    <div second>
-      <div style="text-align: center">
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-        </div>
-      </div>
-    </div>
-    <div third>
-      milupHPC  - ParticleHandler Class Reference<br />
-      Generated on Wed Jun 29 2022 11:18:50 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    </div>
-  </custom-footer>
+  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
+  <div id="banner-footer-first"></div>
+  <div id="banner-footer-second"></div>
+  <script>
+    function topFunction() {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+  </script>
 </footer>
-<!--
-<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
--->
-<script src="components/hamburger/runtime.js" type="module"></script><script src="components/hamburger/polyfills.js" type="module"></script><script src="components/hamburger/main.js" type="module"></script>
-<script src="components/header/runtime.js" type="module"></script><script src="components/header/polyfills.js" type="module"></script><script src="components/header/main.js" type="module"></script>
-<script src="components/icons/runtime.js" type="module"></script><script src="components/icons/polyfills.js" type="module"></script><script src="components/icons/main.js" type="module"></script>
-<script src="components/footer/runtime.js" type="module"></script><script src="components/footer/polyfills.js" type="module"></script><script src="components/footer/main.js" type="module"></script>
-<script src="components/dialog/runtime.js" type="module"></script><script src="components/dialog/polyfills.js" type="module"></script><script src="components/dialog/main.js" type="module"></script>
-<script src="components/copyable/runtime.js" type="module"></script><script src="components/copyable/polyfills.js" type="module"></script><script src="components/copyable/main.js" type="module"></script>
-<!--
-<script>
-  function toggle() {
-    var elem = document.getElementById("side-nav");
-    console.log(elem);
-    elem.toggleSideNav(false);
-  }
-</script>
--->
-<!--
-<script>
-  function topFunction() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  }
-</script>
--->
 </html>

@@ -1,7 +1,7 @@
 <map id="include/sph/pressure.cuh" name="include/sph/pressure.cuh">
 <area shape="rect" id="node1" title="Pressure calculation in dependence of the equation of states." alt="" coords="143,5,310,32"/>
 <area shape="rect" id="node2" href="$particles_8cuh.html" title="Particle struct as Structure of arrays both instantiable on host and device." alt="" coords="81,80,189,107"/>
-<area shape="rect" id="node3" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="247,304,337,331"/>
+<area shape="rect" id="node3" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="247,304,337,331"/>
 <area shape="rect" id="node6" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="264,155,451,181"/>
 <area shape="rect" id="node8" href="$cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers." alt="" coords="209,229,319,256"/>
 <area shape="rect" id="node11" href="$material_8cuh.html" title="Material parameters and settings." alt="" coords="531,80,693,107"/>

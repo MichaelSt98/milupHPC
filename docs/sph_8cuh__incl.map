@@ -1,7 +1,7 @@
 <map id="include/sph/sph.cuh" name="include/sph/sph.cuh">
 <area shape="rect" id="node1" title="SPH related functionalities and kernels." alt="" coords="864,5,1003,32"/>
 <area shape="rect" id="node2" href="$particles_8cuh.html" title="Particle struct as Structure of arrays both instantiable on host and device." alt="" coords="195,244,303,271"/>
-<area shape="rect" id="node3" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="723,468,813,495"/>
+<area shape="rect" id="node3" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="723,468,813,495"/>
 <area shape="rect" id="node9" title=" " alt="" coords="148,393,217,420"/>
 <area shape="rect" id="node11" href="$subdomain_8cuh.html" title="Classes and Kernels handling subdomains that distribute the workload among the MPI processes." alt="" coords="683,80,837,121"/>
 <area shape="rect" id="node13" href="$helper_8cuh.html" title=" " alt="" coords="965,244,1046,271"/>

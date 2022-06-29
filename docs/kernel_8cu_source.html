@@ -1,26 +1,14 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+-->
 <head>
-	<meta charset="utf-8">
-	<title>CodePortray</title>
-	<base href="/">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: src/sph/kernel.cu Source File</title>
-	<title>src/sph/kernel.cu Source File</title>
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -34,68 +22,42 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
+	<!-- Add icon library -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- Add font awesome icons -->
+	<!--HIGHLIGHT.JS INSTALL BEGIN
+	<link rel="stylesheet" href="github.min.css">
+	<script src="highlight.js"></script>
+	<script>
+		$(function() {
+			hljs.configure({useBR: false});
+			$(".fragment").each(function(i,node) {
+				$(node).removeClass("fragment");
+				hljs.highlightBlock(node);
+			});
+		});
+	</script>
+	HIGHLIGHT.JS INSTALL END-->
 </head>
 <body>
-<custom-header class="custom-header-class">
-	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
-	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
-	<div shortcuts style="display: table">
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
-		</div>
-		<!-- get the code ... -->
-		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
-		<div style="display: table-cell; padding-right: 2px">
-			<custom-dialog window-width="600px" window-height="400px">
-				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
-				<div title>Get the code: milupHPC!</div>
-				<div style="text-align: center; padding-top: 20px;">
-					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
-					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
-					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
-					<div style="padding-top: 40px">clone via HTTPS:</div>
-					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">clone via SSH:</div>
-					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
-					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
-				</div>
-				<!--<div footer>This is the footer</div>-->
-			</custom-dialog>
-		</div>
-		<!-- end: get the code .... -->
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
-		</div>
-		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
-	</div>
-</custom-header>
-	<!--
-	<custom-side-nav id="side-nav" nav-width="300">
-		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
-		<div>test</div>
-	</custom-side-nav>
-	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation
+				milupHPC documentation <!-- src/sph/kernel.cu Source File -->
 			</span>
+			<!-- <span class="search">
+				<input type="text" placeholder="Search" onkeydown="search(this,event);">
+			</span> -->
 		</div>
+    <!--
+	<div class="icon-bar">
+		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
+		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
+		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
+	</div>
+	</div>
+	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -150,11 +112,11 @@ $(function() {
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_s_p_h.html">SPH</a> {</div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="namespace_s_p_h_1_1_smoothing_kernel.html#adf210cb576929009985e6da5b3328cf3">   14</a></span>    __device__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_s_p_h_1_1_smoothing_kernel.html#adf210cb576929009985e6da5b3328cf3">SmoothingKernel::spiky</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *W, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dWdx[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *dWdr, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dx[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> sml) {</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno"><a class="line" href="namespace_s_p_h_1_1_smoothing_kernel.html#adf210cb576929009985e6da5b3328cf3">   14</a></span>    __device__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_s_p_h_1_1_smoothing_kernel.html#adf210cb576929009985e6da5b3328cf3">SmoothingKernel::spiky</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *W, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dWdx[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *dWdr, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dx[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> sml) {</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> r, q;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> r, q;</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        r = 0;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>            r += dx[d] * dx[d];</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>            dWdx[d] = 0;</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        }</div>
@@ -181,16 +143,16 @@ $(function() {
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>            *dWdr = -45/(M_PI * sml * sml * sml * sml) * (1-q) * (1-q);</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        }</div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>            dWdx[d] = *dWdr/r * dx[d];</div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        }</div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    }</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="namespace_s_p_h_1_1_smoothing_kernel.html#ac3eb45d9306f90d8454e712050e28228">   50</a></span>    __device__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_s_p_h_1_1_smoothing_kernel.html#ac3eb45d9306f90d8454e712050e28228">SmoothingKernel::cubicSpline</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *W, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dWdx[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *dWdr, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dx[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> sml) {</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="namespace_s_p_h_1_1_smoothing_kernel.html#ac3eb45d9306f90d8454e712050e28228">   50</a></span>    __device__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_s_p_h_1_1_smoothing_kernel.html#ac3eb45d9306f90d8454e712050e28228">SmoothingKernel::cubicSpline</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *W, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dWdx[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *dWdr, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dx[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> sml) {</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> r, q, f;</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> r, q, f;</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        r = 0;</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>            r += dx[d] * dx[d];</div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>            dWdx[d] = 0;</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        }</div>
@@ -216,17 +178,17 @@ $(function() {
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>            *W = f * (6. * q * q * q - 6. * q * q + 1.);</div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>            *dWdr = 6. * f/sml * (3 * q * q - 2 * q);</div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        }</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>            dWdx[d] = *dWdr/r * dx[d];</div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        }</div>
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    }</div>
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <span class="comment">// Wendland C2 from Dehnen &amp; Aly 2012</span></div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno"><a class="line" href="namespace_s_p_h_1_1_smoothing_kernel.html#a590293c613de045abaf47ed7a830bd8e">   86</a></span>    __device__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_s_p_h_1_1_smoothing_kernel.html#a590293c613de045abaf47ed7a830bd8e">SmoothingKernel::wendlandc2</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *W, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dWdx[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *dWdr, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dx[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> sml) {</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno"><a class="line" href="namespace_s_p_h_1_1_smoothing_kernel.html#a590293c613de045abaf47ed7a830bd8e">   86</a></span>    __device__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_s_p_h_1_1_smoothing_kernel.html#a590293c613de045abaf47ed7a830bd8e">SmoothingKernel::wendlandc2</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *W, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dWdx[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *dWdr, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dx[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> sml) {</div>
 <div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> r, q;</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> r, q;</div>
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        r = 0;</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>            r += dx[d]*dx[d];</div>
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>            dWdx[d] = 0;</div>
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        }</div>
@@ -247,18 +209,18 @@ $(function() {
 <div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>            *W = 21./(2 * M_PI * sml * sml * sml) * (1-q) * (1-q) * (1-q) * (1-q) * (1+4 * q) * (q &lt; 1);</div>
 <div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>            *dWdr = -210./(M_PI * sml * sml * sml * sml) * q * (1-q) * (1-q) * (1-q) * (q &lt; 1);</div>
 <div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>                dWdx[d] = *dWdr/r * dx[d];</div>
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>            }</div>
 <div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        }</div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    }</div>
 <div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span> </div>
 <div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment">// Wendland C4 from Dehnen &amp; Aly 2012</span></div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno"><a class="line" href="namespace_s_p_h_1_1_smoothing_kernel.html#a9eadb24df8f2ac660d03fcdb7c233410">  118</a></span>    __device__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_s_p_h_1_1_smoothing_kernel.html#a9eadb24df8f2ac660d03fcdb7c233410">SmoothingKernel::wendlandc4</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *W, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dWdx[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *dWdr, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dx[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> sml) {</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno"><a class="line" href="namespace_s_p_h_1_1_smoothing_kernel.html#a9eadb24df8f2ac660d03fcdb7c233410">  118</a></span>    __device__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_s_p_h_1_1_smoothing_kernel.html#a9eadb24df8f2ac660d03fcdb7c233410">SmoothingKernel::wendlandc4</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *W, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dWdx[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *dWdr, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dx[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> sml) {</div>
 <div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> r, q;</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> r, q;</div>
 <div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        r = 0;</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>            r += dx[d]*dx[d];</div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>            dWdx[d] = 0;</div>
 <div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>        }</div>
@@ -280,7 +242,7 @@ $(function() {
 <div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>            *W = 495./(32.*M_PI*sml*sml*sml) * (1-q) * (1-q) * (1-q) * (1-q) * (1-q) * (1-q) * (1.+6.*q+35./3.*q*q) * (q &lt; 1);</div>
 <div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>            *dWdr = -1485./(16.*M_PI*sml*sml*sml*sml) * (1-q) * (1-q) * (1-q) * (1-q) * (1-q) * (1.-35.*q*q+105.*q*q*q) * (q&lt; 1);</div>
 <div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>                dWdx[d] = *dWdr/r * dx[d];</div>
 <div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>            }</div>
 <div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>        }</div>
@@ -288,11 +250,11 @@ $(function() {
 <div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span> </div>
 <div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
 <div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    <span class="comment">// Wendland C6 from Dehnen &amp; Aly 2012</span></div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno"><a class="line" href="namespace_s_p_h_1_1_smoothing_kernel.html#a0341ec6c10a77c2d27c79eed5a3c19fb">  152</a></span>    __device__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_s_p_h_1_1_smoothing_kernel.html#a0341ec6c10a77c2d27c79eed5a3c19fb">SmoothingKernel::wendlandc6</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *W, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dWdx[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *dWdr, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dx[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> sml) {</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno"><a class="line" href="namespace_s_p_h_1_1_smoothing_kernel.html#a0341ec6c10a77c2d27c79eed5a3c19fb">  152</a></span>    __device__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_s_p_h_1_1_smoothing_kernel.html#a0341ec6c10a77c2d27c79eed5a3c19fb">SmoothingKernel::wendlandc6</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *W, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dWdx[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *dWdr, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dx[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> sml) {</div>
 <div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span> </div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> r, q;</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> r, q;</div>
 <div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>        r = 0;</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>            r += dx[d]*dx[d];</div>
 <div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>            dWdx[d] = 0;</div>
 <div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>        }</div>
@@ -315,26 +277,26 @@ $(function() {
 <div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>            *dWdr = -15015./(32.*M_PI*sml*sml*sml*sml) * q * (1-q)*(1-q)*(1-q)*(1-q)*(1-q)*(1-q)*(1-q) *</div>
 <div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>                    (1.+7*q+16*q*q) * (q &lt; 1);</div>
 <div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>                dWdx[d] = *dWdr/r * dx[d];</div>
 <div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>            }</div>
 <div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>        }</div>
 <div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    }</div>
 <div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span> </div>
 <div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span> </div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno"><a class="line" href="namespace_s_p_h.html#a20d2d9e9c136ed71a25b248028909a8f">  186</a></span>    <a class="code hl_define" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_s_p_h.html#a20d2d9e9c136ed71a25b248028909a8f">fixTensileInstability</a>(<a class="code hl_typedef" href="namespace_s_p_h.html#a3648976f83c385455616e1dbc7c85a6a">SPH_kernel</a> kernel, <a class="code hl_class" href="class_particles.html">Particles</a> *particles, <span class="keywordtype">int</span> p1, <span class="keywordtype">int</span> p2) {</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno"><a class="line" href="namespace_s_p_h.html#a20d2d9e9c136ed71a25b248028909a8f">  186</a></span>    <a class="code hl_define" href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a> <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_s_p_h.html#a20d2d9e9c136ed71a25b248028909a8f">fixTensileInstability</a>(<a class="code hl_typedef" href="namespace_s_p_h.html#a3648976f83c385455616e1dbc7c85a6a">SPH_kernel</a> kernel, <a class="code hl_class" href="class_particles.html">Particles</a> *particles, <span class="keywordtype">int</span> p1, <span class="keywordtype">int</span> p2) {</div>
 <div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span> </div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> hbar;</div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dx[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> W;</div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> W2;</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dWdr;</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dWdx[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> hbar;</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dx[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> W;</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> W2;</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dWdr;</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dWdx[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
 <div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span> </div>
 <div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>        W = 0;</div>
 <div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>        W2 = 0;</div>
 <div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>        dWdr = 0;</div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>            dx[d] = 0.0;</div>
 <div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>            dWdx[d] = 0;</div>
 <div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>        }</div>
@@ -351,7 +313,7 @@ $(function() {
 <div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>        kernel(&amp;W, dWdx, &amp;dWdr, dx, hbar);</div>
 <div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>        <span class="comment">//TODO: matmean_particle_distance</span></div>
 <div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>        <span class="comment">//dx[0] = matmean_particle_distance[p_rhs.materialId[a]];</span></div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 1; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> d = 1; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>            dx[d] = 0;</div>
 <div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>        }</div>
 <div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>        kernel(&amp;W2, dWdx, &amp;dWdr, dx, hbar);</div>
@@ -367,14 +329,14 @@ $(function() {
 <div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span> </div>
 <div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>            <span class="keywordtype">int</span> i, inc, j, k, m, d, dd;</div>
 <div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>            <span class="comment">// absolute values of div v and curl v */</span></div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> divv;</div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> curlv[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> W, dWdr;</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Wj, dWdrj, dWdxj[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dWdx[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], dx[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> sml;</div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> vi[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], vj[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>            <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> r;</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>            <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> divv;</div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>            <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> curlv[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>            <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> W, dWdr;</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>            <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Wj, dWdrj, dWdxj[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>            <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dWdx[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], dx[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>            <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> sml;</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>            <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> vi[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], vj[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>            <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> r;</div>
 <div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>            inc = blockDim.x * gridDim.x;</div>
 <div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>            <span class="keywordflow">for</span> (i = threadIdx.x + blockIdx.x * blockDim.x; i &lt; <a class="code hl_variable" href="namespace_profiler_ids.html#ad13e3eace63e610c1eb36461ae4c86fd">numParticles</a>; i += inc) {</div>
 <div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>                <span class="comment">//if (EOS_TYPE_IGNORE == matEOS[p_rhs.materialId[i]] || p_rhs.materialId[i] == EOS_TYPE_IGNORE) {</span></div>
@@ -382,14 +344,14 @@ $(function() {
 <div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>                <span class="comment">//}</span></div>
 <div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>                k = particles-&gt;<a class="code hl_variable" href="class_particles.html#a02158d015225ce8b97f44f2d654edafc">noi</a>[i];</div>
 <div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>                divv = 0;</div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>                <span class="keywordflow">for</span> (m = 0; m &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; m++) {</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>                <span class="keywordflow">for</span> (m = 0; m &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; m++) {</div>
 <div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>                    curlv[m] = 0;</div>
 <div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>                    dWdx[m] = 0;</div>
 <div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>                }</div>
 <div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>                sml = particles-&gt;<a class="code hl_variable" href="class_particles.html#aa6d17649179dbfe2e79bcd66f4779f90">sml</a>[i];</div>
 <div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>                <span class="comment">// interaction partner loop</span></div>
 <div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>                <span class="keywordflow">for</span> (m = 0; m &lt; k; m++) {</div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>                    j = interactions[i*<a class="code hl_define" href="include_2parameter_8h.html#a173e5a522f62a96b7508f1f4139b2479">MAX_NUM_INTERACTIONS</a> + m];</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>                    j = interactions[i*<a class="code hl_define" href="parameter_8h.html#a173e5a522f62a96b7508f1f4139b2479">MAX_NUM_INTERACTIONS</a> + m];</div>
 <div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>                    <span class="comment">// get the kernel values</span></div>
 <div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span><span class="preprocessor">    #if VARIABLE_SML</span></div>
 <div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>                    sml = 0.5 *(particles-&gt;<a class="code hl_variable" href="class_particles.html#aa6d17649179dbfe2e79bcd66f4779f90">sml</a>[i] + particles-&gt;<a class="code hl_variable" href="class_particles.html#aa6d17649179dbfe2e79bcd66f4779f90">sml</a>[j]);</div>
@@ -410,20 +372,20 @@ $(function() {
 <div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>                    <span class="comment">//TODO: shephard correction</span></div>
 <div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>                    W /= particles-&gt;shepard_correction[i];</div>
 <div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>                    Wj /= particles-&gt;shepard_correction[j];</div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>                    <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>                    <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>                        dWdx[d] /= p_rhs.shepard_correction[i];</div>
 <div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>                        dWdxj[d] /= p_rhs.shepard_correction[j];</div>
 <div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>                    }</div>
 <div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span><span class="preprocessor">    # endif</span></div>
 <div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>                    W = 0.5 * (W + Wj);</div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>                    <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>                    <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>                        dWdx[d] = 0.5 * (dWdx[d] + dWdxj[d]);</div>
 <div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>                    }</div>
 <div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span><span class="preprocessor">    #else</span></div>
 <div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>                    kernel(&amp;W, dWdx, &amp;dWdr, dx, sml);</div>
 <div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span><span class="preprocessor">    # if SHEPARD_CORRECTION</span></div>
 <div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>                    W /= p_rhs.shepard_correction[i];</div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>                    <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>                    <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>                        dWdx[d] /= particles-&gt;shepard_correction[i];</div>
 <div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>                    }</div>
 <div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span><span class="preprocessor">    # endif</span></div>
@@ -440,15 +402,15 @@ $(function() {
 <div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span><span class="preprocessor">    #endif</span></div>
 <div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span><span class="preprocessor">    #endif</span></div>
 <div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>                    r = 0;</div>
-<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>                    <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>                    <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>                        r += dx[d]*dx[d];</div>
 <div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>                    }</div>
 <div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>                    r = <a class="code hl_function" href="namespacecuda_1_1math.html#a706200a3f1b2445d7fd835c2ac504a11">cuda::math::sqrt</a>(r);</div>
 <div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>                    <span class="comment">// divv</span></div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>                    <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>                    <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span><span class="preprocessor">    #if TENSORIAL_CORRECTION</span></div>
-<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>                        <span class="keywordflow">for</span> (dd = 0; dd &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; dd++) {</div>
-<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>                        divv += particles-&gt;<a class="code hl_variable" href="class_particles.html#ab65623c55daecdf520fe921621d57bf2">mass</a>[j]/particles-&gt;<a class="code hl_variable" href="class_particles.html#a137c296b1c9c623e8d5378e9bce65a09">rho</a>[j] * (vj[d] - vi[d]) * particles-&gt;tensorialCorrectionMatrix[i*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+d*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+dd] * dWdx[dd];</div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>                        <span class="keywordflow">for</span> (dd = 0; dd &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; dd++) {</div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>                        divv += particles-&gt;<a class="code hl_variable" href="class_particles.html#ab65623c55daecdf520fe921621d57bf2">mass</a>[j]/particles-&gt;<a class="code hl_variable" href="class_particles.html#a137c296b1c9c623e8d5378e9bce65a09">rho</a>[j] * (vj[d] - vi[d]) * particles-&gt;tensorialCorrectionMatrix[i*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+d*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+dd] * dWdx[dd];</div>
 <div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>                    }</div>
 <div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span><span class="preprocessor">    #else</span></div>
 <div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>                        divv += particles-&gt;<a class="code hl_variable" href="class_particles.html#ab65623c55daecdf520fe921621d57bf2">mass</a>[j]/particles-&gt;<a class="code hl_variable" href="class_particles.html#a137c296b1c9c623e8d5378e9bce65a09">rho</a>[j] * (vj[d] - vi[d]) * dWdx[d];</div>
@@ -472,16 +434,16 @@ $(function() {
 <div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>                                                   - (vi[1] - vj[1]) * dWdx[0]);</div>
 <div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span><span class="preprocessor">    #endif</span></div>
 <div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>                }</div>
-<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>                <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>                <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>                    <span class="comment">//TODO: particles or particles_rhs: curlv and divv</span></div>
-<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>                    particles-&gt;curlv[i*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+d] = curlv[d];</div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>                    particles-&gt;curlv[i*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+d] = curlv[d];</div>
 <div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>                }</div>
 <div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>                particles-&gt;divv[i] = divv;</div>
 <div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>            }</div>
 <div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span>        }</div>
 <div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span> </div>
 <div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>            <span class="keyword">namespace </span>Launch {</div>
-<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>                <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CalcDivvandCurlv(<a class="code hl_typedef" href="namespace_s_p_h.html#a3648976f83c385455616e1dbc7c85a6a">SPH_kernel</a> kernel, <a class="code hl_class" href="class_particles.html">Particles</a> *particles, <span class="keywordtype">int</span> *interactions, <span class="keywordtype">int</span> <a class="code hl_variable" href="namespace_profiler_ids.html#ad13e3eace63e610c1eb36461ae4c86fd">numParticles</a>) {</div>
+<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>                <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> CalcDivvandCurlv(<a class="code hl_typedef" href="namespace_s_p_h.html#a3648976f83c385455616e1dbc7c85a6a">SPH_kernel</a> kernel, <a class="code hl_class" href="class_particles.html">Particles</a> *particles, <span class="keywordtype">int</span> *interactions, <span class="keywordtype">int</span> <a class="code hl_variable" href="namespace_profiler_ids.html#ad13e3eace63e610c1eb36461ae4c86fd">numParticles</a>) {</div>
 <div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>                    <a class="code hl_class" href="class_execution_policy.html">ExecutionPolicy</a> executionPolicy;</div>
 <div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>                    <span class="keywordflow">return</span> <a class="code hl_function" href="namespacecuda.html#ae129f267f2d83118533c78c712265b58">cuda::launch</a>(<span class="keyword">true</span>, executionPolicy, ::SPH::Kernel::CalcDivvandCurlv, kernel, particles,</div>
 <div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>                                        interactions, <a class="code hl_variable" href="namespace_profiler_ids.html#ad13e3eace63e610c1eb36461ae4c86fd">numParticles</a>);</div>
@@ -496,13 +458,13 @@ $(function() {
 <div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>__global__ <span class="keywordtype">void</span> shepardCorrection(<a class="code hl_typedef" href="namespace_s_p_h.html#a3648976f83c385455616e1dbc7c85a6a">SPH_kernel</a> kernel, <a class="code hl_class" href="class_particles.html">Particles</a> *particles, <span class="keywordtype">int</span> *interactions, <span class="keywordtype">int</span> <a class="code hl_variable" href="namespace_profiler_ids.html#ad13e3eace63e610c1eb36461ae4c86fd">numParticles</a>) {</div>
 <div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span> </div>
 <div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>    <span class="keyword">register</span> <span class="keywordtype">int</span> i, inc, j, m;</div>
-<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>    <span class="keyword">register</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dr[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], h, dWdr;</div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>    <span class="keyword">register</span> <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dr[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], h, dWdr;</div>
 <div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>    inc = blockDim.x * gridDim.x;</div>
-<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>    <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> W, dWdx[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], Wj;</div>
+<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>    <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> W, dWdx[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], Wj;</div>
 <div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>    <span class="keywordflow">for</span> (i = threadIdx.x + blockIdx.x * blockDim.x; i &lt; <a class="code hl_variable" href="namespace_profiler_ids.html#ad13e3eace63e610c1eb36461ae4c86fd">numParticles</a>; i += inc) {</div>
-<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> shepard_correction;</div>
+<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> shepard_correction;</div>
 <div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>        W = 0;</div>
-<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>        <span class="keywordflow">for</span> (m = 0; m &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; m++) {</div>
+<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>        <span class="keywordflow">for</span> (m = 0; m &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; m++) {</div>
 <div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span>            dr[m] = 0.0;</div>
 <div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>        }</div>
 <div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>        kernel(&amp;W, dWdx, &amp;dWdr, dr, particles-&gt;<a class="code hl_variable" href="class_particles.html#aa6d17649179dbfe2e79bcd66f4779f90">sml</a>[i]);</div>
@@ -510,7 +472,7 @@ $(function() {
 <div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span> </div>
 <div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>        <span class="keywordflow">for</span> (m = 0; m &lt; particles-&gt;<a class="code hl_variable" href="class_particles.html#a02158d015225ce8b97f44f2d654edafc">noi</a>[i]; m++) {</div>
 <div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>            W = 0;</div>
-<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>            j = interactions[i*<a class="code hl_define" href="include_2parameter_8h.html#a173e5a522f62a96b7508f1f4139b2479">MAX_NUM_INTERACTIONS</a> + m];</div>
+<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>            j = interactions[i*<a class="code hl_define" href="parameter_8h.html#a173e5a522f62a96b7508f1f4139b2479">MAX_NUM_INTERACTIONS</a> + m];</div>
 <div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>            <span class="comment">//if (EOS_TYPE_IGNORE == matEOS[p_rhs.materialId[j]] || p_rhs.materialId[j] == EOS_TYPE_IGNORE) {</span></div>
 <div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>            <span class="comment">//    continue;</span></div>
 <div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>            <span class="comment">//}</span></div>
@@ -550,14 +512,14 @@ $(function() {
 <div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>    <span class="keyword">register</span> <span class="keywordtype">int</span> d, dd;</div>
 <div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span>    <span class="keywordtype">int</span> rv = 0;</div>
 <div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>    inc = blockDim.x * gridDim.x;</div>
-<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span>    <span class="keyword">register</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> r, dr[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], h, dWdr, tmp, f1, f2;</div>
-<div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>    <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> W, dWdx[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
-<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>    <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Wj, dWdxj[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
-<div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>    <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> wend_f, wend_sml, q, distance;</div>
+<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span>    <span class="keyword">register</span> <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> r, dr[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], h, dWdr, tmp, f1, f2;</div>
+<div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>    <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> W, dWdx[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
+<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>    <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> Wj, dWdxj[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
+<div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span>    <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> wend_f, wend_sml, q, distance;</div>
 <div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span>    <span class="keywordflow">for</span> (i = threadIdx.x + blockIdx.x * blockDim.x; i &lt; <a class="code hl_variable" href="namespace_profiler_ids.html#ad13e3eace63e610c1eb36461ae4c86fd">numParticles</a>; i += inc) {</div>
-<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>        <span class="keyword">register</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> corrmatrix[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
-<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>        <span class="keyword">register</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> matrix[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
-<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span>        <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>        <span class="keyword">register</span> <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> corrmatrix[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
+<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>        <span class="keyword">register</span> <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> matrix[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
+<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span>        <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span>            corrmatrix[d] = 0;</div>
 <div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>            matrix[d] = 0;</div>
 <div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span>        }</div>
@@ -569,7 +531,7 @@ $(function() {
 <div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span> </div>
 <div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>        <span class="comment">// loop over all interaction partner</span></div>
 <div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span>        <span class="keywordflow">for</span> (m = 0; m &lt; k; m++) {</div>
-<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>            j = interactions[i*<a class="code hl_define" href="include_2parameter_8h.html#a173e5a522f62a96b7508f1f4139b2479">MAX_NUM_INTERACTIONS</a>+m];</div>
+<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>            j = interactions[i*<a class="code hl_define" href="parameter_8h.html#a173e5a522f62a96b7508f1f4139b2479">MAX_NUM_INTERACTIONS</a>+m];</div>
 <div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>            <span class="comment">//if (EOS_TYPE_IGNORE == matEOS[p_rhs.materialId[j]] || p_rhs.materialId[j] == EOS_TYPE_IGNORE) {</span></div>
 <div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>            <span class="comment">//    continue;</span></div>
 <div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>            <span class="comment">//}</span></div>
@@ -591,11 +553,11 @@ $(function() {
 <div class="line"><a id="l00452" name="l00452"></a><span class="lineno">  452</span><span class="preprocessor"># if SHEPARD_CORRECTION</span></div>
 <div class="line"><a id="l00453" name="l00453"></a><span class="lineno">  453</span>            W /= particles-&gt;shepard_correction[i];</div>
 <div class="line"><a id="l00454" name="l00454"></a><span class="lineno">  454</span>            Wj /= particles-&gt;shepard_correction[j];</div>
-<div class="line"><a id="l00455" name="l00455"></a><span class="lineno">  455</span>            <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00455" name="l00455"></a><span class="lineno">  455</span>            <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00456" name="l00456"></a><span class="lineno">  456</span>                dWdx[d] /= particles-&gt;shepard_correction[i];</div>
 <div class="line"><a id="l00457" name="l00457"></a><span class="lineno">  457</span>                dWdxj[d] /= particles-&gt;shepard_correction[j];</div>
 <div class="line"><a id="l00458" name="l00458"></a><span class="lineno">  458</span>            }</div>
-<div class="line"><a id="l00459" name="l00459"></a><span class="lineno">  459</span>            <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00459" name="l00459"></a><span class="lineno">  459</span>            <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00460" name="l00460"></a><span class="lineno">  460</span>                dWdx[d] = 0.5 * (dWdx[d] + dWdxj[d]);</div>
 <div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span>            }</div>
 <div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span>            W = 0.5 * (W + Wj);</div>
@@ -607,15 +569,15 @@ $(function() {
 <div class="line"><a id="l00468" name="l00468"></a><span class="lineno">  468</span>            kernel(&amp;W, dWdx, &amp;dWdr, dr, h);</div>
 <div class="line"><a id="l00469" name="l00469"></a><span class="lineno">  469</span><span class="preprocessor"># if SHEPARD_CORRECTION</span></div>
 <div class="line"><a id="l00470" name="l00470"></a><span class="lineno">  470</span>            W /= particles-&gt;shepard_correction[i];</div>
-<div class="line"><a id="l00471" name="l00471"></a><span class="lineno">  471</span>            <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00471" name="l00471"></a><span class="lineno">  471</span>            <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00472" name="l00472"></a><span class="lineno">  472</span>                dWdx[d] /= particles-&gt;shepard_correction[i];</div>
 <div class="line"><a id="l00473" name="l00473"></a><span class="lineno">  473</span>            }</div>
 <div class="line"><a id="l00474" name="l00474"></a><span class="lineno">  474</span><span class="preprocessor"># endif</span></div>
 <div class="line"><a id="l00475" name="l00475"></a><span class="lineno">  475</span><span class="preprocessor">#endif </span><span class="comment">// AVERAGE_KERNELS</span></div>
 <div class="line"><a id="l00476" name="l00476"></a><span class="lineno">  476</span> </div>
-<div class="line"><a id="l00477" name="l00477"></a><span class="lineno">  477</span>            <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
-<div class="line"><a id="l00478" name="l00478"></a><span class="lineno">  478</span>                <span class="keywordflow">for</span> (dd = 0; dd &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; dd++) {</div>
-<div class="line"><a id="l00479" name="l00479"></a><span class="lineno">  479</span>                    corrmatrix[d*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+dd] -= particles-&gt;<a class="code hl_variable" href="class_particles.html#ab65623c55daecdf520fe921621d57bf2">mass</a>[j]/particles-&gt;<a class="code hl_variable" href="class_particles.html#a137c296b1c9c623e8d5378e9bce65a09">rho</a>[j] * dr[d] * dWdx[dd];</div>
+<div class="line"><a id="l00477" name="l00477"></a><span class="lineno">  477</span>            <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00478" name="l00478"></a><span class="lineno">  478</span>                <span class="keywordflow">for</span> (dd = 0; dd &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; dd++) {</div>
+<div class="line"><a id="l00479" name="l00479"></a><span class="lineno">  479</span>                    corrmatrix[d*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+dd] -= particles-&gt;<a class="code hl_variable" href="class_particles.html#ab65623c55daecdf520fe921621d57bf2">mass</a>[j]/particles-&gt;<a class="code hl_variable" href="class_particles.html#a137c296b1c9c623e8d5378e9bce65a09">rho</a>[j] * dr[d] * dWdx[dd];</div>
 <div class="line"><a id="l00480" name="l00480"></a><span class="lineno">  480</span>                }</div>
 <div class="line"><a id="l00481" name="l00481"></a><span class="lineno">  481</span>            }</div>
 <div class="line"><a id="l00482" name="l00482"></a><span class="lineno">  482</span>        } <span class="comment">// end loop over interaction partners</span></div>
@@ -626,23 +588,23 @@ $(function() {
 <div class="line"><a id="l00487" name="l00487"></a><span class="lineno">  487</span><span class="preprocessor">            #if DEBUG_LINALG</span></div>
 <div class="line"><a id="l00488" name="l00488"></a><span class="lineno">  488</span>            <span class="keywordflow">if</span> (threadIdx.x == 0) {</div>
 <div class="line"><a id="l00489" name="l00489"></a><span class="lineno">  489</span>                printf(<span class="stringliteral">&quot;could not invert matrix: rv: %d and k: %d\n&quot;</span>, rv, k);</div>
-<div class="line"><a id="l00490" name="l00490"></a><span class="lineno">  490</span>                <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
-<div class="line"><a id="l00491" name="l00491"></a><span class="lineno">  491</span>                    <span class="keywordflow">for</span> (dd = 0; dd &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; dd++) {</div>
-<div class="line"><a id="l00492" name="l00492"></a><span class="lineno">  492</span>                        printf(<span class="stringliteral">&quot;%e\t&quot;</span>, corrmatrix[d*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+dd]);</div>
+<div class="line"><a id="l00490" name="l00490"></a><span class="lineno">  490</span>                <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00491" name="l00491"></a><span class="lineno">  491</span>                    <span class="keywordflow">for</span> (dd = 0; dd &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; dd++) {</div>
+<div class="line"><a id="l00492" name="l00492"></a><span class="lineno">  492</span>                        printf(<span class="stringliteral">&quot;%e\t&quot;</span>, corrmatrix[d*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+dd]);</div>
 <div class="line"><a id="l00493" name="l00493"></a><span class="lineno">  493</span>                    }</div>
 <div class="line"><a id="l00494" name="l00494"></a><span class="lineno">  494</span>                        printf(<span class="stringliteral">&quot;\n&quot;</span>);</div>
 <div class="line"><a id="l00495" name="l00495"></a><span class="lineno">  495</span>                }</div>
 <div class="line"><a id="l00496" name="l00496"></a><span class="lineno">  496</span>            }</div>
 <div class="line"><a id="l00497" name="l00497"></a><span class="lineno">  497</span><span class="preprocessor">            #endif</span></div>
-<div class="line"><a id="l00498" name="l00498"></a><span class="lineno">  498</span>            <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
-<div class="line"><a id="l00499" name="l00499"></a><span class="lineno">  499</span>                <span class="keywordflow">for</span> (dd = 0; dd &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; dd++) {</div>
-<div class="line"><a id="l00500" name="l00500"></a><span class="lineno">  500</span>                    matrix[d*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+dd] = 0.0;</div>
+<div class="line"><a id="l00498" name="l00498"></a><span class="lineno">  498</span>            <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00499" name="l00499"></a><span class="lineno">  499</span>                <span class="keywordflow">for</span> (dd = 0; dd &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; dd++) {</div>
+<div class="line"><a id="l00500" name="l00500"></a><span class="lineno">  500</span>                    matrix[d*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+dd] = 0.0;</div>
 <div class="line"><a id="l00501" name="l00501"></a><span class="lineno">  501</span>                    <span class="keywordflow">if</span> (d == dd)</div>
-<div class="line"><a id="l00502" name="l00502"></a><span class="lineno">  502</span>                        matrix[d*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+dd] = 1.0;</div>
+<div class="line"><a id="l00502" name="l00502"></a><span class="lineno">  502</span>                        matrix[d*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+dd] = 1.0;</div>
 <div class="line"><a id="l00503" name="l00503"></a><span class="lineno">  503</span>                }</div>
 <div class="line"><a id="l00504" name="l00504"></a><span class="lineno">  504</span>            }</div>
 <div class="line"><a id="l00505" name="l00505"></a><span class="lineno">  505</span>        }</div>
-<div class="line"><a id="l00506" name="l00506"></a><span class="lineno">  506</span>        <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
+<div class="line"><a id="l00506" name="l00506"></a><span class="lineno">  506</span>        <span class="keywordflow">for</span> (d = 0; d &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; d++) {</div>
 <div class="line"><a id="l00507" name="l00507"></a><span class="lineno">  507</span>            <span class="comment">// TODO: particles or particles_rhs: tensorialCorrectionMatrix</span></div>
 <div class="line"><a id="l00508" name="l00508"></a><span class="lineno">  508</span>            <span class="comment">//particles-&gt;tensorialCorrectionMatrix[i*DIM*DIM+d] = matrix[d];</span></div>
 <div class="line"><a id="l00509" name="l00509"></a><span class="lineno">  509</span> </div>
@@ -665,9 +627,6 @@ $(function() {
 <div class="ttc" id="aclass_particles_html_ae2c12e58da9938a9e0a193b1c70e31a4"><div class="ttname"><a href="class_particles.html#ae2c12e58da9938a9e0a193b1c70e31a4">Particles::vx</a></div><div class="ttdeci">real * vx</div><div class="ttdoc">(pointer to) x velocity (array)</div><div class="ttdef"><b>Definition:</b> <a href="particles_8cuh_source.html#l00064">particles.cuh:64</a></div></div>
 <div class="ttc" id="aclass_particles_html_ae8ae4d6463ea93ab4e6e1216176d1b94"><div class="ttname"><a href="class_particles.html#ae8ae4d6463ea93ab4e6e1216176d1b94">Particles::vy</a></div><div class="ttdeci">real * vy</div><div class="ttdoc">(pointer to) y velocity (array)</div><div class="ttdef"><b>Definition:</b> <a href="particles_8cuh_source.html#l00072">particles.cuh:72</a></div></div>
 <div class="ttc" id="acuda__utilities_8cuh_html_abaa3393ea5f1f52b7fdfde2beec133b7"><div class="ttname"><a href="cuda__utilities_8cuh.html#abaa3393ea5f1f52b7fdfde2beec133b7">CUDA_CALLABLE_MEMBER</a></div><div class="ttdeci">#define CUDA_CALLABLE_MEMBER</div><div class="ttdef"><b>Definition:</b> <a href="cuda__utilities_8cuh_source.html#l00030">cuda_utilities.cuh:30</a></div></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_a11d147c64891830c9e79b3315b1b2e21"><div class="ttname"><a href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a></div><div class="ttdeci">double real</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00015">parameter.h:15</a></div></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_a173e5a522f62a96b7508f1f4139b2479"><div class="ttname"><a href="include_2parameter_8h.html#a173e5a522f62a96b7508f1f4139b2479">MAX_NUM_INTERACTIONS</a></div><div class="ttdeci">#define MAX_NUM_INTERACTIONS</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00106">parameter.h:106</a></div></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_ac25189db92959bff3c6c2adf4c34b50a"><div class="ttname"><a href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a></div><div class="ttdeci">#define DIM</div><div class="ttdoc">Dimension of the problem.</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00038">parameter.h:38</a></div></div>
 <div class="ttc" id="akernel_8cu_html_a3ef3bb999e399e707f35cbb68b70d279"><div class="ttname"><a href="kernel_8cu.html#a3ef3bb999e399e707f35cbb68b70d279">wendlandc6_p</a></div><div class="ttdeci">__device__ SPH::SPH_kernel wendlandc6_p</div><div class="ttdef"><b>Definition:</b> <a href="kernel_8cu_source.html#l00010">kernel.cu:10</a></div></div>
 <div class="ttc" id="akernel_8cu_html_a5e674cc6c838836326b343ac0b92e7df"><div class="ttname"><a href="kernel_8cu.html#a5e674cc6c838836326b343ac0b92e7df">MIN_NUMBER_OF_INTERACTIONS_FOR_TENSORIAL_CORRECTION_TO_WORK</a></div><div class="ttdeci">#define MIN_NUMBER_OF_INTERACTIONS_FOR_TENSORIAL_CORRECTION_TO_WORK</div><div class="ttdef"><b>Definition:</b> <a href="kernel_8cu_source.html#l00004">kernel.cu:4</a></div></div>
 <div class="ttc" id="akernel_8cu_html_a92252b0433c1b484f52a9c44291dc833"><div class="ttname"><a href="kernel_8cu.html#a92252b0433c1b484f52a9c44291dc833">spiky_p</a></div><div class="ttdeci">__device__ SPH::SPH_kernel spiky_p</div><div class="ttdef"><b>Definition:</b> <a href="kernel_8cu_source.html#l00006">kernel.cu:6</a></div></div>
@@ -687,61 +646,25 @@ $(function() {
 <div class="ttc" id="anamespace_s_p_h_html_a3648976f83c385455616e1dbc7c85a6a"><div class="ttname"><a href="namespace_s_p_h.html#a3648976f83c385455616e1dbc7c85a6a">SPH::SPH_kernel</a></div><div class="ttdeci">void(* SPH_kernel)(real *W, real dWdx[DIM], real *dWdr, real dx[DIM], real h)</div><div class="ttdoc">Function pointer to generic SPH kernel function.</div><div class="ttdef"><b>Definition:</b> <a href="kernel_8cuh_source.html#l00026">kernel.cuh:26</a></div></div>
 <div class="ttc" id="anamespacecuda_1_1math_html_a706200a3f1b2445d7fd835c2ac504a11"><div class="ttname"><a href="namespacecuda_1_1math.html#a706200a3f1b2445d7fd835c2ac504a11">cuda::math::sqrt</a></div><div class="ttdeci">__device__ real sqrt(real a)</div><div class="ttdoc">Square root of a floating point value.</div><div class="ttdef"><b>Definition:</b> <a href="cuda__utilities_8cu_source.html#l00456">cuda_utilities.cu:456</a></div></div>
 <div class="ttc" id="anamespacecuda_html_ae129f267f2d83118533c78c712265b58"><div class="ttname"><a href="namespacecuda.html#ae129f267f2d83118533c78c712265b58">cuda::launch</a></div><div class="ttdeci">real launch(bool timeKernel, const ExecutionPolicy &amp;policy, void(*f)(Arguments...), Arguments... args)</div><div class="ttdoc">CUDA execution wrapper function.</div><div class="ttdef"><b>Definition:</b> <a href="cuda__launcher_8cuh_source.html#l00114">cuda_launcher.cuh:114</a></div></div>
+<div class="ttc" id="aparameter_8h_html_a11d147c64891830c9e79b3315b1b2e21"><div class="ttname"><a href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a></div><div class="ttdeci">double real</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00015">parameter.h:15</a></div></div>
+<div class="ttc" id="aparameter_8h_html_a173e5a522f62a96b7508f1f4139b2479"><div class="ttname"><a href="parameter_8h.html#a173e5a522f62a96b7508f1f4139b2479">MAX_NUM_INTERACTIONS</a></div><div class="ttdeci">#define MAX_NUM_INTERACTIONS</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00106">parameter.h:106</a></div></div>
+<div class="ttc" id="aparameter_8h_html_ac25189db92959bff3c6c2adf4c34b50a"><div class="ttname"><a href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a></div><div class="ttdeci">#define DIM</div><div class="ttdoc">Dimension of the problem.</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00038">parameter.h:38</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
-    <!--
     milupHPC  - src/sph/kernel.cu Source File<br />
-    Generated on Wed Jun 29 2022 11:18:49 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    -->
+    Generated on Thu Jun 23 2022 16:11:19 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
   </small></address>
 </body>
 <footer>
-  <custom-footer color="white" background="#2E4053">
-    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
-    <div second>
-      <div style="text-align: center">
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-        </div>
-      </div>
-    </div>
-    <div third>
-      milupHPC  - src/sph/kernel.cu Source File<br />
-      Generated on Wed Jun 29 2022 11:18:49 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    </div>
-  </custom-footer>
+  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
+  <div id="banner-footer-first"></div>
+  <div id="banner-footer-second"></div>
+  <script>
+    function topFunction() {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+  </script>
 </footer>
-<!--
-<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
--->
-<script src="components/hamburger/runtime.js" type="module"></script><script src="components/hamburger/polyfills.js" type="module"></script><script src="components/hamburger/main.js" type="module"></script>
-<script src="components/header/runtime.js" type="module"></script><script src="components/header/polyfills.js" type="module"></script><script src="components/header/main.js" type="module"></script>
-<script src="components/icons/runtime.js" type="module"></script><script src="components/icons/polyfills.js" type="module"></script><script src="components/icons/main.js" type="module"></script>
-<script src="components/footer/runtime.js" type="module"></script><script src="components/footer/polyfills.js" type="module"></script><script src="components/footer/main.js" type="module"></script>
-<script src="components/dialog/runtime.js" type="module"></script><script src="components/dialog/polyfills.js" type="module"></script><script src="components/dialog/main.js" type="module"></script>
-<script src="components/copyable/runtime.js" type="module"></script><script src="components/copyable/polyfills.js" type="module"></script><script src="components/copyable/main.js" type="module"></script>
-<!--
-<script>
-  function toggle() {
-    var elem = document.getElementById("side-nav");
-    console.log(elem);
-    elem.toggleSideNav(false);
-  }
-</script>
--->
-<!--
-<script>
-  function topFunction() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  }
-</script>
--->
 </html>

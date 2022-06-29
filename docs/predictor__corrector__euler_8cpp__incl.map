@@ -41,7 +41,7 @@
 <area shape="rect" id="node46" title=" " alt="" coords="3853,266,3920,293"/>
 <area shape="rect" id="node47" title=" " alt="" coords="3945,266,4010,293"/>
 <area shape="rect" id="node48" title=" " alt="" coords="4034,259,4179,300"/>
-<area shape="rect" id="node5" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="1727,840,1817,867"/>
+<area shape="rect" id="node5" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="1727,840,1817,867"/>
 <area shape="rect" id="node7" href="$particles_8cuh.html" title="Particle struct as Structure of arrays both instantiable on host and device." alt="" coords="853,616,949,643"/>
 <area shape="rect" id="node11" title=" " alt="" coords="445,765,515,792"/>
 <area shape="rect" id="node16" href="$tree_8cuh.html" title="Tree related classes, kernels and functions." alt="" coords="995,534,1064,561"/>

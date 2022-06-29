@@ -4,7 +4,7 @@
 <area shape="rect" id="node3" href="$simulation__time_8cuh.html" title="Simulation time related variables and functions instantiable on device and host." alt="" coords="139,184,278,211"/>
 <area shape="rect" id="node9" href="$cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers." alt="" coords="5,333,116,360"/>
 <area shape="rect" id="node11" title=" " alt="" coords="302,184,406,211"/>
-<area shape="rect" id="node4" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="238,408,329,435"/>
+<area shape="rect" id="node4" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="238,408,329,435"/>
 <area shape="rect" id="node7" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="115,259,302,285"/>
 <area shape="rect" id="node5" title=" " alt="" coords="257,483,310,509"/>
 <area shape="rect" id="node6" title=" " alt="" coords="146,483,218,509"/>

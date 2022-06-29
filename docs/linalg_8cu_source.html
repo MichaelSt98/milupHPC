@@ -1,26 +1,14 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+-->
 <head>
-	<meta charset="utf-8">
-	<title>CodePortray</title>
-	<base href="/">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: src/cuda_utils/linalg.cu Source File</title>
-	<title>src/cuda_utils/linalg.cu Source File</title>
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -34,68 +22,42 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
+	<!-- Add icon library -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- Add font awesome icons -->
+	<!--HIGHLIGHT.JS INSTALL BEGIN
+	<link rel="stylesheet" href="github.min.css">
+	<script src="highlight.js"></script>
+	<script>
+		$(function() {
+			hljs.configure({useBR: false});
+			$(".fragment").each(function(i,node) {
+				$(node).removeClass("fragment");
+				hljs.highlightBlock(node);
+			});
+		});
+	</script>
+	HIGHLIGHT.JS INSTALL END-->
 </head>
 <body>
-<custom-header class="custom-header-class">
-	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
-	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
-	<div shortcuts style="display: table">
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
-		</div>
-		<!-- get the code ... -->
-		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
-		<div style="display: table-cell; padding-right: 2px">
-			<custom-dialog window-width="600px" window-height="400px">
-				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
-				<div title>Get the code: milupHPC!</div>
-				<div style="text-align: center; padding-top: 20px;">
-					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
-					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
-					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
-					<div style="padding-top: 40px">clone via HTTPS:</div>
-					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">clone via SSH:</div>
-					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
-					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
-				</div>
-				<!--<div footer>This is the footer</div>-->
-			</custom-dialog>
-		</div>
-		<!-- end: get the code .... -->
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
-		</div>
-		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
-	</div>
-</custom-header>
-	<!--
-	<custom-side-nav id="side-nav" nav-width="300">
-		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
-		<div>test</div>
-	</custom-side-nav>
-	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation
+				milupHPC documentation <!-- src/cuda_utils/linalg.cu Source File -->
 			</span>
+			<!-- <span class="search">
+				<input type="text" placeholder="Search" onkeydown="search(this,event);">
+			</span> -->
 		</div>
+    <!--
+	<div class="icon-bar">
+		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
+		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
+		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
+	</div>
+	</div>
+	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -141,7 +103,7 @@ $(function() {
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_cuda_utils.html">CudaUtils</a> {</div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#a8aeb7e0c30b9fc75f02145d06a56ddc8">    5</a></span>    __device__ <span class="keywordtype">int</span> <a class="code hl_function" href="namespace_cuda_utils.html#a8aeb7e0c30b9fc75f02145d06a56ddc8">sign</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> x) {</div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#a8aeb7e0c30b9fc75f02145d06a56ddc8">    5</a></span>    __device__ <span class="keywordtype">int</span> <a class="code hl_function" href="namespace_cuda_utils.html#a8aeb7e0c30b9fc75f02145d06a56ddc8">sign</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> x) {</div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span>        <span class="keywordflow">if</span> (x &lt; 0) { <span class="keywordflow">return</span> -1; }</div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span>        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (x &gt; 0) { <span class="keywordflow">return</span>  1; }</div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span>        <span class="keywordflow">else</span> { <span class="keywordflow">return</span> 0; }</div>
@@ -149,77 +111,77 @@ $(function() {
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#a3bcbf0a1bc8cec054592b8fb1c4749a8">   11</a></span>    __device__ <span class="keywordtype">int</span> <a class="code hl_function" href="namespace_cuda_utils.html#a3bcbf0a1bc8cec054592b8fb1c4749a8">stressIndex</a>(<span class="keywordtype">int</span> particleIndex, <span class="keywordtype">int</span> row, <span class="keywordtype">int</span> col)</div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    {</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>        <span class="keywordflow">return</span> particleIndex*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+row*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+col;</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>        <span class="keywordflow">return</span> particleIndex*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+row*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+col;</div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    }</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#a85061666bd4ff673117abb526f7070f5">   16</a></span>    __device__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils.html#a85061666bd4ff673117abb526f7070f5">copyMatrix</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> src[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dst[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>]) {</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#a85061666bd4ff673117abb526f7070f5">   16</a></span>    __device__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils.html#a85061666bd4ff673117abb526f7070f5">copyMatrix</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> src[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> dst[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>]) {</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        <span class="keywordtype">int</span> i, j;</div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++) {</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++) {</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>                dst[i][j] = src[i][j];</div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>            }</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        }</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    }</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#a59e1eafcc742ea4bc83059c7718de79d">   27</a></span>    __device__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils.html#a59e1eafcc742ea4bc83059c7718de79d">transposeMatrix</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> m[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>]) {</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#a59e1eafcc742ea4bc83059c7718de79d">   27</a></span>    __device__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils.html#a59e1eafcc742ea4bc83059c7718de79d">transposeMatrix</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> m[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>]) {</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        <span class="keywordtype">int</span> i, j;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> mt[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++) {</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> mt[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++) {</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>                mt[j][i] = m[i][j];</div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>            }</div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        }</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++) {</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++) {</div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>                m[i][j] = mt[i][j];</div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>            }</div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        }</div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    }</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="comment">// calculates C = A B and stores in C</span></div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#abfa36f97bfa5efa4cf038a7af28ba65c">   43</a></span>    __device__  <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils.html#abfa36f97bfa5efa4cf038a7af28ba65c">multiplyMatrix</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> A[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> B[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> C[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>]) {</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#abfa36f97bfa5efa4cf038a7af28ba65c">   43</a></span>    __device__  <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils.html#abfa36f97bfa5efa4cf038a7af28ba65c">multiplyMatrix</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> A[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> B[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> C[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>]) {</div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        <span class="keywordtype">int</span> i, j, k;</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> vprime[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> vprime[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++) {</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++) {</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>                vprime[i][j] = 0.0;</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>            }</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        }</div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++) {</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>                <span class="keywordflow">for</span> (k = 0; k &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; k++) {</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++) {</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>                <span class="keywordflow">for</span> (k = 0; k &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; k++) {</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>                    vprime[i][j] += A[i][k] * B[k][j];</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>                }</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>            }</div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        }</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++) {</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++) {</div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>                C[i][j] = vprime[i][j];</div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>            }</div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        }</div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    }</div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#ade06d392eb186078a29f9362c0e1cfe4">   69</a></span>    __device__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils.html#ade06d392eb186078a29f9362c0e1cfe4">multiply</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> A[][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> B[][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> C[][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>]) {</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#ade06d392eb186078a29f9362c0e1cfe4">   69</a></span>    __device__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils.html#ade06d392eb186078a29f9362c0e1cfe4">multiply</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> A[][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> B[][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> C[][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>]) {</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>        <span class="keywordtype">int</span> i, j, k;</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++) {</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>                <span class="keywordflow">for</span> (k = 0; k &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; k++) {</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++) {</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>                <span class="keywordflow">for</span> (k = 0; k &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; k++) {</div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>                    C[i][j] += A[i][k]*B[k][j];</div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>                }</div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>            }</div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        }</div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    }</div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#adf7cf363515e4ca76b4094c3ed8ededb">   80</a></span>    __device__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils.html#adf7cf363515e4ca76b4094c3ed8ededb">identityMatrix</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> A[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>]) {</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#adf7cf363515e4ca76b4094c3ed8ededb">   80</a></span>    __device__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils.html#adf7cf363515e4ca76b4094c3ed8ededb">identityMatrix</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> A[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>]) {</div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        <span class="keywordtype">int</span> i, j;</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++) {</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++) {</div>
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>                A[i][j] = 0.0;</div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>            }</div>
 <div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>            A[i][i] = 1.0;</div>
@@ -228,13 +190,13 @@ $(function() {
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
 <div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    <span class="comment">// returns the indices of the greatest non-diagonal element of M</span></div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#a382f4052f7c24e4f66411ffed4950031">   92</a></span>    __device__ <span class="keywordtype">int</span> <a class="code hl_function" href="namespace_cuda_utils.html#a382f4052f7c24e4f66411ffed4950031">maxMatrix</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> M[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <span class="keywordtype">int</span> *e, <span class="keywordtype">int</span> *f, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *elmax) {</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#a382f4052f7c24e4f66411ffed4950031">   92</a></span>    __device__ <span class="keywordtype">int</span> <a class="code hl_function" href="namespace_cuda_utils.html#a382f4052f7c24e4f66411ffed4950031">maxMatrix</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> M[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <span class="keywordtype">int</span> *e, <span class="keywordtype">int</span> *f, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *elmax) {</div>
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        <span class="keywordtype">int</span> i, j;</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">max</a> = 0.0;</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">max</a> = 0.0;</div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        <span class="keywordtype">int</span> ierror = 1;</div>
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++) {</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++) {</div>
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>                <span class="keywordflow">if</span> (i == j)</div>
 <div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>                    <span class="keywordflow">continue</span>;</div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>                <span class="keywordflow">if</span> (<a class="code hl_function" href="namespacecuda_1_1math.html#aa01779064aaf96a9607a87bd52921410">cuda::math::abs</a>(M[i][j]) &gt;= <a class="code hl_function" href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">max</a>) {</div>
@@ -254,14 +216,14 @@ $(function() {
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    <span class="comment">// help function for the jacobi method</span></div>
 <div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    <span class="comment">// returns: M&#39; = A^T M A, and A_ef = s = -A_ef, A_ee = A_ff = c</span></div>
 <div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    <span class="comment">//</span></div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#adb2da123824962ee4b85604e26ef6457">  118</a></span>    __device__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils.html#adb2da123824962ee4b85604e26ef6457">rotateMatrix</a>(<span class="keyword">volatile</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> m[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <span class="keyword">volatile</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> c, <span class="keyword">volatile</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> s, <span class="keyword">volatile</span> <span class="keywordtype">int</span> e,</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#adb2da123824962ee4b85604e26ef6457">  118</a></span>    __device__ <span class="keywordtype">void</span> <a class="code hl_function" href="namespace_cuda_utils.html#adb2da123824962ee4b85604e26ef6457">rotateMatrix</a>(<span class="keyword">volatile</span> <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> m[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <span class="keyword">volatile</span> <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> c, <span class="keyword">volatile</span> <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> s, <span class="keyword">volatile</span> <span class="keywordtype">int</span> e,</div>
 <div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>                                  <span class="keyword">volatile</span> <span class="keywordtype">int</span> f) {</div>
 <div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>        <span class="keywordtype">int</span> i, j;</div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        <span class="keyword">volatile</span> <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> mprime[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        <span class="keyword">volatile</span> <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> mprime[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
 <div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        <span class="comment">// first copy the matrix</span></div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++)</div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++)</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++)</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++)</div>
 <div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>                mprime[i][j] = m[i][j];</div>
 <div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span> </div>
 <div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        <span class="comment">// now the elements that change</span></div>
@@ -272,7 +234,7 @@ $(function() {
 <div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span> </div>
 <div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>        <span class="comment">// the other elements in columns and rows e, f</span></div>
 <div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>        <span class="comment">// actually, this is only one in 3D and 0 in 2D</span></div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
 <div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>            <span class="keywordflow">if</span> (i == f || i == e)</div>
 <div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>                <span class="keywordflow">continue</span>;</div>
 <div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>            mprime[e][i] = c * m[i][e] - s * m[i][f];</div>
@@ -282,8 +244,8 @@ $(function() {
 <div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>        }</div>
 <div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
 <div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>        <span class="comment">// set the matrix to the rotated one</span></div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++)</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++)</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++)</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++)</div>
 <div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>                m[i][j] = mprime[i][j];</div>
 <div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    }</div>
 <div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
@@ -295,15 +257,15 @@ $(function() {
 <div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>    <span class="comment">//</span></div>
 <div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>    <span class="comment">// returns the number of iterations</span></div>
 <div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    <span class="comment">//</span></div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#a18c0f25a14827dd8b4feeb0a88147b16">  159</a></span>    __device__ <span class="keywordtype">int</span> <a class="code hl_function" href="namespace_cuda_utils.html#a18c0f25a14827dd8b4feeb0a88147b16">calculateAllEigenvalues</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> M[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> eigenvalues[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> v[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>]) {</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#a18c0f25a14827dd8b4feeb0a88147b16">  159</a></span>    __device__ <span class="keywordtype">int</span> <a class="code hl_function" href="namespace_cuda_utils.html#a18c0f25a14827dd8b4feeb0a88147b16">calculateAllEigenvalues</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> M[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> eigenvalues[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>], <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> v[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>]) {</div>
 <div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>        <span class="keywordtype">int</span> i, j;</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> diagM[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>] = {0.0,};</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> c, s, t, thta;</div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> A[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> vtmp[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> diagM[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>] = {0.0,};</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> c, s, t, thta;</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> A[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> vtmp[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>];</div>
 <div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>        <span class="keywordtype">int</span> e, f;</div>
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>        <span class="keywordtype">int</span> error;</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">max</a> = -1e300;</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">max</a> = -1e300;</div>
 <div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>        <span class="keywordtype">int</span> nit = 0;</div>
 <div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>        i = j = e = f = 0;</div>
 <div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>        c = s = t = thta = 0.0;</div>
@@ -311,8 +273,8 @@ $(function() {
 <div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
 <div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="preprocessor">#define EPS_JACOBI 1e-10</span></div>
 <div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span> </div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++) {</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++) {</div>
 <div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>                diagM[i][j] = M[i][j];</div>
 <div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>                v[i][j] = 0.0;</div>
 <div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>            }</div>
@@ -348,7 +310,7 @@ $(function() {
 <div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>            }</div>
 <div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        } <span class="keywordflow">while</span> (<a class="code hl_function" href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">max</a> &gt; <a class="code hl_define" href="linalg_8cu.html#a986f2217c83e5fe112bcad9726c52b8e">EPS_JACOBI</a>);</div>
 <div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span> </div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
 <div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>            eigenvalues[i] = diagM[i][i];</div>
 <div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>        }</div>
 <div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>        <span class="keywordflow">return</span> nit;</div>
@@ -360,14 +322,14 @@ $(function() {
 <div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    <span class="comment">// using the jacobi method</span></div>
 <div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>    <span class="comment">// returns the greatest eigenvalue</span></div>
 <div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>    <span class="comment">//</span></div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#a4f8edc820792c16b1c21649befaa0b90">  224</a></span>    __device__ <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils.html#a4f8edc820792c16b1c21649befaa0b90">calculateMaxEigenvalue</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> M[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>]) {</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#a4f8edc820792c16b1c21649befaa0b90">  224</a></span>    __device__ <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils.html#a4f8edc820792c16b1c21649befaa0b90">calculateMaxEigenvalue</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> M[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>]) {</div>
 <div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>        <span class="keywordtype">int</span> i, j;</div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> diagM[<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>] = {0.0,};</div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> c, s, t, thta;</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> diagM[<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>][<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>] = {0.0,};</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> c, s, t, thta;</div>
 <div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>        <span class="keywordtype">int</span> e, f;</div>
 <div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>        <span class="keywordtype">int</span> error;</div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">max</a>;</div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> max_ev;</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">max</a>;</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> max_ev;</div>
 <div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>        <span class="keywordtype">int</span> nit = 0;</div>
 <div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>        i = j = e = f = 0;</div>
 <div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>        c = s = t = thta = 0.0;</div>
@@ -377,8 +339,8 @@ $(function() {
 <div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span> </div>
 <div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span><span class="preprocessor">#define EPS_JACOBI 1e-10</span></div>
 <div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span> </div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++)</div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++)</div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>        <span class="keywordflow">for</span> (i = 0; i &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++)</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>            <span class="keywordflow">for</span> (j = 0; j &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; j++)</div>
 <div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>                diagM[i][j] = M[i][j];</div>
 <div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span> </div>
 <div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>        <span class="keywordflow">do</span> {</div>
@@ -403,7 +365,7 @@ $(function() {
 <div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>        } <span class="keywordflow">while</span> (<a class="code hl_function" href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">max</a> &gt; <a class="code hl_define" href="linalg_8cu.html#a986f2217c83e5fe112bcad9726c52b8e">EPS_JACOBI</a> || nit &lt; 5);</div>
 <div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span> </div>
 <div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>        max_ev = diagM[0][0];</div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>        <span class="keywordflow">for</span> (i = 1; i &lt; <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>        <span class="keywordflow">for</span> (i = 1; i &lt; <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>; i++) {</div>
 <div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>            <span class="keywordflow">if</span> (diagM[i][i] &gt; max_ev) {</div>
 <div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>                max_ev = diagM[i][i];</div>
 <div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>            }</div>
@@ -411,54 +373,52 @@ $(function() {
 <div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>        <span class="keywordflow">return</span> max_ev;</div>
 <div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>    }</div>
 <div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span> </div>
-<div class="line"><a id="l00275" name="l00275"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#aab831968a9745b09bac2ec72a3684475">  275</a></span>    __device__ <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils.html#aab831968a9745b09bac2ec72a3684475">det2x2</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> a, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> b, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> c, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> d) {</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#aab831968a9745b09bac2ec72a3684475">  275</a></span>    __device__ <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> <a class="code hl_function" href="namespace_cuda_utils.html#aab831968a9745b09bac2ec72a3684475">det2x2</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> a, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> b, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> c, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> d) {</div>
 <div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>        <span class="keywordflow">return</span> a * d - c * b;</div>
 <div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>    }</div>
 <div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span> </div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#adb110bae80a79fbf923e4917d75ef6ee">  279</a></span>    __device__ <span class="keywordtype">int</span> <a class="code hl_function" href="namespace_cuda_utils.html#adb110bae80a79fbf923e4917d75ef6ee">invertMatrix</a>(<a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *m, <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *inverted) {</div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> det;</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno"><a class="line" href="namespace_cuda_utils.html#adb110bae80a79fbf923e4917d75ef6ee">  279</a></span>    __device__ <span class="keywordtype">int</span> <a class="code hl_function" href="namespace_cuda_utils.html#adb110bae80a79fbf923e4917d75ef6ee">invertMatrix</a>(<a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *m, <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *inverted) {</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> det;</div>
 <div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span><span class="preprocessor">#if (DIM == 2)</span></div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>        <a class="code hl_typedef" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> a, b, c, d;</div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>        a = m[0*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+0];</div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>        b = m[0*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+1];</div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>        c = m[1*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+0];</div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>        d = m[1*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+1];</div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>        <a class="code hl_typedef" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> a, b, c, d;</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>        a = m[0*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+0];</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>        b = m[0*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+1];</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>        c = m[1*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+0];</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>        d = m[1*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+1];</div>
 <div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span> </div>
 <div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>        det = <a class="code hl_function" href="namespace_cuda_utils.html#aab831968a9745b09bac2ec72a3684475">det2x2</a>(a,b,c,d);</div>
 <div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>        <span class="comment">//  if (det &lt; 1e-8) return -1;</span></div>
 <div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>        <span class="comment">// if (det &lt; 1e-10) det = 1e-10;</span></div>
 <div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>        det = 1./det;</div>
 <div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span> </div>
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>        inverted[0*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+0] = det*d;</div>
-<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>        inverted[0*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+1] = -det*b;</div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>        inverted[1*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+0] = -det*c;</div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>        inverted[1*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+1] = det*a;</div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>        inverted[0*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+0] = det*d;</div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>        inverted[0*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+1] = -det*b;</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>        inverted[1*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+0] = -det*c;</div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>        inverted[1*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+1] = det*a;</div>
 <div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span><span class="preprocessor">#elif (DIM == 3)</span></div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>        det = m[0 * <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 0] * (m[1 * <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 1] * m[2 * <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 2] - m[2 * <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 1] * m[1 * <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 2])</div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>            - m[0 * <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 1] * (m[1 * <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 0] * m[2 * <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 2] - m[1 * <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 2] * m[2 * <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 0])</div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>            + m[0 * <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 2] * (m[1 * <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 0] * m[2 * <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 1] - m[1 * <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 1] * m[2 * <a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 0]);</div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>        det = m[0 * <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 0] * (m[1 * <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 1] * m[2 * <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 2] - m[2 * <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 1] * m[1 * <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 2])</div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>            - m[0 * <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 1] * (m[1 * <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 0] * m[2 * <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 2] - m[1 * <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 2] * m[2 * <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 0])</div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>            + m[0 * <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 2] * (m[1 * <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 0] * m[2 * <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 1] - m[1 * <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 1] * m[2 * <a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a> + 0]);</div>
 <div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span> </div>
 <div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>        <span class="comment">// inverse determinante</span></div>
 <div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span> </div>
 <div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>        <span class="keywordflow">if</span> (det &lt; 1e-8) <span class="keywordflow">return</span> -1;</div>
 <div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>        det = 1.0 / det;</div>
 <div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span> </div>
-<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>        inverted[0*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+0] = (m[1*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1] * m[2*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2] - m[2*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1] * m[1*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2]) * det;</div>
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>        inverted[0*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+1] = (m[0*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2] * m[2*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1] - m[0*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1] * m[2*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2]) * det;</div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>        inverted[0*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+2] = (m[0*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1] * m[1*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2] - m[0*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2] * m[1*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1]) * det;</div>
-<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>        inverted[1*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+0] = (m[1*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2] * m[2*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] - m[1*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] * m[2*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2]) * det;</div>
-<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>        inverted[1*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+1] = (m[0*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] * m[2*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2] - m[0*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2] * m[2*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0]) * det;</div>
-<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>        inverted[1*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+2] = (m[1*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] * m[0*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2] - m[0*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] * m[1*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2]) * det;</div>
-<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>        inverted[2*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+0] = (m[1*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] * m[2*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1] - m[2*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] * m[1*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1]) * det;</div>
-<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>        inverted[2*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+1] = (m[2*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] * m[0*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1] - m[0*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] * m[2*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1]) * det;</div>
-<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>        inverted[2*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+2] = (m[0*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] * m[1*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1] - m[1*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] * m[0*<a class="code hl_define" href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1]) * det;</div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>        inverted[0*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+0] = (m[1*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1] * m[2*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2] - m[2*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1] * m[1*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2]) * det;</div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>        inverted[0*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+1] = (m[0*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2] * m[2*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1] - m[0*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1] * m[2*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2]) * det;</div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>        inverted[0*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+2] = (m[0*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1] * m[1*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2] - m[0*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2] * m[1*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1]) * det;</div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>        inverted[1*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+0] = (m[1*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2] * m[2*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] - m[1*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] * m[2*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2]) * det;</div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>        inverted[1*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+1] = (m[0*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] * m[2*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2] - m[0*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2] * m[2*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0]) * det;</div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>        inverted[1*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+2] = (m[1*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] * m[0*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2] - m[0*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] * m[1*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 2]) * det;</div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>        inverted[2*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+0] = (m[1*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] * m[2*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1] - m[2*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] * m[1*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1]) * det;</div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>        inverted[2*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+1] = (m[2*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] * m[0*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1] - m[0*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] * m[2*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1]) * det;</div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>        inverted[2*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+2] = (m[0*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] * m[1*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1] - m[1*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 0] * m[0*<a class="code hl_define" href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a>+ 1]) * det;</div>
 <div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span> </div>
 <div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>        <span class="keywordflow">return</span> 1;</div>
 <div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>    }</div>
 <div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>}</div>
-<div class="ttc" id="ainclude_2parameter_8h_html_a11d147c64891830c9e79b3315b1b2e21"><div class="ttname"><a href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a></div><div class="ttdeci">double real</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00015">parameter.h:15</a></div></div>
-<div class="ttc" id="ainclude_2parameter_8h_html_ac25189db92959bff3c6c2adf4c34b50a"><div class="ttname"><a href="include_2parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a></div><div class="ttdeci">#define DIM</div><div class="ttdoc">Dimension of the problem.</div><div class="ttdef"><b>Definition:</b> <a href="include_2parameter_8h_source.html#l00038">parameter.h:38</a></div></div>
 <div class="ttc" id="alinalg_8cu_html_a986f2217c83e5fe112bcad9726c52b8e"><div class="ttname"><a href="linalg_8cu.html#a986f2217c83e5fe112bcad9726c52b8e">EPS_JACOBI</a></div><div class="ttdeci">#define EPS_JACOBI</div></div>
 <div class="ttc" id="anamespace_cuda_utils_html"><div class="ttname"><a href="namespace_cuda_utils.html">CudaUtils</a></div><div class="ttdef"><b>Definition:</b> <a href="cuda__utilities_8cuh_source.html#l00100">cuda_utilities.cuh:100</a></div></div>
 <div class="ttc" id="anamespace_cuda_utils_html_a18c0f25a14827dd8b4feeb0a88147b16"><div class="ttname"><a href="namespace_cuda_utils.html#a18c0f25a14827dd8b4feeb0a88147b16">CudaUtils::calculateAllEigenvalues</a></div><div class="ttdeci">__device__ int calculateAllEigenvalues(real M[DIM][DIM], real eigenvalues[DIM], real v[DIM][DIM])</div><div class="ttdoc">Computes all eigenvalues and eigenvectors of the symmetric matrix M.</div><div class="ttdef"><b>Definition:</b> <a href="linalg_8cu_source.html#l00159">linalg.cu:159</a></div></div>
@@ -477,61 +437,24 @@ $(function() {
 <div class="ttc" id="anamespacecuda_1_1math_html_a706200a3f1b2445d7fd835c2ac504a11"><div class="ttname"><a href="namespacecuda_1_1math.html#a706200a3f1b2445d7fd835c2ac504a11">cuda::math::sqrt</a></div><div class="ttdeci">__device__ real sqrt(real a)</div><div class="ttdoc">Square root of a floating point value.</div><div class="ttdef"><b>Definition:</b> <a href="cuda__utilities_8cu_source.html#l00456">cuda_utilities.cu:456</a></div></div>
 <div class="ttc" id="anamespacecuda_1_1math_html_aa01779064aaf96a9607a87bd52921410"><div class="ttname"><a href="namespacecuda_1_1math.html#aa01779064aaf96a9607a87bd52921410">cuda::math::abs</a></div><div class="ttdeci">__device__ real abs(real a)</div><div class="ttdoc">Absolute value of a floating point value.</div><div class="ttdef"><b>Definition:</b> <a href="cuda__utilities_8cu_source.html#l00448">cuda_utilities.cu:448</a></div></div>
 <div class="ttc" id="anamespacecuda_1_1math_html_ae45b7a0e96687aa98c58a3ee386b2ada"><div class="ttname"><a href="namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada">cuda::math::max</a></div><div class="ttdeci">__device__ real max(real a, real b)</div><div class="ttdoc">Maximum value out of two floating point values.</div><div class="ttdef"><b>Definition:</b> <a href="cuda__utilities_8cu_source.html#l00431">cuda_utilities.cu:431</a></div></div>
+<div class="ttc" id="aparameter_8h_html_a11d147c64891830c9e79b3315b1b2e21"><div class="ttname"><a href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a></div><div class="ttdeci">double real</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00015">parameter.h:15</a></div></div>
+<div class="ttc" id="aparameter_8h_html_ac25189db92959bff3c6c2adf4c34b50a"><div class="ttname"><a href="parameter_8h.html#ac25189db92959bff3c6c2adf4c34b50a">DIM</a></div><div class="ttdeci">#define DIM</div><div class="ttdoc">Dimension of the problem.</div><div class="ttdef"><b>Definition:</b> <a href="parameter_8h_source.html#l00038">parameter.h:38</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
-    <!--
     milupHPC  - src/cuda_utils/linalg.cu Source File<br />
-    Generated on Wed Jun 29 2022 11:18:49 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    -->
+    Generated on Thu Jun 23 2022 16:11:19 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
   </small></address>
 </body>
 <footer>
-  <custom-footer color="white" background="#2E4053">
-    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
-    <div second>
-      <div style="text-align: center">
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-        </div>
-      </div>
-    </div>
-    <div third>
-      milupHPC  - src/cuda_utils/linalg.cu Source File<br />
-      Generated on Wed Jun 29 2022 11:18:49 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    </div>
-  </custom-footer>
+  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
+  <div id="banner-footer-first"></div>
+  <div id="banner-footer-second"></div>
+  <script>
+    function topFunction() {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+  </script>
 </footer>
-<!--
-<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
--->
-<script src="components/hamburger/runtime.js" type="module"></script><script src="components/hamburger/polyfills.js" type="module"></script><script src="components/hamburger/main.js" type="module"></script>
-<script src="components/header/runtime.js" type="module"></script><script src="components/header/polyfills.js" type="module"></script><script src="components/header/main.js" type="module"></script>
-<script src="components/icons/runtime.js" type="module"></script><script src="components/icons/polyfills.js" type="module"></script><script src="components/icons/main.js" type="module"></script>
-<script src="components/footer/runtime.js" type="module"></script><script src="components/footer/polyfills.js" type="module"></script><script src="components/footer/main.js" type="module"></script>
-<script src="components/dialog/runtime.js" type="module"></script><script src="components/dialog/polyfills.js" type="module"></script><script src="components/dialog/main.js" type="module"></script>
-<script src="components/copyable/runtime.js" type="module"></script><script src="components/copyable/polyfills.js" type="module"></script><script src="components/copyable/main.js" type="module"></script>
-<!--
-<script>
-  function toggle() {
-    var elem = document.getElementById("side-nav");
-    console.log(elem);
-    elem.toggleSideNav(false);
-  }
-</script>
--->
-<!--
-<script>
-  function topFunction() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  }
-</script>
--->
 </html>

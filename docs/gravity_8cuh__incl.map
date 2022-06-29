@@ -1,7 +1,7 @@
 <map id="include/gravity/gravity.cuh" name="include/gravity/gravity.cuh">
 <area shape="rect" id="node1" title="Gravitational force computation functions and CUDA kernels." alt="" coords="607,5,779,32"/>
 <area shape="rect" id="node2" href="$tree_8cuh.html" title="Tree related classes, kernels and functions." alt="" coords="303,169,457,211"/>
-<area shape="rect" id="node7" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="681,497,783,524"/>
+<area shape="rect" id="node7" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="681,497,783,524"/>
 <area shape="rect" id="node9" title=" " alt="" coords="369,423,439,449"/>
 <area shape="rect" id="node11" title=" " alt="" coords="77,341,136,367"/>
 <area shape="rect" id="node13" href="$subdomain_8cuh.html" title="Classes and Kernels handling subdomains that distribute the workload among the MPI processes." alt="" coords="616,80,771,121"/>

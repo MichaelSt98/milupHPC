@@ -1,26 +1,14 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+-->
 <head>
-	<meta charset="utf-8">
-	<title>CodePortray</title>
-	<base href="/">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: SPH::Kernel::Launch Namespace Reference</title>
-	<title>SPH::Kernel::Launch Namespace Reference</title>
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -34,68 +22,42 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
+	<!-- Add icon library -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- Add font awesome icons -->
+	<!--HIGHLIGHT.JS INSTALL BEGIN
+	<link rel="stylesheet" href="github.min.css">
+	<script src="highlight.js"></script>
+	<script>
+		$(function() {
+			hljs.configure({useBR: false});
+			$(".fragment").each(function(i,node) {
+				$(node).removeClass("fragment");
+				hljs.highlightBlock(node);
+			});
+		});
+	</script>
+	HIGHLIGHT.JS INSTALL END-->
 </head>
 <body>
-<custom-header class="custom-header-class">
-	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
-	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
-	<div shortcuts style="display: table">
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
-		</div>
-		<!-- get the code ... -->
-		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
-		<div style="display: table-cell; padding-right: 2px">
-			<custom-dialog window-width="600px" window-height="400px">
-				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
-				<div title>Get the code: milupHPC!</div>
-				<div style="text-align: center; padding-top: 20px;">
-					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
-					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
-					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
-					<div style="padding-top: 40px">clone via HTTPS:</div>
-					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">clone via SSH:</div>
-					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
-					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
-				</div>
-				<!--<div footer>This is the footer</div>-->
-			</custom-dialog>
-		</div>
-		<!-- end: get the code .... -->
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
-		</div>
-		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
-	</div>
-</custom-header>
-	<!--
-	<custom-side-nav id="side-nav" nav-width="300">
-		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
-		<div>test</div>
-	</custom-side-nav>
-	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation
+				milupHPC documentation <!-- SPH::Kernel::Launch Namespace Reference -->
 			</span>
+			<!-- <span class="search">
+				<input type="text" placeholder="Search" onkeydown="search(this,event);">
+			</span> -->
 		</div>
+    <!--
+	<div class="icon-bar">
+		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
+		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
+		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
+	</div>
+	</div>
+	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -145,70 +107,70 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a2d30906e260b5b58d0b3642505da42f9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a2d30906e260b5b58d0b3642505da42f9">calculateDensity</a> (::SPH::SPH_kernel kernel, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, int *interactions, int numParticles)</td></tr>
+<tr class="memitem:a2d30906e260b5b58d0b3642505da42f9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a2d30906e260b5b58d0b3642505da42f9">calculateDensity</a> (::SPH::SPH_kernel kernel, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, int *interactions, int numParticles)</td></tr>
 <tr class="memdesc:a2d30906e260b5b58d0b3642505da42f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a9f5d96c796f6dbe763023712ca0eb7da" title="Calculate the density .">SPH::Kernel::calculateDensity()</a>.  <a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a2d30906e260b5b58d0b3642505da42f9">More...</a><br /></td></tr>
 <tr class="separator:a2d30906e260b5b58d0b3642505da42f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c14ce011cbf71dc5ac0741ea948813c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a5c14ce011cbf71dc5ac0741ea948813c">internalForces</a> (::SPH::SPH_kernel kernel, <a class="el" href="class_material.html">Material</a> *materials, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, int *interactions, int numRealParticles)</td></tr>
+<tr class="memitem:a5c14ce011cbf71dc5ac0741ea948813c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a5c14ce011cbf71dc5ac0741ea948813c">internalForces</a> (::SPH::SPH_kernel kernel, <a class="el" href="class_material.html">Material</a> *materials, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, int *interactions, int numRealParticles)</td></tr>
 <tr class="memdesc:a5c14ce011cbf71dc5ac0741ea948813c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a2a77d1157077548a4240a3ca4b25183a" title="Internal SPH forces.">SPH::Kernel::internalForces()</a>.  <a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a5c14ce011cbf71dc5ac0741ea948813c">More...</a><br /></td></tr>
 <tr class="separator:a5c14ce011cbf71dc5ac0741ea948813c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb9bfab7ebee64cebb3b4dfc22d73410"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#adb9bfab7ebee64cebb3b4dfc22d73410">calculatePressure</a> (<a class="el" href="class_material.html">Material</a> *materials, <a class="el" href="class_particles.html">Particles</a> *particles, int numParticles)</td></tr>
+<tr class="memitem:adb9bfab7ebee64cebb3b4dfc22d73410"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#adb9bfab7ebee64cebb3b4dfc22d73410">calculatePressure</a> (<a class="el" href="class_material.html">Material</a> *materials, <a class="el" href="class_particles.html">Particles</a> *particles, int numParticles)</td></tr>
 <tr class="memdesc:adb9bfab7ebee64cebb3b4dfc22d73410"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#ae4626d08797d48f118456ae8efd3cf9c" title="Calculate the pressure.">SPH::Kernel::calculatePressure()</a>.  <a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#adb9bfab7ebee64cebb3b4dfc22d73410">More...</a><br /></td></tr>
 <tr class="separator:adb9bfab7ebee64cebb3b4dfc22d73410"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b0b5260f76511d2537cc6be2aca90c0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a4b0b5260f76511d2537cc6be2aca90c0">initializeSoundSpeed</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_material.html">Material</a> *materials, int numParticles)</td></tr>
+<tr class="memitem:a4b0b5260f76511d2537cc6be2aca90c0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a4b0b5260f76511d2537cc6be2aca90c0">initializeSoundSpeed</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_material.html">Material</a> *materials, int numParticles)</td></tr>
 <tr class="memdesc:a4b0b5260f76511d2537cc6be2aca90c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a3c1afc8308eac0063c547efbbf0b34c7" title="Initialize the speed of sound .">SPH::Kernel::initializeSoundSpeed()</a>.  <a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a4b0b5260f76511d2537cc6be2aca90c0">More...</a><br /></td></tr>
 <tr class="separator:a4b0b5260f76511d2537cc6be2aca90c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43f2dfbb804b2bddd9ab571282b9f193"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a43f2dfbb804b2bddd9ab571282b9f193">calculateSoundSpeed</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_material.html">Material</a> *materials, int numParticles)</td></tr>
+<tr class="memitem:a43f2dfbb804b2bddd9ab571282b9f193"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a43f2dfbb804b2bddd9ab571282b9f193">calculateSoundSpeed</a> (<a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_material.html">Material</a> *materials, int numParticles)</td></tr>
 <tr class="memdesc:a43f2dfbb804b2bddd9ab571282b9f193"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#ab3ead6880d8879851f4c03c1035bae32" title="Calculate the speed of sound .">SPH::Kernel::calculateSoundSpeed()</a>.  <a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a43f2dfbb804b2bddd9ab571282b9f193">More...</a><br /></td></tr>
 <tr class="separator:a43f2dfbb804b2bddd9ab571282b9f193"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6397eb3529172568e97de37e21b90132"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a6397eb3529172568e97de37e21b90132">fixedRadiusNN_bruteForce</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *interactions, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticlesLocal, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numNodes)</td></tr>
+<tr class="memitem:a6397eb3529172568e97de37e21b90132"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a6397eb3529172568e97de37e21b90132">fixedRadiusNN_bruteForce</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *interactions, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticlesLocal, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numNodes)</td></tr>
 <tr class="memdesc:a6397eb3529172568e97de37e21b90132"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#af37c5a554f9614a0dfec0ee4f49c5dac" title="Fixed-radius near neighbor search (brute-force method).">SPH::Kernel::fixedRadiusNN_bruteForce()</a>.  <a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a6397eb3529172568e97de37e21b90132">More...</a><br /></td></tr>
 <tr class="separator:a6397eb3529172568e97de37e21b90132"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75db7e296f4697eb2c944c1d5d09cf97"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a75db7e296f4697eb2c944c1d5d09cf97">fixedRadiusNN</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *interactions, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> radius, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticlesLocal, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numNodes)</td></tr>
+<tr class="memitem:a75db7e296f4697eb2c944c1d5d09cf97"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a75db7e296f4697eb2c944c1d5d09cf97">fixedRadiusNN</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *interactions, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> radius, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticlesLocal, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numNodes)</td></tr>
 <tr class="memdesc:a75db7e296f4697eb2c944c1d5d09cf97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#aa8153382c0f43606c46fb503c966f6a7" title="Fixed-radius near neighbor search (default method via explicit stack).">SPH::Kernel::fixedRadiusNN()</a>.  <a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a75db7e296f4697eb2c944c1d5d09cf97">More...</a><br /></td></tr>
 <tr class="separator:a75db7e296f4697eb2c944c1d5d09cf97"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41db1ae09d0d9ce897061755892d2f05"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a41db1ae09d0d9ce897061755892d2f05">fixedRadiusNN_sharedMemory</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *interactions, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticlesLocal, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numNodes)</td></tr>
+<tr class="memitem:a41db1ae09d0d9ce897061755892d2f05"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a41db1ae09d0d9ce897061755892d2f05">fixedRadiusNN_sharedMemory</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *interactions, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticlesLocal, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numNodes)</td></tr>
 <tr class="memdesc:a41db1ae09d0d9ce897061755892d2f05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#af1cb5520233420fac363a5c8c6d6ba76" title="Fixed-radius near neighbor search (brute-force method).">SPH::Kernel::fixedRadiusNN_sharedMemory()</a>.  <a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a41db1ae09d0d9ce897061755892d2f05">More...</a><br /></td></tr>
 <tr class="separator:a41db1ae09d0d9ce897061755892d2f05"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ff271d86ab9b97d6364a6373feeabe4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a8ff271d86ab9b97d6364a6373feeabe4">fixedRadiusNN_withinBox</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *interactions, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticlesLocal, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numNodes)</td></tr>
+<tr class="memitem:a8ff271d86ab9b97d6364a6373feeabe4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a8ff271d86ab9b97d6364a6373feeabe4">fixedRadiusNN_withinBox</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *interactions, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticlesLocal, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numNodes)</td></tr>
 <tr class="memdesc:a8ff271d86ab9b97d6364a6373feeabe4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#ab67721f07abaa2f4b9e890aa7c9b170d" title="Fixed-radius near neighbor search (nested stack method).">SPH::Kernel::fixedRadiusNN_withinBox()</a>.  <a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a8ff271d86ab9b97d6364a6373feeabe4">More...</a><br /></td></tr>
 <tr class="separator:a8ff271d86ab9b97d6364a6373feeabe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad996d121d4ca3dbe80bdcb62cd5f1ccd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#ad996d121d4ca3dbe80bdcb62cd5f1ccd">fixedRadiusNN_variableSML</a> (<a class="el" href="class_material.html">Material</a> *materials, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *interactions, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticlesLocal, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numNodes)</td></tr>
+<tr class="memitem:ad996d121d4ca3dbe80bdcb62cd5f1ccd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#ad996d121d4ca3dbe80bdcb62cd5f1ccd">fixedRadiusNN_variableSML</a> (<a class="el" href="class_material.html">Material</a> *materials, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *interactions, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticlesLocal, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numNodes)</td></tr>
 <tr class="memdesc:ad996d121d4ca3dbe80bdcb62cd5f1ccd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a7a3797bbc1c5cf10269d170ce5ca6da9" title="Fixed-radius near neighbor search for iteratively finding appropriate smoothing length.">SPH::Kernel::fixedRadiusNN_variableSML()</a>.  <a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#ad996d121d4ca3dbe80bdcb62cd5f1ccd">More...</a><br /></td></tr>
 <tr class="separator:ad996d121d4ca3dbe80bdcb62cd5f1ccd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45aaebbc2bcb33d135d2126882c9120a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a45aaebbc2bcb33d135d2126882c9120a">compTheta</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
+<tr class="memitem:a45aaebbc2bcb33d135d2126882c9120a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a45aaebbc2bcb33d135d2126882c9120a">compTheta</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
 <tr class="memdesc:a45aaebbc2bcb33d135d2126882c9120a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a1acb1cfca559541389ff3149bef02a20" title="Find the relevant (lowest) domain list nodes as preparation for finding particles to be exchanged bet...">SPH::Kernel::compTheta()</a>.  <a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a45aaebbc2bcb33d135d2126882c9120a">More...</a><br /></td></tr>
 <tr class="separator:a45aaebbc2bcb33d135d2126882c9120a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab441dbbe2956f22df13e10f1aab9fe86"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#ab441dbbe2956f22df13e10f1aab9fe86">symbolicForce</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> searchRadius, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantIndex, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
+<tr class="memitem:ab441dbbe2956f22df13e10f1aab9fe86"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#ab441dbbe2956f22df13e10f1aab9fe86">symbolicForce</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> searchRadius, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantIndex, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
 <tr class="memdesc:ab441dbbe2956f22df13e10f1aab9fe86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a3a47884d8c6fd661a24f63e66be36d10" title="Find the particles that need to be exchanged between processes to grant correctness of SPH forces.">SPH::Kernel::symbolicForce()</a>.  <a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#ab441dbbe2956f22df13e10f1aab9fe86">More...</a><br /></td></tr>
 <tr class="separator:ab441dbbe2956f22df13e10f1aab9fe86"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3446b110d152a192aad811c132816679"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a3446b110d152a192aad811c132816679">symbolicForce_test</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> searchRadius, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantProc, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="parallel_force_concept_8cpp.html#a82a080d0cd98e3ade9b2452814f99256">relevantIndicesCounter</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantIndexOld, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
+<tr class="memitem:a3446b110d152a192aad811c132816679"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a3446b110d152a192aad811c132816679">symbolicForce_test</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> searchRadius, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantProc, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="parallel_force_concept_8cpp.html#a82a080d0cd98e3ade9b2452814f99256">relevantIndicesCounter</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantIndexOld, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
 <tr class="separator:a3446b110d152a192aad811c132816679"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1a55c5249693802081d636a74291d249"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a1a55c5249693802081d636a74291d249">symbolicForce_test2</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> searchRadius, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantProc, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="parallel_force_concept_8cpp.html#a82a080d0cd98e3ade9b2452814f99256">relevantIndicesCounter</a>, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
+<tr class="memitem:a1a55c5249693802081d636a74291d249"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a1a55c5249693802081d636a74291d249">symbolicForce_test2</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> searchRadius, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> m, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> relevantProc, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> <a class="el" href="parallel_force_concept_8cpp.html#a82a080d0cd98e3ade9b2452814f99256">relevantIndicesCounter</a>, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
 <tr class="separator:a1a55c5249693802081d636a74291d249"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e61c2689b8305004e8114b11163fde3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a5e61c2689b8305004e8114b11163fde3">collectSendIndices</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#aa52ae5343579950877be5da8fa5bbd40">particles2Send</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *particlesCount, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> length, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
+<tr class="memitem:a5e61c2689b8305004e8114b11163fde3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a5e61c2689b8305004e8114b11163fde3">collectSendIndices</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#aa52ae5343579950877be5da8fa5bbd40">particles2Send</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *particlesCount, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> n, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> length, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
 <tr class="memdesc:a5e61c2689b8305004e8114b11163fde3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a8ca47fc9c2f55abc46c05c899426c6a0" title="Collect the found particles into contiguous memory in order to facilitate sending via MPI.">SPH::Kernel::collectSendIndices()</a>.  <a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a5e61c2689b8305004e8114b11163fde3">More...</a><br /></td></tr>
 <tr class="separator:a5e61c2689b8305004e8114b11163fde3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d583a5c64e223947eb7e6f620664628"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a5d583a5c64e223947eb7e6f620664628">collectSendIndices_test2</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#aa52ae5343579950877be5da8fa5bbd40">particles2Send</a>, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *particlesCount, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticlesLocal, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> treeIndex, int currentProc, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
+<tr class="memitem:a5d583a5c64e223947eb7e6f620664628"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a5d583a5c64e223947eb7e6f620664628">collectSendIndices_test2</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *<a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#aa52ae5343579950877be5da8fa5bbd40">particles2Send</a>, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *particlesCount, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticlesLocal, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> treeIndex, int currentProc, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
 <tr class="separator:a5d583a5c64e223947eb7e6f620664628"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa52ae5343579950877be5da8fa5bbd40"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#aa52ae5343579950877be5da8fa5bbd40">particles2Send</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> maxLevel, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *toSend, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendCount, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *alreadyInserted, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> insertOffset, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticlesLocal, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numNodes, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> radius, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType=<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">Curve::lebesgue</a>)</td></tr>
+<tr class="memitem:aa52ae5343579950877be5da8fa5bbd40"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#aa52ae5343579950877be5da8fa5bbd40">particles2Send</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> maxLevel, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *toSend, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendCount, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *alreadyInserted, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> insertOffset, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticlesLocal, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numNodes, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> radius, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType=<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">Curve::lebesgue</a>)</td></tr>
 <tr class="memdesc:aa52ae5343579950877be5da8fa5bbd40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a89b6537f53e3271b87059b7be0d844ee">SPH::Kernel::particles2Send()</a>.  <a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#aa52ae5343579950877be5da8fa5bbd40">More...</a><br /></td></tr>
 <tr class="separator:aa52ae5343579950877be5da8fa5bbd40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b3d4a834d65a1ca54cec0feb34a9639"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a6b3d4a834d65a1ca54cec0feb34a9639">collectSendIndicesBackup</a> (<a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *toSend, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *toSendCollected, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> count)</td></tr>
+<tr class="memitem:a6b3d4a834d65a1ca54cec0feb34a9639"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a6b3d4a834d65a1ca54cec0feb34a9639">collectSendIndicesBackup</a> (<a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *toSend, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *toSendCollected, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> count)</td></tr>
 <tr class="memdesc:a6b3d4a834d65a1ca54cec0feb34a9639"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a5e4573439cbef5d8464637666bc654b2">SPH::Kernel::collectSendIndicesBackup()</a>.  <a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a6b3d4a834d65a1ca54cec0feb34a9639">More...</a><br /></td></tr>
 <tr class="separator:a6b3d4a834d65a1ca54cec0feb34a9639"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a523a373b9cfcdb1e416575af2c826791"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a523a373b9cfcdb1e416575af2c826791">collectSendEntriesBackup</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *toSend, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendCount, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> totalSendCount, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> insertOffset)</td></tr>
+<tr class="memitem:a523a373b9cfcdb1e416575af2c826791"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a523a373b9cfcdb1e416575af2c826791">collectSendEntriesBackup</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *entry, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *toSend, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendIndices, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *sendCount, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> totalSendCount, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> insertOffset)</td></tr>
 <tr class="memdesc:a523a373b9cfcdb1e416575af2c826791"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#ae58d5e1615c6a0bcc045ab7de10a393b">SPH::Kernel::collectSendEntriesBackup()</a>.  <a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a523a373b9cfcdb1e416575af2c826791">More...</a><br /></td></tr>
 <tr class="separator:a523a373b9cfcdb1e416575af2c826791"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a596be35f433ff50e6b7ef034f6049a93"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a596be35f433ff50e6b7ef034f6049a93">insertReceivedParticles</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, int n, int m)</td></tr>
+<tr class="memitem:a596be35f433ff50e6b7ef034f6049a93"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a596be35f433ff50e6b7ef034f6049a93">insertReceivedParticles</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, int n, int m)</td></tr>
 <tr class="memdesc:a596be35f433ff50e6b7ef034f6049a93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a5b654090eef5d075287a59b80a0c7f22" title="Insert the received particles into the local tree.">SPH::Kernel::insertReceivedParticles()</a>.  <a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#a596be35f433ff50e6b7ef034f6049a93">More...</a><br /></td></tr>
 <tr class="separator:a596be35f433ff50e6b7ef034f6049a93"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7d88af16ff101cc3c4a4c39b58aebfa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#ab7d88af16ff101cc3c4a4c39b58aebfa">info</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_helper.html">Helper</a> *helper, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticlesLocal, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numNodes)</td></tr>
+<tr class="memitem:ab7d88af16ff101cc3c4a4c39b58aebfa"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#ab7d88af16ff101cc3c4a4c39b58aebfa">info</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_helper.html">Helper</a> *helper, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticlesLocal, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numParticles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> numNodes)</td></tr>
 <tr class="memdesc:ab7d88af16ff101cc3c4a4c39b58aebfa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a8a4a5accdc69e467d7b15f12d2e68b92" title="Info/Debug kernel.">SPH::Kernel::info()</a>.  <a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#ab7d88af16ff101cc3c4a4c39b58aebfa">More...</a><br /></td></tr>
 <tr class="separator:ab7d88af16ff101cc3c4a4c39b58aebfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:affdd7dc90a66d0bd7ed8fc7d88bc8ff7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#affdd7dc90a66d0bd7ed8fc7d88bc8ff7">calculateCentersOfMass</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> level)</td></tr>
+<tr class="memitem:affdd7dc90a66d0bd7ed8fc7d88bc8ff7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#affdd7dc90a66d0bd7ed8fc7d88bc8ff7">calculateCentersOfMass</a> (<a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> level)</td></tr>
 <tr class="memdesc:affdd7dc90a66d0bd7ed8fc7d88bc8ff7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a20ebf0f22ec1fe57f2c49393e8cb1a55">SPH::Kernel::calculateCentersOfMass()</a>.  <a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#affdd7dc90a66d0bd7ed8fc7d88bc8ff7">More...</a><br /></td></tr>
 <tr class="separator:affdd7dc90a66d0bd7ed8fc7d88bc8ff7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac06639b4e1b0006433e32cea0c662314"><td class="memItemLeft" align="right" valign="top"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#ac06639b4e1b0006433e32cea0c662314">determineSearchRadii</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, <a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *searchRadii, int n, int m, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
+<tr class="memitem:ac06639b4e1b0006433e32cea0c662314"><td class="memItemLeft" align="right" valign="top"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespace_s_p_h_1_1_kernel_1_1_launch.html#ac06639b4e1b0006433e32cea0c662314">determineSearchRadii</a> (<a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *subDomainKeyTree, <a class="el" href="class_tree.html">Tree</a> *tree, <a class="el" href="class_particles.html">Particles</a> *particles, <a class="el" href="class_domain_list.html">DomainList</a> *domainList, <a class="el" href="class_domain_list.html">DomainList</a> *lowestDomainList, <a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *searchRadii, int n, int m, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a> curveType)</td></tr>
 <tr class="memdesc:ac06639b4e1b0006433e32cea0c662314"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#ac3eddd96f7fd33ce608495bc927272ad" title="Determine the search radius needed for SPH::Kernel::symbolicForce().">SPH::Kernel::determineSearchRadii()</a>.  <a href="namespace_s_p_h_1_1_kernel_1_1_launch.html#ac06639b4e1b0006433e32cea0c662314">More...</a><br /></td></tr>
 <tr class="separator:ac06639b4e1b0006433e32cea0c662314"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -222,7 +184,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::calculateCentersOfMass </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::calculateCentersOfMass </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -236,7 +198,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>level</em>&#160;</td>
         </tr>
         <tr>
@@ -250,7 +212,7 @@ Functions</h2></td></tr>
 <p>Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a20ebf0f22ec1fe57f2c49393e8cb1a55">SPH::Kernel::calculateCentersOfMass()</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>Wall time for kernel execution </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03230">3230</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03222">3222</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -274,7 +236,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::calculateDensity </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::calculateDensity </td>
           <td>(</td>
           <td class="paramtype">::SPH::SPH_kernel&#160;</td>
           <td class="paramname"><em>kernel</em>, </td>
@@ -346,7 +308,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::calculatePressure </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::calculatePressure </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_material.html">Material</a> *&#160;</td>
           <td class="paramname"><em>materials</em>, </td>
@@ -409,7 +371,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::calculateSoundSpeed </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::calculateSoundSpeed </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_particles.html">Particles</a> *&#160;</td>
           <td class="paramname"><em>particles</em>, </td>
@@ -469,7 +431,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::collectSendEntriesBackup </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::collectSendEntriesBackup </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -477,37 +439,37 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>entry</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>toSend</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>sendIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>sendCount</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>totalSendCount</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>insertOffset</em>&#160;</td>
         </tr>
         <tr>
@@ -521,7 +483,7 @@ Functions</h2></td></tr>
 <p>Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#ae58d5e1615c6a0bcc045ab7de10a393b">SPH::Kernel::collectSendEntriesBackup()</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>Wall time for kernel execution </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03209">3209</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03201">3201</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
 <div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-4-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-4-summary" class="dynsummary" style="display:block;">
@@ -544,7 +506,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::collectSendIndices </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::collectSendIndices </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -558,31 +520,31 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>sendIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>particles2Send</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>particlesCount</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>length</em>, </td>
         </tr>
         <tr>
@@ -602,7 +564,7 @@ Functions</h2></td></tr>
 <p>Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a8ca47fc9c2f55abc46c05c899426c6a0" title="Collect the found particles into contiguous memory in order to facilitate sending via MPI.">SPH::Kernel::collectSendIndices()</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>Wall time for kernel execution </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03172">3172</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03164">3164</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
 <div id="dynsection-5" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-5-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-5-summary" class="dynsummary" style="display:block;">
@@ -630,7 +592,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::collectSendIndices_test2 </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::collectSendIndices_test2 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -644,37 +606,37 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>sendIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>particles2Send</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>particlesCount</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numParticlesLocal</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numParticles</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>treeIndex</em>, </td>
         </tr>
         <tr>
@@ -697,7 +659,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03180">3180</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03172">3172</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
 <div id="dynsection-6" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-6-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-6-summary" class="dynsummary" style="display:block;">
@@ -725,21 +687,21 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::collectSendIndicesBackup </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::collectSendIndicesBackup </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>toSend</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>toSendCollected</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>count</em>&#160;</td>
         </tr>
         <tr>
@@ -753,7 +715,7 @@ Functions</h2></td></tr>
 <p>Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a5e4573439cbef5d8464637666bc654b2">SPH::Kernel::collectSendIndicesBackup()</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>Wall time for kernel execution </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03203">3203</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03195">3195</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
 <div id="dynsection-7" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-7-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-7-summary" class="dynsummary" style="display:block;">
@@ -776,7 +738,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::compTheta </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::compTheta </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -816,7 +778,7 @@ Functions</h2></td></tr>
 <p>Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a1acb1cfca559541389ff3149bef02a20" title="Find the relevant (lowest) domain list nodes as preparation for finding particles to be exchanged bet...">SPH::Kernel::compTheta()</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>Wall time for kernel execution </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03137">3137</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03129">3129</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
 <div id="dynsection-8" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-8-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-8-summary" class="dynsummary" style="display:block;">
@@ -841,7 +803,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::determineSearchRadii </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::determineSearchRadii </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -873,7 +835,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> *&#160;</td>
           <td class="paramname"><em>searchRadii</em>, </td>
         </tr>
         <tr>
@@ -905,7 +867,7 @@ Functions</h2></td></tr>
 <p>Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#ac3eddd96f7fd33ce608495bc927272ad" title="Determine the search radius needed for SPH::Kernel::symbolicForce().">SPH::Kernel::determineSearchRadii()</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>Wall time for kernel execution </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03236">3236</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03228">3228</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
 <div id="dynsection-9" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-9-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-9-summary" class="dynsummary" style="display:block;">
@@ -928,7 +890,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::fixedRadiusNN </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::fixedRadiusNN </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -942,31 +904,31 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>interactions</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>radius</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numParticlesLocal</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numParticles</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numNodes</em>&#160;</td>
         </tr>
         <tr>
@@ -980,7 +942,7 @@ Functions</h2></td></tr>
 <p>Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#aa8153382c0f43606c46fb503c966f6a7" title="Fixed-radius near neighbor search (default method via explicit stack).">SPH::Kernel::fixedRadiusNN()</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>Wall time for kernel execution </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03094">3094</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03086">3086</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
 <div id="dynsection-10" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-10-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-10-summary" class="dynsummary" style="display:block;">
@@ -1002,7 +964,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::fixedRadiusNN_bruteForce </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::fixedRadiusNN_bruteForce </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -1016,25 +978,25 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>interactions</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numParticlesLocal</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numParticles</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numNodes</em>&#160;</td>
         </tr>
         <tr>
@@ -1048,7 +1010,7 @@ Functions</h2></td></tr>
 <p>Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#af37c5a554f9614a0dfec0ee4f49c5dac" title="Fixed-radius near neighbor search (brute-force method).">SPH::Kernel::fixedRadiusNN_bruteForce()</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>Wall time for kernel execution </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03087">3087</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03079">3079</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
 <div id="dynsection-11" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-11-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-11-summary" class="dynsummary" style="display:block;">
@@ -1071,7 +1033,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::fixedRadiusNN_sharedMemory </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::fixedRadiusNN_sharedMemory </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -1085,25 +1047,25 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>interactions</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numParticlesLocal</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numParticles</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numNodes</em>&#160;</td>
         </tr>
         <tr>
@@ -1117,7 +1079,7 @@ Functions</h2></td></tr>
 <p>Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#af1cb5520233420fac363a5c8c6d6ba76" title="Fixed-radius near neighbor search (brute-force method).">SPH::Kernel::fixedRadiusNN_sharedMemory()</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>Wall time for kernel execution </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03113">3113</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03105">3105</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
 <div id="dynsection-12" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-12-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-12-summary" class="dynsummary" style="display:block;">
@@ -1142,7 +1104,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::fixedRadiusNN_variableSML </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::fixedRadiusNN_variableSML </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_material.html">Material</a> *&#160;</td>
           <td class="paramname"><em>materials</em>, </td>
@@ -1162,25 +1124,25 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>interactions</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numParticlesLocal</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numParticles</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numNodes</em>&#160;</td>
         </tr>
         <tr>
@@ -1194,7 +1156,7 @@ Functions</h2></td></tr>
 <p>Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a7a3797bbc1c5cf10269d170ce5ca6da9" title="Fixed-radius near neighbor search for iteratively finding appropriate smoothing length.">SPH::Kernel::fixedRadiusNN_variableSML()</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>Wall time for kernel execution </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03128">3128</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03120">3120</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
 <div id="dynsection-13" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-13-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-13-summary" class="dynsummary" style="display:block;">
@@ -1219,7 +1181,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::fixedRadiusNN_withinBox </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::fixedRadiusNN_withinBox </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -1233,25 +1195,25 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>interactions</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numParticlesLocal</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numParticles</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numNodes</em>&#160;</td>
         </tr>
         <tr>
@@ -1265,7 +1227,7 @@ Functions</h2></td></tr>
 <p>Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#ab67721f07abaa2f4b9e890aa7c9b170d" title="Fixed-radius near neighbor search (nested stack method).">SPH::Kernel::fixedRadiusNN_withinBox()</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>Wall time for kernel execution </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03103">3103</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03095">3095</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
 <div id="dynsection-14" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-14-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-14-summary" class="dynsummary" style="display:block;">
@@ -1289,7 +1251,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::info </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::info </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_tree.html">Tree</a> *&#160;</td>
           <td class="paramname"><em>tree</em>, </td>
@@ -1309,19 +1271,19 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numParticlesLocal</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numParticles</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numNodes</em>&#160;</td>
         </tr>
         <tr>
@@ -1335,7 +1297,7 @@ Functions</h2></td></tr>
 <p>Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a8a4a5accdc69e467d7b15f12d2e68b92" title="Info/Debug kernel.">SPH::Kernel::info()</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>Wall time for kernel execution </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03223">3223</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03215">3215</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
 <div id="dynsection-15" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-15-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-15-summary" class="dynsummary" style="display:block;">
@@ -1359,7 +1321,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::initializeSoundSpeed </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::initializeSoundSpeed </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_particles.html">Particles</a> *&#160;</td>
           <td class="paramname"><em>particles</em>, </td>
@@ -1418,7 +1380,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::insertReceivedParticles </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::insertReceivedParticles </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -1470,7 +1432,7 @@ Functions</h2></td></tr>
 <p>Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a5b654090eef5d075287a59b80a0c7f22" title="Insert the received particles into the local tree.">SPH::Kernel::insertReceivedParticles()</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>Wall time for kernel execution </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03216">3216</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03208">3208</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
 <div id="dynsection-17" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-17-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-17-summary" class="dynsummary" style="display:block;">
@@ -1493,7 +1455,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::internalForces </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::internalForces </td>
           <td>(</td>
           <td class="paramtype">::SPH::SPH_kernel&#160;</td>
           <td class="paramname"><em>kernel</em>, </td>
@@ -1571,7 +1533,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::particles2Send </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::particles2Send </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -1603,55 +1565,55 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>maxLevel</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>toSend</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>sendCount</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>alreadyInserted</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>insertOffset</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numParticlesLocal</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numParticles</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>numNodes</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>radius</em>, </td>
         </tr>
         <tr>
@@ -1671,7 +1633,7 @@ Functions</h2></td></tr>
 <p>Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a89b6537f53e3271b87059b7be0d844ee">SPH::Kernel::particles2Send()</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>Wall time for kernel execution </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03190">3190</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03182">3182</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
 <div id="dynsection-19" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-19-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-19-summary" class="dynsummary" style="display:block;">
@@ -1697,7 +1659,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::symbolicForce </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::symbolicForce </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -1723,31 +1685,31 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>sendIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>searchRadius</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>relevantIndex</em>, </td>
         </tr>
         <tr>
@@ -1767,7 +1729,7 @@ Functions</h2></td></tr>
 <p>Wrapper for <a class="el" href="namespace_s_p_h_1_1_kernel.html#a3a47884d8c6fd661a24f63e66be36d10" title="Find the particles that need to be exchanged between processes to grant correctness of SPH forces.">SPH::Kernel::symbolicForce()</a>. </p>
 <dl class="section return"><dt>Returns</dt><dd>Wall time for kernel execution </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03144">3144</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03136">3136</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
 <div id="dynsection-20" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-20-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-20-summary" class="dynsummary" style="display:block;">
@@ -1793,7 +1755,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::symbolicForce_test </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::symbolicForce_test </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -1819,43 +1781,43 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>sendIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>searchRadius</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>relevantProc</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>relevantIndicesCounter</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>relevantIndexOld</em>, </td>
         </tr>
         <tr>
@@ -1872,7 +1834,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03153">3153</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03145">3145</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
 <div id="dynsection-21" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-21-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-21-summary" class="dynsummary" style="display:block;">
@@ -1896,7 +1858,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::symbolicForce_test2 </td>
+          <td class="memname"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a> SPH::Kernel::Launch::symbolicForce_test2 </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="class_sub_domain_key_tree.html">SubDomainKeyTree</a> *&#160;</td>
           <td class="paramname"><em>subDomainKeyTree</em>, </td>
@@ -1922,37 +1884,37 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a> *&#160;</td>
           <td class="paramname"><em>sendIndices</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a11d147c64891830c9e79b3315b1b2e21">real</a>&#160;</td>
           <td class="paramname"><em>searchRadius</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>n</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>relevantProc</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="include_2parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="parameter_8h.html#a3b6ee100a473e8866bcea6d1fc4041d9">integer</a>&#160;</td>
           <td class="paramname"><em>relevantIndicesCounter</em>, </td>
         </tr>
         <tr>
@@ -1969,7 +1931,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03163">3163</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sph_8cu_source.html#l03155">3155</a> of file <a class="el" href="sph_8cu_source.html">sph.cu</a>.</p>
 <div id="dynsection-22" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-22-trigger" src="closed.png" alt="+"/> Here is the call graph for this function:</div>
 <div id="dynsection-22-summary" class="dynsummary" style="display:block;">
@@ -1988,58 +1950,19 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
-    <!--
     milupHPC  - SPH::Kernel::Launch Namespace Reference<br />
-    Generated on Wed Jun 29 2022 11:18:51 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    -->
+    Generated on Thu Jun 23 2022 16:11:21 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
   </small></address>
 </body>
 <footer>
-  <custom-footer color="white" background="#2E4053">
-    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
-    <div second>
-      <div style="text-align: center">
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-        </div>
-      </div>
-    </div>
-    <div third>
-      milupHPC  - SPH::Kernel::Launch Namespace Reference<br />
-      Generated on Wed Jun 29 2022 11:18:51 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    </div>
-  </custom-footer>
+  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
+  <div id="banner-footer-first"></div>
+  <div id="banner-footer-second"></div>
+  <script>
+    function topFunction() {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+  </script>
 </footer>
-<!--
-<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
--->
-<script src="components/hamburger/runtime.js" type="module"></script><script src="components/hamburger/polyfills.js" type="module"></script><script src="components/hamburger/main.js" type="module"></script>
-<script src="components/header/runtime.js" type="module"></script><script src="components/header/polyfills.js" type="module"></script><script src="components/header/main.js" type="module"></script>
-<script src="components/icons/runtime.js" type="module"></script><script src="components/icons/polyfills.js" type="module"></script><script src="components/icons/main.js" type="module"></script>
-<script src="components/footer/runtime.js" type="module"></script><script src="components/footer/polyfills.js" type="module"></script><script src="components/footer/main.js" type="module"></script>
-<script src="components/dialog/runtime.js" type="module"></script><script src="components/dialog/polyfills.js" type="module"></script><script src="components/dialog/main.js" type="module"></script>
-<script src="components/copyable/runtime.js" type="module"></script><script src="components/copyable/polyfills.js" type="module"></script><script src="components/copyable/main.js" type="module"></script>
-<!--
-<script>
-  function toggle() {
-    var elem = document.getElementById("side-nav");
-    console.log(elem);
-    elem.toggleSideNav(false);
-  }
-</script>
--->
-<!--
-<script>
-  function topFunction() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  }
-</script>
--->
 </html>

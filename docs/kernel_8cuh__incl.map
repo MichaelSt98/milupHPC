@@ -1,7 +1,7 @@
 <map id="include/sph/kernel.cuh" name="include/sph/kernel.cuh">
 <area shape="rect" id="node1" title=" " alt="" coords="454,5,606,32"/>
 <area shape="rect" id="node2" href="$particles_8cuh.html" title="Particle struct as Structure of arrays both instantiable on host and device." alt="" coords="651,80,759,107"/>
-<area shape="rect" id="node3" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="334,304,425,331"/>
+<area shape="rect" id="node3" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="334,304,425,331"/>
 <area shape="rect" id="node9" title=" " alt="" coords="739,229,809,256"/>
 <area shape="rect" id="node11" href="$helper_8cuh.html" title=" " alt="" coords="267,80,361,107"/>
 <area shape="rect" id="node17" href="$linalg_8cuh.html" title="Linear algebra CUDA kernels and device functions." alt="" coords="454,80,606,107"/>

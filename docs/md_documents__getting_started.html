@@ -1,26 +1,14 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+-->
 <head>
-	<meta charset="utf-8">
-	<title>CodePortray</title>
-	<base href="/">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: Getting started</title>
-	<title>Getting started</title>
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -34,68 +22,42 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
+	<!-- Add icon library -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- Add font awesome icons -->
+	<!--HIGHLIGHT.JS INSTALL BEGIN
+	<link rel="stylesheet" href="github.min.css">
+	<script src="highlight.js"></script>
+	<script>
+		$(function() {
+			hljs.configure({useBR: false});
+			$(".fragment").each(function(i,node) {
+				$(node).removeClass("fragment");
+				hljs.highlightBlock(node);
+			});
+		});
+	</script>
+	HIGHLIGHT.JS INSTALL END-->
 </head>
 <body>
-<custom-header class="custom-header-class">
-	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
-	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
-	<div shortcuts style="display: table">
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
-		</div>
-		<!-- get the code ... -->
-		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
-		<div style="display: table-cell; padding-right: 2px">
-			<custom-dialog window-width="600px" window-height="400px">
-				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
-				<div title>Get the code: milupHPC!</div>
-				<div style="text-align: center; padding-top: 20px;">
-					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
-					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
-					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
-					<div style="padding-top: 40px">clone via HTTPS:</div>
-					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">clone via SSH:</div>
-					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
-					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
-				</div>
-				<!--<div footer>This is the footer</div>-->
-			</custom-dialog>
-		</div>
-		<!-- end: get the code .... -->
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
-		</div>
-		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
-	</div>
-</custom-header>
-	<!--
-	<custom-side-nav id="side-nav" nav-width="300">
-		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
-		<div>test</div>
-	</custom-side-nav>
-	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation
+				milupHPC documentation <!-- Getting started -->
 			</span>
+			<!-- <span class="search">
+				<input type="text" placeholder="Search" onkeydown="search(this,event);">
+			</span> -->
 		</div>
+    <!--
+	<div class="icon-bar">
+		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
+		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
+		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
+	</div>
+	</div>
+	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -133,342 +95,45 @@ $(function() {
   <div class="headertitle"><div class="title">Getting started </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="autotoc_md40"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md44"></a>
 Quickstart</h1>
 <ol type="1">
-<li>check for the <b><a class="el" href="md_documents__prerequisites.html">prerequisites</a></b></li>
-<li><b>compile</b> using the <a href="../Makefile">Makefile</a> (for help/instructions see <a class="el" href="md_documents__compilation.html">Compilation.md</a><ul>
-<li>with the corresponding/wanted preprocessor directives in <code><a class="el" href="include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs.">include/parameter.h</a></code></li>
+<li>check for the <a class="el" href="md_documents__prerequisites.html">prerequisites</a></li>
+<li>compile using the <a href="../Makefile">Makefile</a> (for help/instructions see <a class="el" href="md_documents__compilation.html">Compilation.md</a><ul>
+<li>with the corresponding/wanted preprocessor directives in <code><a class="el" href="parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs.">include/parameter.h</a></code></li>
 </ul>
 </li>
 <li>provide/create/set<ul>
-<li><b>initial particle distribution</b></li>
-<li><b>config file</b>: especially output <code>directory</code> for the output files</li>
-<li><b>material config file</b> (for a simulation including <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a>): especially <code>sml</code> in dependence of generated number of particles</li>
+<li>initial particle distribution</li>
+<li>config file</li>
+<li>material config file (for a simulation including <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a>)</li>
 </ul>
 </li>
 </ol>
 <ol type="1">
-<li><b>execute/run</b> via <code>mpirun -np &lt;np&gt; &lt;binary&gt; -n &lt;#output files&gt; -f &lt;input hdf5 file&gt; -C &lt;config file&gt; -m &lt;material-config&gt;</code><ul>
+<li>run via <code>mpirun -np &lt;np&gt; &lt;binary&gt; -n &lt;#output files&gt; -f &lt;input hdf5 file&gt; -C &lt;config file&gt; -m &lt;material-config&gt;</code><ul>
 <li>or by using an adequate batch script for the used queing system</li>
 </ul>
 </li>
-<li>postprocess results</li>
+<li>post-process results </li>
 </ol>
-<h1><a class="anchor" id="autotoc_md41"></a>
-Generally</h1>
-<p ><details>
- <summary> Preprocessor directives: parameter.h </summary></details>
-</p>
-<p ><details>
-</p><ul>
-<li>see <code><a class="el" href="include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs.">include/parameter.h</a></code></li>
-</ul>
-<p></details>
-</p>
-<p ><details>
-</p><div class="fragment"><div class="line"><span class="preprocessor">#define DEBUGGING 0</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define SAFETY_LEVEL 2</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define DIM 3</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define SI_UNITS 1</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define CUBIC_DOMAINS 1</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define GRAVITY_SIM 1</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define SPH_SIM 1</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define INTEGRATE_ENERGY 0</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define INTEGRATE_DENSITY 1</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define INTEGRATE_SML 0</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define DECOUPLE_SML 0</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define VARIABLE_SML 1</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define SML_CORRECTION 0</span></div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#define SPH_EQU_VERSION 1</span></div>
-</div><!-- fragment --><p> </details>
-</p>
-<p ><details>
- <summary> Input HDF5 file </summary></details>
-</p>
-<p ><details>
-</p><ul>
-<li>for <b>gravity only</b><ul>
-<li>provide mass "m", position "x" and velocity "v"</li>
-</ul>
-</li>
-</ul>
-<p></details>
-</p>
-<p ><details>
-</p><div class="fragment"><div class="line">GROUP &quot;/&quot; {</div>
-<div class="line">   DATASET &quot;m&quot; {</div>
-<div class="line">      DATATYPE  H5T_IEEE_F64LE</div>
-<div class="line">      DATASPACE  SIMPLE { ( &lt;num particles&gt; ) / ( &lt;num particles&gt;  ) }</div>
-<div class="line">   }</div>
-<div class="line">   DATASET &quot;v&quot; {</div>
-<div class="line">      DATATYPE  H5T_IEEE_F64LE</div>
-<div class="line">      DATASPACE  SIMPLE { ( &lt;num particles&gt; , &lt;dim&gt; ) / ( &lt;num particles&gt; , &lt;dim&gt; ) }</div>
-<div class="line">   }</div>
-<div class="line">   DATASET &quot;x&quot; {</div>
-<div class="line">      DATATYPE  H5T_IEEE_F64LE</div>
-<div class="line">      DATASPACE  SIMPLE { ( &lt;num particles&gt; , &lt;dim&gt;  ) / (&lt;num particles&gt; , &lt;dim&gt;  ) }</div>
-<div class="line">   }</div>
-<div class="line">}</div>
-<div class="line">}</div>
-</div><!-- fragment --><p></details>
-</p>
-<p ><details>
-</p><ul>
-<li><b>with <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a></b> provide (at least)<ul>
-<li>provide mass "m", material identifier "materialId", internal energy "u", position "x" and velocity "v"</li>
-</ul>
-</li>
-</ul>
-<p></details>
-</p>
-<p ><details>
-</p><div class="fragment"><div class="line">GROUP &quot;/&quot; {</div>
-<div class="line">   DATASET &quot;m&quot; {</div>
-<div class="line">      DATATYPE  H5T_IEEE_F64LE</div>
-<div class="line">      DATASPACE  SIMPLE { ( &lt;num particles&gt; ) / ( &lt;num particles&gt;  ) }</div>
-<div class="line">   }</div>
-<div class="line">   DATASET &quot;materialId&quot; {</div>
-<div class="line">      DATATYPE  H5T_STD_I8LE</div>
-<div class="line">      DATASPACE  SIMPLE { ( &lt;num particles&gt;  ) / ( &lt;num particles&gt;  ) }</div>
-<div class="line">   }</div>
-<div class="line">   DATASET &quot;u&quot; {</div>
-<div class="line">      DATATYPE  H5T_IEEE_F64LE</div>
-<div class="line">      DATASPACE  SIMPLE { ( &lt;num particles&gt;  ) / ( &lt;num particles&gt;  ) }</div>
-<div class="line">   }</div>
-<div class="line">   DATASET &quot;v&quot; {</div>
-<div class="line">      DATATYPE  H5T_IEEE_F64LE</div>
-<div class="line">      DATASPACE  SIMPLE { ( &lt;num particles&gt; , &lt;dim&gt; ) / ( &lt;num particles&gt; , &lt;dim&gt; ) }</div>
-<div class="line">   }</div>
-<div class="line">   DATASET &quot;x&quot; {</div>
-<div class="line">      DATATYPE  H5T_IEEE_F64LE</div>
-<div class="line">      DATASPACE  SIMPLE { ( &lt;num particles&gt; , &lt;dim&gt;  ) / (&lt;num particles&gt; , &lt;dim&gt;  ) }</div>
-<div class="line">   }</div>
-<div class="line">}</div>
-<div class="line">}</div>
-</div><!-- fragment --><p></details>
-</p>
-<p ><details>
-</details>
-</p>
-<p ><details>
- <summary> Config file </summary></details>
-</p>
-<p ><details>
-</p><div class="fragment"><div class="line">; IO RELATED</div>
-<div class="line">; ------------------------------------------------------</div>
-<div class="line">; output directory (will be created if it does not exist)</div>
-<div class="line">directory bb/</div>
-<div class="line"> </div>
-<div class="line">; outputRank (-1 corresponds to all)</div>
-<div class="line">outputRank -1</div>
-<div class="line">; omit logType::TIME for standard output</div>
-<div class="line">omitTime true</div>
-<div class="line">; create log file (including warnings, errors, ...)</div>
-<div class="line">log true</div>
-<div class="line">; create performance log</div>
-<div class="line">performanceLog true</div>
-<div class="line">; write particles to be sent to h5 file</div>
-<div class="line">particlesSent2H5 true</div>
-<div class="line"> </div>
-<div class="line"> </div>
-<div class="line">; INTEGRATOR RELATED</div>
-<div class="line">; ------------------------------------------------------</div>
-<div class="line">; integrator selection</div>
-<div class="line">; explicit euler [0], predictor-corrector euler [1], leapfrog [2]</div>
-<div class="line">integrator 1</div>
-<div class="line">; initial time step</div>
-<div class="line">timeStep 1e-4</div>
-<div class="line">; max time step allowed</div>
-<div class="line">maxTimeStep 1e-4</div>
-<div class="line">; end time for simulation</div>
-<div class="line">;timeEnd 6e-2</div>
-<div class="line"> </div>
-<div class="line">; SIMULATION RELATED</div>
-<div class="line">; ------------------------------------------------------</div>
-<div class="line">; space-filling curve selection</div>
-<div class="line">; lebesgue [0], hilbert [1]</div>
-<div class="line">sfc 1</div>
-<div class="line"> </div>
-<div class="line">; theta-criterion for Barnes-Hut (approximative gravity)</div>
-<div class="line">theta 0.5</div>
-<div class="line">; smoothing parameter for gravitational forces</div>
-<div class="line">smoothing 2.56e+20</div>
-<div class="line"> </div>
-<div class="line">; SPH smoothing kernel selection</div>
-<div class="line">; spiky [0], cubic spline [1], wendlandc2 [3], wendlandc4 [4], wendlandc6 [5]</div>
-<div class="line">smoothingKernel 1</div>
-<div class="line"> </div>
-<div class="line">; remove particles (corresponding to some criterion)</div>
-<div class="line">removeParticles true</div>
-<div class="line">; spherically [0], cubic [1]</div>
-<div class="line">removeParticlesCriterion 0</div>
-<div class="line">; allowed distance to center (0, 0, 0)</div>
-<div class="line">removeParticlesDimension 3.6e14</div>
-<div class="line"> </div>
-<div class="line">; execute load balancing</div>
-<div class="line">loadBalancing false</div>
-<div class="line">; interval for executing load balancing (every Nth step)</div>
-<div class="line">loadBalancingInterval 1</div>
-<div class="line"> </div>
-<div class="line">; how much memory to allocate (1.0 -&gt; all particles can in principle be on one process)</div>
-<div class="line">particleMemoryContingent 1.0</div>
-<div class="line"> </div>
-<div class="line">; calculate angular momentum (and save to output file)</div>
-<div class="line">calculateAngularMomentum true</div>
-<div class="line">; calculate (total) energy (and save to output file)</div>
-<div class="line">calculateEnergy true</div>
-<div class="line">; calculate center of mass (and save to output file)</div>
-<div class="line">calculateCenterOfMass false</div>
-<div class="line"> </div>
-<div class="line">; IMPLEMENTATION SELECTION</div>
-<div class="line">; ------------------------------------------------------</div>
-<div class="line">; force version for gravity (use [2])</div>
-<div class="line">; burtscher [0], burtscher without presorting [1], miluphcuda with presorting [2],</div>
-<div class="line">; miluphcuda without presorting [3], miluphcuda shared memory (experimental) [4]</div>
-<div class="line">gravityForceVersion 0</div>
-<div class="line">; fixed radius NN version for SPH (use [0])</div>
-<div class="line">; normal [0], brute-force [1], shared-memory [2], within-box [3]</div>
-<div class="line">sphFixedRadiusNNVersion 3</div>
-</div><!-- fragment --><p></details>
-</p>
-<p ><details>
-</details>
-</p>
-<p ><details>
- <summary> <a class="el" href="class_material.html" title="Material parameters.">Material</a> config file </summary></details>
-</p>
-<p ><details>
-</p><div class="fragment"><div class="line">materials = (</div>
-<div class="line">{</div>
-<div class="line">    ID = 0</div>
-<div class="line">    name = &quot;IsothermalGas&quot;</div>
-<div class="line">    #sml = 1e12</div>
-<div class="line">    sml = 5.2e11</div>
-<div class="line">    interactions = 50</div>
-<div class="line">    artificial_viscosity = { alpha = 1.0; beta = 2.0; };</div>
-<div class="line">    eos = {</div>
-<div class="line">        type = 3</div>
-<div class="line">    };</div>
-<div class="line">}</div>
-<div class="line">);</div>
-<div class="line"> </div>
-<div class="line">...</div>
-</div><!-- fragment --><p></details>
-</p>
-<p ><details>
-</details>
-</p>
-<p ><details>
- <summary> Command line arguments </summary></details>
-</p>
-<p ><details>
-</p><ul>
-<li><code>./bin/runner -h</code> gives help:</li>
-</ul>
-<p></details>
-</p>
-<p ><details>
-</p><div class="fragment"><div class="line">Multi-GPU CUDA Barnes-Hut NBody/SPH code</div>
-<div class="line">Usage:</div>
-<div class="line">  HPC NBody [OPTION...]</div>
-<div class="line"> </div>
-<div class="line">  -n, --number-output-files arg</div>
-<div class="line">                                number of output files (default: 100)</div>
-<div class="line">  -t, --max-time-step arg       time step (default: -1.)</div>
-<div class="line">  -l, --load-balancing          load balancing</div>
-<div class="line">  -L, --load-balancing-interval arg</div>
-<div class="line">                                load balancing interval (default: -1)</div>
-<div class="line">  -C, --config arg              config file (default: config/config.info)</div>
-<div class="line">  -m, --material-config arg     material config file (default: </div>
-<div class="line">                                config/material.cfg)</div>
-<div class="line">  -c, --curve-type arg          curve type (Lebesgue: 0/Hilbert: 1) </div>
-<div class="line">                                (default: -1)</div>
-<div class="line">  -f, --input-file arg          File name (default: -)</div>
-<div class="line">  -v, --verbosity arg           Verbosity level (default: 0)</div>
-<div class="line">  -h, --help                    Show this help</div>
-</div><!-- fragment --><p></details>
-</p>
-<p ><details>
-</details>
-</p>
-<h1><a class="anchor" id="autotoc_md42"></a>
-Test cases</h1>
-<p ><b>Available test cases including instructions can be found within <a href="../testcases/">testcases/</a>.</b></p>
-<p >Currently available:</p>
-<ul>
-<li>the <a href="../testcases/plummer/">Plummer/</a> test case (<a class="el" href="md_testcases_plummer__r_e_a_d_m_e.html">README</a>)</li>
-<li>the <a href="../testcases/sedov/">Taylor-von Neumann-Sedov blast wave/</a> test case (<a class="el" href="md_testcases_sedov__r_e_a_d_m_e.html">README</a>) </li>
-</ul>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
-    <!--
     milupHPC  - Getting started<br />
-    Generated on Wed Jun 29 2022 11:18:50 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    -->
+    Generated on Thu Jun 23 2022 16:11:20 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
   </small></address>
 </body>
 <footer>
-  <custom-footer color="white" background="#2E4053">
-    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
-    <div second>
-      <div style="text-align: center">
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-        </div>
-      </div>
-    </div>
-    <div third>
-      milupHPC  - Getting started<br />
-      Generated on Wed Jun 29 2022 11:18:50 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    </div>
-  </custom-footer>
+  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
+  <div id="banner-footer-first"></div>
+  <div id="banner-footer-second"></div>
+  <script>
+    function topFunction() {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+  </script>
 </footer>
-<!--
-<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
--->
-<script src="components/hamburger/runtime.js" type="module"></script><script src="components/hamburger/polyfills.js" type="module"></script><script src="components/hamburger/main.js" type="module"></script>
-<script src="components/header/runtime.js" type="module"></script><script src="components/header/polyfills.js" type="module"></script><script src="components/header/main.js" type="module"></script>
-<script src="components/icons/runtime.js" type="module"></script><script src="components/icons/polyfills.js" type="module"></script><script src="components/icons/main.js" type="module"></script>
-<script src="components/footer/runtime.js" type="module"></script><script src="components/footer/polyfills.js" type="module"></script><script src="components/footer/main.js" type="module"></script>
-<script src="components/dialog/runtime.js" type="module"></script><script src="components/dialog/polyfills.js" type="module"></script><script src="components/dialog/main.js" type="module"></script>
-<script src="components/copyable/runtime.js" type="module"></script><script src="components/copyable/polyfills.js" type="module"></script><script src="components/copyable/main.js" type="module"></script>
-<!--
-<script>
-  function toggle() {
-    var elem = document.getElementById("side-nav");
-    console.log(elem);
-    elem.toggleSideNav(false);
-  }
-</script>
--->
-<!--
-<script>
-  function topFunction() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  }
-</script>
--->
 </html>

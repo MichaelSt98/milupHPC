@@ -1,6 +1,6 @@
 <map id="include/helper.cuh" name="include/helper.cuh">
 <area shape="rect" id="node1" title=" " alt="" coords="144,5,271,32"/>
-<area shape="rect" id="node2" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="125,229,216,256"/>
+<area shape="rect" id="node2" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="125,229,216,256"/>
 <area shape="rect" id="node5" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="114,80,301,107"/>
 <area shape="rect" id="node7" href="$cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers." alt="" coords="22,155,132,181"/>
 <area shape="rect" id="node9" title=" " alt="" coords="376,80,480,107"/>

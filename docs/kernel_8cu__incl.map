@@ -3,7 +3,7 @@
 <area shape="rect" id="node2" href="$kernel_8cuh.html" title=" " alt="" coords="124,80,300,107"/>
 <area shape="rect" id="node19" href="$cuda__launcher_8cuh.html" title="CUDA Kernel wrapper execution." alt="" coords="665,155,831,196"/>
 <area shape="rect" id="node3" href="$particles_8cuh.html" title="Particle struct as Structure of arrays both instantiable on host and device." alt="" coords="81,162,189,189"/>
-<area shape="rect" id="node4" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="285,393,376,420"/>
+<area shape="rect" id="node4" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="285,393,376,420"/>
 <area shape="rect" id="node10" title=" " alt="" coords="100,319,169,345"/>
 <area shape="rect" id="node12" href="$helper_8cuh.html" title=" " alt="" coords="451,162,544,189"/>
 <area shape="rect" id="node18" href="$linalg_8cuh.html" title="Linear algebra CUDA kernels and device functions." alt="" coords="213,162,365,189"/>

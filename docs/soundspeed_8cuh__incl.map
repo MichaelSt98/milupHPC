@@ -1,7 +1,7 @@
 <map id="include/sph/soundspeed.cuh" name="include/sph/soundspeed.cuh">
 <area shape="rect" id="node1" title="Calculating and initializing the speed of sound in dependence of the used equation of state." alt="" coords="628,5,815,32"/>
 <area shape="rect" id="node2" href="$particles_8cuh.html" title="Particle struct as Structure of arrays both instantiable on host and device." alt="" coords="810,244,918,271"/>
-<area shape="rect" id="node3" href="$include_2parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="520,468,611,495"/>
+<area shape="rect" id="node3" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="520,468,611,495"/>
 <area shape="rect" id="node6" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="472,319,659,345"/>
 <area shape="rect" id="node8" href="$cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers." alt="" coords="394,393,505,420"/>
 <area shape="rect" id="node11" href="$subdomain_8cuh.html" title="Classes and Kernels handling subdomains that distribute the workload among the MPI processes." alt="" coords="509,80,664,121"/>

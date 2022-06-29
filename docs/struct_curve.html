@@ -1,26 +1,14 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
+<!--<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+-->
 <head>
-	<meta charset="utf-8">
-	<title>CodePortray</title>
-	<base href="/">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--
 	<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
-	-->
 	<meta name="generator" content="Doxygen 1.9.3"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>milupHPC: Curve Struct Reference</title>
-	<title>Curve Struct Reference</title>
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-	<link href="https://fonts.googleapis.com/css2?family=Alata&amp;display=swap" rel="stylesheet" type="text/css">
-	<link rel="stylesheet" href="components/side-nav/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/hamburger/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/header/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/icons/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/dialog/styles.css" type="text/css">
-	<link rel="stylesheet" href="components/copyable/styles.css" type="text/css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -34,68 +22,42 @@ MathJax.Hub.Config({
 });
 </script>
 <script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
-	<link href="doxygen-custom.css" rel="stylesheet" type="text/css"/>
+	<link href="doxygen-custom.css" rel="stylesheet" type="text/css" />
+	<!-- Add icon library -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- Add font awesome icons -->
+	<!--HIGHLIGHT.JS INSTALL BEGIN
+	<link rel="stylesheet" href="github.min.css">
+	<script src="highlight.js"></script>
+	<script>
+		$(function() {
+			hljs.configure({useBR: false});
+			$(".fragment").each(function(i,node) {
+				$(node).removeClass("fragment");
+				hljs.highlightBlock(node);
+			});
+		});
+	</script>
+	HIGHLIGHT.JS INSTALL END-->
 </head>
 <body>
-<custom-header class="custom-header-class">
-	<!--<custom-hamburger menu onclick="toggle()"></custom-hamburger>-->
-	<a menu href="https://michaelst98.github.io/milupHPC/"><custom-icon icon="home" color="white" background="black"></custom-icon></a>
-	<div shortcuts style="display: table">
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-		</div>
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="Youtube: CPTuebingen" href="https://www.youtube.com/user/CPTuebingen"><custom-icon icon="youtube" color="white" background="#DB0000"></custom-icon></a>
-		</div>
-		<!-- get the code ... -->
-		<!--<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>-->
-		<div style="display: table-cell; padding-right: 2px">
-			<custom-dialog window-width="600px" window-height="400px">
-				<span open><custom-icon title="Get the code" icon="code" color="white" background="black"></custom-icon></span>
-				<div title>Get the code: milupHPC!</div>
-				<div style="text-align: center; padding-top: 20px;">
-					<div>The code is publicly available on GitHub: <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>
-					<!--<div><a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a></div>-->
-					<!--<a href="https://github.com/MichaelSt98/milupHPC">github.com/MichaelSt98/milupHPC</a>-->
-					<div style="padding-top: 40px">clone via HTTPS:</div>
-					<custom-copyable copy-text="https://github.com/MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">clone via SSH:</div>
-					<custom-copyable copy-text="git@github.com:MichaelSt98/milupHPC.git" width="none" height="33px">
-						<custom-icon icon="clone" color="white" background="black" size="15px"></custom-icon>
-					</custom-copyable>
-					<div style="padding-top: 20px">or download as zip: <a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a></div>
-					<!--<a href="https://github.com/MichaelSt98/milupHPC/archive/refs/heads/main.zip"><custom-icon icon="file-archive-o" color="white" background="black"></custom-icon></a>-->
-				</div>
-				<!--<div footer>This is the footer</div>-->
-			</custom-dialog>
-		</div>
-		<!-- end: get the code .... -->
-		<div style="display: table-cell; padding-right: 2px">
-			<a title="License" href="https://github.com/MichaelSt98/milupHPC/blob/main/LICENSE"><custom-icon icon="balance-scale" color="white" background="#000000"></custom-icon></a>
-		</div>
-		<!--<a href=""><custom-icon url="https://www.google.com" icon="terminal" color="white" background="black"></custom-icon></a>-->
-	</div>
-</custom-header>
-	<!--
-	<custom-side-nav id="side-nav" nav-width="300">
-		<custom-icon url="https://www.google.com" icon="code" color="white" background="black"></custom-icon>
-		<div>test</div>
-	</custom-side-nav>
-	-->
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation
+				milupHPC documentation <!-- Curve Struct Reference -->
 			</span>
+			<!-- <span class="search">
+				<input type="text" placeholder="Search" onkeydown="search(this,event);">
+			</span> -->
 		</div>
+    <!--
+	<div class="icon-bar">
+		<a href="https://www.tat.physik.uni-tuebingen.de/~schaefer/#codes" class="fa fa-university"></a>
+		<a href="https://github.com/MichaelSt98/milupHPC" class="fa fa-github"></a>
+		<a href="https://en.wikipedia.org/wiki/Smoothed-particle_hydrodynamics" class="fa fa-wikipedia-w"></a>
+	</div>
+	</div>
+	-->
 	<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <!-- Generated by Doxygen 1.9.3 -->
 <script type="text/javascript">
@@ -143,7 +105,7 @@ $(function() {
 <p>Available space-filling curves.  
  <a href="struct_curve.html#details">More...</a></p>
 
-<p><code>#include &quot;<a class="el" href="include_2parameter_8h_source.html">parameter.h</a>&quot;</code></p>
+<p><code>#include &quot;<a class="el" href="parameter_8h_source.html">parameter.h</a>&quot;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for Curve:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -157,69 +119,21 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a4269858acf8d67e3cd222466771848b9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a> { <br />
-&#160;&#160;<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">lebesgue</a>
+<tr class="memitem:a4269858acf8d67e3cd222466771848b9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a> { <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">lebesgue</a>
 , <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">hilbert</a>
 , <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">lebesgue</a>
 , <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">hilbert</a>
-, <br />
-&#160;&#160;<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">lebesgue</a>
-, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">hilbert</a>
-, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">lebesgue</a>
-, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">hilbert</a>
-<br />
  }</td></tr>
 <tr class="separator:a4269858acf8d67e3cd222466771848b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4269858acf8d67e3cd222466771848b9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a> { <br />
-&#160;&#160;<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">lebesgue</a>
+<tr class="memitem:a4269858acf8d67e3cd222466771848b9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a> { <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">lebesgue</a>
 , <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">hilbert</a>
 , <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">lebesgue</a>
 , <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">hilbert</a>
-, <br />
-&#160;&#160;<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">lebesgue</a>
-, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">hilbert</a>
-, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">lebesgue</a>
-, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">hilbert</a>
-<br />
- }</td></tr>
-<tr class="separator:a4269858acf8d67e3cd222466771848b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4269858acf8d67e3cd222466771848b9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a> { <br />
-&#160;&#160;<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">lebesgue</a>
-, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">hilbert</a>
-, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">lebesgue</a>
-, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">hilbert</a>
-, <br />
-&#160;&#160;<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">lebesgue</a>
-, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">hilbert</a>
-, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">lebesgue</a>
-, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">hilbert</a>
-<br />
- }</td></tr>
-<tr class="separator:a4269858acf8d67e3cd222466771848b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4269858acf8d67e3cd222466771848b9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a> { <br />
-&#160;&#160;<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">lebesgue</a>
-, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">hilbert</a>
-, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">lebesgue</a>
-, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">hilbert</a>
-, <br />
-&#160;&#160;<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">lebesgue</a>
-, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">hilbert</a>
-, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052">lebesgue</a>
-, <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a">hilbert</a>
-<br />
  }</td></tr>
 <tr class="separator:a4269858acf8d67e3cd222466771848b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa23fab9ccef7e492b1e279582ba026c0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_curve.html#aa23fab9ccef7e492b1e279582ba026c0">Curve</a> (<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a> t)</td></tr>
-<tr class="separator:aa23fab9ccef7e492b1e279582ba026c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b5efbd786934b5e4812cc4421b70b48"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_curve.html#a7b5efbd786934b5e4812cc4421b70b48">operator Type</a> () const</td></tr>
-<tr class="separator:a7b5efbd786934b5e4812cc4421b70b48"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa23fab9ccef7e492b1e279582ba026c0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_curve.html#aa23fab9ccef7e492b1e279582ba026c0">Curve</a> (<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a> t)</td></tr>
-<tr class="separator:aa23fab9ccef7e492b1e279582ba026c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b5efbd786934b5e4812cc4421b70b48"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_curve.html#a7b5efbd786934b5e4812cc4421b70b48">operator Type</a> () const</td></tr>
-<tr class="separator:a7b5efbd786934b5e4812cc4421b70b48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa23fab9ccef7e492b1e279582ba026c0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_curve.html#aa23fab9ccef7e492b1e279582ba026c0">Curve</a> (<a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a> t)</td></tr>
 <tr class="separator:aa23fab9ccef7e492b1e279582ba026c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b5efbd786934b5e4812cc4421b70b48"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_curve.html#a7b5efbd786934b5e4812cc4421b70b48">operator Type</a> () const</td></tr>
@@ -242,12 +156,6 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:ade00eb3bca60d1575cd034bfbb7bb1d7"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:ade00eb3bca60d1575cd034bfbb7bb1d7"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="struct_curve.html#ade00eb3bca60d1575cd034bfbb7bb1d7">operator T</a> () const</td></tr>
 <tr class="separator:ade00eb3bca60d1575cd034bfbb7bb1d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade00eb3bca60d1575cd034bfbb7bb1d7"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ade00eb3bca60d1575cd034bfbb7bb1d7"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="struct_curve.html#ade00eb3bca60d1575cd034bfbb7bb1d7">operator T</a> () const</td></tr>
-<tr class="separator:ade00eb3bca60d1575cd034bfbb7bb1d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade00eb3bca60d1575cd034bfbb7bb1d7"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ade00eb3bca60d1575cd034bfbb7bb1d7"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="struct_curve.html#ade00eb3bca60d1575cd034bfbb7bb1d7">operator T</a> () const</td></tr>
-<tr class="separator:ade00eb3bca60d1575cd034bfbb7bb1d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Available space-filling curves. </p>
@@ -258,10 +166,10 @@ Private Member Functions</h2></td></tr>
 </ul>
 <p >whereas Hilbert SFC are derived from Lebesgue SFC. </p>
 
-<p class="definition">Definition at line <a class="el" href="include_2parameter_8h_source.html#l00203">203</a> of file <a class="el" href="include_2parameter_8h_source.html">parameter.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parameter_8h_source.html#l00203">203</a> of file <a class="el" href="parameter_8h_source.html">parameter.h</a>.</p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a4269858acf8d67e3cd222466771848b9" name="a4269858acf8d67e3cd222466771848b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4269858acf8d67e3cd222466771848b9">&#9670;&nbsp;</a></span>Type <span class="overload">[1/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a4269858acf8d67e3cd222466771848b9">&#9670;&nbsp;</a></span>Type <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -273,21 +181,17 @@ Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052" name="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052"></a>lebesgue&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a" name="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a"></a>hilbert&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052" name="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052"></a>lebesgue&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a" name="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a"></a>hilbert&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052" name="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052"></a>lebesgue&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a" name="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a"></a>hilbert&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052" name="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052"></a>lebesgue&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a" name="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a"></a>hilbert&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="include_2parameter_8h_source.html#l00205">205</a> of file <a class="el" href="include_2parameter_8h_source.html">parameter.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parameter_8h_source.html#l00205">205</a> of file <a class="el" href="parameter_8h_source.html">parameter.h</a>.</p>
 
 </div>
 </div>
 <a id="a4269858acf8d67e3cd222466771848b9" name="a4269858acf8d67e3cd222466771848b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4269858acf8d67e3cd222466771848b9">&#9670;&nbsp;</a></span>Type <span class="overload">[2/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a4269858acf8d67e3cd222466771848b9">&#9670;&nbsp;</a></span>Type <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -299,10 +203,6 @@ Private Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052" name="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052"></a>lebesgue&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a" name="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a"></a>hilbert&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052" name="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052"></a>lebesgue&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a" name="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a"></a>hilbert&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052" name="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052"></a>lebesgue&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a" name="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a"></a>hilbert&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052" name="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052"></a>lebesgue&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a" name="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a"></a>hilbert&#160;</td><td class="fielddoc"></td></tr>
@@ -312,61 +212,9 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a4269858acf8d67e3cd222466771848b9" name="a4269858acf8d67e3cd222466771848b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4269858acf8d67e3cd222466771848b9">&#9670;&nbsp;</a></span>Type <span class="overload">[3/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052" name="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052"></a>lebesgue&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a" name="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a"></a>hilbert&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052" name="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052"></a>lebesgue&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a" name="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a"></a>hilbert&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052" name="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052"></a>lebesgue&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a" name="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a"></a>hilbert&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052" name="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052"></a>lebesgue&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a" name="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a"></a>hilbert&#160;</td><td class="fielddoc"></td></tr>
-</table>
-
-<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00205">205</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
-
-</div>
-</div>
-<a id="a4269858acf8d67e3cd222466771848b9" name="a4269858acf8d67e3cd222466771848b9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4269858acf8d67e3cd222466771848b9">&#9670;&nbsp;</a></span>Type <span class="overload">[4/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Curve::Type</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052" name="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052"></a>lebesgue&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a" name="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a"></a>hilbert&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052" name="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052"></a>lebesgue&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a" name="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a"></a>hilbert&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052" name="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052"></a>lebesgue&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a" name="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a"></a>hilbert&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052" name="a4269858acf8d67e3cd222466771848b9a16dfb5ba06923c2241d208efec2f3052"></a>lebesgue&#160;</td><td class="fielddoc"></td></tr>
-<tr><td class="fieldname"><a id="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a" name="a4269858acf8d67e3cd222466771848b9a77f44d732cf91068c642ce1b5860544a"></a>hilbert&#160;</td><td class="fielddoc"></td></tr>
-</table>
-
-<p class="definition">Definition at line <a class="el" href="testcases_2sedov_2parameter_8h_source.html#l00204">204</a> of file <a class="el" href="testcases_2sedov_2parameter_8h_source.html">parameter.h</a>.</p>
-
-</div>
-</div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aa23fab9ccef7e492b1e279582ba026c0" name="aa23fab9ccef7e492b1e279582ba026c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa23fab9ccef7e492b1e279582ba026c0">&#9670;&nbsp;</a></span>Curve() <span class="overload">[1/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa23fab9ccef7e492b1e279582ba026c0">&#9670;&nbsp;</a></span>Curve() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -389,12 +237,12 @@ Private Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="include_2parameter_8h_source.html#l00210">210</a> of file <a class="el" href="include_2parameter_8h_source.html">parameter.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parameter_8h_source.html#l00210">210</a> of file <a class="el" href="parameter_8h_source.html">parameter.h</a>.</p>
 
 </div>
 </div>
 <a id="aa23fab9ccef7e492b1e279582ba026c0" name="aa23fab9ccef7e492b1e279582ba026c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa23fab9ccef7e492b1e279582ba026c0">&#9670;&nbsp;</a></span>Curve() <span class="overload">[2/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa23fab9ccef7e492b1e279582ba026c0">&#9670;&nbsp;</a></span>Curve() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -421,65 +269,9 @@ Private Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aa23fab9ccef7e492b1e279582ba026c0" name="aa23fab9ccef7e492b1e279582ba026c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa23fab9ccef7e492b1e279582ba026c0">&#9670;&nbsp;</a></span>Curve() <span class="overload">[3/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Curve::Curve </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a>&#160;</td>
-          <td class="paramname"><em>t</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00210">210</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
-
-</div>
-</div>
-<a id="aa23fab9ccef7e492b1e279582ba026c0" name="aa23fab9ccef7e492b1e279582ba026c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa23fab9ccef7e492b1e279582ba026c0">&#9670;&nbsp;</a></span>Curve() <span class="overload">[4/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Curve::Curve </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a>&#160;</td>
-          <td class="paramname"><em>t</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="testcases_2sedov_2parameter_8h_source.html#l00209">209</a> of file <a class="el" href="testcases_2sedov_2parameter_8h_source.html">parameter.h</a>.</p>
-
-</div>
-</div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="ade00eb3bca60d1575cd034bfbb7bb1d7" name="ade00eb3bca60d1575cd034bfbb7bb1d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade00eb3bca60d1575cd034bfbb7bb1d7">&#9670;&nbsp;</a></span>operator T() <span class="overload">[1/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ade00eb3bca60d1575cd034bfbb7bb1d7">&#9670;&nbsp;</a></span>operator T() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -506,61 +298,7 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <a id="ade00eb3bca60d1575cd034bfbb7bb1d7" name="ade00eb3bca60d1575cd034bfbb7bb1d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade00eb3bca60d1575cd034bfbb7bb1d7">&#9670;&nbsp;</a></span>operator T() <span class="overload">[2/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Curve::operator T </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ade00eb3bca60d1575cd034bfbb7bb1d7" name="ade00eb3bca60d1575cd034bfbb7bb1d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade00eb3bca60d1575cd034bfbb7bb1d7">&#9670;&nbsp;</a></span>operator T() <span class="overload">[3/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Curve::operator T </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ade00eb3bca60d1575cd034bfbb7bb1d7" name="ade00eb3bca60d1575cd034bfbb7bb1d7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade00eb3bca60d1575cd034bfbb7bb1d7">&#9670;&nbsp;</a></span>operator T() <span class="overload">[4/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ade00eb3bca60d1575cd034bfbb7bb1d7">&#9670;&nbsp;</a></span>operator T() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -587,7 +325,7 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <a id="a7b5efbd786934b5e4812cc4421b70b48" name="a7b5efbd786934b5e4812cc4421b70b48"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b5efbd786934b5e4812cc4421b70b48">&#9670;&nbsp;</a></span>operator Type() <span class="overload">[1/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b5efbd786934b5e4812cc4421b70b48">&#9670;&nbsp;</a></span>operator Type() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -609,12 +347,12 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="include_2parameter_8h_source.html#l00211">211</a> of file <a class="el" href="include_2parameter_8h_source.html">parameter.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parameter_8h_source.html#l00211">211</a> of file <a class="el" href="parameter_8h_source.html">parameter.h</a>.</p>
 
 </div>
 </div>
 <a id="a7b5efbd786934b5e4812cc4421b70b48" name="a7b5efbd786934b5e4812cc4421b70b48"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b5efbd786934b5e4812cc4421b70b48">&#9670;&nbsp;</a></span>operator Type() <span class="overload">[2/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b5efbd786934b5e4812cc4421b70b48">&#9670;&nbsp;</a></span>operator Type() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -640,60 +378,6 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a7b5efbd786934b5e4812cc4421b70b48" name="a7b5efbd786934b5e4812cc4421b70b48"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b5efbd786934b5e4812cc4421b70b48">&#9670;&nbsp;</a></span>operator Type() <span class="overload">[3/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Curve::operator <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="testcases_2plummer_2parameter_8h_source.html#l00211">211</a> of file <a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a>.</p>
-
-</div>
-</div>
-<a id="a7b5efbd786934b5e4812cc4421b70b48" name="a7b5efbd786934b5e4812cc4421b70b48"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b5efbd786934b5e4812cc4421b70b48">&#9670;&nbsp;</a></span>operator Type() <span class="overload">[4/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Curve::operator <a class="el" href="struct_curve.html#a4269858acf8d67e3cd222466771848b9">Type</a> </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="testcases_2sedov_2parameter_8h_source.html#l00210">210</a> of file <a class="el" href="testcases_2sedov_2parameter_8h_source.html">parameter.h</a>.</p>
-
-</div>
-</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a7d7b6984a47618a0eb5bccbc84888d43" name="a7d7b6984a47618a0eb5bccbc84888d43"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7d7b6984a47618a0eb5bccbc84888d43">&#9670;&nbsp;</a></span>t_</h2>
@@ -707,71 +391,30 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="include_2parameter_8h_source.html#l00209">209</a> of file <a class="el" href="include_2parameter_8h_source.html">parameter.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="parameter_8h_source.html#l00209">209</a> of file <a class="el" href="parameter_8h_source.html">parameter.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this struct was generated from the following files:<ul>
-<li>include/<a class="el" href="include_2parameter_8h_source.html">parameter.h</a></li>
+<li>include/<a class="el" href="parameter_8h_source.html">parameter.h</a></li>
 <li>include/<a class="el" href="parameter__backup_8h_source.html">parameter_backup.h</a></li>
-<li>testcases/plummer/<a class="el" href="testcases_2plummer_2parameter_8h_source.html">parameter.h</a></li>
-<li>testcases/sedov/<a class="el" href="testcases_2sedov_2parameter_8h_source.html">parameter.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
-    <!--
     milupHPC  - Curve Struct Reference<br />
-    Generated on Wed Jun 29 2022 11:18:50 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    -->
+    Generated on Thu Jun 23 2022 16:11:20 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
   </small></address>
 </body>
 <footer>
-  <custom-footer color="white" background="#2E4053">
-    <div first>API documentation for milupHPC - a parallel SPH & Barnes-Hut code targeting GPU cluster via CUDA-aware MPI</div>
-    <div second>
-      <div style="text-align: center">
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="GitHub: milupHPC" href="https://github.com/MichaelSt98/milupHPC"><custom-icon icon="github" color="white" background="#2A2D32"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Computational physics Tübingen" href="https://uni-tuebingen.de/en/faculties/faculty-of-science/departments/physics/institutes/astronomy-astrophysics/computational-physics/welcome/"><custom-icon icon="university" color="white" background="#8D2439"></custom-icon></a>
-        </div>
-        <div style="display: inline-block; padding-right: 2px; padding-top: 2px">
-          <a title="Wikipedia: Smoothed particle hydrodynamics" href="https://de.wikipedia.org/wiki/Smoothed_Particle_Hydrodynamics"><custom-icon icon="wikipedia-w" color="black" background="lightgrey"></custom-icon></a>
-        </div>
-      </div>
-    </div>
-    <div third>
-      milupHPC  - Curve Struct Reference<br />
-      Generated on Wed Jun 29 2022 11:18:50 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
-    </div>
-  </custom-footer>
+  <button onclick="topFunction()" id="myBtn" title="Go to top">Got to top</button>
+  <div id="banner-footer-first"></div>
+  <div id="banner-footer-second"></div>
+  <script>
+    function topFunction() {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    }
+  </script>
 </footer>
-<!--
-<script src="components/side-nav/runtime.js" type="module"></script><script src="components/side-nav/polyfills.js" type="module"></script><script src="components/side-nav/main.js" type="module"></script>
--->
-<script src="components/hamburger/runtime.js" type="module"></script><script src="components/hamburger/polyfills.js" type="module"></script><script src="components/hamburger/main.js" type="module"></script>
-<script src="components/header/runtime.js" type="module"></script><script src="components/header/polyfills.js" type="module"></script><script src="components/header/main.js" type="module"></script>
-<script src="components/icons/runtime.js" type="module"></script><script src="components/icons/polyfills.js" type="module"></script><script src="components/icons/main.js" type="module"></script>
-<script src="components/footer/runtime.js" type="module"></script><script src="components/footer/polyfills.js" type="module"></script><script src="components/footer/main.js" type="module"></script>
-<script src="components/dialog/runtime.js" type="module"></script><script src="components/dialog/polyfills.js" type="module"></script><script src="components/dialog/main.js" type="module"></script>
-<script src="components/copyable/runtime.js" type="module"></script><script src="components/copyable/polyfills.js" type="module"></script><script src="components/copyable/main.js" type="module"></script>
-<!--
-<script>
-  function toggle() {
-    var elem = document.getElementById("side-nav");
-    console.log(elem);
-    elem.toggleSideNav(false);
-  }
-</script>
--->
-<!--
-<script>
-  function topFunction() {
-    document.body.scrollTop = 0; // For Safari
-    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  }
-</script>
--->
 </html>
