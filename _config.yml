@@ -1,0 +1,4 @@
+include:
+  - "_*.html"
+  - "_*.png"
+  - "_*.map"
