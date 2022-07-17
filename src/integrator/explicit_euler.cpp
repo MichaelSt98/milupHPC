@@ -64,19 +64,29 @@ void ExplicitEuler::integrate(int step) {
         profiler.value2file(ProfilerIds::Time::rhs, time);
         profiler.value2file(ProfilerIds::Time::rhsElapsed, timeElapsed);
 
+#if TARGET_GPU
         time = ExplicitEulerNS::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal,
                                                 *simulationTimeHandler->h_dt); //(real) simulationParameters.timestep);
+#else
+        // TODO: CPU ExplicitEulerNS::update()
+#endif // TARGET_GPU
 
         profiler.value2file(ProfilerIds::Time::integrate, time);
 
         //Logger(INFO) << "timestep: " << (real) simulationParameters.timestep;
 
         *simulationTimeHandler->h_currentTime += *simulationTimeHandler->h_dt;
-        simulationTimeHandler->copy(To::device);
 
+#if TARGET_GPU
+        simulationTimeHandler->copy(To::device);
+#endif
+
+#if TARGET_GPU
 #if INTEGRATE_SML
         cuda::set(particleHandler->d_dsmldt, (real)0, numParticles);
 #endif
+#endif
+
 
         Logger(TRACE) << "finished sub step - simulation time: " << *simulationTimeHandler->h_currentTime
                      << " (STEP: " << step << " | subStep: " << subStep
@@ -84,7 +94,9 @@ void ExplicitEuler::integrate(int step) {
                      << *simulationTimeHandler->h_subEndTime << "/"
                      << *simulationTimeHandler->h_endTime << ")";
 
+#if TARGET_GPU
         subDomainKeyTreeHandler->copy(To::host, true, false);
+#endif
         profiler.vector2file(ProfilerIds::ranges, subDomainKeyTreeHandler->h_range);
 
         boost::mpi::communicator comm;

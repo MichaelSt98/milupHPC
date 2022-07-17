@@ -10,8 +10,9 @@
 #ifndef MILUPHPC_CUDA_RUNTIME_H
 #define MILUPHPC_CUDA_RUNTIME_H
 
-#include "cuda_utilities.cuh"
 #include "../parameter.h"
+#if TARGET_GPU
+#include "cuda_utilities.cuh"
 
 namespace cuda {
 
@@ -84,5 +85,5 @@ namespace cuda {
 
 }
 
-
+#endif // TARGET_GPU
 #endif //MILUPHPC_CUDA_RUNTIME_H

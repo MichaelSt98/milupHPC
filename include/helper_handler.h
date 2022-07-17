@@ -17,6 +17,7 @@ public:
     int sumParticles;
     int numNodes;
 
+#if TARGET_GPU
     integer *d_integerVal;
     integer *d_integerVal1;
     integer *d_integerVal2;
@@ -47,6 +48,7 @@ public:
     keyType *d_keyTypeBuffer2; //sumParticles
 
     Helper *d_helper;
+#endif // TARGET_GPU
 
     HelperHandler(int numProcesses, int numParticlesLocal, int numParticles, int sumParticles, int numNodes);
     ~HelperHandler();

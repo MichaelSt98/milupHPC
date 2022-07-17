@@ -22,15 +22,18 @@
 #include "../utils/logger.h"
 
 #include <fstream>
-#include <libconfig.h>
+#include <libconfig.h++>
 
 /**
  * @brief Read material config files.
+ *
+ * Utilizing library *libconfig*: [hyperrealm.github.io/libconfig](https://hyperrealm.github.io/libconfig/).
  */
 class LibConfigReader {
 public:
-    config_t config;
-    config_setting_t *materials;
+
+    libconfig::Config config;
+
     /**
      * Load/read config file.
      *
@@ -54,8 +57,10 @@ public:
     integer numMaterials;
     /// host instance of material class
     Material *h_materials;
+#if TARGET_GPU
     /// device instance of material class
     Material *d_materials;
+#endif
 
     /**
      * @brief Constructor.

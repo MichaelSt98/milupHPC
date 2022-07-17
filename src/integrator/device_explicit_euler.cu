@@ -1,4 +1,5 @@
 #include "../../include/integrator/device_explicit_euler.cuh"
+#if TARGET_GPU
 #include "../../include/cuda_utils/cuda_launcher.cuh"
 
 __global__ void ExplicitEulerNS::Kernel::update(Particles *particles, integer n, real dt) {
@@ -59,3 +60,4 @@ real ExplicitEulerNS::Kernel::Launch::update(Particles *particles, integer n, re
     return cuda::launch(true, executionPolicy, ::ExplicitEulerNS::Kernel::update, particles, n, dt);
 
 }
+#endif

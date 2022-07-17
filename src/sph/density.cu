@@ -1,4 +1,5 @@
 #include "../../include/sph/density.cuh"
+#if TARGET_GPU
 #include "../include/cuda_utils/cuda_launcher.cuh"
 
 namespace SPH {
@@ -80,3 +81,4 @@ namespace SPH {
 
     }
 }
+#endif // TARGET_GPU

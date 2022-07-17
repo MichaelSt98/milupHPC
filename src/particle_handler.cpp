@@ -124,6 +124,7 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
 
     h_particles = new Particles();
 
+#if TARGET_GPU
     cuda::malloc(d_numParticles, 1);
     cuda::malloc(d_numNodes, 1);
 
@@ -256,7 +257,7 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
 #endif
 
     cuda::malloc(d_particles, 1);
-
+#endif // TARGET_GPU
 
 #if DIM == 1
     h_particles->set(&numParticles, &numNodes, h_mass, h_x, h_vx, h_ax, h_level, h_uid, h_materialId, h_sml, h_nnl,
@@ -271,9 +272,11 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
 #else
     h_particles->set(&numParticles, &numNodes, h_mass, h_x, h_y, h_z, h_vx, h_vy, h_vz, h_ax, h_ay, h_az,
                      h_level, h_uid, h_materialId, h_sml, h_nnl, h_noi, h_e, h_dedt, h_cs, h_rho, h_p);
+#if TARGET_GPU
     ParticlesNS::Kernel::Launch::set(d_particles, d_numParticles, d_numNodes, d_mass, d_x, d_y, d_z, d_vx, d_vy, d_vz,
                                      d_ax, d_ay, d_az, d_level, d_uid, d_materialId, d_sml,
                                      d_nnl, d_noi, d_e, d_dedt, d_cs, d_rho, d_p);
+#endif // TARGET_GPU
 #endif
 
 #if DIM == 1
@@ -284,33 +287,48 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     ParticlesNS::Kernel::Launch::setGravity(d_particles, d_g_ax, d_g_ay);
 #else
     h_particles->setGravity(h_g_ax, h_g_ay, h_g_az);
+#if TARGET_GPU
     ParticlesNS::Kernel::Launch::setGravity(d_particles, d_g_ax, d_g_ay, d_g_az);
+#endif // TARGET_GPU
 #endif
 
     h_particles->setNodeType(h_nodeType);
+#if TARGET_GPU
     ParticlesNS::Kernel::Launch::setNodeType(d_particles, d_nodeType);
+#endif // TARGET_GPU
     h_particles->setU(h_u);
+#if TARGET_GPU
     ParticlesNS::Kernel::Launch::setU(d_particles, d_u);
+#endif // TARGET_GPU
 
 #if SPH_SIM
     h_particles->setArtificialViscosity(h_muijmax);
+#if TARGET_GPU
     ParticlesNS::Kernel::Launch::setArtificialViscosity(d_particles, d_muijmax);
-
+#endif // TARGET_GPU
 //#if INTEGRATE_DENSITY
     h_particles->setIntegrateDensity(h_drhodt);
+#if TARGET_GPU
     ParticlesNS::Kernel::Launch::setIntegrateDensity(d_particles, d_drhodt);
+#endif // TARGET_GPU
 //#endif
 #if VARIABLE_SML || INTEGRATE_SML
     h_particles->setVariableSML(h_dsmldt);
+#if TARGET_GPU
     ParticlesNS::Kernel::Launch::setVariableSML(d_particles, d_dsmldt);
+#endif // TARGET_GPU
 #endif
 #if SML_CORRECTION
     h_particles->setSMLCorrection(h_sml_omega);
+#if TARGET_GPU
     ParticlesNS::Kernel::Launch::setSMLCorrection(d_particles, d_sml_omega);
+#endif // TARGET_GPU
 #endif
 #if NAVIER_STOKES
     h_particles->setNavierStokes(h_Tshear, h_eta);
+#if TARGET_GPU
     ParticlesNS::Kernel::Launch::setNavierStokes(d_particles, d_Tshear, d_eta);
+#endif // TARGET_GPU
 #endif
 #if SOLID
     h_particles->setSolid(h_S, h_dSdt, h_localStrain);
@@ -357,8 +375,10 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     ParticlesNS::Kernel::Launch::setDivCurl(d_particles, d_divv, d_curlv);
 #endif
 
+#if TARGET_GPU
     cuda::copy(&numParticles, d_numParticles, 1, To::device);
     cuda::copy(&numNodes, d_numNodes, 1, To::device);
+#endif // TARGET_GPU
 
 }
 
@@ -396,6 +416,7 @@ ParticleHandler::~ParticleHandler() {
     delete [] h_muijmax;
 #endif // SPH_SIM
 
+#if TARGET_GPU
     // device particle entries
     cuda::free(d_numParticles);
     cuda::free(d_numNodes);
@@ -431,14 +452,19 @@ ParticleHandler::~ParticleHandler() {
     cuda::free(_d_p);
     cuda::free(d_muijmax);
 #endif // SPH_SIM
+#endif // TARGET_GPU
 
 #if SPH_SIM
     delete [] h_muijmax;
+#if TARGET_GPU
     cuda::free(d_muijmax);
+#endif // TARGET_GPU
 
 //#if INTEGRATE_DENSITY
     delete [] _h_drhodt;
+#if TARGET_GPU
     cuda::free(_d_drhodt);
+#endif
 //#endif
 #if VARIABLE_SML || INTEGRATE_SML
     delete [] _h_dsmldt;
@@ -542,7 +568,9 @@ ParticleHandler::~ParticleHandler() {
 #endif
 
     delete h_particles;
+#if TARGET_GPU
     cuda::free(d_particles);
+#endif
 
 }
 
@@ -553,24 +581,30 @@ void ParticleHandler::initLeapfrog() {
     // TODO: should be numParticles instead of numNodes
     h_ax_old = new real[numNodes];
     h_g_ax_old = new real[numNodes];
+#if TARGET_GPU
     cuda::malloc(d_ax_old, numNodes);
     cuda::set(d_ax_old, (real)0, numNodes);
     cuda::malloc(d_g_ax_old, numNodes);
     cuda::set(d_g_ax_old, (real)0, numNodes);
+#endif // TARGET_GPU
 #if DIM > 1
     h_ay_old = new real[numNodes];
     h_g_ay_old = new real[numNodes];
+#if TARGET_GPU
     cuda::malloc(d_ay_old, numNodes);
     cuda::set(d_ay_old, (real)0, numNodes);
     cuda::malloc(d_g_ay_old, numNodes);
     cuda::set(d_g_ay_old, (real)0, numNodes);
+#endif // TARGET_GPU
 #if DIM == 3
     h_az_old = new real[numNodes];
     h_g_az_old = new real[numNodes];
+#if TARGET_GPU
     cuda::malloc(d_az_old, numNodes);
     cuda::set(d_az_old, (real)0, numNodes);
     cuda::malloc(d_g_az_old, numNodes);
     cuda::set(d_g_az_old, (real)0, numNodes);
+#endif // TARGET_GPU
 #endif
 #endif
 
@@ -580,7 +614,9 @@ void ParticleHandler::initLeapfrog() {
 
 #else
     h_particles->setLeapfrog(h_ax_old, h_ay_old, h_az_old, h_g_ax_old, h_g_ay_old, h_g_az_old);
+#if TARGET_GPU
     ParticlesNS::Kernel::Launch::setLeapfrog(d_particles, d_ax_old, d_ay_old, d_az_old, d_g_ax_old, d_g_ay_old, d_g_az_old);
+#endif // TARGET_GPU
 #endif
 
 }
@@ -588,13 +624,19 @@ void ParticleHandler::initLeapfrog() {
 void ParticleHandler::freeLeapfrog() {
 
     delete h_g_ax_old;
+#if TARGET_GPU
     cuda::free(d_g_ax_old);
+#endif // TARGET_GPU
 #if DIM > 1
     delete h_g_ay_old;
+#if TARGET_GPU
     cuda::free(d_g_ay_old);
+#endif // TARGET_GPU
 #if DIM == 3
     delete h_g_az_old;
+#if TARGET_GPU
     cuda::free(d_g_az_old);
+#endif // TARGET_GPU
 #endif
 #endif
 
@@ -603,6 +645,7 @@ void ParticleHandler::freeLeapfrog() {
 template <typename T>
 T*& ParticleHandler::getEntry(Entry::Name entry, Execution::Location location) {
     switch (location) {
+#if TARGET_GPU
         case Execution::device: {
             switch (entry) {
                 case Entry::x: {
@@ -627,6 +670,7 @@ T*& ParticleHandler::getEntry(Entry::Name entry, Execution::Location location) {
                 }
             }
         } break;
+#endif // TARGET_GPU
         case Execution::host: {
             switch (entry) {
                 case Entry::x: {
@@ -660,6 +704,7 @@ T*& ParticleHandler::getEntry(Entry::Name entry, Execution::Location location) {
 
 void ParticleHandler::setPointer(IntegratedParticleHandler *integratedParticleHandler) {
 
+#if TARGET_GPU
     d_x = integratedParticleHandler->d_x;
     d_vx = integratedParticleHandler->d_vx;
     d_ax = integratedParticleHandler->d_ax;
@@ -691,6 +736,7 @@ void ParticleHandler::setPointer(IntegratedParticleHandler *integratedParticleHa
     d_dsmldt = integratedParticleHandler->d_dsmldt;
 #endif
 #endif // SPH_SIM
+#endif // TARGET_GPU
 
 // Already redirected pointers, thus just call setter like in constructor
 #if DIM == 1
@@ -704,6 +750,7 @@ void ParticleHandler::setPointer(IntegratedParticleHandler *integratedParticleHa
     ParticlesNS::Kernel::Launch::set(d_particles, d_numParticles, d_numNodes, d_mass, d_x, d_y, d_vx, d_vy, d_ax, d_ay,
                                      d_level, d_uid, d_materialId, d_sml, d_nnl, d_noi, d_e, d_dedt, d_cs, d_rho, d_p);
 #else
+#if TARGET_GPU
     h_particles->set(&numParticles, &numNodes, h_mass, h_x, h_y, h_z, h_vx, h_vy, h_vz, h_ax, h_ay, h_az,
                      h_level, h_uid, h_materialId, h_sml, h_nnl, h_noi, h_e, h_dedt, h_cs, h_rho, h_p);
     h_particles->setIntegrateDensity(h_drhodt);
@@ -721,12 +768,14 @@ void ParticleHandler::setPointer(IntegratedParticleHandler *integratedParticleHa
     ParticlesNS::Kernel::Launch::setVariableSML(d_particles, d_dsmldt);
 #endif
 #endif
+#endif // TARGET_GPU
 #endif // SPH_SIM
 
 }
 
 void ParticleHandler::resetPointer() {
 
+#if TARGET_GPU
     d_x = _d_x;
     d_vx = _d_vx;
     d_ax = _d_ax;
@@ -759,6 +808,7 @@ void ParticleHandler::resetPointer() {
     d_dsmldt = _d_dsmldt;
 #endif
 #endif // SPH_SIM
+#endif // TARGET_GPU
 
 #if DIM == 1
     h_particles->set(&numParticles, &numNodes, h_mass, h_x, h_vx, h_ax, h_level, h_uid, h_materialId, h_sml, h_nnl,
@@ -771,6 +821,7 @@ void ParticleHandler::resetPointer() {
     ParticlesNS::Kernel::Launch::set(d_particles, d_numParticles, d_numNodes, d_mass, d_x, d_y, d_vx, d_vy, d_ax, d_ay,
                                      d_level, d_uid, d_materialId, d_sml, d_nnl, d_noi, d_e, d_dedt, d_cs, d_rho, d_p);
 #else
+#if TARGET_GPU
     h_particles->set(&numParticles, &numNodes, h_mass, h_x, h_y, h_z, h_vx, h_vy, h_vz, h_ax, h_ay, h_az,
                      h_level, h_uid, h_materialId, h_sml, h_nnl, h_noi, h_e, h_dedt, h_cs, h_rho, h_p);
     h_particles->setIntegrateDensity(h_drhodt);
@@ -788,6 +839,7 @@ void ParticleHandler::resetPointer() {
     ParticlesNS::Kernel::Launch::setVariableSML(d_particles, d_dsmldt);
 #endif
 #endif
+#endif // TARGET_GPU
 #endif // SPH_SIM
 
 }
@@ -801,22 +853,30 @@ void ParticleHandler::copyMass(To::Target target, bool includePseudoParticles) {
     else {
         length = numParticles;
     }
+#if TARGET_GPU
     cuda::copy(h_mass, d_mass, length, target);
+#endif // TARGET_GPU
 }
 
 void ParticleHandler::copyUid(To::Target target) {
     int length = numParticles;
+#if TARGET_GPU
     cuda::copy(h_uid, d_uid, length, target);
+#endif // TARGET_GPU
 }
 
 void ParticleHandler::copyMatId(To::Target target) {
     int length = numParticles;
+#if TARGET_GPU
     cuda::copy(h_materialId, d_materialId, length, target);
+#endif // TARGET_GPU
 }
 
 void ParticleHandler::copySML(To::Target target) {
     int length = numParticles;
+#if TARGET_GPU
     cuda::copy(h_sml, d_sml, length, target);
+#endif // TARGET_GPU
 }
 
 void ParticleHandler::copyPosition(To::Target target, bool includePseudoParticles) {
@@ -827,6 +887,7 @@ void ParticleHandler::copyPosition(To::Target target, bool includePseudoParticle
     else {
         length = numParticles;
     }
+#if TARGET_GPU
     cuda::copy(h_x, d_x, length, target);
 #if DIM > 1
     cuda::copy(h_y, d_y, length, target);
@@ -834,6 +895,7 @@ void ParticleHandler::copyPosition(To::Target target, bool includePseudoParticle
     cuda::copy(h_z, d_z, length, target);
 #endif
 #endif
+#endif // TARGET_GPU
 }
 
 void ParticleHandler::copyVelocity(To::Target target, bool includePseudoParticles) {
@@ -844,6 +906,7 @@ void ParticleHandler::copyVelocity(To::Target target, bool includePseudoParticle
     //else {
     //    length = numParticles;
     //}
+#if TARGET_GPU
     cuda::copy(h_vx, d_vx, length, target);
 #if DIM > 1
     cuda::copy(h_vy, d_vy, length, target);
@@ -851,6 +914,7 @@ void ParticleHandler::copyVelocity(To::Target target, bool includePseudoParticle
     cuda::copy(h_vz, d_vz, length, target);
 #endif
 #endif
+#endif // TARGET_GPU
 }
 
 void ParticleHandler::copyAcceleration(To::Target target, bool includePseudoParticles) {
@@ -861,6 +925,7 @@ void ParticleHandler::copyAcceleration(To::Target target, bool includePseudoPart
     //else {
     //    length = numParticles;
     //}
+#if TARGET_GPU
     cuda::copy(h_ax, d_ax, length, target);
 #if DIM > 1
     cuda::copy(h_ay, d_ay, length, target);
@@ -868,9 +933,11 @@ void ParticleHandler::copyAcceleration(To::Target target, bool includePseudoPart
     cuda::copy(h_az, d_az, length, target);
 #endif
 #endif
+#endif // TARGET_GPU
 }
 
 void ParticleHandler::copyDistribution(To::Target target, bool velocity, bool acceleration, bool includePseudoParticles) {
+#if TARGET_GPU
     copyUid(target);
     copyMass(target, includePseudoParticles);
     copyPosition(target, includePseudoParticles);
@@ -884,21 +951,25 @@ void ParticleHandler::copyDistribution(To::Target target, bool velocity, bool ac
     if (acceleration) {
         copyAcceleration(target, includePseudoParticles);
     }
+#endif // TARGET_GPU
 }
 
 void ParticleHandler::copySPH(To::Target target) {
     int length = numParticles;
+#if TARGET_GPU
     cuda::copy(h_rho, d_rho, length, target);
     cuda::copy(h_p, d_p, length, target);
     cuda::copy(h_e, d_e, length, target);
     cuda::copy(h_sml, d_sml, length, target);
     cuda::copy(h_noi, d_noi, length, target);
     cuda::copy(h_cs, d_cs, length, target);
+#endif // TARGET_GPU
 }
 
 IntegratedParticleHandler::IntegratedParticleHandler(integer numParticles, integer numNodes) :
                                                         numParticles(numParticles), numNodes(numNodes) {
 
+#if TARGET_GPU
     cuda::malloc(d_uid, numParticles);
 
     cuda::malloc(d_x, numNodes);
@@ -954,10 +1025,12 @@ IntegratedParticleHandler::IntegratedParticleHandler(integer numParticles, integ
     IntegratedParticlesNS::Kernel::Launch::setIntegrateSML(d_integratedParticles, d_dsmldt);
 #endif
 
+#endif // TARGET_GPU
 }
 
 IntegratedParticleHandler::~IntegratedParticleHandler() {
 
+#if TARGET_GPU
     cuda::free(d_uid);
 
     cuda::free(d_x);
@@ -991,6 +1064,8 @@ IntegratedParticleHandler::~IntegratedParticleHandler() {
 #endif
 
     cuda::free(d_integratedParticles);
+
+#endif // TARGET_GPU
 
 }
 

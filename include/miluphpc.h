@@ -47,8 +47,10 @@
 
 #include <iostream>
 #include <stdio.h>
+#if TARGET_GPU
 #include <cuda.h>
 #include <cuda_runtime.h>
+#endif
 #include <climits> // for ulong_max
 #include <algorithm>
 #include <cmath>
@@ -75,8 +77,7 @@ class Miluphpc {
 
 private:
 
-    // @todo implement serial versions in order to reduce overhead
-    //  arised from parallelization
+    // @todo implement serial versions in order to reduce overhead due to parallelization
     //real serial_tree();
     //real serial_pseudoParticles();
     //real serial_gravity();
@@ -111,33 +112,49 @@ private:
      */
     real boundingBox();
 
+    real cpu_tree();
+
+#if TARGET_GPU
     /**
      * @brief Parallel version regarding tree-stuff.
      *
      * @return accumulated time of functions within
      */
     real parallel_tree();
+#endif
 
+    real cpu_pseudoParticles();
+
+#if TARGET_GPU
     /**
      * @brief Parallel version regarding computation of pseudo-particles.
      *
      * @return accumulated time of functions within
      */
     real parallel_pseudoParticles();
+#endif
 
+    real cpu_gravity();
+
+#if TARGET_GPU
     /**
      * @brief Parallel version regarding computation of gravitational stuff.
      *
      * @return accumulated time of functions within
      */
     real parallel_gravity();
+#endif
 
+    real cpu_sph();
+
+#if TARGET_GPU
     /**
      * @brief Parallel version regarding computation of SPH-stuff.
      *
      * @return accumulated time of functions within
      */
     real parallel_sph();
+#endif
 
     // @todo possible to combine sendPartclesEntry and sendParticles
     /**
@@ -193,19 +210,23 @@ private:
      */
     real assignParticles();
 
+#if TARGET_GPU
     /**
      * @brief Calculate the angular momentum for all particles.
      *
      * @return accumulated time of functions within
      */
     real angularMomentum();
+#endif
 
+#if TARGET_GPU
     /**
      * @brief Calculate the total amount of energy.
      *
      * @return accumulated time of functions within
      */
     real energy();
+#endif
 
 public:
 
@@ -260,6 +281,7 @@ public:
      */
     void updateRangeApproximately(int aimedParticlesPerProcess, int bins=5000);
 
+    void cpu_updateRange(int aimedParticlesPerProcess);
     /**
      * @brief Update the range in dependence on number of (MPI) processes and aimed particles per process.
      *
@@ -278,7 +300,9 @@ public:
     Curve::Type curveType;
 
     /// Instance to handle the SPH `Kernel` instance on device and host
+#if TARGET_GPU
     SPH::KernelHandler kernelHandler;
+#endif
     /// Instance to handle the `SimulationTime` instances on device and host
     SimulationTimeHandler *simulationTimeHandler;
 
@@ -507,6 +531,8 @@ public:
      * @return accumulated time for functions within
      */
     real particles2file(const std::string& filename, int *particleIndices, int length);
+
+    real configParameters2file(HighFive::File &h5file);
 
     void getMemoryInfo();
 

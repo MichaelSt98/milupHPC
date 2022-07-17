@@ -8,8 +8,9 @@
 #ifndef MILUPHPC_KERNEL_HANDLER_H
 #define MILUPHPC_KERNEL_HANDLER_H
 
-#include "kernel.cuh"
 #include "../parameter.h"
+#if TARGET_GPU
+#include "kernel.cuh"
 
 namespace SPH {
 
@@ -45,5 +46,5 @@ namespace SPH {
     };
 }
 
-
+#endif // TARGET_GPU
 #endif //MILUPHPC_KERNEL_HANDLER_H

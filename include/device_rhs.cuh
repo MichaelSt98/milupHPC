@@ -4,6 +4,7 @@
 #include "subdomain_key_tree/tree.cuh"
 #include "particles.cuh"
 
+#if TARGET_GPU
 namespace Kernel {
 
     __global__ void resetArrays(Tree *tree, Particles *particles, integer *mutex, integer n, integer m);
@@ -12,5 +13,6 @@ namespace Kernel {
     }
 
 }
+#endif
 
 #endif //MILUPHPC_DEVICE_RHS_CUH

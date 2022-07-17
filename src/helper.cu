@@ -1,6 +1,8 @@
 #include "../include/helper.cuh"
+#if TARGET_GPU
 #include "../include/cuda_utils/cuda_launcher.cuh"
 #include <cub/cub.cuh>
+#endif // TARGET_GPU
 
 CUDA_CALLABLE_MEMBER Helper::Helper() {
 
@@ -76,6 +78,7 @@ CUDA_CALLABLE_MEMBER void Helper::set(integer *integerVal, integer *integerVal1,
 
 }
 
+#if TARGET_GPU
 namespace HelperNS {
 
     namespace Kernel {
@@ -313,3 +316,4 @@ namespace HelperNS {
     }
 
 }
+#endif

@@ -18,10 +18,12 @@
 #ifndef MILUPHPC_CUDAUTILITIES_CUH
 #define MILUPHPC_CUDAUTILITIES_CUH
 
+#include "../parameter.h"
 #include <iostream>
+#if TARGET_GPU
 #include <cuda.h>
 #include <cuda_runtime.h>
-#include "../parameter.h"
+#endif // TARGET_GPU
 #include <assert.h>
 
 #ifdef __CUDACC__
@@ -30,6 +32,7 @@
 #define CUDA_CALLABLE_MEMBER
 #endif
 
+#if TARGET_GPU
 /**
  * @brief check CUDA call
  */
@@ -234,4 +237,5 @@ namespace cuda {
     }
 }
 
+#endif // TARGET_GPU
 #endif //MILUPHPC_CUDAUTILITIES_CUH

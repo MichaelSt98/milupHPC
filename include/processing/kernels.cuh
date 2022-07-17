@@ -10,8 +10,9 @@
 #ifndef MILUPHPC_KERNELS_CUH
 #define MILUPHPC_KERNELS_CUH
 
-#include "../particles.cuh"
 #include "../parameter.h"
+#if TARGET_GPU
+#include "../particles.cuh"
 #include "../materials/material.cuh"
 #include "cuda_utils/cuda_utilities.cuh"
 #include "cuda_utils/cuda_runtime.h"
@@ -64,5 +65,5 @@ namespace Processing {
         }
     }
 }
-
+#endif
 #endif //MILUPHPC_KERNELS_CUH

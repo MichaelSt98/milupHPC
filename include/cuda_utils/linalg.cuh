@@ -11,6 +11,7 @@
 #define MILUPHPC_LINALG_CUH
 
 #include "../parameter.h"
+#if TARGET_GPU
 #include "../../include/cuda_utils/cuda_utilities.cuh"
 
 class linalg {
@@ -141,5 +142,5 @@ namespace CudaUtils {
     __device__ int invertMatrix(real *m, real *inverted);
 }
 
-
+#endif // TARGET_GPU
 #endif //MILUPHPC_LINALG_CUH

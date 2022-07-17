@@ -1,9 +1,12 @@
 #Compiler/Linker
 CXX            := mpic++
 
-OPENMPIDIR     := /usr/local/opt/open-mpi
-HDF5DIR        := /usr/local/Cellar/hdf5-mpi/1.12.2
-HDF5LIB        := /usr/local/Cellar/hdf5-mpi/1.12.2
+CUDADIR        := /usr/local/cuda-11.4
+NVCC           := $(CUDADIR)/bin/nvcc
+
+OPENMPIDIR     := /opt/openmpi-4.1.0
+HDF5DIR        := /usr/include/hdf5/openmpi
+HDF5LIB        := /usr/lib/x86_64-linux-gnu/hdf5/openmpi
 HEADERONLYDIR  := /usr/local/Headeronly
 
 #Target binary
@@ -26,10 +29,14 @@ DEPEXT         := d
 OBJEXT         := o
 
 #Flags, Libraries and Includes
-CXXFLAGS       += -std=c++11 -x c++ -w -I/usr/include/hdf5/openmpi -I$(OPENMPIDIR)/include -I$(HDF5DIR) -O1#-O3
-LFLAGS         += -lm -lpthread -lconfig++ -L$(OPENMPIDIR)/lib -L$(HDF5LIB) -lmpi -lhdf5 -lboost_filesystem -lboost_system
+CXXFLAGS       += -std=c++11 -w -I/usr/include/hdf5/openmpi#-O3
+NVFLAGS        := --std=c++11 -x cu -c -dc -w -Xcompiler "-pthread" -Wno-deprecated-gpu-targets -fmad=false -O3 -I$(OPENMPIDIR)/include -I$(HDF5DIR)
+LFLAGS         += -lm -L$(CUDADIR)/lib64 -lcudart -lpthread -lconfig -L$(OPENMPIDIR)/lib -L$(HDF5LIB) -lmpi -lhdf5 -lboost_filesystem -lboost_system
+GPU_ARCH       := -arch=sm_52
+CUDALFLAGS     := -dlink
+CUDALINKOBJ    := cuLink.o #needed?
 LIB            := -lboost_mpi -lboost_serialization
-INC            := -I$(INCDIR) -I/usr/include -I$(OPENMPIDIR)/include -I$(HEADERONLYDIR)
+INC            := -I$(INCDIR) -I/usr/include -I$(CUDADIR)/include -I$(OPENMPIDIR)/include -I$(HEADERONLYDIR)
 INCDEP         := -I$(INCDIR)
 
 #Source and Object files
@@ -50,9 +57,12 @@ DOXYFILE       := $(DOCDIR)/Doxyfile
 all:  tester ideas $(TARGET)
 
 single-precision: CXXFLAGS += -DSINGLE_PRECISION
+single-precision: NVFLAGS += -DSINGLE_PRECISION
 single-precision: all
 
 debug: CXXFLAGS += -g
+debug: NVFLAGS := ${filter-out -O3, $(NVFLAGS)}
+debug: NVFLAGS  += -g -G
 debug: LFALGS += -g -G
 debug: tester ideas $(TARGET)
 
@@ -86,7 +96,7 @@ cleaner: clean
 #link
 $(TARGET): $(OBJECTS) $(CUDA_OBJECTS)
 	@echo "Linking ..."
-	@$(CXX) $(LFLAGS) $(INC) -o $(TARGETDIR)/$(TARGET) $^ $(LIB) #$(GPU_ARCH)
+	@$(NVCC) $(GPU_ARCH) $(LFLAGS) $(INC) -o $(TARGETDIR)/$(TARGET) $^ $(LIB) #$(GPU_ARCH)
 
 #compile
 $(BUILDDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)
@@ -102,8 +112,8 @@ $(BUILDDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)
 $(BUILDDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(CUDASRCEXT)
 	@echo "  compiling: " $(SRCDIR)/$*
 	@mkdir -p $(dir $@)
-	@$(CXX) $(CXXFLAGS) $(INC) -c -o $@ $<
-	@$(CXX) $(CXXFLAGS) $(INC) -MM $(SRCDIR)/$*.$(CUDASRCEXT) > $(BUILDDIR)/$*.$(DEPEXT)
+	@$(NVCC) $(GPU_ARCH) $(INC) $(NVFLAGS) -I$(CUDADIR) -c -o $@ $<
+	@$(NVCC) $(GPU_ARCH) $(INC) $(NVFLAGS) -I$(CUDADIR) -MM $(SRCDIR)/$*.$(CUDASRCEXT) > $(BUILDDIR)/$*.$(DEPEXT)
 
 #compile test files
 tester: directories

@@ -31,6 +31,7 @@ bool checkFile(const std::string file, bool terminate, const std::string message
     }
 }
 
+#if TARGET_GPU
 void SetDeviceBeforeInit()
 {
     char * localRankStr = NULL;
@@ -46,6 +47,7 @@ void SetDeviceBeforeInit()
     //gpuErrorcheck(cudaSetDevice(rank % devCount));
     gpuErrorcheck(cudaSetDevice(rank % devCount));
 }
+#endif // TARGET_GPU
 
 structLog LOGCFG = {};
 
@@ -56,7 +58,9 @@ int main(int argc, char** argv)
     // -----------------------------------------------------------------------------------------------------------------
 
     /// MPI rank setting
-    SetDeviceBeforeInit();
+#if TARGET_GPU
+        SetDeviceBeforeInit();
+#endif
 
     boost::mpi::environment env(argc, argv);
     boost::mpi::communicator comm;
@@ -65,17 +69,19 @@ int main(int argc, char** argv)
     int numProcesses = comm.size();
 
     /// Setting CUDA device
-    //cudaSetDevice(rank);
-    int device;
-    cudaGetDevice(&device);
-    int numDevices;
-    cudaGetDeviceCount(&numDevices);
-    cudaDeviceSynchronize();
+#if TARGET_GPU
+        //cudaSetDevice(rank);
+        int device;
+        cudaGetDevice(&device);
+        int numDevices;
+        cudaGetDeviceCount(&numDevices);
+        cudaDeviceSynchronize();
 
-    cudaDeviceProp deviceProp;
-    cudaGetDeviceProperties(&deviceProp, device);
-    int numberOfMultiprocessors = deviceProp.multiProcessorCount;
-    printf("numberOfMultiprocessors: %i\n", numberOfMultiprocessors);
+        cudaDeviceProp deviceProp;
+        cudaGetDeviceProperties(&deviceProp, device);
+        int numberOfMultiprocessors = deviceProp.multiProcessorCount;
+        printf("numberOfMultiprocessors: %i\n", numberOfMultiprocessors);
+#endif
 
     // testing whether MPI works ...
     //int mpi_test = rank;
@@ -154,8 +160,10 @@ int main(int argc, char** argv)
     //Logger(TRACE) << "TRACE output";
     //Logger(TIME) << "TIME output";
 
+#if TARGET_GPU
     Logger(DEBUG) << "rank: " << rank << " | number of processes: " << numProcesses;
     Logger(DEBUG) << "device: " << device << " | num devices: " << numDevices;
+#endif // TARGET_GPU
 
     Logger(INFO) << "sizeof(keyType) = " << (int)sizeof(keyType); // intmax_t, uintmax_t
     Logger(INFO) << "sizeof(intmax_t) = " << (int)sizeof(intmax_t);
@@ -314,6 +322,14 @@ int main(int argc, char** argv)
     profiler.createValueDataSet<real>(ProfilerIds::Time::integrate, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::IO, 1);
 
+
+#if !SPH_SIM
+    // TODO: default integrator for gravity-only simulation
+    if (parameters.integratorSelection == IntegratorSelection::predictor_corrector_euler) {
+        Logger(INFO) << "Gravity is decoupled! Therefore switching to explicit Euler integrator!";
+        parameters.integratorSelection = IntegratorSelection::explicit_euler;
+    }
+#endif
 
     /// INTEGRATOR SELECTION
     // -----------------------------------------------------------------------------------------------------------------

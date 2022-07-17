@@ -1,4 +1,5 @@
 #include "../../include/sph/pressure.cuh"
+#if TARGET_GPU
 #include "../include/cuda_utils/cuda_launcher.cuh"
 
 
@@ -84,4 +85,6 @@ namespace SPH {
         }
     }
 }
+
+#endif // TARGET_GPU
 

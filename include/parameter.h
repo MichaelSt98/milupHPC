@@ -22,6 +22,8 @@ typedef int idInteger;
 
 //#define theta 0.5
 
+#define TARGET_GPU 0
+
 #define MAX_LEVEL 21
 
 #define DEBUGGING 0

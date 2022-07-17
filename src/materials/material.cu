@@ -11,6 +11,7 @@ CUDA_CALLABLE_MEMBER Material::~Material() {
 
 CUDA_CALLABLE_MEMBER void Material::info() {
     printf("Material: ID                      = %i\n", ID);
+    printf("Material: sml                     = %f\n", sml);
     printf("Material: interactions            = %i\n", interactions);
     printf("Material: alpha                   = %f\n", artificialViscosity.alpha);
     printf("Material: eos: type               = %i\n", eos.type);
@@ -18,6 +19,7 @@ CUDA_CALLABLE_MEMBER void Material::info() {
     printf("Material: eos: polytropic_gamma   = %f\n", eos.polytropic_gamma);
 }
 
+#if TARGET_GPU
 namespace MaterialNS {
     namespace Kernel {
         __global__ void info(Material *material) {
@@ -30,6 +32,7 @@ namespace MaterialNS {
         }
     }
 }
+#endif
 
 
 CUDA_CALLABLE_MEMBER ArtificialViscosity::ArtificialViscosity() : alpha(0.0), beta(0.0) {

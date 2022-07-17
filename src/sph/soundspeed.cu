@@ -1,4 +1,5 @@
 #include "../../include/sph/soundspeed.cuh"
+#if TARGET_GPU
 #include "../../include/cuda_utils/cuda_launcher.cuh"
 
 __global__ void SPH::Kernel::initializeSoundSpeed(Particles *particles, Material *materials, int numParticles) {
@@ -100,3 +101,4 @@ real SPH::Kernel::Launch::calculateSoundSpeed(Particles *particles, Material *ma
     return cuda::launch(true, executionPolicy, ::SPH::Kernel::calculateSoundSpeed, particles, materials, numParticles);
 }
 
+#endif //TARGET_GPU

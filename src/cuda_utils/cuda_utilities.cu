@@ -1,4 +1,5 @@
 #include "../../include/cuda_utils/cuda_utilities.cuh"
+#if TARGET_GPU
 #include "../../include/cuda_utils/cuda_launcher.cuh"
 
 // see:
@@ -470,3 +471,5 @@ namespace cuda {
         }
     }
 }
+
+#endif // TARGET_GPU

@@ -92,6 +92,7 @@ public:
 
 };
 
+#if TARGET_GPU
 namespace HelperNS {
 
     namespace Kernel {
@@ -144,5 +145,5 @@ namespace HelperNS {
     T reduceAndGlobalize(T *d_sml, T *d_aggregate, integer n, Reduction::Type reductionType);
 
 }
-
+#endif // TARGET_GPU
 #endif //MILUPHPC_HELPER_CUH

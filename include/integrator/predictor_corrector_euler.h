@@ -46,6 +46,7 @@ private:
 public:
 
     int device;
+#if TARGET_GPU
     struct cudaDeviceProp prop;
     int *d_blockCount;
 
@@ -57,7 +58,7 @@ public:
     real *d_block_vmax;
 
     PredictorCorrectorEulerNS::BlockShared *d_blockShared;
-
+#endif // TARGET_GPU
     /**
      * @brief Constructor.
      *

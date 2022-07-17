@@ -28,7 +28,7 @@ _______
 * [Compilation.md](documents/Compilation.md): for instructions to compile the code
 * [GettingStarted.md](documents/GettingStarted.md): for getting started, including running some [test cases](testcases/README.md) 
 	* [Plummer](testcases/plummer/) gravity-only test case ([README](testcases/plummer/README.md))
-	* [Taylor-von Neumann-Sedov blast wave/](../testcases/sedov/) SPH-only test case ([README](../testcases/sedov/README.md))
+	* [Taylor-von Neumann-Sedov blast wave](../testcases/sedov/) SPH-only test case ([README](../testcases/sedov/README.md))
 * [Postprocessing.md](postprocessing/README.md): for information regarding postprocessing
 * [Debugging.md](debug/README.md): for information regarding debugging
 

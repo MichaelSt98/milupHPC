@@ -21,7 +21,6 @@
 
 #include <iostream>
 #include <stdio.h>
-#include <cuda.h>
 #include <boost/mpi.hpp>
 
 /**
@@ -192,6 +191,7 @@ public:
     };*/
 };
 
+#if TARGET_GPU
 /// Material related functions and kernels
 namespace MaterialNS {
 
@@ -217,5 +217,5 @@ namespace MaterialNS {
         }
     }
 }
-
+#endif
 #endif //MILUPHPC_MATERIAL_CUH

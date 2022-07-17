@@ -13,6 +13,7 @@
 #include "../parameter.h"
 #include "subdomain.cuh"
 #include <boost/mpi.hpp>
+#include <algorithm>
 
 //class KeyHandler {
 //};
@@ -32,6 +33,7 @@ public:
     /// host counter for particles in dependence of MPI process belonging
     integer *h_procParticleCounter;
 
+#if TARGET_GPU
     /// device MPI rank
     integer *d_rank;
     /// device MPI number of processes
@@ -41,11 +43,14 @@ public:
     //keyType *d_hilberRange;
     /// host counter for particles in dependence of MPI process belonging
     integer *d_procParticleCounter;
+#endif // TARGET_GPU
 
     /// host instance of class `SubDomainKeyTree`
     SubDomainKeyTree *h_subDomainKeyTree;
+#if TARGET_GPU
     /// device instance of class `SubDomainKeyTree`
     SubDomainKeyTree *d_subDomainKeyTree;
+#endif // TARGET_GPU
 
     /**
      * @brief Constructor
@@ -84,6 +89,31 @@ public:
     /// length/size of domain list
     integer domainListSize;
 
+    // TODO: CPU necessary to have domain list ?
+
+    /// host domain list indices
+    integer *h_domainListIndices;
+    /// host domain list levels
+    integer *h_domainListLevels;
+    /// host domain list index
+    integer *h_domainListIndex;
+    /// host domain list counter
+    integer *h_domainListCounter;
+    /// host domain list key
+    keyType *h_domainListKeys;
+    /// host sorted domain list keys
+    keyType *h_sortedDomainListKeys;
+    /// host relevant domain list indices
+    integer *h_relevantDomainListIndices;
+    integer *h_relevantDomainListLevels;
+    integer *h_relevantDomainListProcess;
+    integer *h_relevantDomainListOriginalIndex;
+    real *h_borders;
+
+    /// device instance of `DomainList` class
+    DomainList *h_domainList;
+
+#if TARGET_GPU
     /// device domain list indices
     integer *d_domainListIndices;
     /// device domain list levels
@@ -105,7 +135,7 @@ public:
 
     /// device instance of `DomainList` class
     DomainList *d_domainList;
-
+#endif
     /**
      * @brief Constructor
      *

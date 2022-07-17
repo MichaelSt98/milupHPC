@@ -1,4 +1,5 @@
 #include "../../include/sph/viscosity.cuh"
+#if TARGET_GPU
 #include "../include/cuda_utils/cuda_launcher.cuh"
 
 #if NAVIER_STOKES
@@ -109,4 +110,5 @@ __global__ void SPH::Kernel::calculate_kinematic_viscosity(::SPH::SPH_kernel ker
     }
 }
 #endif // NAVIER STOKES
+#endif // TARGET_GPU
 

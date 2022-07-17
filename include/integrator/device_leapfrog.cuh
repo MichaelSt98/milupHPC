@@ -9,6 +9,7 @@
 #define MILUPHPC_DEVICE_LEAPFROG_CUH
 
 #include "../particles.cuh"
+#if TARGET_GPU
 #include <assert.h>
 
 /// leapfrog integrator
@@ -45,4 +46,5 @@ namespace LeapfrogNS {
 
 }
 
+#endif // TARGET_GPU
 #endif //MILUPHPC_DEVICE_LEAPFROG_CUH

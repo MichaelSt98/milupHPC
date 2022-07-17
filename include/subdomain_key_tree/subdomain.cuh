@@ -121,8 +121,13 @@ public:
     CUDA_CALLABLE_MEMBER bool isDomainListNode(keyType key, integer maxLevel, integer level,
                                                Curve::Type curveType=Curve::lebesgue);
 
+    void buildDomainTree(Tree *tree, DomainList *domainList);
+
+    void buildDomainTree(Tree *tree, DomainList *domainList, int level, keyType key);
+
 };
 
+#if TARGET_GPU
 /// SubDomainKeyTree related functions and kernels
 namespace SubDomainKeyTreeNS {
 
@@ -488,6 +493,8 @@ namespace SubDomainKeyTreeNS {
 
 }
 
+#endif
+
 /**
  * Class to represent domain list nodes (lowest domain list nodes)
  */
@@ -562,6 +569,7 @@ public:
     CUDA_CALLABLE_MEMBER ~DomainList();
 };
 
+#if TARGET_GPU
 namespace DomainListNS {
 
     namespace Kernel {
@@ -687,7 +695,10 @@ namespace DomainListNS {
     }
 
 }
+#endif // TARGET_GPU
 
+
+#if TARGET_GPU
 /// Particle class related functions and kernels
 namespace ParticlesNS {
 
@@ -819,5 +830,7 @@ namespace Physics {
         }
     }
 }
+
+#endif // TARGET_GPU
 
 #endif //MILUPHPC_DOMAIN_CUH

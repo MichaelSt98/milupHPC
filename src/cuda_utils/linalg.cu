@@ -1,5 +1,7 @@
 #include "../../include/cuda_utils/linalg.cuh"
 
+#if TARGET_GPU
+
 namespace CudaUtils {
 
     __device__ int sign(real x) {
@@ -318,3 +320,5 @@ namespace CudaUtils {
         return 1;
     }
 }
+
+#endif

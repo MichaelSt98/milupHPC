@@ -1,4 +1,5 @@
 #include "../../include/processing/kernels.cuh"
+#if TARGET_GPU
 #include "../../include/cuda_utils/cuda_launcher.cuh"
 
 namespace Processing {
@@ -87,3 +88,5 @@ namespace Processing {
 
     }
 }
+
+#endif

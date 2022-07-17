@@ -4,52 +4,50 @@ int LibConfigReader::loadConfigFromFile(const char *configFile)
 {
     int numberOfElements;
 
-    std::ifstream f(configFile);
-    if(!f.good()) {
-        Logger(ERROR) << "Error: config file cannot be found: " << configFile;
-        MPI_Finalize();
-        exit(1);
-    }
+    try {
 
-    config_init(&config);
+        config.readFile(configFile);
+        const libconfig::Setting &materials = config.lookup("materials");
 
-    if (!config_read_file(&config, configFile)) {
-        Logger(ERROR) << "Error reading config file: " << configFile;
-        const char *errorText;
-        errorText = new char[500];
-        errorText = config_error_text(&config);
-        int errorLine = config_error_line(&config);
-        Logger(ERROR) << "since: " << errorText << " on line: " << errorLine;
-        delete [] errorText;
-        config_destroy(&config);
-        exit(1);
-    }
+        try {
 
-    materials = config_lookup(&config, "materials");
-    if (materials != NULL) {
-        numberOfElements = config_setting_length(materials);
-        int i, j;
-        int maxId = 0;
-        config_setting_t *material; //, *subset;
+            numberOfElements = materials.getLength();
+            int i, j;
+            int maxId = 0;
 
-        // find max ID of materials
-        for (i = 0; i < numberOfElements; ++i) {
-            material = config_setting_get_elem(materials, i);
-            int ID;
-            if (!config_setting_lookup_int(material, "ID", &ID)) {
-                Logger(ERROR) << "Error. Found material without ID in config file...";
+            // find max ID of materials
+            for (i = 0; i < numberOfElements; ++i) {
+
+                const libconfig::Setting &material = materials[i];
+                int ID;
+
+                if (!(material.lookupValue("ID", ID))) {
+                    Logger(ERROR) << "Error. Found material without ID in config file...";
+                    MPI_Finalize();
+                    exit(1);
+                }
+
+                Logger(DEBUG) << "Found material ID: " << ID;
+                maxId = std::max(ID, maxId);
+            }
+            if (maxId != numberOfElements - 1) {
+                Logger(ERROR) << "Material-IDs in config file have to be 0, 1, 2,...";
                 MPI_Finalize();
                 exit(1);
             }
+        }
+        catch(...) {
 
-            Logger(DEBUG) << "Found material ID: " << ID;
-            maxId = std::max(ID, maxId);
         }
-        if (maxId != numberOfElements - 1) {
-            Logger(ERROR) << "Material-IDs in config file have to be 0, 1, 2,...";
-            MPI_Finalize();
-            exit(1);
-        }
+    }
+    catch(const libconfig::FileIOException &fileIOException) {
+        std::cerr << "I/O error while reading file." << std::endl;
+        MPI_Finalize();
+        exit(1);
+    }
+    catch(const libconfig::ParseException &parseException) {
+        std::cerr << "Parse error at " << parseException.getFile() << ":" << parseException.getLine()
+                  << " - " << parseException.getError() << std::endl;
     }
     return numberOfElements;
 }
@@ -57,11 +55,12 @@ int LibConfigReader::loadConfigFromFile(const char *configFile)
 MaterialHandler::MaterialHandler(integer numMaterials) : numMaterials(numMaterials) {
 
     h_materials = new Material[numMaterials];
+#if TARGET_GPU
     cuda::malloc(d_materials, numMaterials);
+#endif
 
     h_materials[0].ID = 0;
     h_materials[0].interactions = 0;
-    //h_materials[0].artificialViscosity.alpha = 3.1;
     h_materials[0].artificialViscosity = ArtificialViscosity();
 
 }
@@ -71,42 +70,37 @@ MaterialHandler::MaterialHandler(const char *material_cfg) {
     LibConfigReader libConfigReader;
     numMaterials = libConfigReader.loadConfigFromFile(material_cfg);
 
-    config_setting_t *material, *subset;
-
     h_materials = new Material[numMaterials];
+#if TARGET_GPU
     cuda::malloc(d_materials, numMaterials);
+#endif
 
     double temp;
+
+    const libconfig::Setting &materials = libConfigReader.config.lookup("materials");
 
     for (int i = 0; i < numMaterials; ++i) {
 
         // general
-        material = config_setting_get_elem(libConfigReader.materials, i);
+        const libconfig::Setting &material = materials[i]; //libConfigReader.materials[i];
         int id;
-        config_setting_lookup_int(material, "ID", &id);
+
+        material.lookupValue("ID", id);
         h_materials[id].ID = id;
         Logger(DEBUG) << "Reading information about material ID " << id << " out of " << numMaterials << "...";
-        config_setting_lookup_int(material, "interactions", &h_materials[id].interactions);
-        config_setting_lookup_float(material, "sml", &temp);
-        h_materials[id].sml = temp;
+        material.lookupValue("interactions", h_materials[id].interactions);
+        material.lookupValue("sml", h_materials[id].sml);
 
         // artificial viscosity
-        subset = config_setting_get_member(material, "artificial_viscosity");
-        config_setting_lookup_float(subset, "alpha", &temp);
-        h_materials[id].artificialViscosity.alpha = temp;
-        config_setting_lookup_float(subset, "beta", &temp);
-        h_materials[id].artificialViscosity.beta = temp;
+        const libconfig::Setting &subset_artVisc = material.lookup("artificial_viscosity");
+        subset_artVisc.lookupValue("alpha", h_materials[id].artificialViscosity.alpha);
+        subset_artVisc.lookupValue("beta", h_materials[id].artificialViscosity.beta);
 
         // eos
-        subset = config_setting_get_member(material, "eos");
-        config_setting_lookup_int(subset, "type", &h_materials[id].eos.type);
-        //config_setting_lookup_float(subset, "polytropic_K", &h_materials[id].eos.polytropic_K);
-        //config_setting_lookup_float(subset, "polytropic_gamma", &h_materials[id].eos.polytropic_gamma);
-        config_setting_lookup_float(subset, "polytropic_K", &temp);
-        //printf("temp = %f\n", temp);
-        h_materials[id].eos.polytropic_K = temp;
-        config_setting_lookup_float(subset, "polytropic_gamma", &temp);
-        h_materials[id].eos.polytropic_gamma = temp;
+        const libconfig::Setting &subset_eos = material.lookup("eos");
+        subset_eos.lookupValue("type", h_materials[id].eos.type);
+        subset_eos.lookupValue("polytropic_K", h_materials[id].eos.polytropic_K);
+        subset_eos.lookupValue("polytropic_gamma", h_materials[id].eos.polytropic_gamma);
     }
 
 
@@ -116,7 +110,9 @@ MaterialHandler::MaterialHandler(integer numMaterials, integer ID, integer inter
                                     numMaterials(numMaterials) {
 
     h_materials = new Material[numMaterials];
+#if TARGET_GPU
     cuda::malloc(d_materials, numMaterials);
+#endif
 
     h_materials[0].ID = ID;
     h_materials[0].interactions = interactions;
@@ -128,18 +124,22 @@ MaterialHandler::MaterialHandler(integer numMaterials, integer ID, integer inter
 MaterialHandler::~MaterialHandler() {
 
     delete [] h_materials;
+#if TARGET_GPU
     cuda::free(d_materials);
+#endif
 
 }
 
 void MaterialHandler::copy(To::Target target, integer index) {
 
+#if TARGET_GPU
     if (index >= 0 && index < numMaterials) {
         cuda::copy(&h_materials[index], &d_materials[index], 1, target);
     }
     else {
         cuda::copy(h_materials, d_materials, numMaterials, target);
     }
+#endif
 
 }
 
@@ -149,8 +149,6 @@ void MaterialHandler::communicate(int from, int to, bool fromDevice, bool toDevi
 
     boost::mpi::environment env;
     boost::mpi::communicator comm;
-
-    //printf("numMaterials = %i    comm.rank() = %i\n", numMaterials, comm.rank());
 
     std::vector<boost::mpi::request> reqParticles;
     std::vector<boost::mpi::status> statParticles;
@@ -165,7 +163,10 @@ void MaterialHandler::communicate(int from, int to, bool fromDevice, bool toDevi
 
     boost::mpi::wait_all(reqParticles.begin(), reqParticles.end());
 
+#if TARGET_GPU
     if (toDevice) { copy(To::device); }
+#endif
+
 }
 
 void MaterialHandler::broadcast(int root, bool fromDevice, bool toDevice) {
@@ -177,5 +178,8 @@ void MaterialHandler::broadcast(int root, bool fromDevice, bool toDevice) {
 
     boost::mpi::broadcast(comm, h_materials, numMaterials, root);
 
+#if TARGET_GPU
     if (toDevice) { copy(To::device); }
+#endif
+
 }

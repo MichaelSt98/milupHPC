@@ -9,6 +9,7 @@
 #define MILUPHPC_DEVICE_PREDICTOR_CORRECTOR_EULER_CUH
 
 #include "../particles.cuh"
+#if TARGET_GPU
 #include "../materials/material.cuh"
 #include "../simulation_time.cuh"
 
@@ -167,4 +168,5 @@ namespace PredictorCorrectorEulerNS {
     }
 }
 
+#endif // TARGET_GPU
 #endif //MILUPHPC_DEVICE_PREDICTOR_CORRECTOR_EULER_CUH

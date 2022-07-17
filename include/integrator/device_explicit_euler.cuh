@@ -9,6 +9,7 @@
 #define MILUPHPC_DEVICE_EXPLICIT_EULER_CUH
 
 #include "../particles.cuh"
+#if TARGET_GPU
 #include <assert.h>
 
 /// explicit euler integrator
@@ -41,4 +42,5 @@ namespace ExplicitEulerNS {
 
 }
 
+#endif // TARGET_GPU
 #endif //MILUPHPC_DEVICE_EXPLICIT_EULER_CUH

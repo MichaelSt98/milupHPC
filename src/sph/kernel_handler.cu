@@ -1,4 +1,5 @@
 #include "../../include/sph/kernel_handler.cuh"
+#if TARGET_GPU
 
 extern __device__ SPH::SPH_kernel spiky_p;
 extern __device__ SPH::SPH_kernel cubicSpline_p;
@@ -38,3 +39,5 @@ SPH::KernelHandler::KernelHandler(Smoothing::Kernel smoothingKernel) {
 SPH::KernelHandler::~KernelHandler() {
 
 }
+
+#endif

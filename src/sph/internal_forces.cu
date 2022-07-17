@@ -1,4 +1,5 @@
 #include "../../include/sph/internal_forces.cuh"
+#if TARGET_GPU
 #include "../../include/cuda_utils/cuda_launcher.cuh"
 
 __global__ void SPH::Kernel::internalForces(::SPH::SPH_kernel kernel, Material *materials, Tree *tree, Particles *particles,
@@ -475,4 +476,5 @@ real SPH::Kernel::Launch::internalForces(::SPH::SPH_kernel kernel, Material *mat
                         numRealParticles);
 }
 
+#endif
 

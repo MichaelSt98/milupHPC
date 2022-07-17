@@ -19,6 +19,7 @@ SimulationTimeHandler::SimulationTimeHandler(real dt, real endTime, real dt_max)
     h_simulationTime = new SimulationTime;
     h_simulationTime->set(h_dt, h_startTime, h_subEndTime, h_endTime, h_currentTime, h_dt_max);
 
+#if TARGET_GPU
     cuda::malloc(d_dt, 1);
     cuda::malloc(d_startTime, 1);
     cuda::malloc(d_subEndTime, 1);
@@ -31,6 +32,7 @@ SimulationTimeHandler::SimulationTimeHandler(real dt, real endTime, real dt_max)
                                           d_currentTime, d_dt_max);
 
     copy(To::device);
+#endif // TARGET_GPU
 }
 
 SimulationTimeHandler::~SimulationTimeHandler() {
@@ -43,6 +45,7 @@ SimulationTimeHandler::~SimulationTimeHandler() {
 
     delete h_simulationTime;
 
+#if TARGET_GPU
     cuda::free(d_dt);
     cuda::free(d_startTime);
     cuda::free(d_subEndTime);
@@ -51,17 +54,19 @@ SimulationTimeHandler::~SimulationTimeHandler() {
     cuda::free(d_dt_max);
 
     cuda::free(d_simulationTime);
+#endif // TARGET_GPU
 }
 
 void SimulationTimeHandler::copy(To::Target target) {
 
+#if TARGET_GPU
     cuda::copy(h_dt, d_dt, 1, target);
     cuda::copy(h_startTime, d_startTime, 1, target);
     cuda::copy(h_subEndTime, d_subEndTime, 1, target);
     cuda::copy(h_endTime, d_endTime, 1, target);
     cuda::copy(h_currentTime, d_currentTime, 1, target);
     cuda::copy(h_dt_max, d_dt_max, 1, target);
-
+#endif // TARGET_GPU
 }
 
 void SimulationTimeHandler::globalizeTimeStep(Execution::Location exLoc) {
@@ -72,10 +77,11 @@ void SimulationTimeHandler::globalizeTimeStep(Execution::Location exLoc) {
         case Execution::host: {
             all_reduce(comm, boost::mpi::inplace_t<real*>(h_dt), 1, boost::mpi::minimum<real>());
         } break;
+#if TARGET_GPU
         case Execution::device: {
             all_reduce(comm, boost::mpi::inplace_t<real*>(d_dt), 1, boost::mpi::minimum<real>());
         } break;
-
+#endif // TARGET_GPU
     }
 
 }

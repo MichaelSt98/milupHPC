@@ -15,9 +15,10 @@
 #ifndef MILUPHPC_SPH_CUH
 #define MILUPHPC_SPH_CUH
 
+#include "../parameter.h"
+#if TARGET_GPU
 #include "../particles.cuh"
 #include "../subdomain_key_tree/subdomain.cuh"
-#include "../parameter.h"
 #include "../helper.cuh"
 #include "../materials/material.cuh"
 #include <float.h>
@@ -473,4 +474,5 @@ namespace SPH {
 
 }
 
+#endif
 #endif //MILUPHPC_SPH_CUH

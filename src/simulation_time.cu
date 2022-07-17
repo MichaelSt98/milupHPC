@@ -24,6 +24,7 @@ CUDA_CALLABLE_MEMBER void SimulationTime::set(real *dt, real *startTime, real *s
     this->dt_max = dt_max;
 }
 
+#if TARGET_GPU
 namespace SimulationTimeNS {
     namespace Kernel {
         __global__ void set(SimulationTime *simulationTime, real *dt, real *startTime, real *subEndTime, real *endTime,
@@ -41,3 +42,4 @@ namespace SimulationTimeNS {
         }
     }
 }
+#endif // TARGET_GPU

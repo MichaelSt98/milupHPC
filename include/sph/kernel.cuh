@@ -8,8 +8,9 @@
 #ifndef MILUPHPC_KERNEL_CUH
 #define MILUPHPC_KERNEL_CUH
 
-#include "../particles.cuh"
+#if TARGET_GPU
 #include "../parameter.h"
+#include "../particles.cuh"
 #include "../helper.cuh"
 
 //#include <boost/mpi.hpp>
@@ -222,5 +223,5 @@ namespace SPH {
 
 }
 
-
+#endif // TARGET_GPU
 #endif //MILUPHPC_KERNEL_CUH

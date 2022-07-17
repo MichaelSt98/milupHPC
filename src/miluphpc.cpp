@@ -20,7 +20,9 @@ Miluphpc::Miluphpc(SimulationParameters simulationParameters) {
     Logger(DEBUG) << "Initialized: sumParticles:      " << sumParticles;
 
     // memory allocations (via instantiation of handlers)
+#if TARGET_GPU
     cuda::malloc(d_mutex, 1);
+#endif
     //helperHandler = new HelperHandler(numNodes);
     //buffer = new HelperHandler(numNodes);
     subDomainKeyTreeHandler = new SubDomainKeyTreeHandler();
@@ -31,6 +33,7 @@ Miluphpc::Miluphpc(SimulationParameters simulationParameters) {
     treeHandler = new TreeHandler(numParticles, numNodes);
     domainListHandler = new DomainListHandler(simulationParameters.domainListSize);
     lowestDomainListHandler = new DomainListHandler(simulationParameters.domainListSize);
+#if SPH_SIM
     materialHandler = new MaterialHandler(simulationParameters.materialConfigFile.c_str()); //"config/material.cfg"
 #if DEBUGGING
     for (int i=0; i<materialHandler->numMaterials; i++) {
@@ -38,10 +41,13 @@ Miluphpc::Miluphpc(SimulationParameters simulationParameters) {
     }
 #endif
     materialHandler->copy(To::device);
+#endif
     simulationTimeHandler = new SimulationTimeHandler(simulationParameters.timeStep,
                                                       simulationParameters.timeEnd,
                                                       simulationParameters.maxTimeStep);
+#if TARGET_GPU
     simulationTimeHandler->copy(To::device);
+#endif
     if (subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses == 1) {
         curveType = Curve::lebesgue;
     }
@@ -81,7 +87,9 @@ Miluphpc::Miluphpc(SimulationParameters simulationParameters) {
     }
 #else
     // TODO: instance should not be needed at all if SPH_SIM 0
+#if TARGET_GPU
     kernelHandler = SPH::KernelHandler(Smoothing::Kernel(0));
+#endif
 #endif
 
     // read particle data, load balancing, ...
@@ -99,10 +107,14 @@ Miluphpc::~Miluphpc() {
     delete particleHandler;
     delete subDomainKeyTreeHandler;
     delete treeHandler;
+#if SPH_SIM
     delete materialHandler;
+#endif
     delete simulationTimeHandler;
 
+#if TARGET_GPU
     cuda::free(d_mutex);
+#endif // TARGET_GPU
     //cuda::free(d_particles2SendIndices);
     //cuda::free(d_pseudoParticles2SendIndices);
     //cuda::free(d_pseudoParticles2SendLevels);
@@ -187,6 +199,8 @@ void Miluphpc::distributionFromFile(const std::string& filename) {
 #endif
 #endif
 
+    // TODO: read sml if xy?
+
     integer ppp = m.size()/subDomainKeyTreeHandler->h_numProcesses;
     integer ppp_remnant = m.size() % subDomainKeyTreeHandler->h_numProcesses;
 
@@ -213,6 +227,7 @@ void Miluphpc::distributionFromFile(const std::string& filename) {
 #endif
 #endif
 
+
 #if SPH_SIM
 #if INTEGRATE_ENERGY
         particleHandler->h_particles->e[i] = u[j];
@@ -223,6 +238,10 @@ void Miluphpc::distributionFromFile(const std::string& filename) {
 #endif
 
     }
+
+    //for (int particleIndex=0; particleIndex < 10; particleIndex++) {
+    //    Logger(TRACE) << "x = (" << particleHandler->h_particles->x[particleIndex] << ", " << particleHandler->h_particles->y[particleIndex] << ", " << particleHandler->h_particles->z[particleIndex] << ")";
+    //}
 }
 
 //TODO: block/warp/stack size for computeBoundingBox and computeForces
@@ -237,23 +256,31 @@ void Miluphpc::prepareSimulation() {
     SPH::Kernel::Launch::initializeSoundSpeed(particleHandler->d_particles, materialHandler->d_materials, numParticlesLocal);
 #endif
 
+#if TARGET_GPU
     particleHandler->copyDistribution(To::device, true, true);
+#endif
+
 #if SPH_SIM
     //TODO: problem: (e.g.) cs should not be copied....
     //particleHandler->copySPH(To::device);
     //cuda::copy(particleHandler->h_rho, particleHandler->d_rho, numParticles, To::device);
     //cuda::copy(particleHandler->h_p, particleHandler->d_p, numParticles, To::device);
+#if TARGET_GPU
     cuda::copy(particleHandler->h_e, particleHandler->d_e, numParticles, To::device);
     cuda::copy(particleHandler->h_sml, particleHandler->d_sml, numParticles, To::device);
+#endif
     //cuda::copy(particleHandler->h_noi, particleHandler->d_noi, numParticles, To::device);
     //cuda::copy(particleHandler->h_cs, particleHandler->d_cs, numParticles, To::device);
 #endif
 
+#if TARGET_GPU
     if (simulationParameters.removeParticles) {
         removeParticles();
     }
+#endif
 
     Logger(DEBUG) << "Compute bounding box ...";
+#if TARGET_GPU
     TreeNS::Kernel::Launch::computeBoundingBox(treeHandler->d_tree, particleHandler->d_particles, d_mutex,
                                                numParticlesLocal, 256, false);
 
@@ -276,6 +303,7 @@ void Miluphpc::prepareSimulation() {
     else {
         fixedLoadBalancing();
     }
+#endif // TARGET_GPU
 
     subDomainKeyTreeHandler->copy(To::device);
 
@@ -301,10 +329,11 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
     getMemoryInfo();
 
     Timer timer;
-    real time;
+    real time = 0.;
     real elapsed;
     real *profilerTime = &elapsed; //&time;
     real totalTime = 0;
+
 
     Logger(INFO) << "rhs::reset()";
     timer.reset();
@@ -315,6 +344,7 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
     totalTime += time;
     Logger(TIME) << "rhs::reset(): " << elapsed << " ms"; //time << " ms";
     profiler.value2file(ProfilerIds::Time::reset, *profilerTime);
+
 
     //Logger(INFO) << "checking for nans before bounding box...";
     //ParticlesNS::Kernel::Launch::check4nans(particleHandler->d_particles, numParticlesLocal);
@@ -328,6 +358,10 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
     totalTime += time;
     Logger(TIME) << "rhs::boundingBox(): " << time << " ms";
     profiler.value2file(ProfilerIds::Time::boundingBox, *profilerTime);
+
+    treeHandler->h_tree->buildTree(particleHandler->h_particles, numParticlesLocal, numParticles);
+
+    /*
 
 #if DEBUGGING
     Logger(INFO) << "checking for nans before assigning particles...";
@@ -399,11 +433,13 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
         profiler.value2file(ProfilerIds::Time::pseudoParticle, *profilerTime);
     }
     else {
+#if TARGET_GPU
         // -------------------------------------------------------------------------------------------------------------
         DomainListNS::Kernel::Launch::lowestDomainList(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
                                                        particleHandler->d_particles, domainListHandler->d_domainList,
                                                        lowestDomainListHandler->d_domainList, numParticles, numNodes);
         // -------------------------------------------------------------------------------------------------------------
+#endif // TARGET_GPU
     }
 #else
     // -----------------------------------------------------------------------------------------------------------------
@@ -458,13 +494,14 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
     profiler.value2file(ProfilerIds::Time::sph, *profilerTime);
     totalTime += time;
 #endif
-
+    */
     return totalTime;
 }
 
 void Miluphpc::afterIntegrationStep() {
     // things which need/can be done after (full) integration step
 
+#if TARGET_GPU
     // angular momentum calculation
     if (simulationParameters.calculateAngularMomentum) {
         angularMomentum();
@@ -473,8 +510,12 @@ void Miluphpc::afterIntegrationStep() {
     if (simulationParameters.calculateEnergy) {
         energy();
     }
+#else
+    // TODO: CPU afterIntegrationStep()
+#endif
 }
 
+#if TARGET_GPU
 real Miluphpc::angularMomentum() {
     real time;
 
@@ -528,7 +569,9 @@ real Miluphpc::angularMomentum() {
 
     return time;
 }
+#endif // TARGET_GPU
 
+#if TARGET_GPU
 real Miluphpc::energy() {
 
     real time = 0;
@@ -576,15 +619,26 @@ real Miluphpc::energy() {
 
     return time;
 }
+#endif // TARGET_GPU
 
 real Miluphpc::reset() {
     real time;
+
+    *treeHandler->h_tree->index = numParticles;
+
+    std::fill(treeHandler->h_tree->child, treeHandler->h_tree->child + POW_DIM * numNodes, -1);
+    std::fill(&particleHandler->h_particles->x[numParticles], &particleHandler->h_particles->x[numNodes], 0.);
+    std::fill(&particleHandler->h_particles->y[numParticles], &particleHandler->h_particles->y[numNodes], 0.);
+    std::fill(&particleHandler->h_particles->z[numParticles], &particleHandler->h_particles->z[numNodes], 0.);
+
+#if TARGET_GPU
     // START: resetting arrays, variables, buffers, ...
     Logger(DEBUG) << "resetting (device) arrays ...";
     // -----------------------------------------------------------------------------------------------------------------
     time = Kernel::Launch::resetArrays(treeHandler->d_tree, particleHandler->d_particles, d_mutex, numParticles,
                                        numNodes, true);
     // -----------------------------------------------------------------------------------------------------------------
+
 
 #if SPH_SIM
     cuda::set(particleHandler->d_u, (real)0., numParticlesLocal);
@@ -599,19 +653,23 @@ real Miluphpc::reset() {
 #endif
 
     // TODO: just some testing
-    /*
-    cuda::set(treeHandler->d_child, -1, POW_DIM * numNodes);
-    cuda::set(&particleHandler->d_mass[numParticlesLocal], (real)0., numNodes - numParticlesLocal);
-    cuda::set(&particleHandler->d_x[numParticlesLocal], (real)0., numNodes - numParticlesLocal);
-#if DIM > 1
-    cuda::set(&particleHandler->d_y[numParticlesLocal], (real)0., numNodes - numParticlesLocal);
-#if DIM == 3
-    cuda::set(&particleHandler->d_z[numParticlesLocal], (real)0., numNodes - numParticlesLocal);
-#endif
-#endif
-     */
+
+    //cuda::set(treeHandler->d_child, -1, POW_DIM * numNodes);
+    //cuda::set(&particleHandler->d_mass[numParticlesLocal], (real)0., numNodes - numParticlesLocal);
+    //cuda::set(&particleHandler->d_x[numParticlesLocal], (real)0., numNodes - numParticlesLocal);
+    //#if DIM > 1
+    //cuda::set(&particleHandler->d_y[numParticlesLocal], (real)0., numNodes - numParticlesLocal);
+    //#if DIM == 3
+    //cuda::set(&particleHandler->d_z[numParticlesLocal], (real)0., numNodes - numParticlesLocal);
+    //#endif
+    //#endif
+
     // end: testing
+
     cuda::set(particleHandler->d_nodeType, 0, numNodes);
+#else
+    // TODO: CPU reset particle entries
+#endif // TARGET_GPU
 
     //cuda::set(&particleHandler->d_x[numParticles], (real)0., numNodes-numParticles);
     //cuda::set(&particleHandler->d_y[numParticles], (real)0., numNodes-numParticles);
@@ -624,13 +682,18 @@ real Miluphpc::reset() {
     lowestDomainListHandler->reset();
     subDomainKeyTreeHandler->reset();
 
+#if TARGET_GPU
 #if SPH_SIM
     cuda::set(particleHandler->d_noi, 0, numParticles);
     cuda::set(particleHandler->d_nnl, -1, MAX_NUM_INTERACTIONS * numParticles);
 #endif
+#else
+    // TODO: CPU set particle entries (noi, nnl)
+#endif
 
     //Logger(TIME) << "resetArrays: " << time << " ms";
     // END: resetting arrays, variables, buffers, ...
+
     return time;
 }
 
@@ -639,6 +702,7 @@ real Miluphpc::boundingBox() {
     //ParticlesNS::Kernel::Launch::check4nans(particleHandler->d_particles, numParticlesLocal);
 
     real time;
+#if TARGET_GPU
     Logger(DEBUG) << "computing bounding box ...";
     // ---------------------------------------------------------
     time = TreeNS::Kernel::Launch::computeBoundingBox(treeHandler->d_tree, particleHandler->d_particles, d_mutex,
@@ -688,12 +752,40 @@ real Miluphpc::boundingBox() {
 #endif
 
     Logger(TIME) << "computeBoundingBox: " << time << " ms";
+#else
+    time = 0.; // TODO: CPU boundingBox()
+
+
+    std::pair<real*, real*> minmax = std::minmax_element(particleHandler->h_particles->x,
+                                                         particleHandler->h_particles->x + numParticlesLocal);
+    *treeHandler->h_minX = *(minmax.first);
+    *treeHandler->h_maxX = *(minmax.second);
+#if DIM > 1
+    minmax = std::minmax_element(particleHandler->h_particles->y,
+                                 particleHandler->h_particles->y + numParticlesLocal);
+    *treeHandler->h_minY = *(minmax.first);
+    *treeHandler->h_maxY = *(minmax.second);
+#if DIM == 3
+    minmax = std::minmax_element(particleHandler->h_particles->z,
+                                 particleHandler->h_particles->z + numParticlesLocal);
+    *treeHandler->h_minZ = *(minmax.first);
+    *treeHandler->h_maxZ = *(minmax.second);
+#endif
+#endif
+
+    //Logger(TRACE) << "Bounding box: x = (" << std::setprecision(9) << *treeHandler->h_minX << ", "
+    //              << *treeHandler->h_maxX << ")" << "y = (" << *treeHandler->h_minY << ", "
+    //              << *treeHandler->h_maxY << ")" << "z = " << *treeHandler->h_minZ << ", "
+    //              << *treeHandler->h_maxZ << ")";
+
+#endif // TARGET_GPU
     return time;
 }
 
 real Miluphpc::assignParticles() {
 
     real time;
+#if TARGET_GPU
     // -----------------------------------------------------------------------------------------------------------------
     time = SubDomainKeyTreeNS::Kernel::Launch::particlesPerProcess(subDomainKeyTreeHandler->d_subDomainKeyTree,
                                                                    treeHandler->d_tree, particleHandler->d_particles,
@@ -931,24 +1023,43 @@ real Miluphpc::assignParticles() {
                                                  (integer)0, resetLength);
 #endif
 
+#else
+    time = 0.; // TODO: CPU assignParticles()
+#endif // TARGET_GPU
     return time;
 }
 
 template <typename U, typename T>
 real Miluphpc::arrangeParticleEntries(U *sortArray, U *sortedArray, T *entry, T *temp) {
     real time;
+#if TARGET_GPU
     time = HelperNS::sortArray(entry, temp, sortArray, sortedArray, numParticlesLocal);
     time += HelperNS::Kernel::Launch::copyArray(entry, temp, numParticlesLocal);
+#else
+    time = 0.; // TODO: CPU arrangeParticleEntries()
+#endif
     return time;
 }
+
 
 real Miluphpc::tree() {
 
+#if TARGET_GPU
     real time = parallel_tree();
+#else
+    real time = 0.;
 
+#endif
     return time;
 }
 
+real Miluphpc::cpu_tree() {
+
+    // TODO: cpu_tree();
+    return 0.;
+}
+
+#if TARGET_GPU
 real Miluphpc::parallel_tree() {
     real time;
     real totalTime = 0.;
@@ -1044,14 +1155,25 @@ real Miluphpc::parallel_tree() {
 
     return totalTime;
 }
+#endif // TARGET_GPU
+
 
 real Miluphpc::pseudoParticles() {
 
+#if TARGET_GPU
     real time = parallel_pseudoParticles();
-
+#else
+    real time = 0.;
+#endif // TARGET_GPU
     return time;
 }
 
+real Miluphpc::cpu_pseudoParticles() {
+    // TODO: CPU pseudoParticles()
+    return 0.;
+}
+
+#if TARGET_GPU
 real Miluphpc::parallel_pseudoParticles() {
 
     real time = 0;
@@ -1231,14 +1353,26 @@ real Miluphpc::parallel_pseudoParticles() {
 
     return time;
 }
+#endif // TARGET_GPU
 
 real Miluphpc::gravity() {
 
+#if TARGET_GPU
     real time = parallel_gravity();
+#else
+    real time = 0.;
+#endif // TARGET_GPU
 
     return time;
 }
 
+real Miluphpc::cpu_gravity() {
+
+    // TODO: CPU gravity()
+    return 0.;
+}
+
+#if TARGET_GPU
 real Miluphpc::parallel_gravity() {
 
     real time;
@@ -2197,20 +2331,35 @@ real Miluphpc::parallel_gravity() {
 
     return totalTime;
 }
+#endif // TARGET_GPU
 
 real Miluphpc::sph() {
 
-    real time = 0;
+    real time = 0.;
+#if TARGET_GPU
     time = parallel_sph();
+#else
+    time = cpu_sph();
+#endif // TARGET_GPU
 
     return time;
 }
 
+real Miluphpc::cpu_sph() {
+
+    // TODO: CPU sph()
+
+    return 0.;
+}
+#if TARGET_GPU
 // IN PRINCIPLE it should be possible to reuse already sent particles from (parallel) gravity
 real Miluphpc::parallel_sph() {
 
     real time;
     real totalTime = 0;
+
+#if SPH_SIM
+
     Timer timer;
     real timeElapsed;
 
@@ -2821,9 +2970,12 @@ real Miluphpc::parallel_sph() {
     Logger(TIME) << "sph: totalTime: " << totalTime << " ms";
     profiler.value2file(ProfilerIds::Time::SPH::repairTree, time);
 
+#endif // SPH_SIM
+
     return totalTime;
 
 }
+#endif // TARGET_GPU
 
 void Miluphpc::fixedLoadBalancing() {
 
@@ -2835,6 +2987,8 @@ void Miluphpc::fixedLoadBalancing() {
         subDomainKeyTreeHandler->h_subDomainKeyTree->range[i] = (keyType)i * rangePerProc;
     }
     subDomainKeyTreeHandler->h_subDomainKeyTree->range[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses] = KEY_MAX;
+
+    Logger(INFO) << "keyMax: " << (keyType)KEY_MAX;
 
     //subDomainKeyTreeHandler->h_subDomainKeyTree->range[0] = 0UL;
     //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = 0UL;
@@ -2865,8 +3019,10 @@ void Miluphpc::fixedLoadBalancing() {
         //printf("range[%i] = %lu\n", i, subDomainKeyTreeHandler->h_subDomainKeyTree->range[i]);
         Logger(DEBUG) << "range[" << i << "] = " << subDomainKeyTreeHandler->h_subDomainKeyTree->range[i];
     }
-
+#if TARGET_GPU
     subDomainKeyTreeHandler->copy(To::device, true, true);
+#endif
+
 }
 
 void Miluphpc::dynamicLoadBalancing(int bins) {
@@ -2891,11 +3047,20 @@ void Miluphpc::dynamicLoadBalancing(int bins) {
 //#endif
 
     //updateRangeApproximately(aimedParticlesPerProcess, bins);
+#if TARGET_GPU
     updateRange(aimedParticlesPerProcess);
+#else
+    cpu_updateRange(aimedParticlesPerProcess);
+#endif // TARGET_GPU
 
     delete [] processParticleCounts;
 }
 
+void Miluphpc::cpu_updateRange(int aimedParticlesPerProcess) {
+    // TODO: CPU updateRange()
+}
+
+#if TARGET_GPU
 void Miluphpc::updateRange(int aimedParticlesPerProcess) {
 
     // update bounding boxes here! // TODO: if bounding boxes are calculated here, they shouldn't be calculated again !?
@@ -2970,7 +3135,9 @@ void Miluphpc::updateRange(int aimedParticlesPerProcess) {
     delete [] h_sortedKeys;
 
 }
+#endif // TARGET_GPU
 
+#if TARGET_GPU
 // deprecated
 void Miluphpc::updateRangeApproximately(int aimedParticlesPerProcess, int bins) {
 
@@ -3023,9 +3190,11 @@ void Miluphpc::updateRangeApproximately(int aimedParticlesPerProcess, int bins) 
         Logger(INFO) << "range[" << i << "] = " << subDomainKeyTreeHandler->h_subDomainKeyTree->range[i];
     }
 }
+#endif
 
 real Miluphpc::removeParticles() {
 
+#if TARGET_GPU
     int *d_particles2remove = buffer->d_integerBuffer; //d_particles2removeBuffer; //&buffer->d_integerBuffer[0];
     int *d_particles2remove_counter = buffer->d_integerVal; //d_particles2removeVal; //buffer->d_integerVal;
 
@@ -3153,6 +3322,14 @@ real Miluphpc::removeParticles() {
     numParticlesLocal -= h_particles2remove_counter;
     Logger(INFO) << "removing #" << h_particles2remove_counter << " particles!";
 
+
+#else
+
+    // TODO: CPU removeParticles()
+    real time = 0.;
+
+#endif // TARGET_GPU
+
     return time;
 }
 
@@ -3241,17 +3418,26 @@ integer Miluphpc::sendParticlesEntry(integer *sendLengths, integer *receiveLengt
             //HelperNS::Kernel::Launch::copyArray(&entry[0], &entry[subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] - offset], offset);
             //KernelHandler.copyArray(&entry[0], &entry[h_procCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] - offset], offset);
         }
+#if TARGET_GPU
         HelperNS::Kernel::Launch::copyArray(&copyBuffer[0], &entry[offset], subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]);
         HelperNS::Kernel::Launch::copyArray(&entry[0], &copyBuffer[0], subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]);
+#else
+       // TODO: CPU copyArray
+#endif // TARGET_GPU
         //KernelHandler.copyArray(&d_tempArray_2[0], &entry[offset], subDomainKeyTreeHandler->d_h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]);
         //KernelHandler.copyArray(&entry[0], &d_tempArray_2[0], subDomainKeyTreeHandler->d_h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]);
         //Logger(INFO) << "moving from offet: " << offset << " length: " << subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank];
     }
 
+#if TARGET_GPU
     HelperNS::Kernel::Launch::resetArray(&entry[subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]],
                                          (T)0, numParticles-subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]);
     HelperNS::Kernel::Launch::copyArray(&entry[subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]],
                                         entryBuffer, receiveOffset);
+#else
+    // TODO: CPU copyArray()
+#endif // TARGET_GPU
+
      //KernelHandler.resetFloatArray(&entry[h_procCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]], 0, numParticles-h_procCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]); //resetFloatArrayKernel(float *array, float value, int n)
     //KernelHandler.copyArray(&entry[h_procCounter[h_subDomainHandler->rank]], d_tempArray, receiveOffset);
 
@@ -3274,6 +3460,8 @@ real Miluphpc::particles2file(int step) {
                           HighFive::File::ReadWrite | HighFive::File::Create | HighFive::File::Truncate,
                           HighFive::MPIOFileDriver(MPI_COMM_WORLD, MPI_INFO_NULL));
 
+    configParameters2file(h5file);
+
     std::vector <size_t> dataSpaceDims(2);
     dataSpaceDims[0] = std::size_t(sumParticles);
     dataSpaceDims[1] = DIM;
@@ -3295,7 +3483,9 @@ real Miluphpc::particles2file(int step) {
 
     // TODO: add uid (and other entries?)
     std::vector<real> time;
+#if TARGET_GPU
     simulationTimeHandler->copy(To::host);
+#endif // TARGET_GPU
     time.push_back(*simulationTimeHandler->h_currentTime); //step*simulationParameters.timestep);
     HighFive::DataSet h5_time = h5file.createDataSet<real>("/time", HighFive::DataSpace::From(time));
 
@@ -3338,20 +3528,28 @@ real Miluphpc::particles2file(int step) {
 
     Logger(INFO) << "copying particles ...";
 
+#if TARGET_GPU
     particleHandler->copyDistribution(To::host, true, false);
 #if SPH_SIM
     particleHandler->copySPH(To::host);
 #endif
+#endif // TARGET_GPU
 
     Logger(INFO) << "getting particle keys ...";
+#if TARGET_GPU
     keyType *d_keys = buffer->d_keyTypeBuffer;
+#endif
     //cuda::malloc(d_keys, numParticlesLocal);
 
     //TreeNS::Kernel::Launch::getParticleKeys(treeHandler->d_tree, particleHandler->d_particles,
     //                                        d_keys, 21, numParticlesLocal, curveType);
+#if TARGET_GPU
     SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys(subDomainKeyTreeHandler->d_subDomainKeyTree,
                                                         treeHandler->d_tree, particleHandler->d_particles,
                                                         d_keys, 21, numParticlesLocal, curveType);
+#else
+    // TODO: CPU getParticleKeys()
+#endif
     //SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys(subDomainKeyTreeHandler->d_subDomainKeyTree,
     //                                                    treeHandler->d_tree, particleHandler->d_particles,
     //                                                    d_keys, 21, numParticlesLocal, curveType);
@@ -3359,7 +3557,9 @@ real Miluphpc::particles2file(int step) {
 
     keyType *h_keys;
     h_keys = new keyType[numParticlesLocal];
+#if TARGET_GPU
     cuda::copy(h_keys, d_keys, numParticlesLocal, To::host);
+#endif
 
     integer keyProc;
 
@@ -3433,19 +3633,23 @@ real Miluphpc::particles2file(int step) {
     h5_cs.select({nOffset}, {std::size_t(numParticlesLocal)}).write(cs);
 #endif
 
+#if TARGET_GPU
     if (simulationParameters.calculateEnergy) {
         h5_totalEnergy.select({subDomainKeyTreeHandler->h_subDomainKeyTree->rank}, {1}).write(totalEnergy);
     }
     if (simulationParameters.calculateAngularMomentum) {
         h5_totalAngularMomentum.select({subDomainKeyTreeHandler->h_subDomainKeyTree->rank}, {1}).write(totalAngularMomentum);
     }
+#endif // TARGET_GPU
 
     if (simulationParameters.calculateCenterOfMass) {
         real *h_com = new real[DIM];
+#if TARGET_GPU
         real *d_com = buffer->d_realBuffer;
         //cuda::malloc(d_com, DIM);
         TreeNS::Kernel::Launch::globalCOM(treeHandler->d_tree, particleHandler->d_particles, d_com);
         cuda::copy(h_com, d_com, DIM, To::host);
+#endif // TARGET_GPU
         for (int i=0; i<DIM; i++) {
             Logger(DEBUG) << "com[" << i << "] = " << h_com[i];
         }
@@ -3513,6 +3717,7 @@ real Miluphpc::particles2file(const std::string& filename, int *particleIndices,
     std::vector<std::vector<real>> x, v; // two dimensional vector for 3D vector data
     std::vector<keyType> k; // one dimensional vector holding particle keys
 
+#if TARGET_GPU
     particleHandler->copyDistribution(To::host, true, false, true);
 
     keyType *d_keys = buffer->d_keyTypeBuffer;
@@ -3523,6 +3728,9 @@ real Miluphpc::particles2file(const std::string& filename, int *particleIndices,
     SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys(subDomainKeyTreeHandler->d_subDomainKeyTree,
                                                         treeHandler->d_tree, particleHandler->d_particles,
                                                         d_keys, 21, numNodes, curveType);
+#else
+    // TODO: ...
+#endif // TARGET_GPU
     //SubDomainKeyTreeNS::Kernel::Launch::getParticleKeys(subDomainKeyTreeHandler->d_subDomainKeyTree,
     //                                                    treeHandler->d_tree, particleHandler->d_particles,
     //                                                    d_keys, 21, numParticlesLocal, curveType);
@@ -3530,7 +3738,9 @@ real Miluphpc::particles2file(const std::string& filename, int *particleIndices,
 
     keyType *h_keys;
     h_keys = new keyType[numNodes];
+#if TARGET_GPU
     cuda::copy(h_keys, d_keys, numNodes, To::host);
+#endif // TARGET_GPU
 
     integer keyProc;
 
@@ -3584,8 +3794,33 @@ real Miluphpc::particles2file(const std::string& filename, int *particleIndices,
 
 }
 
+real Miluphpc::configParameters2file(HighFive::File &h5file) {
+
+    // TODO: write config parameters to HDF5 file
+
+    // not working if only one rank writes attributes ...
+    //if (subDomainKeyTreeHandler->h_subDomainKeyTree->rank == 0) {
+    //    HighFive::Group header = h5file.createGroup("/Header");
+    //    //header.createAttribute<int>("test", 1);
+    //}
+
+    // testing
+    HighFive::Group header = h5file.createGroup("config");
+    int test_1 = 10;
+    HighFive::Attribute b_1 = header.createAttribute<int>("test_1", HighFive::DataSpace::From(test_1));
+    b_1.write(test_1);
+    double test_2 = 1.5;
+    HighFive::Attribute b_2 = header.createAttribute<double>("test_2", test_2);
+    // end: testing
+
+    // which information are necessary
+    // - time (to know from which start time to continue)
+    // - ...
+}
+
 void Miluphpc::getMemoryInfo() {
 
+#if TARGET_GPU
     // TODO: simulate other memory allocations to include "peak memory usage" ?
     //  - including updateRange()
     //  - sorting using CUDA cub
@@ -3606,5 +3841,9 @@ void Miluphpc::getMemoryInfo() {
                  << " free: " << 9.31e-10 * free_bytes << " GB ("
                  << (double)free_bytes/(double)total_bytes * 100. << " %)"
                  << " available: " << 9.31e-10 * total_bytes << " GB";
+
+#else
+    // TODO: CPU getMemoryInfo()
+#endif // TARGET_GPU
 
 }

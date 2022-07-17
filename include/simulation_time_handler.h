@@ -25,6 +25,7 @@ public:
 
     SimulationTime *h_simulationTime;
 
+#if TARGET_GPU
     real *d_dt;
     real *d_startTime;
     real *d_subEndTime;
@@ -33,6 +34,7 @@ public:
     real *d_dt_max;
 
     SimulationTime *d_simulationTime;
+#endif // TARGET_GPU
 
     SimulationTimeHandler(real dt, real endTime, real dt_max);
     ~SimulationTimeHandler();

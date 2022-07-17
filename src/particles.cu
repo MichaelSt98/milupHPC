@@ -363,6 +363,7 @@ CUDA_CALLABLE_MEMBER Particles::~Particles() {
 }
 
 
+#if TARGET_GPU
 namespace ParticlesNS {
 
     namespace Kernel {
@@ -936,6 +937,8 @@ namespace ParticlesNS {
 
 }
 
+#endif // TARGET_GPU
+
 CUDA_CALLABLE_MEMBER IntegratedParticles::IntegratedParticles() {
 
 }
@@ -1079,6 +1082,7 @@ CUDA_CALLABLE_MEMBER IntegratedParticles::~IntegratedParticles() {
 
 }
 
+#if TARGET_GPU
 namespace IntegratedParticlesNS {
 
     namespace Kernel {
@@ -1194,3 +1198,4 @@ namespace IntegratedParticlesNS {
 #endif
     }
 }
+#endif // TARGET_GPU

@@ -1,6 +1,8 @@
 #include "../../include/subdomain_key_tree/subdomain.cuh"
+#if TARGET_GPU
 #include "../../include/cuda_utils/cuda_launcher.cuh"
 #include <cub/cub.cuh>
+#endif // TARGET_GPU
 
 CUDA_CALLABLE_MEMBER void KeyNS::key2Char(keyType key, integer maxLevel, char *keyAsChar) {
     int level[21];
@@ -130,6 +132,65 @@ CUDA_CALLABLE_MEMBER bool SubDomainKeyTree::isDomainListNode(keyType key, intege
     return false;
 }
 
+void SubDomainKeyTree::buildDomainTree(Tree *tree, DomainList *domainList) {
+
+    keyType key;
+    for (int i=0; i<POW_DIM; ++i) {
+        domainList->domainListIndices[*domainList->domainListCounter] = i;
+        key = (keyType)((i * 1UL) << (DIM * (MAX_LEVEL - 1)));
+        domainList->domainListKeys[*domainList->domainListCounter] = key;
+        domainList->domainListLevels[*domainList->domainListCounter] = 1;
+        domainList->domainListCounter++;
+    }
+
+    for (int i=0; i<POW_DIM; ++i) {
+        //buildDomainTree(tree, domainList, 2, domainList->domainListKeys[i]);
+    }
+
+}
+
+void SubDomainKeyTree::buildDomainTree(Tree *tree, DomainList *domainList, int level, keyType key) {
+
+    int proc1;
+    int proc2;
+
+}
+
+/*
+void SubDomain::createDomainList(TreeNode &t, int level, KeyType k) {
+    t.node = TreeNode::domainList;
+
+    //Logger(INFO) << "KeyType k = " << k;
+
+    int proc1;
+    int proc2;
+    if (curve == hilbert) {
+        KeyType hilbert = KeyType::Lebesgue2Hilbert(k, level);
+        proc1 = key2proc(hilbert, level, true);
+        proc2 = key2proc(hilbert | (KeyType{ KeyType::KEY_MAX } >> (DIM * level + 1)), level, true);
+    }
+    else {
+        proc1 = key2proc(k, level);
+        proc2 = key2proc(k | ~(~KeyType(0L) << DIM * (k.maxLevel - level)), level);
+    }
+    if (proc1 != proc2) {
+        for (int i=0; i<POWDIM; i++) {
+            if (t.son[i] == NULL) {
+                t.son[i] = new TreeNode;
+            }
+            else if (t.son[i]->isLeaf() && t.son[i]->node == TreeNode::particle) {
+                t.son[i]->node = TreeNode::domainList;
+                t.insert(t.son[i]->p);
+                continue;
+            }
+            createDomainList(*t.son[i], level + 1,
+                             k | (KeyType{ i } << (DIM*(k.maxLevel-level-1))));
+        }
+    }
+}
+*/
+
+#if TARGET_GPU
 namespace SubDomainKeyTreeNS {
 
     namespace Kernel {
@@ -1671,6 +1732,8 @@ namespace SubDomainKeyTreeNS {
 
 }
 
+#endif // TARGET_GPU
+
 CUDA_CALLABLE_MEMBER DomainList::DomainList() {
 
 }
@@ -1716,6 +1779,7 @@ CUDA_CALLABLE_MEMBER void DomainList::setBorders(real *borders, integer *relevan
     this->relevantDomainListOriginalIndex = relevantDomainListOriginalIndex;
 }
 
+#if TARGET_GPU
 namespace DomainListNS {
 
     namespace Kernel {
@@ -2642,3 +2706,5 @@ namespace Physics {
         }
     }
 }
+
+#endif // TARGET_GPU

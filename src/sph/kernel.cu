@@ -1,4 +1,5 @@
 #include "../../include/sph/kernel.cuh"
+#if TARGET_GPU
 #include "../../include/cuda_utils/cuda_launcher.cuh"
 
 #define MIN_NUMBER_OF_INTERACTIONS_FOR_TENSORIAL_CORRECTION_TO_WORK 0
@@ -512,4 +513,6 @@ __global__ void tensorialCorrection(SPH_kernel kernel, Particles *particles, int
 }
 #endif
 }
+
+#endif
 

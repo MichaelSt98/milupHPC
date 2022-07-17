@@ -12,13 +12,16 @@
 #ifndef MILUPHPC_TREE_CUH
 #define MILUPHPC_TREE_CUH
 
-#include "../cuda_utils/cuda_utilities.cuh"
 #include "../parameter.h"
+#include "../cuda_utils/cuda_utilities.cuh"
 #include "../particles.cuh"
+#include "../box.h"
 
 #include <iostream>
 #include <stdio.h>
+#if TARGET_GPU
 #include <cuda.h>
+#endif
 #include <assert.h>
 #include <cmath>
 
@@ -348,9 +351,17 @@ public:
      */
     CUDA_CALLABLE_MEMBER ~Tree();
 
+    bool isLeaf(integer nodeIndex);
+
+    bool isDomainList(integer nodeIndex);
+
+    void buildTree(Particles *particles, integer numParticlesLocal, integer numParticles);
+
+    void insertTree(Particles *particles, integer particleIndex, integer nodeIndex, integer numParticles, Box &box);
 
 };
 
+#if TARGET_GPU
 namespace TreeNS {
 
     namespace Kernel {
@@ -689,5 +700,6 @@ namespace UnitTesting {
     }
 }
 #endif
+#endif // TARGET_GPU
 
 #endif //MILUPHPC_TREE_CUH

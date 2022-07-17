@@ -549,6 +549,7 @@ public:
 
 };
 
+#if TARGET_GPU
 namespace ParticlesNS {
 
     namespace Kernel {
@@ -970,6 +971,7 @@ namespace ParticlesNS {
     }
 
 }
+#endif // TARGET_GPU
 
 /**
  * Class for buffering particle information needed for integration
@@ -1080,6 +1082,7 @@ public:
 
 };
 
+#if TARGET_GPU
 namespace IntegratedParticlesNS {
 
     namespace Kernel {
@@ -1158,5 +1161,7 @@ namespace IntegratedParticlesNS {
 
     }
 }
+
+#endif // TARGET_GPU
 
 #endif //MILUPHPC_PARTICLES_CUH

@@ -1,4 +1,5 @@
 #include "../../include/integrator/device_predictor_corrector_euler.cuh"
+#if TARGET_GPU
 #include "../../include/cuda_utils/cuda_launcher.cuh"
 
 namespace PredictorCorrectorEulerNS {
@@ -544,3 +545,5 @@ namespace PredictorCorrectorEulerNS {
 
     }
 }
+
+#endif // TARGET_GPU

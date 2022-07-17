@@ -4,7 +4,7 @@ PredictorCorrectorEuler::PredictorCorrectorEuler(SimulationParameters simulation
     printf("PredictorCorrectorEuler()\n");
     integratedParticles = new IntegratedParticleHandler(numParticles, numNodes);
 
-
+#if TARGET_GPU
     cudaGetDevice(&device);
     printf("Device: %i\n", device);
     cudaGetDeviceProperties(&prop, device);
@@ -26,6 +26,7 @@ PredictorCorrectorEuler::PredictorCorrectorEuler(SimulationParameters simulation
     PredictorCorrectorEulerNS::BlockSharedNS::Launch::setE(d_blockShared, d_block_e);
     PredictorCorrectorEulerNS::BlockSharedNS::Launch::setRho(d_blockShared, d_block_rho);
     PredictorCorrectorEulerNS::BlockSharedNS::Launch::setVmax(d_blockShared, d_block_vmax);
+#endif // TARGET_GPU
 
 }
 
@@ -34,6 +35,7 @@ PredictorCorrectorEuler::~PredictorCorrectorEuler() {
 
     delete [] integratedParticles;
 
+#if TARGET_GPU
     cuda::free(d_block_forces);
     cuda::free(d_block_courant);
     cuda::free(d_block_artVisc);
@@ -42,6 +44,7 @@ PredictorCorrectorEuler::~PredictorCorrectorEuler() {
     cuda::free(d_block_vmax);
 
     cuda::free(d_blockShared);
+#endif // TARGET_GPU
 }
 
 void PredictorCorrectorEuler::integrate(int step) {
@@ -93,15 +96,23 @@ void PredictorCorrectorEuler::integrate(int step) {
         //Logger(INFO) << "h_dt_max = " << *simulationTimeHandler->h_dt_max;
 
         Logger(INFO) << "setTimeStep: search radius: " << h_searchRadius;
+#if TARGET_GPU
         PredictorCorrectorEulerNS::Kernel::Launch::setTimeStep(prop.multiProcessorCount,
                                                                simulationTimeHandler->d_simulationTime,
                                                                materialHandler->d_materials,
                                                                particleHandler->d_particles,
                                                                d_blockShared, d_blockCount, h_searchRadius,
                                                                numParticlesLocal);
+#else
+        // TODO: CPU PredictorCorrectorEulerNS::setTimeStep()
+#endif // TARGET_GPU
 
+#if TARGET_GPU
         simulationTimeHandler->globalizeTimeStep(Execution::device);
         simulationTimeHandler->copy(To::host);
+#else
+        simulationTimeHandler->globalizeTimeStep(Execution::host);
+#endif // TARGET_GPU
         Logger(INFO) << "h_dt = " << *simulationTimeHandler->h_dt << "  | h_dt_max = "
                      << *simulationTimeHandler->h_dt_max;;
         Logger(INFO) << "h_startTime = " << *simulationTimeHandler->h_startTime;
@@ -111,10 +122,14 @@ void PredictorCorrectorEuler::integrate(int step) {
         //Logger(INFO) << "h_dt_max = " << *simulationTimeHandler->h_dt_max;
         // ------------------------------------------------------------------------------------------------------------
         Logger(INFO) << "PREDICTOR!";
+#if TARGET_GPU
         time += PredictorCorrectorEulerNS::Kernel::Launch::predictor(particleHandler->d_particles,
                                                                      integratedParticles[0].d_integratedParticles,
                                                                      *simulationTimeHandler->h_dt, //(real) simulationParameters.timestep,
                                                                      numParticlesLocal);
+#else
+      // TODO: CPU PredictorCorrectorEulerNS::predictor()
+#endif
 
         Logger(INFO) << "setPointer()...";
         particleHandler->setPointer(&integratedParticles[0]);
@@ -133,14 +148,19 @@ void PredictorCorrectorEuler::integrate(int step) {
         particleHandler->resetPointer();
 
         Logger(INFO) << "CORRECTOR!";
+#if TARGET_GPU
         time += PredictorCorrectorEulerNS::Kernel::Launch::corrector(particleHandler->d_particles,
                                                                      integratedParticles[0].d_integratedParticles,
                                                                      *simulationTimeHandler->h_dt, //(real) simulationParameters.timestep,
                                                                      numParticlesLocal);
-
+#else
+        // TODO: PredictorCorrectorEulerNS::corrector()
+#endif
 
         *simulationTimeHandler->h_currentTime += *simulationTimeHandler->h_dt;
+#if TARGET_GPU
         simulationTimeHandler->copy(To::device);
+#endif
 
         Logger(TRACE) << "finished sub step - simulation time: " << *simulationTimeHandler->h_currentTime
                       << " (STEP: " << step << " | subStep: " << subStep
@@ -151,7 +171,9 @@ void PredictorCorrectorEuler::integrate(int step) {
         //H5Profiler &profiler = H5Profiler::getInstance("log/performance.h5");
 
 
+#if TARGET_GPU
         subDomainKeyTreeHandler->copy(To::host, true, false);
+#endif
         profiler.vector2file(ProfilerIds::ranges, subDomainKeyTreeHandler->h_range);
 
         boost::mpi::communicator comm;

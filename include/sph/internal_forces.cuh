@@ -11,6 +11,8 @@
 #ifndef MILUPHPC_INTERNAL_FORCES_CUH
 #define MILUPHPC_INTERNAL_FORCES_CUH
 
+#include "../parameter.h"
+#if TARGET_GPU
 #include "../subdomain_key_tree/subdomain.cuh"
 #include "../materials/material.cuh"
 #include "kernel.cuh"
@@ -70,4 +72,5 @@ namespace SPH {
     }
 }
 
+#endif // TARGET_GPU
 #endif //MILUPHPC_INTERNAL_FORCES_CUH

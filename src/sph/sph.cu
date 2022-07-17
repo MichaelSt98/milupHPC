@@ -1,4 +1,5 @@
 #include "../../include/sph/sph.cuh"
+#if TARGET_GPU
 #include "../../include/cuda_utils/cuda_launcher.cuh"
 //#include <cub/cub.cuh>
 
@@ -3244,3 +3245,5 @@ namespace SPH {
     }
 
 }
+
+#endif // TARGET_GPU

@@ -4,6 +4,7 @@ HelperHandler::HelperHandler(int numProcesses, int numParticlesLocal, int numPar
             numProcesses(numProcesses), numParticlesLocal(numParticlesLocal), numParticles(numParticles),
             sumParticles(sumParticles), numNodes(numNodes) {
 
+#if TARGET_GPU
     cuda::malloc(d_integerVal, 1);
     cuda::malloc(d_integerVal1, 1);
     cuda::malloc(d_integerVal2, 1);
@@ -46,10 +47,13 @@ HelperHandler::HelperHandler(int numProcesses, int numParticlesLocal, int numPar
                                   d_idIntegerBuffer1, d_realBuffer, d_realBuffer1,
                                   d_keyTypeBuffer, d_keyTypeBuffer1, d_keyTypeBuffer2);
 
+#endif // TARGET_GPU
+
 }
 
 HelperHandler::~HelperHandler() {
 
+#if TARGET_GPU
     cuda::free(d_integerVal);
     cuda::free(d_integerVal1);
     cuda::free(d_integerVal2);
@@ -80,11 +84,12 @@ HelperHandler::~HelperHandler() {
     cuda::free(d_keyTypeBuffer2);
 
     cuda::free(d_helper);
-
+#endif
 }
 
 void HelperHandler::reset() {
 
+#if TARGET_GPU
     cuda::set(d_integerVal, 0, 1);
     cuda::set(d_integerVal1, 0, 1);
     cuda::set(d_integerVal2, 0, 1);
@@ -117,4 +122,5 @@ void HelperHandler::reset() {
     //cuda::set(d_integerBuffer, 0, length);
     //cuda::set(d_realBuffer, (real)0, length);
     //cuda::set(d_keyTypeBuffer, (keyType)0, length);
+#endif // TARGET_GPU
 }

@@ -30,18 +30,28 @@ public:
 
     /// device (pointer to) count (array)
     integer *d_count;
+    /// host (pointer to) count (array)
+    integer *h_count;
     /// device (pointer to) start (array)
     integer *d_start;
+    /// host (pointer to) start (array)
+    integer *h_start;
     /// device (pointer to) sorted (array)
     integer *d_sorted;
+    /// host (pointer to) sorted (array)
+    integer *h_sorted;
     /// device (pointer to) child/children (array)
     integer *d_child;
+    /// host (pointer to) child/children (array)
+    integer *h_child;
     /// device (pointer to) index
     integer *d_index;
     /// host (pointer to) index
     integer *h_index;
     /// device (pointer to) mutex/lock
     integer *d_mutex;
+    /// host (pointer to) mutex/lock
+    integer *h_mutex;
 
     /// host (pointer to) array remembering leaf indices for rebuilding after temporarily inserting particles
     integer *h_toDeleteLeaf;
@@ -83,6 +93,8 @@ public:
 
     /// device instance of Class `Tree`
     Tree *d_tree;
+    /// host instance of Class `Tree`
+    Tree *h_tree;
 
     /**
      * @brief Constructor

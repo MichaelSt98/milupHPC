@@ -299,6 +299,112 @@ CUDA_CALLABLE_MEMBER Tree::~Tree() {
 
 }
 
+bool Tree::isLeaf(integer nodeIndex) {
+    for (int childIndex=0; childIndex<POW_DIM; ++childIndex) {
+        if (child[POW_DIM * nodeIndex + childIndex] >= 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool Tree::isDomainList(integer nodeIndex) {
+    // TODO: implement
+}
+
+void Tree::buildTree(Particles *particles, integer numParticlesLocal, integer numParticles) {
+    //for (int i=0; i<100; i++) {
+    //    std::cout << "child[" << i << "] = " << child[i] << std::endl;
+    //}
+    Box root {*minX, *maxX, *minY, *maxY, *minZ, *maxZ};
+    *index = numParticles;
+    for (int i=0; i<numParticlesLocal; ++i) {
+        insertTree(particles, i, 0, numParticles, root);
+    }
+}
+
+void Tree::insertTree(Particles *particles, integer particleIndex, integer nodeIndex, integer numParticles, Box &box) {
+
+    Box sonBox;
+    int childPath = 0;
+
+    //std::cout << "nodeIndex: " << nodeIndex  << "  particleIndex: " << particleIndex << std::endl;
+
+    //sonBox = box;
+
+    //std::cout << "x = " << particles->x[particleIndex] << " < " << "box.minX = " << box.minX << std::endl;
+
+    if (particles->x[particleIndex] < 0.5 * (box.minX + box.maxX)) { // x direction
+        childPath += 1;
+        sonBox.maxX = 0.5 * (box.minX + box.maxX);
+        sonBox.minX = box.minX;
+    }
+    else {
+        sonBox.minX = 0.5 * (box.minX + box.maxX);
+        sonBox.maxX = box.maxX;
+    }
+#if DIM > 1
+    // y direction
+    if (particles->y[particleIndex] < 0.5 * (box.minY + box.maxY)) { // y direction
+        childPath += 2;
+        sonBox.maxY = 0.5 * (box.minY + box.maxY);
+        sonBox.minY = box.minY;
+    }
+    else {
+        sonBox.minY = 0.5 * (box.minY + box.maxY);
+        sonBox.maxY = box.maxY;
+    }
+#if DIM == 3
+    // z direction
+    if (particles->z[particleIndex] < 0.5 * (box.minZ + box.maxZ)) {  // z direction
+        childPath += 4;
+        sonBox.maxZ = 0.5 * (box.minZ + box.maxZ);
+        sonBox.minZ = box.minZ;
+    }
+    else {
+        sonBox.minZ = 0.5 * (box.minZ + box.maxZ);
+        sonBox.maxZ = box.maxZ;
+    }
+#endif
+#endif
+
+    //std::cout << "childPath: " << childPath << " minmax x = " << box.minX << ", " << box.maxX << std::endl;
+
+    // pseudo-particle
+    if (child[POW_DIM * nodeIndex + childPath] > numParticles) {
+        //std::cout << "pseudo-particle" << std::endl;
+        insertTree(particles, particleIndex, child[POW_DIM * nodeIndex + childPath], numParticles, sonBox);
+    }
+    else {
+        // good to go
+        if (child[POW_DIM * nodeIndex + childPath] == -1) {
+            //std::cout << "child[8 * " << nodeIndex << " + " << childPath << "] = " << particleIndex << std::endl;
+            child[POW_DIM * nodeIndex + childPath] = particleIndex;
+        }
+        else { // already a particle there
+            int insertIndex = *index;
+            (*index)++;
+            //std::cout << "already a particle here: " << child[POW_DIM * nodeIndex + childPath] << std::endl;
+            int p2 = child[POW_DIM * nodeIndex + childPath];
+            //std::cout << "child[" << nodeIndex << "] = " << insertIndex << std::endl;
+            child[nodeIndex] = insertIndex;
+
+            //particles->x[insertIndex] = 0.5 * (sonBox.minX + sonBox.maxX);
+            //particles->y[insertIndex] = 0.5 * (sonBox.minY + sonBox.maxZ);
+            //particles->z[insertIndex] = 0.5 * (sonBox.minZ + sonBox.maxZ);
+
+            //std::cout << "child[8 * " << insertIndex << " + " << particleIndex << "] = " << particleIndex << std::endl;
+            child[POW_DIM * insertIndex + childPath] = particleIndex;
+            //std::cout << "insertTree(" << p2 << ", " << insertIndex << ")" << std::endl;
+            insertTree(particles, p2, insertIndex, numParticles, sonBox);
+
+        }
+    }
+
+}
+
+
+#if TARGET_GPU
 __global__ void TreeNS::Kernel::computeBoundingBox(Tree *tree, Particles *particles, integer *mutex, integer n,
                                                  integer blockSize) {
 
@@ -2081,3 +2187,5 @@ namespace UnitTesting {
     }
 }
 #endif
+
+#endif // TARGET_GPU

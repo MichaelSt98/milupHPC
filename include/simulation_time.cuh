@@ -30,6 +30,7 @@ public:
 
 };
 
+#if TARGET_GPU
 namespace SimulationTimeNS {
     namespace Kernel {
         __global__ void set(SimulationTime *simulationTime, real *dt, real *startTime, real *subEndTime, real *endTime,
@@ -41,6 +42,6 @@ namespace SimulationTimeNS {
         }
     }
 }
-
+#endif // TARGET_GPU
 
 #endif //MILUPHPC_SIMULATIONTIME_CUH

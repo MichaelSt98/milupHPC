@@ -1,4 +1,5 @@
 #include "../../include/gravity/gravity.cuh"
+#if TARGET_GPU
 #include "../../include/cuda_utils/cuda_launcher.cuh"
 
 namespace Gravity {
@@ -2785,3 +2786,4 @@ namespace Gravity {
 
     }
 }
+#endif // TARGET_GPU

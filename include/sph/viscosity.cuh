@@ -11,8 +11,9 @@
 #ifndef MILUPHPC_VISCOSITY_CUH
 #define MILUPHPC_VISCOSITY_CUH
 
-#include "../particles.cuh"
 #include "../parameter.h"
+#if TARGET_GPU
+#include "../particles.cuh"
 #include "../materials/material.cuh"
 #include "kernel.cuh"
 #include "cuda_utils/cuda_utilities.cuh"
@@ -32,4 +33,5 @@ namespace SPH {
     }
 }
 
+#endif // TARGET_GPU
 #endif //MILUPHPC_VISCOSITY_CUH

@@ -19,6 +19,9 @@
 #define MILUPHPC_CUDALAUNCHER_CUH
 
 #include "../parameter.h"
+
+#if TARGET_GPU
+
 #include "cuda_utilities.cuh"
 
 #include <iostream>
@@ -158,4 +161,6 @@ namespace cuda {
 
 //#elseif
 
+#endif // TARGET_GPU
 #endif //MILUPHPC_CUDALAUNCHER_CUH
+

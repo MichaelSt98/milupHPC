@@ -1,6 +1,7 @@
 #include "../include/device_rhs.cuh"
 #include "../include/cuda_utils/cuda_launcher.cuh"
 
+#if TARGET_GPU
 namespace Kernel {
 
     __global__ void resetArrays(Tree *tree, Particles *particles, integer *mutex, integer n, integer m) {
@@ -46,4 +47,5 @@ namespace Kernel {
     }
 
 }
+#endif
 

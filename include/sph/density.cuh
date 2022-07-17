@@ -8,9 +8,10 @@
 #ifndef MILUPHPC_DENSITY_CUH
 #define MILUPHPC_DENSITY_CUH
 
+#include "../parameter.h"
+#if TARGET_GPU
 #include "../particles.cuh"
 #include "../subdomain_key_tree/subdomain.cuh"
-#include "../parameter.h"
 #include "kernel.cuh"
 #include "cuda_utils/cuda_utilities.cuh"
 #include "cuda_utils/cuda_runtime.h"
@@ -63,5 +64,5 @@ namespace SPH {
     }
 }
 
-
+#endif // TARGET_GPU
 #endif //MILUPHPC_DENSITY_CUH

@@ -181,6 +181,7 @@ public:
 #endif
 #endif
 
+#if TARGET_GPU
     /// device number of particles
     integer *d_numParticles;
     /// device number of nodes
@@ -344,10 +345,15 @@ public:
 #endif
 #endif
 
+#endif // TARGET_GPU
+
     /// host instance of particles class
     Particles *h_particles;
+
+#if TARGET_GPU
     /// device instance of particles class
     Particles *d_particles;
+#endif // TARGET_GPU
 
     /**
      * Constructor
@@ -431,6 +437,7 @@ public:
     /// (host) number of nodes
     integer numNodes;
 
+#if TARGET_GPU
     /// device unique identifier
     idInteger *d_uid;
 
@@ -472,6 +479,7 @@ public:
 
     /// device instance of `IntegratedParticles` class
     IntegratedParticles *d_integratedParticles;
+#endif // TARGET_GPU
 
     /**
      * Constructor

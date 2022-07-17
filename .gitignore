@@ -8,6 +8,7 @@
 **/testing/
 **/movies/
 **/log/
+**/highfive_testing/
 
 H5Renderer/obj/*
 H5Renderer/bin/*

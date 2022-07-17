@@ -11,9 +11,11 @@
 #ifndef MILUPHPC_GRAVITY_CUH
 #define MILUPHPC_GRAVITY_CUH
 
+#include "../parameter.h"
+#if TARGET_GPU
+
 #include "../subdomain_key_tree/tree.cuh"
 #include "../subdomain_key_tree/subdomain.cuh"
-#include "../parameter.h"
 #include "../helper.cuh"
 #include <boost/mpi.hpp>
 #include <assert.h>
@@ -488,5 +490,5 @@ namespace Gravity {
     }
 }
 
-
+#endif // TARGET_GPU
 #endif //MILUPHPC_GRAVITY_CUH

@@ -1,4 +1,5 @@
 #include "../../include/integrator/device_leapfrog.cuh"
+#if TARGET_GPU
 #include "../../include/cuda_utils/cuda_launcher.cuh"
 
 __global__ void LeapfrogNS::Kernel::updateX(Particles *particles, integer n, real dt) {
@@ -70,3 +71,5 @@ real LeapfrogNS::Kernel::Launch::updateV(Particles *particles, integer n, real d
     return cuda::launch(true, executionPolicy, ::LeapfrogNS::Kernel::updateV, particles, n, dt);
 
 }
+
+#endif // TARGET_GPU
