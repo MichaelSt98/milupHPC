@@ -296,6 +296,8 @@ void Miluphpc::prepareSimulation() {
     treeHandler->globalizeBoundingBox(Execution::device);
     treeHandler->copy(To::host);
 
+#endif // TARGET_GPU
+
     if (simulationParameters.loadBalancing) {
         fixedLoadBalancing();
         dynamicLoadBalancing();
@@ -303,7 +305,6 @@ void Miluphpc::prepareSimulation() {
     else {
         fixedLoadBalancing();
     }
-#endif // TARGET_GPU
 
     subDomainKeyTreeHandler->copy(To::device);
 
@@ -359,7 +360,44 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
     Logger(TIME) << "rhs::boundingBox(): " << time << " ms";
     profiler.value2file(ProfilerIds::Time::boundingBox, *profilerTime);
 
+
     treeHandler->h_tree->buildTree(particleHandler->h_particles, numParticlesLocal, numParticles);
+
+
+
+    //for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses+1; ++i) {
+    //    Logger(TRACE) << "range[" << i << "] = " << subDomainKeyTreeHandler->h_subDomainKeyTree->range[i];
+    //}
+
+    if (subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses > 1) {
+        subDomainKeyTreeHandler->h_subDomainKeyTree->buildDomainTree(treeHandler->h_tree, particleHandler->h_particles,
+                                                                     domainListHandler->h_domainList, numParticles,
+                                                                     curveType);
+    }
+
+    pseudoParticles();
+
+
+    real massCheck = 0.;
+    for (int i=0; i<POW_DIM; ++i) {
+        //Logger(TRACE) << "child[" << i << "] = " << treeHandler->h_tree->child[i] << "  mass: " << particleHandler->h_particles->mass[treeHandler->h_tree->child[i]];
+        massCheck += particleHandler->h_particles->mass[treeHandler->h_tree->child[i]];
+    }
+    Logger(TRACE) << "massCheck: " << massCheck;
+
+
+    //Logger(TRACE) << "domainList: " << *domainListHandler->h_domainList->domainListIndex << " | lowestDomainList: " << *lowestDomainListHandler->h_domainList->domainListIndex;
+
+    //for (int i=0; i<*lowestDomainListHandler->h_domainList->domainListIndex; i++) {
+    //    Logger(TRACE) << "lowestDomainList[" << i << "] = " << lowestDomainListHandler->h_domainList->domainListKeys[i]
+    //                  << "  level = " << lowestDomainListHandler->h_domainList->domainListLevels[i] << "  mass = " << particleHandler->h_particles->mass[lowestDomainListHandler->h_domainList->domainListIndices[i]];
+    //}
+
+    //for (int i=0; i<*domainListHandler->h_domainList->domainListIndex; i++) {
+    //    Logger(TRACE) << "domainList[" << i << "] = " << domainListHandler->h_domainList->domainListKeys[i]
+    //    << "  mass = " << particleHandler->h_particles->mass[domainListHandler->h_domainList->domainListIndices[i]];
+    //}
+
 
     /*
 
@@ -630,6 +668,11 @@ real Miluphpc::reset() {
     std::fill(&particleHandler->h_particles->x[numParticles], &particleHandler->h_particles->x[numNodes], 0.);
     std::fill(&particleHandler->h_particles->y[numParticles], &particleHandler->h_particles->y[numNodes], 0.);
     std::fill(&particleHandler->h_particles->z[numParticles], &particleHandler->h_particles->z[numNodes], 0.);
+    std::fill(&particleHandler->h_particles->mass[numParticles], &particleHandler->h_particles->mass[numNodes], 0.);
+    std::fill(particleHandler->h_particles->nodeType, &particleHandler->h_particles->nodeType[numNodes], -1);
+
+    domainListHandler->reset();
+    lowestDomainListHandler->reset();
 
 #if TARGET_GPU
     // START: resetting arrays, variables, buffers, ...
@@ -1164,12 +1207,142 @@ real Miluphpc::pseudoParticles() {
     real time = parallel_pseudoParticles();
 #else
     real time = 0.;
+    cpu_pseudoParticles();
+
 #endif // TARGET_GPU
     return time;
 }
 
 real Miluphpc::cpu_pseudoParticles() {
     // TODO: CPU pseudoParticles()
+
+    TreeNS::compPseudoParticles(treeHandler->h_tree, particleHandler->h_particles, domainListHandler->h_domainList,
+                                numParticles, 0);
+
+    TreeNS::lowestDomainListNodes(treeHandler->h_tree, particleHandler->h_particles, domainListHandler->h_domainList,
+                                  lowestDomainListHandler->h_domainList, numParticles);
+
+    TreeNS::zeroDomainListNodes(treeHandler->h_tree, particleHandler->h_particles, domainListHandler->h_domainList);
+
+    integer domainListIndex = *domainListHandler->h_domainList->domainListIndex;
+    integer lowestDomainListIndex = *lowestDomainListHandler->h_domainList->domainListIndex;
+
+    Logger(DEBUG) << "domainListIndex: " << domainListIndex << " | lowestDomainListIndex: " << lowestDomainListIndex;
+    Logger(DEBUG) << "communicating/exchanging and updating domain list nodes ...";
+
+    boost::mpi::communicator comm;
+
+    //TODO: current approach reasonable?
+    // or template functions and explicitly hand over buffer(s) (and not instance of buffer class)
+
+    // x ---------------------------------------------------------------------------------------------------------------
+
+    lowestDomainListHandler->h_domainList->domainListCounter = 0;
+
+    real *h_realBuffer = new real[lowestDomainListIndex];
+
+    // ---- x ---------------------
+    for (int i=0; i<lowestDomainListIndex; ++i) {
+        h_realBuffer[i] = particleHandler->h_particles->x[lowestDomainListHandler->h_domainList->domainListIndices[i]];
+        //Logger(TRACE) << "index: " << lowestDomainListHandler->h_domainList->domainListIndices[i] << " | h_realBuffer[" << i << "] = " << h_realBuffer[i];
+        //Logger(TRACE) << "before: x[" << i << "] = " << particleHandler->h_particles->x[lowestDomainListHandler->h_domainList->domainListIndices[i]];
+    }
+
+    all_reduce(comm, boost::mpi::inplace_t<real*>(&h_realBuffer[0]), lowestDomainListIndex, std::plus<real>());
+
+    for (int i=0; i<lowestDomainListIndex; ++i) {
+        particleHandler->h_particles->x[lowestDomainListHandler->h_domainList->domainListIndices[i]] = h_realBuffer[i];
+        //Logger(TRACE) << "after: x[" << i << "] = " << particleHandler->h_particles->x[lowestDomainListHandler->h_domainList->domainListIndices[i]];
+    }
+    // ---- end: x ---------------------
+#if DIM > 1
+    // ---- y ---------------------
+    for (int i=0; i<lowestDomainListIndex; ++i) {
+        h_realBuffer[i] = particleHandler->h_particles->y[lowestDomainListHandler->h_domainList->domainListIndices[i]];
+    }
+
+    all_reduce(comm, boost::mpi::inplace_t<real*>(&h_realBuffer[0]), lowestDomainListIndex, std::plus<real>());
+
+    for (int i=0; i<lowestDomainListIndex; ++i) {
+        particleHandler->h_particles->y[lowestDomainListHandler->h_domainList->domainListIndices[i]] = h_realBuffer[i];
+    }
+    // ---- end: y ---------------------
+#if DIM == 3
+    // ---- z ---------------------
+    for (int i=0; i<lowestDomainListIndex; ++i) {
+        h_realBuffer[i] = particleHandler->h_particles->z[lowestDomainListHandler->h_domainList->domainListIndices[i]];
+    }
+
+    all_reduce(comm, boost::mpi::inplace_t<real*>(&h_realBuffer[0]), lowestDomainListIndex, std::plus<real>());
+
+    for (int i=0; i<lowestDomainListIndex; ++i) {
+        particleHandler->h_particles->z[lowestDomainListHandler->h_domainList->domainListIndices[i]] = h_realBuffer[i];
+    }
+    // ---- end: z ---------------------
+#endif
+#endif
+
+    // ---- mass ---------------------
+    for (int i=0; i<lowestDomainListIndex; ++i) {
+        h_realBuffer[i] = particleHandler->h_particles->mass[lowestDomainListHandler->h_domainList->domainListIndices[i]];
+    }
+
+    all_reduce(comm, boost::mpi::inplace_t<real*>(&h_realBuffer[0]), lowestDomainListIndex, std::plus<real>());
+
+    for (int i=0; i<lowestDomainListIndex; ++i) {
+        particleHandler->h_particles->mass[lowestDomainListHandler->h_domainList->domainListIndices[i]] = h_realBuffer[i];
+    }
+    // ---- end: mass ---------------------
+
+    for (int i=0; i<lowestDomainListIndex; ++i) {
+        if (particleHandler->h_particles->mass[lowestDomainListHandler->h_domainList->domainListIndices[i]] > 0) {
+            particleHandler->h_particles->x[lowestDomainListHandler->h_domainList->domainListIndices[i]] /= particleHandler->h_particles->mass[lowestDomainListHandler->h_domainList->domainListIndices[i]];
+#if DIM > 1
+            particleHandler->h_particles->y[lowestDomainListHandler->h_domainList->domainListIndices[i]] /= particleHandler->h_particles->mass[lowestDomainListHandler->h_domainList->domainListIndices[i]];
+#if DIM == 3
+            particleHandler->h_particles->z[lowestDomainListHandler->h_domainList->domainListIndices[i]] /= particleHandler->h_particles->mass[lowestDomainListHandler->h_domainList->domainListIndices[i]];
+#endif
+#endif
+        }
+    }
+
+    //for (int i=0; i<lowestDomainListIndex; ++i) {
+    //}
+
+    for (int domainLevel = MAX_LEVEL; domainLevel>= 0; domainLevel--) {
+        // -------------------------------------------------------------------------------------------------------------
+        TreeNS::compDomainListPseudoParticlesPerLevel(treeHandler->h_tree, particleHandler->h_particles,
+                                                      domainListHandler->h_domainList,
+                                                      lowestDomainListHandler->h_domainList, domainLevel);
+        // -------------------------------------------------------------------------------------------------------------
+    }
+
+    delete [] h_realBuffer;
+
+    /*
+    // -----------------------------------------------------------------------------------------------------------------
+
+    Logger(DEBUG) << "finish computation of lowest domain list nodes ...";
+    // -----------------------------------------------------------------------------------------------------------------
+    time += SubDomainKeyTreeNS::Kernel::Launch::compLowestDomainListNodes(treeHandler->d_tree,
+                                                                          particleHandler->d_particles,
+                                                                          lowestDomainListHandler->d_domainList);
+    // -----------------------------------------------------------------------------------------------------------------
+    //end: for all entries!
+
+    Logger(DEBUG) << "finish computation of (all) domain list nodes ...";
+    // per level computation of domain list pseudo-particles to ensure the correct order (avoid race condition)
+    for (int domainLevel = MAX_LEVEL; domainLevel>= 0; domainLevel--) {
+        // -------------------------------------------------------------------------------------------------------------
+        time += SubDomainKeyTreeNS::Kernel::Launch::compDomainListPseudoParticlesPerLevel(treeHandler->d_tree,
+                                                                                          particleHandler->d_particles,
+                                                                                          domainListHandler->d_domainList,
+                                                                                          lowestDomainListHandler->d_domainList,
+                                                                                          numParticles, domainLevel);
+        // -------------------------------------------------------------------------------------------------------------
+    }
+     */
+
     return 0.;
 }
 
@@ -2994,7 +3167,7 @@ void Miluphpc::fixedLoadBalancing() {
     //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = 0UL;
     //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = (2UL << 60) + (4UL << 57); // + (4UL << 54) + (2UL << 51) + (1UL << 39);
     // 3|4|5|0|6|4|5|1|2|0|4|7|5|6|2|3|0|2|2|4|6|
-    //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = (4UL << 60) + (1UL << 57);
+    subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = (4UL << 60) + (1UL << 57); // + (2UL << 54);
     //        + (4UL << 57); // + (5UL << 54) + (0UL << 51) + (6UL << 48)
             //+ (4UL << 45) + (5UL << 42) + (1UL << 39) + (2UL << 36)
             //+ (0UL << 33) + (4UL << 30) + (7UL << 27) + (5UL << 24)
@@ -3017,7 +3190,7 @@ void Miluphpc::fixedLoadBalancing() {
 
     for (int i=0; i<=subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; i++) {
         //printf("range[%i] = %lu\n", i, subDomainKeyTreeHandler->h_subDomainKeyTree->range[i]);
-        Logger(DEBUG) << "range[" << i << "] = " << subDomainKeyTreeHandler->h_subDomainKeyTree->range[i];
+        Logger(TRACE) << "initialized range[" << i << "] = " << subDomainKeyTreeHandler->h_subDomainKeyTree->range[i];
     }
 #if TARGET_GPU
     subDomainKeyTreeHandler->copy(To::device, true, true);

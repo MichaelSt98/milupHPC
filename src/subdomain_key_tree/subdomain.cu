@@ -132,27 +132,223 @@ CUDA_CALLABLE_MEMBER bool SubDomainKeyTree::isDomainListNode(keyType key, intege
     return false;
 }
 
-void SubDomainKeyTree::buildDomainTree(Tree *tree, DomainList *domainList) {
+void SubDomainKeyTree::buildDomainTree(Tree *tree, Particles *particles, DomainList *domainList, integer numParticles, Curve::Type curveType) {
 
+
+    //Logger(TRACE) << "buildDomainTree()";
+
+    *domainList->domainListIndex = 0;
     keyType key;
-    for (int i=0; i<POW_DIM; ++i) {
-        domainList->domainListIndices[*domainList->domainListCounter] = i;
+
+    for (int i=0; i<POW_DIM; i++) {
+
+#if DIM == 1
+        Box box {*tree->minX, *tree->maxX};
+        Box sonBox {*tree->minX, *tree->maxX};
+#elif DIM == 2
+        Box box {*tree->minX, *tree->maxX, *tree->minY, *tree->maxY};
+        Box sonBox {*tree->minX, *tree->maxX, *tree->minY, *tree->maxY};
+#else
+        Box box {*tree->minX, *tree->maxX, *tree->minY, *tree->maxY, *tree->minZ, *tree->maxZ};
+        Box sonBox {*tree->minX, *tree->maxX, *tree->minY, *tree->maxY, *tree->minZ, *tree->maxZ};
+#endif
+
         key = (keyType)((i * 1UL) << (DIM * (MAX_LEVEL - 1)));
-        domainList->domainListKeys[*domainList->domainListCounter] = key;
-        domainList->domainListLevels[*domainList->domainListCounter] = 1;
-        domainList->domainListCounter++;
+        domainList->domainListKeys[*domainList->domainListIndex] = key;
+        domainList->domainListLevels[*domainList->domainListIndex] = 1;
+
+        int nodeIndex = tree->child[i];
+
+        if (nodeIndex < numParticles) {
+            if (tree->child[i] == -1) {
+                // nothing there, thus create pseudo-particle!
+                //Logger(TRACE) << "i: " << i <<"... nothing here create: " << *tree->index;
+                tree->child[i] = *tree->index;
+                nodeIndex = *tree->index;
+            }
+            else {
+                // particle, thus create pseudo-particle in between!
+                int particleIndex = tree->child[i];
+                tree->child[i] = *tree->index;
+                //(*tree->index)++;
+
+                //Logger(TRACE) << "i: " << i <<"... already pseudo: " << *tree->index;
+
+                //Box box {*tree->minX, *tree->maxX, *tree->minY, *tree->maxY, *tree->minZ, *tree->maxZ};
+                int childPath = 0;
+
+                if (particles->x[particleIndex] < 0.5 * (box.minX + box.maxX)) { // x direction
+                    childPath += 1;
+                    sonBox.maxX = 0.5 * (box.minX + box.maxX);
+                    sonBox.minX = box.minX;
+                }
+                else {
+                    sonBox.minX = 0.5 * (box.minX + box.maxX);
+                    sonBox.maxX = box.maxX;
+                }
+#if DIM > 1
+                // y direction
+                if (particles->y[particleIndex] < 0.5 * (box.minY + box.maxY)) { // y direction
+                    childPath += 2;
+                    sonBox.maxY = 0.5 * (box.minY + box.maxY);
+                    sonBox.minY = box.minY;
+                }
+                else {
+                    sonBox.minY = 0.5 * (box.minY + box.maxY);
+                    sonBox.maxY = box.maxY;
+                }
+#if DIM == 3
+                // z direction
+                if (particles->z[particleIndex] < 0.5 * (box.minZ + box.maxZ)) {  // z direction
+                    childPath += 4;
+                    sonBox.maxZ = 0.5 * (box.minZ + box.maxZ);
+                    sonBox.minZ = box.minZ;
+                }
+                else {
+                    sonBox.minZ = 0.5 * (box.minZ + box.maxZ);
+                    sonBox.maxZ = box.maxZ;
+                }
+#endif
+#endif
+
+                tree->child[POW_DIM * (*tree->index) + childPath] = particleIndex;
+                nodeIndex = *tree->index;
+            }
+
+            (*tree->index)++;
+        }
+        //else {
+        //    Logger(TRACE) << "i: " << i <<"... good to go: " << nodeIndex;
+        //}
+
+        domainList->domainListIndices[*domainList->domainListIndex] = nodeIndex;
+        particles->nodeType[nodeIndex] = 1;
+
+        (*domainList->domainListIndex)++;
+
+        buildDomainTree(tree, particles, domainList, 2, key, numParticles, nodeIndex, sonBox, curveType);
+        //buildDomainTree(tree, particles, domainList, 2, key, numParticles, i, sonBox, curveType);
     }
 
-    for (int i=0; i<POW_DIM; ++i) {
+    //for (int i=0; i<POW_DIM; ++i) {
         //buildDomainTree(tree, domainList, 2, domainList->domainListKeys[i]);
-    }
+    //}
+
+    //for (int i=0; i< *domainList->domainListIndex; ++i) {
+    //    Logger(TRACE) << "domainList[" << i << "] (level: " << domainList->domainListLevels[i] << ")= "
+    //    << domainList->domainListKeys[i] << "  " << domainList->domainListIndices[i] << "  type: " << particles->nodeType[domainList->domainListIndices[i]];
+    //}
 
 }
 
-void SubDomainKeyTree::buildDomainTree(Tree *tree, DomainList *domainList, int level, keyType key) {
+// TODO: pass box
+void SubDomainKeyTree::buildDomainTree(Tree *tree, Particles *particles, DomainList *domainList, int level, keyType key2test,
+                                       integer numParticles, int childIndex, Box &box, Curve::Type curveType) {
 
-    int proc1;
-    int proc2;
+
+
+    if (isDomainListNode(key2test & (~0UL << (DIM * (MAX_LEVEL - level - 1))),
+                                           MAX_LEVEL, level-1, curveType)) {
+
+        //Logger(TRACE) << "-----------";
+        //Logger(TRACE) << "Testing key: " << key2test << " | childIndex: " << childIndex << " | level = "
+        //              << level << " | " << isDomainListNode(key2test & (~0UL << (DIM * (MAX_LEVEL - level - 1))), MAX_LEVEL, level-1, curveType);
+
+        for (int i=0; i<POW_DIM; ++i) {
+
+            //Logger(TRACE) << "-- " << i;
+
+            domainList->domainListKeys[*domainList->domainListIndex] = key2test | ((i * 1UL) << DIM * (MAX_LEVEL - level)); //key2test & (~0UL << (DIM * (MAX_LEVEL - level - 1))); //key2test;
+            domainList->domainListLevels[*domainList->domainListIndex] = level;
+
+            int nodeIndex = tree->child[POW_DIM * childIndex + i];
+
+            Box sonBox;
+            sonBox.minX = box.minX;
+            sonBox.maxX = box.maxX;
+#if DIM > 1
+            sonBox.minY = box.minY;
+            sonBox.maxY = box.maxY;
+#if DIM == 3
+            sonBox.minZ = box.minZ;
+            sonBox.maxZ = box.maxZ;
+#endif
+#endif
+
+            if (nodeIndex < numParticles) {
+                if (nodeIndex == -1) {
+                    // nothing there, thus create pseudo-particle!
+                    //Logger(TRACE) << "nothing here for " << childIndex << "and " << i << ": create pseudo-particle: tree->child[8 * " << childIndex << " + " << i << "] = " << *tree->index;
+                    tree->child[POW_DIM * childIndex + i] = *tree->index;
+                    nodeIndex = *tree->index;
+                }
+                else {
+                    // particle, thus create pseudo-particle in between!
+                    int particleIndex = tree->child[POW_DIM * childIndex + i];
+                    tree->child[POW_DIM * childIndex + i] = *tree->index;
+                    //(*tree->index)++;
+
+                    //Box box {*tree->minX, *tree->maxX, *tree->minY, *tree->maxY, *tree->minZ, *tree->maxZ};
+                    int childPath = 0;
+
+                    if (particles->x[particleIndex] < 0.5 * (box.minX + box.maxX)) { // x direction
+                        childPath += 1;
+                        sonBox.maxX = 0.5 * (box.minX + box.maxX);
+                        sonBox.minX = box.minX;
+                    }
+                    else {
+                        sonBox.minX = 0.5 * (box.minX + box.maxX);
+                        sonBox.maxX = box.maxX;
+                    }
+#if DIM > 1
+                    // y direction
+                    if (particles->y[particleIndex] < 0.5 * (box.minY + box.maxY)) { // y direction
+                        childPath += 2;
+                        sonBox.maxY = 0.5 * (box.minY + box.maxY);
+                        sonBox.minY = box.minY;
+                    }
+                    else {
+                        sonBox.minY = 0.5 * (box.minY + box.maxY);
+                        sonBox.maxY = box.maxY;
+                    }
+#if DIM == 3
+                    // z direction
+                    if (particles->z[particleIndex] < 0.5 * (box.minZ + box.maxZ)) {  // z direction
+                        childPath += 4;
+                        sonBox.maxZ = 0.5 * (box.minZ + box.maxZ);
+                        sonBox.minZ = box.minZ;
+                    }
+                    else {
+                        sonBox.minZ = 0.5 * (box.minZ + box.maxZ);
+                        sonBox.maxZ = box.maxZ;
+                    }
+#endif
+#endif
+
+                    //Logger(TRACE) << "particle here child[8 * " << childIndex << " + " << i << " = " << nodeIndex << "create pseudo-particle: tree->child[8 * " << childIndex << " + " << i << "] = " << *tree->index;
+                    //Logger(TRACE) << "    and: insert particle at          : tree->child[8 * " << (*tree->index) << " + " << childPath << "] = " << particleIndex;
+
+                    tree->child[POW_DIM * (*tree->index) + childPath] = particleIndex;
+                    nodeIndex = *tree->index;
+                }
+
+                (*tree->index)++;
+            }
+            //else {
+            //    //Logger(TRACE) << "already a pseudo-particle here: " << childIndex;
+            //}
+
+            //Logger(TRACE) << "particles->nodeType[" << nodeIndex << "] = 1 (numParticles = " << numParticles << ")";
+
+            domainList->domainListIndices[*domainList->domainListIndex] = nodeIndex; //childIndex;
+            (*domainList->domainListIndex)++;
+            particles->nodeType[nodeIndex] = 1;
+
+            buildDomainTree(tree, particles, domainList, level + 1, key2test + ((i * 1UL) << DIM * (MAX_LEVEL - level)),
+                            numParticles, nodeIndex, sonBox, curveType);
+        }
+
+    }
 
 }
 
@@ -2708,3 +2904,190 @@ namespace Physics {
 }
 
 #endif // TARGET_GPU
+
+namespace TreeNS {
+
+    void compPseudoParticles(Tree *tree, Particles *particles, DomainList *domainList, int numParticles,
+                            int nodeIndex) {
+
+        for (int i=0; i<POW_DIM; i++) {
+            //if (son[i] != NULL) {
+            if (tree->child[POW_DIM * nodeIndex + i] >= numParticles) {
+                //if (tree->child[POW_DIM * nodeIndex + i] == 0) {
+                //    Logger(TRACE) << " = 0 for nodeIndex: " << nodeIndex << " and i: " << i;
+                //}
+                //Logger(TRACE) << "new nodeIndex: " << tree->child[POW_DIM * nodeIndex + i];
+                compPseudoParticles(tree, particles, domainList, numParticles,
+                                    tree->child[POW_DIM * nodeIndex + i]);
+            }
+        }
+
+        if (nodeIndex >= numParticles) { //(!isLeaf()) {
+
+            particles->mass[nodeIndex] = 0.;
+            particles->x[nodeIndex] = 0.;
+#if DIM > 1
+            particles->y[nodeIndex] = 0.;
+#if DIM == 3
+            particles->z[nodeIndex] = 0.;
+#endif
+#endif
+
+            int childIndex = -1;
+            for (int j=0; j<POW_DIM; j++) {
+                childIndex = tree->child[POW_DIM * nodeIndex + j];
+                if (childIndex >= 0) {//if (son[j] != NULL) {
+                    particles->mass[nodeIndex] += particles->mass[childIndex]; //son[j]->p.m;
+                    particles->x[nodeIndex] += particles->mass[childIndex] * particles->x[childIndex];
+#if DIM > 1
+                    particles->y[nodeIndex] += particles->mass[childIndex] * particles->y[childIndex];
+#if DIM == 3
+                    particles->z[nodeIndex] += particles->mass[childIndex] * particles->z[childIndex];
+#endif
+#endif
+                }
+            }
+            if (particles->mass[nodeIndex] > 0) {
+                particles->x[nodeIndex] /= particles->mass[nodeIndex];
+#if DIM > 1
+                particles->y[nodeIndex] /= particles->mass[nodeIndex];
+#if DIM == 3
+                particles->z[nodeIndex] /= particles->mass[nodeIndex];
+#endif
+#endif
+            }
+        }
+
+    }
+
+    void lowestDomainListNodes(Tree *tree, Particles *particles, DomainList *domainList, DomainList *lowestDomainList,
+                               int numParticles) {
+        int domainIndex;
+        int childIndex;
+        bool lowestDomainListNode;
+
+        *lowestDomainList->domainListIndex = 0;
+
+        for (int i_domainList=0; i_domainList < *domainList->domainListIndex; ++i_domainList) {
+            lowestDomainListNode = true;
+            domainIndex = domainList->domainListIndices[i_domainList];
+            for (int i=0; i<POW_DIM; ++i) {
+                childIndex = tree->child[POW_DIM * domainIndex + i];
+                if (childIndex != -1) {
+                    //Logger(TRACE) << "i: " << i_domainList << "  particles->nodeType[" << childIndex << "] = " << particles->nodeType[childIndex];
+                    if (particles->nodeType[childIndex] == 1) {
+                        //Logger(TRACE) << "This is not a lowest domain list! (child[8 * " << domainIndex << " + " << i
+                        //              << " = childIndex: " << childIndex
+                        //              << ") " << domainList->domainListKeys[i_domainList] << " type: "
+                        //              << particles->nodeType[childIndex];
+                        lowestDomainListNode = false;
+                        break;
+                    }
+                }
+                //if (childIndex != -1) {
+                    //if (childIndex >= numParticles) {
+                    //    for (int k=0; k<*domainList->domainListIndex; ++k) {
+                    //        if (childIndex == domainList->domainListIndices[k]) {
+                    //            Logger(TRACE) << "This is not a lowest domain list! (childIndex: " << childIndex
+                    //                << ") " << domainList->domainListKeys[i_domainList];
+                    //            lowestDomainListNode = false;
+                    //            break;
+                    //        }
+                    //    }
+                    //}
+                //}
+                //if (!lowestDomainListNode) {
+                //    break;
+                //}
+            }
+
+            if (lowestDomainListNode) {
+
+                lowestDomainList->domainListIndices[*lowestDomainList->domainListIndex] = domainIndex;
+                particles->nodeType[domainIndex] = 2;
+                lowestDomainList->domainListKeys[*lowestDomainList->domainListIndex] = domainList->domainListKeys[i_domainList];
+                lowestDomainList->domainListLevels[*lowestDomainList->domainListIndex] = domainList->domainListLevels[i_domainList];
+
+                (*lowestDomainList->domainListIndex)++;
+
+                //lowestDomainList->borders[(*lowestDomainList->domainListIndex) * 2 * DIM] = domainList->borders[(index + offset) * 2 * DIM];
+                //lowestDomainList->borders[(*lowestDomainList->domainListIndex) * 2 * DIM + 1] = domainList->borders[(index + offset) * 2 * DIM + 1];
+#if DIM > 1
+                //lowestDomainList->borders[(*lowestDomainList->domainListIndex) * 2 * DIM + 2] = domainList->borders[(index + offset) * 2 * DIM + 2];
+                //lowestDomainList->borders[(*lowestDomainList->domainListIndex) * 2 * DIM + 3] = domainList->borders[(index + offset) * 2 * DIM + 3];
+#if DIM == 3
+                //lowestDomainList->borders[(*lowestDomainList->domainListIndex) * 2 * DIM + 4] = domainList->borders[(index + offset) * 2 * DIM + 4];
+                //lowestDomainList->borders[(*lowestDomainList->domainListIndex)* 2 * DIM + 5] = domainList->borders[(index + offset) * 2 * DIM + 5];
+#endif
+#endif
+            }
+        }
+    }
+
+    void zeroDomainListNodes(Tree *tree, Particles *particles, DomainList *domainList) {
+
+        int domainIndex;
+        for (int i=0; i<*domainList->domainListIndex; ++i) {
+            domainIndex = domainList->domainListIndices[i];
+            if (particles->nodeType[domainIndex] == 2) {
+                //Logger(TRACE) << "*= particles->mass: " << domainIndex;
+                particles->x[domainIndex] *= particles->mass[domainIndex];
+#if DIM > 1
+                particles->y[domainIndex] *= particles->mass[domainIndex];
+#if DIM == 3
+                particles->z[domainIndex] *= particles->mass[domainIndex];
+#endif
+#endif
+            }
+
+            else {
+                //Logger(TRACE) << "[" << domainIndex << "] = 0: " << i << " before x = " << particles->x[domainIndex];
+                particles->x[domainIndex] = (real)0;
+#if DIM > 1
+                particles->y[domainIndex] = (real)0;
+#if DIM == 3
+                particles->z[domainIndex] = (real)0;
+#endif
+#endif
+                particles->mass[domainIndex] = (real)0;
+            }
+
+        }
+
+    }
+
+    void compDomainListPseudoParticlesPerLevel(Tree *tree, Particles *particles, DomainList *domainList,
+                                               DomainList *lowestDomainList, int level) {
+
+        int childIndex;
+        for (int i=0; i<*domainList->domainListIndex; ++i) {
+            if (particles->nodeType[domainList->domainListIndices[i]] == 1) {
+                if (domainList->domainListLevels[i] == level) {
+                    for (int i_child=0; i_child < POW_DIM; ++i_child) {
+                        childIndex = tree->child[POW_DIM * domainList->domainListIndices[i] + i_child];
+                        if (childIndex != -1) {
+                            particles->mass[domainList->domainListIndices[i]] += particles->mass[childIndex];
+                            particles->x[domainList->domainListIndices[i]] += particles->x[childIndex] * particles->mass[childIndex];
+#if DIM > 1
+                            particles->y[domainList->domainListIndices[i]] += particles->y[childIndex] * particles->mass[childIndex];
+#if DIM == 3
+                            particles->z[domainList->domainListIndices[i]] += particles->z[childIndex] * particles->mass[childIndex];
+#endif
+#endif
+                        }
+                    }
+                    if (particles->mass[childIndex] > 0) {
+                        particles->x[domainList->domainListIndices[i]] /= particles->mass[childIndex];
+#if DIM > 1
+                        particles->y[domainList->domainListIndices[i]] /= particles->mass[childIndex];
+#if DIM == 3
+                        particles->z[domainList->domainListIndices[i]] /= particles->mass[childIndex];
+#endif
+#endif
+                    }
+                }
+            }
+        }
+
+    }
+}

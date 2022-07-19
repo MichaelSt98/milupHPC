@@ -328,7 +328,11 @@ void Tree::insertTree(Particles *particles, integer particleIndex, integer nodeI
     Box sonBox;
     int childPath = 0;
 
-    //std::cout << "nodeIndex: " << nodeIndex  << "  particleIndex: " << particleIndex << std::endl;
+    bool debug = false;
+    if (debug) {
+        Logger(TRACE) << "----";
+        Logger(TRACE) << "nodeIndex: " << nodeIndex << "  particleIndex: " << particleIndex;
+    }
 
     //sonBox = box;
 
@@ -368,35 +372,92 @@ void Tree::insertTree(Particles *particles, integer particleIndex, integer nodeI
 #endif
 #endif
 
-    //std::cout << "childPath: " << childPath << " minmax x = " << box.minX << ", " << box.maxX << std::endl;
+    if (debug) {
+        Logger(TRACE) << "childPath: " << childPath << " box = " << box.minX << ", " << box.maxX << " | " << box.minY
+                      << ", " << box.maxY << " | " << box.minZ << ", " << box.maxZ; // << std::endl;
+        Logger(TRACE) << "childPath: " << childPath << " sonBox = " << sonBox.minX << ", " << sonBox.maxX << " | "
+                      << sonBox.minY << ", " << sonBox.maxY << " | " << sonBox.minZ << ", "
+                      << sonBox.maxZ; // << std::endl;
+    }
 
     // pseudo-particle
     if (child[POW_DIM * nodeIndex + childPath] > numParticles) {
-        //std::cout << "pseudo-particle" << std::endl;
+        if (debug) {
+            Logger(TRACE) << "pseudo-particle";
+        }
         insertTree(particles, particleIndex, child[POW_DIM * nodeIndex + childPath], numParticles, sonBox);
     }
     else {
         // good to go
         if (child[POW_DIM * nodeIndex + childPath] == -1) {
-            //std::cout << "child[8 * " << nodeIndex << " + " << childPath << "] = " << particleIndex << std::endl;
+            if (debug) {
+                Logger(TRACE) << "child[8 * " << nodeIndex << " + " << childPath << "] = " << particleIndex;
+            }
+            //if (particleIndex == 0) {
+            //Logger(TRACE) << "child[8 * " << nodeIndex << " + " << childPath << "] = " << particleIndex << " | x = " << particles->x[particleIndex] << ", " << particles->y[particleIndex];
+            //}
             child[POW_DIM * nodeIndex + childPath] = particleIndex;
+            if ((POW_DIM * nodeIndex + childPath) == 7 && particleIndex == 0) {
+                Logger(TRACE) << "!!! WTF !!!";
+            }
         }
         else { // already a particle there
             int insertIndex = *index;
             (*index)++;
-            //std::cout << "already a particle here: " << child[POW_DIM * nodeIndex + childPath] << std::endl;
+            if (debug) {
+                Logger(TRACE) << "already a particle here: " << child[POW_DIM * nodeIndex + childPath];
+            }
             int p2 = child[POW_DIM * nodeIndex + childPath];
-            //std::cout << "child[" << nodeIndex << "] = " << insertIndex << std::endl;
-            child[nodeIndex] = insertIndex;
+            if (debug) {
+                Logger(TRACE) << "child[" << nodeIndex << "] = " << insertIndex;
+            }
+            //if (p2 == 0) {
+            //    Logger(TRACE) << "inserting " << particleIndex << " :already a particle here: child[8 * " << nodeIndex << " + " << childPath << "] = " << child[POW_DIM * nodeIndex + childPath];
+            //    Logger(TRACE) << "  child[" << nodeIndex << "] = " << insertIndex;
+
+            if (debug) {
+                Logger(TRACE) << " x1 = " << particles->x[particleIndex] << ", " << particles->y[particleIndex]
+                              << " vs. x2 = " << particles->x[p2] << ", " << particles->y[p2];
+            }
+            //}
+            child[POW_DIM * nodeIndex + childPath] = insertIndex; // was: child[nodeIndex] or POW_DIM * nodeIndex + childPath
 
             //particles->x[insertIndex] = 0.5 * (sonBox.minX + sonBox.maxX);
             //particles->y[insertIndex] = 0.5 * (sonBox.minY + sonBox.maxZ);
             //particles->z[insertIndex] = 0.5 * (sonBox.minZ + sonBox.maxZ);
 
-            //std::cout << "child[8 * " << insertIndex << " + " << particleIndex << "] = " << particleIndex << std::endl;
+            //if (p2 == 0) {
+            //    Logger(TRACE) << "child[8 * " << insertIndex << " + " << particleIndex << "] = " << particleIndex;
+            //}
+
+            childPath = 0;
+            if (particles->x[particleIndex] < 0.5 * (sonBox.minX + sonBox.maxX)) { // x direction
+                childPath += 1;
+            }
+#if DIM > 1
+            // y direction
+            if (particles->y[particleIndex] < 0.5 * (sonBox.minY + sonBox.maxY)) { // y direction
+                childPath += 2;
+            }
+#if DIM == 3
+            // z direction
+            if (particles->z[particleIndex] < 0.5 * (sonBox.minZ + sonBox.maxZ)) {  // z direction
+                childPath += 4;
+            }
+#endif
+#endif
+
+
             child[POW_DIM * insertIndex + childPath] = particleIndex;
             //std::cout << "insertTree(" << p2 << ", " << insertIndex << ")" << std::endl;
-            insertTree(particles, p2, insertIndex, numParticles, sonBox);
+            //insertTree(particles, p2, insertIndex, numParticles, sonBox);
+
+            //Box root {*minX, *maxX, *minY, *maxY, *minZ, *maxZ};
+            if (debug) {
+                Logger(TRACE) << "insertTree(" << p2 << ", " << insertIndex << ")";
+            }
+            insertTree(particles, p2, insertIndex, numParticles, sonBox); //box);
+            //insertTree(particles, )
 
         }
     }

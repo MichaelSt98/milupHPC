@@ -26,7 +26,7 @@ DEPEXT         := d
 OBJEXT         := o
 
 #Flags, Libraries and Includes
-CXXFLAGS       += -std=c++11 -x c++ -w -I/usr/include/hdf5/openmpi -I$(OPENMPIDIR)/include -I$(HDF5DIR) -O1#-O3
+CXXFLAGS       += -std=c++11 -x c++ -w -I/usr/include/hdf5/openmpi -I$(OPENMPIDIR)/include -I$(HDF5DIR) #-O3
 LFLAGS         += -lm -lpthread -lconfig++ -L$(OPENMPIDIR)/lib -L$(HDF5LIB) -lmpi -lhdf5 -lboost_filesystem -lboost_system
 LIB            := -lboost_mpi -lboost_serialization
 INC            := -I$(INCDIR) -I/usr/include -I$(OPENMPIDIR)/include -I$(HEADERONLYDIR)

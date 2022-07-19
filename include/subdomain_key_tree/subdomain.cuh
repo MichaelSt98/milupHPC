@@ -121,9 +121,10 @@ public:
     CUDA_CALLABLE_MEMBER bool isDomainListNode(keyType key, integer maxLevel, integer level,
                                                Curve::Type curveType=Curve::lebesgue);
 
-    void buildDomainTree(Tree *tree, DomainList *domainList);
+    void buildDomainTree(Tree *tree, Particles *particles, DomainList *domainList, integer numParticles, Curve::Type curveType);
 
-    void buildDomainTree(Tree *tree, DomainList *domainList, int level, keyType key);
+    void buildDomainTree(Tree *tree, Particles *particles, DomainList *domainList, int level, keyType key2test,
+                         integer numParticles, int childIndex, Box &box, Curve::Type curveType);
 
 };
 
@@ -832,5 +833,18 @@ namespace Physics {
 }
 
 #endif // TARGET_GPU
+
+namespace TreeNS {
+    void compPseudoParticles(Tree *tree, Particles *particles, DomainList *domainList, int numParticles,
+                            int nodeIndex);
+
+    void lowestDomainListNodes(Tree *tree, Particles *particles, DomainList *domainList, DomainList *lowestDomainList,
+                               int numParticles);
+
+    void zeroDomainListNodes(Tree *tree, Particles *particles, DomainList *domainList);
+
+    void compDomainListPseudoParticlesPerLevel(Tree *tree, Particles *particles, DomainList *domainList,
+                                               DomainList *lowestDomainList, int level);
+}
 
 #endif //MILUPHPC_DOMAIN_CUH

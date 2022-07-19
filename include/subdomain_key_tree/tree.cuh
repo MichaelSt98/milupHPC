@@ -19,6 +19,7 @@
 
 #include <iostream>
 #include <stdio.h>
+#include "utils/logger.h"
 #if TARGET_GPU
 #include <cuda.h>
 #endif
