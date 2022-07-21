@@ -12,14 +12,16 @@
 #define MILUPHPC_GRAVITY_CUH
 
 #include "../parameter.h"
-#if TARGET_GPU
-
 #include "../subdomain_key_tree/tree.cuh"
 #include "../subdomain_key_tree/subdomain.cuh"
-#include "../helper.cuh"
 #include <boost/mpi.hpp>
 #include <assert.h>
 #include <cmath>
+
+#if TARGET_GPU
+
+#include "../helper.cuh"
+
 
 /// Gravity related kernels/functions.
 namespace Gravity {
@@ -491,4 +493,12 @@ namespace Gravity {
 }
 
 #endif // TARGET_GPU
+
+namespace Gravity {
+    void computeForces(Tree *tree, Particles *particles, real diam, real theta, real smoothing,
+                       int numParticlesLocal, int numParticles);
+
+    void force(Tree *tree, Particles *particles, int particleIndex, int nodeIndex, real diam, real theta,
+               real smoothing, int numParticles);
+}
 #endif //MILUPHPC_GRAVITY_CUH

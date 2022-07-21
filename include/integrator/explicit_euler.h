@@ -37,6 +37,8 @@ public:
      */
     void integrate(int step);
 
+    void update(Particles *particles, int numParticlesLocal, real dt);
+
 };
 
 

@@ -1,4 +1,5 @@
 #include "../../include/gravity/gravity.cuh"
+
 #if TARGET_GPU
 #include "../../include/cuda_utils/cuda_launcher.cuh"
 
@@ -2787,3 +2788,76 @@ namespace Gravity {
     }
 }
 #endif // TARGET_GPU
+
+namespace Gravity {
+
+    void computeForces(Tree *tree, Particles *particles, real diam, real theta, real smoothing,
+                       int numParticlesLocal, int numParticles) {
+
+        int childIndex;
+        for (int i=0; i<numParticlesLocal; ++i) {
+            for (int j=0; j<POW_DIM; ++j) {
+                childIndex = tree->child[j];
+                if (childIndex != -1) {
+                    force(tree, particles, i, childIndex, diam, theta, smoothing, numParticles);
+                }
+            }
+        }
+    }
+
+    void force(Tree *tree, Particles *particles, int particleIndex, int nodeIndex, real diam, real theta,
+               real smoothing, int numParticles) {
+
+        real r;
+        //r = sqrt((p.x - tl.p.x) * (p.x -tl.p.x));
+        real dx = particles->x[particleIndex] - particles->x[nodeIndex];
+#if DIM > 1
+        real dy = particles->y[particleIndex] - particles->y[nodeIndex];
+#if DIM == 3
+        real dz = particles->z[particleIndex] - particles->z[nodeIndex];
+#endif
+#endif
+
+#if DIM == 1
+        r = sqrt(dx*dx + smoothing);
+#elif DIM == 2
+        r = sqrt(dx*dx + dy*dy + smoothing);
+#else
+        r = sqrt(dx*dx + dy*dy + dz*dz + smoothing);
+#endif
+
+        //if ((tl.isLeaf() || (diam < theta * r)) && !tl.isDomainList()) {
+        if ((nodeIndex < numParticles || (diam < theta * r)) && particles->nodeType[nodeIndex] <= 0 && particleIndex != nodeIndex) {
+            //if (r == 0) {
+            //    Logger(WARN) << "Zero radius has been encountered.";
+            //}
+            //else {
+            //tl.p.force(p);
+            //real f = m * j.m /(sqrt(r) * r); // + smoothing);
+            //F += f * (j.x - x);
+            real f = particles->mass[nodeIndex] / (r * r * r);
+            particles->g_ax[particleIndex] += f * dx;
+#if DIM > 1
+            particles->g_ay[particleIndex] += f * dy;
+#if DIM == 3
+            particles->g_az[particleIndex] += f * dz;
+            //if (particleIndex == 1021) {
+            //    Logger(TRACE) << "g_ax = " << particles->g_ax[particleIndex] << " | f = " << f << " | dx = " << dx;
+            //}
+#endif
+#endif
+            //}
+        }
+        else {
+            int childIndex;
+            for (int i=0; i<POW_DIM; i++) {
+                //force(*son[i], 0.5*diam);
+                childIndex = tree->child[POW_DIM * nodeIndex + i];
+                if (childIndex != -1) {
+                    force(tree, particles, particleIndex, childIndex, 0.5 * diam, theta, smoothing, numParticles);
+                }
+            }
+        }
+    }
+
+}

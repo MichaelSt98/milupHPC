@@ -69,6 +69,8 @@ void ExplicitEuler::integrate(int step) {
                                                 *simulationTimeHandler->h_dt); //(real) simulationParameters.timestep);
 #else
         // TODO: CPU ExplicitEulerNS::update()
+        update(particleHandler->h_particles, numParticlesLocal, *simulationTimeHandler->h_dt);
+
 #endif // TARGET_GPU
 
         profiler.value2file(ProfilerIds::Time::integrate, time);
@@ -112,5 +114,34 @@ void ExplicitEuler::integrate(int step) {
     //ParticlesNS::Kernel::Launch::check4nans(particleHandler->d_particles, numParticlesLocal);
 
 
+
+}
+
+void ExplicitEuler::update(Particles *particles, int numParticlesLocal, real dt) {
+
+    for (int i=0; i<numParticlesLocal; ++i) {
+
+        if (i % 1000 == 0) {
+            Logger(TRACE) << "i: " << i << " | x = " << particles->x[i] << " | vx = " << particles->vx[i] << " | ax = " << particles->ax[i] << " | g_ax = " << particles->g_ax[i];
+        }
+
+        particles->vx[i] += dt * (particles->ax[i] + particles->g_ax[i]);
+#if DIM > 1
+        particles->vy[i] += dt * (particles->ay[i] + particles->g_ay[i]);
+#if DIM == 3
+        particles->vz[i] += dt * (particles->az[i] + particles->g_az[i]);
+#endif
+#endif
+
+        // calculating/updating the positions
+        particles->x[i] += dt * particles->vx[i];
+#if DIM > 1
+        particles->y[i] += dt * particles->vy[i];
+#if DIM == 3
+        particles->z[i] += dt * particles->vz[i];
+#endif
+#endif
+
+    }
 
 }

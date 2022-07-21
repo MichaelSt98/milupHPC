@@ -365,18 +365,26 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
 
 
 
-    //for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses+1; ++i) {
-    //    Logger(TRACE) << "range[" << i << "] = " << subDomainKeyTreeHandler->h_subDomainKeyTree->range[i];
-    //}
-
     if (subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses > 1) {
         subDomainKeyTreeHandler->h_subDomainKeyTree->buildDomainTree(treeHandler->h_tree, particleHandler->h_particles,
                                                                      domainListHandler->h_domainList, numParticles,
                                                                      curveType);
     }
 
-    pseudoParticles();
+    // ---- testing
+    //TreeNS::newLoadDistribution(subDomainKeyTreeHandler->h_subDomainKeyTree, treeHandler->h_tree,
+    //                            particleHandler->h_particles, 0, numParticles, numParticlesLocal,
+    //                            curveType);
+    //for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses+1; ++i) {
+    //    Logger(TRACE) << "range[" << i << "] = " << subDomainKeyTreeHandler->h_subDomainKeyTree->range[i];
+    //}
+    // ---- end: testing
 
+    //for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses+1; ++i) {
+    //    Logger(TRACE) << "range[" << i << "] = " << subDomainKeyTreeHandler->h_subDomainKeyTree->range[i];
+    //}
+
+    pseudoParticles();
 
     real massCheck = 0.;
     for (int i=0; i<POW_DIM; ++i) {
@@ -397,6 +405,9 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
     //    Logger(TRACE) << "domainList[" << i << "] = " << domainListHandler->h_domainList->domainListKeys[i]
     //    << "  mass = " << particleHandler->h_particles->mass[domainListHandler->h_domainList->domainListIndices[i]];
     //}
+
+
+    cpu_gravity();
 
 
     /*
@@ -670,6 +681,17 @@ real Miluphpc::reset() {
     std::fill(&particleHandler->h_particles->z[numParticles], &particleHandler->h_particles->z[numNodes], 0.);
     std::fill(&particleHandler->h_particles->mass[numParticles], &particleHandler->h_particles->mass[numNodes], 0.);
     std::fill(particleHandler->h_particles->nodeType, &particleHandler->h_particles->nodeType[numNodes], -1);
+
+    std::fill(particleHandler->h_particles->ax, particleHandler->h_particles->ax + numParticlesLocal, 0.);
+    std::fill(particleHandler->h_particles->g_ax, particleHandler->h_particles->g_ax + numParticlesLocal, 0.);
+#if DIM > 1
+    std::fill(particleHandler->h_particles->ax, particleHandler->h_particles->ax + numParticlesLocal, 0.);
+    std::fill(particleHandler->h_particles->g_ay, particleHandler->h_particles->g_ay + numParticlesLocal, 0.);
+#if DIM == 3
+    std::fill(particleHandler->h_particles->ax, particleHandler->h_particles->ax + numParticlesLocal, 0.);
+    std::fill(particleHandler->h_particles->g_az, particleHandler->h_particles->g_az + numParticlesLocal, 0.);
+#endif
+#endif
 
     domainListHandler->reset();
     lowestDomainListHandler->reset();
@@ -1219,11 +1241,13 @@ real Miluphpc::cpu_pseudoParticles() {
     TreeNS::compPseudoParticles(treeHandler->h_tree, particleHandler->h_particles, domainListHandler->h_domainList,
                                 numParticles, 0);
 
-    TreeNS::lowestDomainListNodes(treeHandler->h_tree, particleHandler->h_particles, domainListHandler->h_domainList,
-                                  lowestDomainListHandler->h_domainList, numParticles);
+    if (subDomainKeyTreeHandler->h_rank > 1) {
+        TreeNS::lowestDomainListNodes(treeHandler->h_tree, particleHandler->h_particles,
+                                      domainListHandler->h_domainList,
+                                      lowestDomainListHandler->h_domainList, numParticles);
 
-    TreeNS::zeroDomainListNodes(treeHandler->h_tree, particleHandler->h_particles, domainListHandler->h_domainList);
-
+        TreeNS::zeroDomainListNodes(treeHandler->h_tree, particleHandler->h_particles, domainListHandler->h_domainList);
+    }
     integer domainListIndex = *domainListHandler->h_domainList->domainListIndex;
     integer lowestDomainListIndex = *lowestDomainListHandler->h_domainList->domainListIndex;
 
@@ -1534,6 +1558,7 @@ real Miluphpc::gravity() {
     real time = parallel_gravity();
 #else
     real time = 0.;
+    cpu_gravity();
 #endif // TARGET_GPU
 
     return time;
@@ -1542,6 +1567,37 @@ real Miluphpc::gravity() {
 real Miluphpc::cpu_gravity() {
 
     // TODO: CPU gravity()
+
+#if CUBIC_DOMAINS
+    real diam = std::abs(*treeHandler->h_maxX) + std::abs(*treeHandler->h_minX);
+    //Logger(INFO) << "diam: " << diam;
+#else // !CUBIC DOMAINS
+    real diam_x = std::abs(*treeHandler->h_maxX) + std::abs(*treeHandler->h_minX);
+#if DIM > 1
+    real diam_y = std::abs(*treeHandler->h_maxY) + std::abs(*treeHandler->h_minY);
+#if DIM == 3
+    real diam_z = std::abs(*treeHandler->h_maxZ) + std::abs(*treeHandler->h_minZ);
+#endif
+#endif
+#if DIM == 1
+    real diam = diam_x;
+    //Logger(INFO) << "diam: " << diam << "  (x = " << diam_x << ")";
+#elif DIM == 2
+    real diam = std::max({diam_x, diam_y});
+    //Logger(INFO) << "diam: " << diam << "  (x = " << diam_x << ", y = " << diam_y << ")";
+#else
+    real diam = std::max({diam_x, diam_y, diam_z});
+    //Logger(INFO) << "diam: " << diam << "  (x = " << diam_x << ", y = " << diam_y << ", z = " << diam_z << ")";
+#endif
+#endif // CUBIC_DOMAINS
+
+
+    Logger(TRACE) << "diam: " << diam;
+    diam *= 0.25;
+
+    Gravity::computeForces(treeHandler->h_tree, particleHandler->h_particles, diam, simulationParameters.theta,
+                           simulationParameters.smoothing, numParticlesLocal, numParticles);
+
     return 0.;
 }
 

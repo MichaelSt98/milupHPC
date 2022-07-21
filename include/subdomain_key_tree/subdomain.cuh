@@ -845,6 +845,16 @@ namespace TreeNS {
 
     void compDomainListPseudoParticlesPerLevel(Tree *tree, Particles *particles, DomainList *domainList,
                                                DomainList *lowestDomainList, int level);
+
+    void newLoadDistribution(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, int nodeIndex,
+                             int numParticles, int numParticlesLocal, Curve::Type curveType);
+
+    void updateRange(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, int nodeIndex, int &n, int &p, keyType *range, int *newDist,
+                     int numParticles, Curve::Type curveType);
+
+    void updateRange(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, int nodeIndex, int &n,
+                     int &p, keyType *range, int *newDist, keyType k, int level, int numParticles);
+
 }
 
 #endif //MILUPHPC_DOMAIN_CUH

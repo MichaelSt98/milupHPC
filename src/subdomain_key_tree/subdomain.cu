@@ -353,21 +353,21 @@ void SubDomainKeyTree::buildDomainTree(Tree *tree, Particles *particles, DomainL
 }
 
 /*
-void SubDomain::createDomainList(TreeNode &t, int level, KeyType k) {
+void SubDomain::createDomainList(TreeNode &t, int level, keyType k) {
     t.node = TreeNode::domainList;
 
-    //Logger(INFO) << "KeyType k = " << k;
+    //Logger(INFO) << "keyType k = " << k;
 
     int proc1;
     int proc2;
     if (curve == hilbert) {
-        KeyType hilbert = KeyType::Lebesgue2Hilbert(k, level);
+        keyType hilbert = keyType::Lebesgue2Hilbert(k, level);
         proc1 = key2proc(hilbert, level, true);
-        proc2 = key2proc(hilbert | (KeyType{ KeyType::KEY_MAX } >> (DIM * level + 1)), level, true);
+        proc2 = key2proc(hilbert | (keyType{ keyType::KEY_MAX } >> (DIM * level + 1)), level, true);
     }
     else {
         proc1 = key2proc(k, level);
-        proc2 = key2proc(k | ~(~KeyType(0L) << DIM * (k.maxLevel - level)), level);
+        proc2 = key2proc(k | ~(~keyType(0L) << DIM * (k.maxLevel - level)), level);
     }
     if (proc1 != proc2) {
         for (int i=0; i<POWDIM; i++) {
@@ -380,7 +380,7 @@ void SubDomain::createDomainList(TreeNode &t, int level, KeyType k) {
                 continue;
             }
             createDomainList(*t.son[i], level + 1,
-                             k | (KeyType{ i } << (DIM*(k.maxLevel-level-1))));
+                             k | (keyType{ i } << (DIM*(k.maxLevel-level-1))));
         }
     }
 }
@@ -3090,4 +3090,122 @@ namespace TreeNS {
         }
 
     }
+
+    void newLoadDistribution(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, int nodeIndex,
+                             int numParticles, int numParticlesLocal, Curve::Type curveType) {
+
+        //int numParticles = root.getParticleCount();
+
+        boost::mpi::communicator comm;
+
+        int *particleCounts = new int[subDomainKeyTree->numProcesses];
+        boost::mpi::all_gather(comm, &numParticlesLocal, 1, particleCounts);
+
+        //for (int i=0; i < subDomainKeyTree->numProcesses; ++i) {
+        //    Logger(TRACE) << "local numP: " << particleCounts[i];
+        //}
+
+        int *oldDist = new int[subDomainKeyTree->numProcesses + 1];
+        int *newDist = new int [subDomainKeyTree->numProcesses + 1];
+        keyType *range = new keyType [subDomainKeyTree->numProcesses + 1];
+
+        oldDist[0] = 0;
+        for (int i=0; i < subDomainKeyTree->numProcesses; i++) {
+            oldDist[i + 1] = oldDist[i] + particleCounts[i];
+        }
+
+        for (int i=0; i <= subDomainKeyTree->numProcesses; i++) {
+            newDist[i] = (i * oldDist[subDomainKeyTree->numProcesses]) / subDomainKeyTree->numProcesses;
+        }
+
+        for (int i=0; i <= subDomainKeyTree->numProcesses; i++) {
+            subDomainKeyTree->range[i] = 0UL;
+        }
+
+        int p = 0;
+        int n = oldDist[subDomainKeyTree->rank];
+
+        while (n > newDist[p]) {
+            p++;
+        }
+
+        //updateRange(n, p, newDist);
+        updateRange(subDomainKeyTree, tree, particles, nodeIndex, n, p, range, newDist, numParticles, curveType);
+
+        subDomainKeyTree->range[0] = 0UL;
+        subDomainKeyTree->range[subDomainKeyTree->numProcesses] = (keyType)KEY_MAX;
+
+        //keyType sendRange[subDomainKeyTree->numProcesses + 1];
+        //std::copy(range, range + numProcesses+1, sendRange);
+
+        // //boost::mpi::all_reduce(comm, sendRange, numProcesses+1, range, boost::mpi::maximum<keyType>());
+        //boost::mpi::all_reduce(comm, sendRange, numProcesses+1, range, boost::mpi::KeyMaximum<keyType>());
+
+        all_reduce(comm, boost::mpi::inplace_t<keyType*>(&subDomainKeyTree->range[1]), subDomainKeyTree->numProcesses-1, boost::mpi::maximum<keyType>()); //boost::mpi::maximum<keyType>());
+
+        /*for (int i=0; i <= numProcesses; i++){
+            Logger(DEBUG) << "Load balancing: NEW range[" << i << "] = " << range[i];
+        }*/
+
+        delete [] range;
+        delete [] particleCounts;
+        delete [] oldDist;
+        delete [] newDist;
+
+    }
+
+    void updateRange(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, int nodeIndex, int &n, int &p, keyType *range,
+                     int *newDist, int numParticles, Curve::Type curveType) {
+        switch (curveType) {
+            case 0: {
+                updateRange(subDomainKeyTree, tree, particles, nodeIndex, n, p, range, newDist, 0UL, 1, numParticles); // level : 0
+                break;
+            }
+            //case 1: {
+            //    updateRangeHilbert(root, n, p, newDist);
+            //    break;
+            //}
+            default: {
+                Logger(ERROR) << "updateRange() not implemented for curve type: " << curveType;
+            }
+        }
+    }
+
+    // TODO: updateRangeHilbert ...
+    void updateRange(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, int nodeIndex, int &n,
+                     int &p, keyType *range, int *newDist, keyType k, int level, int numParticles) {
+
+        for (int i=0; i<POW_DIM; i++) {
+            //Logger(TRACE) << "nodeIndex: " << nodeIndex << " | childIndex: " << tree->child[POW_DIM * nodeIndex + i];
+            if (/*tree->child[POW_DIM * nodeIndex + i] != -1 &&*/tree->child[POW_DIM * nodeIndex + i] > numParticles) { // != -1) {
+                //Logger(TRACE) << "nodeIndex: " << nodeIndex << " | childIndex: " << tree->child[POW_DIM * nodeIndex + i] << " | level: " << level << " | i: " << i;
+                updateRange(subDomainKeyTree, tree, particles, tree->child[POW_DIM * nodeIndex + i], n, p,
+                            range, newDist, k | (keyType)((i * 1UL)  << (DIM*(MAX_LEVEL-level - 1))), level + 1, numParticles);
+            // (MAX_LEVEL-level-1)
+            // tree->child[POW_DIM * nodeIndex + i]
+            // | (((keyType)i)  << (DIM*(MAX_LEVEL-level-1)))
+            }
+            else {
+                if (tree->child[POW_DIM * nodeIndex + i] != -1) {
+                    while (n >= newDist[p]) {
+                        subDomainKeyTree->range[p] = (k | (keyType)((i * 1UL)  << (DIM*(MAX_LEVEL-level - 1)))); // or k | (keyType)((i * 1UL)  << (DIM*(MAX_LEVEL-level-1))
+                        Logger(TRACE) << "p: " << p << " | k = " << (k | (keyType)((i * 1UL)  << (DIM*(MAX_LEVEL-level - 1)))); //k;
+                        p++;
+                    }
+                }
+            }
+        }
+        //if (isLeaf() && !isDomainList()) {
+        //if (nodeIndex < numParticles) { // && particles->nodeType[nodeIndex] < 1) {
+            //Logger(TRACE) << "nodeIndex: " << nodeIndex;
+            //while (n >= newDist[p]) {
+                //subDomainKeyTree->range[p] = k;
+                //Logger(INFO) << "k = " << k;
+            //    p++;
+            //}
+            //n++;
+        //}
+    }
+
+
 }
