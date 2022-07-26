@@ -122,7 +122,7 @@ void ExplicitEuler::update(Particles *particles, int numParticlesLocal, real dt)
     for (int i=0; i<numParticlesLocal; ++i) {
 
         if (i % 1000 == 0) {
-            Logger(TRACE) << "i: " << i << " | x = " << particles->x[i] << " | vx = " << particles->vx[i] << " | ax = " << particles->ax[i] << " | g_ax = " << particles->g_ax[i];
+            Logger(TRACE) << "i: " << i << " | dt: " << dt << " | x = " << particles->x[i] << " | vx = " << particles->vx[i] << " | ax = " << particles->ax[i] << " | g_ax = " << particles->g_ax[i];
         }
 
         particles->vx[i] += dt * (particles->ax[i] + particles->g_ax[i]);

@@ -2791,6 +2791,151 @@ namespace Gravity {
 
 namespace Gravity {
 
+    void compTheta(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, DomainList *domainList,
+                   Curve::Type curveType) {
+
+        //int childIndex;
+        //for (int j = 0; j < POW_DIM; ++j) {
+        //    childIndex = tree->child[j];
+        //    if (childIndex != -1) {
+        //        compTheta(subDomainKeyTree, tree, particles, domainList, curveType, childIndex,
+        //                  (i * 1UL) << (DIM * (MAX_LEVEL)), 2);
+        //    }
+        //}
+
+        int proc;
+
+        //int domainIndex = 0;
+
+        *domainList->domainListCounter = 0;
+
+        Logger(TRACE) << "domainListCounter: " << *domainList->domainListCounter;
+        Logger(TRACE) << "domainList->domainListIndex: " << *domainList->domainListIndex;
+
+        for (int i=0; i<*domainList->domainListIndex; ++i) {
+            proc = subDomainKeyTree->key2proc(domainList->domainListKeys[i]);
+            if (proc != subDomainKeyTree->rank && proc >= 0 && particles->mass[domainList->domainListIndices[i]] > 0.f) {
+
+                Logger(TRACE) << "This is a relevant domain list index: " << domainList->domainListKeys[i] << " | proc: " << proc;
+
+                //domainIndex = *domainList->domainListCounter;
+
+                domainList->relevantDomainListIndices[*domainList->domainListCounter] = domainList->domainListIndices[i];
+                domainList->relevantDomainListLevels[*domainList->domainListCounter] = domainList->domainListLevels[i];
+                domainList->relevantDomainListProcess[*domainList->domainListCounter] = proc;
+                domainList->relevantDomainListOriginalIndex[*domainList->domainListCounter] = i;
+
+                (*domainList->domainListCounter)++;
+                //domainIndex++;
+
+            }
+        }
+
+    }
+
+    void symbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, DomainList *domainList,
+                       real theta, real diam, std::map<keyType, int> *&particles2send, int numParticles) {
+
+        int childIndex;
+        //Box root {*tree->minX, *tree->maxX, *tree->minY, *tree->maxY, *tree->minZ, *tree->maxZ};
+        //Box box {*tree->minX, *tree->maxX, *tree->minY, *tree->maxY, *tree->minZ, *tree->maxZ};
+
+        for (int i=0; i<*domainList->domainListCounter; ++i) {
+
+            Logger(TRACE) << "border min x: " << domainList->borders[domainList->relevantDomainListOriginalIndex[i] * 2 * DIM];
+            Logger(TRACE) << "border max x: " << domainList->borders[domainList->relevantDomainListOriginalIndex[i] * 2 * DIM + 1];
+            Logger(TRACE) << "border min y: " << domainList->borders[domainList->relevantDomainListOriginalIndex[i] * 2 * DIM + 2];
+            Logger(TRACE) << "border max y: " << domainList->borders[domainList->relevantDomainListOriginalIndex[i] * 2 * DIM + 3];
+            Logger(TRACE) << "border min z: " << domainList->borders[domainList->relevantDomainListOriginalIndex[i] * 2 * DIM + 4];
+            Logger(TRACE) << "border max z: " << domainList->borders[domainList->relevantDomainListOriginalIndex[i] * 2 * DIM + 5];
+
+            /*
+            Box box {domainList->borders[domainList->relevantDomainListOriginalIndex[i] * 2 * DIM],
+                     domainList->borders[domainList->relevantDomainListOriginalIndex[i] * 2 * DIM + 1],
+                     domainList->borders[domainList->relevantDomainListOriginalIndex[i] * 2 * DIM + 2],
+                     domainList->borders[domainList->relevantDomainListOriginalIndex[i] * 2 * DIM + 3],
+                     domainList->borders[domainList->relevantDomainListOriginalIndex[i] * 2 * DIM + 4],
+                     domainList->borders[domainList->relevantDomainListOriginalIndex[i] * 2 * DIM + 5]};
+            */
+
+            //for (int j=0; j<POW_DIM; ++j) {
+            //    childIndex = tree->child[j];
+            //    if (childIndex != -1) {
+            //        symbolicForce(subDomainKeyTree, tree, particles, domainList, childIndex, (1UL << DIM) | 1UL, box,
+            //                      theta, 0.5 * diam, particles2send[domainList->relevantDomainListProcess[i]], numParticles);
+            //    }
+            //}
+        }
+
+    }
+
+    void symbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, DomainList *domainList,
+                       int childIndex, keyType key, Box &box, real theta, real diam, std::map<keyType, int> &particles4proc,
+                       int numParticles) {
+
+        // not a domain list node
+        if (particles->nodeType[childIndex] < 1) {
+            particles4proc[key] = childIndex;
+        }
+
+        real distance, dx;
+#if DIM > 1
+        real dy;
+#if DIM == 3
+        real dz;
+#endif
+#endif
+
+        if (particles->x[childIndex] < box.minX) {
+            dx = particles->x[childIndex] - box.minX;
+        } else if (particles->x[childIndex] > box.maxX) {
+            dx = particles->x[childIndex] - box.maxX;
+        } else {
+            dx = 0.;
+        }
+#if DIM > 1
+        if (particles->y[childIndex] < box.minY) {
+            dy = particles->y[childIndex] - box.minY;
+        } else if (particles->y[childIndex] > box.maxX) {
+            dy = particles->y[childIndex] - box.maxX;
+        } else {
+            dy = 0.;
+        }
+#if DIM == 3
+        if (particles->z[childIndex] < box.minZ) {
+            dz = particles->z[childIndex] - box.minZ;
+        } else if (particles->z[childIndex] > box.maxX) {
+            dz = particles->z[childIndex] - box.maxX;
+        } else {
+            dz = 0.;
+        }
+#endif
+#endif
+
+#if DIM == 1
+        distance = sqrt(dx*dx);
+#elif DIM == 2
+        distance = sqrt(dx*dx + dy*dy);
+#else
+        distance = sqrt(dx*dx + dy*dy + dz*dz);
+#endif
+
+    if (diam >= theta * distance) {
+        for (int i=0; i<POW_DIM; ++i) {
+            childIndex = tree->child[POW_DIM * childIndex + i];
+            if (childIndex != -1) {
+                //
+            }
+        }
+    }
+
+    }
+
+    //void compTheta(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, DomainList *domainList,
+    //               Curve::Type curveType, int childIndex, keyType key, int level) {
+    //
+    //}
+
     void computeForces(Tree *tree, Particles *particles, real diam, real theta, real smoothing,
                        int numParticlesLocal, int numParticles) {
 
@@ -2799,9 +2944,58 @@ namespace Gravity {
             for (int j=0; j<POW_DIM; ++j) {
                 childIndex = tree->child[j];
                 if (childIndex != -1) {
-                    force(tree, particles, i, childIndex, diam, theta, smoothing, numParticles);
+                    force(tree, particles, i, childIndex, 0.5 * diam, theta, smoothing, numParticles);
                 }
             }
+
+            // direct force calculation ...
+            /*
+            particles->g_ax[i] = 0.;
+#if DIM > 1
+            particles->g_ay[i] = 0.;
+#if DIM == 3
+            particles->g_az[i] = 0.;
+#endif
+#endif
+
+            real dx, dy, dz, r, f;
+            // testing
+            for (int j=0; j<numParticlesLocal; ++j) {
+                if (i != j) {
+                    dx = particles->x[j] - particles->x[i];
+#if DIM > 1
+                    dy = particles->y[j] - particles->y[i];
+#if DIM == 3
+                    dz = particles->z[j] - particles->z[i];
+#endif
+#endif
+
+#if DIM == 1
+                    r = sqrt(dx*dx + smoothing);
+#elif DIM == 2
+                    r = sqrt(dx*dx + dy*dy + smoothing);
+#else
+                    r = sqrt(dx * dx + dy * dy + dz * dz + smoothing);
+#endif
+
+                    f = particles->mass[j] / (r * r * r);
+
+                    //if (i == 100 && j % 100 == 0) {
+                    //    Logger(TRACE) << "f = " << f;
+                    //}
+
+                    particles->g_ax[i] += f * dx;
+#if DIM > 1
+                    particles->g_ay[i] += f * dy;
+#if DIM == 3
+                    particles->g_az[i] += f * dz;
+#endif
+#endif
+                }
+
+            }
+            // end: testing
+            */
         }
     }
 
@@ -2809,12 +3003,19 @@ namespace Gravity {
                real smoothing, int numParticles) {
 
         real r;
-        //r = sqrt((p.x - tl.p.x) * (p.x -tl.p.x));
-        real dx = particles->x[particleIndex] - particles->x[nodeIndex];
+        real dx;
 #if DIM > 1
-        real dy = particles->y[particleIndex] - particles->y[nodeIndex];
+        real dy;
 #if DIM == 3
-        real dz = particles->z[particleIndex] - particles->z[nodeIndex];
+        real dz;
+#endif
+#endif
+        //r = sqrt((p.x - tl.p.x) * (p.x -tl.p.x));
+        dx = particles->x[nodeIndex] - particles->x[particleIndex];
+#if DIM > 1
+        dy = particles->y[nodeIndex] - particles->y[particleIndex];
+#if DIM == 3
+        dz = particles->z[nodeIndex] - particles->z[particleIndex];
 #endif
 #endif
 
@@ -2827,7 +3028,7 @@ namespace Gravity {
 #endif
 
         //if ((tl.isLeaf() || (diam < theta * r)) && !tl.isDomainList()) {
-        if ((nodeIndex < numParticles || (diam < theta * r)) && particles->nodeType[nodeIndex] <= 0 && particleIndex != nodeIndex) {
+        if ((nodeIndex < numParticles || (diam < theta * r)) /*&& particles->nodeType[nodeIndex] <= 0*/ && particleIndex != nodeIndex) {
             //if (r == 0) {
             //    Logger(WARN) << "Zero radius has been encountered.";
             //}

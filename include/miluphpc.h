@@ -67,6 +67,18 @@
 #include <highfive/H5DataSpace.hpp>
 #include <highfive/H5DataSet.hpp>
 
+template <typename T>
+struct SortByKey {
+    T *array;
+
+    SortByKey(T* array): array(array) {}
+
+    bool operator() (int i, int j)
+    {
+        return array[i] < array[j];
+    }
+};
+
 /**
  * @brief MilupHPC class
  *

@@ -855,6 +855,12 @@ namespace TreeNS {
     void updateRange(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, int nodeIndex, int &n,
                      int &p, keyType *range, int *newDist, keyType k, int level, int numParticles);
 
+    void markParticlesProcess(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                              int *particleProcess, int numParticles);
+
+    void markParticlesProcess(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, int nodeIndex,
+                              keyType key, int level, int *particleProcess, int numParticles);
+
 }
 
 #endif //MILUPHPC_DOMAIN_CUH

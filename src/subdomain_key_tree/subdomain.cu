@@ -165,6 +165,28 @@ void SubDomainKeyTree::buildDomainTree(Tree *tree, Particles *particles, DomainL
                 //Logger(TRACE) << "i: " << i <<"... nothing here create: " << *tree->index;
                 tree->child[i] = *tree->index;
                 nodeIndex = *tree->index;
+
+                if (i & 1) {
+                    sonBox.maxX = 0.5 * (box.minX + box.maxX);
+                } else {
+                    sonBox.minX = 0.5 * (box.minX + box.maxX);
+                }
+#if DIM > 1
+                if ((i >> 1) & 1) {
+                    sonBox.maxY = 0.5 * (box.minY + box.maxY);
+                    //path -= 2;
+                } else {
+                    sonBox.minY = 0.5 * (box.minY + box.maxY);
+                }
+#if DIM == 3
+                if ((i >> 2) & 1) {
+                    sonBox.maxZ = 0.5 * (box.minZ + box.maxZ);
+                } else {
+                    sonBox.minZ = 0.5 * (box.minZ + box.maxZ);
+                }
+#endif
+#endif
+
             }
             else {
                 // particle, thus create pseudo-particle in between!
@@ -223,6 +245,19 @@ void SubDomainKeyTree::buildDomainTree(Tree *tree, Particles *particles, DomainL
 
         domainList->domainListIndices[*domainList->domainListIndex] = nodeIndex;
         particles->nodeType[nodeIndex] = 1;
+
+        int domainListIndex = *domainList->domainListIndex;
+        domainList->borders[domainListIndex * 2 * DIM] = sonBox.minX;
+        domainList->borders[domainListIndex * 2 * DIM + 1] = sonBox.maxX;
+#if DIM > 1
+        domainList->borders[domainListIndex * 2 * DIM + 2] = sonBox.minY;
+        domainList->borders[domainListIndex * 2 * DIM + 3] = sonBox.maxY;
+#if DIM == 3
+        domainList->borders[domainListIndex * 2 * DIM + 4] = sonBox.minZ;
+        domainList->borders[domainListIndex * 2 * DIM + 5] = sonBox.maxZ;
+#endif
+#endif
+
 
         (*domainList->domainListIndex)++;
 
@@ -2968,6 +3003,8 @@ namespace TreeNS {
 
         *lowestDomainList->domainListIndex = 0;
 
+        Logger(TRACE) << "lowestDomainListNodes: domainListIndex: " << *domainList->domainListIndex;
+
         for (int i_domainList=0; i_domainList < *domainList->domainListIndex; ++i_domainList) {
             lowestDomainListNode = true;
             domainIndex = domainList->domainListIndices[i_domainList];
@@ -3003,23 +3040,28 @@ namespace TreeNS {
 
             if (lowestDomainListNode) {
 
+                Logger(TRACE) << "Adding lowest domain list node! ...";
+
                 lowestDomainList->domainListIndices[*lowestDomainList->domainListIndex] = domainIndex;
                 particles->nodeType[domainIndex] = 2;
                 lowestDomainList->domainListKeys[*lowestDomainList->domainListIndex] = domainList->domainListKeys[i_domainList];
                 lowestDomainList->domainListLevels[*lowestDomainList->domainListIndex] = domainList->domainListLevels[i_domainList];
 
-                (*lowestDomainList->domainListIndex)++;
 
-                //lowestDomainList->borders[(*lowestDomainList->domainListIndex) * 2 * DIM] = domainList->borders[(index + offset) * 2 * DIM];
-                //lowestDomainList->borders[(*lowestDomainList->domainListIndex) * 2 * DIM + 1] = domainList->borders[(index + offset) * 2 * DIM + 1];
+                lowestDomainList->borders[(*lowestDomainList->domainListIndex) * 2 * DIM] = domainList->borders[i_domainList * 2 * DIM];
+                lowestDomainList->borders[(*lowestDomainList->domainListIndex) * 2 * DIM + 1] = domainList->borders[i_domainList * 2 * DIM + 1];
 #if DIM > 1
-                //lowestDomainList->borders[(*lowestDomainList->domainListIndex) * 2 * DIM + 2] = domainList->borders[(index + offset) * 2 * DIM + 2];
-                //lowestDomainList->borders[(*lowestDomainList->domainListIndex) * 2 * DIM + 3] = domainList->borders[(index + offset) * 2 * DIM + 3];
+                lowestDomainList->borders[(*lowestDomainList->domainListIndex) * 2 * DIM + 2] = domainList->borders[i_domainList * 2 * DIM + 2];
+                lowestDomainList->borders[(*lowestDomainList->domainListIndex) * 2 * DIM + 3] = domainList->borders[i_domainList * 2 * DIM + 3];
 #if DIM == 3
-                //lowestDomainList->borders[(*lowestDomainList->domainListIndex) * 2 * DIM + 4] = domainList->borders[(index + offset) * 2 * DIM + 4];
-                //lowestDomainList->borders[(*lowestDomainList->domainListIndex)* 2 * DIM + 5] = domainList->borders[(index + offset) * 2 * DIM + 5];
+                lowestDomainList->borders[(*lowestDomainList->domainListIndex) * 2 * DIM + 4] = domainList->borders[i_domainList * 2 * DIM + 4];
+                lowestDomainList->borders[(*lowestDomainList->domainListIndex)* 2 * DIM + 5] = domainList->borders[i_domainList * 2 * DIM + 5];
 #endif
 #endif
+                (*lowestDomainList->domainListIndex)++;
+            }
+            else {
+                Logger(TRACE) << "NOT Adding lowest domain list node! ...";
             }
         }
     }
@@ -3207,5 +3249,43 @@ namespace TreeNS {
         //}
     }
 
+    void markParticlesProcess(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
+                              int *particleProcess, int numParticles) {
+        int childIndex;
+        for (int i=0; i<POW_DIM; ++i) {
+            childIndex = tree->child[i];
+            if (childIndex != -1) {
+                Logger(TRACE) << "initial childIndex: " << childIndex;
+                markParticlesProcess(subDomainKeyTree, tree, particles, childIndex,
+                                     (i * 1UL) << (DIM * (MAX_LEVEL)), 2, particleProcess, numParticles);
+            }
+        }
+    }
+
+    void markParticlesProcess(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, int nodeIndex,
+                              keyType key, int level, int *particleProcess, int numParticles) {
+
+        int childIndex, proc;
+        for (int i=0; i<POW_DIM; ++i) {
+            childIndex = tree->child[POW_DIM * nodeIndex + i];
+            if (childIndex != -1) {
+                if (childIndex >= numParticles) {
+                    markParticlesProcess(subDomainKeyTree, tree, particles, childIndex,
+                                         key | (keyType) ((i * 1UL) << (DIM * (MAX_LEVEL - level))),
+                                         level + 1, particleProcess, numParticles);
+                }
+                else {
+                    // TODO: Hilbert key
+                    proc = subDomainKeyTree->key2proc(key);
+                    subDomainKeyTree->procParticleCounter[proc] += 1;
+                    particleProcess[childIndex] = proc;
+                }
+            }
+            //if (t.son[i] != NULL) {
+                //compTheta(*t.son[i], pMap, diam, k | KeyType{ i << (DIM * (k.maxLevel - level - 1)) },
+                //          level + 1);
+            //}
+        }
+    }
 
 }

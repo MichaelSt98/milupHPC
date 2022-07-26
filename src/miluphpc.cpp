@@ -325,6 +325,39 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
     //HelperNS::reduceAndGlobalize(particleHandler->d_sml, helperHandler->d_realVal, numParticlesLocal, Reduction::sum);
     // end: TESTING
 
+    // start: testing sorting
+    /*
+    real *val = new real[10];
+    keyType *key = new keyType[10];
+
+    for (int i=0; i<10; ++i) {
+        val[i] = i * 1.0;
+    }
+    key[0] = 12UL;
+    key[1] = 100UL;
+    key[2] = 0UL;
+    key[3] = 12UL;
+    key[4] = 110UL;
+    key[5] = 1UL;
+    key[6] = 13UL;
+    key[7] = 12UL;
+    key[8] = 15UL;
+    key[9] = 1111UL;
+
+    for (int i=0; i<10; ++i) {
+        Logger(TRACE) << "before val[" << i << "] = " << val[i];
+    }
+
+    std::sort(val, val + 10, SortByKey<keyType>(key));
+
+    for (int i=0; i<10; ++i) {
+        Logger(TRACE) << "after val[" << i << "] = " << val[i];
+    }
+
+    exit(0);
+    */
+    // end: testing sorting
+
     Logger(INFO) << "Miluphpc::rhs()";
 
     getMemoryInfo();
@@ -335,6 +368,11 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
     real *profilerTime = &elapsed; //&time;
     real totalTime = 0;
 
+    assignParticles();
+
+    for (int i=0; i<10; ++i) {
+        Logger(TRACE) << "particles[" << i << "] = " << particleHandler->h_particles->x[i] << " | particles[" << numParticlesLocal - i - 1 << "] = " << particleHandler->h_particles->x[numParticlesLocal - i - 1];
+    }
 
     Logger(INFO) << "rhs::reset()";
     timer.reset();
@@ -360,9 +398,7 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
     Logger(TIME) << "rhs::boundingBox(): " << time << " ms";
     profiler.value2file(ProfilerIds::Time::boundingBox, *profilerTime);
 
-
     treeHandler->h_tree->buildTree(particleHandler->h_particles, numParticlesLocal, numParticles);
-
 
 
     if (subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses > 1) {
@@ -370,6 +406,7 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
                                                                      domainListHandler->h_domainList, numParticles,
                                                                      curveType);
     }
+
 
     // ---- testing
     //TreeNS::newLoadDistribution(subDomainKeyTreeHandler->h_subDomainKeyTree, treeHandler->h_tree,
@@ -380,9 +417,9 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
     //}
     // ---- end: testing
 
-    //for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses+1; ++i) {
-    //    Logger(TRACE) << "range[" << i << "] = " << subDomainKeyTreeHandler->h_subDomainKeyTree->range[i];
-    //}
+    for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses+1; ++i) {
+        Logger(TRACE) << "range[" << i << "] = " << subDomainKeyTreeHandler->h_subDomainKeyTree->range[i];
+    }
 
     pseudoParticles();
 
@@ -685,10 +722,10 @@ real Miluphpc::reset() {
     std::fill(particleHandler->h_particles->ax, particleHandler->h_particles->ax + numParticlesLocal, 0.);
     std::fill(particleHandler->h_particles->g_ax, particleHandler->h_particles->g_ax + numParticlesLocal, 0.);
 #if DIM > 1
-    std::fill(particleHandler->h_particles->ax, particleHandler->h_particles->ax + numParticlesLocal, 0.);
+    std::fill(particleHandler->h_particles->ay, particleHandler->h_particles->ay + numParticlesLocal, 0.);
     std::fill(particleHandler->h_particles->g_ay, particleHandler->h_particles->g_ay + numParticlesLocal, 0.);
 #if DIM == 3
-    std::fill(particleHandler->h_particles->ax, particleHandler->h_particles->ax + numParticlesLocal, 0.);
+    std::fill(particleHandler->h_particles->az, particleHandler->h_particles->az + numParticlesLocal, 0.);
     std::fill(particleHandler->h_particles->g_az, particleHandler->h_particles->g_az + numParticlesLocal, 0.);
 #endif
 #endif
@@ -864,7 +901,7 @@ real Miluphpc::assignParticles() {
     idInteger *d_idIntTempEntry = buffer->d_idIntegerBuffer; //d_idIntegerBuffer;
     idInteger *d_idIntCopyBuffer = buffer->d_idIntegerBuffer1; //d_idIntegerCopyBuffer;
 
-    // arrange velocities and accelerations as well (which is normally not necessary)
+    // arrange accelerations as well (which is normally not necessary)
     bool arrangeAll = false;
 
     // TODO: principally sorting the keys would only be necessary once
@@ -1089,6 +1126,111 @@ real Miluphpc::assignParticles() {
 #endif
 
 #else
+
+    reset();
+
+    boundingBox();
+
+    treeHandler->h_tree->buildTree(particleHandler->h_particles, numParticlesLocal, numParticles);
+
+    int *particlesProcess = new int[numParticlesLocal];
+
+    for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; ++i) {
+        subDomainKeyTreeHandler->h_subDomainKeyTree->procParticleCounter[i] = 0;
+    }
+
+    TreeNS::markParticlesProcess(subDomainKeyTreeHandler->h_subDomainKeyTree, treeHandler->h_tree,
+                                 particleHandler->h_particles, particlesProcess, numParticles);
+
+    for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; ++i) {
+        Logger(TRACE) << "procParticleCounter[" << i << "] = " << subDomainKeyTreeHandler->h_subDomainKeyTree->procParticleCounter[i];
+    }
+
+    //for (int i=0; i<numParticlesLocal; ++i) {
+    //    if (particlesProcess[i] != 0 && particlesProcess[i] != 1) {
+    //        Logger(TRACE) << "particlesProcess[" << i << "] = " << particlesProcess[i];
+    //    }
+    //}
+
+    std::sort(particleHandler->h_particles->x, particleHandler->h_particles->x + numParticlesLocal,
+              SortByKey<int>(particlesProcess));
+#if DIM > 1
+    std::sort(particleHandler->h_particles->y, particleHandler->h_particles->y + numParticlesLocal,
+              SortByKey<int>(particlesProcess));
+#if DIM == 3
+    std::sort(particleHandler->h_particles->z, particleHandler->h_particles->z + numParticlesLocal,
+              SortByKey<int>(particlesProcess));
+#endif
+#endif
+
+    std::sort(particleHandler->h_particles->vx, particleHandler->h_particles->vx + numParticlesLocal,
+              SortByKey<int>(particlesProcess));
+#if DIM > 1
+    std::sort(particleHandler->h_particles->vy, particleHandler->h_particles->vy + numParticlesLocal,
+              SortByKey<int>(particlesProcess));
+#if DIM == 3
+    std::sort(particleHandler->h_particles->vz, particleHandler->h_particles->vz + numParticlesLocal,
+              SortByKey<int>(particlesProcess));
+#endif
+#endif
+
+    // TODO: all entries ...
+
+    integer *sendLengths;
+    sendLengths = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+    sendLengths[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] = 0;
+    integer *receiveLengths;
+    receiveLengths = new integer[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+    receiveLengths[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] = 0;
+
+    for (int proc=0; proc < subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; proc++) {
+        if (proc != subDomainKeyTreeHandler->h_subDomainKeyTree->rank) {
+            sendLengths[proc] = subDomainKeyTreeHandler->h_procParticleCounter[proc];
+        }
+    }
+    mpi::messageLengths(subDomainKeyTreeHandler->h_subDomainKeyTree, sendLengths, receiveLengths);
+
+    for (int i=0; i<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; ++i) {
+        Logger(TRACE) << "sendLengths[" << i << "] = " << sendLengths[i]
+            << " | receiveLengths[" << i << "] = " << receiveLengths[i];
+    }
+
+    real *h_tempEntry = new real[numParticles];
+    real *h_copyBuffer = new real[numParticles];
+
+    sendParticlesEntry(sendLengths, receiveLengths, particleHandler->h_x, h_tempEntry, h_copyBuffer);
+    sendParticlesEntry(sendLengths, receiveLengths, particleHandler->h_vx, h_tempEntry, h_copyBuffer);
+#if DIM > 1
+    sendParticlesEntry(sendLengths, receiveLengths, particleHandler->h_y, h_tempEntry, h_copyBuffer);
+    sendParticlesEntry(sendLengths, receiveLengths, particleHandler->h_vy, h_tempEntry, h_copyBuffer);
+#if DIM == 3
+    sendParticlesEntry(sendLengths, receiveLengths, particleHandler->h_z, h_tempEntry, h_copyBuffer);
+    sendParticlesEntry(sendLengths, receiveLengths, particleHandler->h_vz, h_tempEntry, h_copyBuffer);
+#endif
+#endif
+    numParticlesLocal = sendParticlesEntry(sendLengths, receiveLengths, particleHandler->h_mass, h_tempEntry, h_copyBuffer);;
+
+    Logger(TRACE) << "new numParticlesLocal: " << numParticlesLocal;
+    //int resetLength = numParticles-numParticlesLocal;
+    //HelperNS::Kernel::Launch::resetArray(&particleHandler->h_x[numParticlesLocal], (real)0, resetLength);
+    std::fill(&particleHandler->h_x[numParticlesLocal], &particleHandler->h_x[numParticles], (real)0);
+    std::fill(&particleHandler->h_vx[numParticlesLocal], &particleHandler->h_vx[numParticles], (real)0);
+#if DIM > 1
+    std::fill(&particleHandler->h_y[numParticlesLocal], &particleHandler->h_y[numParticles], (real)0);
+    std::fill(&particleHandler->h_vy[numParticlesLocal], &particleHandler->h_vy[numParticles], (real)0);
+#if DIM == 3
+    std::fill(&particleHandler->h_z[numParticlesLocal], &particleHandler->h_z[numParticles], (real)0);
+    std::fill(&particleHandler->h_vz[numParticlesLocal], &particleHandler->h_vz[numParticles], (real)0);
+#endif
+#endif
+    std::fill(&particleHandler->h_mass[numParticlesLocal], &particleHandler->h_mass[numParticles], (real)0);
+
+    delete [] particlesProcess;
+    delete [] sendLengths;
+    delete [] receiveLengths;
+    delete [] h_tempEntry;
+    delete [] h_copyBuffer;
+
     time = 0.; // TODO: CPU assignParticles()
 #endif // TARGET_GPU
     return time;
@@ -1241,7 +1383,9 @@ real Miluphpc::cpu_pseudoParticles() {
     TreeNS::compPseudoParticles(treeHandler->h_tree, particleHandler->h_particles, domainListHandler->h_domainList,
                                 numParticles, 0);
 
-    if (subDomainKeyTreeHandler->h_rank > 1) {
+
+    if (subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses > 1) {
+        Logger(TRACE) << "calling lowest domain list nodes ...";
         TreeNS::lowestDomainListNodes(treeHandler->h_tree, particleHandler->h_particles,
                                       domainListHandler->h_domainList,
                                       lowestDomainListHandler->h_domainList, numParticles);
@@ -1251,7 +1395,7 @@ real Miluphpc::cpu_pseudoParticles() {
     integer domainListIndex = *domainListHandler->h_domainList->domainListIndex;
     integer lowestDomainListIndex = *lowestDomainListHandler->h_domainList->domainListIndex;
 
-    Logger(DEBUG) << "domainListIndex: " << domainListIndex << " | lowestDomainListIndex: " << lowestDomainListIndex;
+    Logger(TRACE) << "domainListIndex: " << domainListIndex << " | lowestDomainListIndex: " << lowestDomainListIndex;
     Logger(DEBUG) << "communicating/exchanging and updating domain list nodes ...";
 
     boost::mpi::communicator comm;
@@ -1261,7 +1405,8 @@ real Miluphpc::cpu_pseudoParticles() {
 
     // x ---------------------------------------------------------------------------------------------------------------
 
-    lowestDomainListHandler->h_domainList->domainListCounter = 0;
+    // TODO: needed?
+    // *lowestDomainListHandler->h_domainList->domainListCounter = 0;
 
     real *h_realBuffer = new real[lowestDomainListIndex];
 
@@ -1593,7 +1738,22 @@ real Miluphpc::cpu_gravity() {
 
 
     Logger(TRACE) << "diam: " << diam;
-    diam *= 0.25;
+    //diam *= 0.25;
+
+    //*lowestDomainListHandler->h_domainList->domainListCounter = 0;
+
+    Gravity::compTheta(subDomainKeyTreeHandler->h_subDomainKeyTree, treeHandler->h_tree, particleHandler->h_particles,
+                       lowestDomainListHandler->h_domainList, curveType);
+
+    Logger(TRACE) << "relevant (lowest) domain list indices: " << (*lowestDomainListHandler->h_domainList->domainListCounter);
+
+    auto particles2send = new std::map<keyType, int>[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
+
+    Gravity::symbolicForce(subDomainKeyTreeHandler->h_subDomainKeyTree, treeHandler->h_tree, particleHandler->h_particles,
+                           lowestDomainListHandler->h_domainList, simulationParameters.theta, diam, particles2send,
+                           numParticles);
+
+    // TODO: symbolic force and particle exchange!
 
     Gravity::computeForces(treeHandler->h_tree, particleHandler->h_particles, diam, simulationParameters.theta,
                            simulationParameters.smoothing, numParticlesLocal, numParticles);
@@ -3223,7 +3383,7 @@ void Miluphpc::fixedLoadBalancing() {
     //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = 0UL;
     //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = (2UL << 60) + (4UL << 57); // + (4UL << 54) + (2UL << 51) + (1UL << 39);
     // 3|4|5|0|6|4|5|1|2|0|4|7|5|6|2|3|0|2|2|4|6|
-    subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = (4UL << 60) + (1UL << 57); // + (2UL << 54);
+    //subDomainKeyTreeHandler->h_subDomainKeyTree->range[1] = (4UL << 60) + (1UL << 57); // + (2UL << 54);
     //        + (4UL << 57); // + (5UL << 54) + (0UL << 51) + (6UL << 48)
             //+ (4UL << 45) + (5UL << 42) + (1UL << 39) + (2UL << 36)
             //+ (0UL << 33) + (4UL << 30) + (7UL << 27) + (5UL << 24)
@@ -3622,11 +3782,12 @@ integer Miluphpc::sendParticlesEntry(integer *sendLengths, integer *receiveLengt
 
                 //Logger(INFO) << "Sending from: " << subDomainKeyTreeHandler->h_procParticleCounter[proc-1] + sendOffset << " to proc: " << proc;
             }
-            //reqParticles.push_back(comm.isend(proc, 17,&entry[sendOffset], sendLengths[proc]));
             statParticles.push_back(comm.recv(proc, 17, &entryBuffer[0] + receiveOffset,
                                               receiveLengths[proc]));
+            //statParticles.push_back(comm.recv(proc, 17, &entry[0] + receiveOffset,
+            //                                  receiveLengths[proc]));
 
-            //Logger(INFO) << "Receiving at " << receiveOffset << " from proc: " << proc;
+            Logger(TRACE) << "Receiving at " << receiveOffset << " from proc: " << proc;
 
             //sendOffset += subDomainKeyTreeHandler->h_procParticleCounter[proc-1]; //sendLengths[proc];
             receiveOffset += receiveLengths[proc];
@@ -3642,15 +3803,17 @@ integer Miluphpc::sendParticlesEntry(integer *sendLengths, integer *receiveLengt
     }
 
     if (subDomainKeyTreeHandler->h_subDomainKeyTree->rank != 0) {
-        if (offset > 0 && (subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] - offset) > 0) {
+        //if (offset > 0 && (subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] - offset) > 0) {
             //TODO: following line needed? (probably not)
             //HelperNS::Kernel::Launch::copyArray(&entry[0], &entry[subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] - offset], offset);
             //KernelHandler.copyArray(&entry[0], &entry[h_procCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank] - offset], offset);
-        }
+        //}
 #if TARGET_GPU
         HelperNS::Kernel::Launch::copyArray(&copyBuffer[0], &entry[offset], subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]);
         HelperNS::Kernel::Launch::copyArray(&entry[0], &copyBuffer[0], subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]);
 #else
+        std::copy(&entry[offset], &entry[offset + subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]], &copyBuffer[0]);
+        std::copy(&copyBuffer[0], &copyBuffer[subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]], &entry[0]);
        // TODO: CPU copyArray
 #endif // TARGET_GPU
         //KernelHandler.copyArray(&d_tempArray_2[0], &entry[offset], subDomainKeyTreeHandler->d_h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]);
@@ -3665,6 +3828,8 @@ integer Miluphpc::sendParticlesEntry(integer *sendLengths, integer *receiveLengt
                                         entryBuffer, receiveOffset);
 #else
     // TODO: CPU copyArray()
+    std::fill(&entry[subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]], &entry[numParticles], (T)0);
+    std::copy(&entryBuffer[0], &entryBuffer[receiveOffset], &entry[subDomainKeyTreeHandler->h_procParticleCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]]);
 #endif // TARGET_GPU
 
      //KernelHandler.resetFloatArray(&entry[h_procCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]], 0, numParticles-h_procCounter[subDomainKeyTreeHandler->h_subDomainKeyTree->rank]); //resetFloatArrayKernel(float *array, float value, int n)
@@ -3878,6 +4043,32 @@ real Miluphpc::particles2file(int step) {
         //cuda::malloc(d_com, DIM);
         TreeNS::Kernel::Launch::globalCOM(treeHandler->d_tree, particleHandler->d_particles, d_com);
         cuda::copy(h_com, d_com, DIM, To::host);
+#else
+        real mass = 0.;
+        for (int i=0; i<DIM; i++) {
+            h_com[i] = 0;
+        }
+        for (int i=0; i<POW_DIM; i++) {
+            if (treeHandler->h_tree->child[i] != -1) {
+                mass += particleHandler->h_particles->mass[treeHandler->h_tree->child[i]];
+                h_com[0] += particleHandler->h_particles->weightedEntry(treeHandler->h_tree->child[i], Entry::x);
+#if DIM > 1
+                h_com[1] += particleHandler->h_particles->weightedEntry(treeHandler->h_tree->child[i], Entry::y);
+#if DIM == 3
+                h_com[2] += particleHandler->h_particles->weightedEntry(treeHandler->h_tree->child[i], Entry::z);
+#endif
+#endif
+            }
+        }
+        if (mass > 0) {
+            h_com[0] /= mass;
+#if DIM > 1
+            h_com[1] /= mass;
+#if DIM == 3
+            h_com[2] /= mass;
+#endif
+#endif
+        }
 #endif // TARGET_GPU
         for (int i=0; i<DIM; i++) {
             Logger(DEBUG) << "com[" << i << "] = " << h_com[i];

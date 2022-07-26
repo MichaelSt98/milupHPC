@@ -397,9 +397,6 @@ void Tree::insertTree(Particles *particles, integer particleIndex, integer nodeI
             //Logger(TRACE) << "child[8 * " << nodeIndex << " + " << childPath << "] = " << particleIndex << " | x = " << particles->x[particleIndex] << ", " << particles->y[particleIndex];
             //}
             child[POW_DIM * nodeIndex + childPath] = particleIndex;
-            if ((POW_DIM * nodeIndex + childPath) == 7 && particleIndex == 0) {
-                Logger(TRACE) << "!!! WTF !!!";
-            }
         }
         else { // already a particle there
             int insertIndex = *index;
