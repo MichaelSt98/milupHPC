@@ -2,6 +2,8 @@
 
 **Scripts for postprocessing, visualization, ...**
 
+* See also [H5Renderer](../H5Renderer/) for basic rendering ([README](../H5Renderer/README.md))
+
 
 ## Snippets
 

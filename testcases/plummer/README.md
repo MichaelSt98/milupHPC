@@ -2,6 +2,8 @@
 
 The Plummer model or Plummer sphere is a distribution that remains stable over time as shown in *Plummer (1911)*. The initial distributions used for the simulation are generated as described in *Aarseth et al. (1979)*.
 
+<img src="../../documents/4proc_plummer_dynamic.gif" alt="Plummer sample" width="50%"/>
+
 ____
 
 ## Overview
@@ -24,7 +26,7 @@ ____
 2. **generate initial** HDF5 **particle distribution** (choose amount of particles to be simulated)
 	* e.g. using [GitHub: ParticleDistributor](https://github.com/MichaelSt98/ParticleDistributor)
 3. adjust [config.info](config.info): especially output `directory` for the output files
-4. **execute simulation** via `mpirun -np <num processes> bin/runner -n <num output files> -f <generated initial particle distribution> -C testcases/sedov/config.info` 
+4. **execute simulation** via `mpirun -np <num processes> bin/runner -n <num output files> -f <generated initial particle distribution> -C testcases/plummer/config.info` 
 	* assuming execution from the `milupHPC` root directory
 5. possibly [postprocess](../../postprocessing/README.md)
 
@@ -437,3 +439,7 @@ For more information refer to [postprocessing](../../postprocessing/README.md)
 * some scripts are available within [postprocessing/](../../postprocessing/) 
 	* [postprocessing/PlotPlummer.py](../../postprocessing//PlotPlummer.py): plot mass quantiles for the plummer test case
 		* usage: e.g. `./PlotPlummer.py -Q -d <input data directory> -o <output directory>` 
+
+producing a plot like this:
+
+<img src="../../documents/figures/long_pl_N10000000_sfc1D_np4_mass_quantiles.png" alt="Plummer sample" width="100%"/>

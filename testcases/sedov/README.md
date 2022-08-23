@@ -1,6 +1,8 @@
 # Sedov test case
 
 The Taylor-von Neumann-Sedov blast wave describes a blast wave as result of a strong explosion and is a standard test case for SPH codes. A semi-analytical, self-similar solution exists, usable for validation. The problem is set up in a uniform periodically box [-0.5, 0.5] and a high internal energy is induced at the center and smoothed over a smoothing length. An adiabatic EOS with gamma = 5/3 is used and the internal energy equation is integrated.
+
+<img src="../../documents/sedov_sample_movie.gif" alt="Sedov sample" width="50%"/>
 _____
 
 ## Overview
@@ -475,5 +477,6 @@ For more information refer to [postprocessing](../../postprocessing/README.md)
 			* combining those to a video: `ffmpeg -r 24 -i <input directory>/ts%06d.h5.png -vf 'pad=ceil(iw/2)*2:ceil(ih/2)*2' -pix_fmt yuv420p -vcodec libx264 -y -an <output directory>/evolution.mp4`
 
 
+producing a plot like this:
 
-
+<img src="../../documents/figures/sedov_N171_sfc1D_np8_density.png" alt="Sedov sample" width="100%"/>

@@ -28,26 +28,118 @@ _______
 * [Compilation.md](documents/Compilation.md): for instructions to compile the code
 * [GettingStarted.md](documents/GettingStarted.md): for getting started, including running some [test cases](testcases/README.md) 
 	* [Plummer](testcases/plummer/) gravity-only test case ([README](testcases/plummer/README.md))
-	* [Taylor-von Neumann-Sedov blast wave/](../testcases/sedov/) SPH-only test case ([README](../testcases/sedov/README.md))
+	* [Taylor-von Neumann-Sedov blast wave](../testcases/sedov/) SPH-only test case ([README](../testcases/sedov/README.md))
 * [Postprocessing.md](postprocessing/README.md): for information regarding postprocessing
+	* [H5Renderer](../H5Renderer/) for basic rendering ([README](../H5Renderer/README.md)) 
 * [Debugging.md](debug/README.md): for information regarding debugging
+
+_______
+
+**Repository content:**
+
+| Directory    | Description     |
+| ---- | ----- |
+| [**src/**](src/) & [**include/**](include/) | **actual multi-GPU SPH & Barnes-Hut implementation** |
+| **bin/** | binary to be executed, compile via `make`| 
+| **build/** | build files, created by `make` | 
+| [**debug/**](debug/) | debugging with gdb, lldb, cuda gdb ([README](debug/README.md)) | 
+| [**config/**](config/) | config files for settings (`.info`) and material parameters (`.cfg`) ([README](config/README.md)) | 
+| [**testcases/**](testcases/) | test cases including [Plummer](testcases/Plummer/) and [Sedov](testcases/Sedov/) ([README](testcases/README.md)) |
+| [**cluster/**](cluster/) | information to dispatch simulation on clusters using queing systems ([README](cluster/README.md)) | 
+| [**postprocessing/**](postprocessing/) | postprocessing scripts ([README](postprocessing/README.md)) |
+| [**H5Renderer/**](H5Renderer/) | H5Renderer implementation: basic Renderer (2D) ([README](H5Renderer/README.md)) |
+| [**utilities/**](utilities/) | utilities e.g. counting lines of code ([README](utilities/README.md)) | 
+| [**doc/**](doc/) | create Doxygen documentation ([README](doc/README.md)) | 
+| **documents/** | several documents including files for README, instructions, notes, ... | 
+| **images/** | images for MD files, ... | 
 
 _______
 
 ## Parallelization/Implementation
 
 * Parallelization embraces both 
-	* **multi-node** parallelization via message-passing and 
+	* **multi-node** parallelization via message-passing (MPI) and 
 	* **single-node** parallelization for **GPU**s via CUDA
 
 implemented using **C++ and CUDA-aware MPI**.
 
 <img src="documents/figures/class_miluphpc__coll__graph_small.png" alt="Collaboration diagram" width="100%"/>
 
+
 <details>
  <summary>
    Implementation details
  </summary>
+ 
+<!--
+| [src/](src/) & [include/](include/) | **actual multi-GPU SPH & Barnes-Hut implementation** |
+| **bin/** | binary to be executed, compile via `make`| 
+| **build/** | build files, created by `make` | 
+| [**debug/**](debug/) | debugging with gdb, lldb, cuda gdb ([README](debug/README.md)) | 
+| **config/** | config files for settings (`.info`) and material parameters (`.cfg`) ([README](config/README.md)) | 
+| **testcases/** | test cases including Plummer and Sedov ([README](testcases/README.md)) |
+| **cluster/** | ([README](cluster/README.md)) | 
+| **postprocessing/** | ([README](postprocessing/README.md)) |
+| **H5Renderer/** | ([README](H5Renderer/README.md)) |
+| **utilities/** | ([README](utilities/README.md)) | 
+| **doc/** | create Doxygen documentation ([README](doc/README.md)) | 
+| **documents/** | several documents including files for README, instructions, notes, ... | 
+| **images/** | images for MD files, ... | 
+-->
+ 
+| Directory | File | Description |
+| --------- | ---- | ----------- |
+| **./** | | *include/* & *src/* directory | 
+| | *main.cpp* | main: setting CUDA device, config parsing, loading parameters/settings, integrator selection, start of simulation |
+| | *miluphpc.h/cpp* | **abstract base class** defining largest reoccuring part of the simulation (right hand side) and assorted high level functionalities |
+| | *particles.cuh/cu* | particle class (SoA) and reduced particle class: particle attributes like mass, position, velocity, density, ... |
+| | *particle_handler.h/cpp* | handler class for particle class including memory allocation and copy mechanisms |
+| | *simulation_time.cuh/cu* | simulation time class: start & end time, time step, ... |
+| | *simulation_time_handler.cpp* | handler for simulation time class including memory allocation and copy mechanisms |
+| | *device_rhs.cuh/cu* | CUDA kernels for resetting arrays/variables (in between right hand sides) |
+| | *helper.cuh/cu* | buffer class and sorting algorithms (based on CUDA cub) |
+| | *helper_handler.h/cpp* | buffer class handler including memory allocation and copy mechanisms |
+| **subdomain_key_tree/** | | (parallel) tree related functionalities including tree construction and domain decomposition |
+| | *tree.cuh/cu* | (local) tree class and CUDA kernels for tree construction |
+| | *tree_handler.h/cpp* | (local) tree class handler including memory allocation and kernel execution wrapper |
+| | *subdomain.cuh/cu* | (parallel) tree structures including domain decomposition, SFC keys, ... |
+| | *subdomain_handler.h/cpp* | (parallel) tree handling including memory allocation and kernel execution |
+| **gravity/** | | gravity related functionalities according to the **Barnes-Hut** method | 
+| | *gravity.cuh/cu* | gravity related CUDA kernels according to the Barnes-Hut method |
+| **sph/** | | Smoothed Particle Hydrodynamics (SPH) related functionalities |
+| | *kernel.cuh/cu* | SPH smoothing kernels |
+| | *kernel_handler.cuh/cu* | SPH smoothing kernels wrapper |
+| | *sph.cuh/cu* | fixed radius near neighbor search (FRNN) and multi-node SPH |
+| | *density.cuh/cu* | SPH density |
+| | *pressure.cuh/cu* | SPH pressure |
+| | *soundspeed.cuh/cu* | SPH speed of sound |
+| | *internal_forces.cuh/cu* | SPH internal forces |
+| | *stress.cuh/cu* | SPH stress (not fully implemented yet) |
+| | *viscosity.cuh/cu* | SPH viscosity (not fully implemented yet) |
+| **materials/** | | material attributes (as needed for SPH) |
+| | *material.cuh/cu* | material attributes class |
+| | *material_handler.cuh/cpp* | material attributes handler class including loading from *.cfg* file |
+| **integrator/** | | **child classes for miluphpc** implementing `integrate()` |
+| | *device_explicit_euler.cuh/cu* | explicit Euler integrator device implementations |
+| | *explicit_euler.h/cpp* | explicit Euler integrator logic and flow |
+| | *device_leapfrog.cuh/cu* | leapfrog integrator device implementations |
+| | *leapfrog.h/cpp* | leapforg integrator logic and flow |
+| | *device_predictor_corrector_euler.cuh/cu* | predictor-corrector Euler integrator device implementations |
+| | *predictor_corrector_euler.h/cpp* | predictor-corrector Euler integrator logic and flow |
+| **processing/** | | removing particles that moved to far from simulation center, ... |
+| | *kernels.cuh/cu* | removing particles that moved to far from simulation center based on a sphere/cuboid |
+| **utils/** | | C++ utilites like config parsing, logging, profiling, timing, ... |
+| | *config_parser.h/cpp* | config parser based on *cxxopts* |
+| | *h5profiler.h/cpp* | HDF5 profiler based on *HighFive* |
+| | *logger.h/cpp* | Logger class and functionalities (taking MPI ranks into account) |
+| | *timer.h/cpp* | timing events based on MPI timer |
+| **cuda_utils/** |  | CUDA utilities including wrappers, execution policy and math kernels |
+| | *cuda_launcher.cuh/cu* | CUDA Kernel wrapper and execution policy |
+| | *cuda_runtime.h/cpp* | thin CUDA API wrapper |
+| | *cuda_utilities.cuh/cu* | utilities for CUDA including simple kernels, assertions, ... |
+| | *linalg.cuh/cu* | linear algebra CUDA kernels |  
+
+<!--
 
 ```c
 include/src
@@ -99,7 +191,10 @@ include/src
     ├── h5profiler.h/cpp
     ├── logger.h/cpp
     └── timer.h/cpp
+
 ```
+
+-->
 
 The actual implementation and dispatching of the simulation includes 
 
@@ -443,6 +538,7 @@ The code validation comprises the correctness of dispatched simulation on one GP
    Plummer
  </summary>
 
+* refer to [this testcase](testcases/plummer/) ([README](testcases/plummer/README.md))
 * Plummer model: four GPUs with dynamic load balancing every 10th step (top: lebesgue, bottom: hilbert)
 
 <img src="documents/4proc_plummer_dynamic.gif" alt="Plummer sample" width="100%"/>
@@ -459,6 +555,7 @@ The Plummer model is a gravity only test case, the distribution is stable over t
    Taylor–von Neumann–Sedov blast wave
  </summary>
 
+* refer to [this testcase](testcases/sedov/) ([README](testcases/sedov/README.md))
 * Sedov explosion: one and two GPUs
 
 <img src="documents/sedov_sample_movie.gif" alt="Sedov sample" width="100%"/>
