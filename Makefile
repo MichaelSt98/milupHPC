@@ -18,8 +18,8 @@ INCDIR         := ./include
 BUILDDIR       := ./build
 TARGETDIR      := ./bin
 RESDIR         := ./resources
-IDEASDIR       := ./ideas
-TESTDIR        := ./test
+# IDEASDIR       := ./ideas
+# TESTDIR        := ./test
 DOCDIR         := ./doc
 DOCUMENTSDIR   := ./documents
 
@@ -54,7 +54,8 @@ DOXY           := /usr/local/Cellar/doxygen/1.9.3_1/bin/doxygen
 DOXYFILE       := $(DOCDIR)/Doxyfile
 
 #default make (all)
-all:  tester ideas $(TARGET)
+# all:  tester ideas $(TARGET)
+all: $(TARGET)
 
 single-precision: CXXFLAGS += -DSINGLE_PRECISION
 single-precision: NVFLAGS += -DSINGLE_PRECISION
@@ -116,23 +117,23 @@ $(BUILDDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(CUDASRCEXT)
 	@$(NVCC) $(GPU_ARCH) $(INC) $(NVFLAGS) -I$(CUDADIR) -MM $(SRCDIR)/$*.$(CUDASRCEXT) > $(BUILDDIR)/$*.$(DEPEXT)
 
 #compile test files
-tester: directories
-ifneq ("$(wildcard $(TESTDIR)/*.$(SRCEXT) )","")
-	@echo "  compiling: " test/*
-	@$(CXX) $(CXXFLAGS) test/*.cpp $(INC) $(LIB) -o bin/tester
-else
-	@echo "No $(SRCEXT)-files within $(TESTDIR)!"
-endif
+# tester: directories
+# ifneq ("$(wildcard $(TESTDIR)/*.$(SRCEXT) )","")
+#  	@echo "  compiling: " test/*
+# 	@$(CXX) $(CXXFLAGS) test/*.cpp $(INC) $(LIB) -o bin/tester
+# else
+# 	@echo "No $(SRCEXT)-files within $(TESTDIR)!"
+# endif
 
 
 #compile idea files
-ideas: directories
-ifneq ("$(wildcard $(IDEASDIR)/*.$(SRCEXT) )","")
-	@echo "  compiling: " ideas/*
-	@$(CXX) $(CXXFLAGS) ideas/*.cpp $(INC) $(LIB) -o bin/ideas
-else
-	@echo "No $(SRCEXT)-files within $(IDEASDIR)!"
-endif
+# ideas: directories
+# ifneq ("$(wildcard $(IDEASDIR)/*.$(SRCEXT) )","")
+# 	@echo "  compiling: " ideas/*
+# 	@$(CXX) $(CXXFLAGS) ideas/*.cpp $(INC) $(LIB) -o bin/ideas
+# else
+# 	@echo "No $(SRCEXT)-files within $(IDEASDIR)!"
+# endif
 
 #@echo FILE_PATTERNS     = "*.md" "*.h" "*.$(SRCEXT)" >> $(DOCDIR)/doxyfile.inc
 doxyfile.inc: #Makefile
