@@ -1,4 +1,4 @@
-# MilupHPC
+# milupHPC
 
 This is the **API documentation for milupHPC** - a parallel smoothed particle hydrodynamics (**SPH**) targeting GPU cluster via CUDA-aware MPI.
 
