@@ -1,9 +1,0 @@
-chmod 755 H5Renderer/createMP4
-chmod 755 H5Renderer/createMP4From
-chmod 755 postprocessing/Communication.py
-chmod 755 postprocessing/min_max_mean.py
-chmod 755 postprocessing/PlotMinMaxMean.py
-chmod 755 postprocessing/GetMinMaxMean.py
-chmod 755 postprocessing/PlotBB.py
-chmod 755 postprocessing/PlotPlummer.py
-chmod 755 postprocessing/PlotSedov.py
