@@ -1,0 +1,2791 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>manual</title>
+
+
+<style type="text/css">
+body {
+  font-family: Helvetica, arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: white;
+  padding: 30px; }
+
+body > *:first-child {
+  margin-top: 0 !important; }
+body > *:last-child {
+  margin-bottom: 0 !important; }
+
+a {
+  color: #4183C4; }
+a.absent {
+  color: #cc0000; }
+a.anchor {
+  display: block;
+  padding-left: 30px;
+  margin-left: -30px;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 20px 0 10px;
+  padding: 0;
+  font-weight: bold;
+  -webkit-font-smoothing: antialiased;
+  cursor: text;
+  position: relative; }
+
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA09pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoMTMuMCAyMDEyMDMwNS5tLjQxNSAyMDEyLzAzLzA1OjIxOjAwOjAwKSAgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OUM2NjlDQjI4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OUM2NjlDQjM4ODBGMTFFMTg1ODlEODNERDJBRjUwQTQiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5QzY2OUNCMDg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5QzY2OUNCMTg4MEYxMUUxODU4OUQ4M0REMkFGNTBBNCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PsQhXeAAAABfSURBVHjaYvz//z8DJYCRUgMYQAbAMBQIAvEqkBQWXI6sHqwHiwG70TTBxGaiWwjCTGgOUgJiF1J8wMRAIUA34B4Q76HUBelAfJYSA0CuMIEaRP8wGIkGMA54bgQIMACAmkXJi0hKJQAAAABJRU5ErkJggg==) no-repeat 10px center;
+  text-decoration: none; }
+
+h1 tt, h1 code {
+  font-size: inherit; }
+
+h2 tt, h2 code {
+  font-size: inherit; }
+
+h3 tt, h3 code {
+  font-size: inherit; }
+
+h4 tt, h4 code {
+  font-size: inherit; }
+
+h5 tt, h5 code {
+  font-size: inherit; }
+
+h6 tt, h6 code {
+  font-size: inherit; }
+
+h1 {
+  font-size: 28px;
+  color: black; }
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #cccccc;
+  color: black; }
+
+h3 {
+  font-size: 18px; }
+
+h4 {
+  font-size: 16px; }
+
+h5 {
+  font-size: 14px; }
+
+h6 {
+  color: #777777;
+  font-size: 14px; }
+
+p, blockquote, ul, ol, dl, li, table, pre {
+  margin: 15px 0; }
+
+hr {
+  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAECAYAAACtBE5DAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OENDRjNBN0E2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OENDRjNBN0I2NTZBMTFFMEI3QjRBODM4NzJDMjlGNDgiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4Q0NGM0E3ODY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4Q0NGM0E3OTY1NkExMUUwQjdCNEE4Mzg3MkMyOUY0OCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PqqezsUAAAAfSURBVHjaYmRABcYwBiM2QSA4y4hNEKYDQxAEAAIMAHNGAzhkPOlYAAAAAElFTkSuQmCC) repeat-x 0 0;
+  border: 0 none;
+  color: #cccccc;
+  height: 4px;
+  padding: 0;
+}
+
+body > h2:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+body > h1:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+  body > h1:first-child + h2 {
+    margin-top: 0;
+    padding-top: 0; }
+body > h3:first-child, body > h4:first-child, body > h5:first-child, body > h6:first-child {
+  margin-top: 0;
+  padding-top: 0; }
+
+a:first-child h1, a:first-child h2, a:first-child h3, a:first-child h4, a:first-child h5, a:first-child h6 {
+  margin-top: 0;
+  padding-top: 0; }
+
+h1 p, h2 p, h3 p, h4 p, h5 p, h6 p {
+  margin-top: 0; }
+
+li p.first {
+  display: inline-block; }
+li {
+  margin: 0; }
+ul, ol {
+  padding-left: 30px; }
+
+ul :first-child, ol :first-child {
+  margin-top: 0; }
+
+dl {
+  padding: 0; }
+  dl dt {
+    font-size: 14px;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0;
+    margin: 15px 0 5px; }
+    dl dt:first-child {
+      padding: 0; }
+    dl dt > :first-child {
+      margin-top: 0; }
+    dl dt > :last-child {
+      margin-bottom: 0; }
+  dl dd {
+    margin: 0 0 15px;
+    padding: 0 15px; }
+    dl dd > :first-child {
+      margin-top: 0; }
+    dl dd > :last-child {
+      margin-bottom: 0; }
+
+blockquote {
+  border-left: 4px solid #dddddd;
+  padding: 0 15px;
+  color: #777777; }
+  blockquote > :first-child {
+    margin-top: 0; }
+  blockquote > :last-child {
+    margin-bottom: 0; }
+
+table {
+  padding: 0;border-collapse: collapse; }
+  table tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0; }
+    table tr:nth-child(2n) {
+      background-color: #f8f8f8; }
+    table tr th {
+      font-weight: bold;
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr td {
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px; }
+    table tr th :first-child, table tr td :first-child {
+      margin-top: 0; }
+    table tr th :last-child, table tr td :last-child {
+      margin-bottom: 0; }
+
+img {
+  max-width: 100%; }
+
+span.frame {
+  display: block;
+  overflow: hidden; }
+  span.frame > span {
+    border: 1px solid #dddddd;
+    display: block;
+    float: left;
+    overflow: hidden;
+    margin: 13px 0 0;
+    padding: 7px;
+    width: auto; }
+  span.frame span img {
+    display: block;
+    float: left; }
+  span.frame span span {
+    clear: both;
+    color: #333333;
+    display: block;
+    padding: 5px 0 0; }
+span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-center > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: center; }
+  span.align-center span img {
+    margin: 0 auto;
+    text-align: center; }
+span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both; }
+  span.align-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px 0 0;
+    text-align: right; }
+  span.align-right span img {
+    margin: 0;
+    text-align: right; }
+span.float-left {
+  display: block;
+  margin-right: 13px;
+  overflow: hidden;
+  float: left; }
+  span.float-left span {
+    margin: 13px 0 0; }
+span.float-right {
+  display: block;
+  margin-left: 13px;
+  overflow: hidden;
+  float: right; }
+  span.float-right > span {
+    display: block;
+    overflow: hidden;
+    margin: 13px auto 0;
+    text-align: right; }
+
+code, tt {
+  margin: 0 2px;
+  padding: 0 5px;
+  white-space: nowrap;
+  border: 1px solid #eaeaea;
+  background-color: #f8f8f8;
+  border-radius: 3px; }
+
+pre code {
+  margin: 0;
+  padding: 0;
+  white-space: pre;
+  border: none;
+  background: transparent; }
+
+.highlight pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+
+pre {
+  background-color: #f8f8f8;
+  border: 1px solid #cccccc;
+  font-size: 13px;
+  line-height: 19px;
+  overflow: auto;
+  padding: 6px 10px;
+  border-radius: 3px; }
+  pre code, pre tt {
+    background-color: transparent;
+    border: none; }
+
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+
+kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb
+}
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:0 auto;
+    }
+}
+@media print {
+	table, pre {
+		page-break-inside: avoid;
+	}
+	pre {
+		word-wrap: break-word;
+	}
+  body {
+    padding: 2cm; 
+  }
+}
+</style>
+
+<style type="text/css">
+/**
+ * prism.js tomorrow night eighties for JavaScript, CoffeeScript, CSS and HTML
+ * Based on https://github.com/chriskempson/tomorrow-theme
+ * @author Rose Pritchard
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: #ccc;
+	background: none;
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #2d2d2d;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.block-comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: #999;
+}
+
+.token.punctuation {
+	color: #ccc;
+}
+
+.token.tag,
+.token.attr-name,
+.token.namespace,
+.token.deleted {
+	color: #e2777a;
+}
+
+.token.function-name {
+	color: #6196cc;
+}
+
+.token.boolean,
+.token.number,
+.token.function {
+	color: #f08d49;
+}
+
+.token.property,
+.token.class-name,
+.token.constant,
+.token.symbol {
+	color: #f8c555;
+}
+
+.token.selector,
+.token.important,
+.token.atrule,
+.token.keyword,
+.token.builtin {
+	color: #cc99cd;
+}
+
+.token.string,
+.token.char,
+.token.attr-value,
+.token.regex,
+.token.variable {
+	color: #7ec699;
+}
+
+.token.operator,
+.token.entity,
+.token.url {
+	color: #67cdcc;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+
+.token.inserted {
+	color: green;
+}
+</style>
+
+<style type="text/css">
+pre.line-numbers {
+	position: relative;
+	padding-left: 3.8em;
+	counter-reset: linenumber;
+}
+
+pre.line-numbers > code {
+	position: relative;
+}
+
+.line-numbers .line-numbers-rows {
+	position: absolute;
+	pointer-events: none;
+	top: 0;
+	font-size: 100%;
+	left: -3.8em;
+	width: 3em; /* works for line-numbers below 1000 lines */
+	letter-spacing: -1px;
+	border-right: 1px solid #999;
+
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+
+}
+
+	.line-numbers-rows > span {
+		pointer-events: none;
+		display: block;
+		counter-increment: linenumber;
+	}
+
+		.line-numbers-rows > span:before {
+			content: counter(linenumber);
+			color: #999;
+			display: block;
+			padding-right: 0.8em;
+			text-align: right;
+		}
+</style>
+
+<style type="text/css">
+div.prism-show-language {
+	position: relative;
+}
+
+div.prism-show-language > div.prism-show-language-label {
+	color: black;
+	background-color: #CFCFCF;
+	display: inline-block;
+	position: absolute;
+	bottom: auto;
+	left: auto;
+	top: 0;
+	right: 0;
+	width: auto;
+	height: auto;
+	font-size: 0.9em;
+	border-radius: 0 0 0 5px;
+	padding: 0 0.5em;
+	text-shadow: none;
+	z-index: 1;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	-webkit-transform: none;
+	-moz-transform: none;
+	-ms-transform: none;
+	-o-transform: none;
+	transform: none;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<h1 id="toc_0">Manual for milupHPC</h1>
+
+<hr>
+
+<p><strong>TOC</strong></p>
+
+<ol>
+<li><a href="#about">About</a> - description of the project</li>
+<li><a href="#relevant-links">Relevant links</a> - relevant links</li>
+<li><a href="#repository-content">Repository content</a> - project structure and content
+
+<ol>
+<li><a href="#implementation-details">Implementation details</a> - details about the parallelization and implementation</li>
+</ol></li>
+<li><a href="#prerequisites">Prerequisites</a> - prerequisites including instructions for installation
+
+<ol>
+<li><a href="#mpi">MPI</a> - message passing interface </li>
+<li><a href="#boost">Boost</a> </li>
+<li><a href="#highfive">HighFive</a> </li>
+<li><a href="#cuda-cub">CUDA cub</a></li>
+<li><a href="#cxxopts">Cxxopts</a></li>
+<li><a href="#libconfig">libconfig</a> </li>
+<li><a href="#hdf5">HDF5</a></li>
+</ol></li>
+<li><a href="#compilation">Compilation</a> - compilation using the delivered Makefile</li>
+<li><a href="#usage">Usage</a>
+
+<ol>
+<li><a href="#preprocessor-directives">Preprocessor directives</a></li>
+<li><a href="#input-hdf5-file">Input HDF5 file</a></li>
+<li><a href="#config-file">Config file</a></li>
+<li><a href="#material-config-file">Material config file</a></li>
+<li><a href="#command-line-arguments">Command line arguments</a></li>
+</ol></li>
+<li><a href="#test-cases">Test cases</a>
+
+<ol>
+<li><a href="#plummer-test-case">Plummer test case</a> - dispatching gravity test case</li>
+<li><a href="#sedov-test-case">Sedov test case</a> - dispatching SPH test case</li>
+</ol></li>
+<li><a href="#postprocessing">Postprocessing</a> - postprocessing instructions and tips</li>
+<li><a href="#debugging">Debugging</a> - debugging tips</li>
+</ol>
+
+<hr>
+
+<h2 id="toc_1">About <a name="about"></a></h2>
+
+<p>This project <strong>milupHPC</strong> implements a <strong>multi-GPU SPH &amp; N-body (via Barnes-Hut) algorithm using C++11 and CUDA-aware MPI</strong> by combining already proven parallelization strategies and available implementations </p>
+
+<ul>
+<li><strong>single-GPU version inspired/adopted from:</strong>
+
+<ul>
+<li><a href="https://github.com/christophmschaefer/miluphcuda">miluphcuda</a> </li>
+<li><a href="https://iss.oden.utexas.edu/Publications/Papers/burtscher11.pdf">An Efficient CUDA Implementation of the Tree-Based Barnes Hut n-Body Algorithm</a></li>
+</ul></li>
+<li><strong>multi-node (or rather multi-CPU) version inspired/adopted from:</strong>
+
+<ul>
+<li>M. Griebel, S. Knapek, and G. Zumbusch. Numerical Simulation in Molecular Dynamics: Numerics, Algorithms, Parallelization, Applications. 1st. Springer Pub- lishing Company, Incorporated, 2010. isbn: 3642087760</li>
+</ul></li>
+</ul>
+
+<p>with new ideas and parallelization strategies.</p>
+
+<hr>
+
+<h2 id="toc_2">Relevant links <a name="relevant-links"></a></h2>
+
+<ul>
+<li><strong><a href="https://github.com/MichaelSt98/milupHPC">GitHub: milupHPC</a></strong></li>
+<li><strong><a href="https://michaelst98.github.io/milupHPC/">milupHPC API documentation</a></strong> (Doxygen)</li>
+<li>further potentially interesting:
+
+<ul>
+<li>for a <strong>versatile single-GPU implementation</strong> refer to <a href="https://github.com/christophmschaefer/miluphcuda">GitHub: miluphcuda</a> </li>
+<li>for a <strong>multi-CPU implementation</strong> (self-gravity via Barnes-Hut only) refer to <a href="https://github.com/jammartin/ParaLoBstar">GitHub: ParaLoBstar</a></li>
+</ul></li>
+</ul>
+
+<hr>
+
+<h2 id="toc_3">Repository content <a name="repository-content"></a></h2>
+
+<p>This project/repository includes:</p>
+
+<ul>
+<li>the actual implementation (<code>src</code> and <code>include</code> directory)</li>
+<li>instructions/documentation</li>
+<li>debugging information/instructions</li>
+<li>postprocessing instructions and scripts
+
+<ul>
+<li>including a primitive renderer </li>
+</ul></li>
+</ul>
+
+<p><strong>Overview:</strong></p>
+
+<table>
+<thead>
+<tr>
+<th>Directory</th>
+<th> Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><a href="src/"><strong>src/</strong></a> &amp; <a href="include/"><strong>include/</strong></a></td>
+<td><strong>actual multi-GPU SPH &amp; Barnes-Hut implementation</strong> </td>
+</tr>
+<tr>
+<td><strong>bin/</strong></td>
+<td>binary to be executed, compile via <code>make</code></td>
+</tr>
+<tr>
+<td><strong>build/</strong></td>
+<td>build files, created by <code>make</code></td>
+</tr>
+<tr>
+<td><a href="debug/"><strong>debug/</strong></a></td>
+<td>debugging with gdb, lldb, cuda gdb (<a href="debug/README.md">README</a>)</td>
+</tr>
+<tr>
+<td><a href="config/"><strong>config/</strong></a></td>
+<td>config files for settings (<code>.info</code>) and material parameters (<code>.cfg</code>) (<a href="config/README.md">README</a>)</td>
+</tr>
+<tr>
+<td><a href="testcases/"><strong>testcases/</strong></a></td>
+<td>test cases including <a href="testcases/Plummer/">Plummer</a> and <a href="testcases/Sedov/">Sedov</a> (<a href="testcases/README.md">README</a>)</td>
+</tr>
+<tr>
+<td><a href="cluster/"><strong>cluster/</strong></a></td>
+<td>information to dispatch simulation on clusters using queing systems (<a href="cluster/README.md">README</a>)</td>
+</tr>
+<tr>
+<td><a href="postprocessing/"><strong>postprocessing/</strong></a></td>
+<td>postprocessing scripts (<a href="postprocessing/README.md">README</a>)</td>
+</tr>
+<tr>
+<td><a href="H5Renderer/"><strong>H5Renderer/</strong></a></td>
+<td>H5Renderer implementation: basic Renderer (2D) (<a href="H5Renderer/README.md">README</a>)</td>
+</tr>
+<tr>
+<td><a href="utilities/"><strong>utilities/</strong></a></td>
+<td>utilities e.g. counting lines of code (<a href="utilities/README.md">README</a>)</td>
+</tr>
+<tr>
+<td><a href="doc/"><strong>doc/</strong></a></td>
+<td>create Doxygen documentation (<a href="doc/README.md">README</a>)</td>
+</tr>
+<tr>
+<td><strong>documents/</strong></td>
+<td>several documents including files for README, instructions, notes, ...</td>
+</tr>
+<tr>
+<td><strong>images/</strong></td>
+<td>images for MD files, ...</td>
+</tr>
+</tbody>
+</table>
+
+<hr>
+
+<h3 id="toc_4">Implementation details <a name="implementation-details"></a></h3>
+
+<ul>
+<li>Parallelization embraces both 
+
+<ul>
+<li><strong>multi-node</strong> parallelization via message-passing (MPI) and </li>
+<li><strong>single-node</strong> parallelization for <strong>GPU</strong>s via CUDA</li>
+</ul></li>
+</ul>
+
+<p>implemented using <strong>C++ and CUDA-aware MPI</strong>.</p>
+
+<p><img src="documents/figures/class_miluphpc__coll__graph_small.png" alt="Collaboration diagram" width="100%"/></p>
+
+<!--
+| [src/](src/) & [include/](include/) | **actual multi-GPU SPH & Barnes-Hut implementation** |
+| **bin/** | binary to be executed, compile via `make`| 
+| **build/** | build files, created by `make` | 
+| [**debug/**](debug/) | debugging with gdb, lldb, cuda gdb ([README](debug/README.md)) | 
+| **config/** | config files for settings (`.info`) and material parameters (`.cfg`) ([README](config/README.md)) | 
+| **testcases/** | test cases including Plummer and Sedov ([README](testcases/README.md)) |
+| **cluster/** | ([README](cluster/README.md)) | 
+| **postprocessing/** | ([README](postprocessing/README.md)) |
+| **H5Renderer/** | ([README](H5Renderer/README.md)) |
+| **utilities/** | ([README](utilities/README.md)) | 
+| **doc/** | create Doxygen documentation ([README](doc/README.md)) | 
+| **documents/** | several documents including files for README, instructions, notes, ... | 
+| **images/** | images for MD files, ... | 
+-->
+
+<table>
+<thead>
+<tr>
+<th> Directory</th>
+<th>File</th>
+<th>Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><strong>./</strong></td>
+<td></td>
+<td><em>include/</em> &amp; <em>src/</em> directory</td>
+</tr>
+<tr>
+<td></td>
+<td><em>main.cpp</em></td>
+<td>main: setting CUDA device, config parsing, loading parameters/settings, integrator selection, start of simulation</td>
+</tr>
+<tr>
+<td></td>
+<td> <em>miluphpc.h/cpp</em></td>
+<td><strong>abstract base class</strong> defining largest reoccuring part of the simulation (right hand side) and assorted high level functionalities</td>
+</tr>
+<tr>
+<td></td>
+<td><em>particles.cuh/cu</em></td>
+<td>particle class (SoA) and reduced particle class: particle attributes like mass, position, velocity, density, ...</td>
+</tr>
+<tr>
+<td></td>
+<td><em>particle_handler.h/cpp</em></td>
+<td>handler class for particle class including memory allocation and copy mechanisms</td>
+</tr>
+<tr>
+<td></td>
+<td><em>simulation_time.cuh/cu</em></td>
+<td>simulation time class: start &amp; end time, time step, ... </td>
+</tr>
+<tr>
+<td></td>
+<td> <em>simulation<em>time</em>handler.cpp</em></td>
+<td>handler for simulation time class including memory allocation and copy mechanisms </td>
+</tr>
+<tr>
+<td> </td>
+<td><em>device_rhs.cuh/cu</em></td>
+<td>CUDA kernels for resetting arrays/variables (in between right hand sides)</td>
+</tr>
+<tr>
+<td> </td>
+<td><em>helper.cuh/cu</em></td>
+<td>buffer class and sorting algorithms (based on CUDA cub)</td>
+</tr>
+<tr>
+<td> </td>
+<td> <em>helper_handler.h/cpp</em></td>
+<td>buffer class handler including memory allocation and copy mechanisms</td>
+</tr>
+<tr>
+<td><strong>subdomain<em>key</em>tree/</strong></td>
+<td></td>
+<td>(parallel) tree related functionalities including tree construction and domain decomposition </td>
+</tr>
+<tr>
+<td> </td>
+<td><em>tree.cuh/cu</em></td>
+<td>(local) tree class and CUDA kernels for tree construction</td>
+</tr>
+<tr>
+<td> </td>
+<td><em>tree_handler.h/cpp</em></td>
+<td>(local) tree class handler including memory allocation and kernel execution wrapper </td>
+</tr>
+<tr>
+<td></td>
+<td> <em>subdomain.cuh/cu</em></td>
+<td>(parallel) tree structures including domain decomposition, SFC keys, ...</td>
+</tr>
+<tr>
+<td></td>
+<td> <em>subdomain_handler.h/cpp</em></td>
+<td>(parallel) tree handling including memory allocation and kernel execution </td>
+</tr>
+<tr>
+<td><strong>gravity/</strong></td>
+<td></td>
+<td>gravity related functionalities according to the <strong>Barnes-Hut</strong> method </td>
+</tr>
+<tr>
+<td> </td>
+<td><em>gravity.cuh/cu</em></td>
+<td>gravity related CUDA kernels according to the Barnes-Hut method</td>
+</tr>
+<tr>
+<td><strong>sph/</strong></td>
+<td></td>
+<td> Smoothed Particle Hydrodynamics (SPH) related functionalities</td>
+</tr>
+<tr>
+<td></td>
+<td> <em>kernel.cuh/cu</em></td>
+<td>SPH smoothing kernels</td>
+</tr>
+<tr>
+<td></td>
+<td><em>kernel_handler.cuh/cu</em></td>
+<td>SPH smoothing kernels wrapper</td>
+</tr>
+<tr>
+<td></td>
+<td> <em>sph.cuh/cu</em></td>
+<td>fixed radius near neighbor search (FRNN) and multi-node SPH</td>
+</tr>
+<tr>
+<td> </td>
+<td><em>density.cuh/cu</em></td>
+<td>SPH density</td>
+</tr>
+<tr>
+<td></td>
+<td> <em>pressure.cuh/cu</em></td>
+<td>SPH pressure</td>
+</tr>
+<tr>
+<td> </td>
+<td><em>soundspeed.cuh/cu</em></td>
+<td>SPH speed of sound</td>
+</tr>
+<tr>
+<td></td>
+<td> <em>internal_forces.cuh/cu</em></td>
+<td>SPH internal forces</td>
+</tr>
+<tr>
+<td></td>
+<td> <em>stress.cuh/cu</em></td>
+<td>SPH stress (not fully implemented yet)</td>
+</tr>
+<tr>
+<td></td>
+<td> <em>viscosity.cuh/cu</em></td>
+<td>SPH viscosity (not fully implemented yet)</td>
+</tr>
+<tr>
+<td><strong>materials/</strong></td>
+<td> </td>
+<td>material attributes (as needed for SPH)</td>
+</tr>
+<tr>
+<td> </td>
+<td><em>material.cuh/cu</em></td>
+<td>material attributes class</td>
+</tr>
+<tr>
+<td> </td>
+<td><em>material_handler.cuh/cpp</em></td>
+<td>material attributes handler class including loading from <em>.cfg</em> file</td>
+</tr>
+<tr>
+<td><strong>integrator/</strong></td>
+<td> </td>
+<td><strong>child classes for miluphpc</strong> implementing <code>integrate()</code></td>
+</tr>
+<tr>
+<td> </td>
+<td><em>device<em>explicit</em>euler.cuh/cu</em></td>
+<td>explicit Euler integrator device implementations</td>
+</tr>
+<tr>
+<td></td>
+<td> <em>explicit_euler.h/cpp</em></td>
+<td>explicit Euler integrator logic and flow</td>
+</tr>
+<tr>
+<td></td>
+<td> <em>device_leapfrog.cuh/cu</em></td>
+<td>leapfrog integrator device implementations</td>
+</tr>
+<tr>
+<td></td>
+<td> <em>leapfrog.h/cpp</em></td>
+<td>leapforg integrator logic and flow</td>
+</tr>
+<tr>
+<td></td>
+<td> <em>device<em>predictor</em>corrector_euler.cuh/cu</em></td>
+<td>predictor-corrector Euler integrator device implementations</td>
+</tr>
+<tr>
+<td></td>
+<td> <em>predictor<em>corrector</em>euler.h/cpp</em></td>
+<td>predictor-corrector Euler integrator logic and flow</td>
+</tr>
+<tr>
+<td><strong>processing/</strong></td>
+<td> </td>
+<td>removing particles that moved to far from simulation center, ...</td>
+</tr>
+<tr>
+<td> </td>
+<td><em>kernels.cuh/cu</em></td>
+<td>removing particles that moved to far from simulation center based on a sphere/cuboid</td>
+</tr>
+<tr>
+<td><strong>utils/</strong></td>
+<td> </td>
+<td>C++ utilites like config parsing, logging, profiling, timing, ...</td>
+</tr>
+<tr>
+<td> </td>
+<td><em>config_parser.h/cpp</em></td>
+<td>config parser based on <em>cxxopts</em></td>
+</tr>
+<tr>
+<td></td>
+<td><em>h5profiler.h/cpp</em></td>
+<td> HDF5 profiler based on <em>HighFive</em></td>
+</tr>
+<tr>
+<td></td>
+<td> <em>logger.h/cpp</em></td>
+<td>Logger class and functionalities (taking MPI ranks into account)</td>
+</tr>
+<tr>
+<td></td>
+<td> <em>timer.h/cpp</em></td>
+<td> timing events based on MPI timer</td>
+</tr>
+<tr>
+<td><strong>cuda_utils/</strong></td>
+<td></td>
+<td>CUDA utilities including wrappers, execution policy and math kernels</td>
+</tr>
+<tr>
+<td></td>
+<td><em>cuda_launcher.cuh/cu</em></td>
+<td>CUDA Kernel wrapper and execution policy</td>
+</tr>
+<tr>
+<td> </td>
+<td><em>cuda_runtime.h/cpp</em></td>
+<td>thin CUDA API wrapper</td>
+</tr>
+<tr>
+<td></td>
+<td><em>cuda_utilities.cuh/cu</em></td>
+<td>utilities for CUDA including simple kernels, assertions, ...</td>
+</tr>
+<tr>
+<td></td>
+<td><em>linalg.cuh/cu</em></td>
+<td>linear algebra CUDA kernels</td>
+</tr>
+</tbody>
+</table>
+
+<!--
+
+```c
+include/src
+├── cuda_utils // CUDA utilities
+│   ├── cuda_launcher.cuh/cu
+│   ├── cuda_runtime.h/cpp
+│   ├── cuda_utilities.cuh/cu
+│   └── linalg.cuh/cu
+├── device_rhs.cuh/cu
+├── gravity // Gravity related functions/kernels
+│   └── gravity.cuh/cu
+├── helper.cuh/cu // buffer class
+├── helper_handler.h/cpp // buffer handling
+├── integrator // Integrator classes, inheriting from miluphpc.h/cpp
+│   ├── device_explicit_euler.cuh/cu
+│   ├── device_leapfrog.cuh/cu
+│   ├── device_predictor_corrector_euler.cuh/cu
+│   ├── explicit_euler.h/cpp
+│   ├── leapfrog.h/cpp
+│   └── predictor_corrector_euler.h/cpp
+├── main.cpp // main
+├── materials // material handling (for SPH)
+│   ├── material.cuh/cu
+│   └── material_handler.cuh/cpp
+├── miluphpc.h/cpp // base class for dispatching simulation
+├── particle_handler.h/cpp // particle class handling
+├── particles.cuh/cu // particle information/class
+├── processing
+│   └── kernels.cuh/cu
+├── simulation_time.cuh/cu // simulation time class
+├── simulation_time_handler.cpp // simulation time handling
+├── sph // SPH related functions/kernels
+│   ├── density.cuh/cu
+│   ├── internal_forces.cuh/cu
+│   ├── kernel.cuh/cu
+│   ├── kernel_handler.cuh/cu
+│   ├── pressure.cuh/cu
+│   ├── soundspeed.cuh/cu
+│   ├── sph.cuh/cu
+│   ├── stress.cuh/cu
+│   └── viscosity.cuh/cu
+├── subdomain_key_tree // Tree related functions/kernels as well as domain decomposition
+│   ├── subdomain.cuh/cu
+│   ├── subdomain_handler.h/cpp
+│   ├── tree.cuh/cu
+│   └── tree_handler.h/cpp
+└── utils // C++ utilities
+    ├── config_parser.h/cpp
+    ├── h5profiler.h/cpp
+    ├── logger.h/cpp
+    └── timer.h/cpp
+
+```
+
+-->
+
+<p>The actual implementation and dispatching of the simulation includes </p>
+
+<ul>
+<li>pre-processing (inititial particle distribution, ...)</li>
+<li>preparation tasks like 
+
+<ul>
+<li>initializing the MPI and CUDA environment</li>
+<li>reading the initial particle distribution</li>
+<li>memory allocation, ...</li>
+</ul></li>
+<li>the actual simulation in dependence of the used integration scheme
+
+<ul>
+<li>encapsulated in the right-hand-side (as depicted in the following picture)<br></li>
+<li>advancing the particles</li>
+</ul></li>
+<li>post-processing</li>
+<li>...</li>
+</ul>
+
+<p>However, as the following suggests, the simulation differs for single and multi-node execution, whereas multi-node execution requires more and more sophisticated functionalities to ensure the correctness of the algorithms.</p>
+
+<p><img src="documents/figures/right-hand-side.png" alt="right-hand-side" width="100%"/></p>
+
+<h2 id="toc_5">Prerequisites <a name="prerequisites"></a></h2>
+
+<ul>
+<li>milupHPC targets NVIDIA GPUs as the code is implemented with CUDA, therefore the following assumes existing NVIDIA GPU(s) and a proper NVIDIA driver &amp; toolkit installation, otherwise refer to
+
+<ul>
+<li><a href="https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html">NVIDIA installation guide for Linux</a> </li>
+<li><a href="https://docs.nvidia.com/cuda/cuda-installation-guide-microsoft-windows/index.html">NVIIDA installation guide for Windows</a></li>
+</ul></li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th>library</th>
+<th>licence</th>
+<th>usage</th>
+<th>link</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>GNU</td>
+<td>GPLv3+</td>
+<td> compiler</td>
+<td><a href="https://www.gnu.org/home.de.html">gnu.org</a></td>
+</tr>
+<tr>
+<td>OpenMPI</td>
+<td>BSD 3-Clause</td>
+<td>compiler, MPI Implementation</td>
+<td><a href="https://www.open-mpi.org/">open-mpi.org</a></td>
+</tr>
+<tr>
+<td>CUDA</td>
+<td>CUDA Toolkit End User License Agreement</td>
+<td>compiler, CUDA Toolkit and API</td>
+<td><a href="https://developer.nvidia.com/">developer.nvidia.com</a></td>
+</tr>
+<tr>
+<td> CUDA cub</td>
+<td>BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</td>
+<td>device wide parallel primitives</td>
+<td><a href="https://github.com/NVIDIA/cub">github.com/NVIDIA/cub</a></td>
+</tr>
+<tr>
+<td>HDF5</td>
+<td>HDF5 License (BSD-Style)</td>
+<td>parallel HDF5 for I/O operations</td>
+<td><a href="https://www.hdfgroup.org/solutions/hdf5/">hdf5group.org</a></td>
+</tr>
+<tr>
+<td>HighFive</td>
+<td>Boost Software License 1.0</td>
+<td>C++ wrapper for parallel HDF5</td>
+<td><a href="https://github.com/BlueBrain/HighFive">github.com/BlueBrain/HighFive</a></td>
+</tr>
+<tr>
+<td>Boost</td>
+<td>Boost Software License 1.0</td>
+<td>config file parsing, C++ wrapper for MPI</td>
+<td><a href="https://www.boost.org/">boost.org</a></td>
+</tr>
+<tr>
+<td>cxxopts</td>
+<td>MIT license</td>
+<td>command line argument parsing</td>
+<td><a href="https://github.com/jarro2783/cxxopts">github.com/jarro2783/cxxopts</a></td>
+</tr>
+<tr>
+<td>libconfig</td>
+<td>LGPL-2.1</td>
+<td>material config parsing</td>
+<td><a href="http://hyperrealm.github.io/libconfig/">github.io/libconfig</a></td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>in general there is no need for the usage of the GNU compiler and OpenMPI as MPI implementation, as long as a proper C++ compiler as well as MPI implementation (CUDA-aware) are available and corresponding changes in the Makefile are done</li>
+</ul>
+
+<h3 id="toc_6">MPI <a name="mpi"></a></h3>
+
+<blockquote>
+<p>Multiple MPI implementations exist and can be used to execute milupHPC. However, the code was primarily tested with OpenMPI &gt;= 4.0.</p>
+</blockquote>
+
+<h4 id="toc_7">OpenMPI</h4>
+
+<table>
+<thead>
+<tr>
+<th>library</th>
+<th>licence</th>
+<th>usage</th>
+<th>link</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>OpenMPI</td>
+<td>BSD 3-Clause</td>
+<td>compiler, MPI Implementation</td>
+<td><a href="https://www.open-mpi.org/">open-mpi.org</a></td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>if either MPI is not available or MPI is not CUDA-aware
+
+<ul>
+<li>e.g. via <code>ompi_info -a | grep &quot;\-with\-cuda&quot;</code> </li>
+</ul></li>
+<li>build, see e.g.
+
+<ul>
+<li><a href="https://www.open-mpi.org/faq/?category=building">Building Open MPI</a></li>
+<li><a href="https://www.open-mpi.org/faq/?category=buildcuda">Building CUDA-aware Open MPI</a></li>
+<li><a href="https://github.com/openucx/ucx/wiki/OpenMPI-and-OpenSHMEM-installation-with-UCX">UCX OpenMPI installation</a></li>
+</ul></li>
+</ul>
+
+<h3 id="toc_8">Boost <a name="boost"></a></h3>
+
+<table>
+<thead>
+<tr>
+<th>library</th>
+<th>licence</th>
+<th>usage</th>
+<th>link</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Boost</td>
+<td>Boost Software License 1.0</td>
+<td>config file parsing, C++ wrapper for MPI</td>
+<td><a href="https://www.boost.org/">boost.org</a></td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li><code>&lt;boost version&gt;</code> e.g. <code>1_78_0</code></li>
+</ul>
+
+<div><pre class="line-numbers"><code class="language-none">$ wget https://boostorg.jfrog.io/artifactory/main/release/1.78.0/source/boost_&lt;boost version&gt;.tar.gz
+$ tar zxvf boost_&lt;boost version&gt;.tar.gz
+$ cd boost_&lt;boost version&gt;
+$ ./bootstrap.sh --with-libraries=all
+$ vim project-config.jam
+$ &gt;&gt; using mpi ;
+$ ./b2
+$ ./b2 install --prefix=/usr</code></pre></div>
+
+<h3 id="toc_9">HighFive <a name="highfive"></a></h3>
+
+<table>
+<thead>
+<tr>
+<th>library</th>
+<th>licence</th>
+<th>usage</th>
+<th>link</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>HighFive</td>
+<td>Boost Software License 1.0</td>
+<td>C++ wrapper for parallel HDF5</td>
+<td><a href="https://github.com/BlueBrain/HighFive">github.com/BlueBrain/HighFive</a></td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li><code>git clone https://github.com/BlueBrain/HighFive.git</code></li>
+</ul>
+
+<h3 id="toc_10">CUDA cub <a name="cuda-cub"></a></h3>
+
+<ul>
+<li>included in the CUDA Toolkit since CUDA 11.0</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th>library</th>
+<th>licence</th>
+<th>usage</th>
+<th>link</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td> CUDA cub</td>
+<td>BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</td>
+<td>device wide parallel primitives</td>
+<td><a href="https://github.com/NVIDIA/cub">github.com/NVIDIA/cub</a></td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li><code>git clone https://github.com/NVIDIA/cub.git</code>
+
+<ul>
+<li>in dependence of used CUDA Toolkit e.g. <code>git checkout 1.8.0</code> </li>
+</ul></li>
+</ul>
+
+<h3 id="toc_11">Cxxopts <a name="cxxopts"></a></h3>
+
+<table>
+<thead>
+<tr>
+<th>library</th>
+<th>licence</th>
+<th>usage</th>
+<th>link</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>cxxopts</td>
+<td>MIT license</td>
+<td>command line argument parsing</td>
+<td><a href="https://github.com/jarro2783/cxxopts">github.com/jarro2783/cxxopts</a></td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li><code>git clone https://github.com/jarro2783/cxxopts.git</code></li>
+</ul>
+
+<h3 id="toc_12">libconfig <a name="libconfig"></a></h3>
+
+<table>
+<thead>
+<tr>
+<th>library</th>
+<th>licence</th>
+<th>usage</th>
+<th>link</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>libconfig</td>
+<td>LGPL-2.1</td>
+<td>material config parsing</td>
+<td><a href="http://hyperrealm.github.io/libconfig/">github.io/libconfig</a></td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li><code>&lt;libconfig version&gt;</code> e.g. <code>1.7.3</code></li>
+</ul>
+
+<div><pre class="line-numbers"><code class="language-none">$ wget http://hyperrealm.github.io/libconfig/dist/libconfig-&lt;libconfig version&gt;.tar.gz
+$ tar zxvf libconfig-&lt;libconfig version&gt;.tar.gz
+$ cd libconfig-&lt;libconfig version&gt;
+$ ./configure --prefix=/usr
+$ make
+$ make install</code></pre></div>
+
+<h3 id="toc_13">HDF5 <a name="hdf5"></a></h3>
+
+<table>
+<thead>
+<tr>
+<th>library</th>
+<th>licence</th>
+<th>usage</th>
+<th>link</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>HDF5</td>
+<td>HDF5 License (BSD-Style)</td>
+<td>parallel HDF5 for I/O operations</td>
+<td><a href="https://www.hdfgroup.org/solutions/hdf5/">hdf5group.org</a></td>
+</tr>
+</tbody>
+</table>
+
+<ul>
+<li>refer to <a href="https://github.com/HDFGroup/hdf5/tree/develop/release_docs">realease_docs</a> and build parallel</li>
+</ul>
+
+<p>e.g.:</p>
+
+<div><pre class="line-numbers"><code class="language-none">$ wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-1.12.2/src/hdf5-1.12.2.tar.gz
+$ tar -zxvf hdf5-1.12.0.tar.gz
+$ cd hdf5
+$ CC=mpicc CXX=mpic++ ./configure --prefix=/usr --enable-parallel --enable-hl
+$ make install</code></pre></div>
+
+<h2 id="toc_14">Compilation <a name="compilation"></a></h2>
+
+<p>The compilation process embraces the separate compilation of C++ (<code>.h</code>/<code>.cpp</code>) and CUDA (<code>.cuh</code>/<code>cu</code>) files and the subsequent linking of the object files.</p>
+
+<p>The C++ and CUDA source files are automatically and recursively found via</p>
+
+<ul>
+<li>C++: <code>$(shell find $(SRCDIR) -type f -name &quot;*.$(SRCEXT)&quot;)</code></li>
+<li>CUDA: <code>$(shell find $(SRCDIR) -type f -name &quot;*.$(CUDASRCEXT)&quot;)</code></li>
+</ul>
+
+<p>It is important to <strong>set the following flags/paths</strong> within the <a href="Makefile">Makefile</a> <strong>correctly</strong>:</p>
+
+<ul>
+<li><code>CXX</code>: the C++/MPI compiler e.g. <code>mpic++</code></li>
+<li><code>CUDADIR</code>: the directory of the CUDA installation e.g. <code>nvcc</code>
+
+<ul>
+<li><code>NVCC</code>: the CUDA compiler, if <code>NVCC</code> not equal to <code>$(CUDADIR)/bin/nvcc</code></li>
+</ul></li>
+<li><code>OPENMPIDIR</code>: OpenMPI directory (or more generally MPI implementation) e.g. <code>/opt/openmpi-4.1.0</code></li>
+<li><code>HDF5DIR</code>: HDF5 installation path/header files e.g. <code>/usr/include/hdf5/openmpi</code> (parallel version  necessary!)</li>
+<li><code>HDF5LIB</code>: HDF5 library files e.g. <code>/usr/lib/hdf5/openmpi</code></li>
+<li><code>HEADERONLYDIR</code>: path(s) to the header only libraries like <em>cxxopts</em>, <em>HighFive</em>, ...</li>
+</ul>
+
+<p>If all of the flags/paths are set correctly the <a href="Makefile">Makefile</a> can be used to compile the code:</p>
+
+<ul>
+<li><strong>build/compile</strong> using the <em>Makefile</em> via: <code>make</code>
+
+<ul>
+<li>for debug: <code>make debug</code>
+
+<ul>
+<li>using <em>cuda-gdb</em>: <code>./debug/cuda_debug.sh</code></li>
+</ul></li>
+<li>for single-precision: <code>make single-precision</code> (default: double-precision)</li>
+</ul></li>
+<li>clean via: <code>make clean</code>, <code>make cleaner</code></li>
+<li>rebuild via: <code>make remake</code><br></li>
+</ul>
+
+<p>The following shows the complete <a href="Makefile">Makefile</a>.</p>
+
+<div><pre class="line-numbers"><code class="language-none">#Compiler/Linker
+CXX            := mpic++
+
+CUDADIR        := /usr/local/cuda-11.4
+NVCC           := $(CUDADIR)/bin/nvcc
+
+OPENMPIDIR     := /opt/openmpi-4.1.0
+HDF5DIR        := /usr/include/hdf5/openmpi
+HDF5LIB        := /usr/lib/x86_64-linux-gnu/hdf5/openmpi
+HEADERONLYDIR  := /usr/local/Headeronly
+
+#Target binary
+TARGET         := runner
+
+#Directories
+SRCDIR         := ./src
+INCDIR         := ./include
+BUILDDIR       := ./build
+TARGETDIR      := ./bin
+RESDIR         := ./resources
+IDEASDIR       := ./ideas
+TESTDIR        := ./test
+DOCDIR         := ./doc
+DOCUMENTSDIR   := ./documents
+
+SRCEXT         := cpp
+CUDASRCEXT     := cu
+DEPEXT         := d
+OBJEXT         := o
+
+#Flags, Libraries and Includes
+CXXFLAGS       += -std=c++11 -w -I/usr/include/hdf5/openmpi#-O3
+NVFLAGS        := --std=c++11 -x cu -c -dc -w -Xcompiler &quot;-pthread&quot; -Wno-deprecated-gpu-targets -fmad=false -O3 -I$(OPENMPIDIR)/include -I$(HDF5DIR)
+LFLAGS         += -lm -L$(CUDADIR)/lib64 -lcudart -lpthread -lconfig -L$(OPENMPIDIR)/lib -L$(HDF5LIB) -lmpi -lhdf5 -lboost_filesystem -lboost_system
+GPU_ARCH       := -arch=sm_52
+CUDALFLAGS     := -dlink
+CUDALINKOBJ    := cuLink.o #needed?
+LIB            := -lboost_mpi -lboost_serialization
+INC            := -I$(INCDIR) -I/usr/include -I$(CUDADIR)/include -I$(OPENMPIDIR)/include -I$(HEADERONLYDIR)
+INCDEP         := -I$(INCDIR)
+
+#Source and Object files
+#find ./src -type f -name &quot;*.cu&quot; -not -path &quot;./src/gravity/*&quot;
+#find ./src -type f -name &quot;*.cu&quot; -not -path &quot;*/gravity/*&quot;
+#find . -type d \( -path ./src/sph -o -path ./src/gravity -o -path ./dir3 \) -prune -o -name &#39;*.cu&#39; -print
+#find . -type d \( -name sph -o -name gravity -o -name dir3 \) -prune -o -name &#39;*.cu&#39; -print
+SOURCES        := $(shell find $(SRCDIR) -type f -name &quot;*.$(SRCEXT)&quot;)
+CUDA_SOURCES   := $(shell find $(SRCDIR) -type f -name &quot;*.$(CUDASRCEXT)&quot;)
+OBJECTS        := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.$(OBJEXT)))
+CUDA_OBJECTS   := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(CUDA_SOURCES:.$(CUDASRCEXT)=.$(OBJEXT)))
+
+#Documentation (Doxygen)
+DOXY           := /usr/local/Cellar/doxygen/1.9.3_1/bin/doxygen
+DOXYFILE       := $(DOCDIR)/Doxyfile
+
+#default make (all)
+all:  tester ideas $(TARGET)
+
+single-precision: CXXFLAGS += -DSINGLE_PRECISION
+single-precision: NVFLAGS += -DSINGLE_PRECISION
+single-precision: all
+
+debug: CXXFLAGS += -g
+debug: NVFLAGS := ${filter-out -O3, $(NVFLAGS)}
+debug: NVFLAGS  += -g -G
+debug: LFALGS += -g -G
+debug: tester ideas $(TARGET)
+
+#make regarding source files
+sources: resources $(TARGET)
+
+#remake
+remake: cleaner all
+
+#copy Resources from Resources Directory to Target Directory
+resources: directories
+    @cp -r $(RESDIR)/ $(TARGETDIR)/
+
+#make directories
+directories:
+    @mkdir -p $(RESDIR)
+    @mkdir -p $(TARGETDIR)
+    @mkdir -p $(BUILDDIR)
+
+#clean objects
+clean:
+    @$(RM) -rf $(BUILDDIR)
+
+#clean objects and binaries
+cleaner: clean
+    @$(RM) -rf $(TARGETDIR)
+
+#Pull in dependency info for *existing* .o files
+-include $(OBJECTS:.$(OBJEXT)=.$(DEPEXT)) #$(INCDIR)/matplotlibcpp.h
+
+#link
+$(TARGET): $(OBJECTS) $(CUDA_OBJECTS)
+    @echo &quot;Linking ...&quot;
+    @$(NVCC) $(GPU_ARCH) $(LFLAGS) $(INC) -o $(TARGETDIR)/$(TARGET) $^ $(LIB) #$(GPU_ARCH)
+
+#compile
+$(BUILDDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)
+    @echo &quot;  compiling: &quot; $(SRCDIR)/$*
+    @mkdir -p $(dir $@)
+    @$(CXX) $(CXXFLAGS) $(INC) -c -o $@ $&lt; $(LIB)
+    @$(CXX) $(CXXFLAGS) $(INC) $(INCDEP) -MM $(SRCDIR)/$*.$(SRCEXT) &gt; $(BUILDDIR)/$*.$(DEPEXT)
+    @cp -f $(BUILDDIR)/$*.$(DEPEXT) $(BUILDDIR)/$*.$(DEPEXT).tmp
+    @sed -e &#39;s|.*:|$(BUILDDIR)/$*.$(OBJEXT):|&#39; &lt; $(BUILDDIR)/$*.$(DEPEXT).tmp &gt; $(BUILDDIR)/$*.$(DEPEXT)
+    @sed -e &#39;s/.*://&#39; -e &#39;s/\\$$//&#39; &lt; $(BUILDDIR)/$*.$(DEPEXT).tmp | fmt -1 | sed -e &#39;s/^ *//&#39; -e &#39;s/$$/:/&#39; &gt;&gt; $(BUILDDIR)/$*.$(DEPEXT)
+    @rm -f $(BUILDDIR)/$*.$(DEPEXT).tmp
+
+$(BUILDDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(CUDASRCEXT)
+    @echo &quot;  compiling: &quot; $(SRCDIR)/$*
+    @mkdir -p $(dir $@)
+    @$(NVCC) $(GPU_ARCH) $(INC) $(NVFLAGS) -I$(CUDADIR) -c -o $@ $&lt;
+    @$(NVCC) $(GPU_ARCH) $(INC) $(NVFLAGS) -I$(CUDADIR) -MM $(SRCDIR)/$*.$(CUDASRCEXT) &gt; $(BUILDDIR)/$*.$(DEPEXT)
+
+#compile test files
+tester: directories
+ifneq (&quot;$(wildcard $(TESTDIR)/*.$(SRCEXT) )&quot;,&quot;&quot;)
+    @echo &quot;  compiling: &quot; test/*
+    @$(CXX) $(CXXFLAGS) test/*.cpp $(INC) $(LIB) -o bin/tester
+else
+    @echo &quot;No $(SRCEXT)-files within $(TESTDIR)!&quot;
+endif
+
+#compile idea files
+ideas: directories
+ifneq (&quot;$(wildcard $(IDEASDIR)/*.$(SRCEXT) )&quot;,&quot;&quot;)
+    @echo &quot;  compiling: &quot; ideas/*
+    @$(CXX) $(CXXFLAGS) ideas/*.cpp $(INC) $(LIB) -o bin/ideas
+else
+    @echo &quot;No $(SRCEXT)-files within $(IDEASDIR)!&quot;
+endif
+
+#@echo FILE_PATTERNS     = &quot;*.md&quot; &quot;*.h&quot; &quot;*.$(SRCEXT)&quot; &gt;&gt; $(DOCDIR)/doxyfile.inc
+doxyfile.inc: #Makefile
+    @echo INPUT            = README.md . $(SRCDIR)/ $(INCDIR)/ $(DOCUMENTSDIR)/ &gt; $(DOCDIR)/doxyfile.inc
+    @echo OUTPUT_DIRECTORY = $(DOCDIR)/ &gt;&gt; $(DOCDIR)/doxyfile.inc
+
+#@$(MAKE) -C $(DOCDIR)/latex/ &amp;&gt; $(DOCDIR)/latex/latex.log
+doc: doxyfile.inc
+    $(DOXY) $(DOXYFILE) &amp;&gt; $(DOCDIR)/doxygen.log
+    @mkdir -p &quot;./docs&quot;
+    cp -r &quot;./doc/html/&quot; &quot;./docs/&quot;
+
+#Non-File Targets
+.PHONY: all remake clean cleaner resources sources directories ideas tester doc</code></pre></div>
+
+<h2 id="toc_15">Usage <a name="usage"></a></h2>
+
+<ul>
+<li><p>you need to provide an appropriate H5 file as initial (particle) distribution </p>
+
+<ul>
+<li>see e.g. <a href="https://github.com/MichaelSt98/ParticleDistributor">GitHub: ParticleDistributor</a></li>
+</ul></li>
+<li><p><strong>run</strong> via <strong><code>mpirun -np &lt;np&gt; &lt;binary&gt; -n &lt;#output files&gt; -f &lt;input hdf5 file&gt; -C &lt;config file&gt; -m &lt;material-config&gt;</code></strong></p>
+
+<ul>
+<li><code>&lt;binary&gt;</code> within <code>bin/</code> e.g. <code>bin/runner</code> </li>
+<li><code>&lt;input hdf5 file&gt;</code>: appropriate HDF5 file as initial (particle) distribution </li>
+<li><code>&lt;config file&gt;</code>: configurations</li>
+<li><code>&lt;material-config&gt;</code> : material configurations</li>
+<li>as well as correct preprocessor directives: <code>include/parameter.h</code></li>
+</ul></li>
+<li><p>clean via: <code>make clean</code>, <code>make cleaner</code></p></li>
+<li><p>rebuild via: <code>make remake</code>    </p></li>
+</ul>
+
+<h3 id="toc_16">Preprocessor directives <a name="preprocessor-directives"></a></h3>
+
+<ul>
+<li><strong>general directives:</strong>
+
+<ul>
+<li><code>DEBUGGING</code></li>
+<li><code>SAFETY_LEVEL</code></li>
+<li><code>DIM</code> - dimensionality</li>
+<li><code>SI_UNITS</code> - natural units or SI units</li>
+<li><code>CUBIC_DOMAINS</code> - cuboid or cubic (sub)domains</li>
+</ul></li>
+<li><strong>regarding simulation including gravity:</strong>
+
+<ul>
+<li><code>GRAVITY_SIM</code> </li>
+</ul></li>
+<li><p><strong>regarding simulation including SPH</strong></p>
+
+<ul>
+<li><code>SPH_SIM</code></li>
+<li><code>INTEGRATE_ENERGY</code> - integrate energy equation</li>
+<li><code>INTEGRATE_DENSITY</code> - integrate density equation</li>
+<li><code>INTEGRATE_SML</code> - integrate smoothing length</li>
+<li><code>DECOUPLE_SML</code> - decouple smoothing length for pc integrators</li>
+<li><code>VARIABLE_SML</code> - allow for variable smoothing length</li>
+<li><code>SML_CORRECTION</code> - smoothing length correction</li>
+<li><code>SPH_EQU_VERSION</code> - SPH equation version</li>
+</ul></li>
+<li><p>see <code>include/parameter.h</code></p></li>
+</ul>
+
+<div><pre class="line-numbers"><code class="language-c">#define DEBUGGING 0
+
+/**
+ * * `SAFETY_LEVEL 0`: almost no safety measures
+ * * `SAFETY_LEVEL 1`: most relevant/important safety measures
+ * * `SAFETY_LEVEL 2`: more safety measures, including assertions
+ * * `SAFETY_LEVEL 3`: many security measures, including all assertions
+ */
+#define SAFETY_LEVEL 2
+
+/// Dimension of the problem
+#define DIM 3
+
+/// [0]: natural units, [1]: SI units
+#define SI_UNITS 1
+
+/// [0]: rectangular (and not necessarily cubic domains), [1]: cubic domains
+#define CUBIC_DOMAINS 1
+
+/// Simulation with gravitational forces
+#define GRAVITY_SIM 1
+
+/// SPH simulation
+#define SPH_SIM 1
+
+/// integrate energy equation
+#define INTEGRATE_ENERGY 0
+
+/// integrate density equation
+#define INTEGRATE_DENSITY 1
+
+/// integrate smoothing length
+#define INTEGRATE_SML 0
+
+/// decouple smoothing length for pc integrator(s)
+#define DECOUPLE_SML 0
+
+/// variable smoothing length
+#define VARIABLE_SML 1
+
+/// correct smoothing length
+#define SML_CORRECTION 0
+
+/**
+ * Choose the SPH representation to solve the momentum and energy equation:
+ * * **SPH_EQU_VERSION 1:** original version with
+ *     * HYDRO $dv_a/dt ~ - (p_a/rho_a**2 + p_b/rho_b**2)  \nabla_a W_ab$
+ *     * SOLID $dv_a/dt ~ (sigma_a/rho_a**2 + sigma_b/rho_b**2) \nabla_a W_ab$
+ * * **SPH_EQU_VERSION 2:** slighty different version with
+ *     * HYDRO $dv_a/dt ~ - (p_a+p_b)/(rho_a*rho_b)  \nabla_a W_ab$
+ *     * SOLID $dv_a/dt ~ (sigma_a+sigma_b)/(rho_a*rho_b)  \nabla_a W_ab$
+ */
+#define SPH_EQU_VERSION 1</code></pre></div>
+
+<h3 id="toc_17">Input HDF5 file <a name="input-hdf5-file"></a></h3>
+
+<ul>
+<li>for <strong>gravity only</strong>
+
+<ul>
+<li>provide mass &quot;m&quot;, position &quot;x&quot; and velocity &quot;v&quot; </li>
+</ul></li>
+</ul>
+
+<div><pre class="line-numbers"><code class="language-none">GROUP &quot;/&quot; {
+   DATASET &quot;m&quot; {
+      DATATYPE  H5T_IEEE_F64LE
+      DATASPACE  SIMPLE { ( &lt;num particles&gt; ) / ( &lt;num particles&gt;  ) }
+   }
+   DATASET &quot;v&quot; {
+      DATATYPE  H5T_IEEE_F64LE
+      DATASPACE  SIMPLE { ( &lt;num particles&gt; , &lt;dim&gt; ) / ( &lt;num particles&gt; , &lt;dim&gt; ) }
+   }
+   DATASET &quot;x&quot; {
+      DATATYPE  H5T_IEEE_F64LE
+      DATASPACE  SIMPLE { ( &lt;num particles&gt; , &lt;dim&gt;  ) / (&lt;num particles&gt; , &lt;dim&gt;  ) }
+   }
+}
+}</code></pre></div>
+
+<ul>
+<li><strong>with SPH</strong> provide (at least)
+
+<ul>
+<li>provide mass &quot;m&quot;, material identifier &quot;materialId&quot;, internal energy &quot;u&quot;, position &quot;x&quot; and velocity &quot;v&quot; </li>
+</ul></li>
+</ul>
+
+<div><pre class="line-numbers"><code class="language-none">GROUP &quot;/&quot; {
+   DATASET &quot;m&quot; {
+      DATATYPE  H5T_IEEE_F64LE
+      DATASPACE  SIMPLE { ( &lt;num particles&gt; ) / ( &lt;num particles&gt;  ) }
+   }
+   DATASET &quot;materialId&quot; {
+      DATATYPE  H5T_STD_I8LE
+      DATASPACE  SIMPLE { ( &lt;num particles&gt;  ) / ( &lt;num particles&gt;  ) }
+   }
+   DATASET &quot;u&quot; {
+      DATATYPE  H5T_IEEE_F64LE
+      DATASPACE  SIMPLE { ( &lt;num particles&gt;  ) / ( &lt;num particles&gt;  ) }
+   }
+   DATASET &quot;v&quot; {
+      DATATYPE  H5T_IEEE_F64LE
+      DATASPACE  SIMPLE { ( &lt;num particles&gt; , &lt;dim&gt; ) / ( &lt;num particles&gt; , &lt;dim&gt; ) }
+   }
+   DATASET &quot;x&quot; {
+      DATATYPE  H5T_IEEE_F64LE
+      DATASPACE  SIMPLE { ( &lt;num particles&gt; , &lt;dim&gt;  ) / (&lt;num particles&gt; , &lt;dim&gt;  ) }
+   }
+}
+}</code></pre></div>
+
+<h3 id="toc_18">Config file <a name="config-file"></a></h3>
+
+<ul>
+<li>config settings including
+
+<ul>
+<li>I/O options</li>
+<li>integrator options</li>
+<li>simulation time</li>
+<li>SFC</li>
+<li>load balancing</li>
+<li>...</li>
+</ul></li>
+</ul>
+
+<div><pre class="line-numbers"><code class="language-none">; IO RELATED
+; ------------------------------------------------------
+; output directory (will be created if it does not exist)
+directory &lt;output directory&gt;
+
+; outputRank (-1 corresponds to all)
+outputRank -1
+; omit logType::TIME for standard output
+omitTime true
+; create log file (including warnings, errors, ...)
+log true
+; create performance log
+performanceLog true
+; write particles to be sent to h5 file
+particlesSent2H5 true
+
+
+; INTEGRATOR RELATED
+; ------------------------------------------------------
+; integrator selection
+; explicit euler [0], predictor-corrector euler [1], leapfrog [2]
+integrator 1
+; initial time step
+timeStep 1e-4
+; max time step allowed
+maxTimeStep 1e-4
+; end time for simulation
+;timeEnd 6e-2
+
+; SIMULATION RELATED
+; ------------------------------------------------------
+; space-filling curve selection
+; lebesgue [0], hilbert [1]
+sfc 1
+
+; theta-criterion for Barnes-Hut (approximative gravity)
+theta 0.5
+; smoothing parameter for gravitational forces
+smoothing 2.56e+20
+
+; SPH smoothing kernel selection
+; spiky [0], cubic spline [1], wendlandc2 [3], wendlandc4 [4], wendlandc6 [5]
+smoothingKernel 1
+
+; remove particles (corresponding to some criterion)
+removeParticles true
+; spherically [0], cubic [1]
+removeParticlesCriterion 0
+; allowed distance to center (0, 0, 0)
+removeParticlesDimension 3.6e14
+
+; execute load balancing
+loadBalancing false
+; interval for executing load balancing (every Nth step)
+loadBalancingInterval 1
+
+; how much memory to allocate (1.0 -&gt; all particles can in principle be on one process)
+particleMemoryContingent 1.0
+
+; calculate angular momentum (and save to output file)
+calculateAngularMomentum true
+; calculate (total) energy (and save to output file)
+calculateEnergy true
+; calculate center of mass (and save to output file)
+calculateCenterOfMass false
+
+; IMPLEMENTATION SELECTION
+; ------------------------------------------------------
+; force version for gravity (use [2])
+; burtscher [0], burtscher without presorting [1], miluphcuda with presorting [2],
+; miluphcuda without presorting [3], miluphcuda shared memory (experimental) [4]
+gravityForceVersion 0
+; fixed radius NN version for SPH (use [0])
+; normal [0], brute-force [1], shared-memory [2], within-box [3]
+sphFixedRadiusNNVersion 3</code></pre></div>
+
+<h3 id="toc_19">Material config file <a name="material-config-file"></a></h3>
+
+<ul>
+<li>material config file for SPH simulation defining material parameters</li>
+</ul>
+
+<div><pre class="line-numbers"><code class="language-none">materials = (
+{
+    ID = 0
+    name = &quot;IsothermalGas&quot;
+    #sml = 1e12
+    sml = 5.2e11
+    interactions = 50
+    artificial_viscosity = { alpha = 1.0; beta = 2.0; };
+    eos = {
+        type = 3
+    };
+}
+);
+
+...</code></pre></div>
+
+<h3 id="toc_20">Command line arguments <a name="command-line-arguments"></a></h3>
+
+<ul>
+<li><code>./bin/runner -h</code> gives help:</li>
+</ul>
+
+<div><pre class="line-numbers"><code class="language-none">Multi-GPU CUDA Barnes-Hut NBody/SPH code
+Usage:
+  HPC NBody [OPTION...]
+
+  -n, --number-output-files arg
+                                number of output files (default: 100)
+  -t, --max-time-step arg       time step (default: -1.)
+  -l, --load-balancing          load balancing
+  -L, --load-balancing-interval arg
+                                load balancing interval (default: -1)
+  -C, --config arg              config file (default: config/config.info)
+  -m, --material-config arg     material config file (default: 
+                                config/material.cfg)
+  -c, --curve-type arg          curve type (Lebesgue: 0/Hilbert: 1) 
+                                (default: -1)
+  -f, --input-file arg          File name (default: -)
+  -v, --verbosity arg           Verbosity level (default: 0)
+  -h, --help                    Show this help</code></pre></div>
+
+<h2 id="toc_21">Test cases <a name="test-cases"></a></h2>
+
+<p>The code validation comprises the correctness of dispatched simulation on one GPU and multiple GPUs, whereas identical simulation on one and multiple GPUs are not mandatorily bitwise-identical. By suitable choice of compiler flags and in dependence of the used architecture this is in principle attainable. However, this is generally not useful to apply for performance reasons and therefore at this point not presupposed. Amongst others, three test cases were used for validating the implementation:</p>
+
+<ul>
+<li>the Plummer test case is a gravity-only test case</li>
+<li>the Taylor–von Neumann–Sedov blast wave test case is a pure hydrodynamical SPH test case </li>
+<li>the isothermal collapse test case  self-gravitating SPH test case utilizing almost all implemented features</li>
+</ul>
+
+<h3 id="toc_22">Plummer test case <a name="plummer-test-case"></a></h3>
+
+<p>The Plummer model or Plummer sphere is a distribution that remains stable over time as shown in <em>Plummer (1911)</em>. The initial distributions used for the simulation are generated as described in <em>Aarseth et al. (1979)</em>.</p>
+
+<hr>
+
+<h4 id="toc_23">Overview</h4>
+
+<ol>
+<li>check the <a href="documents/Prerequisites.md">prerequisites</a></li>
+<li><strong>compile</strong> according to the test case
+
+<ul>
+<li>either copy <a href="parameter.h">parameter.h</a> to <code>include/</code></li>
+<li>or set
+
+<ul>
+<li><code>#define SI_UNITS 0</code></li>
+<li><code>#define GRAVITY_SIM 1</code></li>
+<li><code>#define SPH_SIM 0</code></li>
+<li><code>#define INTEGRATE_ENERGY 0</code></li>
+<li><code>#define INTEGRATE_DENSITY 0</code></li>
+<li><code>#define INTEGRATE_SML 0</code></li>
+<li><code>#define DECOUPLE_SML 0</code></li>
+<li><code>#define VARIABLE_SML 0</code></li>
+<li><code>#define SML_CORRECTION 0</code></li>
+<li><code>#define ARTIFICIAL_VISCOSITY 0</code></li>
+<li><code>#define BALSARA_SWITCH 0</code></li>
+</ul></li>
+</ul></li>
+<li><strong>generate initial</strong> HDF5 <strong>particle distribution</strong> (choose amount of particles to be simulated)
+
+<ul>
+<li>e.g. using <a href="https://github.com/MichaelSt98/ParticleDistributor">GitHub: ParticleDistributor</a></li>
+</ul></li>
+<li>adjust <a href="config.info">config.info</a>: especially output <code>directory</code> for the output files</li>
+<li><strong>execute simulation</strong> via <code>mpirun -np &lt;num processes&gt; bin/runner -n &lt;num output files&gt; -f &lt;generated initial particle distribution&gt; -C testcases/plummer/config.info</code> 
+
+<ul>
+<li>assuming execution from the <code>milupHPC</code> root directory</li>
+</ul></li>
+<li>possibly <a href="postprocessing/README.md">postprocess</a></li>
+</ol>
+
+<h4 id="toc_24">Compilation</h4>
+
+<ul>
+<li>See <a href="documents/Compilation.md">Compilation.md</a> for help</li>
+</ul>
+
+<p>A proper version of <code>parameter.h</code> is shown in the following. It is important to have/copy this version to the <code>include/</code> directory before the compilation.</p>
+
+<div><pre class="line-numbers"><code class="language-cpp">#include &lt;iostream&gt;
+
+//#define theta 0.5
+
+#define MAX_LEVEL 21
+
+#define DEBUGGING 0
+
+/**
+ * * `SAFETY_LEVEL 0`: almost no safety measures
+ * * `SAFETY_LEVEL 1`: most relevant/important safety measures
+ * * `SAFETY_LEVEL 2`: more safety measures, including assertions
+ * * `SAFETY_LEVEL 3`: many security measures, including all assertions
+ */
+#define SAFETY_LEVEL 1
+
+/// Dimension of the problem
+#define DIM 3
+#define power_two(x) (1 &lt;&lt; (x))
+#define POW_DIM power_two(DIM)
+
+/// [0]: natural units, [1]: SI units
+#define SI_UNITS 0
+
+/// [0]: rectangular (and not necessarily cubic domains), [1]: cubic domains
+#define CUBIC_DOMAINS 1
+
+/// Simulation with gravitational forces
+#define GRAVITY_SIM 1
+
+/// SPH simulation
+#define SPH_SIM 0
+
+/// integrate energy equation
+#define INTEGRATE_ENERGY 0
+
+/// integrate density equation
+#define INTEGRATE_DENSITY 0
+
+/// integrate smoothing length
+#define INTEGRATE_SML 0
+
+/// decouple smoothing length for pc integrator(s)
+#define DECOUPLE_SML 0
+
+/// variable smoothing length
+#define VARIABLE_SML 0
+
+/// correct smoothing length
+#define SML_CORRECTION 0
+
+/**
+ * Choose the SPH representation to solve the momentum and energy equation:
+ * * **SPH_EQU_VERSION 1:** original version with
+ *     * HYDRO $dv_a/dt ~ - (p_a/rho_a**2 + p_b/rho_b**2)  \nabla_a W_ab$
+ *     * SOLID $dv_a/dt ~ (sigma_a/rho_a**2 + sigma_b/rho_b**2) \nabla_a W_ab$
+ * * **SPH_EQU_VERSION 2:** slighty different version with
+ *     * HYDRO $dv_a/dt ~ - (p_a+p_b)/(rho_a*rho_b)  \nabla_a W_ab$
+ *     * SOLID $dv_a/dt ~ (sigma_a+sigma_b)/(rho_a*rho_b)  \nabla_a W_ab$
+ */
+#define SPH_EQU_VERSION 1</code></pre></div>
+
+<h4 id="toc_25">Generate initial particle distribution</h4>
+
+<p>See <a href="https://github.com/MichaelSt98/ParticleDistributor">GitHub: ParticleDistributor</a>.</p>
+
+<ul>
+<li><code>git clone https://github.com/MichaelSt98/ParticleDistributor.git</code></li>
+<li>compile via <code>make</code>
+
+<ul>
+<li>make necessary changes to the <em>Makefile</em></li>
+</ul></li>
+<li>generate input Plummer file via e.g. <code>./bin/runner -N 10000 -f pl -d 0</code>
+
+<ul>
+<li>get help via <code>./bin/runner -h</code></li>
+</ul></li>
+</ul>
+
+<h4 id="toc_26">Config file</h4>
+
+<p>Within <a href="config.info">config.info</a> adjust <code>directory</code> and possibly more:</p>
+
+<div><pre class="line-numbers"><code class="language-none">; IO RELATED
+; ------------------------------------------------------
+; output directory (will be created if it does not exist)
+directory &lt;TODO: directory&gt;
+
+; outputRank (-1 corresponds to all)
+outputRank -1
+
+; omit logType::TIME for standard output
+omitTime true
+
+; create log file (including warnings, errors, ...)
+log false
+
+; create performance log
+performanceLog true
+
+; write particles to be sent to h5 file
+particlesSent2H5 false
+
+
+; INTEGRATOR RELATED
+; ------------------------------------------------------
+; integrator selection
+; explicit euler [0], predictor-corrector euler [1]
+integrator 0
+; initial time step
+timeStep 0.025
+; max time step allowed
+maxTimeStep 0.025
+; end time for simulation
+timeEnd 25.0
+
+; SIMULATION RELATED
+; ------------------------------------------------------
+; space-filling curve selection
+; lebesgue [0], hilbert [1]
+sfc 0
+
+; theta-criterion for Barnes-Hut (approximative gravity)
+theta 0.5
+; smoothing parameter for gravitational forces
+;smoothing 0.032
+;smoothing 0.001024
+smoothing 0.001024
+
+; SPH smoothing kernel selection
+; spiky [0], cubic spline [1], wendlandc2 [3], wendlandc4 [4], wendlandc6 [5]
+smoothingKernel 1
+
+; remove particles (corresponding to some criterion)
+removeParticles true
+; spherically [0], cubic [1]
+removeParticlesCriterion 0
+; allowed distance to center (0, 0, 0)
+removeParticlesDimension 10.0
+
+; execute load balancing
+loadBalancing false
+; interval for executing load balancing (every Nth step)
+loadBalancingInterval 1
+; amount of bins for load balancing
+loadBalancingBins 2000
+
+; how much memory to allocate (1.0 -&gt; all particles can in principle be on one process)
+particleMemoryContingent 1.0
+
+; calculate angular momentum (and save to output file)
+calculateAngularMomentum false
+; calculate (total) energy (and save to output file)
+calculateEnergy false
+; calculate center of mass (and save to output file)
+calculateCenterOfMass true
+
+
+; THESE SHOULD PROBABLY NOT EXIST IN A PRODUCTION VERSION
+; ------------------------------------------------------
+; ------------------------------------------------------
+; force version for gravity (use [0] or [2])
+; burtscher [0], burtscher without presorting [1], miluphcuda with presorting [2],
+; miluphcuda without presorting [3], miluphcuda shared memory (NOT working properly) [4]
+gravityForceVersion 0
+; fixed radius NN version for SPH (use [0])
+; normal [0], brute-force [1], shared-memory [2], within-box [3]
+sphFixedRadiusNNVersion 0</code></pre></div>
+
+<h4 id="toc_27">Postprocessing</h4>
+
+<p>For more information refer to <a href="postprocessing/README.md">postprocessing</a></p>
+
+<ul>
+<li>some scripts are available within <a href="postprocessing/">postprocessing/</a> 
+
+<ul>
+<li><a href="postprocessing//PlotPlummer.py">postprocessing/PlotPlummer.py</a>: plot mass quantiles for the plummer test case
+
+<ul>
+<li>usage: e.g. <code>./PlotPlummer.py -Q -d &lt;input data directory&gt; -o &lt;output directory&gt;</code> </li>
+</ul></li>
+</ul></li>
+</ul>
+
+<p>producing a plot like this:</p>
+
+<p><img src="documents/figures/long_pl_N10000000_sfc1D_np4_mass_quantiles.png" alt="Plummer sample" width="100%"/></p>
+
+<h3 id="toc_28">Sedov test case <a name="sedov-test-case"></a></h3>
+
+<p>The Taylor-von Neumann-Sedov blast wave describes a blast wave as result of a strong explosion and is a standard test case for SPH codes. A semi-analytical, self-similar solution exists, usable for validation. The problem is set up in a uniform periodically box [-0.5, 0.5] and a high internal energy is induced at the center and smoothed over a smoothing length. An adiabatic EOS with gamma = 5/3 is used and the internal energy equation is integrated.</p>
+
+<hr>
+
+<h4 id="toc_29">Overview</h4>
+
+<ol>
+<li>check the <a href="documents/Prerequisites.md">prerequisites</a></li>
+<li><strong>compile</strong> according to the test case
+
+<ul>
+<li>either copy <a href="parameter.h">parameter.h</a> to <code>include/</code></li>
+<li>or set
+
+<ul>
+<li><code>#define SI_UNITS 0</code></li>
+<li><code>#define GRAVITY_SIM 0</code></li>
+<li><code>#define SPH_SIM 1</code></li>
+<li><code>#define INTEGRATE_ENERGY 1</code></li>
+<li><code>#define INTEGRATE_DENSITY 0</code></li>
+<li><code>#define INTEGRATE_SML 1</code> or <code>0</code></li>
+<li><code>#define DECOUPLE_SML 1</code> or <code>0</code></li>
+<li><code>#define VARIABLE_SML 0</code></li>
+<li><code>#define SML_CORRECTION 0</code></li>
+<li><code>#define ARTIFICIAL_VISCOSITY 1</code></li>
+<li><code>#define BALSARA_SWITCH 0</code></li>
+</ul></li>
+</ul></li>
+<li><strong>generate initial</strong> HDF5 <strong>particle distribution</strong> (choose amount of particles to be simulated)
+
+<ul>
+<li>e.g. execute <code>initial_sedov.py</code></li>
+</ul></li>
+<li><strong>adjust <a href="material.cfg">material.cfg</a></strong>: especially/at least <code>sml</code> in dependence of particles to be simulated</li>
+<li>adjust <a href="config.info">config.info</a>: especially output <code>directory</code> for the output files</li>
+<li><strong>execute simulation</strong> via <code>mpirun -np &lt;num processes&gt; bin/runner -n &lt;num output files&gt; -f &lt;generated initial particle distribution&gt; -C testcases/sedov/config.info -m testcases/sedov/material.cfg</code> 
+
+<ul>
+<li>assuming execution from the <code>milupHPC</code> root directory</li>
+</ul></li>
+<li>possibly <a href="postprocessing/README.md">postprocess</a></li>
+</ol>
+
+<h4 id="toc_30">Compilation</h4>
+
+<ul>
+<li>See <a href="documents/Compilation.md">Compilation.md</a> for help</li>
+</ul>
+
+<p>A proper version of <code>parameter.h</code> is shown in the following. It is important to have/copy this version to the <code>include/</code> directory before the compilation.</p>
+
+<div><pre class="line-numbers"><code class="language-cpp">#define DEBUGGING 0
+
+/**
+ * * `SAFETY_LEVEL 0`: almost no safety measures
+ * * `SAFETY_LEVEL 1`: most relevant/important safety measures
+ * * `SAFETY_LEVEL 2`: more safety measures, including assertions
+ * * `SAFETY_LEVEL 3`: many security measures, including all assertions
+ */
+#define SAFETY_LEVEL 2
+
+/// Dimension of the problem
+#define DIM 3
+#define power_two(x) (1 &lt;&lt; (x))
+#define POW_DIM power_two(DIM)
+
+/// [0]: natural units, [1]: SI units
+#define SI_UNITS 0
+
+/// [0]: rectangular (and not necessarily cubic domains), [1]: cubic domains
+#define CUBIC_DOMAINS 1
+
+/// Simulation with gravitational forces
+#define GRAVITY_SIM 0
+
+/// SPH simulation
+#define SPH_SIM 1
+
+/// integrate energy equation
+#define INTEGRATE_ENERGY 1
+
+/// integrate density equation
+#define INTEGRATE_DENSITY 0
+
+/// integrate smoothing length
+#define INTEGRATE_SML 1
+
+/// decouple smoothing length for pc integrator(s)
+#define DECOUPLE_SML 1
+
+/// variable smoothing length
+#define VARIABLE_SML 0
+
+/// correct smoothing length
+#define SML_CORRECTION 0
+
+/**
+ * Choose the SPH representation to solve the momentum and energy equation:
+ * * **SPH_EQU_VERSION 1:** original version with
+ *     * HYDRO $dv_a/dt ~ - (p_a/rho_a**2 + p_b/rho_b**2)  \nabla_a W_ab$
+ *     * SOLID $dv_a/dt ~ (sigma_a/rho_a**2 + sigma_b/rho_b**2) \nabla_a W_ab$
+ * * **SPH_EQU_VERSION 2:** slighty different version with
+ *     * HYDRO $dv_a/dt ~ - (p_a+p_b)/(rho_a*rho_b)  \nabla_a W_ab$
+ *     * SOLID $dv_a/dt ~ (sigma_a+sigma_b)/(rho_a*rho_b)  \nabla_a W_ab$
+ */
+#define SPH_EQU_VERSION 1</code></pre></div>
+
+<h4 id="toc_31">Generate initial particle distribution</h4>
+
+<ul>
+<li>necessary Python3 packages:
+
+<ul>
+<li>seagen</li>
+<li>numpy</li>
+<li>h5py </li>
+</ul></li>
+</ul>
+
+<p>Within <a href="initial_sedov.py">initial_sedov.py</a> adjust:</p>
+
+<div><pre class="line-numbers"><code class="language-python">N = 61  # num particles = N**3
+
+sml = 0.041833  # for n = 61**3  = 226981  = ca. 2e5
+# sml = 0.031375  # for n = 81**3  = 531441  = ca. 5e5
+# sml = 0.0251    # for n = 101**3 = 1030301 = ca. 1e6
+# sml = 0.02      # for n = 126**3 = 2000376 = ca 2e6
+# sml = 0.01476   # for n = 171**3 = 5000211 = ca 5e6</code></pre></div>
+
+<ul>
+<li>usage: <code>python3 initial_sedov.py</code></li>
+<li>if wanted rename generated HDF5 file</li>
+</ul>
+
+<h4 id="toc_32">Material config file</h4>
+
+<ul>
+<li>adjust the <code>sml</code> in dependence of the number of particles </li>
+</ul>
+
+<p>Within <a href="material.cfg">material.cfg</a> adjust:</p>
+
+<div><pre class="line-numbers"><code class="language-none">materials = (
+{
+    ID = 0
+    name = &quot;IdealGas&quot;
+    sml = 0.041833  # for n = 61**3  = 226981  = ca. 2e5
+    # sml = 0.031375  # for n = 81**3  = 531441  = ca. 5e5
+    # sml = 0.0251    # for n = 101**3 = 1030301 = ca. 1e6
+    # sml = 0.02      # for n = 126**3 = 2000376 = ca 2e6
+    # sml = 0.01476   # for n = 171**3 = 5000211 = ca 5e6
+    interactions = 50
+    artificial_viscosity = { alpha = 1.0; beta = 2.0; };
+    eos = {
+        polytropic_K = 0.0
+        polytropic_gamma = 1.6666666
+    type = 9
+    };
+}
+);</code></pre></div>
+
+<h4 id="toc_33">Config file</h4>
+
+<p>Within <a href="config.info">config.info</a> adjust <code>directory</code> and possibly more:</p>
+
+<div><pre class="line-numbers"><code class="language-none">; IO RELATED
+; ------------------------------------------------------
+; output directory (will be created if it does not exist)
+directory &lt;TODO: directory&gt;
+
+; outputRank (-1 corresponds to all)
+outputRank -1
+
+; omit logType::TIME for standard output
+omitTime true
+
+; create log file (including warnings, errors, ...)
+log false
+
+; create performance log
+performanceLog true
+
+; write particles to be sent to h5 file
+particlesSent2H5 false
+
+
+; INTEGRATOR RELATED
+; ------------------------------------------------------
+; integrator selection
+; explicit euler [0], predictor-corrector euler [1]
+integrator 1
+; initial time step
+timeStep 0.0005
+; max time step allowed
+maxTimeStep 1e-3
+; end time for simulation
+timeEnd 0.06
+
+; SIMULATION RELATED
+; ------------------------------------------------------
+; space-filling curve selection
+; lebesgue [0], hilbert [1]
+sfc 0
+
+; theta-criterion for Barnes-Hut (approximative gravity)
+theta 1.0
+; smoothing parameter for gravitational forces
+;smoothing 0.032
+smoothing 0.001024
+
+; SPH smoothing kernel selection
+; spiky [0], cubic spline [1], wendlandc2 [3], wendlandc4 [4], wendlandc6 [5]
+smoothingKernel 1
+
+; remove particles (corresponding to some criterion)
+removeParticles false
+; spherically [0], cubic [1]
+removeParticlesCriterion 0
+; allowed distance to center (0, 0, 0)
+removeParticlesDimension 10.0
+
+; execute load balancing
+loadBalancing false
+; interval for executing load balancing (every Nth step)
+loadBalancingInterval 1
+; amount of bins for load balancing
+loadBalancingBins 2000
+
+; how much memory to allocate (1.0 -&gt; all particles can in principle be on one process)
+particleMemoryContingent 1.0
+
+; calculate angular momentum (and save to output file)
+calculateAngularMomentum false
+; calculate (total) energy (and save to output file)
+calculateEnergy false
+; calculate center of mass (and save to output file)
+calculateCenterOfMass true
+
+
+; THESE SHOULD PROBABLY NOT EXIST IN A PRODUCTION VERSION
+; ------------------------------------------------------
+; ------------------------------------------------------
+; force version for gravity (use [0] or [2])
+; burtscher [0], burtscher without presorting [1], miluphcuda with presorting [2],
+; miluphcuda without presorting [3], miluphcuda shared memory (NOT working properly) [4]
+gravityForceVersion 0
+; fixed radius NN version for SPH (use [0])
+; normal [0], brute-force [1], shared-memory [2], within-box [3]
+sphFixedRadiusNNVersion 3</code></pre></div>
+
+<h4 id="toc_34">Postprocessing</h4>
+
+<p>For more information refer to <a href="postprocessing/README.md">postprocessing</a></p>
+
+<ul>
+<li>some scripts are available within <a href="postprocessing/">postprocessing/</a> 
+
+<ul>
+<li><a href="postprocessing//PlotSedov.py">postprocessing/PlotSedov.py</a>: plot density, pressure and internal energy in dependence of the radius for the sedov test case, including the semi-analytical solution
+
+<ul>
+<li>usage: e.g.  <code>./PlotSedov.py -i &lt;input HDF5 particle file&gt; -o &lt;output directory&gt; -a -p 1</code></li>
+<li>for applying script for all output files: e.g. <code>find &lt;directory with input files&gt; -type f -name &#39;ts*.h5&#39; -print0 | parallel -0 -j 1 ./PlotSedov.py -i {} -o &lt;output directory&gt; -a -p 1 \;</code>
+
+<ul>
+<li>combining those to a video: <code>ffmpeg -r 24 -i &lt;input directory&gt;/ts%06d.h5.png -vf &#39;pad=ceil(iw/2)*2:ceil(ih/2)*2&#39; -pix_fmt yuv420p -vcodec libx264 -y -an &lt;output directory&gt;/evolution.mp4</code></li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+
+<p>producing a plot like this:</p>
+
+<p><img src="documents/figures/sedov_N171_sfc1D_np8_density.png" alt="Sedov sample" width="100%"/></p>
+
+<h2 id="toc_35">Postprocessing <a name="postprocessing"></a></h2>
+
+<p><strong>Scripts for postprocessing, visualization, ...</strong></p>
+
+<ul>
+<li>See also <a href="H5Renderer/">H5Renderer</a> for basic rendering (<a href="H5Renderer/README.md">README</a>)</li>
+</ul>
+
+<h3 id="toc_36">Snippets</h3>
+
+<ul>
+<li>reading the particle output files</li>
+</ul>
+
+<div><pre class="line-numbers"><code class="language-python">import h5py
+import numpy as np
+
+h5file = &quot;sample.h5&quot;
+f = h5py.File(h5file, &#39;r&#39;)
+
+mass = f[&quot;m&quot;][:]
+pos = f[&quot;x&quot;][:] # x, y, z component
+vel = f[&quot;v&quot;][:] # x, y, z component
+COM = f[&quot;COM&quot;][:] # x, y, z component
+key = f[&quot;key&quot;][:] # SFC key
+proc = f[&quot;proc&quot;][:]
+time = f[&quot;time&quot;][:]
+# ...</code></pre></div>
+
+<ul>
+<li>reading the performance files</li>
+</ul>
+
+<div><pre class="line-numbers"><code class="language-python">import h5py
+import numpy as np
+
+h5file = &quot;sample.h5&quot;
+f = h5py.File(h5file, &#39;r&#39;)
+keys = f[&#39;time&#39;].keys()
+
+for key in keys:
+    # e.g. average for each entry/key
+    elapsed = np.array(f[&quot;time/{}&quot;.format(key)][:])
+    elapsed_max = [np.array(elem).max() for elem in elapsed]
+    mean_elapsed = np.array(elapsed_max).mean()
+    print(&quot;{}: {} ms&quot;.format(key, mean_elapsed))</code></pre></div>
+
+<h3 id="toc_37">Paraview</h3>
+
+<ul>
+<li><a href="https://www.paraview.org/">ParaView</a></li>
+</ul>
+
+<p>ParaView is an open-source, multi-platform data analysis and visualization application. ParaView users can quickly build visualizations to analyze their data using qualitative and quantitative techniques. The data exploration can be done interactively in 3D or programmatically using ParaView’s batch processing capabilities.</p>
+
+<p>Create a XDMF file in order to facilitate the data access for Paraview:</p>
+
+<div><pre class="line-numbers"><code class="language-python">#!/usr/bin/env python3
+
+import h5py
+import sys
+import argparse
+
+parser = argparse.ArgumentParser(description=&#39;Generate xdmf file from .h5 miluph output files for paraview postprocessing.\n Open the generated .xdmf file with paraview.&#39;)
+
+parser.add_argument(&#39;--output&#39;, help=&#39;output file name&#39;, default=&#39;paraview.xdmf&#39;)
+parser.add_argument(&#39;--dim&#39;, help=&#39;dimension&#39;, default=&#39;3&#39;)
+parser.add_argument(&#39;--input_files&#39;, nargs=&#39;+&#39;, help=&#39;input file names&#39;, default=&#39;none&#39;)
+
+args = parser.parse_args()
+
+if len(sys.argv) &lt; 3:
+    print(&quot;Try --help to get a usage.&quot;)
+    sys.exit(0);
+
+def write_xdmf_header(fh):
+    header = &quot;&quot;&quot;
+&lt;Xdmf&gt;
+&lt;Domain Name=&quot;MSI&quot;&gt;
+&lt;Grid Name=&quot;CellTime&quot; GridType=&quot;Collection&quot; CollectionType=&quot;Temporal&quot;&gt;
+&quot;&quot;&quot;
+    fh.write(header)
+    
+def write_xdmf_footer(fh):
+    footer = &quot;&quot;&quot;
+&lt;/Grid&gt;
+&lt;/Domain&gt;
+&lt;/Xdmf&gt;
+&quot;&quot;&quot;
+    fh.write(footer)
+    
+xdmfh = open(args.output, &#39;w&#39;)
+
+# write header of xdmf file
+write_xdmf_header(xdmfh)
+
+# now process input files
+# scalar floats only 
+wanted_attributes = [&#39;rho&#39;, &#39;p&#39;, &#39;sml&#39;, &#39;noi&#39;, &#39;e&#39;]
+
+for hfile in args.input_files:
+    print(&quot;Processing %s &quot; % hfile)
+    try: 
+        f = h5py.File(hfile, &#39;r&#39;)
+    except IOError:
+        print(&quot;Cannot open %s, exiting.&quot; % hfile)
+        sys.exit(1)
+
+    current_time = f[&#39;time&#39;][...]
+    # write current time entry
+    xdmfh.write(&#39;&lt;Grid Name=&quot;particles&quot; GridType=&quot;Uniform&quot;&gt;\n&#39;)
+    xdmfh.write(&#39;&lt;Time Value=&quot;%s&quot; /&gt;\n&#39; % current_time[0])
+    mylen = len(f[&#39;x&#39;])
+    xdmfh.write(&#39;&lt;Topology TopologyType=&quot;Polyvertex&quot; NodesPerElement=&quot;%s&quot;&gt;&lt;/Topology&gt;\n&#39; % mylen)
+    if args.dim == &#39;3&#39;:
+        xdmfh.write(&#39;&lt;Geometry GeometryType=&quot;XYZ&quot;&gt;\n&#39;)
+        xdmfh.write(&#39;&lt;DataItem DataType=&quot;Float&quot; Dimensions=&quot;%s 3&quot; Format=&quot;HDF&quot;&gt;\n&#39; % mylen)
+    else:
+        xdmfh.write(&#39;&lt;Geometry GeometryType=&quot;XY&quot;&gt;\n&#39;)
+        xdmfh.write(&#39;&lt;DataItem DataType=&quot;Float&quot; Dimensions=&quot;%s 2&quot; Format=&quot;HDF&quot;&gt;\n&#39; % mylen)
+    xdmfh.write(&#39;%s:/x\n&#39; % hfile) 
+    xdmfh.write(&#39;&lt;/DataItem&gt;\n&#39;)
+    xdmfh.write(&#39;&lt;/Geometry&gt;\n&#39;)
+
+    # velocities
+    xdmfh.write(&#39;&lt;Attribute AttributeType=&quot;Vector&quot; Centor=&quot;Node&quot; Name=&quot;velocity&quot;&gt;\n&#39;)
+    xdmfh.write(&#39;&lt;DataItem DataType=&quot;Float&quot; Dimensions=&quot;%s %s&quot; Format=&quot;HDF&quot;&gt;\n&#39; % (mylen, args.dim))
+    xdmfh.write(&#39;%s:/v\n&#39; % hfile)
+    xdmfh.write(&#39;&lt;/DataItem&gt;\n&#39;)
+    xdmfh.write(&#39;&lt;/Attribute&gt;\n&#39;)
+
+    # wanted_attributes
+    for myattr in wanted_attributes:
+        datatype = &quot;Float&quot;
+        if myattr in [&#39;number_of_interactions&#39;, &#39;material_type&#39;]:
+            datatype = &quot;Integer&quot;
+        xdmfh.write(&#39;&lt;Attribute AttributeType=&quot;Scalar&quot; Centor=&quot;Node&quot; Name=&quot;%s&quot;&gt;\n&#39; % myattr)
+        xdmfh.write(&#39;&lt;DataItem DataType=&quot;%s&quot; Dimensions=&quot;%s 1&quot; Format=&quot;HDF&quot;&gt;\n&#39; % (datatype, mylen))
+        xdmfh.write(&#39;%s:/%s\n&#39; % (hfile, myattr))
+        xdmfh.write(&#39;&lt;/DataItem&gt;\n&#39;)
+        xdmfh.write(&#39;&lt;/Attribute&gt;\n&#39;)
+    xdmfh.write(&#39;&lt;/Grid&gt;\n&#39;)
+    f.close()
+
+# write footnote of xdmf file
+write_xdmf_footer(xdmfh)</code></pre></div>
+
+<h4 id="toc_38">Remote Paraview</h4>
+
+<p>The information presented here is based on <a href="https://docs.paraview.org/en/latest/ReferenceManual/parallelDataVisualization.html">https://docs.paraview.org/en/latest/ReferenceManual/parallelDataVisualization.html</a></p>
+
+<ol>
+<li>install locally paraview on your laptop and on the server with the identical version.</li>
+<li>run the binary pvserver on the server side (it&#39;s in the same directory as the paraview binary), e.g.<br>
+~/sw/paraview/ParaView-5.8.0-MPI-Linux-Python3.7-64bit/bin/pvserver --force-offscreen-rendering
+IMPORTANT: log in to the server via ssh without X forwarding (ssh +X cpt-kamino.am10.uni-tuebingen.de)</li>
+<li>start the client on your laptop, go to File-&gt;connect and add cpt-kamino to the server list</li>
+<li>if the client connection is successful, you can choose File-&gt;open and open the file on the server. the rendering will be done on the server and the client will display the final picture.</li>
+</ol>
+
+<h3 id="toc_39">Custom scripts</h3>
+
+<ul>
+<li><a href="RhsPerformance.py">RhsPerformance.py</a>: get average execution time for each part of the simulation
+
+<ul>
+<li>usage: <code>./RhsPerformance -d &lt;HDF5 performance file&gt;</code><br></li>
+</ul></li>
+<li><a href="PerformanceComparison.py">PerformanceComparison.py</a>: compare average execution time for each part of the simulation
+
+<ul>
+<li>usage: <code>./RhsPerformance -a &lt;HDF5 performance file 1&gt; -b &lt;HDF5 performance file 2&gt;</code><br></li>
+</ul></li>
+<li><a href="PlotPlummer.py">PlotPlummer.py</a>: plot mass quantiles for the plummer test case
+
+<ul>
+<li>usage: e.g. <code>./PlotPlummer.py -Q -d &lt;input data directory&gt; -o &lt;output directory&gt;</code> </li>
+</ul></li>
+<li><a href="PlotSedov.py">PlotSedov.py</a>: plot density, pressure and internal energy in dependence of the radius for the sedov test case, including the semi-analytical solution
+
+<ul>
+<li>usage: e.g.  <code>./PlotSedov.py -i &lt;input HDF5 particle file&gt; -o &lt;output directory&gt; -a -p 1</code></li>
+<li>for applying script for all output files: e.g. <code>find &lt;directory with input files&gt; -type f -name &#39;ts*.h5&#39; -print0 | parallel -0 -j 1 ./PlotSedov.py -i {} -o &lt;output directory&gt; -a -p 1 \;</code>
+
+<ul>
+<li>combining those to a video: <code>ffmpeg -r 24 -i &lt;input directory&gt;/ts%06d.h5.png -vf &#39;pad=ceil(iw/2)*2:ceil(ih/2)*2&#39; -pix_fmt yuv420p -vcodec libx264 -y -an &lt;output directory&gt;/evolution.mp4</code></li>
+</ul></li>
+</ul></li>
+<li><a href="PlotBB.py">PlotBB.py</a>: plot density evolution (for the isothermal collapse test case)
+
+<ul>
+<li>usage: <code>PlotBB.py -d &lt;input directory&gt; -o &lt;output directory&gt;</code></li>
+</ul></li>
+<li><a href="GetMinMaxMean.py">GetMinMaxMean.py</a>: calculate min, max, mean for each entry and each output file and write/summarize to CSV file<br>
+
+<ul>
+<li>usage: <code>./GetMinMaxMean.py -i &lt;input directory&gt; -o &lt;output directory&gt;</code></li>
+</ul></li>
+<li><a href="PlotMinMaxMean.py">PlotMinMaxMean.py</a>: take min, max, mean CSV file and plot for each entry
+
+<ul>
+<li>usage: <code>./PlotMinMaxMean.py -i &lt;input directory&gt;/min_max_mean.csv -o &lt;output directory&gt; -a</code> </li>
+<li>requires previous execution of <code>PlotMinMaxMean.py</code></li>
+</ul></li>
+<li><a href="VisualizeDistribution.py">VisualizeDistribution.py</a>: visualize a particle distribution with Matplotlib 3D</li>
+<li><a href="VisualizeDomains_2D.py">VisualizeDomains_2D.py</a>: visualize domain borders or rather domains for 2D simulations</li>
+<li><a href="VisualizeDomains_3D.py">VisualizeDomains_3D.py</a>: visualize domain borders or rather domains for 3D simulations</li>
+</ul>
+
+<h2 id="toc_40">Debugging <a name="debugging"></a></h2>
+
+<p><strong>Basic debugging:</strong></p>
+
+<ul>
+<li>using GDB: <code>mpirun -np &lt;num processes&gt; xterm -e gdb bin/runner -x initPipe.gdb</code>
+
+<ul>
+<li>see <a href="debug_gdb.sh">debug_gdb.sh</a> </li>
+</ul></li>
+<li>using LLDB: <code>mpirun -np &lt;num processes&gt; xterm -e lldb ./bin/runner -s initPipe.lldb</code>
+
+<ul>
+<li>see <a href="debug_lldb.sh">debug_lldb.sh</a> </li>
+</ul></li>
+<li>using CUDA-GDB: <code>mpirun -np &lt;num processes&gt; xterm -e cuda-gdb bin/runner</code>
+
+<ul>
+<li>see <a href="cuda_debug.sh">cuda_debug.sh</a> </li>
+</ul></li>
+</ul>
+
+<hr>
+
+<p>Further, there are other and more sophisticated tools available for debugging MPI and/or CUDA programs. Among others, there are the following tools.</p>
+
+<hr>
+
+<h3 id="toc_41">MPI Tools</h3>
+
+<h4 id="toc_42">ARM DDT</h4>
+
+<ul>
+<li><a href="https://www.arm.com/products/development-tools/server-and-hpc/forge/ddt">ARM DDT Debugger</a></li>
+</ul>
+
+<p>Arm DDT is the number one server and HPC debugger in research, industry, and academia for software engineers and scientists developing C++, C, Fortran parallel and threaded applications on CPUs, GPUs, Intel and Arm. Arm DDT is trusted as a powerful tool for automatic detection of memory bugs and divergent behavior to achieve lightning-fast performance at all scales.</p>
+
+<h4 id="toc_43">Valgrind</h4>
+
+<ul>
+<li><a href="https://www.valgrind.org/">Valgrind instrumentation framework for building dynamic analysis tools</a></li>
+</ul>
+
+<p>Valgrind is an instrumentation framework for building dynamic analysis tools. There are Valgrind tools that can automatically detect many memory management and threading bugs, and profile your programs in detail. You can also use Valgrind to build new tools.</p>
+
+<h4 id="toc_44">Intel Inspector</h4>
+
+<ul>
+<li><a href="https://software.intel.com/content/www/us/en/develop/tools/oneapi/components/inspector.html">Intel Inspector</a></li>
+</ul>
+
+<p>Memory errors and nondeterministic threading errors are difficult to find without the right tool. Intel® Inspector is designed to find these errors. It is a dynamic memory and threading error debugger for C, C++, and Fortran applications that run on Windows* and Linux* operating systems.</p>
+
+<h4 id="toc_45">Oracle Developer Studio Thread Anaylzer</h4>
+
+<ul>
+<li><a href="https://www.oracle.com/application-development/technologies/developerstudio.html">Oracle Thread Analyzer</a></li>
+</ul>
+
+<h4 id="toc_46">MPI Runtime Correctness Analysis</h4>
+
+<ul>
+<li><a href="https://www.i12.rwth-aachen.de/go/id/nrbe">MUST - MPI Runtime Correctness Analysis</a></li>
+</ul>
+
+<p>MUST detects usage errors of the Message Passing Interface (MPI) and reports them to the user. As MPI calls are complex and usage errors common, this functionality is extremely helpful for application developers that want to develop correct MPI applications. This includes errors that already manifest – segmentation faults or incorrect results – as well as many errors that are not visible to the application developer or do not manifest on a certain system or MPI implementation.</p>
+
+<hr>
+
+<h3 id="toc_47">CUDA Tools</h3>
+
+<ul>
+<li><a href="https://developer.nvidia.com/debugging-solutions">NVIDIA: Debugging solutions</a></li>
+</ul>
+
+<h4 id="toc_48">CUDA-MEMCHECK</h4>
+
+<ul>
+<li><a href="https://docs.nvidia.com/cuda/cuda-memcheck/index.html">NVIDIA: CUDA-MEMCHECK</a></li>
+</ul>
+
+<p>Accurately identifying the source and cause of memory access errors can be frustrating and time-consuming.  CUDA-MEMCHECK detects these errors in your GPU code and allows you to locate them quickly.  CUDA-MEMCHECK also reports runtime execution errors, identifying situations that could otherwise result in an “unspecified launch failure” error when your application is running.</p>
+
+<h4 id="toc_49">CUDA-GDB</h4>
+
+<ul>
+<li><a href="https://docs.nvidia.com/cuda/cuda-gdb/index.html">NVIDIA: CUDA-GDB</a></li>
+</ul>
+
+<p>When developing massively parallel applications on the GPU, you need a debugger capable of handling thousands of threads running simultaneously on each GPU in the system.  CUDA-GDB delivers a seamless debugging experience that allows you to debug both the CPU and GPU portions of your application simultaneously.</p>
+
+<h4 id="toc_50">Nsight</h4>
+
+<ul>
+<li><a href="https://developer.nvidia.com/nsight-systems">NVIDIA: Nsight</a></li>
+</ul>
+
+<p>and the <a href="https://developer.nvidia.com/nsight-visual-studio-edition">NVIDIA Nsight Visual Studio Edition</a></p>
+
+<p>NVIDIA® Nsight™ Systems is a system-wide performance analysis tool designed to visualize an application’s algorithms, help you identify the largest opportunities to optimize, and tune to scale efficiently across any quantity or size of CPUs and GPUs; from large server to our smallest SoC.</p>
+
+<h4 id="toc_51">Arm Forge</h4>
+
+<ul>
+<li><a href="https://developer.nvidia.com/allinea-ddt">NVIDIA: Arm Forge</a></li>
+</ul>
+
+<p>Supporting the latest toolkits from NVIDIA, Arm DDT provides one of the most comprehensive debuggers of CPU and GPU applications available.
+Relied on by software developers on CUDA-enabled laptops and workstations through to the world’s largest hybrid GPU/CPU supercomputers, Arm DDT is designed to help you tackle software bugs in CPU/GPU applications easily.</p>
+
+<h4 id="toc_52">TotalView</h4>
+
+<ul>
+<li><a href="https://developer.nvidia.com/totalview-debugger">NVIDIA: TotalView</a></li>
+</ul>
+
+<p>TotalView is the leading dynamic analysis and debugging tool designed to handle complex CPU and GPU based multi-threaded, multi-process and multi-node cluster applications. It enables developers to analyze their C, C++, Fortran and mixed-language Python applications in order to quickly diagnose and fix bugs. Using TotalView’s powerful reverse debugging, memory debugging and advanced debugging technologies, developers are able to reduce development cycles and amount of time it takes to find and fix difficult bugs in their complex codes. TotalView supports the latest CUDA SDK’s, NVIDIA GPU hardware, Linux x86-64, Arm64, and OpenPower platforms and applications utilizing MPI and OpenMP technologies.</p>
+
+
+
+<script type="text/javascript">
+var _self="undefined"!=typeof window?window:"undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?self:{},Prism=function(){var e=/\blang(?:uage)?-(\w+)\b/i,t=0,n=_self.Prism={util:{encode:function(e){return e instanceof a?new a(e.type,n.util.encode(e.content),e.alias):"Array"===n.util.type(e)?e.map(n.util.encode):e.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/\u00a0/g," ")},type:function(e){return Object.prototype.toString.call(e).match(/\[object (\w+)\]/)[1]},objId:function(e){return e.__id||Object.defineProperty(e,"__id",{value:++t}),e.__id},clone:function(e){var t=n.util.type(e);switch(t){case"Object":var a={};for(var r in e)e.hasOwnProperty(r)&&(a[r]=n.util.clone(e[r]));return a;case"Array":return e.map&&e.map(function(e){return n.util.clone(e)})}return e}},languages:{extend:function(e,t){var a=n.util.clone(n.languages[e]);for(var r in t)a[r]=t[r];return a},insertBefore:function(e,t,a,r){r=r||n.languages;var l=r[e];if(2==arguments.length){a=arguments[1];for(var i in a)a.hasOwnProperty(i)&&(l[i]=a[i]);return l}var o={};for(var s in l)if(l.hasOwnProperty(s)){if(s==t)for(var i in a)a.hasOwnProperty(i)&&(o[i]=a[i]);o[s]=l[s]}return n.languages.DFS(n.languages,function(t,n){n===r[e]&&t!=e&&(this[t]=o)}),r[e]=o},DFS:function(e,t,a,r){r=r||{};for(var l in e)e.hasOwnProperty(l)&&(t.call(e,l,e[l],a||l),"Object"!==n.util.type(e[l])||r[n.util.objId(e[l])]?"Array"!==n.util.type(e[l])||r[n.util.objId(e[l])]||(r[n.util.objId(e[l])]=!0,n.languages.DFS(e[l],t,l,r)):(r[n.util.objId(e[l])]=!0,n.languages.DFS(e[l],t,null,r)))}},plugins:{},highlightAll:function(e,t){var a={callback:t,selector:'code[class*="language-"], [class*="language-"] code, code[class*="lang-"], [class*="lang-"] code'};n.hooks.run("before-highlightall",a);for(var r,l=a.elements||document.querySelectorAll(a.selector),i=0;r=l[i++];)n.highlightElement(r,e===!0,a.callback)},highlightElement:function(t,a,r){for(var l,i,o=t;o&&!e.test(o.className);)o=o.parentNode;o&&(l=(o.className.match(e)||[,""])[1],i=n.languages[l]),t.className=t.className.replace(e,"").replace(/\s+/g," ")+" language-"+l,o=t.parentNode,/pre/i.test(o.nodeName)&&(o.className=o.className.replace(e,"").replace(/\s+/g," ")+" language-"+l);var s=t.textContent,u={element:t,language:l,grammar:i,code:s};if(!s||!i)return n.hooks.run("complete",u),void 0;if(n.hooks.run("before-highlight",u),a&&_self.Worker){var c=new Worker(n.filename);c.onmessage=function(e){u.highlightedCode=e.data,n.hooks.run("before-insert",u),u.element.innerHTML=u.highlightedCode,r&&r.call(u.element),n.hooks.run("after-highlight",u),n.hooks.run("complete",u)},c.postMessage(JSON.stringify({language:u.language,code:u.code,immediateClose:!0}))}else u.highlightedCode=n.highlight(u.code,u.grammar,u.language),n.hooks.run("before-insert",u),u.element.innerHTML=u.highlightedCode,r&&r.call(t),n.hooks.run("after-highlight",u),n.hooks.run("complete",u)},highlight:function(e,t,r){var l=n.tokenize(e,t);return a.stringify(n.util.encode(l),r)},tokenize:function(e,t){var a=n.Token,r=[e],l=t.rest;if(l){for(var i in l)t[i]=l[i];delete t.rest}e:for(var i in t)if(t.hasOwnProperty(i)&&t[i]){var o=t[i];o="Array"===n.util.type(o)?o:[o];for(var s=0;s<o.length;++s){var u=o[s],c=u.inside,g=!!u.lookbehind,h=!!u.greedy,f=0,d=u.alias;u=u.pattern||u;for(var p=0;p<r.length;p++){var m=r[p];if(r.length>e.length)break e;if(!(m instanceof a)){u.lastIndex=0;var y=u.exec(m),v=1;if(!y&&h&&p!=r.length-1){var b=r[p+1].matchedStr||r[p+1],k=m+b;if(p<r.length-2&&(k+=r[p+2].matchedStr||r[p+2]),u.lastIndex=0,y=u.exec(k),!y)continue;var w=y.index+(g?y[1].length:0);if(w>=m.length)continue;var _=y.index+y[0].length,P=m.length+b.length;if(v=3,P>=_){if(r[p+1].greedy)continue;v=2,k=k.slice(0,P)}m=k}if(y){g&&(f=y[1].length);var w=y.index+f,y=y[0].slice(f),_=w+y.length,S=m.slice(0,w),O=m.slice(_),j=[p,v];S&&j.push(S);var A=new a(i,c?n.tokenize(y,c):y,d,y,h);j.push(A),O&&j.push(O),Array.prototype.splice.apply(r,j)}}}}}return r},hooks:{all:{},add:function(e,t){var a=n.hooks.all;a[e]=a[e]||[],a[e].push(t)},run:function(e,t){var a=n.hooks.all[e];if(a&&a.length)for(var r,l=0;r=a[l++];)r(t)}}},a=n.Token=function(e,t,n,a,r){this.type=e,this.content=t,this.alias=n,this.matchedStr=a||null,this.greedy=!!r};if(a.stringify=function(e,t,r){if("string"==typeof e)return e;if("Array"===n.util.type(e))return e.map(function(n){return a.stringify(n,t,e)}).join("");var l={type:e.type,content:a.stringify(e.content,t,r),tag:"span",classes:["token",e.type],attributes:{},language:t,parent:r};if("comment"==l.type&&(l.attributes.spellcheck="true"),e.alias){var i="Array"===n.util.type(e.alias)?e.alias:[e.alias];Array.prototype.push.apply(l.classes,i)}n.hooks.run("wrap",l);var o="";for(var s in l.attributes)o+=(o?" ":"")+s+'="'+(l.attributes[s]||"")+'"';return"<"+l.tag+' class="'+l.classes.join(" ")+'" '+o+">"+l.content+"</"+l.tag+">"},!_self.document)return _self.addEventListener?(_self.addEventListener("message",function(e){var t=JSON.parse(e.data),a=t.language,r=t.code,l=t.immediateClose;_self.postMessage(n.highlight(r,n.languages[a],a)),l&&_self.close()},!1),_self.Prism):_self.Prism;var r=document.currentScript||[].slice.call(document.getElementsByTagName("script")).pop();return r&&(n.filename=r.src,document.addEventListener&&!r.hasAttribute("data-manual")&&document.addEventListener("DOMContentLoaded",n.highlightAll)),_self.Prism}();"undefined"!=typeof module&&module.exports&&(module.exports=Prism),"undefined"!=typeof global&&(global.Prism=Prism);
+</script>
+
+<script type="text/javascript">
+Prism.languages.python={"triple-quoted-string":{pattern:/"""[\s\S]+?"""|'''[\s\S]+?'''/,alias:"string"},comment:{pattern:/(^|[^\\])#.*/,lookbehind:!0},string:/("|')(?:\\?.)*?\1/,"function":{pattern:/((?:^|\s)def[ \t]+)[a-zA-Z_][a-zA-Z0-9_]*(?=\()/g,lookbehind:!0},"class-name":{pattern:/(\bclass\s+)[a-z0-9_]+/i,lookbehind:!0},keyword:/\b(?:as|assert|async|await|break|class|continue|def|del|elif|else|except|exec|finally|for|from|global|if|import|in|is|lambda|pass|print|raise|return|try|while|with|yield)\b/,"boolean":/\b(?:True|False)\b/,number:/\b-?(?:0[bo])?(?:(?:\d|0x[\da-f])[\da-f]*\.?\d*|\.\d+)(?:e[+-]?\d+)?j?\b/i,operator:/[-+%=]=?|!=|\*\*?=?|\/\/?=?|<[<=>]?|>[=>]?|[&|^~]|\b(?:or|and|not)\b/,punctuation:/[{}[\];(),.:]/};
+</script>
+
+<script type="text/javascript">
+Prism.languages.clike={comment:[{pattern:/(^|[^\\])\/\*[\w\W]*?\*\//,lookbehind:!0},{pattern:/(^|[^\\:])\/\/.*/,lookbehind:!0}],string:{pattern:/(["'])(\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1/,greedy:!0},"class-name":{pattern:/((?:\b(?:class|interface|extends|implements|trait|instanceof|new)\s+)|(?:catch\s+\())[a-z0-9_\.\\]+/i,lookbehind:!0,inside:{punctuation:/(\.|\\)/}},keyword:/\b(if|else|while|do|for|return|in|instanceof|function|new|try|throw|catch|finally|null|break|continue)\b/,"boolean":/\b(true|false)\b/,"function":/[a-z0-9_]+(?=\()/i,number:/\b-?(?:0x[\da-f]+|\d*\.?\d+(?:e[+-]?\d+)?)\b/i,operator:/--?|\+\+?|!=?=?|<=?|>=?|==?=?|&&?|\|\|?|\?|\*|\/|~|\^|%/,punctuation:/[{}[\];(),.:]/};
+</script>
+
+<script type="text/javascript">
+Prism.languages.c=Prism.languages.extend("clike",{keyword:/\b(asm|typeof|inline|auto|break|case|char|const|continue|default|do|double|else|enum|extern|float|for|goto|if|int|long|register|return|short|signed|sizeof|static|struct|switch|typedef|union|unsigned|void|volatile|while)\b/,operator:/\-[>-]?|\+\+?|!=?|<<?=?|>>?=?|==?|&&?|\|?\||[~^%?*\/]/,number:/\b-?(?:0x[\da-f]+|\d*\.?\d+(?:e[+-]?\d+)?)[ful]*\b/i}),Prism.languages.insertBefore("c","string",{macro:{pattern:/(^\s*)#\s*[a-z]+([^\r\n\\]|\\.|\\(?:\r\n?|\n))*/im,lookbehind:!0,alias:"property",inside:{string:{pattern:/(#\s*include\s*)(<.+?>|("|')(\\?.)+?\3)/,lookbehind:!0},directive:{pattern:/(#\s*)\b(define|elif|else|endif|error|ifdef|ifndef|if|import|include|line|pragma|undef|using)\b/,lookbehind:!0,alias:"keyword"}}},constant:/\b(__FILE__|__LINE__|__DATE__|__TIME__|__TIMESTAMP__|__func__|EOF|NULL|stdin|stdout|stderr)\b/}),delete Prism.languages.c["class-name"],delete Prism.languages.c["boolean"];
+</script>
+
+<script type="text/javascript">
+Prism.languages.cpp=Prism.languages.extend("c",{keyword:/\b(alignas|alignof|asm|auto|bool|break|case|catch|char|char16_t|char32_t|class|compl|const|constexpr|const_cast|continue|decltype|default|delete|do|double|dynamic_cast|else|enum|explicit|export|extern|float|for|friend|goto|if|inline|int|long|mutable|namespace|new|noexcept|nullptr|operator|private|protected|public|register|reinterpret_cast|return|short|signed|sizeof|static|static_assert|static_cast|struct|switch|template|this|thread_local|throw|try|typedef|typeid|typename|union|unsigned|using|virtual|void|volatile|wchar_t|while)\b/,"boolean":/\b(true|false)\b/,operator:/[-+]{1,2}|!=?|<{1,2}=?|>{1,2}=?|\->|:{1,2}|={1,2}|\^|~|%|&{1,2}|\|?\||\?|\*|\/|\b(and|and_eq|bitand|bitor|not|not_eq|or|or_eq|xor|xor_eq)\b/}),Prism.languages.insertBefore("cpp","keyword",{"class-name":{pattern:/(class\s+)[a-z0-9_]+/i,lookbehind:!0}});
+</script>
+
+<script type="text/javascript">
+!function(){"undefined"!=typeof self&&self.Prism&&self.document&&Prism.hooks.add("complete",function(e){if(e.code){var t=e.element.parentNode,s=/\s*\bline-numbers\b\s*/;if(t&&/pre/i.test(t.nodeName)&&(s.test(t.className)||s.test(e.element.className))&&!e.element.querySelector(".line-numbers-rows")){s.test(e.element.className)&&(e.element.className=e.element.className.replace(s,"")),s.test(t.className)||(t.className+=" line-numbers");var n,a=e.code.match(/\n(?!$)/g),l=a?a.length+1:1,m=new Array(l+1);m=m.join("<span></span>"),n=document.createElement("span"),n.className="line-numbers-rows",n.innerHTML=m,t.hasAttribute("data-start")&&(t.style.counterReset="linenumber "+(parseInt(t.getAttribute("data-start"),10)-1)),e.element.appendChild(n)}}})}();
+</script>
+
+<script type="text/javascript">
+!function(){if("undefined"!=typeof self&&self.Prism&&self.document){var e={html:"HTML",xml:"XML",svg:"SVG",mathml:"MathML",css:"CSS",clike:"C-like",javascript:"JavaScript",abap:"ABAP",actionscript:"ActionScript",apacheconf:"Apache Configuration",apl:"APL",applescript:"AppleScript",asciidoc:"AsciiDoc",aspnet:"ASP.NET (C#)",autoit:"AutoIt",autohotkey:"AutoHotkey",basic:"BASIC",csharp:"C#",cpp:"C++",coffeescript:"CoffeeScript","css-extras":"CSS Extras",fsharp:"F#",glsl:"GLSL",http:"HTTP",inform7:"Inform 7",json:"JSON",latex:"LaTeX",lolcode:"LOLCODE",matlab:"MATLAB",mel:"MEL",nasm:"NASM",nginx:"nginx",nsis:"NSIS",objectivec:"Objective-C",ocaml:"OCaml",parigp:"PARI/GP",php:"PHP","php-extras":"PHP Extras",powershell:"PowerShell",jsx:"React JSX",rest:"reST (reStructuredText)",sas:"SAS",sass:"Sass (Sass)",scss:"Sass (Scss)",sql:"SQL",typescript:"TypeScript",vhdl:"VHDL",vim:"vim",wiki:"Wiki markup",yaml:"YAML"};Prism.hooks.add("before-highlight",function(s){var a=s.element.parentNode;if(a&&/pre/i.test(a.nodeName)){var t,i,r=a.getAttribute("data-language")||e[s.language]||s.language.substring(0,1).toUpperCase()+s.language.substring(1),l=a.previousSibling;l&&/\s*\bprism-show-language\b\s*/.test(l.className)&&l.firstChild&&/\s*\bprism-show-language-label\b\s*/.test(l.firstChild.className)?i=l.firstChild:(t=document.createElement("div"),i=document.createElement("div"),i.className="prism-show-language-label",t.className="prism-show-language",t.appendChild(i),a.parentNode.insertBefore(t,a)),i.innerHTML=r}})}}();
+</script>
+
+<script type="text/x-mathjax-config">
+(function () {
+
+MathJax.Hub.Config({
+	'showProcessingMessages': false,
+	'messageStyle': 'none'
+});
+
+if (typeof MathJaxListener !== 'undefined') {
+	MathJax.Hub.Register.StartupHook('End', function () {
+		MathJaxListener.invokeCallbackForKey_('End');
+	});
+}
+
+})();
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+</body>
+
+</html>
