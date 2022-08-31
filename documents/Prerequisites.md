@@ -18,7 +18,12 @@ _____
 
 ## Installing/Building the dependencies
 
-### OpenMPI
+### MPI implementation
+
+> Multiple MPI implementations exist and can be used to execute milupHPC. However, the code was primarily tested with OpenMPI >= 4.0.
+
+#### OpenMPI
+
 
 | library         | licence           | usage             | link               |
 | --------------- | ----------------- | ----------------- | ------------------ |
@@ -29,9 +34,10 @@ see also [MPI_Versions.md](MPI_Versions.md)
 
 * if either MPI is not available or MPI is not CUDA-aware
 	* e.g. via `ompi_info -a | grep "\-with\-cuda"` 
-* build
+* build, see e.g.
 	* [Building Open MPI](https://www.open-mpi.org/faq/?category=building)
 	* [Building CUDA-aware Open MPI](https://www.open-mpi.org/faq/?category=buildcuda)
+	* [UCX OpenMPI installation](https://github.com/openucx/ucx/wiki/OpenMPI-and-OpenSHMEM-installation-with-UCX)
 
 	
 ### Boost
@@ -94,6 +100,7 @@ $ ./b2 install --prefix=/usr
 ```
 $ wget http://hyperrealm.github.io/libconfig/dist/libconfig-<libconfig version>.tar.gz
 $ tar zxvf libconfig-<libconfig version>.tar.gz
+$ cd libconfig-<libconfig version>
 $ ./configure --prefix=/usr
 $ make
 $ make install
@@ -107,6 +114,16 @@ $ make install
 | HDF5            | HDF5 License (BSD-Style) | parallel HDF5 for I/O operations | [hdf5group.org](https://www.hdfgroup.org/solutions/hdf5/) |
 
 * refer to [realease_docs](https://github.com/HDFGroup/hdf5/tree/develop/release_docs) and build parallel
+
+e.g.:
+
+```
+$ wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-1.12.2/src/hdf5-1.12.2.tar.gz
+$ tar -zxvf hdf5-1.12.0.tar.gz
+$ cd hdf5
+$ CC=mpicc CXX=mpic++ ./configure --prefix=/usr --enable-parallel --enable-hl
+$ make install
+```
 
 
 _____
