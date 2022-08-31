@@ -145,6 +145,13 @@ doc: doxyfile.inc
 	$(DOXY) $(DOXYFILE) &> $(DOCDIR)/doxygen.log
 	@mkdir -p "./docs"
 	cp -r "./doc/html/" "./docs/"
+	@cp -r "./documents" "./docs/"
+	@cp "./doc/open.png" "./docs/"
+	@cp "./doc/closed.png" "./docs/"
+
+remove_doc:
+	rm -rf docs/*
+	rm -rf doc/html
 
 #Non-File Targets
-.PHONY: all remake clean cleaner resources sources directories ideas tester doc
+.PHONY: all remake clean cleaner resources sources directories ideas tester doc remove_doc
