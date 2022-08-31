@@ -23,13 +23,13 @@ particlesSent2H5 false
 ; ------------------------------------------------------
 ; integrator selection
 ; explicit euler [0], predictor-corrector euler [1]
-integrator 1
+integrator 0
 ; initial time step
-timeStep 0.0005
+timeStep 0.025
 ; max time step allowed
-maxTimeStep 1e-3
+maxTimeStep 0.025
 ; end time for simulation
-timeEnd 0.06
+timeEnd 25.0
 
 ; SIMULATION RELATED
 ; ------------------------------------------------------
@@ -38,9 +38,10 @@ timeEnd 0.06
 sfc 0
 
 ; theta-criterion for Barnes-Hut (approximative gravity)
-theta 1.0
+theta 0.5
 ; smoothing parameter for gravitational forces
 ;smoothing 0.032
+;smoothing 0.001024
 smoothing 0.001024
 
 ; SPH smoothing kernel selection
@@ -48,7 +49,7 @@ smoothing 0.001024
 smoothingKernel 1
 
 ; remove particles (corresponding to some criterion)
-removeParticles false
+removeParticles true
 ; spherically [0], cubic [1]
 removeParticlesCriterion 0
 ; allowed distance to center (0, 0, 0)
@@ -81,4 +82,4 @@ calculateCenterOfMass true
 gravityForceVersion 0
 ; fixed radius NN version for SPH (use [0])
 ; normal [0], brute-force [1], shared-memory [2], within-box [3]
-sphFixedRadiusNNVersion 3
+sphFixedRadiusNNVersion 0

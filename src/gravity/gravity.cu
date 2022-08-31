@@ -481,21 +481,21 @@ namespace Gravity {
 #endif
                             // if child is leaf or far away
                             if (child < n || distance * thetasq > cellSize[depth]) {
-                                if (particles->nodeType[child] == 3 || particles->nodeType[child] == -10) {
-                                    printf("Taking node type %i into account...\n", particles->nodeType[child]);
-                                    if (particles->nodeType[child] == 3) {
-                                        for (int i_test=0; i_test<POW_DIM; ++i_test) {
-                                            printf("%i node type %i: (%e, %e, %e | %e), child %i: %i (%e, %e, %e | %e)\n",
-                                                   child, particles->nodeType[child], particles->x[child], particles->y[child], particles->z[child],
-                                                   particles->mass[child], i_test,
-                                                   tree->child[POW_DIM * child + i_test],
-                                                   particles->x[tree->child[POW_DIM * child + i_test]],
-                                                   particles->y[tree->child[POW_DIM * child + i_test]],
-                                                   particles->z[tree->child[POW_DIM * child + i_test]],
-                                                   particles->mass[tree->child[POW_DIM * child + i_test]]);
-                                        }
-                                    }
-                                }
+                                //if (particles->nodeType[child] == 3 || particles->nodeType[child] == -10) {
+                                //    printf("Taking node type %i into account...\n", particles->nodeType[child]);
+                                //    if (particles->nodeType[child] == 3) {
+                                //        for (int i_test=0; i_test<POW_DIM; ++i_test) {
+                                //            printf("%i node type %i: (%e, %e, %e | %e), child %i: %i (%e, %e, %e | %e)\n",
+                                //                   child, particles->nodeType[child], particles->x[child], particles->y[child], particles->z[child],
+                                //                   particles->mass[child], i_test,
+                                //                   tree->child[POW_DIM * child + i_test],
+                                //                   particles->x[tree->child[POW_DIM * child + i_test]],
+                                //                   particles->y[tree->child[POW_DIM * child + i_test]],
+                                //                   particles->z[tree->child[POW_DIM * child + i_test]],
+                                //                   particles->mass[tree->child[POW_DIM * child + i_test]]);
+                                //        }
+                                //    }
+                                //}
                                 distance = sqrt(distance);
 #if SI_UNITS
                                 f = Constants::G * particles->mass[child] / (distance * distance * distance);
@@ -1198,7 +1198,7 @@ namespace Gravity {
         }
         */
 
-        __global__ void computeForces_v3(Tree *tree, Particles *particles, real radius, integer numParticles, integer m,
+        /*__global__ void computeForces_v3(Tree *tree, Particles *particles, real radius, integer numParticles, integer m,
                                          integer blockSize, integer warp, integer stackSize,
                                          SubDomainKeyTree *subDomainKeyTree, real theta,
                                          real smoothing, bool potentialEnergy) {
@@ -1300,15 +1300,15 @@ namespace Gravity {
                     depth--;  // done with this level
                 } while (depth >= j);
 
-                /*float4 acc = accVeld[i];
-                if (stepd > 0) {
-                    // update velocity
-                    float2 v = veld[i];
-                    v.x += (ax - acc.x) * dthfd;
-                    v.y += (ay - acc.y) * dthfd;
-                    acc.w += (az - acc.z) * dthfd;
-                    veld[i] = v;
-                }*/
+                //float4 acc = accVeld[i];
+                //if (stepd > 0) {
+                //    // update velocity
+                //    float2 v = veld[i];
+                //    v.x += (ax - acc.x) * dthfd;
+                //    v.y += (ay - acc.y) * dthfd;
+                //    acc.w += (az - acc.z) * dthfd;
+                //    veld[i] = v;
+                //}
 
                 // save computed acceleration
 
@@ -1321,7 +1321,7 @@ namespace Gravity {
 #endif
             }
 
-        }
+        }*/
 
         __global__ void preSymbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles,
                                       DomainList *domainList, integer *sendIndices, real diam, real theta_,

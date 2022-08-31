@@ -2180,7 +2180,7 @@ namespace ParticlesNS {
                                         real d, int index) {
 
 #if DIM == 1
-        if (cuda::math::abs(particles->x[index]) < d)) {
+        if (cuda::math::abs(particles->x[index]) < d) {
 #elif DIM == 2
         if (cuda::math::abs(particles->x[index]) < d &&
             cuda::math::abs(particles->y[index]) < d) {
