@@ -8,7 +8,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=9"/>
 	<meta name="generator" content="Doxygen 1.9.3"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	<title>milupHPC: MilupHPC</title>
+	<title>milupHPC: milupHPC</title>
 	<link href="tabs.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="dynsections.js"></script>
@@ -44,7 +44,7 @@ MathJax.Hub.Config({
 	<div id="banner">
 		<div class="logo">
 			<span class="subtitle">
-				milupHPC documentation <!-- MilupHPC -->
+				milupHPC documentation <!-- milupHPC -->
 			</span>
 			<!-- <span class="search">
 				<input type="text" placeholder="Search" onkeydown="search(this,event);">
@@ -92,7 +92,7 @@ $(function() {
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title">MilupHPC </div></div>
+  <div class="headertitle"><div class="title">milupHPC </div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p ><a class="anchor" id="md_doc_Mainpage"></a> This is the <b>API documentation for milupHPC</b> - a parallel smoothed particle hydrodynamics (<b><a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a></b>) targeting GPU cluster via CUDA-aware MPI.</p>
@@ -101,14 +101,14 @@ $(function() {
 <li><a href="https://github.com/michaelst98/miluphpc">GitHub: milupHPC</a></li>
 <li><a href="https://github.com/christophmschaefer/miluphcuda">GitHub: miluphcuda</a></li>
 </ul>
-<h1><a class="anchor" id="autotoc_md36"></a>
+<h1><a class="anchor" id="autotoc_md11"></a>
 About</h1>
 <hr  />
-<p >The computational method Smoothed <a class="el" href="class_particle.html">Particle</a> Hydrodynamics is an expedient method for solving hydrodynamic equations and is in combination with a method for self-gravity applicable for astrophysical simulations. Since computationally expensive, appropriate methods and technologies need to be utilized. Especially parallelization is a promising approach.</p>
-<p >Thus, this work aims to describe and implement a multi-GPU Smoothed <a class="el" href="class_particle.html">Particle</a> Hydrodynamics code with self-gravity via the Barnes-Hut method using CUDA-aware MPI targeting GPU cluster. The Barnes-Hut method is an approximative N-body tree method subdividing the simulation domain hierarchically and approximating the potential of a distant group using a multipole expansion of the potential which reduces the overall complexity of the gravitational force computation. While the parallelization for shared memory systems is relatively straightforward, many challenges and problems arise for distributed memory parallelization.</p>
-<p >The approach presented here is based on the parallelization of the tree as constructed for the Barnes-Hut method. Every process' local tree contains the particles assigned to this process and in addition nodes identical for all processes forming a common coarse tree. This shared part of the tree enables processes to gain knowledge about the local trees on the other processes. Moreover, the tree constructed in this way permit the introduction of space-filling-curves which themselves are basis for an efficient domain decomposition and load-balancing. In addition, the parallel tree facilitates the determination of communication patterns which are necessary for calculating the forces arising from the Barnes-Hut method and <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a>. <a class="el" href="class_particle.html">Particle</a> exchange via message passing is necessary since not all particles are accessible on all processes as the target architecture are distributed memory systems. Besides, this thesis investigates efficient GPU implementations of <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> and the Barnes-Hut algorithm including the gravitational force computation and fixed-radius near neighbor search.</p>
+<p >The computational method Smoothed Particle Hydrodynamics is an expedient method for solving hydrodynamic equations and is in combination with a method for self-gravity applicable for astrophysical simulations. Since computationally expensive, appropriate methods and technologies need to be utilized. Especially parallelization is a promising approach.</p>
+<p >Thus, this work aims to describe and implement a multi-GPU Smoothed Particle Hydrodynamics code with self-gravity via the Barnes-Hut method using CUDA-aware MPI targeting GPU cluster. The Barnes-Hut method is an approximative N-body tree method subdividing the simulation domain hierarchically and approximating the potential of a distant group using a multipole expansion of the potential which reduces the overall complexity of the gravitational force computation. While the parallelization for shared memory systems is relatively straightforward, many challenges and problems arise for distributed memory parallelization.</p>
+<p >The approach presented here is based on the parallelization of the tree as constructed for the Barnes-Hut method. Every process' local tree contains the particles assigned to this process and in addition nodes identical for all processes forming a common coarse tree. This shared part of the tree enables processes to gain knowledge about the local trees on the other processes. Moreover, the tree constructed in this way permit the introduction of space-filling-curves which themselves are basis for an efficient domain decomposition and load-balancing. In addition, the parallel tree facilitates the determination of communication patterns which are necessary for calculating the forces arising from the Barnes-Hut method and <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a>. Particle exchange via message passing is necessary since not all particles are accessible on all processes as the target architecture are distributed memory systems. Besides, this thesis investigates efficient GPU implementations of <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> and the Barnes-Hut algorithm including the gravitational force computation and fixed-radius near neighbor search.</p>
 <hr  />
-<p ><b>High Performance Computing Smooth(ed) <a class="el" href="class_particle.html">Particle</a> Hydrodynamics</b></p>
+<p ><b>High Performance Computing Smooth(ed) Particle Hydrodynamics</b></p>
 <p >The successor of <a href="https://github.com/christophmschaefer/miluphcuda">miluphcuda</a> targeting GPU cluster via CUDA aware MPI.</p>
 <hr  />
 <p >This repository implements a <b>multi-GPU <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> &amp; N-body (via Barnes-Hut) algorithm using C++11 and CUDA-aware MPI</b> by combining already proven parallelization strategies and available implementations</p>
@@ -129,7 +129,7 @@ About</h1>
 <li>for a <b>multi-CPU implementation</b> (self-gravity via Barnes-Hut only) refer to <a href="https://github.com/jammartin/ParaLoBstar">jammartin/ParaLoBstar</a></li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md37"></a>
+<h2><a class="anchor" id="autotoc_md12"></a>
 Parallelization/Implementation</h2>
 <ul>
 <li>Parallelization embraces both<ul>
@@ -209,7 +209,7 @@ Parallelization/Implementation</h2>
 </ul>
 <p >However, as the following suggests, the simulation differs for single and multi-node execution, whereas multi-node execution requires more and more sophisticated functionalities to ensure the correctness of the algorithms.</p>
 <p ><img src="documents/figures/right-hand-side.png" alt="right-hand-side" width="100%" class="inline"/></p>
-<h2><a class="anchor" id="autotoc_md38"></a>
+<h2><a class="anchor" id="autotoc_md13"></a>
 Prerequisites/Dependencies</h2>
 <p >For more information and instructions refer to <a class="el" href="md_documents__prerequisites.html">Prerequisites.md</a></p>
 <table class="markdownTable">
@@ -237,7 +237,7 @@ Prerequisites/Dependencies</h2>
 <ul>
 <li>in general there is no need for the usage of the GNU compiler and OpenMPI as MPI implementation, as long as a proper C++ compiler as well as MPI implementation (CUDA-aware) are available and corresponding changes in the Makefile are done</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md39"></a>
+<h2><a class="anchor" id="autotoc_md14"></a>
 Usage</h2>
 <ul>
 <li>you need to provide an appropriate H5 file as initial (particle) distribution<ul>
@@ -459,7 +459,7 @@ Usage</h2>
 <div class="line">  -f, --input-file arg          File name (default: -)</div>
 <div class="line">  -v, --verbosity arg           Verbosity level (default: 0)</div>
 <div class="line">  -h, --help                    Show this help</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md40"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md15"></a>
 Samples/Validation</h2>
 <p >The code validation comprises the correctness of dispatched simulation on one GPU and multiple GPUs, whereas identical simulation on one and multiple GPUs are not mandatorily bitwise-identical. By suitable choice of compiler flags and in dependence of the used architecture this is in principle attainable. However, this is generally not useful to apply for performance reasons and therefore at this point not presupposed. Amongst others, three test cases were used for validating the implementation:</p>
 <ul>
@@ -498,8 +498,8 @@ Samples/Validation</h2>
 </div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
-    milupHPC  - MilupHPC<br />
-    Generated on Thu Jun 23 2022 16:11:21 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    milupHPC  - milupHPC<br />
+    Generated on Wed Aug 31 2022 12:16:54 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
   </small></address>
 </body>
 <footer>

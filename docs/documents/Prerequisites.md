@@ -18,7 +18,12 @@ _____
 
 ## Installing/Building the dependencies
 
-### OpenMPI
+### MPI implementation
+
+> Multiple MPI implementations exist and can be used to execute milupHPC. However, the code was primarily tested with OpenMPI >= 4.0.
+
+#### OpenMPI
+
 
 | library         | licence           | usage             | link               |
 | --------------- | ----------------- | ----------------- | ------------------ |
@@ -29,9 +34,10 @@ see also [MPI_Versions.md](MPI_Versions.md)
 
 * if either MPI is not available or MPI is not CUDA-aware
 	* e.g. via `ompi_info -a | grep "\-with\-cuda"` 
-* build
+* build, see e.g.
 	* [Building Open MPI](https://www.open-mpi.org/faq/?category=building)
 	* [Building CUDA-aware Open MPI](https://www.open-mpi.org/faq/?category=buildcuda)
+	* [UCX OpenMPI installation](https://github.com/openucx/ucx/wiki/OpenMPI-and-OpenSHMEM-installation-with-UCX)
 
 	
 ### Boost
@@ -103,6 +109,7 @@ $ make install
 ### HDF5
 
 | library         | licence           | usage             | link               |
+| --------------- | ----------------- | ----------------- | ------------------ |
 | HDF5            | HDF5 License (BSD-Style) | parallel HDF5 for I/O operations | [hdf5group.org](https://www.hdfgroup.org/solutions/hdf5/) |
 
 * refer to [realease_docs](https://github.com/HDFGroup/hdf5/tree/develop/release_docs) and build parallel

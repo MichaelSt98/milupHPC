@@ -683,12 +683,7 @@ RECURSIVE              = YES
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 # Note that relative paths are relative to directory from which doxygen is run.
 
-EXCLUDE                = binac/* \
-                         include/utils/cxxopts.h \
-                         doc/* \
-                         documents/* \
-                         resources/* \
-                         testing/* \
+EXCLUDE                =  
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or
 # directories that are symbolic links (a Unix file system feature) are excluded
@@ -702,7 +697,21 @@ EXCLUDE_SYMLINKS       = NO
 # against the file with absolute path, so to exclude all test directories
 # for example use the pattern */test/*
 
-EXCLUDE_PATTERNS       =
+EXCLUDE_PATTERNS       = */cluster/* 
+EXCLUDE_PATTERNS      += */doc/DoxygenFiles/* 
+EXCLUDE_PATTERNS      += */resources/* 
+EXCLUDE_PATTERNS      += */testing/* 
+EXCLUDE_PATTERNS      += *cxxopts.h 
+EXCLUDE_PATTERNS      += */H5Renderer/* 
+EXCLUDE_PATTERNS      += *vector3.h
+EXCLUDE_PATTERNS      += */config/*
+EXCLUDE_PATTERNS      += */debug/*
+EXCLUDE_PATTERNS      += */highfive_testing/*
+EXCLUDE_PATTERNS      += */postprocessing/*
+EXCLUDE_PATTERNS      += */testcases/*
+EXCLUDE_PATTERNS      += */utilities/*
+EXCLUDE_PATTERNS      += */movies/*
+EXCLUDE_PATTERNS      += */images/*
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names
 # (namespaces, classes, functions, etc.) that should be excluded from the
@@ -736,7 +745,8 @@ EXAMPLE_RECURSIVE      = NO
 # directories that contain image that are included in the documentation (see
 # the \image command).
 
-IMAGE_PATH             =
+IMAGE_PATH             = documents/figures/ \
+			 images/ \
 
 # The INPUT_FILTER tag can be used to specify a program that doxygen should
 # invoke to filter for each input file. Doxygen will invoke the filter program

@@ -4,7 +4,7 @@
 <area shape="rect" id="node3" href="$tree_8cuh.html" title="Tree related classes, kernels and functions." alt="" coords="249,184,319,211"/>
 <area shape="rect" id="node7" href="$cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers." alt="" coords="507,423,618,449"/>
 <area shape="rect" id="node8" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="506,497,609,524"/>
-<area shape="rect" id="node14" href="$include_2utils_2_logger_8h.html" title="C++ style logger." alt="" coords="744,423,851,449"/>
+<area shape="rect" id="node14" href="$logger_8h.html" title="C++ style logger." alt="" coords="744,423,851,449"/>
 <area shape="rect" id="node18" title=" " alt="" coords="795,184,899,211"/>
 <area shape="rect" id="node4" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="407,333,532,375"/>
 <area shape="rect" id="node5" title=" " alt="" coords="412,572,484,599"/>
@@ -15,6 +15,6 @@
 <area shape="rect" id="node13" title=" " alt="" coords="144,259,205,285"/>
 <area shape="rect" id="node9" title=" " alt="" coords="531,572,584,599"/>
 <area shape="rect" id="node15" title=" " alt="" coords="861,497,915,524"/>
-<area shape="rect" id="node16" href="$include_2utils_2_color_8h.html" title=" " alt="" coords="685,497,745,524"/>
+<area shape="rect" id="node16" href="$color_8h.html" title=" " alt="" coords="685,497,745,524"/>
 <area shape="rect" id="node17" title=" " alt="" coords="769,497,836,524"/>
 </map>

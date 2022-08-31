@@ -19,9 +19,9 @@
 <area shape="rect" id="node14" href="$helper_8cuh.html" title=" " alt="" coords="1147,408,1229,435"/>
 <area shape="rect" id="node20" title=" " alt="" coords="1406,408,1461,435"/>
 <area shape="rect" id="node15" title=" " alt="" coords="1053,483,1157,509"/>
-<area shape="rect" id="node16" href="$include_2utils_2_logger_8h.html" title="C++ style logger." alt="" coords="1487,557,1582,584"/>
+<area shape="rect" id="node16" href="$logger_8h.html" title="C++ style logger." alt="" coords="1487,557,1582,584"/>
 <area shape="rect" id="node17" title=" " alt="" coords="1570,632,1625,659"/>
-<area shape="rect" id="node18" href="$include_2utils_2_color_8h.html" title=" " alt="" coords="1394,632,1454,659"/>
+<area shape="rect" id="node18" href="$color_8h.html" title=" " alt="" coords="1394,632,1454,659"/>
 <area shape="rect" id="node19" title=" " alt="" coords="1479,632,1545,659"/>
 <area shape="rect" id="node22" title=" " alt="" coords="917,483,979,509"/>
 <area shape="rect" id="node24" href="$linalg_8cuh.html" title="Linear algebra CUDA kernels and device functions." alt="" coords="144,408,296,435"/>

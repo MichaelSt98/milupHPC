@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ycomp_0',['yComp',['../class_particle.html#aa2e04f13e8835c8e518b5c0025234991',1,'Particle']]]
+  ['zerodomainlistnodes_0',['zeroDomainListNodes',['../namespace_sub_domain_key_tree_n_s_1_1_kernel.html#afb9ced706615ea5c4a49282b84b5b741',1,'SubDomainKeyTreeNS::Kernel::zeroDomainListNodes()'],['../namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a2a4bc3d5c1b490ad93743f8f679dabf8',1,'SubDomainKeyTreeNS::Kernel::Launch::zeroDomainListNodes()']]]
 ];

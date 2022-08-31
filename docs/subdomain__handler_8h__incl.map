@@ -13,9 +13,9 @@
 <area shape="rect" id="node9" title=" " alt="" coords="978,483,1047,509"/>
 <area shape="rect" id="node11" href="$helper_8cuh.html" title=" " alt="" coords="417,244,499,271"/>
 <area shape="rect" id="node17" title=" " alt="" coords="339,244,393,271"/>
-<area shape="rect" id="node13" href="$include_2utils_2_logger_8h.html" title="C++ style logger." alt="" coords="67,408,161,435"/>
+<area shape="rect" id="node13" href="$logger_8h.html" title="C++ style logger." alt="" coords="67,408,161,435"/>
 <area shape="rect" id="node14" title=" " alt="" coords="5,483,60,509"/>
-<area shape="rect" id="node15" href="$include_2utils_2_color_8h.html" title=" " alt="" coords="84,483,144,509"/>
+<area shape="rect" id="node15" href="$color_8h.html" title=" " alt="" coords="84,483,144,509"/>
 <area shape="rect" id="node16" title=" " alt="" coords="169,483,235,509"/>
 <area shape="rect" id="node19" href="$particles_8cuh.html" title="Particle struct as Structure of arrays both instantiable on host and device." alt="" coords="955,326,1063,353"/>
 <area shape="rect" id="node20" title=" " alt="" coords="1053,408,1111,435"/>

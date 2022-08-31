@@ -113,7 +113,7 @@ $(function() {
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#include &lt;highfive/H5DataSet.hpp&gt;</span></div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#include &lt;highfive/H5DataSpace.hpp&gt;</span></div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &quot;<a class="code" href="include_2utils_2_logger_8h.html">logger.h</a>&quot;</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &quot;<a class="code" href="logger_8h.html">logger.h</a>&quot;</span></div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="namespace_profiler_ids.html">   27</a></span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_profiler_ids.html">ProfilerIds</a> {</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
@@ -239,7 +239,7 @@ $(function() {
 <div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    }</div>
 <div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span> </div>
 <div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno"><a class="line" href="class_h5_profiler.html#ae68abdc532941ad9cde82fee6534c9aa">  202</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_h5_profiler.html#ae68abdc532941ad9cde82fee6534c9aa">value2file</a>(<span class="keyword">const</span> std::string&amp; path, T <a class="code hl_function" href="namespacecxxopts.html#a6b58e451713ebbf12866c1cd8e0a66ab">value</a>) {</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno"><a class="line" href="class_h5_profiler.html#ae68abdc532941ad9cde82fee6534c9aa">  202</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_h5_profiler.html#ae68abdc532941ad9cde82fee6534c9aa">value2file</a>(<span class="keyword">const</span> std::string&amp; path, T value) {</div>
 <div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span> </div>
 <div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>        <span class="keywordflow">if</span> (!<a class="code hl_variable" href="class_h5_profiler.html#a105ad93206a69480d0ed1a2b093e56e9">disabled</a>) {</div>
 <div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>            <span class="keywordflow">if</span> (<a class="code hl_variable" href="class_h5_profiler.html#ad1d50fefc777a9c9f7bbe3189e58adcb">currentSteps</a>[path] &gt;= <a class="code hl_variable" href="class_h5_profiler.html#a420bfa3880e1ff0fc50cdf37ea0f1280">totalSteps</a>[path]) {</div>
@@ -247,7 +247,7 @@ $(function() {
 <div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>                <span class="comment">//Logger(INFO) &lt;&lt; &quot;resizing: &quot; &lt;&lt; totalSteps[path];</span></div>
 <div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>                <a class="code hl_variable" href="class_h5_profiler.html#ac63323c14848cbeda79bb5fdfef4b17a">dataSets</a>[path].resize({std::size_t(<a class="code hl_variable" href="class_h5_profiler.html#a420bfa3880e1ff0fc50cdf37ea0f1280">totalSteps</a>[path]), std::size_t(<a class="code hl_variable" href="class_h5_profiler.html#a77acb2019abca04ae4ca03ecd064d606">numProcs</a>)});</div>
 <div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>            }</div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>            <a class="code hl_variable" href="class_h5_profiler.html#ac63323c14848cbeda79bb5fdfef4b17a">dataSets</a>[path].select({std::size_t(<a class="code hl_variable" href="class_h5_profiler.html#ad1d50fefc777a9c9f7bbe3189e58adcb">currentSteps</a>[path]), std::size_t(<a class="code hl_variable" href="class_h5_profiler.html#a7a4d20aadadf4bf6e2cc4c66784ee5d4">myRank</a>)}, {1, 1}).write(<a class="code hl_function" href="namespacecxxopts.html#a6b58e451713ebbf12866c1cd8e0a66ab">value</a>);</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>            <a class="code hl_variable" href="class_h5_profiler.html#ac63323c14848cbeda79bb5fdfef4b17a">dataSets</a>[path].select({std::size_t(<a class="code hl_variable" href="class_h5_profiler.html#ad1d50fefc777a9c9f7bbe3189e58adcb">currentSteps</a>[path]), std::size_t(<a class="code hl_variable" href="class_h5_profiler.html#a7a4d20aadadf4bf6e2cc4c66784ee5d4">myRank</a>)}, {1, 1}).write(value);</div>
 <div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>        }</div>
 <div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>        <a class="code hl_variable" href="class_h5_profiler.html#ad1d50fefc777a9c9f7bbe3189e58adcb">currentSteps</a>[path] += 1;</div>
 <div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>    }</div>
@@ -344,7 +344,7 @@ $(function() {
 <div class="ttc" id="aclass_tree_html"><div class="ttname"><a href="class_tree.html">Tree</a></div><div class="ttdoc">Tree class.</div><div class="ttdef"><b>Definition:</b> <a href="tree_8cuh_source.html#l00140">tree.cuh:140</a></div></div>
 <div class="ttc" id="aclassdensity_html"><div class="ttname"><a href="classdensity.html">density</a></div><div class="ttdef"><b>Definition:</b> <a href="density_8cuh_source.html#l00019">density.cuh:19</a></div></div>
 <div class="ttc" id="aclasspressure_html"><div class="ttname"><a href="classpressure.html">pressure</a></div><div class="ttdef"><b>Definition:</b> <a href="pressure_8cuh_source.html#l00020">pressure.cuh:20</a></div></div>
-<div class="ttc" id="ainclude_2utils_2_logger_8h_html"><div class="ttname"><a href="include_2utils_2_logger_8h.html">logger.h</a></div><div class="ttdoc">C++ style logger.</div></div>
+<div class="ttc" id="alogger_8h_html"><div class="ttname"><a href="logger_8h.html">logger.h</a></div><div class="ttdoc">C++ style logger.</div></div>
 <div class="ttc" id="anamespace_gravity_html"><div class="ttname"><a href="namespace_gravity.html">Gravity</a></div><div class="ttdoc">Gravity related kernels/functions.</div><div class="ttdef"><b>Definition:</b> <a href="gravity_8cuh_source.html#l00023">gravity.cuh:23</a></div></div>
 <div class="ttc" id="anamespace_profiler_ids_1_1_receive_lengths_html_a2c0e3efb144155016133a7cb17896001"><div class="ttname"><a href="namespace_profiler_ids_1_1_receive_lengths.html#a2c0e3efb144155016133a7cb17896001">ProfilerIds::ReceiveLengths::gravityParticles</a></div><div class="ttdeci">const char *const gravityParticles</div><div class="ttdef"><b>Definition:</b> <a href="h5profiler_8h_source.html#l00042">h5profiler.h:42</a></div></div>
 <div class="ttc" id="anamespace_profiler_ids_1_1_receive_lengths_html_a5c3f01662dbedb40ea3e00a97caa3b11"><div class="ttname"><a href="namespace_profiler_ids_1_1_receive_lengths.html#a5c3f01662dbedb40ea3e00a97caa3b11">ProfilerIds::ReceiveLengths::gravityPseudoParticles</a></div><div class="ttdeci">const char *const gravityPseudoParticles</div><div class="ttdef"><b>Definition:</b> <a href="h5profiler_8h_source.html#l00043">h5profiler.h:43</a></div></div>
@@ -390,12 +390,11 @@ $(function() {
 <div class="ttc" id="anamespace_profiler_ids_html_a75011decb303041b957c240bdd40026d"><div class="ttname"><a href="namespace_profiler_ids.html#a75011decb303041b957c240bdd40026d">ProfilerIds::ranges</a></div><div class="ttdeci">const char *const ranges</div><div class="ttdef"><b>Definition:</b> <a href="h5profiler_8h_source.html#l00031">h5profiler.h:31</a></div></div>
 <div class="ttc" id="anamespace_profiler_ids_html_ad13e3eace63e610c1eb36461ae4c86fd"><div class="ttname"><a href="namespace_profiler_ids.html#ad13e3eace63e610c1eb36461ae4c86fd">ProfilerIds::numParticles</a></div><div class="ttdeci">const char *const numParticles</div><div class="ttdef"><b>Definition:</b> <a href="h5profiler_8h_source.html#l00029">h5profiler.h:29</a></div></div>
 <div class="ttc" id="anamespace_s_p_h_html"><div class="ttname"><a href="namespace_s_p_h.html">SPH</a></div><div class="ttdoc">SPH related functions and kernels.</div><div class="ttdef"><b>Definition:</b> <a href="density_8cuh_source.html#l00023">density.cuh:23</a></div></div>
-<div class="ttc" id="anamespacecxxopts_html_a6b58e451713ebbf12866c1cd8e0a66ab"><div class="ttname"><a href="namespacecxxopts.html#a6b58e451713ebbf12866c1cd8e0a66ab">cxxopts::value</a></div><div class="ttdeci">std::shared_ptr&lt; Value &gt; value()</div><div class="ttdef"><b>Definition:</b> <a href="cxxopts_8h_source.html#l00993">cxxopts.h:993</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
     milupHPC  - include/utils/h5profiler.h Source File<br />
-    Generated on Thu Jun 23 2022 16:11:19 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    Generated on Wed Aug 31 2022 12:16:52 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
   </small></address>
 </body>
 <footer>

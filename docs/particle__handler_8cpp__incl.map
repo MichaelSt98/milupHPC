@@ -4,7 +4,7 @@
 <area shape="rect" id="node3" href="$parameter_8h.html" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="148,393,239,420"/>
 <area shape="rect" id="node6" href="$particles_8cuh.html" title="Particle struct as Structure of arrays both instantiable on host and device." alt="" coords="268,169,364,196"/>
 <area shape="rect" id="node9" href="$cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers." alt="" coords="21,319,132,345"/>
-<area shape="rect" id="node12" href="$include_2utils_2_logger_8h.html" title="C++ style logger." alt="" coords="488,319,582,345"/>
+<area shape="rect" id="node12" href="$logger_8h.html" title="C++ style logger." alt="" coords="488,319,582,345"/>
 <area shape="rect" id="node4" title=" " alt="" coords="167,468,220,495"/>
 <area shape="rect" id="node5" title=" " alt="" coords="270,468,342,495"/>
 <area shape="rect" id="node7" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="76,244,263,271"/>
@@ -12,6 +12,6 @@
 <area shape="rect" id="node11" title=" " alt="" coords="287,244,346,271"/>
 <area shape="rect" id="node8" title=" " alt="" coords="207,319,268,345"/>
 <area shape="rect" id="node13" title=" " alt="" coords="573,393,628,420"/>
-<area shape="rect" id="node14" href="$include_2utils_2_color_8h.html" title=" " alt="" coords="346,393,406,420"/>
+<area shape="rect" id="node14" href="$color_8h.html" title=" " alt="" coords="346,393,406,420"/>
 <area shape="rect" id="node15" title=" " alt="" coords="431,393,498,420"/>
 </map>

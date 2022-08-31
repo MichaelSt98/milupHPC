@@ -100,7 +100,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p><a class="el" href="class_particle.html">Particle(s)</a> class based on SoA (Structur of Arrays).  
+<p>Particle(s) class based on SoA (Structur of Arrays).  
  <a href="class_particles.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Collaboration diagram for Particles:</div>
@@ -257,16 +257,16 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a1aa24ad55b4018884dcf4d8360ad1a8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p ><a class="el" href="class_particle.html">Particle(s)</a> class based on SoA (Structur of Arrays). </p>
+<div class="textblock"><p >Particle(s) class based on SoA (Structur of Arrays). </p>
 <p >Since dynamic memory allocation and access to heap objects in GPUs are usually suboptimal, an array-based data structure is used to store the (pseudo-)particle information as well as the tree and allows for efficient cache alignment. Consequently, array indices are used instead of pointers to constitute the tree out of the tree nodes, whereas "-1" represents a null pointer and "-2" is used for locking nodes. For this purpose an array with the minimum length \( 2^{d} \cdot (M - N) \) with dimensionality \( d \) and number of cells \( (M -N) \) is needed to store the children. The \( i \)-th child of node \( c \) can therefore be accessed via index \( 2^d \cdot c + i \).</p>
 <p >Single-GPU memory layout:</p>
 <div class="image">
-<img src="images/Parallelization/single_gpu_memory_layout.png" alt="" width="40%"/>
+<img src="single_gpu_memory_layout.png" alt="" width="40%"/>
 </div>
 <p >It is further necessary to exchange particle properties between processes and (temporarily) include them into the local tree. <a class="el" href="struct_to.html" title="Specify target: device or host.">To</a> combine this requirement with the data structure described it is necessary to reserve parts of the array or memory for this purpose.</p>
 <p >Multi-GPU memory layout:</p>
 <div class="image">
-<img src="images/Parallelization/multi_gpu_memory_layout.png" alt="" width="40%"/>
+<img src="multi_gpu_memory_layout.png" alt="" width="40%"/>
 </div>
  
 <p class="definition">Definition at line <a class="el" href="particles_8cuh_source.html#l00050">50</a> of file <a class="el" href="particles_8cuh_source.html">particles.cuh</a>.</p>
@@ -1652,7 +1652,7 @@ Public Attributes</h2></td></tr>
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
     milupHPC  - Particles Class Reference<br />
-    Generated on Thu Jun 23 2022 16:11:20 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    Generated on Wed Aug 31 2022 12:16:53 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
   </small></address>
 </body>
 <footer>

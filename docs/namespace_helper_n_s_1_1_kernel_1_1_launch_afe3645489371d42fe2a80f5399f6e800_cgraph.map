@@ -1,6 +1,5 @@
 <map id="HelperNS::Kernel::Launch::resetArray" name="HelperNS::Kernel::Launch::resetArray">
-<area shape="rect" id="node1" title=" " alt="" coords="5,49,180,90"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,23,180,65"/>
 <area shape="rect" id="node2" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="276,5,372,32"/>
 <area shape="rect" id="node3" href="$namespace_helper_n_s_1_1_kernel.html#a3091cbf26f33cb907e2830f8480bfc37" title=" " alt="" coords="228,56,420,83"/>
-<area shape="rect" id="node4" href="$namespacecxxopts.html#a6b58e451713ebbf12866c1cd8e0a66ab" title=" " alt="" coords="468,81,575,108"/>
 </map>

@@ -95,7 +95,7 @@ $(function() {
   <div class="headertitle"><div class="title">milupHPC </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p ><b>High Performance Computing Smooth(ed) <a class="el" href="class_particle.html">Particle</a> Hydrodynamics</b></p>
+<div class="textblock"><p ><b>High Performance Computing Smooth(ed) Particle Hydrodynamics</b></p>
 <p >The successor of <a href="https://github.com/christophmschaefer/miluphcuda">miluphcuda</a> targeting GPU cluster via CUDA aware MPI.</p>
 <hr  />
 <p >This repository implements a <b>multi-GPU <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> &amp; N-body (via Barnes-Hut) algorithm using C++11 and CUDA-aware MPI</b> by combining already proven parallelization strategies and available implementations</p>
@@ -118,19 +118,35 @@ $(function() {
 <hr  />
 <p ><b>See also:</b></p>
 <ul>
+<li><b><a href="https://michaelst98.github.io/milupHPC/">milupHPC API documentation</a></b> (Doxygen)</li>
 <li><a class="el" href="md_documents__prerequisites.html">Prerequisites.md</a>: for instructions to install the dependencies</li>
 <li><a class="el" href="md_documents__compilation.html">Compilation.md</a>: for instructions to compile the code</li>
-<li><a class="el" href="md_documents__getting_started.html">GettingStarted.md</a>: for getting started, including running some test cases</li>
-<li>documentation ...</li>
-<li><a class="el" href="md_postprocessing__r_e_a_d_m_e.html">Postprocessing.md</a>: for information regarding postprocessing</li>
-<li><a class="el" href="md_debug__r_e_a_d_m_e.html">Debugging.md</a>: for information regarding debugging</li>
+<li><a class="el" href="md_documents__getting_started.html">GettingStarted.md</a>: for getting started, including running some test cases<ul>
+<li><a href="testcases/plummer/">Plummer</a> gravity-only test case (README)</li>
+<li><a href="../testcases/sedov/">Taylor-von Neumann-Sedov blast wave</a> SPH-only test case (../testcases/sedov/README.md "README")</li>
 </ul>
+</li>
+<li>Postprocessing.md: for information regarding postprocessing<ul>
+<li><a href="../H5Renderer/">H5Renderer</a> for basic rendering (../H5Renderer/README.md "README")</li>
+</ul>
+</li>
+<li>Debugging.md: for information regarding debugging</li>
+</ul>
+<hr  />
+<p ><b>Repository content:</b></p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Directory   </th><th class="markdownTableHeadNone"> Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a href="src/"><b>src/</b></a> &amp; <a href="include/"><b>include/</b></a>   </td><td class="markdownTableBodyNone">**actual multi-GPU <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> &amp; Barnes-Hut implementation**    </td></tr>
+</table>
+<p>| <b>bin/</b> | binary to be executed, compile via <code>make</code>|  | <b>build/</b> | build files, created by <code>make</code> |  | <a href="debug/"><b>debug/</b></a> | debugging with gdb, lldb, cuda gdb (README) |  | <a href="config/"><b>config/</b></a> | config files for settings (<code>.info</code>) and material parameters (<code>.cfg</code>) (README) |  | <a href="testcases/"><b>testcases/</b></a> | test cases including <a href="testcases/Plummer/">Plummer</a> and <a href="testcases/Sedov/">Sedov</a> (README) | | <a href="cluster/"><b>cluster/</b></a> | information to dispatch simulation on clusters using queing systems (README) |  | <a href="postprocessing/"><b>postprocessing/</b></a> | postprocessing scripts (README) | | <a href="H5Renderer/"><b>H5Renderer/</b></a> | H5Renderer implementation: basic Renderer (2D) (README) | | <a href="utilities/"><b>utilities/</b></a> | utilities e.g. counting lines of code (README) |  | <a href="doc/"><b>doc/</b></a> | create Doxygen documentation (<a class="el" href="md_doc__r_e_a_d_m_e.html">README</a>) |  | <b>documents/</b> | several documents including files for README, instructions, notes, ... |  | <b>images/</b> | images for MD files, ... | </p>
 <hr  />
 <h1><a class="anchor" id="autotoc_md1"></a>
 Parallelization/Implementation</h1>
 <ul>
 <li>Parallelization embraces both<ul>
-<li><b>multi-node</b> parallelization via message-passing and</li>
+<li><b>multi-node</b> parallelization via message-passing (MPI) and</li>
 <li><b>single-node</b> parallelization for **GPU**s via CUDA</li>
 </ul>
 </li>
@@ -141,63 +157,109 @@ Parallelization/Implementation</h1>
  <summary> Implementation details </summary></details>
 </p>
 <p ><details>
-</p><div class="fragment"><div class="line">include/src</div>
-<div class="line">├── cuda_utils <span class="comment">// CUDA utilities</span></div>
-<div class="line">│   ├── cuda_launcher.cuh/cu</div>
-<div class="line">│   ├── cuda_runtime.h/cpp</div>
-<div class="line">│   ├── cuda_utilities.cuh/cu</div>
-<div class="line">│   └── <a class="code hl_class" href="classlinalg.html">linalg</a>.cuh/cu</div>
-<div class="line">├── device_rhs.cuh/cu</div>
-<div class="line">├── <a class="code hl_variable" href="namespace_profiler_ids_1_1_time.html#a143ec296f73cfdcd98551008050b004c">gravity</a> <span class="comment">// Gravity related functions/kernels</span></div>
-<div class="line">│   └── <a class="code hl_variable" href="namespace_profiler_ids_1_1_time.html#a143ec296f73cfdcd98551008050b004c">gravity</a>.cuh/cu</div>
-<div class="line">├── helper.cuh/cu <span class="comment">// buffer class</span></div>
-<div class="line">├── helper_handler.h/cpp <span class="comment">// buffer handling</span></div>
-<div class="line">├── integrator <span class="comment">// Integrator classes, inheriting from miluphpc.h/cpp</span></div>
-<div class="line">│   ├── device_explicit_euler.cuh/cu</div>
-<div class="line">│   ├── device_leapfrog.cuh/cu</div>
-<div class="line">│   ├── device_predictor_corrector_euler.cuh/cu</div>
-<div class="line">│   ├── explicit_euler.h/cpp</div>
-<div class="line">│   ├── leapfrog.h/cpp</div>
-<div class="line">│   └── predictor_corrector_euler.h/cpp</div>
-<div class="line">├── <a class="code hl_function" href="main_8cu.html#a0ddf1224851353fc92bfbff6f499fa97">main</a>.cpp <span class="comment">// main</span></div>
-<div class="line">├── materials <span class="comment">// material handling (for SPH)</span></div>
-<div class="line">│   ├── material.cuh/cu</div>
-<div class="line">│   └── material_handler.cuh/cpp</div>
-<div class="line">├── miluphpc.h/cpp <span class="comment">// base class for dispatching simulation</span></div>
-<div class="line">├── particle_handler.h/cpp <span class="comment">// particle class handling</span></div>
-<div class="line">├── particles.cuh/cu <span class="comment">// particle information/class</span></div>
-<div class="line">├── processing</div>
-<div class="line">│   └── kernels.cuh/cu</div>
-<div class="line">├── simulation_time.cuh/cu <span class="comment">// simulation time class</span></div>
-<div class="line">├── simulation_time_handler.cpp <span class="comment">// simulation time handling</span></div>
-<div class="line">├── <a class="code hl_variable" href="namespace_profiler_ids_1_1_send_lengths.html#aecddf7cb1900d6ce0e97a0dda0d1e71c">sph</a> <span class="comment">// SPH related functions/kernels</span></div>
-<div class="line">│   ├── <a class="code hl_class" href="classdensity.html">density</a>.cuh/cu</div>
-<div class="line">│   ├── internal_forces.cuh/cu</div>
-<div class="line">│   ├── kernel.cuh/cu</div>
-<div class="line">│   ├── kernel_handler.cuh/cu</div>
-<div class="line">│   ├── <a class="code hl_class" href="classpressure.html">pressure</a>.cuh/cu</div>
-<div class="line">│   ├── soundspeed.cuh/cu</div>
-<div class="line">│   ├── <a class="code hl_variable" href="namespace_profiler_ids_1_1_send_lengths.html#aecddf7cb1900d6ce0e97a0dda0d1e71c">sph</a>.cuh/cu</div>
-<div class="line">│   ├── stress.cuh/cu</div>
-<div class="line">│   └── viscosity.cuh/cu</div>
-<div class="line">├── subdomain_key_tree <span class="comment">// Tree related functions/kernels as well as domain decomposition</span></div>
-<div class="line">│   ├── subdomain.cuh/cu</div>
-<div class="line">│   ├── subdomain_handler.h/cpp</div>
-<div class="line">│   ├── <a class="code hl_variable" href="namespace_profiler_ids_1_1_time.html#a6bc176ffe75049b4b899b6a019bf15e9">tree</a>.cuh/cu</div>
-<div class="line">│   └── tree_handler.h/cpp</div>
-<div class="line">└── utils <span class="comment">// C++ utilities</span></div>
-<div class="line">    ├── config_parser.h/cpp</div>
-<div class="line">    ├── h5profiler.h/cpp</div>
-<div class="line">    ├── logger.h/cpp</div>
-<div class="line">    └── timer.h/cpp</div>
-<div class="ttc" id="aclassdensity_html"><div class="ttname"><a href="classdensity.html">density</a></div><div class="ttdef"><b>Definition:</b> <a href="density_8cuh_source.html#l00019">density.cuh:19</a></div></div>
-<div class="ttc" id="aclasslinalg_html"><div class="ttname"><a href="classlinalg.html">linalg</a></div><div class="ttdef"><b>Definition:</b> <a href="linalg_8cuh_source.html#l00016">linalg.cuh:16</a></div></div>
-<div class="ttc" id="aclasspressure_html"><div class="ttname"><a href="classpressure.html">pressure</a></div><div class="ttdef"><b>Definition:</b> <a href="pressure_8cuh_source.html#l00020">pressure.cuh:20</a></div></div>
-<div class="ttc" id="amain_8cu_html_a0ddf1224851353fc92bfbff6f499fa97"><div class="ttname"><a href="main_8cu.html#a0ddf1224851353fc92bfbff6f499fa97">main</a></div><div class="ttdeci">int main(int argc, char *argv[])</div><div class="ttdef"><b>Definition:</b> <a href="main_8cu_source.html#l00006">main.cu:6</a></div></div>
-<div class="ttc" id="anamespace_profiler_ids_1_1_send_lengths_html_aecddf7cb1900d6ce0e97a0dda0d1e71c"><div class="ttname"><a href="namespace_profiler_ids_1_1_send_lengths.html#aecddf7cb1900d6ce0e97a0dda0d1e71c">ProfilerIds::SendLengths::sph</a></div><div class="ttdeci">const char *const sph</div><div class="ttdef"><b>Definition:</b> <a href="h5profiler_8h_source.html#l00037">h5profiler.h:37</a></div></div>
-<div class="ttc" id="anamespace_profiler_ids_1_1_time_html_a143ec296f73cfdcd98551008050b004c"><div class="ttname"><a href="namespace_profiler_ids_1_1_time.html#a143ec296f73cfdcd98551008050b004c">ProfilerIds::Time::gravity</a></div><div class="ttdeci">const char *const gravity</div><div class="ttdef"><b>Definition:</b> <a href="h5profiler_8h_source.html#l00059">h5profiler.h:59</a></div></div>
-<div class="ttc" id="anamespace_profiler_ids_1_1_time_html_a6bc176ffe75049b4b899b6a019bf15e9"><div class="ttname"><a href="namespace_profiler_ids_1_1_time.html#a6bc176ffe75049b4b899b6a019bf15e9">ProfilerIds::Time::tree</a></div><div class="ttdeci">const char *const tree</div><div class="ttdef"><b>Definition:</b> <a href="h5profiler_8h_source.html#l00057">h5profiler.h:57</a></div></div>
-</div><!-- fragment --><p></details>
+</p><table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"> Directory   </th><th class="markdownTableHeadNone">File   </th><th class="markdownTableHeadNone">Description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">**./**   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"><em>include/</em> &amp; <em>src/</em> directory    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"><em><a class="el" href="main_8cpp.html">main.cpp</a></em>   </td><td class="markdownTableBodyNone">main: setting CUDA device, config parsing, loading parameters/settings, integrator selection, start of simulation    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"> *miluphpc.h/cpp*   </td><td class="markdownTableBodyNone"><b>abstract base class</b> defining largest reoccuring part of the simulation (right hand side) and assorted high level functionalities    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"><em><a class="el" href="particles_8cuh.html" title="Particle struct as Structure of arrays both instantiable on host and device.">particles.cuh</a>/cu</em>   </td><td class="markdownTableBodyNone">particle class (SoA) and reduced particle class: particle attributes like mass, position, velocity, density, ...    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"><em><a class="el" href="particle__handler_8h.html">particle_handler.h</a>/cpp</em>   </td><td class="markdownTableBodyNone">handler class for particle class including memory allocation and copy mechanisms    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"><em><a class="el" href="simulation__time_8cuh.html" title="Simulation time related variables and functions instantiable on device and host.">simulation_time.cuh</a>/cu</em>   </td><td class="markdownTableBodyNone">simulation time class: start &amp; end time, time step, ...     </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"> *simulation_time_handler.cpp*   </td><td class="markdownTableBodyNone">handler for simulation time class including memory allocation and copy mechanisms     </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">    </td><td class="markdownTableBodyNone"><em><a class="el" href="device__rhs_8cuh.html">device_rhs.cuh</a>/cu</em>   </td><td class="markdownTableBodyNone">CUDA kernels for resetting arrays/variables (in between right hand sides)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">    </td><td class="markdownTableBodyNone"><em><a class="el" href="helper_8cuh.html">helper.cuh</a>/cu</em>   </td><td class="markdownTableBodyNone">buffer class and sorting algorithms (based on CUDA cub)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">    </td><td class="markdownTableBodyNone"> *helper_handler.h/cpp*   </td><td class="markdownTableBodyNone">buffer class handler including memory allocation and copy mechanisms    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>subdomain_key_tree/</b>   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">(parallel) tree related functionalities including tree construction and domain decomposition     </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">    </td><td class="markdownTableBodyNone"><em><a class="el" href="tree_8cuh.html" title="Tree related classes, kernels and functions.">tree.cuh</a>/cu</em>   </td><td class="markdownTableBodyNone">(local) tree class and CUDA kernels for tree construction    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">    </td><td class="markdownTableBodyNone"><em><a class="el" href="tree__handler_8h.html" title="Tree class handler.">tree_handler.h</a>/cpp</em>   </td><td class="markdownTableBodyNone">(local) tree class handler including memory allocation and kernel execution wrapper     </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"> *subdomain.cuh/cu*   </td><td class="markdownTableBodyNone">(parallel) tree structures including domain decomposition, SFC keys, ...    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"> *subdomain_handler.h/cpp*   </td><td class="markdownTableBodyNone">(parallel) tree handling including memory allocation and kernel execution     </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>gravity/</b>   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">gravity related functionalities according to the <b>Barnes-Hut</b> method     </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">    </td><td class="markdownTableBodyNone"><em><a class="el" href="gravity_8cuh.html" title="Gravitational force computation functions and CUDA kernels.">gravity.cuh</a>/cu</em>   </td><td class="markdownTableBodyNone">gravity related CUDA kernels according to the Barnes-Hut method    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>sph/</b>   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"> Smoothed Particle Hydrodynamics (<a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a>) related functionalities    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"> *kernel.cuh/cu*   </td><td class="markdownTableBodyNone"><a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> smoothing kernels    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"><em><a class="el" href="kernel__handler_8cuh.html">kernel_handler.cuh</a>/cu</em>   </td><td class="markdownTableBodyNone"><a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> smoothing kernels wrapper    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"> *sph.cuh/cu*   </td><td class="markdownTableBodyNone">fixed radius near neighbor search (FRNN) and multi-node <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">    </td><td class="markdownTableBodyNone"><em><a class="el" href="density_8cuh.html" title="SPH density calculation.">density.cuh</a>/cu</em>   </td><td class="markdownTableBodyNone"><a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> density    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"> *pressure.cuh/cu*   </td><td class="markdownTableBodyNone"><a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> pressure    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">    </td><td class="markdownTableBodyNone"><em><a class="el" href="soundspeed_8cuh.html" title="Calculating and initializing the speed of sound in dependence of the used equation of state.">soundspeed.cuh</a>/cu</em>   </td><td class="markdownTableBodyNone"><a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> speed of sound    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"> *internal_forces.cuh/cu*   </td><td class="markdownTableBodyNone"><a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> internal forces    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"> *stress.cuh/cu*   </td><td class="markdownTableBodyNone"><a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> stress (not fully implemented yet)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"> *viscosity.cuh/cu*   </td><td class="markdownTableBodyNone"><a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a> viscosity (not fully implemented yet)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>materials/</b>   </td><td class="markdownTableBodyNone">    </td><td class="markdownTableBodyNone">material attributes (as needed for <a class="el" href="namespace_s_p_h.html" title="SPH related functions and kernels.">SPH</a>)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">    </td><td class="markdownTableBodyNone"><em><a class="el" href="material_8cuh.html" title="Material parameters and settings.">material.cuh</a>/cu</em>   </td><td class="markdownTableBodyNone">material attributes class    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">    </td><td class="markdownTableBodyNone"><em>material_handler.cuh/cpp</em>   </td><td class="markdownTableBodyNone">material attributes handler class including loading from *.cfg* file    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>integrator/</b>   </td><td class="markdownTableBodyNone">    </td><td class="markdownTableBodyNone"><b>child classes for miluphpc</b> implementing <code><a class="el" href="namespace_profiler_ids_1_1_time.html#adbe0ef0106f04388430449d555dd1655">integrate()</a></code>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">    </td><td class="markdownTableBodyNone"><em><a class="el" href="device__explicit__euler_8cuh.html" title="Device functions and kernels for the explicit euler integrator.">device_explicit_euler.cuh</a>/cu</em>   </td><td class="markdownTableBodyNone">explicit Euler integrator device implementations    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"> *explicit_euler.h/cpp*   </td><td class="markdownTableBodyNone">explicit Euler integrator logic and flow    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"> *device_leapfrog.cuh/cu*   </td><td class="markdownTableBodyNone">leapfrog integrator device implementations    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"> *leapfrog.h/cpp*   </td><td class="markdownTableBodyNone">leapforg integrator logic and flow    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"> *device_predictor_corrector_euler.cuh/cu*   </td><td class="markdownTableBodyNone">predictor-corrector Euler integrator device implementations    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"> *predictor_corrector_euler.h/cpp*   </td><td class="markdownTableBodyNone">predictor-corrector Euler integrator logic and flow    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>processing/</b>   </td><td class="markdownTableBodyNone">    </td><td class="markdownTableBodyNone">removing particles that moved to far from simulation center, ...    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">    </td><td class="markdownTableBodyNone"><em><a class="el" href="kernels_8cuh.html" title="...">kernels.cuh</a>/cu</em>   </td><td class="markdownTableBodyNone">removing particles that moved to far from simulation center based on a sphere/cuboid    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>utils/</b>   </td><td class="markdownTableBodyNone">    </td><td class="markdownTableBodyNone">C++ utilites like config parsing, logging, profiling, timing, ...    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">    </td><td class="markdownTableBodyNone"><em><a class="el" href="config__parser_8h.html" title="Config parser.">config_parser.h</a>/cpp</em>   </td><td class="markdownTableBodyNone">config parser based on <em>cxxopts</em>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"><em><a class="el" href="h5profiler_8h.html" title="profiler based on (parallel) HDF5">h5profiler.h</a>/cpp</em>   </td><td class="markdownTableBodyNone"> HDF5 profiler based on <em>HighFive</em>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"> *logger.h/cpp*   </td><td class="markdownTableBodyNone"><a class="el" href="class_logger.html" title="Logger class.">Logger</a> class and functionalities (taking MPI ranks into account)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"> *timer.h/cpp*   </td><td class="markdownTableBodyNone"> timing events based on MPI timer    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><b>cuda_utils/</b>   </td><td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone">CUDA utilities including wrappers, execution policy and math kernels    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"><em><a class="el" href="cuda__launcher_8cuh.html" title="CUDA Kernel wrapper execution.">cuda_launcher.cuh</a>/cu</em>   </td><td class="markdownTableBodyNone">CUDA <a class="el" href="namespace_kernel.html">Kernel</a> wrapper and execution policy    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">    </td><td class="markdownTableBodyNone"><em><a class="el" href="cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers.">cuda_runtime.h</a>/cpp</em>   </td><td class="markdownTableBodyNone">thin CUDA API wrapper    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"><em><a class="el" href="cuda__utilities_8cuh.html" title="CUDA utilities.">cuda_utilities.cuh</a>/cu</em>   </td><td class="markdownTableBodyNone">utilities for CUDA including simple kernels, assertions, ...    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"></td><td class="markdownTableBodyNone"><em><a class="el" href="linalg_8cuh.html" title="Linear algebra CUDA kernels and device functions.">linalg.cuh</a>/cu</em>   </td><td class="markdownTableBodyNone">linear algebra CUDA kernels   </td></tr>
+</table>
+<p></details>
 </p>
 <p ><details>
 The actual implementation and dispatching of the simulation includes</details>
@@ -550,6 +612,7 @@ Samples/Validation</h1>
 </p>
 <p ><details>
 </p><ul>
+<li>refer to <a href="testcases/plummer/">this testcase</a> (README)</li>
 <li>Plummer model: four GPUs with dynamic load balancing every 10th step (top: lebesgue, bottom: hilbert)</li>
 </ul>
 <p></details>
@@ -571,6 +634,7 @@ The Plummer model is a gravity only test case, the distribution is stable over t
 </p>
 <p ><details>
 </p><ul>
+<li>refer to <a href="testcases/sedov/">this testcase</a> (README)</li>
 <li>Sedov explosion: one and two GPUs</li>
 </ul>
 <p></details>
@@ -616,7 +680,7 @@ Contour plot, showing the density at 1.2 x free-fall time.</details>
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
     milupHPC  - milupHPC<br />
-    Generated on Thu Jun 23 2022 16:11:20 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    Generated on Wed Aug 31 2022 12:16:53 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
   </small></address>
 </body>
 <footer>

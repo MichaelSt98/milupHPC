@@ -1,52 +1,52 @@
 <map id="include/parameter.h" name="include/parameter.h">
-<area shape="rect" id="node1" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="3621,5,3755,32"/>
-<area shape="rect" id="node2" href="$cuda__launcher_8cuh.html" title="CUDA Kernel wrapper execution." alt="" coords="2401,259,2535,300"/>
-<area shape="rect" id="node21" href="$cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers." alt="" coords="3371,80,3498,121"/>
-<area shape="rect" id="node23" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="2934,169,3061,211"/>
-<area shape="rect" id="node24" href="$linalg_8cuh.html" title="Linear algebra CUDA kernels and device functions." alt="" coords="862,259,989,300"/>
-<area shape="rect" id="node25" href="$kernel_8cuh.html" title=" " alt="" coords="1163,363,1315,389"/>
-<area shape="rect" id="node27" href="$density_8cuh.html" title="SPH density calculation." alt="" coords="3421,631,3579,657"/>
-<area shape="rect" id="node28" href="$kernel__handler_8cuh.html" title=" " alt="" coords="923,452,1050,493"/>
-<area shape="rect" id="node29" href="$soundspeed_8cuh.html" title="Calculating and initializing the speed of sound in dependence of the used equation of state." alt="" coords="792,549,979,575"/>
-<area shape="rect" id="node30" href="$viscosity_8cuh.html" title="Stress." alt="" coords="2401,459,2567,486"/>
-<area shape="rect" id="node32" href="$helper_8cuh.html" title=" " alt="" coords="3574,266,3701,293"/>
-<area shape="rect" id="node33" href="$gravity_8cuh.html" title="Gravitational force computation functions and CUDA kernels." alt="" coords="4130,549,4302,575"/>
-<area shape="rect" id="node34" href="$helper__handler_8h.html" title=" " alt="" coords="4231,363,4393,389"/>
-<area shape="rect" id="node35" href="$subdomain_8cuh.html" title="Classes and Kernels handling subdomains that distribute the workload among the MPI processes." alt="" coords="3794,452,3953,493"/>
-<area shape="rect" id="node36" href="$sph_8cuh.html" title="SPH related functionalities and kernels." alt="" coords="2913,549,3052,575"/>
-<area shape="rect" id="node37" href="$subdomain__handler_8h.html" title="Classes and Kernels handling subdomains that distribute the workload among the MPI processes." alt="" coords="4457,541,4634,583"/>
-<area shape="rect" id="node39" href="$material_8cuh.html" title="Material parameters and settings." alt="" coords="643,266,837,293"/>
-<area shape="rect" id="node40" href="$material__handler_8h.html" title="Handler for material parameters and settings." alt="" coords="4720,355,4891,397"/>
-<area shape="rect" id="node41" href="$kernels_8cuh.html" title="..." alt="" coords="285,355,416,397"/>
-<area shape="rect" id="node42" href="$pressure_8cuh.html" title="Pressure calculation in dependence of the equation of states." alt="" coords="94,363,261,389"/>
-<area shape="rect" id="node43" href="$particles_8cuh.html" title="Particle struct as Structure of arrays both instantiable on host and device." alt="" coords="1307,266,1448,293"/>
-<area shape="rect" id="node44" href="$particle__handler_8h.html" title=" " alt="" coords="5016,363,5184,389"/>
-<area shape="rect" id="node45" href="$tree_8cuh.html" title="Tree related classes, kernels and functions." alt="" coords="3794,355,3953,397"/>
-<area shape="rect" id="node46" href="$tree__handler_8h.html" title="Tree class handler." alt="" coords="4849,452,5007,493"/>
-<area shape="rect" id="node47" href="$simulation__time_8cuh.html" title="Simulation time related variables and functions instantiable on device and host." alt="" coords="3725,259,3851,300"/>
-<area shape="rect" id="node50" href="$include_2utils_2_logger_8h.html" title="C++ style logger." alt="" coords="4902,177,5042,203"/>
-<area shape="rect" id="node3" href="$cuda__launcher_8cu.html" title=" " alt="" coords="2089,355,2223,397"/>
-<area shape="rect" id="node4" href="$cuda__utilities_8cu.html" title=" " alt="" coords="2930,355,3065,397"/>
-<area shape="rect" id="node5" href="$device__rhs_8cu.html" title=" " alt="" coords="2248,363,2373,389"/>
-<area shape="rect" id="node6" href="$gravity_8cu.html" title=" " alt="" coords="3877,631,4019,657"/>
-<area shape="rect" id="node7" href="$helper_8cu.html" title=" " alt="" coords="3241,363,3337,389"/>
-<area shape="rect" id="node8" href="$device__explicit__euler_8cu.html" title=" " alt="" coords="2398,355,2538,397"/>
-<area shape="rect" id="node9" href="$device__leapfrog_8cu.html" title=" " alt="" coords="2562,355,2702,397"/>
-<area shape="rect" id="node10" href="$device__predictor__corrector__euler_8cu.html" title=" " alt="" coords="1729,348,1869,404"/>
-<area shape="rect" id="node11" href="$material_8cu.html" title=" " alt="" coords="923,363,1088,389"/>
-<area shape="rect" id="node12" href="$particles_8cu.html" title=" " alt="" coords="1491,363,1602,389"/>
-<area shape="rect" id="node13" href="$kernels_8cu.html" title=" " alt="" coords="255,459,425,486"/>
-<area shape="rect" id="node14" href="$simulation__time_8cu.html" title=" " alt="" coords="3514,363,3667,389"/>
-<area shape="rect" id="node15" href="$internal__forces_8cu.html" title=" " alt="" coords="1893,363,2065,389"/>
-<area shape="rect" id="node16" href="$kernel_8cu.html" title=" " alt="" coords="1421,459,1544,486"/>
-<area shape="rect" id="node17" href="$soundspeed_8cu.html" title=" " alt="" coords="1340,631,1497,657"/>
-<area shape="rect" id="node18" href="$sph_8cu.html" title=" " alt="" coords="2895,631,3003,657"/>
-<area shape="rect" id="node19" href="$subdomain_8cu.html" title=" " alt="" coords="3413,541,3577,583"/>
-<area shape="rect" id="node20" href="$tree_8cu.html" title=" " alt="" coords="3173,452,3337,493"/>
-<area shape="rect" id="node22" href="$main_8cu.html" title=" " alt="" coords="3244,169,3415,211"/>
-<area shape="rect" id="node26" href="$miluphpc_8h.html" title="Right&#45;hand&#45;side implementation and CUDA kernel execution via wrapper functions." alt="" coords="4151,705,4281,732"/>
-<area shape="rect" id="node48" href="$simulation__time__handler_8h.html" title="Handler for SimulationTime class." alt="" coords="4417,355,4543,397"/>
-<area shape="rect" id="node49" href="$cuda__runtime_8cpp.html" title=" " alt="" coords="3085,169,3219,211"/>
-<area shape="rect" id="node31" href="$linalg_8cu.html" title=" " alt="" coords="693,363,848,389"/>
-<area shape="rect" id="node38" href="$helper__handler_8cpp.html" title=" " alt="" coords="4236,459,4388,486"/>
+<area shape="rect" id="node1" title="Settings via preprocessor directives, typedefs, constants, structs." alt="" coords="3115,5,3249,32"/>
+<area shape="rect" id="node2" href="$cuda__launcher_8cuh.html" title="CUDA Kernel wrapper execution." alt="" coords="3013,259,3148,300"/>
+<area shape="rect" id="node21" href="$cuda__runtime_8h.html" title="CUDA runtime functionalities and wrappers." alt="" coords="3363,80,3489,121"/>
+<area shape="rect" id="node22" href="$cuda__utilities_8cuh.html" title="CUDA utilities." alt="" coords="3119,169,3245,211"/>
+<area shape="rect" id="node23" href="$linalg_8cuh.html" title="Linear algebra CUDA kernels and device functions." alt="" coords="653,259,780,300"/>
+<area shape="rect" id="node24" href="$kernel_8cuh.html" title=" " alt="" coords="730,363,882,389"/>
+<area shape="rect" id="node26" href="$density_8cuh.html" title="SPH density calculation." alt="" coords="885,645,1042,672"/>
+<area shape="rect" id="node27" href="$kernel__handler_8cuh.html" title=" " alt="" coords="5,459,132,501"/>
+<area shape="rect" id="node28" href="$soundspeed_8cuh.html" title="Calculating and initializing the speed of sound in dependence of the used equation of state." alt="" coords="3519,563,3706,590"/>
+<area shape="rect" id="node29" href="$viscosity_8cuh.html" title="Stress." alt="" coords="921,467,1088,493"/>
+<area shape="rect" id="node31" href="$helper_8cuh.html" title=" " alt="" coords="4232,266,4359,293"/>
+<area shape="rect" id="node32" href="$gravity_8cuh.html" title="Gravitational force computation functions and CUDA kernels." alt="" coords="4283,563,4455,590"/>
+<area shape="rect" id="node33" href="$helper__handler_8h.html" title=" " alt="" coords="4637,363,4799,389"/>
+<area shape="rect" id="node34" href="$subdomain_8cuh.html" title="Classes and Kernels handling subdomains that distribute the workload among the MPI processes." alt="" coords="4251,459,4409,501"/>
+<area shape="rect" id="node35" href="$sph_8cuh.html" title="SPH related functionalities and kernels." alt="" coords="1527,563,1666,590"/>
+<area shape="rect" id="node36" href="$subdomain__handler_8h.html" title="Classes and Kernels handling subdomains that distribute the workload among the MPI processes." alt="" coords="4571,556,4748,597"/>
+<area shape="rect" id="node38" href="$material_8cuh.html" title="Material parameters and settings." alt="" coords="1562,266,1757,293"/>
+<area shape="rect" id="node40" href="$material__handler_8h.html" title="Handler for material parameters and settings." alt="" coords="4925,355,5095,397"/>
+<area shape="rect" id="node41" href="$kernels_8cuh.html" title="..." alt="" coords="1109,355,1239,397"/>
+<area shape="rect" id="node42" href="$pressure_8cuh.html" title="Pressure calculation in dependence of the equation of states." alt="" coords="309,363,476,389"/>
+<area shape="rect" id="node43" href="$particles_8cuh.html" title="Particle struct as Structure of arrays both instantiable on host and device." alt="" coords="1397,266,1538,293"/>
+<area shape="rect" id="node44" href="$particle__handler_8h.html" title=" " alt="" coords="5221,363,5389,389"/>
+<area shape="rect" id="node45" href="$tree_8cuh.html" title="Tree related classes, kernels and functions." alt="" coords="4251,355,4409,397"/>
+<area shape="rect" id="node46" href="$tree__handler_8h.html" title="Tree class handler." alt="" coords="5053,459,5212,501"/>
+<area shape="rect" id="node47" href="$simulation__time_8cuh.html" title="Simulation time related variables and functions instantiable on device and host." alt="" coords="2109,259,2236,300"/>
+<area shape="rect" id="node50" href="$logger_8h.html" title="C++ style logger." alt="" coords="5076,177,5216,203"/>
+<area shape="rect" id="node3" href="$cuda__launcher_8cu.html" title=" " alt="" coords="3101,355,3236,397"/>
+<area shape="rect" id="node4" href="$cuda__utilities_8cu.html" title=" " alt="" coords="3717,355,3852,397"/>
+<area shape="rect" id="node5" href="$device__rhs_8cu.html" title=" " alt="" coords="2325,363,2450,389"/>
+<area shape="rect" id="node6" href="$gravity_8cu.html" title=" " alt="" coords="3995,645,4137,672"/>
+<area shape="rect" id="node7" href="$helper_8cu.html" title=" " alt="" coords="3927,363,4023,389"/>
+<area shape="rect" id="node8" href="$device__explicit__euler_8cu.html" title=" " alt="" coords="2475,355,2615,397"/>
+<area shape="rect" id="node9" href="$device__leapfrog_8cu.html" title=" " alt="" coords="2639,355,2779,397"/>
+<area shape="rect" id="node10" href="$device__predictor__corrector__euler_8cu.html" title=" " alt="" coords="2299,452,2439,508"/>
+<area shape="rect" id="node11" href="$material_8cu.html" title=" " alt="" coords="1906,363,2071,389"/>
+<area shape="rect" id="node12" href="$particles_8cu.html" title=" " alt="" coords="1669,363,1780,389"/>
+<area shape="rect" id="node13" href="$kernels_8cu.html" title=" " alt="" coords="1538,467,1709,493"/>
+<area shape="rect" id="node14" href="$simulation__time_8cu.html" title=" " alt="" coords="2096,363,2249,389"/>
+<area shape="rect" id="node15" href="$internal__forces_8cu.html" title=" " alt="" coords="2905,363,3077,389"/>
+<area shape="rect" id="node16" href="$kernel_8cu.html" title=" " alt="" coords="1218,467,1341,493"/>
+<area shape="rect" id="node17" href="$soundspeed_8cu.html" title=" " alt="" coords="3463,645,3621,672"/>
+<area shape="rect" id="node18" href="$sph_8cu.html" title=" " alt="" coords="2477,645,2585,672"/>
+<area shape="rect" id="node19" href="$subdomain_8cu.html" title=" " alt="" coords="3731,556,3895,597"/>
+<area shape="rect" id="node20" href="$tree_8cu.html" title=" " alt="" coords="3520,459,3684,501"/>
+<area shape="rect" id="node25" href="$miluphpc_8h.html" title="Right&#45;hand&#45;side implementation and CUDA kernel execution via wrapper functions." alt="" coords="3593,720,3723,747"/>
+<area shape="rect" id="node48" href="$simulation__time__handler_8h.html" title="Handler for SimulationTime class." alt="" coords="3363,355,3489,397"/>
+<area shape="rect" id="node49" href="$cuda__runtime_8cpp.html" title=" " alt="" coords="4021,169,4156,211"/>
+<area shape="rect" id="node30" href="$linalg_8cu.html" title=" " alt="" coords="501,363,655,389"/>
+<area shape="rect" id="node37" href="$helper__handler_8cpp.html" title=" " alt="" coords="4597,467,4749,493"/>
+<area shape="rect" id="node39" href="$device__predictor__corrector__euler_8cuh.html" title="Device functions and kernels for the predictor corrector euler (Heun) integrator." alt="" coords="1466,348,1645,404"/>
 </map>

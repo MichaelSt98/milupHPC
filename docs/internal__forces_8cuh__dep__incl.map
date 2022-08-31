@@ -3,7 +3,7 @@
 <area shape="rect" id="node2" href="$miluphpc_8h.html" title="Right&#45;hand&#45;side implementation and CUDA kernel execution via wrapper functions." alt="" coords="254,95,385,121"/>
 <area shape="rect" id="node11" href="$internal__forces_8cu.html" title=" " alt="" coords="409,95,581,121"/>
 <area shape="rect" id="node3" href="$explicit__euler_8h.html" title="Explicit Euler integrator." alt="" coords="61,177,183,218"/>
-<area shape="rect" id="node5" href="$src_2main_8cpp.html" title=" " alt="" coords="172,281,269,307"/>
+<area shape="rect" id="node5" href="$main_8cpp.html" title=" " alt="" coords="172,281,269,307"/>
 <area shape="rect" id="node6" href="$leapfrog_8h.html" title="Leapfrog integrator." alt="" coords="259,177,380,218"/>
 <area shape="rect" id="node8" href="$predictor__corrector__euler_8h.html" title="Predictor Corrector Euler integrator." alt="" coords="404,169,539,225"/>
 <area shape="rect" id="node10" href="$miluphpc_8cpp.html" title=" " alt="" coords="563,184,684,211"/>

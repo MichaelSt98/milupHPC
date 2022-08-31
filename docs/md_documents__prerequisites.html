@@ -121,10 +121,15 @@ $(function() {
 <li>in general there is no need for the usage of the GNU compiler and OpenMPI as MPI implementation, as long as a proper C++ compiler as well as MPI implementation (CUDA-aware) are available and corresponding changes in the Makefile are done</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md53"></a>
+<h1><a class="anchor" id="autotoc_md32"></a>
 Installing/Building the dependencies</h1>
-<h2><a class="anchor" id="autotoc_md54"></a>
-OpenMPI</h2>
+<h2><a class="anchor" id="autotoc_md33"></a>
+MPI implementation</h2>
+<blockquote class="doxtable">
+<p >&zwj;Multiple MPI implementations exist and can be used to execute milupHPC. However, the code was primarily tested with OpenMPI &gt;= 4.0. </p>
+</blockquote>
+<h3><a class="anchor" id="autotoc_md34"></a>
+OpenMPI</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">library   </th><th class="markdownTableHeadNone">licence   </th><th class="markdownTableHeadNone">usage   </th><th class="markdownTableHeadNone">link    </th></tr>
@@ -137,13 +142,14 @@ OpenMPI</h2>
 <li>e.g. via <code>ompi_info -a | grep "\-with\-cuda"</code></li>
 </ul>
 </li>
-<li>build<ul>
+<li>build, see e.g.<ul>
 <li><a href="https://www.open-mpi.org/faq/?category=building">Building Open MPI</a></li>
 <li><a href="https://www.open-mpi.org/faq/?category=buildcuda">Building CUDA-aware Open MPI</a></li>
+<li><a href="https://github.com/openucx/ucx/wiki/OpenMPI-and-OpenSHMEM-installation-with-UCX">UCX OpenMPI installation</a></li>
 </ul>
 </li>
 </ul>
-<h2><a class="anchor" id="autotoc_md55"></a>
+<h2><a class="anchor" id="autotoc_md35"></a>
 Boost</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -162,7 +168,7 @@ Boost</h2>
 <div class="line">$ &gt;&gt; using mpi ;</div>
 <div class="line">$ ./b2</div>
 <div class="line">$ ./b2 install --prefix=/usr</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md56"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md36"></a>
 HighFive</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -173,7 +179,7 @@ HighFive</h2>
 <ul>
 <li><code>git clone <a href="https://github.com/BlueBrain/HighFive.git">https://github.com/BlueBrain/HighFive.git</a></code></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md57"></a>
+<h2><a class="anchor" id="autotoc_md37"></a>
 CUDA cub</h2>
 <ul>
 <li>included in the CUDA Toolkit since CUDA 11.0</li>
@@ -190,7 +196,7 @@ CUDA cub</h2>
 </ul>
 </li>
 </ul>
-<h2><a class="anchor" id="autotoc_md58"></a>
+<h2><a class="anchor" id="autotoc_md38"></a>
 Cxxopts</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -201,7 +207,7 @@ Cxxopts</h2>
 <ul>
 <li><code>git clone <a href="https://github.com/jarro2783/cxxopts.git">https://github.com/jarro2783/cxxopts.git</a></code></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md59"></a>
+<h2><a class="anchor" id="autotoc_md39"></a>
 libconfig</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -217,17 +223,22 @@ libconfig</h2>
 <div class="line">$ ./configure --prefix=/usr</div>
 <div class="line">$ make</div>
 <div class="line">$ make install</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md60"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md40"></a>
 HDF5</h2>
-<p >| library | licence | usage | link | | HDF5 | HDF5 License (BSD-Style) | parallel HDF5 for I/O operations | <a href="https://www.hdfgroup.org/solutions/hdf5/">hdf5group.org</a> |</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">library   </th><th class="markdownTableHeadNone">licence   </th><th class="markdownTableHeadNone">usage   </th><th class="markdownTableHeadNone">link    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">HDF5   </td><td class="markdownTableBodyNone">HDF5 License (BSD-Style)   </td><td class="markdownTableBodyNone">parallel HDF5 for I/O operations   </td><td class="markdownTableBodyNone"><a href="https://www.hdfgroup.org/solutions/hdf5/">hdf5group.org</a>   </td></tr>
+</table>
 <ul>
 <li>refer to <a href="https://github.com/HDFGroup/hdf5/tree/develop/release_docs">realease_docs</a> and build parallel</li>
 </ul>
 <hr  />
-<h2><a class="anchor" id="autotoc_md61"></a>
+<h2><a class="anchor" id="autotoc_md41"></a>
 Postprocessing</h2>
 <p >For postprocessing purposes several scripts are available. Some of those scripts require the following.</p>
-<h3><a class="anchor" id="autotoc_md62"></a>
+<h3><a class="anchor" id="autotoc_md42"></a>
 Python</h3>
 <ul>
 <li>Python: <a href="https://realpython.com/installing-python/">realpython.com/installing-python</a><ul>
@@ -235,7 +246,7 @@ Python</h3>
 </ul>
 </li>
 </ul>
-<h3><a class="anchor" id="autotoc_md63"></a>
+<h3><a class="anchor" id="autotoc_md43"></a>
 ffmpeg</h3>
 <div class="fragment"><div class="line">$ sudo wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz</div>
 <div class="line">$ sudo wget https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz.md5</div>
@@ -249,7 +260,7 @@ ffmpeg</h3>
 <!-- start footer part -->
   <hr class="footer"/><address class="footer"><small>
     milupHPC  - Prerequisites/Dependencies<br />
-    Generated on Thu Jun 23 2022 16:11:20 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
+    Generated on Wed Aug 31 2022 12:16:53 by <a href="http://www.doxygen.org/index.html">Doxygen</a> 1.9.3
   </small></address>
 </body>
 <footer>

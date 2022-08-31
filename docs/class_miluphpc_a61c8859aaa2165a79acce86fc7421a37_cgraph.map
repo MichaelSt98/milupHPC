@@ -1,52 +1,51 @@
 <map id="Miluphpc::Miluphpc" name="Miluphpc::Miluphpc">
-<area shape="rect" id="node1" title="Constructor to set up simulation." alt="" coords="5,1066,140,1092"/>
-<area shape="rect" id="node2" href="$class_simulation_time_handler.html#a403c2134ccf50387921bfec954404408" title=" " alt="" coords="724,1312,881,1353"/>
-<area shape="rect" id="node4" href="$class_material_handler.html#a1f86f41abdfd11915ca9df5f1e422ebd" title=" " alt="" coords="218,1395,367,1422"/>
-<area shape="rect" id="node5" href="$class_miluphpc.html#ae63b74a387e1e6856d4720a539cf66fe" title=" " alt="" coords="968,442,1137,468"/>
-<area shape="rect" id="node6" href="$class_material.html#afa9b3de7853ad1fee086ba6fda287a5f" title=" " alt="" coords="244,1066,341,1092"/>
-<area shape="rect" id="node7" href="$namespacecuda.html#aba186b2049cc77c289e110a45edab71a" title="Allocate device memory." alt="" coords="1276,427,1372,454"/>
-<area shape="rect" id="node8" href="$class_miluphpc.html#acea73427c5956aa537f540e335501ca4" title="Determine amount of particles (numParticles and numParticlesLocal) from initial file/particle distrib..." alt="" coords="188,1268,397,1295"/>
-<area shape="rect" id="node9" href="$class_miluphpc.html#aba782af276ff4fa28f3cab49c5df7770" title="Prepare the simulation, including." alt="" coords="199,914,386,940"/>
-<area shape="rect" id="node3" href="$namespacecuda.html#a87a2b33c156d39ce0a77f845e5988724" title="Copy between host and device and vice&#45;versa." alt="" coords="1567,1142,1653,1168"/>
-<area shape="rect" id="node10" href="$namespacecuda_1_1math.html#aa01779064aaf96a9607a87bd52921410" title="Absolute value of a floating point value." alt="" coords="1783,48,1899,75"/>
-<area shape="rect" id="node11" href="$namespace_tree_n_s_1_1_kernel_1_1_launch.html#acb1fcee1becc94a7cf945401be17109e" title="Wrapper for TreeNS::Kernel::computeBoundingBox()" alt="" coords="1243,746,1405,788"/>
-<area shape="rect" id="node16" href="$class_tree_handler.html#aa8aa0fa3c3d4794117e50a107d0a986b" title="Copy (parts of the) tree instance(s) between host and device." alt="" coords="1259,914,1389,940"/>
-<area shape="rect" id="node17" href="$class_sub_domain_key_tree_handler.html#af210bfeda325eecd70ca0476d1a0eb08" title="Copy (parts of the) SubDomainKeyTree instance(s) between host and device." alt="" coords="961,1016,1145,1057"/>
-<area shape="rect" id="node18" href="$class_particle_handler.html#a61c9f7bd8645ed21c24ec32eb62af6b4" title=" " alt="" coords="946,1192,1159,1219"/>
-<area shape="rect" id="node26" href="$class_miluphpc.html#ac0ccadbd0f18c4bbc099fdcfc45cc514" title="Read initial/particle distribution file (in parallel)" alt="" coords="455,1116,651,1143"/>
-<area shape="rect" id="node27" href="$class_miluphpc.html#a5d381afc3f62c196111e6a67cdeeedf5" title="Pre&#45;calculations for updateRangeApproximately." alt="" coords="445,838,661,864"/>
-<area shape="rect" id="node30" href="$class_tree_handler.html#ae39dc296fd959c47cd14549099b3eccd" title="All reduce bounding box(es)/borders (among MPI processes)" alt="" coords="1209,812,1439,839"/>
-<area shape="rect" id="node35" href="$class_miluphpc.html#a500b54af92cc3fd259097603f98ed2c1" title="Load balancing via equidistant ranges." alt="" coords="456,1015,651,1042"/>
-<area shape="rect" id="node36" href="$namespace_s_p_h_1_1_kernel_1_1_launch.html#a4b0b5260f76511d2537cc6be2aca90c0" title="Wrapper for SPH::Kernel::initializeSoundSpeed()." alt="" coords="478,645,629,686"/>
-<area shape="rect" id="node38" href="$class_miluphpc.html#aa09a87d14de5945b7c4d1d58101c8fdb" title="Remove particles in dependence of some criterion." alt="" coords="715,340,891,367"/>
-<area shape="rect" id="node12" href="$namespace_tree_n_s_1_1_kernel.html#a3fc2ba2061d44f078127d7d0461e0bd9" title="Kernel to compute the bounding box/borders of the tree or rather the particles within the tree." alt="" coords="1487,754,1733,780"/>
-<area shape="rect" id="node15" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="1562,427,1658,454"/>
-<area shape="rect" id="node13" href="$namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada" title="Maximum value out of two floating point values." alt="" coords="1781,779,1901,806"/>
-<area shape="rect" id="node14" href="$namespacecuda_1_1math.html#a129d30e886ca3c7cb2c9b209ce208076" title="Minimum value out of two floating point values." alt="" coords="1783,728,1899,755"/>
-<area shape="rect" id="node19" href="$class_particle_handler.html#ae95ceda70ac71c6c8580c36141b498d7" title=" " alt="" coords="1215,1319,1433,1346"/>
-<area shape="rect" id="node20" href="$class_particle_handler.html#a4425121add3fe2827f898bd9c66a91ec" title=" " alt="" coords="1235,1370,1413,1396"/>
-<area shape="rect" id="node21" href="$class_particle_handler.html#a830ecc4ef7b3baa3b3ce774a649c8caa" title=" " alt="" coords="1234,1066,1414,1092"/>
-<area shape="rect" id="node22" href="$class_particle_handler.html#a9e7439bc534ba9547c080a0cbb61dc52" title=" " alt="" coords="1227,1116,1421,1143"/>
-<area shape="rect" id="node23" href="$class_particle_handler.html#a947c937360ce67a080fb3aac137dd243" title=" " alt="" coords="1237,1167,1411,1194"/>
-<area shape="rect" id="node24" href="$class_particle_handler.html#a947e29003b60ef672d1d89901d6d8dec" title=" " alt="" coords="1241,1218,1407,1244"/>
-<area shape="rect" id="node25" href="$class_particle_handler.html#adf649d4c9a70e1a18eef895f36f5c402" title=" " alt="" coords="1227,1268,1421,1295"/>
-<area shape="rect" id="node28" href="$class_miluphpc.html#acf89ebee0c64047d55e91e50fe509a81" title="Update the range in dependence on number of (MPI) processes and aimed particles per process." alt="" coords="723,812,882,839"/>
-<area shape="rect" id="node29" href="$class_miluphpc.html#aeeb5a1aac1048eb56473a3e7ef859de5" title="Calculate bounding boxes/simulation domain." alt="" coords="974,812,1131,839"/>
-<area shape="rect" id="node31" href="$namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a993a0b0edd1c4d9626bf5803afaa9af9" title="Wrapper for SubDomainKeyTreeNS::Kernel::getParticleKeys()." alt="" coords="944,645,1161,686"/>
-<area shape="rect" id="node33" href="$namespace_helper_n_s.html#abf9cda93f63d72f387d768c66ab0b4ab" title=" " alt="" coords="983,492,1122,519"/>
-<area shape="rect" id="node32" href="$namespace_sub_domain_key_tree_n_s_1_1_kernel.html#a2729bc71e6579423cf48f5476ee7cffc" title="Kernel to get all particle keys (and additional information for debugging purposes)." alt="" coords="1241,681,1407,722"/>
-<area shape="rect" id="node34" href="$namespacecuda.html#a9a0da8d4e84b94a6893faafbc8cc6dd9" title="Free device memory." alt="" coords="1284,478,1364,504"/>
-<area shape="rect" id="node37" href="$namespace_s_p_h_1_1_kernel.html#a3c1afc8308eac0063c547efbbf0b34c7" title="Initialize the speed of sound ." alt="" coords="709,645,896,686"/>
-<area shape="rect" id="node39" href="$namespace_helper_n_s_1_1_kernel_1_1_launch.html#a64912388bfe1d1a0727d33f2629c9c7b" title=" " alt="" coords="965,224,1140,265"/>
-<area shape="rect" id="node41" href="$namespace_particles_n_s_1_1_kernel_1_1_launch.html#a8250592e30d4eafc72cdd47b52665c31" title=" " alt="" coords="973,158,1132,200"/>
-<area shape="rect" id="node46" href="$namespace_helper_n_s_1_1_kernel_1_1_launch.html#afe3645489371d42fe2a80f5399f6e800" title=" " alt="" coords="965,93,1140,134"/>
-<area shape="rect" id="node49" href="$namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc" title="Set device memory to a specific value." alt="" coords="1015,340,1091,367"/>
-<area shape="rect" id="node50" href="$namespace_helper_n_s.html#a72f5fb75d9bcf7a00474765e26ee6e30" title=" " alt="" coords="983,391,1123,418"/>
-<area shape="rect" id="node40" href="$namespace_helper_n_s_1_1_kernel.html#a4d969737e930f27906ebfd76c1d56386" title=" " alt="" coords="1229,376,1419,403"/>
-<area shape="rect" id="node42" href="$namespace_particles_n_s_1_1_kernel.html#ae1efd50573097db8dfbf71c507b20d9b" title=" " alt="" coords="1255,158,1393,200"/>
-<area shape="rect" id="node43" href="$namespace_particles_n_s.html#adba2eb6a731efdaee85c602b60417473" title="Check whether particle(s) are within cube from simulation center." alt="" coords="1503,107,1717,134"/>
-<area shape="rect" id="node44" href="$namespace_particles_n_s.html#ad5c18e136fc5e7dc538c852ede7241e0" title="Check whether particle(s) are within sphere from simulation center." alt="" coords="1517,158,1703,200"/>
-<area shape="rect" id="node45" href="$namespacecuda_1_1math.html#a706200a3f1b2445d7fd835c2ac504a11" title="Square root of a floating point value." alt="" coords="1783,166,1900,192"/>
-<area shape="rect" id="node47" href="$namespace_helper_n_s_1_1_kernel.html#a3091cbf26f33cb907e2830f8480bfc37" title=" " alt="" coords="1228,107,1420,134"/>
-<area shape="rect" id="node48" href="$namespacecxxopts.html#a6b58e451713ebbf12866c1cd8e0a66ab" title=" " alt="" coords="1557,56,1663,83"/>
+<area shape="rect" id="node1" title="Constructor to set up simulation." alt="" coords="5,1117,140,1144"/>
+<area shape="rect" id="node2" href="$class_simulation_time_handler.html#a403c2134ccf50387921bfec954404408" title=" " alt="" coords="724,1363,881,1405"/>
+<area shape="rect" id="node4" href="$class_material_handler.html#a1f86f41abdfd11915ca9df5f1e422ebd" title=" " alt="" coords="218,1447,367,1473"/>
+<area shape="rect" id="node5" href="$class_miluphpc.html#ae63b74a387e1e6856d4720a539cf66fe" title=" " alt="" coords="968,493,1137,520"/>
+<area shape="rect" id="node6" href="$class_material.html#afa9b3de7853ad1fee086ba6fda287a5f" title=" " alt="" coords="244,1117,341,1144"/>
+<area shape="rect" id="node7" href="$namespacecuda.html#aba186b2049cc77c289e110a45edab71a" title="Allocate device memory." alt="" coords="1276,443,1372,469"/>
+<area shape="rect" id="node8" href="$class_miluphpc.html#acea73427c5956aa537f540e335501ca4" title="Determine amount of particles (numParticles and numParticlesLocal) from initial file/particle distrib..." alt="" coords="188,1320,397,1347"/>
+<area shape="rect" id="node9" href="$class_miluphpc.html#aba782af276ff4fa28f3cab49c5df7770" title="Prepare the simulation, including." alt="" coords="199,965,386,992"/>
+<area shape="rect" id="node3" href="$namespacecuda.html#a87a2b33c156d39ce0a77f845e5988724" title="Copy between host and device and vice&#45;versa." alt="" coords="1567,1193,1653,1220"/>
+<area shape="rect" id="node10" href="$namespacecuda_1_1math.html#aa01779064aaf96a9607a87bd52921410" title="Absolute value of a floating point value." alt="" coords="1783,341,1899,368"/>
+<area shape="rect" id="node11" href="$namespace_tree_n_s_1_1_kernel_1_1_launch.html#acb1fcee1becc94a7cf945401be17109e" title="Wrapper for TreeNS::Kernel::computeBoundingBox()" alt="" coords="1243,762,1405,803"/>
+<area shape="rect" id="node16" href="$class_tree_handler.html#aa8aa0fa3c3d4794117e50a107d0a986b" title="Copy (parts of the) tree instance(s) between host and device." alt="" coords="1259,965,1389,992"/>
+<area shape="rect" id="node17" href="$class_sub_domain_key_tree_handler.html#af210bfeda325eecd70ca0476d1a0eb08" title="Copy (parts of the) SubDomainKeyTree instance(s) between host and device." alt="" coords="961,1067,1145,1109"/>
+<area shape="rect" id="node18" href="$class_particle_handler.html#a61c9f7bd8645ed21c24ec32eb62af6b4" title=" " alt="" coords="946,1244,1159,1271"/>
+<area shape="rect" id="node26" href="$class_miluphpc.html#ac0ccadbd0f18c4bbc099fdcfc45cc514" title="Read initial/particle distribution file (in parallel)" alt="" coords="455,1168,651,1195"/>
+<area shape="rect" id="node27" href="$class_miluphpc.html#a5d381afc3f62c196111e6a67cdeeedf5" title="Pre&#45;calculations for updateRangeApproximately." alt="" coords="445,889,661,916"/>
+<area shape="rect" id="node30" href="$class_tree_handler.html#ae39dc296fd959c47cd14549099b3eccd" title="All reduce bounding box(es)/borders (among MPI processes)" alt="" coords="1209,845,1439,872"/>
+<area shape="rect" id="node35" href="$class_miluphpc.html#a500b54af92cc3fd259097603f98ed2c1" title="Load balancing via equidistant ranges." alt="" coords="456,1067,651,1093"/>
+<area shape="rect" id="node36" href="$namespace_s_p_h_1_1_kernel_1_1_launch.html#a4b0b5260f76511d2537cc6be2aca90c0" title="Wrapper for SPH::Kernel::initializeSoundSpeed()." alt="" coords="478,595,629,637"/>
+<area shape="rect" id="node38" href="$class_miluphpc.html#aa09a87d14de5945b7c4d1d58101c8fdb" title="Remove particles in dependence of some criterion." alt="" coords="715,291,891,317"/>
+<area shape="rect" id="node12" href="$namespace_tree_n_s_1_1_kernel.html#a3fc2ba2061d44f078127d7d0461e0bd9" title="Kernel to compute the bounding box/borders of the tree or rather the particles within the tree." alt="" coords="1487,769,1733,796"/>
+<area shape="rect" id="node15" href="$namespacecuda.html#ae129f267f2d83118533c78c712265b58" title="CUDA execution wrapper function." alt="" coords="1562,291,1658,317"/>
+<area shape="rect" id="node13" href="$namespacecuda_1_1math.html#ae45b7a0e96687aa98c58a3ee386b2ada" title="Maximum value out of two floating point values." alt="" coords="1781,795,1901,821"/>
+<area shape="rect" id="node14" href="$namespacecuda_1_1math.html#a129d30e886ca3c7cb2c9b209ce208076" title="Minimum value out of two floating point values." alt="" coords="1783,744,1899,771"/>
+<area shape="rect" id="node19" href="$class_particle_handler.html#ae95ceda70ac71c6c8580c36141b498d7" title=" " alt="" coords="1215,1320,1433,1347"/>
+<area shape="rect" id="node20" href="$class_particle_handler.html#a4425121add3fe2827f898bd9c66a91ec" title=" " alt="" coords="1235,1371,1413,1397"/>
+<area shape="rect" id="node21" href="$class_particle_handler.html#a830ecc4ef7b3baa3b3ce774a649c8caa" title=" " alt="" coords="1234,1421,1414,1448"/>
+<area shape="rect" id="node22" href="$class_particle_handler.html#a9e7439bc534ba9547c080a0cbb61dc52" title=" " alt="" coords="1227,1117,1421,1144"/>
+<area shape="rect" id="node23" href="$class_particle_handler.html#a947c937360ce67a080fb3aac137dd243" title=" " alt="" coords="1237,1168,1411,1195"/>
+<area shape="rect" id="node24" href="$class_particle_handler.html#a947e29003b60ef672d1d89901d6d8dec" title=" " alt="" coords="1241,1219,1407,1245"/>
+<area shape="rect" id="node25" href="$class_particle_handler.html#adf649d4c9a70e1a18eef895f36f5c402" title=" " alt="" coords="1227,1269,1421,1296"/>
+<area shape="rect" id="node28" href="$class_miluphpc.html#acf89ebee0c64047d55e91e50fe509a81" title="Update the range in dependence on number of (MPI) processes and aimed particles per process." alt="" coords="723,864,882,891"/>
+<area shape="rect" id="node29" href="$class_miluphpc.html#aeeb5a1aac1048eb56473a3e7ef859de5" title="Calculate bounding boxes/simulation domain." alt="" coords="974,864,1131,891"/>
+<area shape="rect" id="node31" href="$namespace_sub_domain_key_tree_n_s_1_1_kernel_1_1_launch.html#a993a0b0edd1c4d9626bf5803afaa9af9" title="Wrapper for SubDomainKeyTreeNS::Kernel::getParticleKeys()." alt="" coords="944,697,1161,738"/>
+<area shape="rect" id="node33" href="$namespace_helper_n_s.html#abf9cda93f63d72f387d768c66ab0b4ab" title=" " alt="" coords="983,544,1122,571"/>
+<area shape="rect" id="node32" href="$namespace_sub_domain_key_tree_n_s_1_1_kernel.html#a2729bc71e6579423cf48f5476ee7cffc" title="Kernel to get all particle keys (and additional information for debugging purposes)." alt="" coords="1241,697,1407,738"/>
+<area shape="rect" id="node34" href="$namespacecuda.html#a9a0da8d4e84b94a6893faafbc8cc6dd9" title="Free device memory." alt="" coords="1284,493,1364,520"/>
+<area shape="rect" id="node37" href="$namespace_s_p_h_1_1_kernel.html#a3c1afc8308eac0063c547efbbf0b34c7" title="Initialize the speed of sound ." alt="" coords="709,595,896,637"/>
+<area shape="rect" id="node39" href="$namespace_helper_n_s_1_1_kernel_1_1_launch.html#a64912388bfe1d1a0727d33f2629c9c7b" title=" " alt="" coords="965,225,1140,266"/>
+<area shape="rect" id="node41" href="$namespace_particles_n_s_1_1_kernel_1_1_launch.html#a8250592e30d4eafc72cdd47b52665c31" title=" " alt="" coords="973,81,1132,122"/>
+<area shape="rect" id="node46" href="$namespace_helper_n_s_1_1_kernel_1_1_launch.html#afe3645489371d42fe2a80f5399f6e800" title=" " alt="" coords="965,159,1140,201"/>
+<area shape="rect" id="node48" href="$namespacecuda.html#a96edb690f1eb4317fc5a936169735bfc" title="Set device memory to a specific value." alt="" coords="1015,291,1091,317"/>
+<area shape="rect" id="node49" href="$namespace_helper_n_s.html#a72f5fb75d9bcf7a00474765e26ee6e30" title=" " alt="" coords="983,392,1123,419"/>
+<area shape="rect" id="node40" href="$namespace_helper_n_s_1_1_kernel.html#a4d969737e930f27906ebfd76c1d56386" title=" " alt="" coords="1229,291,1419,317"/>
+<area shape="rect" id="node42" href="$namespace_particles_n_s_1_1_kernel.html#ae1efd50573097db8dfbf71c507b20d9b" title=" " alt="" coords="1255,22,1393,63"/>
+<area shape="rect" id="node43" href="$namespace_particles_n_s.html#adba2eb6a731efdaee85c602b60417473" title="Check whether particle(s) are within cube from simulation center." alt="" coords="1503,139,1717,165"/>
+<area shape="rect" id="node44" href="$namespace_particles_n_s.html#ad5c18e136fc5e7dc538c852ede7241e0" title="Check whether particle(s) are within sphere from simulation center." alt="" coords="1517,22,1703,63"/>
+<area shape="rect" id="node45" href="$namespacecuda_1_1math.html#a706200a3f1b2445d7fd835c2ac504a11" title="Square root of a floating point value." alt="" coords="1783,29,1900,56"/>
+<area shape="rect" id="node47" href="$namespace_helper_n_s_1_1_kernel.html#a3091cbf26f33cb907e2830f8480bfc37" title=" " alt="" coords="1228,189,1420,216"/>
 </map>
