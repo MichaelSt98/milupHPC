@@ -4,7 +4,7 @@
 
 * a **submit script** could look like this
 
-```
+```sh
 #!/bin/bash
 #PBS -N N1e6SSG
 #PBS -l nodes=1:ppn=4:gpus=4:exclusive_process
@@ -43,7 +43,7 @@ mpirun --bind-to core --map-by core --report-bindings bin/runner -n 50 -f <input
 * [Slurm documentation](https://slurm.schedmd.com/documentation.html)
 * a **submit script** could look like this
 
-```
+```sh
 #!/bin/bash
 #SBATCH --job-name=<job name>
 #SBATCH --nodes=1
