@@ -39,7 +39,7 @@ The following shows the complete [Makefile](../Makefile).
 <details>
 <summary> Makefile template </summary>
 
-```
+```sh
 #Compiler/Linker
 CXX            := mpic++
 
