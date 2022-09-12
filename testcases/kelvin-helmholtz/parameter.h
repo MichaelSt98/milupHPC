@@ -24,7 +24,7 @@ typedef int idInteger;
 
 #define MAX_LEVEL 21
 
-#define DEBUGGING 0
+#define DEBUGGING 1
 
 /**
  * * `SAFETY_LEVEL 0`: almost no safety measures
@@ -44,6 +44,12 @@ typedef int idInteger;
 
 /// [0]: rectangular (and not necessarily cubic domains), [1]: cubic domains
 #define CUBIC_DOMAINS 1
+
+/** Use periodic boundary conditions (for SPH only simulations)
+ * GRAVITY_SIM must be 0
+ * removeParticles from configuration file is ignored
+*/
+#define PERIODIC_BOUNDARIES 1
 
 /// Simulation with gravitational forces
 #define GRAVITY_SIM 0
@@ -149,6 +155,9 @@ typedef struct SimulationParameters {
     bool removeParticles;
     int removeParticlesCriterion;
     real removeParticlesDimension;
+//#if PERIODIC_BOUNDARIES
+    real periodicBoxLimits[DIM*2]; // [lower, upper]
+//#endif
     int bins;
     bool calculateAngularMomentum;
     bool calculateEnergy;

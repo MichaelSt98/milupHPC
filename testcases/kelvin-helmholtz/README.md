@@ -4,6 +4,31 @@ The [Kelvin-Helmholtz instability](https://en.wikipedia.org/wiki/Kelvin%E2%80%93
 
 This test case is a 2D problem with periodic boundary conditions as described in [McNally et. al. (2012)](https://arxiv.org/abs/1111.1764).
 
+## Quick start
+
+Before you can compile the code appropriately all [prerequisites](../../documents/Prerequisites.md) have to be installed.
+
+Assuming you are in the base directory, i.e. `milupHPC` after cloning the repository.
+
+### Create an initial conditions file
+To create an appropriate initial conditions file, `python3` along with `numpy`, `matplotlib` and `h5py` needs to be installed on your system.
+
+```shell
+$ cd testcases/kelvin-helmholtz
+$ ./generateIC.py -N <number of particles>
+```
+
+### Compile the code
+```shell
+$ cp testcases/kelvin-helmholtz/parameter.h include/.
+$ cp testcases/kelvin-helmholtz/config.info config/.
+$ cp testcases/kelvin-helmholtz/material.cfg config/.
+$ make
+```
+
+### Run the testcase
+
+
 ## Overview
 
 0. check the [prerequisites](../../documents/Prerequisites.md)

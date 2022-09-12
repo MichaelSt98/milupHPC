@@ -209,9 +209,31 @@ int main(int argc, char** argv)
     parameters.smoothingKernelSelection = confP.getVal<int>("smoothingKernel");
     parameters.sphFixedRadiusNNVersion = confP.getVal<int>("sphFixedRadiusNNVersion");
 //#endif
+#if PERIODIC_BOUNDARIES
+    auto periodicBoxLimits = confP.getObj("periodicBoxLimits");
+    parameters.periodicBoxLimits[0] = periodicBoxLimits.getVal<real>("lowerX");
+    parameters.periodicBoxLimits[DIM] = periodicBoxLimits.getVal<real>("upperX");
+#if DIM >= 2
+    parameters.periodicBoxLimits[1] = periodicBoxLimits.getVal<real>("lowerY");
+    parameters.periodicBoxLimits[DIM+1] = periodicBoxLimits.getVal<real>("upperY");
+#if DIM == 3
+    parameters.periodicBoxLimits[2] = periodicBoxLimits.getVal<real>("lowerZ");
+    parameters.periodicBoxLimits[DIM+2] = periodicBoxLimits.getVal<real>("upperZ");
+#endif
+#endif
+#if DEBUGGING
+    std::string periodicBoxStr = "[";
+    for (int i=0; i<2*DIM; i++){
+        periodicBoxStr.append(std::to_string(parameters.periodicBoxLimits[i]));
+        if(i<2*DIM-1) periodicBoxStr.append(", ");
+    }
+    Logger(DEBUG) << "Periodic boundaries within box: " << periodicBoxStr << "]";
+#endif
+#endif
     parameters.removeParticles = confP.getVal<bool>("removeParticles");
     parameters.removeParticlesCriterion = confP.getVal<int>("removeParticlesCriterion");
     parameters.removeParticlesDimension = confP.getVal<real>("removeParticlesDimension");
+
     parameters.numOutputFiles = result["number-output-files"].as<int>();
     parameters.timeKernels = true;
     parameters.loadBalancing = confP.getVal<bool>("loadBalancing");
@@ -314,6 +336,8 @@ int main(int argc, char** argv)
     profiler.createValueDataSet<real>(ProfilerIds::Time::integrate, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::IO, 1);
 
+    //TODO: add profiler for periodic boundaries
+
 
     /// INTEGRATOR SELECTION
     // -----------------------------------------------------------------------------------------------------------------
@@ -336,16 +360,25 @@ int main(int argc, char** argv)
         }
     }
 
-    if (rank == 0) {
+    if (rank == 0) { //TODO: why rank here? Logger should take care of that
         Logger(TRACE) << "---------------STARTING---------------";
     }
 
     Timer timer;
     real timeElapsed;
+
+    // TODO: calculate density before writing ICs to zeroth output file
+    /*
+    // write initial conditions to output file
+    auto time = miluphpc->particles2file(0);
+    timeElapsed = timer.elapsed();
+    Logger(TIME) << "particles2file: " << timeElapsed << " ms";
+    profiler.value2file(ProfilerIds::Time::IO, timeElapsed);*/
+
     /// MAIN LOOP
     // -----------------------------------------------------------------------------------------------------------------
     real t = 0;
-    for (int i_step=0; i_step<parameters.numOutputFiles; i_step++) {
+    for (int i_step=1; i_step<=parameters.numOutputFiles; i_step++) {
 
         //profiler.setStep(i_step);
 

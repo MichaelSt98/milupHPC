@@ -269,8 +269,12 @@ void Miluphpc::prepareSimulation() {
     treeHandler->globalizeBoundingBox(Execution::device);
     treeHandler->copy(To::host);
 
+#if PERIODIC_BOUNDARIES
+
+#endif
+
     if (simulationParameters.loadBalancing) {
-        fixedLoadBalancing();
+        fixedLoadBalancing(); //TODO: necessary?
         dynamicLoadBalancing();
     }
     else {
@@ -2566,6 +2570,7 @@ real Miluphpc::parallel_sph() {
     cuda::copy(&treeHandler->h_toDeleteNode[0], treeHandler->d_index, 1, To::host);
 
 #if DEBUGGING
+#if DIM > 2 //TODO: make work for DIM <= 2 ??
     // debug
     gpuErrorcheck(cudaMemset(buffer->d_integerVal, 0, sizeof(integer)));
     CudaUtils::Kernel::Launch::findDuplicateEntries(&particleHandler->d_x[0],
@@ -2582,6 +2587,7 @@ real Miluphpc::parallel_sph() {
         exit(0);
     }
     //end: debug
+#endif
 #endif
 
     //TreeNS::Kernel::Launch::info(treeHandler->d_tree, particleHandler->d_particles, numParticles, numNodes);

@@ -24,7 +24,7 @@ typedef int idInteger;
 
 #define MAX_LEVEL 21
 
-#define DEBUGGING 0
+#define DEBUGGING 1
 
 /**
  * * `SAFETY_LEVEL 0`: almost no safety measures
@@ -32,10 +32,10 @@ typedef int idInteger;
  * * `SAFETY_LEVEL 2`: more safety measures, including assertions
  * * `SAFETY_LEVEL 3`: many security measures, including all assertions
  */
-#define SAFETY_LEVEL 1
+#define SAFETY_LEVEL 2
 
 /// Dimension of the problem
-#define DIM 3
+#define DIM 2
 #define power_two(x) (1 << (x))
 #define POW_DIM power_two(DIM)
 
@@ -45,23 +45,29 @@ typedef int idInteger;
 /// [0]: rectangular (and not necessarily cubic domains), [1]: cubic domains
 #define CUBIC_DOMAINS 1
 
+/** Use periodic boundary conditions (for SPH only simulations)
+ * GRAVITY_SIM must be 0
+ * removeParticles from configuration file is ignored
+*/
+#define PERIODIC_BOUNDARIES 1
+
 /// Simulation with gravitational forces
-#define GRAVITY_SIM 1
+#define GRAVITY_SIM 0
 
 /// SPH simulation
-#define SPH_SIM 0
+#define SPH_SIM 1
 
 /// integrate energy equation
-#define INTEGRATE_ENERGY 0
+#define INTEGRATE_ENERGY 1
 
 /// integrate density equation
 #define INTEGRATE_DENSITY 0
 
 /// integrate smoothing length
-#define INTEGRATE_SML 0
+#define INTEGRATE_SML 1
 
 /// decouple smoothing length for pc integrator(s)
-#define DECOUPLE_SML 0
+#define DECOUPLE_SML 1
 
 /// variable smoothing length
 #define VARIABLE_SML 0
@@ -100,7 +106,6 @@ typedef int idInteger;
 #define KLEY_VISCOSITY 0
 
 #define KEY_MAX ULONG_MAX
-//TODO: make domain list size to run time constant
 #define DOMAIN_LIST_SIZE 512
 #define MAX_DEPTH 128
 #define MAX_NUM_INTERACTIONS 180
@@ -150,6 +155,9 @@ typedef struct SimulationParameters {
     bool removeParticles;
     int removeParticlesCriterion;
     real removeParticlesDimension;
+//#if PERIODIC_BOUNDARIES
+    real periodicBoxLimits[DIM*2]; // [lower, upper]
+//#endif
     int bins;
     bool calculateAngularMomentum;
     bool calculateEnergy;

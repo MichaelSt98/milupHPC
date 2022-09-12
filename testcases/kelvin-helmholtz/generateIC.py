@@ -45,7 +45,7 @@ def getDensities(y):
     densities[mask2] = rho1+Drho*np.exp((.25-y[mask2])/Dy)
     mask3 = (.5<=y) & (y<.75)
     densities[mask3] = rho1+Drho*np.exp((y[mask3]-.75)/Dy)
-    mask4 = .75<y
+    mask4 = .75<=y
     densities[mask4] = rho2-Drho*np.exp((.75-y[mask4])/Dy)
 
     return densities
@@ -76,12 +76,16 @@ if __name__=="__main__":
     rho = getDensities(pos[:,1])
     # create material ID
     matId = np.zeros(len(rho), dtype=np.int8)
+    # volume is 1
+    m = rho/N
     # create specific internal energy
     u = P/((gamma-1.)*rho)
+
+    pos = pos - [.5, .5] # transform for symmetry around origin
     
-    outH5.create_dataset("x", data=pos)
+    outH5.create_dataset("x", data=pos) 
     outH5.create_dataset("v", data=vel)
-    outH5.create_dataset("m", data=rho/N)
+    outH5.create_dataset("m", data=m)
     outH5.create_dataset("u", data=u)
     outH5.create_dataset("materialId", data=matId)
     
