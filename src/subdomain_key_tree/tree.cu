@@ -317,6 +317,7 @@ void Tree::buildTree(Particles *particles, integer numParticlesLocal, integer nu
     //    std::cout << "child[" << i << "] = " << child[i] << std::endl;
     //}
     Box root {*minX, *maxX, *minY, *maxY, *minZ, *maxZ};
+    Logger(INFO) << "within buildTree: min = " << *minX << ", " << *minY << ", " << *minZ;
     *index = numParticles;
     for (int i=0; i<numParticlesLocal; ++i) {
         insertTree(particles, i, 0, numParticles, root);

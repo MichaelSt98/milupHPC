@@ -504,7 +504,7 @@ namespace Gravity {
                        real theta, real diam, std::map<keyType, int> *&particles2send, int numParticles);
 
     void symbolicForce(SubDomainKeyTree *subDomainKeyTree, Tree *tree, Particles *particles, DomainList *domainList,
-                       int childIndex, keyType key, Box &box, real theta, real diam, std::map<keyType, int> &particles4proc,
+                       int nodeIndex, keyType key, Box &box, real theta, real diam, std::map<keyType, int> &particles4proc,
                        int numParticles);
 
     void computeForces(Tree *tree, Particles *particles, real diam, real theta, real smoothing,

@@ -368,7 +368,7 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
     real *profilerTime = &elapsed; //&time;
     real totalTime = 0;
 
-    assignParticles();
+    //assignParticles();
 
     for (int i=0; i<10; ++i) {
         Logger(TRACE) << "particles[" << i << "] = " << particleHandler->h_particles->x[i] << " | particles[" << numParticlesLocal - i - 1 << "] = " << particleHandler->h_particles->x[numParticlesLocal - i - 1];
@@ -711,22 +711,32 @@ real Miluphpc::reset() {
     real time;
 
     *treeHandler->h_tree->index = numParticles;
+    *treeHandler->h_tree->minX = 0.;
+    *treeHandler->h_tree->maxX = 0.;
+#if DIM > 1
+    *treeHandler->h_tree->minY = 0.;
+    *treeHandler->h_tree->maxY = 0.;
+#if DIM == 3
+    *treeHandler->h_tree->minZ = 0.;
+    *treeHandler->h_tree->maxZ = 0.;
+#endif
+#endif
 
-    std::fill(treeHandler->h_tree->child, treeHandler->h_tree->child + POW_DIM * numNodes, -1);
+    std::fill(treeHandler->h_tree->child, &treeHandler->h_tree->child[POW_DIM * numNodes], -1);
     std::fill(&particleHandler->h_particles->x[numParticles], &particleHandler->h_particles->x[numNodes], 0.);
     std::fill(&particleHandler->h_particles->y[numParticles], &particleHandler->h_particles->y[numNodes], 0.);
     std::fill(&particleHandler->h_particles->z[numParticles], &particleHandler->h_particles->z[numNodes], 0.);
     std::fill(&particleHandler->h_particles->mass[numParticles], &particleHandler->h_particles->mass[numNodes], 0.);
-    std::fill(particleHandler->h_particles->nodeType, &particleHandler->h_particles->nodeType[numNodes], -1);
+    std::fill(particleHandler->h_particles->nodeType, &particleHandler->h_particles->nodeType[numNodes], 0);
 
-    std::fill(particleHandler->h_particles->ax, particleHandler->h_particles->ax + numParticlesLocal, 0.);
-    std::fill(particleHandler->h_particles->g_ax, particleHandler->h_particles->g_ax + numParticlesLocal, 0.);
+    std::fill(particleHandler->h_particles->ax, &particleHandler->h_particles->ax[numParticles], 0.);
+    std::fill(particleHandler->h_particles->g_ax, &particleHandler->h_particles->g_ax[numParticles], 0.);
 #if DIM > 1
-    std::fill(particleHandler->h_particles->ay, particleHandler->h_particles->ay + numParticlesLocal, 0.);
-    std::fill(particleHandler->h_particles->g_ay, particleHandler->h_particles->g_ay + numParticlesLocal, 0.);
+    std::fill(particleHandler->h_particles->ay, &particleHandler->h_particles->ay[numParticles], 0.);
+    std::fill(particleHandler->h_particles->g_ay, &particleHandler->h_particles->g_ay[numParticles], 0.);
 #if DIM == 3
-    std::fill(particleHandler->h_particles->az, particleHandler->h_particles->az + numParticlesLocal, 0.);
-    std::fill(particleHandler->h_particles->g_az, particleHandler->h_particles->g_az + numParticlesLocal, 0.);
+    std::fill(particleHandler->h_particles->az, &particleHandler->h_particles->az[numParticles], 0.);
+    std::fill(particleHandler->h_particles->g_az, &particleHandler->h_particles->g_az[numParticles], 0.);
 #endif
 #endif
 
@@ -875,10 +885,27 @@ real Miluphpc::boundingBox() {
 #endif
 #endif
 
+#if CUBIC_DOMAINS
+    if (*treeHandler->h_minY < *treeHandler->h_minX) {
+        *treeHandler->h_minX = *treeHandler->h_minY;
+    }
+    else {
+        *treeHandler->h_minY = *treeHandler->h_minX;
+    }
+    if (*treeHandler->h_maxY > *treeHandler->h_maxX) {
+        *treeHandler->h_maxX = *treeHandler->h_maxY;
+    }
+    else {
+        *treeHandler->h_maxY = *treeHandler->h_maxX;
+    }
+#endif
+
     //Logger(TRACE) << "Bounding box: x = (" << std::setprecision(9) << *treeHandler->h_minX << ", "
     //              << *treeHandler->h_maxX << ")" << "y = (" << *treeHandler->h_minY << ", "
     //              << *treeHandler->h_maxY << ")" << "z = " << *treeHandler->h_minZ << ", "
     //              << *treeHandler->h_maxZ << ")";
+
+    treeHandler->globalizeBoundingBox(Execution::host);
 
 #endif // TARGET_GPU
     return time;
@@ -1383,6 +1410,7 @@ real Miluphpc::cpu_pseudoParticles() {
     TreeNS::compPseudoParticles(treeHandler->h_tree, particleHandler->h_particles, domainListHandler->h_domainList,
                                 numParticles, 0);
 
+    /*
 
     if (subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses > 1) {
         Logger(TRACE) << "calling lowest domain list nodes ...";
@@ -1487,6 +1515,8 @@ real Miluphpc::cpu_pseudoParticles() {
     }
 
     delete [] h_realBuffer;
+
+    */
 
     /*
     // -----------------------------------------------------------------------------------------------------------------
@@ -1713,6 +1743,10 @@ real Miluphpc::cpu_gravity() {
 
     // TODO: CPU gravity()
 
+    Logger(TRACE) << "borders x: " << (*treeHandler->h_minX) << " | " << (*treeHandler->h_maxX);
+    Logger(TRACE) << "borders y: " << (*treeHandler->h_minY) << " | " << (*treeHandler->h_maxY);
+    Logger(TRACE) << "borders z: " << (*treeHandler->h_minZ) << " | " << (*treeHandler->h_maxZ);
+
 #if CUBIC_DOMAINS
     real diam = std::abs(*treeHandler->h_maxX) + std::abs(*treeHandler->h_minX);
     //Logger(INFO) << "diam: " << diam;
@@ -1742,16 +1776,27 @@ real Miluphpc::cpu_gravity() {
 
     //*lowestDomainListHandler->h_domainList->domainListCounter = 0;
 
-    Gravity::compTheta(subDomainKeyTreeHandler->h_subDomainKeyTree, treeHandler->h_tree, particleHandler->h_particles,
-                       lowestDomainListHandler->h_domainList, curveType);
+    //Gravity::compTheta(subDomainKeyTreeHandler->h_subDomainKeyTree, treeHandler->h_tree, particleHandler->h_particles,
+    //                   lowestDomainListHandler->h_domainList, curveType);
 
     Logger(TRACE) << "relevant (lowest) domain list indices: " << (*lowestDomainListHandler->h_domainList->domainListCounter);
 
+    /*
     auto particles2send = new std::map<keyType, int>[subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses];
 
     Gravity::symbolicForce(subDomainKeyTreeHandler->h_subDomainKeyTree, treeHandler->h_tree, particleHandler->h_particles,
                            lowestDomainListHandler->h_domainList, simulationParameters.theta, diam, particles2send,
                            numParticles);
+
+    for (int proc=0; proc<subDomainKeyTreeHandler->h_subDomainKeyTree->numProcesses; ++proc){
+        Logger(TRACE) << "\t... sending " << (int)particles2send[proc].size() << " particles to process " << proc;
+        for (std::map<keyType, int>::iterator pIt = particles2send[proc].begin(); pIt != particles2send[proc].end(); ++pIt){
+            //particles4procs[proc].push_back(pIt->second);
+        }
+    }
+
+    delete [] particles2send;
+    */
 
     // TODO: symbolic force and particle exchange!
 
@@ -3715,6 +3760,26 @@ real Miluphpc::removeParticles() {
 #else
 
     // TODO: CPU removeParticles()
+
+    /*
+    real r;
+    for (int i=0; i<numParticlesLocal; ++i) {
+        r = 0.;
+        r += particleHandler->h_x[i] * particleHandler->h_x[i];
+#if DIM > 1
+        r += particleHandler->h_y[i] * particleHandler->h_y[i];
+#if DIM == 3
+        r += particleHandler->h_z[i] * particleHandler->h_z[i];
+#endif
+#endif
+        r = sqrt(r);
+        if (r > simulationParameters.removeParticlesDimension) {
+            Logger(TRACE) << "Attention! particle: " << i << " outside radius with r = " << r;
+        }
+
+    }
+     */
+
     real time = 0.;
 
 #endif // TARGET_GPU

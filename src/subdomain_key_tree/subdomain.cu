@@ -153,6 +153,27 @@ void SubDomainKeyTree::buildDomainTree(Tree *tree, Particles *particles, DomainL
         Box sonBox {*tree->minX, *tree->maxX, *tree->minY, *tree->maxY, *tree->minZ, *tree->maxZ};
 #endif
 
+        if (i & 1) {
+            sonBox.maxX = 0.5 * (box.minX + box.maxX);
+        } else {
+            sonBox.minX = 0.5 * (box.minX + box.maxX);
+        }
+#if DIM > 1
+        if ((i >> 1) & 1) {
+            sonBox.maxY = 0.5 * (box.minY + box.maxY);
+            //path -= 2;
+        } else {
+            sonBox.minY = 0.5 * (box.minY + box.maxY);
+        }
+#if DIM == 3
+        if ((i >> 2) & 1) {
+            sonBox.maxZ = 0.5 * (box.minZ + box.maxZ);
+        } else {
+            sonBox.minZ = 0.5 * (box.minZ + box.maxZ);
+        }
+#endif
+#endif
+
         key = (keyType)((i * 1UL) << (DIM * (MAX_LEVEL - 1)));
         domainList->domainListKeys[*domainList->domainListIndex] = key;
         domainList->domainListLevels[*domainList->domainListIndex] = 1;
@@ -165,27 +186,6 @@ void SubDomainKeyTree::buildDomainTree(Tree *tree, Particles *particles, DomainL
                 //Logger(TRACE) << "i: " << i <<"... nothing here create: " << *tree->index;
                 tree->child[i] = *tree->index;
                 nodeIndex = *tree->index;
-
-                if (i & 1) {
-                    sonBox.maxX = 0.5 * (box.minX + box.maxX);
-                } else {
-                    sonBox.minX = 0.5 * (box.minX + box.maxX);
-                }
-#if DIM > 1
-                if ((i >> 1) & 1) {
-                    sonBox.maxY = 0.5 * (box.minY + box.maxY);
-                    //path -= 2;
-                } else {
-                    sonBox.minY = 0.5 * (box.minY + box.maxY);
-                }
-#if DIM == 3
-                if ((i >> 2) & 1) {
-                    sonBox.maxZ = 0.5 * (box.minZ + box.maxZ);
-                } else {
-                    sonBox.minZ = 0.5 * (box.minZ + box.maxZ);
-                }
-#endif
-#endif
 
             }
             else {
@@ -310,12 +310,33 @@ void SubDomainKeyTree::buildDomainTree(Tree *tree, Particles *particles, DomainL
 #endif
 #endif
 
+            if (i & 1) {
+                sonBox.maxX = 0.5 * (box.minX + box.maxX);
+            } else {
+                sonBox.minX = 0.5 * (box.minX + box.maxX);
+            }
+#if DIM > 1
+            if ((i >> 1) & 1) {
+                sonBox.maxY = 0.5 * (box.minY + box.maxY);
+                //path -= 2;
+            } else {
+                sonBox.minY = 0.5 * (box.minY + box.maxY);
+            }
+#if DIM == 3
+            if ((i >> 2) & 1) {
+                sonBox.maxZ = 0.5 * (box.minZ + box.maxZ);
+            } else {
+                sonBox.minZ = 0.5 * (box.minZ + box.maxZ);
+            }
+#endif
+#endif
             if (nodeIndex < numParticles) {
                 if (nodeIndex == -1) {
                     // nothing there, thus create pseudo-particle!
                     //Logger(TRACE) << "nothing here for " << childIndex << "and " << i << ": create pseudo-particle: tree->child[8 * " << childIndex << " + " << i << "] = " << *tree->index;
                     tree->child[POW_DIM * childIndex + i] = *tree->index;
                     nodeIndex = *tree->index;
+
                 }
                 else {
                     // particle, thus create pseudo-particle in between!
@@ -376,6 +397,17 @@ void SubDomainKeyTree::buildDomainTree(Tree *tree, Particles *particles, DomainL
             //Logger(TRACE) << "particles->nodeType[" << nodeIndex << "] = 1 (numParticles = " << numParticles << ")";
 
             domainList->domainListIndices[*domainList->domainListIndex] = nodeIndex; //childIndex;
+            int domainListIndex = *domainList->domainListIndex;
+            domainList->borders[domainListIndex * 2 * DIM] = sonBox.minX;
+            domainList->borders[domainListIndex * 2 * DIM + 1] = sonBox.maxX;
+#if DIM > 1
+            domainList->borders[domainListIndex * 2 * DIM + 2] = sonBox.minY;
+            domainList->borders[domainListIndex * 2 * DIM + 3] = sonBox.maxY;
+#if DIM == 3
+            domainList->borders[domainListIndex * 2 * DIM + 4] = sonBox.minZ;
+            domainList->borders[domainListIndex * 2 * DIM + 5] = sonBox.maxZ;
+#endif
+#endif
             (*domainList->domainListIndex)++;
             particles->nodeType[nodeIndex] = 1;
 
@@ -2982,7 +3014,7 @@ namespace TreeNS {
 #endif
                 }
             }
-            if (particles->mass[nodeIndex] > 0) {
+            if (particles->mass[nodeIndex] > 0.) {
                 particles->x[nodeIndex] /= particles->mass[nodeIndex];
 #if DIM > 1
                 particles->y[nodeIndex] /= particles->mass[nodeIndex];
