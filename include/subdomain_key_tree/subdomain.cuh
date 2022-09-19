@@ -727,6 +727,12 @@ namespace ParticlesNS {
                              int *particles2remove, int *counter, int criterion, real d,
                              int numParticles);
         }
+
+        __global__ void moveParticlesPeriodic(Tree *tree, Particles *particles, int numParticles);
+
+        namespace Launch {
+            real moveParticlesPeriodic(Tree *tree, Particles *particles, int numParticles);
+        }
     }
 }
 

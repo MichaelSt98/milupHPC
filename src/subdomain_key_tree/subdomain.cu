@@ -2238,6 +2238,56 @@ namespace ParticlesNS {
                                 tree, particles, particles2remove, counter, criterion, d, numParticles);
         }
 
+        __global__ void moveParticlesPeriodic(Tree *tree, Particles *particles, int numParticles) {
+
+            int bodyIndex = threadIdx.x + blockDim.x * blockIdx.x;
+            int stride = blockDim.x * gridDim.x;
+            int offset = 0;
+
+            while (bodyIndex + offset < numParticles) {
+
+                // handle x-axis
+                if (particles->x[bodyIndex + offset] <= *tree->minX){
+                    // lower x boundary
+                    particles->x[bodyIndex + offset] = *tree->maxX - (*tree->minX - particles->x[bodyIndex + offset]);
+
+                } else if(*tree->maxX < particles->x[bodyIndex + offset]){
+                    // upper x boundary
+                    particles->x[bodyIndex + offset] = *tree->minX + (particles->x[bodyIndex + offset] - *tree->maxX);
+                }
+#if DIM > 1
+                // handle y-axis
+                if (particles->y[bodyIndex + offset] <= *tree->minY){
+                    // lower y boundary
+                    particles->y[bodyIndex + offset] = *tree->maxY - (*tree->minY - particles->y[bodyIndex + offset]);
+                } else if(*tree->maxY < particles->y[bodyIndex + offset]){
+                    // upper y boundary
+                    particles->y[bodyIndex + offset] = *tree->minY + (particles->y[bodyIndex + offset] - *tree->maxY);
+                }
+#if DIM == 3
+                // handle z-axis
+                if (particles->z[bodyIndex + offset] <= *tree->minZ){
+                    // lower z boundary
+                    particles->z[bodyIndex + offset] = *tree->maxZ - (*tree->minZ - particles->z[bodyIndex + offset]);
+                } else if(*tree->maxZ < particles->z[bodyIndex + offset]){
+                    // upper z boundary
+                    particles->z[bodyIndex + offset] = *tree->minZ + (particles->z[bodyIndex + offset] - *tree->maxZ);
+                }
+#endif
+#endif
+                offset += stride;
+            }
+
+        }
+
+        namespace Launch {
+            real moveParticlesPeriodic(Tree *tree, Particles *particles, int numParticles){
+                ExecutionPolicy executionPolicy;
+                return cuda::launch(true, executionPolicy, ::ParticlesNS::Kernel::moveParticlesPeriodic, tree,
+                                    particles, numParticles);
+            }
+        }
+
     }
 }
 

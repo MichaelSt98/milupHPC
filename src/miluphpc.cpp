@@ -249,6 +249,23 @@ void Miluphpc::prepareSimulation() {
     //cuda::copy(particleHandler->h_cs, particleHandler->d_cs, numParticles, To::device);
 #endif
 
+#if PERIODIC_BOUNDARIES
+    Logger(DEBUG) << "Handle periodic boundaries ...";
+
+    treeHandler->h_minX = &simulationParameters.periodicBoxLimits[0];
+    treeHandler->h_maxX = &simulationParameters.periodicBoxLimits[DIM];
+#if DIM > 1
+    treeHandler->h_minY = &simulationParameters.periodicBoxLimits[1];
+    treeHandler->h_maxY = &simulationParameters.periodicBoxLimits[DIM+1];
+#if DIM == 3
+    treeHandler->h_minZ = &simulationParameters.periodicBoxLimits[2];
+    treeHandler->h_maxZ = &simulationParameters.periodicBoxLimits[DIM+2];
+#endif
+#endif
+    treeHandler->copy(To::device, true, false, false);
+    moveParticlesPeriodic();
+
+#else
     if (simulationParameters.removeParticles) {
         removeParticles();
     }
@@ -257,6 +274,7 @@ void Miluphpc::prepareSimulation() {
     TreeNS::Kernel::Launch::computeBoundingBox(treeHandler->d_tree, particleHandler->d_particles, d_mutex,
                                                numParticlesLocal, 256, false);
 
+#endif
 #if DEBUGGING
 #if DIM == 3
     treeHandler->copy(To::host);
@@ -268,10 +286,6 @@ void Miluphpc::prepareSimulation() {
 
     treeHandler->globalizeBoundingBox(Execution::device);
     treeHandler->copy(To::host);
-
-#if PERIODIC_BOUNDARIES
-
-#endif
 
     if (simulationParameters.loadBalancing) {
         fixedLoadBalancing(); //TODO: necessary?
@@ -322,7 +336,7 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
 
     //Logger(INFO) << "checking for nans before bounding box...";
     //ParticlesNS::Kernel::Launch::check4nans(particleHandler->d_particles, numParticlesLocal);
-
+#if !PERIODIC_BOUNDARIES
     Logger(INFO) << "rhs::boundingBox()";
     timer.reset();
     // -----------------------------------------------------------------------------------------------------------------
@@ -332,7 +346,7 @@ real Miluphpc::rhs(int step, bool selfGravity, bool assignParticlesToProcess) {
     totalTime += time;
     Logger(TIME) << "rhs::boundingBox(): " << time << " ms";
     profiler.value2file(ProfilerIds::Time::boundingBox, *profilerTime);
-
+#endif
 #if DEBUGGING
     Logger(INFO) << "checking for nans before assigning particles...";
     ParticlesNS::Kernel::Launch::check4nans(particleHandler->d_particles, numParticlesLocal);
@@ -2904,8 +2918,10 @@ void Miluphpc::dynamicLoadBalancing(int bins) {
 
 void Miluphpc::updateRange(int aimedParticlesPerProcess) {
 
+#if !PERIODIC_BOUNDARIES
     // update bounding boxes here! // TODO: if bounding boxes are calculated here, they shouldn't be calculated again !?
     boundingBox();
+#endif
 
     boost::mpi::communicator comm;
 
@@ -3160,6 +3176,14 @@ real Miluphpc::removeParticles() {
     Logger(INFO) << "removing #" << h_particles2remove_counter << " particles!";
 
     return time;
+}
+
+real Miluphpc::moveParticlesPeriodic(){
+
+    auto time = ParticlesNS::Kernel::Launch::moveParticlesPeriodic(treeHandler->d_tree, particleHandler->d_particles,
+                                                                   numParticlesLocal);
+    return time;
+
 }
 
 // used for gravity and sph

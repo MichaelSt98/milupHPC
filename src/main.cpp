@@ -213,7 +213,7 @@ int main(int argc, char** argv)
     auto periodicBoxLimits = confP.getObj("periodicBoxLimits");
     parameters.periodicBoxLimits[0] = periodicBoxLimits.getVal<real>("lowerX");
     parameters.periodicBoxLimits[DIM] = periodicBoxLimits.getVal<real>("upperX");
-#if DIM >= 2
+#if DIM > 1
     parameters.periodicBoxLimits[1] = periodicBoxLimits.getVal<real>("lowerY");
     parameters.periodicBoxLimits[DIM+1] = periodicBoxLimits.getVal<real>("upperY");
 #if DIM == 3

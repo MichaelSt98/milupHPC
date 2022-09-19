@@ -33,13 +33,17 @@ void ExplicitEuler::integrate(int step) {
         Logger(INFO) << "ExplicitEuler::integrate while...";
 
         timer.reset();
+
+#if PERIODIC_BOUNDARIES
+        time = moveParticlesPeriodic();
+#else
         if (simulationParameters.removeParticles) {
             time = removeParticles();
         }
         timeElapsed = timer.elapsed();
         profiler.value2file(ProfilerIds::Time::removeParticles, timeElapsed);
         Logger(TIME) << "removing particles: " << timeElapsed << " ms";
-
+#endif
         Logger(INFO) << "rhs::loadBalancing()";
         timer.reset();
         if (simulationParameters.loadBalancing && step != 0 && step % simulationParameters.loadBalancingInterval == 0) {

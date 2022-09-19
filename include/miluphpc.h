@@ -234,6 +234,17 @@ public:
     real removeParticles();
 
     /**
+     * @brief Move particles to the other side of box for periodic boundary conditions
+     *
+     * This function is invoked if the flag PERIODIC_BOUNDARIES is set in `include/parameter.h`.
+     * The field `periodicBoxLimits` is used for the criterion which particles are moved to the opposite
+     * side of the given box.
+     *
+     * @return accumulated time of functions within
+     */
+     real moveParticlesPeriodic();
+
+    /**
      * @brief Load balancing via equidistant ranges.
      */
     void fixedLoadBalancing();

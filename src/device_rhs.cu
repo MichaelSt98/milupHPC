@@ -22,6 +22,7 @@ namespace Kernel {
         if (bodyIndex == 0) {
             *mutex = 0;
             *tree->index = n;
+#if !PERIODIC_BOUNDARIES
             *tree->minX = 0;
             *tree->maxX = 0;
 #if DIM > 1
@@ -30,6 +31,7 @@ namespace Kernel {
 #if DIM == 3
             *tree->minZ = 0;
             *tree->maxZ = 0;
+#endif
 #endif
 #endif
             tree->toDeleteLeaf[0] = -1;
