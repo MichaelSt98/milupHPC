@@ -2602,7 +2602,7 @@ real Miluphpc::parallel_sph() {
     //for (int level=MAX_LEVEL; level>0; --level) {
     //    time += SPH::Kernel::Launch::calculateCentersOfMass(treeHandler->d_tree, particleHandler->d_particles, level);
     //}
-    Logger(TIME) << "sph: calculate centers of mass: " << time << " ms";
+    //Logger(TIME) << "sph: calculate centers of mass: " << time << " ms";
 
     totalTime += time;
     Logger(TIME) << "sph: inserting received particles: " << time << " ms";
@@ -2653,6 +2653,8 @@ real Miluphpc::parallel_sph() {
                                                            numParticlesLocal, numParticles, numNodes);
     // -----------------------------------------------------------------------------------------------------------------
     // TODO: for variable SML
+    // Redo particle exchange if SML got too large
+    // Implement different version for MFV/MFM
     // überprüfen inwiefern sich die sml geändert hat, sml_new <= sml_global_search // if sml_new > sml_global_search
 #endif
 
@@ -2705,6 +2707,7 @@ real Miluphpc::parallel_sph() {
     }
     else if (fixedRadiusNN_version == 1) {
         // ATTENTION: brute-force method
+        Logger(WARN) << "Do you really want to use brute force?! - Ok then, see you tomorrow for the next timestep.";
         time += SPH::Kernel::Launch::fixedRadiusNN_bruteForce(treeHandler->d_tree, particleHandler->d_particles,
                                                               particleHandler->d_nnl, numParticlesLocal, numParticles,
                                                               numNodes);
@@ -2737,6 +2740,18 @@ real Miluphpc::parallel_sph() {
     //  * calculatePressure
     //  * internalForces
 
+#if MESHLESS_FINITE_METHOD
+
+    Logger(DEBUG) << "mfv: calculate density";
+    // -----------------------------------------------------------------------------------------------------------------
+    time = MFV::Kernel::Launch::calculateDensity(kernelHandler.kernel, treeHandler->d_tree,
+                                                 particleHandler->d_particles, particleHandler->d_nnl,
+                                                 numParticlesLocal); //treeHandler->h_toDeleteLeaf[1]);
+    // -----------------------------------------------------------------------------------------------------------------
+    Logger(TIME) << "mfv: calculateDensity: " << time << " ms";
+    profiler.value2file(ProfilerIds::Time::SPH::density, time);
+
+#else
     Logger(DEBUG) << "calculate density";
     // -----------------------------------------------------------------------------------------------------------------
     time = SPH::Kernel::Launch::calculateDensity(kernelHandler.kernel, treeHandler->d_tree,
@@ -2745,6 +2760,7 @@ real Miluphpc::parallel_sph() {
     // -----------------------------------------------------------------------------------------------------------------
     Logger(TIME) << "sph: calculateDensity: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::SPH::density, time);
+#endif
 
     Logger(DEBUG) << "calculate sound speed";
     // -----------------------------------------------------------------------------------------------------------------
@@ -2754,7 +2770,8 @@ real Miluphpc::parallel_sph() {
     Logger(TIME) << "sph: calculateSoundSpeed: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::SPH::soundSpeed, time);
 
-#if BALSARA_SWITCH
+#if BALSARA_SWITCH && !MESHLESS_FINITE_METHODS // no correction needed for MFV/MFM
+    Logger(DEBUG) << "balsara switch";
     time = SPH::Kernel::Launch::CalcDivvandCurlv(kernelHandler.kernel, particleHandler->d_particles, particleHandler->d_nnl,
                                                  numParticlesLocal);
 #endif
@@ -2804,14 +2821,21 @@ real Miluphpc::parallel_sph() {
     Logger(TIME) << "sph: sending particles (again): " << time;
     //Logger(TIME) << "sph: sending particles (again) collectingValues: " << sendingParticlesAgain;
     profiler.value2file(ProfilerIds::Time::SPH::resend, time);
-
     totalTime += time;
+
+#if MESHLESS_FINITE_METHOD
+    Logger(DEBUG) << "mfv: second order gradient estimation";
+
+
+
+#else
     Logger(DEBUG) << "internal forces";
 
     time = SPH::Kernel::Launch::internalForces(kernelHandler.kernel, materialHandler->d_materials, treeHandler->d_tree,
                                         particleHandler->d_particles, particleHandler->d_nnl, numParticlesLocal);
     Logger(TIME) << "sph: internalForces: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::SPH::internalForces, time);
+#endif // MESHLESS_FINITE_METHOD
 
     time = SubDomainKeyTreeNS::Kernel::Launch::repairTree(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
                                                           particleHandler->d_particles, domainListHandler->d_domainList,

@@ -39,22 +39,35 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     h_materialId = new integer[numParticles];
 
 #if SPH_SIM
-
     _h_sml = new real[numParticles];
     h_sml = _h_sml;
     h_nnl = new integer[numParticles * MAX_NUM_INTERACTIONS];
     h_noi = new integer [numParticles];
-    _h_e = new real[numParticles];
-    h_e = _h_e;
-    _h_dedt = new real[numParticles];
-    h_dedt = _h_dedt;
-    h_u = new real[numParticles];
-    _h_cs = new real[numParticles];
-    h_cs = _h_cs;
+
     _h_rho = new real[numParticles];
     h_rho = _h_rho;
     _h_p = new real[numParticles];
     h_p = _h_p;
+    _h_e = new real[numParticles];
+    h_e = _h_e;
+    _h_cs = new real[numParticles];
+    h_cs = _h_cs;
+    h_u = new real[numParticles];
+
+#if MESHLESS_FINITE_METHOD
+    h_omega = new real[numParticles];
+
+    h_psix = new real[numParticles*MAX_NUM_INTERACTIONS];
+#if DIM > 2
+    h_psiy = new real[numParticles*MAX_NUM_INTERACTIONS];
+#if DIM == 3
+    h_psiz = new real[numParticles*MAX_NUM_INTERACTIONS];
+#endif
+#endif
+
+#else // avoid allocation of memory for everything that is not needed for the meshless finite methods
+    _h_dedt = new real[numParticles];
+    h_dedt = _h_dedt;
     h_muijmax = new real[numParticles];
 
 //#if INTEGRATE_DENSITY
@@ -120,6 +133,7 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
 #endif
 #endif
 
+#endif // !MESHLESS_FINITE_METHOD
 #endif // SPH_SIM
 
     h_particles = new Particles();
@@ -172,15 +186,27 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     cuda::malloc(d_noi, numParticles);
     cuda::malloc(_d_e, numParticles);
     d_e = _d_e;
-    cuda::malloc(_d_dedt, numParticles);
-    d_dedt = _d_dedt;
-    cuda::malloc(d_u, numParticles);
     cuda::malloc(_d_cs, numParticles);
     d_cs = _d_cs;
+    cuda::malloc(d_u, numParticles);
     cuda::malloc(_d_rho, numParticles);
     d_rho = _d_rho;
     cuda::malloc(_d_p, numParticles);
     d_p = _d_p;
+
+#if MESHLESS_FINITE_METHOD
+    cuda::malloc(d_omega, numParticles);
+    cuda::malloc(d_psix, numParticles*MAX_NUM_INTERACTIONS);
+#if DIM > 1
+    cuda::malloc(d_psiy, numParticles*MAX_NUM_INTERACTIONS);
+#if DIM == 3
+    cuda::malloc(d_psiz, numParticles*MAX_NUM_INTERACTIONS);
+#endif
+#endif
+
+#else // avoid allocation of memory for everything that is not needed for the meshless finite methods
+    cuda::malloc(_d_dedt, numParticles);
+    d_dedt = _d_dedt;
     cuda::malloc(d_muijmax, numParticles);
 
 //#if INTEGRATE_DENSITY
@@ -246,6 +272,7 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
 #endif
 #endif
 
+#endif // !MESHLESS_FINITE_METHOD
 #endif // SPH_SIM
 
 #if BALSARA_SWITCH
@@ -291,6 +318,12 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
     ParticlesNS::Kernel::Launch::setNodeType(d_particles, d_nodeType);
     h_particles->setU(h_u);
     ParticlesNS::Kernel::Launch::setU(d_particles, d_u);
+
+#if MESHLESS_FINITE_METHOD
+    //TODO: handle 1D and 2D cases
+    h_particles->setMeshlessFinite(h_omega, h_psix, h_psiy, h_psiz);
+    ParticlesNS::Kernel::Launch::setMeshlessFinite(d_particles, d_omega, d_psix, d_psiy, d_psiz);
+#endif
 
 #if SPH_SIM
     h_particles->setArtificialViscosity(h_muijmax);

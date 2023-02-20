@@ -41,6 +41,7 @@
 #include "sph/pressure.cuh"
 #include "sph/internal_forces.cuh"
 #include "sph/soundspeed.cuh"
+#include "mfv/volume_partition.cuh"
 #include "simulation_time_handler.h"
 
 #include "processing/kernels.cuh"

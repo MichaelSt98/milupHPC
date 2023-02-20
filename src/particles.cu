@@ -168,6 +168,15 @@ CUDA_CALLABLE_MEMBER void Particles::set(integer *numParticles, integer *numNode
     }
 #endif
 
+#if MESHLESS_FINITE_METHOD
+CUDA_CALLABLE_MEMBER void Particles::setMeshlessFinite(real *omega, real *psix, real *psiy, real *psiz) {
+    this->omega = omega;
+    this->psix = psix;
+    this->psiy = psiy;
+    this->psiz = psiz;
+}
+#endif
+
 CUDA_CALLABLE_MEMBER void Particles::setU(real *u) {
     this->u = u;
 }
@@ -718,6 +727,20 @@ namespace ParticlesNS {
                 ExecutionPolicy executionPolicy(1, 1);
                 cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::setLeapfrog, particles,
                              ax_old, ay_old, az_old, g_ax_old, g_ay_old, g_az_old);
+            }
+        }
+#endif
+
+#if MESHLESS_FINITE_METHOD
+        __global__ void setMeshlessFinite(Particles *particles, real *omega, real *psix, real *psiy, real *psiz){
+            particles->setMeshlessFinite(omega, psix, psiy, psiz);
+        }
+
+        namespace Launch {
+            void setMeshlessFinite(Particles *particles, real *omega, real *psix, real *psiy, real *psiz){
+                ExecutionPolicy executionPolicy(1, 1);
+                cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::setMeshlessFinite, particles,
+                             omega, psix, psiy, psiz);
             }
         }
 #endif

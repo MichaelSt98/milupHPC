@@ -1,13 +1,13 @@
 ; IO RELATED
 ; ------------------------------------------------------
 ; output directory (will be created if it does not exist)
-directory bb/
+directory output/
 
 ; outputRank (-1 corresponds to all)
 outputRank -1
 
 ; omit logType::TIME for standard output
-omitTime true
+omitTime false
 
 ; create log file (including warnings, errors, ...)
 log true
@@ -16,14 +16,14 @@ log true
 performanceLog true
 
 ; write particles to be sent to h5 file
-particlesSent2H5 true
+particlesSent2H5 false
 
 
 ; INTEGRATOR RELATED
 ; ------------------------------------------------------
 ; integrator selection
-; explicit euler [0], predictor-corrector euler [1]
-integrator 1
+; explicit euler [0], predictor-corrector euler [1], leap-frog [2], godunov !!MFV/MFM only!! [3]
+integrator 3
 ; initial time step
 timeStep 1e-4
 ; max time step allowed
@@ -31,7 +31,7 @@ maxTimeStep 1e9
 ; end time for simulation
 ;timeEnd 1.0
 ;timeEnd 5.0e7
-timeEnd 6.9e11
+timeEnd 1e-4
 ;timeEnd 0.5e10;
 ;timeEnd 1e12
 ;timeEnd 6e-2
@@ -64,7 +64,7 @@ removeParticlesCriterion 0
 removeParticlesDimension 3.6e14
 
 ; execute load balancing
-loadBalancing false
+loadBalancing true
 ; interval for executing load balancing (every Nth step)
 loadBalancingInterval 1
 ; amount of bins for load balancing

@@ -24,7 +24,7 @@ typedef int idInteger;
 
 #define MAX_LEVEL 21
 
-#define DEBUGGING 0
+#define DEBUGGING 1
 
 /**
  * * `SAFETY_LEVEL 0`: almost no safety measures
@@ -32,7 +32,7 @@ typedef int idInteger;
  * * `SAFETY_LEVEL 2`: more safety measures, including assertions
  * * `SAFETY_LEVEL 3`: many security measures, including all assertions
  */
-#define SAFETY_LEVEL 1
+#define SAFETY_LEVEL 2
 
 /// Dimension of the problem
 #define DIM 3
@@ -46,11 +46,13 @@ typedef int idInteger;
 #define CUBIC_DOMAINS 1
 
 /// Simulation with gravitational forces
-#define GRAVITY_SIM 1
+#define GRAVITY_SIM 0
 
-/// SPH simulation
-#define SPH_SIM 0
+/// SPH simulation (this must be enabled when MFV or MFM method is used)
+// TODO: rename to HYDRO_SIM to avoid misunderstandings
+#define SPH_SIM 1
 
+/** SPH RELATED SWITCHES */
 /// integrate energy equation
 #define INTEGRATE_ENERGY 0
 
@@ -79,6 +81,12 @@ typedef int idInteger;
  *     * SOLID $dv_a/dt ~ (sigma_a+sigma_b)/(rho_a*rho_b)  \nabla_a W_ab$
  */
 #define SPH_EQU_VERSION 1
+
+/** Use meshless particle methods Meshless Finite Volume (MFV) or Meshless finite Mass (MFM)
+ *  **MESHLESS_FINITE_METHOD 0:** Use SPH for hydrodynamics
+ *  **MESHLESS_FINITE_METHOD 1:** Use MFV or MFM for hydrodynamics (specified in config file)
+ */
+#define MESHLESS_FINITE_METHOD 1
 
 // deprecated flag
 #define ARTIFICIAL_VISCOSITY 1
@@ -219,7 +227,7 @@ struct IntegratorSelection
 {
     enum Type
     {
-        explicit_euler, predictor_corrector_euler, leapfrog
+        explicit_euler, predictor_corrector_euler, leapfrog, godunov
     };
     Type t_;
     IntegratorSelection(Type t) : t_(t) {}

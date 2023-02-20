@@ -87,6 +87,28 @@ public:
     /// host time derivative of density
     real *h_drhodt, *_h_drhodt;
 //#endif
+
+#if MESHLESS_FINITE_METHOD
+    /// additional variables needed for MFV/MFM
+
+    /// host inverse of effective particle volume
+    real *h_omega;
+
+    /// host x-components for vector weights for 2nd order consistent gradient computation
+    real *h_psix;
+
+#if DIM > 1
+    /// host y-components for vector weights for gradient computation
+    real *h_psiy;
+
+#if DIM == 3
+    /// host z-components for vector weights for gradient computation
+    real *h_psiz;
+
+#endif
+#endif
+#endif // MESHLESS_FINITE_METHOD
+
 #if VARIABLE_SML || INTEGRATE_SML
     /// host time derivative of smoothing length
     real *h_dsmldt, *_h_dsmldt;
@@ -250,6 +272,26 @@ public:
     /// device time derivative of density
     real *d_drhodt, *_d_drhodt;
 //#endif
+
+#if MESHLESS_FINITE_METHOD
+    /// device inverse of effective volume of particle
+    real *d_omega;
+
+    /// device x-components for vector weights for 2nd order consistent gradient computation
+    real *d_psix;
+
+#if DIM > 1
+    /// device y-components for vector weights for gradient computation
+    real *d_psiy;
+
+#if DIM == 3
+    /// device z-components for vector weights for gradient computation
+    real *d_psiz;
+
+#endif
+#endif
+#endif // MESHLESS_FINITE_VOLUME
+
 #if VARIABLE_SML || INTEGRATE_SML
     /// device time derivaive of smoothing length
     real *d_dsmldt, *_d_dsmldt;

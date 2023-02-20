@@ -134,6 +134,20 @@ public:
     /// (pointer to) pressure (array)
     real *p; // pressure
 
+#if MESHLESS_FINITE_METHOD
+    /// (pointer) to inverse effective volume (array)
+    real *omega;
+
+    /// pointer to vector weights
+    real *psix;
+#if DIM > 1
+    real *psiy;
+#if DIM == 3
+    real *psiz;
+#endif
+#endif
+#endif // MESHLESS_FINITE_METHOD
+
     /// (pointer) to max(mu_ij) (array) needed for artificial viscosity and determining timestp
     real *muijmax;
 
@@ -373,6 +387,24 @@ public:
     CUDA_CALLABLE_MEMBER void setLeapfrog(real *ax_old, real *ay_old, real *az_old, real *g_ax_old, real *g_ay_old,
                                           real *g_az_old);
 #endif
+
+#if MESHLESS_FINITE_METHOD
+
+    //TODO: Implement 1D and 2D (although 1D is not applicable as gradient estimation would fail)
+
+#if DIM == 3
+    /**
+     * @brief Setter for MFV/MFM related quantities
+     *
+     * @param omega inverse of effective volume of particles
+     * @param psix x-component of least-squares-fit vector weight
+     * @param psiy z-component of least-squares-fit vector weight
+     * @param psiz z-component of least-squares-fit vector weight
+     */
+    CUDA_CALLABLE_MEMBER void setMeshlessFinite(real *omega, real *psix, real *psiy, real *psiz);
+
+#endif
+#endif // MESHLESS_FINITE_METHOD
 
     /**
      * @brief Setter for energy.
@@ -679,6 +711,13 @@ namespace ParticlesNS {
         namespace Launch {
             void setLeapfrog(Particles *particles, real *ax_old, real *ay_old, real *az_old, real *g_ax_old,
                              real *g_ay_old, real *g_az_old);
+        }
+#endif
+
+#if MESHLESS_FINITE_METHOD
+    __global__ void setMeshlessFinite(Particles *particles, real *omega, real *psix, real* psiy, real *psiz);
+        namespace Launch {
+            void setMeshlessFinite(Particles *particles, real *omega, real *psix, real* psiy, real *psiz);
         }
 #endif
 

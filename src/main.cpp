@@ -2,6 +2,7 @@
 #include "../include/integrator/explicit_euler.h"
 #include "../include/integrator/predictor_corrector_euler.h"
 #include "../include/integrator/leapfrog.h"
+#include "../include/integrator/godunov.h"
 #include "../include/utils/config_parser.h"
 #include <boost/filesystem.hpp>
 
@@ -328,6 +329,14 @@ int main(int argc, char** argv)
         } break;
         case IntegratorSelection::leapfrog: {
             miluphpc = new Leapfrog(parameters);
+        } break;
+        case IntegratorSelection::godunov: {
+#if !MESHLESS_FINITE_METHOD
+            Logger(ERROR) << "Godunov type integrator must not be used with classic SPH. Use MFV/MFM instead. - Aborting.";
+            MPI_Finalize();
+            exit(2);
+#endif
+            miluphpc = new Godunov(parameters);
         } break;
         default: {
             Logger(ERROR) << "Integrator not available!";
