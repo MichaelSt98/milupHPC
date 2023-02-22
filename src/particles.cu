@@ -169,11 +169,18 @@ CUDA_CALLABLE_MEMBER void Particles::set(integer *numParticles, integer *numNode
 #endif
 
 #if MESHLESS_FINITE_METHOD
-CUDA_CALLABLE_MEMBER void Particles::setMeshlessFinite(real *omega, real *psix, real *psiy, real *psiz) {
+CUDA_CALLABLE_MEMBER void Particles::setMeshlessFinite(real *omega, real *psix, real *psiy, real *psiz,
+                                                       real *massFlux, real *vxFlux, real *vyFlux, real *vzFlux,
+                                                       real *energyFlux) {
     this->omega = omega;
     this->psix = psix;
     this->psiy = psiy;
     this->psiz = psiz;
+    this->massFlux = massFlux;
+    this->vxFlux = vxFlux;
+    this->vyFlux = vyFlux;
+    this->vzFlux = vzFlux;
+    this->energyFlux = energyFlux;
 }
 #endif
 
@@ -732,15 +739,17 @@ namespace ParticlesNS {
 #endif
 
 #if MESHLESS_FINITE_METHOD
-        __global__ void setMeshlessFinite(Particles *particles, real *omega, real *psix, real *psiy, real *psiz){
-            particles->setMeshlessFinite(omega, psix, psiy, psiz);
+        __global__ void setMeshlessFinite(Particles *particles, real *omega, real *psix, real *psiy, real *psiz,
+                                          real *massFlux, real *vxFlux, real *vyFlux, real *vzFlux, real *energyFlux){
+            particles->setMeshlessFinite(omega, psix, psiy, psiz, massFlux, vxFlux, vyFlux, vzFlux, energyFlux);
         }
 
         namespace Launch {
-            void setMeshlessFinite(Particles *particles, real *omega, real *psix, real *psiy, real *psiz){
+            void setMeshlessFinite(Particles *particles, real *omega, real *psix, real *psiy, real *psiz,
+                                   real *massFlux, real *vxFlux, real *vyFlux, real *vzFlux, real *energyFlux){
                 ExecutionPolicy executionPolicy(1, 1);
                 cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::setMeshlessFinite, particles,
-                             omega, psix, psiy, psiz);
+                             omega, psix, psiy, psiz, massFlux, vxFlux, vyFlux, vzFlux, energyFlux);
             }
         }
 #endif

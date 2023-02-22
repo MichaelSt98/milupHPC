@@ -5,7 +5,7 @@ namespace MFV {
 
     namespace Kernel {
 
-        __global__ void calculateDensity(::SPH::SPH_kernel kernel, Tree *tree, Particles *particles, int *interactions, int numParticles) {
+        __global__ void calculateDensity(::SPH::SPH_kernel kernel, Particles *particles, int *interactions, int numParticles) {
 
             int i, j, inc, ip, d, noi;
             real W, Wj, dx[DIM], dWdx[DIM], dWdr;
@@ -73,14 +73,12 @@ namespace MFV {
             }
         }
 
-        real Launch::calculateDensity(::SPH::SPH_kernel kernel, Tree *tree, Particles *particles, int *interactions, int numParticles) {
-            //ExecutionPolicy executionPolicy(numParticles, ::SPH::Kernel::calculateDensity, kernel, tree, particles,
-            //                                interactions, numParticles);
+        real Launch::calculateDensity(::SPH::SPH_kernel kernel, Particles *particles, int *interactions, int numParticles) {
             ExecutionPolicy executionPolicy;
-            return cuda::launch(true, executionPolicy, ::MFV::Kernel::calculateDensity, kernel, tree, particles, interactions, numParticles);
+            return cuda::launch(true, executionPolicy, ::MFV::Kernel::calculateDensity, kernel, particles, interactions, numParticles);
         }
 
-        __global__ void computeVectorWeights(::SPH::SPH_kernel kernel, Tree *tree, Particles *particles, int *interactions, int numParticles){
+        __global__ void computeVectorWeights(::SPH::SPH_kernel kernel, Particles *particles, int *interactions, int numParticles){
             int i, j, inc, ip, d, noi;
             real W, Wj, dx[DIM], dWdx[DIM], dWdr, E[DIM*DIM];
             real sml, omg;
@@ -138,7 +136,9 @@ namespace MFV {
                 }
 
                 real B[DIM*DIM];
-                CudaUtils::invertMatrix(E, B);
+                if(CudaUtils::invertMatrix(E, B) < 1){
+                    printf("ERROR: Matrix E_%i may not be invertible (det(E) < %e).", i, FLOAT_ZERO_TOLERANCE);
+                }
 
                 // compute vector weights psi_j(x_i)
                 for (j = 0; j < noi; j++) {
@@ -182,11 +182,9 @@ namespace MFV {
             }
         }
 
-        real Launch::computeVectorWeights(::SPH::SPH_kernel kernel, Tree *tree, Particles *particles, int *interactions, int numParticles) {
-            //ExecutionPolicy executionPolicy(numParticles, ::SPH::Kernel::calculateDensity, kernel, tree, particles,
-            //                                interactions, numParticles);
+        real Launch::computeVectorWeights(::SPH::SPH_kernel kernel, Particles *particles, int *interactions, int numParticles) {
             ExecutionPolicy executionPolicy;
-            return cuda::launch(true, executionPolicy, ::MFV::Kernel::computeVectorWeights, kernel, tree, particles, interactions, numParticles);
+            return cuda::launch(true, executionPolicy, ::MFV::Kernel::computeVectorWeights, kernel, particles, interactions, numParticles);
         }
 
     }

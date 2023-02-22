@@ -94,19 +94,34 @@ public:
     /// host inverse of effective particle volume
     real *h_omega;
 
+    /// host mass flux through effective faces of neighbouring particles
+    real *h_massFlux;
+
     /// host x-components for vector weights for 2nd order consistent gradient computation
     real *h_psix;
+
+    /// host x-component of velocity flux through effective faces of neighbouring particles
+    real *h_vxFlux;
 
 #if DIM > 1
     /// host y-components for vector weights for gradient computation
     real *h_psiy;
 
+    /// host y-component of velocity flux through effective faces of neighbouring particles
+    real *h_vyFlux;
+
 #if DIM == 3
     /// host z-components for vector weights for gradient computation
     real *h_psiz;
 
+    /// host z-component of velocity flux through effective faces of neighbouring particles
+    real *h_vzFlux;
 #endif
 #endif
+
+    /// host energy flux through effective faces of neighbouring particles
+    real *h_energyFlux;
+
 #endif // MESHLESS_FINITE_METHOD
 
 #if VARIABLE_SML || INTEGRATE_SML
@@ -277,19 +292,33 @@ public:
     /// device inverse of effective volume of particle
     real *d_omega;
 
+    /// device mass flux through effective faces of neighbouring particles
+    real *d_massFlux;
+
     /// device x-components for vector weights for 2nd order consistent gradient computation
     real *d_psix;
+
+    /// device x-component of velocity flux through effective faces of neighbouring particles
+    real *d_vxFlux;
 
 #if DIM > 1
     /// device y-components for vector weights for gradient computation
     real *d_psiy;
 
+    /// device y-component of velocity flux through effective faces of neighbouring particles
+    real *d_vyFlux;
+
 #if DIM == 3
     /// device z-components for vector weights for gradient computation
     real *d_psiz;
 
+    /// device z-component of velocity flux through effective faces of neighbouring particles
+    real *d_vzFlux;
 #endif
 #endif
+    /// device energy flux through effective faces of neighbouring particles
+    real *d_energyFlux;
+
 #endif // MESHLESS_FINITE_VOLUME
 
 #if VARIABLE_SML || INTEGRATE_SML

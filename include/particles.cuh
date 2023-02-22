@@ -146,6 +146,18 @@ public:
     real *psiz;
 #endif
 #endif
+
+    /// (pointer) to fluxes
+    real *massFlux; // total mass flux
+    real *vxFlux; // total x-velocity flux
+#if DIM > 1
+    real *vyFlux; // total y-velocity flux
+#if DIM == 3
+    real *vzFlux; // total z-velocity flux
+#endif
+#endif
+    real *energyFlux; // total energy flux
+
 #endif // MESHLESS_FINITE_METHOD
 
     /// (pointer) to max(mu_ij) (array) needed for artificial viscosity and determining timestp
@@ -398,10 +410,16 @@ public:
      *
      * @param omega inverse of effective volume of particles
      * @param psix x-component of least-squares-fit vector weight
-     * @param psiy z-component of least-squares-fit vector weight
+     * @param psiy y-component of least-squares-fit vector weight
      * @param psiz z-component of least-squares-fit vector weight
+     * @param massFlux summed mass flux through all effective faces of neighboring particles
+     * @param vxFlux summed x-velocity flux through all effective faces of neighboring particles
+     * @param vyFlux summed y-velocity flux through all effective faces of neighboring particles
+     * @param vzFlux summed z-velocity flux through all effective faces of neighboring particles
+     * @param energyFlux summed energy flux through all effective faces of neighboring particles
      */
-    CUDA_CALLABLE_MEMBER void setMeshlessFinite(real *omega, real *psix, real *psiy, real *psiz);
+    CUDA_CALLABLE_MEMBER void setMeshlessFinite(real *omega, real *psix, real *psiy, real *psiz,
+                                                real *massFlux, real *vxFlux, real *vyFlux, real *vzFlux, real *energyFlux);
 
 #endif
 #endif // MESHLESS_FINITE_METHOD
@@ -715,9 +733,11 @@ namespace ParticlesNS {
 #endif
 
 #if MESHLESS_FINITE_METHOD
-    __global__ void setMeshlessFinite(Particles *particles, real *omega, real *psix, real* psiy, real *psiz);
+    __global__ void setMeshlessFinite(Particles *particles, real *omega, real *psix, real* psiy, real *psiz,
+                                      real *massFlux, real *vxFlux, real *vyFlux, real *vzFlux, real *energyFlux);
         namespace Launch {
-            void setMeshlessFinite(Particles *particles, real *omega, real *psix, real* psiy, real *psiz);
+            void setMeshlessFinite(Particles *particles, real *omega, real *psix, real* psiy, real *psiz,
+                                   real *massFlux, real *vxFlux, real *vyFlux, real *vzFlux, real *energyFlux);
         }
 #endif
 

@@ -55,6 +55,10 @@ smoothing 2.56e+20
 ; spiky [0], cubic spline [1], wendlandc2 [3], wendlandc4 [4], wendlandc6 [5]
 smoothingKernel 1
 
+; MFV/MFM default Riemann solver selection
+; exact [0], hllc [1]
+defaultRiemannSolver 0
+
 ; remove particles (corresponding to some criterion)
 removeParticles true
 ; spherically [0], cubic [1]

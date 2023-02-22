@@ -1,12 +1,12 @@
 /**
- * @file kernel_handler.h
+ * @file kernel_handler.cuh
  * @brief Handling the SPH smoothing kernels.
  *
  * @author Michael Staneker
  * @bug no known bugs
  */
-#ifndef MILUPHPC_KERNEL_HANDLER_H
-#define MILUPHPC_KERNEL_HANDLER_H
+#ifndef MILUPHPC_KERNEL_HANDLER_CUH
+#define MILUPHPC_KERNEL_HANDLER_CUH
 
 #include "kernel.cuh"
 #include "../parameter.h"
@@ -46,4 +46,4 @@ namespace SPH {
 }
 
 
-#endif //MILUPHPC_KERNEL_HANDLER_H
+#endif //MILUPHPC_KERNEL_HANDLER_CUH

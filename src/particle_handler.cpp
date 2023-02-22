@@ -56,14 +56,18 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
 
 #if MESHLESS_FINITE_METHOD
     h_omega = new real[numParticles];
-
+    h_massFlux =  new real[numParticles];
+    h_vxFlux = new real[numParticles];
     h_psix = new real[numParticles*MAX_NUM_INTERACTIONS];
 #if DIM > 2
     h_psiy = new real[numParticles*MAX_NUM_INTERACTIONS];
+    h_vyFlux = new real[numParticles];
 #if DIM == 3
     h_psiz = new real[numParticles*MAX_NUM_INTERACTIONS];
+    h_vzFlux = new real[numParticles];
 #endif
 #endif
+    h_energyFlux = new real[numParticles];
 
 #else // avoid allocation of memory for everything that is not needed for the meshless finite methods
     _h_dedt = new real[numParticles];
@@ -197,12 +201,17 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
 #if MESHLESS_FINITE_METHOD
     cuda::malloc(d_omega, numParticles);
     cuda::malloc(d_psix, numParticles*MAX_NUM_INTERACTIONS);
+    cuda::malloc(d_massFlux, numParticles);
+    cuda::malloc(d_vxFlux, numParticles);
 #if DIM > 1
     cuda::malloc(d_psiy, numParticles*MAX_NUM_INTERACTIONS);
+    cuda::malloc(d_vyFlux, numParticles);
 #if DIM == 3
     cuda::malloc(d_psiz, numParticles*MAX_NUM_INTERACTIONS);
+    cuda::malloc(d_vzFlux, numParticles);
 #endif
 #endif
+    cuda::malloc(d_energyFlux, numParticles);
 
 #else // avoid allocation of memory for everything that is not needed for the meshless finite methods
     cuda::malloc(_d_dedt, numParticles);
@@ -321,8 +330,10 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
 
 #if MESHLESS_FINITE_METHOD
     //TODO: handle 1D and 2D cases
-    h_particles->setMeshlessFinite(h_omega, h_psix, h_psiy, h_psiz);
-    ParticlesNS::Kernel::Launch::setMeshlessFinite(d_particles, d_omega, d_psix, d_psiy, d_psiz);
+    h_particles->setMeshlessFinite(h_omega, h_psix, h_psiy, h_psiz,
+                                   h_massFlux, h_vxFlux, h_vyFlux, h_vzFlux, h_energyFlux);
+    ParticlesNS::Kernel::Launch::setMeshlessFinite(d_particles, d_omega, d_psix, d_psiy, d_psiz,
+                                                   d_massFlux, d_vxFlux, d_vyFlux, d_vzFlux, d_energyFlux);
 #endif
 
 #if SPH_SIM

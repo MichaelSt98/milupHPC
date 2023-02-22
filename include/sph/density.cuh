@@ -45,6 +45,7 @@ namespace SPH {
          * @param interactions interaction list/interaction partners
          * @param numParticles amount of particles
          */
+         //TODO: tree argument is unused - remove.
         __global__ void calculateDensity(::SPH::SPH_kernel kernel, Tree *tree, Particles *particles, int *interactions, int numParticles);
 
         namespace Launch {

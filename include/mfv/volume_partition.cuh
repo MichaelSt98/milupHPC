@@ -11,7 +11,6 @@
 
 #include "../sph/kernel.cuh"
 #include "../particles.cuh"
-#include "../subdomain_key_tree/subdomain.cuh"
 #include "../cuda_utils/linalg.cuh"
 
 namespace MFV {
@@ -38,12 +37,11 @@ namespace MFV {
          * \f]
          *
          * @param kernel smoothing kernel
-         * @param tree Tree class instance
          * @param particles Particles class instance
          * @param interactions interaction list/interaction partners
          * @param numParticles amount of particles
          */
-        __global__ void calculateDensity(::SPH::SPH_kernel kernel, Tree *tree, Particles *particles,
+        __global__ void calculateDensity(::SPH::SPH_kernel kernel, Particles *particles,
                                          int *interactions, int numParticles);
 
         /**
@@ -52,12 +50,11 @@ namespace MFV {
          * * > Corresponding wrapper function: ::MFV::Kernel::Launch::computeVectorWeights()
          *
          * @param kernel smoothing kernel
-         * @param tree Tree class instance
          * @param particles Particles class instance
          * @param interactions interaction list/interaction partners
          * @param numParticles amount of particles
          */
-        __global__ void computeVectorWeights(::SPH::SPH_kernel kernel, Tree *tree, Particles *particles,
+        __global__ void computeVectorWeights(::SPH::SPH_kernel kernel, Particles *particles,
                                              int *interactions, int numParticles);
 
 
@@ -66,24 +63,22 @@ namespace MFV {
              * @brief Wrapper for ::MFV::Kernel::calculateDensity().
              *
              * @param kernel smoothing kernel
-             * @param tree Tree class instance
              * @param particles Particles class instance
              * @param interactions interaction list/interaction partners
              * @param numParticles amount of particles
              */
-            real calculateDensity(::SPH::SPH_kernel kernel, Tree *tree, Particles *particles,
+            real calculateDensity(::SPH::SPH_kernel kernel, Particles *particles,
                                   int *interactions, int numParticles);
 
             /**
              * @brief Wrapper for ::MFV::Kernel::computeVectorWeights().
              *
              * @param kernel smoothing kernel
-             * @param tree Tree class instance
              * @param particles Particles class instance
              * @param interactions interaction list/interaction partners
              * @param numParticles amount of particles
              */
-            real computeVectorWeights(::SPH::SPH_kernel kernel, Tree *tree, Particles *particles,
+            real computeVectorWeights(::SPH::SPH_kernel kernel, Particles *particles,
                                   int *interactions, int numParticles);
         }
 

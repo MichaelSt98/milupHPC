@@ -42,6 +42,8 @@
 #include "sph/internal_forces.cuh"
 #include "sph/soundspeed.cuh"
 #include "mfv/volume_partition.cuh"
+#include "mfv/riemann_fluxes.cuh"
+#include "mfv/riemann_solver_handler.cuh"
 #include "simulation_time_handler.h"
 
 #include "processing/kernels.cuh"
@@ -282,6 +284,9 @@ public:
     SPH::KernelHandler kernelHandler;
     /// Instance to handle the `SimulationTime` instances on device and host
     SimulationTimeHandler *simulationTimeHandler;
+
+    /// Instance to handle Riemann solvers on device and host
+    MFV::RiemannSolverHandler riemannHandler;
 
     /// number of particles (to be allocated)
     integer numParticles;

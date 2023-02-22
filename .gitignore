@@ -42,3 +42,6 @@ bb/bb_N*/*
 
 *.d
 *.o
+
+# ignore deploy script to hide user and server name
+deploy.sh

@@ -84,6 +84,15 @@ Miluphpc::Miluphpc(SimulationParameters simulationParameters) {
     kernelHandler = SPH::KernelHandler(Smoothing::Kernel(0));
 #endif
 
+#if MESHLESS_FINITE_METHOD
+    try {
+        riemannHandler = MFV::RiemannSolverHandler(Riemann::Solver(simulationParameters.defaultRiemannSolver));
+    } catch(...){
+        Logger(WARN) << "Riemann solver not available! Selecting exact solver [0] as default!";
+        riemannHandler = MFV::RiemannSolverHandler(Riemann::Solver::exact);
+    }
+#endif
+
     // read particle data, load balancing, ...
     prepareSimulation();
 
@@ -2744,12 +2753,11 @@ real Miluphpc::parallel_sph() {
 
     Logger(DEBUG) << "mfv: calculate density";
     // -----------------------------------------------------------------------------------------------------------------
-    time = MFV::Kernel::Launch::calculateDensity(kernelHandler.kernel, treeHandler->d_tree,
-                                                 particleHandler->d_particles, particleHandler->d_nnl,
-                                                 numParticlesLocal); //treeHandler->h_toDeleteLeaf[1]);
+    time = MFV::Kernel::Launch::calculateDensity(kernelHandler.kernel, particleHandler->d_particles,
+                                                 particleHandler->d_nnl,numParticlesLocal);
     // -----------------------------------------------------------------------------------------------------------------
     Logger(TIME) << "mfv: calculateDensity: " << time << " ms";
-    profiler.value2file(ProfilerIds::Time::SPH::density, time);
+    profiler.value2file(ProfilerIds::Time::MFV::density, time);
 
 #else
     Logger(DEBUG) << "calculate density";
@@ -2824,9 +2832,11 @@ real Miluphpc::parallel_sph() {
     totalTime += time;
 
 #if MESHLESS_FINITE_METHOD
-    Logger(DEBUG) << "mfv: second order gradient estimation";
-
-
+    Logger(DEBUG) << "mfv: compute riemann fluxes";
+    time = MFV::Kernel::Launch::riemannFluxes(particleHandler->d_particles, riemannHandler.solver,
+                                              particleHandler->d_nnl, numParticlesLocal);
+    Logger(TIME) << "mfv: riemannFluxes: " << time << " ms";
+    profiler.value2file(ProfilerIds::Time::MFV::riemannFluxes, time);
 
 #else
     Logger(DEBUG) << "internal forces";

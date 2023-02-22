@@ -155,6 +155,7 @@ typedef struct SimulationParameters {
     int smoothingKernelSelection;
     int sphFixedRadiusNNVersion;
 //#endif
+    int defaultRiemannSolver;
     bool removeParticles;
     int removeParticlesCriterion;
     real removeParticlesDimension;
@@ -278,6 +279,21 @@ private:
     operator T () const;
 };
 
+#if MESHLESS_FINITE_METHOD
+struct Riemann
+{
+    enum Solver
+    {
+        exact, hllc
+    };
+    Solver t_;
+    Riemann(Solver t) : t_(t) {}
+    operator Solver() const {return t_;}
+private:
+    template<typename T>
+    operator T () const;
+};
+#endif
 
 //#define SOLID
 // ideal hydro, navier stokes

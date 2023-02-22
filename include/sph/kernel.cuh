@@ -1,6 +1,6 @@
 /**
- * @file internal_forces.cuh
- * @brief SPH internal forces.
+ * @file kernel.cuh
+ * @brief SPH smoothing kernels.
  *
  * @author Michael Staneker
  * @bug no known bugs

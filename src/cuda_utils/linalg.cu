@@ -301,7 +301,7 @@ namespace CudaUtils {
 
         // inverse determinante
 
-        if (det < 1e-8) return -1;
+        if (det < FLOAT_ZERO_TOLERANCE) return -1;
         det = 1.0 / det;
 
         inverted[0*DIM+0] = (m[1*DIM+ 1] * m[2*DIM+ 2] - m[2*DIM+ 1] * m[1*DIM+ 2]) * det;

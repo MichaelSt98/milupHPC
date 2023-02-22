@@ -210,6 +210,11 @@ int main(int argc, char** argv)
     parameters.smoothingKernelSelection = confP.getVal<int>("smoothingKernel");
     parameters.sphFixedRadiusNNVersion = confP.getVal<int>("sphFixedRadiusNNVersion");
 //#endif
+#if MESHLESS_FINITE_METHOD
+    parameters.defaultRiemannSolver = confP.getVal<int>("defaultRiemannSolver");
+#else
+    parameters.defaultRiemannSolver = 0; // dummy value as unused anyway
+#endif
     parameters.removeParticles = confP.getVal<bool>("removeParticles");
     parameters.removeParticlesCriterion = confP.getVal<int>("removeParticlesCriterion");
     parameters.removeParticlesDimension = confP.getVal<real>("removeParticlesDimension");
@@ -305,11 +310,16 @@ int main(int argc, char** argv)
     profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::sending, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::insertReceivedParticles, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::fixedRadiusNN, 1);
-    profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::density, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::soundSpeed, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::pressure, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::resend, 1);
+#if MESHLESS_FINITE_METHOD
+    profiler.createValueDataSet<real>(ProfilerIds::Time::MFV::density, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::MFV::riemannFluxes, 1);
+#else
+    profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::density, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::internalForces, 1);
+#endif
     profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::repairTree, 1);
 #endif
     profiler.createValueDataSet<real>(ProfilerIds::Time::integrate, 1);
