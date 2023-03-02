@@ -68,6 +68,7 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
 #endif
 #endif
     h_energyFlux = new real[numParticles];
+    h_Ncond = new real[numParticles];
 
 #else // avoid allocation of memory for everything that is not needed for the meshless finite methods
     _h_dedt = new real[numParticles];
@@ -212,6 +213,7 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
 #endif
 #endif
     cuda::malloc(d_energyFlux, numParticles);
+    cuda::malloc(d_Ncond, numParticles);
 
 #else // avoid allocation of memory for everything that is not needed for the meshless finite methods
     cuda::malloc(_d_dedt, numParticles);
@@ -331,9 +333,10 @@ ParticleHandler::ParticleHandler(integer numParticles, integer numNodes) : numPa
 #if MESHLESS_FINITE_METHOD
     //TODO: handle 1D and 2D cases
     h_particles->setMeshlessFinite(h_omega, h_psix, h_psiy, h_psiz,
-                                   h_massFlux, h_vxFlux, h_vyFlux, h_vzFlux, h_energyFlux);
+                                   h_massFlux, h_vxFlux, h_vyFlux, h_vzFlux, h_energyFlux, h_Ncond);
     ParticlesNS::Kernel::Launch::setMeshlessFinite(d_particles, d_omega, d_psix, d_psiy, d_psiz,
-                                                   d_massFlux, d_vxFlux, d_vyFlux, d_vzFlux, d_energyFlux);
+                                                   d_massFlux, d_vxFlux, d_vyFlux, d_vzFlux,
+                                                   d_energyFlux, d_Ncond);
 #endif
 
 #if SPH_SIM

@@ -171,7 +171,7 @@ CUDA_CALLABLE_MEMBER void Particles::set(integer *numParticles, integer *numNode
 #if MESHLESS_FINITE_METHOD
 CUDA_CALLABLE_MEMBER void Particles::setMeshlessFinite(real *omega, real *psix, real *psiy, real *psiz,
                                                        real *massFlux, real *vxFlux, real *vyFlux, real *vzFlux,
-                                                       real *energyFlux) {
+                                                       real *energyFlux, real *Ncond) {
     this->omega = omega;
     this->psix = psix;
     this->psiy = psiy;
@@ -181,6 +181,7 @@ CUDA_CALLABLE_MEMBER void Particles::setMeshlessFinite(real *omega, real *psix, 
     this->vyFlux = vyFlux;
     this->vzFlux = vzFlux;
     this->energyFlux = energyFlux;
+    this->Ncond = Ncond;
 }
 #endif
 
@@ -740,16 +741,18 @@ namespace ParticlesNS {
 
 #if MESHLESS_FINITE_METHOD
         __global__ void setMeshlessFinite(Particles *particles, real *omega, real *psix, real *psiy, real *psiz,
-                                          real *massFlux, real *vxFlux, real *vyFlux, real *vzFlux, real *energyFlux){
-            particles->setMeshlessFinite(omega, psix, psiy, psiz, massFlux, vxFlux, vyFlux, vzFlux, energyFlux);
+                                          real *massFlux, real *vxFlux, real *vyFlux, real *vzFlux, real *energyFlux,
+                                          real *Ncond){
+            particles->setMeshlessFinite(omega, psix, psiy, psiz, massFlux, vxFlux, vyFlux, vzFlux, energyFlux, Ncond);
         }
 
         namespace Launch {
             void setMeshlessFinite(Particles *particles, real *omega, real *psix, real *psiy, real *psiz,
-                                   real *massFlux, real *vxFlux, real *vyFlux, real *vzFlux, real *energyFlux){
+                                   real *massFlux, real *vxFlux, real *vyFlux, real *vzFlux, real *energyFlux,
+                                   real *Ncond){
                 ExecutionPolicy executionPolicy(1, 1);
                 cuda::launch(false, executionPolicy, ::ParticlesNS::Kernel::setMeshlessFinite, particles,
-                             omega, psix, psiy, psiz, massFlux, vxFlux, vyFlux, vzFlux, energyFlux);
+                             omega, psix, psiy, psiz, massFlux, vxFlux, vyFlux, vzFlux, energyFlux, Ncond);
             }
         }
 #endif

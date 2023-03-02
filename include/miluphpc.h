@@ -357,6 +357,14 @@ public:
     /// collected information required to set up the simulation
     SimulationParameters simulationParameters;
 
+    /** Container for all parameters used for slope limiting (read in from the config file)
+     *  on device ...
+     */
+    MFV::SlopeLimitingParameters *d_slopeLimitingParameters;
+    /// ... and on host
+    MFV::SlopeLimitingParameters h_slopeLimitingParameters;
+
+
     /**
      * @brief Constructor to set up simulation.
      *

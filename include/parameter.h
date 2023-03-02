@@ -24,7 +24,7 @@ typedef int idInteger;
 
 #define MAX_LEVEL 21
 
-#define DEBUGGING 1
+#define DEBUGGING 0
 
 /**
  * * `SAFETY_LEVEL 0`: almost no safety measures
@@ -88,9 +88,15 @@ typedef int idInteger;
  */
 #define MESHLESS_FINITE_METHOD 1
 
+/// employ an additional pairwise limiter between particles
+#define PAIRWISE_LIMITER 0
+
 // deprecated flag
 #define ARTIFICIAL_VISCOSITY 1
 #define BALSARA_SWITCH 0
+
+// switch for slope limiting (should not be disabled)
+//#define SLOPE_LIMITING 1
 
 // to be (fully) implemented flags
 #define AVERAGE_KERNELS 0
@@ -122,6 +128,8 @@ typedef int idInteger;
 
 constexpr real dbl_max = std::numeric_limits<real>::max();
 #define DBL_MAX dbl_max;
+constexpr real dbl_min = std::numeric_limits<real>::min();
+#define DBL_MIN dbl_min;
 
 namespace Constants {
     constexpr real G = 6.67430e-11;
@@ -165,6 +173,12 @@ typedef struct SimulationParameters {
     bool calculateCenterOfMass;
     real particleMemoryContingent;
     int domainListSize;
+
+    /// parameters for standard slope limiter
+    real critCondNum;
+    real betaMin;
+    real betaMax;
+
 } SimulationParameters;
 
 struct To

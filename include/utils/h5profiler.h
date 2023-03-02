@@ -110,6 +110,7 @@ namespace ProfilerIds {
 
         namespace MFV {
             const char *const density { "/time/mfv_density" };
+            const char *const vectorWeights { "/time/mfv_vectorWeights" };
             const char *const riemannFluxes { "/time/mfv_riemannFluxes" };
         }
     }

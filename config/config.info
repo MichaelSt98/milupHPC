@@ -31,7 +31,7 @@ maxTimeStep 1e9
 ; end time for simulation
 ;timeEnd 1.0
 ;timeEnd 5.0e7
-timeEnd 1e-4
+timeEnd 1e-3
 ;timeEnd 0.5e10;
 ;timeEnd 1e12
 ;timeEnd 6e-2
@@ -84,6 +84,20 @@ calculateEnergy true
 ; calculate center of mass (and save to output file)
 calculateCenterOfMass false
 
+; MESHLESS FINITE METHODS MFV/MFM
+; ------------------------------------------------------
+; critical condition number for weighted position moments matrix
+; this value must be chosen >> 1, good choices are 100-1000
+critCondNum 100
+
+; slope limiting parameters depending on N_cond_crit/N_cond_i a value
+; between betaMin and betaMax is selected, a larger beta means less limiting
+betaMin 1.
+betaMax 4.
+
+; free parameters for additional pairwise limiter
+psi1 0.5
+psi2 0.25
 
 ; THESE SHOULD PROBABLY NOT EXIST IN A PRODUCTION VERSION
 ; ------------------------------------------------------

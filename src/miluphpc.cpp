@@ -91,7 +91,22 @@ Miluphpc::Miluphpc(SimulationParameters simulationParameters) {
         Logger(WARN) << "Riemann solver not available! Selecting exact solver [0] as default!";
         riemannHandler = MFV::RiemannSolverHandler(Riemann::Solver::exact);
     }
-#endif
+#if PAIRWISE_LIMITER
+    h_slopeLimitingParameters = MFV::SlopeLimitingParameters(simulationParameters.critCondNum,
+                                                            simulationParameters.betaMin,
+                                                            simulationParameters.betaMax,
+                                                            simulationParameters.psi1,
+                                                            simulationParameters.psi2);
+#else
+    h_slopeLimitingParameters = MFV::SlopeLimitingParameters(simulationParameters.critCondNum,
+                                                             simulationParameters.betaMin,
+                                                             simulationParameters.betaMax);
+
+#endif // PAIRWISE_LIMITER
+
+    cuda::malloc(d_slopeLimitingParameters, 1);
+    cuda::copy(&h_slopeLimitingParameters, d_slopeLimitingParameters);
+#endif // MESHLESS_FINITE_METHOD
 
     // read particle data, load balancing, ...
     prepareSimulation();
@@ -2759,6 +2774,17 @@ real Miluphpc::parallel_sph() {
     Logger(TIME) << "mfv: calculateDensity: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::MFV::density, time);
 
+    Logger(DEBUG) << "mfv: compute vector weights for gradient estimation and effective face computation";
+    // -----------------------------------------------------------------------------------------------------------------
+    time = MFV::Kernel::Launch::computeVectorWeights(kernelHandler.kernel, particleHandler->d_particles,
+                                                     particleHandler->d_nnl,numParticlesLocal,
+                                                     &d_slopeLimitingParameters->critCondNum);
+    // -----------------------------------------------------------------------------------------------------------------
+    Logger(TIME) << "mfv: computeVectorWeights: " << time << " ms";
+    profiler.value2file(ProfilerIds::Time::MFV::vectorWeights, time);
+
+    // TODO: increase kernel size if N_cond > N_cond^crit for particle i
+
 #else
     Logger(DEBUG) << "calculate density";
     // -----------------------------------------------------------------------------------------------------------------
@@ -2834,7 +2860,7 @@ real Miluphpc::parallel_sph() {
 #if MESHLESS_FINITE_METHOD
     Logger(DEBUG) << "mfv: compute riemann fluxes";
     time = MFV::Kernel::Launch::riemannFluxes(particleHandler->d_particles, riemannHandler.solver,
-                                              particleHandler->d_nnl, numParticlesLocal);
+                                              particleHandler->d_nnl, numParticlesLocal, d_slopeLimitingParameters);
     Logger(TIME) << "mfv: riemannFluxes: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::MFV::riemannFluxes, time);
 

@@ -78,8 +78,9 @@ namespace MFV {
             return cuda::launch(true, executionPolicy, ::MFV::Kernel::calculateDensity, kernel, particles, interactions, numParticles);
         }
 
-        __global__ void computeVectorWeights(::SPH::SPH_kernel kernel, Particles *particles, int *interactions, int numParticles){
-            int i, j, inc, ip, d, noi;
+        __global__ void computeVectorWeights(::SPH::SPH_kernel kernel, Particles *particles, int *interactions,
+                                             int numParticles, real *critCondNum){
+            int i, j, inc, ip, d, alpha, beta, noi;
             real W, Wj, dx[DIM], dWdx[DIM], dWdr, E[DIM*DIM];
             real sml, omg;
             real x;
@@ -106,6 +107,11 @@ namespace MFV {
 
                 noi = particles->noi[i];
 
+#pragma unroll
+                for(d=0; d < DIM*DIM; d++){
+                    E[d] = 0.;
+                }
+
                 // construct matrix E_i
                 for (j = 0; j < noi; j++) {
 
@@ -127,17 +133,35 @@ namespace MFV {
                     kernel(&W, dWdx, &dWdr, dx, sml);
 
 #pragma unroll
-                    for (int alpha=0; alpha<DIM; alpha++){
+                    for (alpha=0; alpha<DIM; alpha++){
 #pragma unroll
-                        for (int beta=0; beta<DIM; beta++){
+                        for (beta=0; beta<DIM; beta++){
                             E[DIM*alpha+beta] += dx[alpha]*dx[beta]*W/omg;
                         }
                     }
                 }
 
                 real B[DIM*DIM];
-                if(CudaUtils::invertMatrix(E, B) < 1){
-                    printf("ERROR: Matrix E_%i may not be invertible (det(E) < %e).", i, FLOAT_ZERO_TOLERANCE);
+                if (CudaUtils::invertMatrix(E, B) < 1){
+
+                    printf("ERROR: Matrix E_%i may not be invertible (det(E) < %e).\n", i, FLOAT_ZERO_TOLERANCE);
+                    particles->Ncond[i] = DBL_MAX;
+
+                } else {
+                    real normE=0., normB=0.;
+#pragma unroll
+                    for (alpha=0; alpha<DIM; alpha++){
+#pragma unroll
+                        for (beta=0; beta<DIM; beta++){
+                            normE += abs(E[DIM*alpha+beta])*abs(E[DIM*alpha+beta]);
+                            normB += abs(B[DIM*alpha+beta])*abs(B[DIM*alpha+beta]);
+                        }
+                    }
+                    particles->Ncond[i] = 1./(real)DIM * sqrt(normB*normE);
+
+                    if (particles->Ncond[i] > *critCondNum){
+                        printf("WARNING: N_cond = %f > N_cond^crit = %i\n", particles->Ncond[i], *critCondNum);
+                    }
                 }
 
                 // compute vector weights psi_j(x_i)
@@ -169,7 +193,7 @@ namespace MFV {
 #endif
 #endif
 #pragma unroll
-                    for (int beta=0; beta<DIM; beta++){
+                    for (beta=0; beta<DIM; beta++){
                         particles->psix[ip] += B[beta]*dx[beta]*W/omg;
 #if DIM > 1
                         particles->psiy[ip] += B[DIM+beta]*dx[beta]*W/omg;
@@ -182,9 +206,9 @@ namespace MFV {
             }
         }
 
-        real Launch::computeVectorWeights(::SPH::SPH_kernel kernel, Particles *particles, int *interactions, int numParticles) {
+        real Launch::computeVectorWeights(::SPH::SPH_kernel kernel, Particles *particles, int *interactions, int numParticles, real *critCondNum) {
             ExecutionPolicy executionPolicy;
-            return cuda::launch(true, executionPolicy, ::MFV::Kernel::computeVectorWeights, kernel, particles, interactions, numParticles);
+            return cuda::launch(true, executionPolicy, ::MFV::Kernel::computeVectorWeights, kernel, particles, interactions, numParticles, critCondNum);
         }
 
     }

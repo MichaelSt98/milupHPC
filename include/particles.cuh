@@ -157,6 +157,7 @@ public:
 #endif
 #endif
     real *energyFlux; // total energy flux
+    real *Ncond; // condition number on invertibility of matrix E_i
 
 #endif // MESHLESS_FINITE_METHOD
 
@@ -417,9 +418,11 @@ public:
      * @param vyFlux summed y-velocity flux through all effective faces of neighboring particles
      * @param vzFlux summed z-velocity flux through all effective faces of neighboring particles
      * @param energyFlux summed energy flux through all effective faces of neighboring particles
+     * @param Ncond condition number on invertibility of matrix E_i
      */
     CUDA_CALLABLE_MEMBER void setMeshlessFinite(real *omega, real *psix, real *psiy, real *psiz,
-                                                real *massFlux, real *vxFlux, real *vyFlux, real *vzFlux, real *energyFlux);
+                                                real *massFlux, real *vxFlux, real *vyFlux, real *vzFlux,
+                                                real *energyFlux, real *Ncond);
 
 #endif
 #endif // MESHLESS_FINITE_METHOD
@@ -734,10 +737,12 @@ namespace ParticlesNS {
 
 #if MESHLESS_FINITE_METHOD
     __global__ void setMeshlessFinite(Particles *particles, real *omega, real *psix, real* psiy, real *psiz,
-                                      real *massFlux, real *vxFlux, real *vyFlux, real *vzFlux, real *energyFlux);
+                                      real *massFlux, real *vxFlux, real *vyFlux, real *vzFlux, real *energyFlux,
+                                      real *Ncond);
         namespace Launch {
             void setMeshlessFinite(Particles *particles, real *omega, real *psix, real* psiy, real *psiz,
-                                   real *massFlux, real *vxFlux, real *vyFlux, real *vzFlux, real *energyFlux);
+                                   real *massFlux, real *vxFlux, real *vyFlux, real *vzFlux, real *energyFlux,
+                                   real *Ncond);
         }
 #endif
 

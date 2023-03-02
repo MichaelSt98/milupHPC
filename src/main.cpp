@@ -246,6 +246,16 @@ int main(int argc, char** argv)
     parameters.domainListSize = POW_DIM * MAX_LEVEL * (numProcesses - 1) + 1;
     Logger(DEBUG) << "domainListSize: " << parameters.domainListSize;
 
+#if MESHLESS_FINITE_METHOD
+    parameters.critCondNum = confP.getVal<real>("critCondNum");
+    parameters.betaMin = confP.getVal<real>("betaMin");
+    parameters.betaMax = confP.getVal<real>("betaMax");
+#if PAIRWISE_LIMITER
+    parameters.psi1 = confP.getVal<real>("psi1");
+    parameters.psi2 = confP.getVal<real>("psi2");
+#endif // PAIRWISE_LIMITER
+#endif // MESHLESS_FINITE_METHOD
+
     if (!checkFile(parameters.materialConfigFile, false)) {
         parameters.materialConfigFile = std::string{"config/material.cfg"};
         checkFile(parameters.materialConfigFile, true,
@@ -315,6 +325,7 @@ int main(int argc, char** argv)
     profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::resend, 1);
 #if MESHLESS_FINITE_METHOD
     profiler.createValueDataSet<real>(ProfilerIds::Time::MFV::density, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::MFV::vectorWeights, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::MFV::riemannFluxes, 1);
 #else
     profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::density, 1);

@@ -13,7 +13,7 @@
 #include "../parameter.h"
 #include "../../include/cuda_utils/cuda_utilities.cuh"
 
-#define FLOAT_ZERO_TOLERANCE 1e-12
+#define FLOAT_ZERO_TOLERANCE 1e-18
 
 class linalg {
 

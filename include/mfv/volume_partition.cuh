@@ -53,9 +53,10 @@ namespace MFV {
          * @param particles Particles class instance
          * @param interactions interaction list/interaction partners
          * @param numParticles amount of particles
+         * @param critCondNum critical condition number for matrix E_i
          */
         __global__ void computeVectorWeights(::SPH::SPH_kernel kernel, Particles *particles,
-                                             int *interactions, int numParticles);
+                                             int *interactions, int numParticles, real *critCondNum);
 
 
         namespace Launch {
@@ -77,9 +78,10 @@ namespace MFV {
              * @param particles Particles class instance
              * @param interactions interaction list/interaction partners
              * @param numParticles amount of particles
+             * @param critCondNum critical condition number for matrix E_i
              */
             real computeVectorWeights(::SPH::SPH_kernel kernel, Particles *particles,
-                                  int *interactions, int numParticles);
+                                  int *interactions, int numParticles, real *critCondNum);
         }
 
     }

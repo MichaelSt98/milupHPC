@@ -122,6 +122,9 @@ public:
     /// host energy flux through effective faces of neighbouring particles
     real *h_energyFlux;
 
+    /// host condition number on matrix invertibility of E_i
+    real *h_Ncond;
+
 #endif // MESHLESS_FINITE_METHOD
 
 #if VARIABLE_SML || INTEGRATE_SML
@@ -318,6 +321,9 @@ public:
 #endif
     /// device energy flux through effective faces of neighbouring particles
     real *d_energyFlux;
+
+    /// host condition number on matrix invertibility of E_i
+    real *d_Ncond;
 
 #endif // MESHLESS_FINITE_VOLUME
 
