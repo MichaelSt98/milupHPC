@@ -326,6 +326,7 @@ int main(int argc, char** argv)
 #if MESHLESS_FINITE_METHOD
     profiler.createValueDataSet<real>(ProfilerIds::Time::MFV::density, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::MFV::vectorWeights, 1);
+    profiler.createValueDataSet<real>(ProfilerIds::Time::MFV::gradients, 1);
     profiler.createValueDataSet<real>(ProfilerIds::Time::MFV::riemannFluxes, 1);
 #else
     profiler.createValueDataSet<real>(ProfilerIds::Time::SPH::density, 1);

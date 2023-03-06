@@ -706,8 +706,8 @@ real Miluphpc::boundingBox() {
                  << *treeHandler->h_minY << ", " << *treeHandler->h_maxY << ")";
 #else
     Logger(DEBUG) << "Bounding box: x = (" << std::setprecision(9) << *treeHandler->h_minX << ", "
-                    << *treeHandler->h_maxX << ")" << "y = (" << *treeHandler->h_minY << ", "
-                    << *treeHandler->h_maxY << ")" << "z = " << *treeHandler->h_minZ << ", "
+                    << *treeHandler->h_maxX << ") y = (" << *treeHandler->h_minY << ", "
+                    << *treeHandler->h_maxY << ") z = " << *treeHandler->h_minZ << ", "
                     << *treeHandler->h_maxZ << ")";
 #endif
 
@@ -2622,7 +2622,7 @@ real Miluphpc::parallel_sph() {
     //}
     profiler.value2file(ProfilerIds::Time::SPH::insertReceivedParticles, time);
 
-    time = 0;
+    //time = 0;
     //for (int level=MAX_LEVEL; level>0; --level) {
     //    time += SPH::Kernel::Launch::calculateCentersOfMass(treeHandler->d_tree, particleHandler->d_particles, level);
     //}
@@ -2773,6 +2773,7 @@ real Miluphpc::parallel_sph() {
     // -----------------------------------------------------------------------------------------------------------------
     Logger(TIME) << "mfv: calculateDensity: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::MFV::density, time);
+    totalTime += time;
 
     Logger(DEBUG) << "mfv: compute vector weights for gradient estimation and effective face computation";
     // -----------------------------------------------------------------------------------------------------------------
@@ -2782,6 +2783,7 @@ real Miluphpc::parallel_sph() {
     // -----------------------------------------------------------------------------------------------------------------
     Logger(TIME) << "mfv: computeVectorWeights: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::MFV::vectorWeights, time);
+    totalTime += time;
 
     // TODO: increase kernel size if N_cond > N_cond^crit for particle i
 
@@ -2858,11 +2860,21 @@ real Miluphpc::parallel_sph() {
     totalTime += time;
 
 #if MESHLESS_FINITE_METHOD
+    Logger(DEBUG) << "mfv: compute gradients";
+    time = MFV::Kernel::Launch::computeGradients(particleHandler->d_particles, particleHandler->d_nnl, numParticlesLocal,
+                                                 d_slopeLimitingParameters);
+    Logger(TIME) << "mfv: compute gradients: " << time << " ms";
+    profiler.value2file(ProfilerIds::Time::MFV::gradients, time);
+    totalTime += time;
+
+
     Logger(DEBUG) << "mfv: compute riemann fluxes";
     time = MFV::Kernel::Launch::riemannFluxes(particleHandler->d_particles, riemannHandler.solver,
-                                              particleHandler->d_nnl, numParticlesLocal, d_slopeLimitingParameters);
+                                              particleHandler->d_nnl, numParticlesLocal, d_slopeLimitingParameters,
+                                              simulationTimeHandler->d_dt, materialHandler->d_materials);
     Logger(TIME) << "mfv: riemannFluxes: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::MFV::riemannFluxes, time);
+    totalTime += time;
 
 #else
     Logger(DEBUG) << "internal forces";
@@ -2878,8 +2890,10 @@ real Miluphpc::parallel_sph() {
                                                           lowestDomainListHandler->d_domainList,
                                                           numParticles, numNodes, curveType);
 
-    Logger(TIME) << "sph: totalTime: " << totalTime << " ms";
     profiler.value2file(ProfilerIds::Time::SPH::repairTree, time);
+    Logger(TIME) << "sph: repairTee: " << time << " ms";
+    totalTime += time;
+    Logger(TIME) << "sph: totalTime: " << totalTime << " ms";
 
     return totalTime;
 

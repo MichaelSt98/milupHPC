@@ -147,6 +147,17 @@ public:
 #endif
 #endif
 
+    /// (pointer) to gradients
+    real *rhoGrad; // gradient of rho (dimension N*DIM)
+    real *vxGrad; // gradient of vx (dimension N*DIM)
+#if DIM > 1
+    real *vyGrad; // gradient of vy (dimension N*DIM)
+#if DIM == 3
+    real *vzGrad; // gradient of vz (dimension N*DIM)
+#endif
+#endif
+    real *pGrad; // gradient of p (dimension N*DIM)
+
     /// (pointer) to fluxes
     real *massFlux; // total mass flux
     real *vxFlux; // total x-velocity flux
@@ -419,10 +430,16 @@ public:
      * @param vzFlux summed z-velocity flux through all effective faces of neighboring particles
      * @param energyFlux summed energy flux through all effective faces of neighboring particles
      * @param Ncond condition number on invertibility of matrix E_i
+     * @param rhoGrad gradient of rho
+     * @param vxGrad gradient of x-velocity
+     * @param vyGrad gradient of x-velocity
+     * @param vzGrad gradient of x-velocity
+     * @param pGrad gradient of pressure
      */
     CUDA_CALLABLE_MEMBER void setMeshlessFinite(real *omega, real *psix, real *psiy, real *psiz,
                                                 real *massFlux, real *vxFlux, real *vyFlux, real *vzFlux,
-                                                real *energyFlux, real *Ncond);
+                                                real *energyFlux, real *Ncond, real *rhoGrad, real *vxGrad,
+                                                real *vyGrad, real *vzGrad, real *pGrad);
 
 #endif
 #endif // MESHLESS_FINITE_METHOD
@@ -738,11 +755,11 @@ namespace ParticlesNS {
 #if MESHLESS_FINITE_METHOD
     __global__ void setMeshlessFinite(Particles *particles, real *omega, real *psix, real* psiy, real *psiz,
                                       real *massFlux, real *vxFlux, real *vyFlux, real *vzFlux, real *energyFlux,
-                                      real *Ncond);
+                                      real *Ncond,real *rhoGrad, real *vxGrad, real *vyGrad, real *vzGrad, real *pGrad);
         namespace Launch {
             void setMeshlessFinite(Particles *particles, real *omega, real *psix, real* psiy, real *psiz,
                                    real *massFlux, real *vxFlux, real *vyFlux, real *vzFlux, real *energyFlux,
-                                   real *Ncond);
+                                   real *Ncond, real *rhoGrad, real *vxGrad, real *vyGrad, real *vzGrad, real *pGrad);
         }
 #endif
 

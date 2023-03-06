@@ -10,6 +10,7 @@
 #define MILUPHPC_RIEMANN_FLUXES_CUH
 
 #include "../particles.cuh"
+#include "../materials/material.cuh"
 #include "riemann_solver.cuh"
 #include "../cuda_utils/linalg.cuh"
 
@@ -51,7 +52,7 @@ namespace MFV {
     namespace Compute {
 
         /**
-         * @brief Compute
+         * @brief Compute quadrature point (first order)
          *
          * @param[out] x_ij quadrature point vector between x_i and x_j
          * @param[in] i index of particle i
@@ -59,6 +60,16 @@ namespace MFV {
          * @param[in] particles particles class instance
          */
         __device__ void quadraturePoint(real x_ij[DIM], int i, int ip, Particles *particles);
+
+        /**
+         * @brief Compute frame velocity (firstOrder)
+         *
+         * @param[out] vFrame velocity vector of the frame of reference between particle i and ip
+         * @param[in] i index of particle i
+         * @param[in] ip index of interaction partner j
+         * @param[in] particles particles class instance
+         */
+        __device__ void frameVelocity(real vFrame[DIM], int i, int ip, Particles *particles);
 
         /**
          * @brief Compute effective face from vector weights.
@@ -97,11 +108,30 @@ namespace MFV {
          *            \f$ \beta_\text{min} \f$ and \f$ \beta_\text{max} \f$ from config file used for the employed
          *            slope limiter
          */
-        __device__ void gradient(real grad[DIM], real *f, int i, int *interactions, int noi, Particles *particles,
+        __device__ void gradient(real *grad, real *f, int i, int *interactions, int noi, Particles *particles,
                                  SlopeLimitingParameters *slopeLimitingParameters);
     }
 
     namespace Kernel {
+
+        /**
+         * @brief Compute second-order accurate gradients for primitive variables
+         *
+         * > Corresponding wrapper function: ::MFV::Kernel::Launch::computeGradients()
+         *
+         *
+         *
+         * @param particles Particles class instance
+         * @param interactions interaction list/interaction partners
+         * @param numParticles amount of particles
+         * @param[in] slopeLimitingParameters struct containing parameters for slope limiter in the spirit of
+         *                                    unstructured mesh codes (Barth & Jespersen, 1989) and pairwise limiter
+         *                                    proposed by P.F. Hopkins, 2015
+         *
+         */
+        __global__ void computeGradients(Particles *particles, int *interactions,
+                                         int numParticles, SlopeLimitingParameters *slopeLimitingParameters);
+
 
         /**
          * @brief Compute the inter-particle fluxes \f$ \vec{\F}_{ij} \f$.
@@ -117,23 +147,42 @@ namespace MFV {
          * @param[in] slopeLimitingParameters struct containing parameters for slope limiter in the spirit of
          *                                    unstructured mesh codes (Barth & Jespersen, 1989) and pairwise limiter
          *                                    proposed by P.F. Hopkins, 2015
-         *
+         * @param dt current timestep
+         * @param materials array holding material data
          */
         __global__ void riemannFluxes(Particles *particles, RiemannSolver riemannSolver, int *interactions,
-                                      int numParticles, SlopeLimitingParameters *slopeLimitingParameters);
+                                      int numParticles, SlopeLimitingParameters *slopeLimitingParameters,
+                                      real *dt, Material *materials);
 
         namespace Launch {
             /**
-             * @brief Wrapper for ::MFV::Kernel::riemannFluxes().
+             * @brief Wrapper for ::MFV::Kernel::computeGradients().
              *
-             * @param kernel smoothing kernel
              * @param particles Particles class instance
              * @param interactions interaction list/interaction partners
              * @param numParticles amount of particles
              * @param slopeLimitingParameters struct holding parameters for the slope limiting
+             *
+             * @return execution wall time
+             */
+            real computeGradients(Particles *particles, int *interactions, int numParticles,
+                                  SlopeLimitingParameters *slopeLimitingParameters);
+
+            /**
+             * @brief Wrapper for ::MFV::Kernel::riemannFluxes().
+             *
+             * @param particles Particles class instance
+             * @param riemannSolver RiemannSolver function
+             * @param interactions interaction list/interaction partners
+             * @param numParticles amount of particles
+             * @param slopeLimitingParameters struct holding parameters for the slope limiting
+             * @param dt timestep
+             * @param materials array holding material data
+             *
+             * @return execution wall time
              */
             real riemannFluxes(Particles *particles, RiemannSolver riemannSolver, int *interactions, int numParticles,
-                               SlopeLimitingParameters *slopeLimitingParameters);
+                               SlopeLimitingParameters *slopeLimitingParameters, real *dt, Material *materials);
         }
 
     }

@@ -144,7 +144,7 @@ namespace MFV {
                 real B[DIM*DIM];
                 if (CudaUtils::invertMatrix(E, B) < 1){
 
-                    printf("ERROR: Matrix E_%i may not be invertible (det(E) < %e).\n", i, FLOAT_ZERO_TOLERANCE);
+                    printf("ERROR: Matrix E_%i is not invertible (det(E) = 0.).\n");
                     particles->Ncond[i] = DBL_MAX;
 
                 } else {

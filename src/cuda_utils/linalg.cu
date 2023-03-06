@@ -2,6 +2,70 @@
 
 namespace CudaUtils {
 
+    __device__ real dotProd(real a[DIM], real b[DIM]){
+        real dotProd = 0.;
+#pragma unroll
+        for (int d=0; d<DIM; d++){
+            dotProd += a[d]*b[d];
+        }
+        return dotProd;
+    }
+
+    __device__ void rotationMatrix(real R[DIM*DIM], real a[DIM], real b[DIM]){
+#if DIM == 2
+        R[0] = a[0]*b[0] + a[1]*b[1];
+        R[1] = -(a[0]*b[1] - a[1]*b[0]);
+        R[2] = -R[1];
+        R[3] = R[0];
+#elif DIM == 3
+        real v[DIM]; // cross product axb
+        v[0] = a[1]*b[2] - a[2]*b[1];
+        v[1] = a[2]*b[0] - a[0]*b[2];
+        v[2] = a[0]*b[1] - a[1]*b[0];
+        real cosAB = dotProd(a, b); // a and b MUST be normed
+
+        if (cosAB == -1.){
+            R[0] = -1.;
+            R[1] = 0.;
+            R[2] = 0.;
+            R[3] = 0.;
+            R[4] = -1.;
+            R[5] = 0.;
+            R[6] = 0.;
+            R[7] = 0.;
+            R[8] = -1.;
+        } else if (cosAB < -1.+FLOAT_ZERO_TOLERANCE && cosAB > -1.-FLOAT_ZERO_TOLERANCE){
+            printf("WARNING: a and b almost point in opposite directions: cosAB = %e\n", cosAB);
+        }
+
+        real n = 1./(1. + cosAB);
+
+        R[0] = 1.-n*(v[2]*v[2]+v[1]*v[1]);
+        R[1] = -v[2]+n*v[0]*v[1];
+        R[2] = v[1]+n*v[0]*v[2];
+        R[3] = v[2]+n*v[0]*v[1];
+        R[4] = 1.-n*(v[2]*v[2]+v[0]*v[0]);
+        R[5] = -v[0]+n*v[1]*v[2];
+        R[6] = -v[1]+n*v[0]*v[2];
+        R[7] = v[0]+n*v[1]*v[2];
+        R[8] = 1.-n*(v[1]*v[1]+v[0]*v[0]);
+#else
+        printf("ERROR: Rotation matrix for DIM = %i not applicable/implemented.\n", DIM);
+#endif
+    }
+
+    __device__ void multiplyMatVec(real r[DIM], real M[DIM*DIM], real v[DIM]){
+        int m, n;
+#pragma unroll
+        for(m=0; m<DIM; m++){
+            r[m] = 0.;
+#pragma unroll
+            for(n=0; n<DIM; n++){
+                r[m] += M[m*DIM+n]*v[n];
+            }
+        }
+    }
+
     __device__ int sign(real x) {
         if (x < 0) { return -1; }
         else if (x > 0) { return  1; }
@@ -288,6 +352,12 @@ namespace CudaUtils {
         det = det2x2(a,b,c,d);
         //  if (det < 1e-8) return -1;
         // if (det < 1e-10) det = 1e-10;
+        if (det == 0.){
+            printf("ERROR: matrix to be inverted is singular.\n");
+            return -1;
+        } else if (det < FLOAT_ZERO_TOLERANCE){
+            printf("WARNING: matrix to be inverted is probably singular: det(M) = %e\n", det);
+        }
         det = 1./det;
 
         inverted[0*DIM+0] = det*d;
@@ -299,12 +369,13 @@ namespace CudaUtils {
             - m[0 * DIM + 1] * (m[1 * DIM + 0] * m[2 * DIM + 2] - m[1 * DIM + 2] * m[2 * DIM + 0])
             + m[0 * DIM + 2] * (m[1 * DIM + 0] * m[2 * DIM + 1] - m[1 * DIM + 1] * m[2 * DIM + 0]);
 
-        // inverse determinante
-
-        if (det < FLOAT_ZERO_TOLERANCE){
-            printf("ERROR: matrix to be inverted is probably singular: det(M) = %e\n", det);
+        if (det == 0.){
+            printf("ERROR: matrix to be inverted is singular.\n");
             return -1;
+        } else if (det < FLOAT_ZERO_TOLERANCE){
+            printf("WARNING: matrix to be inverted is probably singular: det(M) = %e\n", det);
         }
+        // inverse determinant
         det = 1.0 / det;
 
         inverted[0*DIM+0] = (m[1*DIM+ 1] * m[2*DIM+ 2] - m[2*DIM+ 1] * m[1*DIM+ 2]) * det;

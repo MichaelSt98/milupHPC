@@ -100,12 +100,21 @@ public:
     /// host x-components for vector weights for 2nd order consistent gradient computation
     real *h_psix;
 
+    /// host gradient of rho
+    real *h_rhoGrad;
+
+    /// host gradient of vx
+    real *h_vxGrad;
+
     /// host x-component of velocity flux through effective faces of neighbouring particles
     real *h_vxFlux;
 
 #if DIM > 1
     /// host y-components for vector weights for gradient computation
     real *h_psiy;
+
+    /// host gradient of vy
+    real *h_vyGrad;
 
     /// host y-component of velocity flux through effective faces of neighbouring particles
     real *h_vyFlux;
@@ -114,10 +123,15 @@ public:
     /// host z-components for vector weights for gradient computation
     real *h_psiz;
 
+    /// host gradient of vy
+    real *h_vzGrad;
+
     /// host z-component of velocity flux through effective faces of neighbouring particles
     real *h_vzFlux;
 #endif
 #endif
+    /// host gradient of p
+    real *h_pGrad;
 
     /// host energy flux through effective faces of neighbouring particles
     real *h_energyFlux;
@@ -301,12 +315,21 @@ public:
     /// device x-components for vector weights for 2nd order consistent gradient computation
     real *d_psix;
 
+    /// device gradient of rho
+    real *d_rhoGrad;
+
+    /// device gradient of vx
+    real *d_vxGrad;
+
     /// device x-component of velocity flux through effective faces of neighbouring particles
     real *d_vxFlux;
 
 #if DIM > 1
     /// device y-components for vector weights for gradient computation
     real *d_psiy;
+
+    /// device gradient of vy
+    real *d_vyGrad;
 
     /// device y-component of velocity flux through effective faces of neighbouring particles
     real *d_vyFlux;
@@ -315,10 +338,16 @@ public:
     /// device z-components for vector weights for gradient computation
     real *d_psiz;
 
+    /// device gradient of vy
+    real *d_vzGrad;
+
     /// device z-component of velocity flux through effective faces of neighbouring particles
     real *d_vzFlux;
 #endif
 #endif
+    /// device gradient of p
+    real *d_pGrad;
+
     /// device energy flux through effective faces of neighbouring particles
     real *d_energyFlux;
 

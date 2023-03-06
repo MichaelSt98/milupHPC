@@ -22,6 +22,38 @@ class linalg {
 namespace CudaUtils {
 
     /**
+     * @brief Computing the dot product of two vectors.
+     *
+     * @param[in] a vector
+     * @param[in] b vector
+     *
+     * @return dot product of vectors a and b
+     */
+    __device__ real dotProd(real a[DIM], real b[DIM]);
+
+    /**
+     * @brief Compute the rotation matrix which rotates vector \f$\hat{a}\f$ onto vector \f$\hat{b}\f$
+     *
+     * Taken from https://math.stackexchange.com/a/476311 (3D) and https://math.stackexchange.com/a/897677 (2D)
+     *
+     * @param[out] R rotation matrix
+     * @param[in] a unit vector \f$\hat{a}\f$ to be rotated to align with \f$\hat{b}\f$
+     * @param[in] b unit vector \f$\hat{b}\f$
+     */
+     __device__ void rotationMatrix(real R[DIM*DIM], real a[DIM], real b[DIM]);
+
+     /**
+      * @brief Multiply matrix with vector.
+      *
+      * \f$ \vec{r} = \mathcal{M} \vec{v} \f$
+      *
+      * @param[out] r resulting vector
+      * @param[in] M matrix
+      * @param[in] v vector
+      */
+     __device__ void multiplyMatVec(real r[DIM], real M[DIM*DIM], real v[DIM]);
+
+    /**
      * @brief Get sign of floating point variable.
      *
      * @param x Floating point variable
