@@ -143,14 +143,13 @@ namespace MFV {
          * @param particles Particles class instance
          * @param interactions interaction list/interaction partners
          * @param numParticles amount of particles
-         * @param riemannSolver default RiemannSolver function pointer
          * @param[in] slopeLimitingParameters struct containing parameters for slope limiter in the spirit of
          *                                    unstructured mesh codes (Barth & Jespersen, 1989) and pairwise limiter
          *                                    proposed by P.F. Hopkins, 2015
          * @param dt current timestep
          * @param materials array holding material data
          */
-        __global__ void riemannFluxes(Particles *particles, RiemannSolver riemannSolver, int *interactions,
+        __global__ void riemannFluxes(Particles *particles, int *interactions,
                                       int numParticles, SlopeLimitingParameters *slopeLimitingParameters,
                                       real *dt, Material *materials);
 
@@ -172,7 +171,6 @@ namespace MFV {
              * @brief Wrapper for ::MFV::Kernel::riemannFluxes().
              *
              * @param particles Particles class instance
-             * @param riemannSolver RiemannSolver function
              * @param interactions interaction list/interaction partners
              * @param numParticles amount of particles
              * @param slopeLimitingParameters struct holding parameters for the slope limiting
@@ -181,7 +179,7 @@ namespace MFV {
              *
              * @return execution wall time
              */
-            real riemannFluxes(Particles *particles, RiemannSolver riemannSolver, int *interactions, int numParticles,
+            real riemannFluxes(Particles *particles, int *interactions, int numParticles,
                                SlopeLimitingParameters *slopeLimitingParameters, real *dt, Material *materials);
         }
 

@@ -293,7 +293,7 @@ private:
     operator T () const;
 };
 
-#if MESHLESS_FINITE_METHOD
+/*#if MESHLESS_FINITE_METHOD
 struct Riemann
 {
     enum Solver
@@ -308,6 +308,7 @@ private:
     operator T () const;
 };
 #endif
+*/
 
 //#define SOLID
 // ideal hydro, navier stokes

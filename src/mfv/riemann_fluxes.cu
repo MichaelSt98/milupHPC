@@ -162,10 +162,10 @@ namespace MFV {
 
         }
 
-        __global__ void riemannFluxes(Particles *particles, RiemannSolver riemannSolver, int *interactions,
+        __global__ void riemannFluxes(Particles *particles, int *interactions,
                                       int numParticles, SlopeLimitingParameters *slopeLimitingParameters,
                                       real *dt, Material *materials){
-            int i, j, inc, ip, noi, d, iGradR, iGradL;
+            int i, j, inc, ip, noi, d, iGradR, iGradL, flagLR;
             real vFrame[DIM]; // frame velocity for Riemann problem
             real xij[DIM]; // quadrature point between particles i and j
             real Aij[DIM], AijNorm, hatAij[DIM]; // effective face of the interface i -> j
@@ -181,6 +181,7 @@ namespace MFV {
 #endif
             real viDiv, vjDiv; // velocity divergences for forward prediction in time
             real gamma; // adiabatic index
+            real rhoSol, vxSol, pSol; // solution vector of Riemann problem
 
 #if PAIRWISE_LIMITER
             real rhoR0, rhoL0, vxR0, vxL0, pR0, pL0;
@@ -197,6 +198,15 @@ namespace MFV {
             for (i = threadIdx.x + blockIdx.x * blockDim.x; i < numParticles; i += inc) {
 
                 noi = particles->noi[i];
+
+                // get adiabatic index of material
+                // TODO: this only works for an ideal gas
+                gamma = materials[particles->materialId[i]].eos.polytropic_gamma;
+
+                /// create Riemann Solver instance with appropriate gamma
+                // TODO: implement the possibility to use other Riemann solvers, probably with preprocessor directives
+                ExactRiemannSolver riemannSolver;
+                riemannSolver.init(gamma);
 
                 /// loop over nearest neighbors
                 for (j = 0; j < noi; j++) {
@@ -286,9 +296,6 @@ namespace MFV {
                     vjDiv += particles->vzGrad[iGradL+2];
 #endif
 #endif
-                    // get adiabatic index of material
-                    // TODO: this only works for an ideal gas
-                    gamma = materials[particles->materialId[i]].eos.polytropic_gamma;
 
                     // actual forward prediction dimension by dimension
                     rhoR -= *dt/2. * (particles->rho[i]*viDiv + (particles->vx[i]-vFrame[0])*particles->rhoGrad[iGradR]);
@@ -363,7 +370,12 @@ namespace MFV {
 
                 }
 
-                // TODO: RIEMANN SOLVER function call
+                flagLR = riemannSolver.solve(rhoL, vL[0], pL,
+                                             rhoR, vR[0], pR,
+                                             rhoSol, vxSol, pSol, 0.);
+
+                
+
 
             }
         }
@@ -376,10 +388,10 @@ namespace MFV {
                                     interactions, numParticles, slopeLimitingParameters);
             }
 
-            real riemannFluxes(Particles *particles, RiemannSolver riemannSolver, int *interactions, int numParticles,
+            real riemannFluxes(Particles *particles, int *interactions, int numParticles,
                                SlopeLimitingParameters *slopeLimitingParameters, real *dt, Material *materials) {
                 ExecutionPolicy executionPolicy;
-                return cuda::launch(true, executionPolicy, ::MFV::Kernel::riemannFluxes, particles, riemannSolver,
+                return cuda::launch(true, executionPolicy, ::MFV::Kernel::riemannFluxes, particles,
                                     interactions, numParticles, slopeLimitingParameters, dt, materials);
             }
         }

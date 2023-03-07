@@ -43,7 +43,6 @@
 #include "sph/soundspeed.cuh"
 #include "mfv/volume_partition.cuh"
 #include "mfv/riemann_fluxes.cuh"
-#include "mfv/riemann_solver_handler.cuh"
 #include "simulation_time_handler.h"
 
 #include "processing/kernels.cuh"
@@ -286,7 +285,8 @@ public:
     SimulationTimeHandler *simulationTimeHandler;
 
     /// Instance to handle Riemann solvers on device and host
-    MFV::RiemannSolverHandler riemannHandler;
+    // DEPRECATED: Riemann solver is instantiated directly on the device
+    //MFV::RiemannSolverHandler riemannHandler;
 
     /// number of particles (to be allocated)
     integer numParticles;

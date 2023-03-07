@@ -85,12 +85,6 @@ Miluphpc::Miluphpc(SimulationParameters simulationParameters) {
 #endif
 
 #if MESHLESS_FINITE_METHOD
-    try {
-        riemannHandler = MFV::RiemannSolverHandler(Riemann::Solver(simulationParameters.defaultRiemannSolver));
-    } catch(...){
-        Logger(WARN) << "Riemann solver not available! Selecting exact solver [0] as default!";
-        riemannHandler = MFV::RiemannSolverHandler(Riemann::Solver::exact);
-    }
 #if PAIRWISE_LIMITER
     h_slopeLimitingParameters = MFV::SlopeLimitingParameters(simulationParameters.critCondNum,
                                                             simulationParameters.betaMin,
@@ -2869,9 +2863,9 @@ real Miluphpc::parallel_sph() {
 
 
     Logger(DEBUG) << "mfv: compute riemann fluxes";
-    time = MFV::Kernel::Launch::riemannFluxes(particleHandler->d_particles, riemannHandler.solver,
-                                              particleHandler->d_nnl, numParticlesLocal, d_slopeLimitingParameters,
-                                              simulationTimeHandler->d_dt, materialHandler->d_materials);
+    time = MFV::Kernel::Launch::riemannFluxes(particleHandler->d_particles, particleHandler->d_nnl, numParticlesLocal,
+                                              d_slopeLimitingParameters, simulationTimeHandler->d_dt,
+                                              materialHandler->d_materials);
     Logger(TIME) << "mfv: riemannFluxes: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::MFV::riemannFluxes, time);
     totalTime += time;
