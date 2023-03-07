@@ -77,7 +77,7 @@ namespace MFV {
 #endif
 #endif
             }
-//#if SLOPE_LIMITING
+
             // limit slopes by default
             // find maximum value of f amongst all neighbors including the particle itself
             fMax = f[i];
@@ -126,7 +126,6 @@ namespace MFV {
             for(d=0; d<DIM; d++){
                 *(grad+d) *= alpha;
             }
-//#end
         }
     }
 
@@ -181,7 +180,8 @@ namespace MFV {
 #endif
             real viDiv, vjDiv; // velocity divergences for forward prediction in time
             real gamma; // adiabatic index
-            real rhoSol, vxSol, pSol; // solution vector of Riemann problem
+            real rhoSol, vSol[DIM], pSol; // solution vector of Riemann problem
+            real vLab2; // length of velocity solution squared in the laboratory frame
 
 #if PAIRWISE_LIMITER
             real rhoR0, rhoL0, vxR0, vxL0, pR0, pL0;
@@ -192,6 +192,17 @@ namespace MFV {
 #endif
 #endif
 #endif // PAIRWISE_LIMITER
+
+            /// set fluxes to be collected over interaction partners to zero
+            particles->massFlux[i] = 0.;
+            particles->vxFlux[i] = 0.;
+#if DIM > 1
+            particles->vyFlux[i] = 0.;
+#if DIM == 3
+            particles->vzFlux[i] = 0.;
+#endif
+#endif
+            particles->energyFlux[i] = 0.;
 
             /// main loop over particles
             inc = blockDim.x * gridDim.x;
@@ -372,11 +383,59 @@ namespace MFV {
 
                 flagLR = riemannSolver.solve(rhoL, vL[0], pL,
                                              rhoR, vR[0], pR,
-                                             rhoSol, vxSol, pSol, 0.);
+                                             rhoSol, vSol[0], pSol, 0.);
 
-                
+                if (flagLR == 1){
+#if DIM > 1
+                    // right state sampled
+                    vSol[1] = vR[1];
+#if DIM == 3
+                    vSol[2] = vR[2];
+#endif
+                } else if (flagLR == -1){ // flagLR == -1
+                    // left state sampled
+                    vSol[1] = vL[1];
+#if DIM ==3
+                    vSol[2] = vL[2];
+#endif
+#endif
+                } else { // flagLR == 0
+                    printf("WARNING: Vacuum state has been sampled. Don't know how to handle this.\n");
+                }
 
+                ///rotate solution state back to simulation frame
+                ::CudaUtils::rotationMatrix(R, unitX, hatAij);
+#pragma unroll
+                for(d=0; d<DIM; d++){
+                    vBuf[d] = vSol[d];
+                }
+                ::CudaUtils::multiplyMatVec(vSol, R, vBuf);
 
+                /// collect fluxes through effective face
+                // reuse vBuf[] as vLab[]
+#pragma unroll
+                for(d=0; d<DIM; d++){
+                    vBuf[d] = vSol[d] + vFrame[d];
+                }
+
+                vLab2 = ::CudaUtils::dotProd(vBuf, vBuf);
+
+                particles->massFlux[i] += Aij[0]*vSol[0];
+                particles->vxFlux[i] += Aij[0]*(rhoSol*vBuf[0]*vSol[0]+pSol);
+                particles->energyFlux[i] += Aij[0]*(vSol[0]*(pSol/(gamma-1.)+rhoSol*.5*vLab2) + pSol*vBuf[0]);
+#if DIM > 1
+                particles->massFlux[i] += Aij[1]*vSol[1];
+                particles->vxFlux[i] += Aij[1]*(rhoSol*vBuf[0]*vSol[1]);
+                particles->vyFlux[i] += Aij[0]*rhoSol*vBuf[1]*vSol[0] + Aij[1]*(rhoSol*vBuf[1]*vSol[1]+pSol);
+                particles->energyFlux[i] += Aij[1]*(vSol[1]*(pSol/(gamma-1.)+rhoSol*.5*vLab2) + pSol*vBuf[1]);
+#if DIM == 3
+                particles->massFlux[i] += Aij[2]*vSol[2];
+                particles->vxFlux[i] += Aij[2]*(rhoSol*vBuf[0]*vSol[2]);
+                particles->vyFlux[i] += Aij[2]*(rhoSol*vBuf[1]*vSol[2]);
+                particles->vzFlux[i] += Aij[0]*rhoSol*vBuf[2]*vSol[0] + Aij[1]*rhoSol*vBuf[2]*vSol[1] + Aij[2]*(rhoSol*vBuf[2]*vSol[2]+pSol);
+                particles->energyFlux[i] += Aij[2]*(vSol[2]*(pSol/(gamma-1.)+rhoSol*.5*vLab2) + pSol*vBuf[2]);
+#endif
+#endif
             }
         }
 

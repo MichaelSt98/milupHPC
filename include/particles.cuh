@@ -1084,7 +1084,6 @@ public:
     //integer *level;
     //integer *nodeType;
 
-    ///
     real *rho;
     real *e;
     real *dedt;

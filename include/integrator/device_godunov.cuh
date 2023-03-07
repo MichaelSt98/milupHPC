@@ -24,10 +24,10 @@ namespace GodunovNS {
          * > Corresponding wrapper function: ::GodunovNS::Kernel::Launch::update()
          *
          * @param particles Particles class instance
-         * @param n Number of particles to be advanced
+         * @param numParticles Number of particles to be advanced
          * @param dt time step
          */
-        __global__ void update(Particles *particles, integer n, real dt);
+        __global__ void update(Particles *particles, int numParticles, real dt);
 
         /// wrapped kernel functions
         namespace Launch {
@@ -36,7 +36,7 @@ namespace GodunovNS {
              *
              * @return Wall time of execution
              */
-            real update(Particles *particles, integer n, real dt);
+            real update(Particles *particles, int numParticles, real dt);
         }
     }
 
