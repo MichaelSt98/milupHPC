@@ -64,7 +64,7 @@ class SedovSolution(object):
         # Characterize the solution
         f_min = self.c2 if self.w1 > w else self.c6
 
-        f = np.logspace(np.log10(f_min), 0, 1e5)
+        f = np.logspace(np.log10(f_min), 0, int(1e5))
 
         # Sort the etas for our interpolation function
         eta = self.parametrized_eta(f)
@@ -186,7 +186,7 @@ class Sedov(object):
         gamma = 5/3. #1.666667 #1.333
         w = 0  # Power law index
         n_dim = 3
-
+        
         self.sol = SedovSolution(e0, rho0, gamma=gamma, w=w, nu=n_dim)
         self.r = np.linspace(0, r_max, 1001)[1:]
         self.t = time

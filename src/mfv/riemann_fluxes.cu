@@ -12,7 +12,7 @@ namespace MFV {
     ) : critCondNum(critCondNum), betaMin(betaMin), betaMax(betaMax)
 
 #if PAIRWISE_LIMITER
-    , pis1(psi1), psi2(psi2)
+    , psi1(psi1), psi2(psi2)
 #endif
     {}
 
@@ -51,7 +51,7 @@ namespace MFV {
             Aij[1] = 1./particles->omega[i]*particles->psiy[ip]
                     - 1./particles->omega[ip]*particles->psiy[ij+ip*MAX_NUM_INTERACTIONS];
 #if DIM ==3
-            Aij[0] = 1./particles->omega[i]*particles->psiz[ip]
+            Aij[2] = 1./particles->omega[i]*particles->psiz[ip]
                     - 1./particles->omega[ip]*particles->psiz[ij+ip*MAX_NUM_INTERACTIONS];
 #endif
 #endif
@@ -63,17 +63,17 @@ namespace MFV {
             real fMax, fMin, beta, Ncrit2cond, absGrad;
 #pragma unroll
             for(d=0; d<DIM; d++){
-                *(grad+d) = 0.;
+                grad[d] = 0.;
             }
 
             for (j = 0; j < noi; j++) {
                 ip = interactions[i * MAX_NUM_INTERACTIONS + j];
 
-                *grad += (f[ip] - f[i]) * particles->psix[ip];
+                grad[0] += (f[ip] - f[i]) * particles->psix[ip];
 #if DIM > 1
-                *(grad+1) += (f[ip] - f[i]) * particles->psiy[ip];
+                grad[1] += (f[ip] - f[i]) * particles->psiy[ip];
 #if DIM == 3
-                *(grad+2) += (f[ip] - f[i]) * particles->psiz[ip];
+                grad[2] += (f[ip] - f[i]) * particles->psiz[ip];
 #endif
 #endif
             }
@@ -124,8 +124,61 @@ namespace MFV {
 
 #pragma unroll
             for(d=0; d<DIM; d++){
-                *(grad+d) *= alpha;
+                grad[d] *= alpha;
             }
+        }
+
+        __device__ double pairwiseLimiter(real &phi0, real &phi_i, real &phi_j, real &xijxiAbs, real &xjxiAbs,
+                                            SlopeLimitingParameters *slopeLimitingParameters){
+            real phi_ = phi_i;
+
+            /// calculate helper values
+            real phi_ij = phi_i + xijxiAbs / xjxiAbs * (phi_j - phi_i);
+            real phiMin, phiMax;
+            if (phi_i < phi_j) {
+                phiMin = phi_i;
+                phiMax = phi_j;
+            } else {
+                phiMin = phi_j;
+                phiMax = phi_i;
+            }
+            real delta1 = slopeLimitingParameters->psi1 * abs(phi_i - phi_j);
+            real delta2 = slopeLimitingParameters->psi2 * abs(phi_i - phi_j);
+            real phiMinus, phiPlus;
+            if ((phiMax + delta1 >= 0. && phiMax >= 0.) || (phiMax + delta1 < 0. && phiMax < 0.)) {
+                phiPlus = phiMax + delta1;
+            } else {
+                phiPlus = phiMax / (1. + delta1 / abs(phiMax));
+            }
+            if ((phiMin - delta1 >= 0. && phiMin >= 0.) || (phiMin - delta1 < 0. && phiMin < 0.)) {
+                phiMinus = phiMin - delta1;
+            } else {
+                phiMinus = phiMin / (1. + delta1 / abs(phiMin));
+            }
+
+            /// actually compute the effective face limited value
+            if (phi_i < phi_j) {
+                real minPhiD2;
+                if (phi_ij + delta2 < phi0){
+                    minPhiD2 = phi_ij + delta2;
+                } else {
+                    minPhiD2 = phi0;
+                }
+
+                phi_ = phiMinus > minPhiD2 ? phiMinus : minPhiD2;
+
+            } else if (phi_i > phi_j){
+                real maxPhiD2;
+                if (phi_ij - delta2 > phi0){
+                    maxPhiD2 = phi_ij - delta2;
+                } else {
+                    maxPhiD2 = phi0;
+                }
+
+                phi_ = phiPlus < maxPhiD2 ? phiPlus : maxPhiD2;
+
+            }
+            return phi_;
         }
     }
 
@@ -185,6 +238,9 @@ namespace MFV {
 
 #if PAIRWISE_LIMITER
             real rhoR0, rhoL0, vxR0, vxL0, pR0, pL0;
+            real xijxiAbs; // distance of quadrature point x_ij to particles location x_i;
+            real xijxjAbs; // distance of quadrature point x_ij to particles location x_j;
+            real xjxiAbs; // distance of interaction partner x_j to x_i
 #if DIM > 1
             real vyR0, vyL0;
 #if DIM == 3
@@ -209,6 +265,9 @@ namespace MFV {
             for (i = threadIdx.x + blockIdx.x * blockDim.x; i < numParticles; i += inc) {
 
                 noi = particles->noi[i];
+//                if (i == 0){
+//                    printf("Particle %i interacts with %i neighbors:\n", i, noi);
+//                }
 
                 // get adiabatic index of material
                 // TODO: this only works for an ideal gas
@@ -223,7 +282,7 @@ namespace MFV {
                 for (j = 0; j < noi; j++) {
                     ip = interactions[i * MAX_NUM_INTERACTIONS + j];
 
-                    // computing frame velocity
+                    /// computing frame velocity
                     ::MFV::Compute::frameVelocity(vFrame, i, ip, particles);
 
                     /// constructing vector of primitive variables for the Riemann problem
@@ -234,32 +293,42 @@ namespace MFV {
                     vR[0] = particles->vx[i] - vFrame[0];
                     vL[0] = particles->vx[ip] - vFrame[0];
 #if DIM > 1
-                    vR[1]  = particles->vy[i] - vFrame[1];
+                    vR[1] = particles->vy[i] - vFrame[1];
                     vL[1] = particles->vy[ip] - vFrame[1];
 #if DIM == 3
-                    vR[2]  = particles->vz[i] - vFrame[2];
+                    vR[2] = particles->vz[i] - vFrame[2];
                     vL[2] = particles->vz[ip] - vFrame[2];
 #endif
 #endif
                     pR = particles->p[i];
                     pL = particles->p[ip];
 
+                    /// computing quadrature point xij
+                    ::MFV::Compute::quadraturePoint(xij, i, ip, particles);
+
 #if PAIRWISE_LIMITER
                     // store original values boosted to moving frame
                     rhoR0 = rhoR, rhoL0 = rhoL;
                     vxR0 = vR[0], vxL0 = vL[0];
+                    xijxiAbs = (xij[0] - particles->x[i])*(xij[0] - particles->x[i]);
+                    xijxjAbs = (xij[0] - particles->x[ip])*(xij[0] - particles->x[ip]);
+                    xjxiAbs = (particles->x[ip] - particles->x[i])*(particles->x[ip] - particles->x[i]);
 #if DIM > 1
                     vyR0 = vR[1], vyL0 = vL[1];
+                    xijxiAbs += (xij[1] - particles->y[i])*(xij[1] - particles->y[i]);
+                    xijxjAbs += (xij[1] - particles->y[ip])*(xij[1] - particles->y[ip]);
+                    xjxiAbs += (particles->y[ip] - particles->y[i])*(particles->y[ip] - particles->y[i]);
 #if DIM == 3
                     vzR0 = vR[2], vzL0 = vL[2];
+                    xijxiAbs += (xij[2] - particles->z[i])*(xij[2] - particles->z[i]);
+                    xijxjAbs += (xij[2] - particles->z[ip])*(xij[2] - particles->z[ip]);
+                    xjxiAbs += (particles->z[ip] - particles->z[i])*(particles->z[ip] - particles->z[i]);
 #endif
 #endif
                     pR0 = pR, pL0 = pL;
 #endif // PAIRWISE_LIMITER
 
                     /// reconstruct vector or primitive variables at effective face between particles
-
-                    ::MFV::Compute::quadraturePoint(xij, i, ip, particles);
 
                     real deltaXijR[DIM], deltaXijL[DIM];
 
@@ -277,6 +346,11 @@ namespace MFV {
                     iGradR = i*DIM;
                     iGradL = ip*DIM;
 
+                    //if (i < 100){
+                    //    printf("pGrad[%i] = [%e, %e, %e]\n", i, particles->pGrad[iGradR], particles->pGrad[iGradR+1], particles->pGrad[iGradR+2]);
+                    //    printf("pGrad[%i] = [%e, %e, %e]\n", ip, particles->pGrad[iGradL], particles->pGrad[iGradL+1], particles->pGrad[iGradL+2]);
+                    //}
+
                     rhoR += CudaUtils::dotProd(&particles->rhoGrad[iGradR], deltaXijR);
                     rhoL += CudaUtils::dotProd(&particles->rhoGrad[iGradL], deltaXijL);
 
@@ -293,6 +367,24 @@ namespace MFV {
                     pR += CudaUtils::dotProd(&particles->pGrad[iGradR], deltaXijR);
                     pL += CudaUtils::dotProd(&particles->pGrad[iGradL], deltaXijL);
 
+#if PAIRWISE_LIMITER
+                    rhoR = ::MFV::Compute::pairwiseLimiter(rhoR, rhoR0, rhoL0, xijxiAbs, xjxiAbs, slopeLimitingParameters);
+                    rhoL = ::MFV::Compute::pairwiseLimiter(rhoL, rhoL0, rhoR0, xijxjAbs, xjxiAbs, slopeLimitingParameters);
+
+                    vR[0] = ::MFV::Compute::pairwiseLimiter(vR[0], vxR0, vxL0, xijxiAbs, xjxiAbs, slopeLimitingParameters);
+                    vL[0] = ::MFV::Compute::pairwiseLimiter(vL[0], vxL0, vxR0, xijxjAbs, xjxiAbs, slopeLimitingParameters);
+#if DIM > 1
+                    vR[1] = ::MFV::Compute::pairwiseLimiter(vR[1], vyR0, vyL0, xijxiAbs, xjxiAbs, slopeLimitingParameters);
+                    vL[1] = ::MFV::Compute::pairwiseLimiter(vL[1], vyL0, vyR0, xijxjAbs, xjxiAbs, slopeLimitingParameters);
+#if DIM == 3
+                    vR[2] = ::MFV::Compute::pairwiseLimiter(vR[2], vzR0, vzL0, xijxiAbs, xjxiAbs, slopeLimitingParameters);
+                    vL[2] = ::MFV::Compute::pairwiseLimiter(vL[2], vzL0, vzR0, xijxjAbs, xjxiAbs, slopeLimitingParameters);
+#endif
+#endif
+                    pR = ::MFV::Compute::pairwiseLimiter(pR, pR0, pL0, xijxiAbs, xjxiAbs, slopeLimitingParameters);
+                    pL = ::MFV::Compute::pairwiseLimiter(pL, pL0, pR0, xijxjAbs, xjxiAbs, slopeLimitingParameters);
+
+#endif // PAIRWISE_LIMITER
 
                     /// forward predict quantities by half a timestep
 
@@ -312,7 +404,7 @@ namespace MFV {
                     rhoR -= *dt/2. * (particles->rho[i]*viDiv + (particles->vx[i]-vFrame[0])*particles->rhoGrad[iGradR]);
                     rhoL -= *dt/2. * (particles->rho[ip]*vjDiv + (particles->vx[ip]-vFrame[0])*particles->rhoGrad[iGradL]);
 
-                    vR[0] -= *dt/2. * (particles->pGrad[iGradL]/particles->rho[i] + (particles->vx[i]-vFrame[0])*particles->vxGrad[iGradR]);
+                    vR[0] -= *dt/2. * (particles->pGrad[iGradR]/particles->rho[i] + (particles->vx[i]-vFrame[0])*particles->vxGrad[iGradR]);
                     vL[0] -= *dt/2. * (particles->pGrad[iGradL]/particles->rho[ip] + (particles->vx[ip]-vFrame[0])*particles->vxGrad[iGradL]);
 
                     pR -= *dt/2. * (gamma*particles->p[i] * viDiv + (particles->vx[i]-vFrame[0])*particles->pGrad[iGradR]);
@@ -355,12 +447,19 @@ namespace MFV {
 #endif
 #endif
 
+                    if(pR < 0. || pL < 0.){
+                        printf("ERROR: Negative pressure after half-timestep prediction for particles %i -> %i\n", i, j);
+                        //printf("         xi = [%f, %f, %f], xj = [%f, %f, %f]\n",
+                        //       particles->x[i], particles->y[i], particles->z[i],
+                        //       particles->x[ip], particles->y[ip], particles->z[ip]);
+                    }
+
                     /// rotate to effective face
                     ::MFV::Compute::effectiveFace(Aij, i, ip, interactions, particles);
                     AijNorm = sqrt(::CudaUtils::dotProd(Aij, Aij));
 #pragma unroll
                     for(d=0; d<DIM; d++){
-                        hatAij[d] = AijNorm*Aij[d];
+                        hatAij[d] = 1./AijNorm*Aij[d];
                     }
 
                     ::CudaUtils::rotationMatrix(R, hatAij, unitX);
@@ -372,6 +471,11 @@ namespace MFV {
                     }
                     ::CudaUtils::multiplyMatVec(vR, R, vBuf);
 
+                    //printf("hatAij = [%e, %e, %e], vR = [%e, %e, %e], R = [%e, %e, %e, %e, %e, %e, %e, %e, %e]\n",
+                    //       hatAij[0], hatAij[1], hatAij[2], vR[0], vR[1], vR[2],
+                    //       R[0], R[1], R[2], R[3], R[4], R[5], R[6], R[7], R[8]);
+
+
                     //rotate left state
 #pragma unroll
                     for(d=0; d<DIM; d++){
@@ -379,63 +483,70 @@ namespace MFV {
                     }
                     ::CudaUtils::multiplyMatVec(vL, R, vBuf);
 
-                }
+                    flagLR = riemannSolver.solve(rhoL, vL[0], pL,
+                                                 rhoR, vR[0], pR,
+                                                 rhoSol, vSol[0], pSol, 0.);
 
-                flagLR = riemannSolver.solve(rhoL, vL[0], pL,
-                                             rhoR, vR[0], pR,
-                                             rhoSol, vSol[0], pSol, 0.);
+//                    if (i == 0){
+//                        printf("    neighbor %i:\n", ip);
+//                        printf("        state L: rhoL = %e, vL = %e, pL = %e\n", rhoL, vL[0], pL);
+//                        printf("        state L: rhoL = %e, vL = %e, pL = %e\n", rhoR, vR[0], pR);
+//                        printf("        sol: rhoL = %e, vL = %e, pL = %e\n", rhoSol, vSol[0], pSol);
+//                    }
 
-                if (flagLR == 1){
+                    if (flagLR == 1){
 #if DIM > 1
-                    // right state sampled
-                    vSol[1] = vR[1];
+                        // right state sampled
+                        vSol[1] = vR[1];
 #if DIM == 3
-                    vSol[2] = vR[2];
+                        vSol[2] = vR[2];
 #endif
-                } else if (flagLR == -1){ // flagLR == -1
-                    // left state sampled
-                    vSol[1] = vL[1];
+                    } else if (flagLR == -1){ // flagLR == -1
+                        // left state sampled
+                        vSol[1] = vL[1];
 #if DIM ==3
-                    vSol[2] = vL[2];
+                        vSol[2] = vL[2];
 #endif
 #endif
-                } else { // flagLR == 0
-                    printf("WARNING: Vacuum state has been sampled. Don't know how to handle this.\n");
-                }
+                    } else { // flagLR == 0
+                        printf("WARNING: Vacuum state has been sampled. %i -> %i. Don't know how to handle this.\n", i, ip);
+                    }
 
-                ///rotate solution state back to simulation frame
-                ::CudaUtils::rotationMatrix(R, unitX, hatAij);
+                    ///rotate solution state back to simulation frame
+                    ::CudaUtils::rotationMatrix(R, unitX, hatAij);
+
 #pragma unroll
-                for(d=0; d<DIM; d++){
-                    vBuf[d] = vSol[d];
-                }
-                ::CudaUtils::multiplyMatVec(vSol, R, vBuf);
+                    for(d=0; d<DIM; d++){
+                        vBuf[d] = vSol[d];
+                    }
+                    ::CudaUtils::multiplyMatVec(vSol, R, vBuf);
 
-                /// collect fluxes through effective face
-                // reuse vBuf[] as vLab[]
+                    /// collect fluxes through effective face
+                    // reuse vBuf[] as vLab[]
 #pragma unroll
-                for(d=0; d<DIM; d++){
-                    vBuf[d] = vSol[d] + vFrame[d];
-                }
+                    for(d=0; d<DIM; d++){
+                        vBuf[d] = vSol[d] + vFrame[d];
+                    }
 
-                vLab2 = ::CudaUtils::dotProd(vBuf, vBuf);
+                    vLab2 = ::CudaUtils::dotProd(vBuf, vBuf);
 
-                particles->massFlux[i] += Aij[0]*vSol[0];
-                particles->vxFlux[i] += Aij[0]*(rhoSol*vBuf[0]*vSol[0]+pSol);
-                particles->energyFlux[i] += Aij[0]*(vSol[0]*(pSol/(gamma-1.)+rhoSol*.5*vLab2) + pSol*vBuf[0]);
+                    particles->massFlux[i] += Aij[0]*rhoSol*vSol[0];
+                    particles->vxFlux[i] += Aij[0]*(rhoSol*vBuf[0]*vSol[0]+pSol);
+                    particles->energyFlux[i] += Aij[0]*(vSol[0]*(pSol/(gamma-1.)+rhoSol*.5*vLab2) + pSol*vBuf[0]);
 #if DIM > 1
-                particles->massFlux[i] += Aij[1]*vSol[1];
-                particles->vxFlux[i] += Aij[1]*(rhoSol*vBuf[0]*vSol[1]);
-                particles->vyFlux[i] += Aij[0]*rhoSol*vBuf[1]*vSol[0] + Aij[1]*(rhoSol*vBuf[1]*vSol[1]+pSol);
-                particles->energyFlux[i] += Aij[1]*(vSol[1]*(pSol/(gamma-1.)+rhoSol*.5*vLab2) + pSol*vBuf[1]);
+                    particles->massFlux[i] += Aij[1]*rhoSol*vSol[1];
+                    particles->vxFlux[i] += Aij[1]*rhoSol*vBuf[0]*vSol[1];
+                    particles->vyFlux[i] += Aij[0]*rhoSol*vBuf[1]*vSol[0] + Aij[1]*(rhoSol*vBuf[1]*vSol[1]+pSol);
+                    particles->energyFlux[i] += Aij[1]*(vSol[1]*(pSol/(gamma-1.)+rhoSol*.5*vLab2) + pSol*vBuf[1]);
 #if DIM == 3
-                particles->massFlux[i] += Aij[2]*vSol[2];
-                particles->vxFlux[i] += Aij[2]*(rhoSol*vBuf[0]*vSol[2]);
-                particles->vyFlux[i] += Aij[2]*(rhoSol*vBuf[1]*vSol[2]);
-                particles->vzFlux[i] += Aij[0]*rhoSol*vBuf[2]*vSol[0] + Aij[1]*rhoSol*vBuf[2]*vSol[1] + Aij[2]*(rhoSol*vBuf[2]*vSol[2]+pSol);
-                particles->energyFlux[i] += Aij[2]*(vSol[2]*(pSol/(gamma-1.)+rhoSol*.5*vLab2) + pSol*vBuf[2]);
+                    particles->massFlux[i] += Aij[2]*rhoSol*vSol[2];
+                    particles->vxFlux[i] += Aij[2]*rhoSol*vBuf[0]*vSol[2];
+                    particles->vyFlux[i] += Aij[2]*rhoSol*vBuf[1]*vSol[2];
+                    particles->vzFlux[i] += Aij[0]*rhoSol*vBuf[2]*vSol[0] + Aij[1]*rhoSol*vBuf[2]*vSol[1] + Aij[2]*(rhoSol*vBuf[2]*vSol[2]+pSol);
+                    particles->energyFlux[i] += Aij[2]*(vSol[2]*(pSol/(gamma-1.)+rhoSol*.5*vLab2) + pSol*vBuf[2]);
 #endif
 #endif
+                }
             }
         }
 

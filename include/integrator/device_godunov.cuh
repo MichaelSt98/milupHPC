@@ -12,6 +12,8 @@
 #include "../particles.cuh"
 #include <assert.h>
 
+#define ENERGY_FLOOR 1e-11
+
 /// device godunov type integrator
 namespace GodunovNS {
 

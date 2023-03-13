@@ -42,12 +42,12 @@ namespace MFV {
 
                 noi = particles->noi[i];
 
-                // sph sum for particle i
+                // renormalization sum for particle i
                 for (j = 0; j < noi; j++) {
 
                     ip = interactions[i * MAX_NUM_INTERACTIONS + j];
 
-#if VARIABLE_SML
+#if (VARIABLE_SML || INTEGRATE_SML)
                     //TODO: check if this works
                     sml = 0.5 * (particles->sml[i] + particles->sml[ip]);
 #endif
@@ -142,7 +142,7 @@ namespace MFV {
                 }
 
                 real B[DIM*DIM];
-                if (CudaUtils::invertMatrix(E, B) < 1){
+                if (::CudaUtils::invertMatrix(E, B) < 1){
 
                     printf("ERROR: Matrix E_%i is not invertible (det(E) = 0.).\n");
                     particles->Ncond[i] = DBL_MAX;
@@ -160,7 +160,7 @@ namespace MFV {
                     particles->Ncond[i] = 1./(real)DIM * sqrt(normB*normE);
 
                     if (particles->Ncond[i] > *critCondNum){
-                        printf("WARNING: N_cond = %f > N_cond^crit = %i\n", particles->Ncond[i], *critCondNum);
+                        printf("WARNING: N_cond = %f > N_cond^crit = %f\n", particles->Ncond[i], *critCondNum);
                     }
                 }
 
@@ -184,7 +184,6 @@ namespace MFV {
 
                     kernel(&W, dWdx, &dWdr, dx, sml);
 
-#pragma unroll
                     particles->psix[ip] = 0.;
 #if DIM > 1
                     particles->psiy[ip] = 0.;

@@ -16,13 +16,15 @@ void Godunov::integrate(int step){
 
     real timeElapsed;
 
+    Timer timerRhs;
+
     Logger(INFO) << "Godunov::integrate()... currentTime: " << *simulationTimeHandler->h_currentTime
                  << " | subEndTime: " << *simulationTimeHandler->h_subEndTime
                  << " | endTime: " << *simulationTimeHandler->h_endTime;
 
     while (*simulationTimeHandler->h_currentTime < *simulationTimeHandler->h_subEndTime) {
 
-        //profiler.setStep(subStep);
+        profiler.setStep(subStep);
         subStep++;
 
         Logger(INFO) << "Godunov::integrate while...";
@@ -36,30 +38,27 @@ void Godunov::integrate(int step){
         Logger(TIME) << "removing particles: " << timeElapsed << " ms";
 
         Logger(INFO) << "rhs::loadBalancing()";
-        timer.reset();
         if (simulationParameters.loadBalancing && step != 0 && step % simulationParameters.loadBalancingInterval == 0) {
-            dynamicLoadBalancing(simulationParameters.loadBalancingBins);
+            dynamicLoadBalancing();
         }
-        real elapsed = timer.elapsed();
-        //totalTime += elapsed;
-        Logger(TIME) << "rhs::loadBalancing(): " << elapsed << " ms";
-        profiler.value2file(ProfilerIds::Time::loadBalancing, elapsed);
 
-        //Logger(INFO) << "checking for nans before update() ..";
-        //ParticlesNS::Kernel::Launch::check4nans(particleHandler->d_particles, numParticlesLocal);
+        timerRhs.reset();
 
-        timer.reset();
-        //real time;
+        // TODO: set timestep
+
         // -------------------------------------------------------------------------------------------------------------
-        time = rhs(step, true, true);
+        time += rhs(step, true, true);
         // -------------------------------------------------------------------------------------------------------------
-        timeElapsed = timer.elapsed();
-        Logger(TIME) << "rhs: " << time << " ms";
-        Logger(TIME) << "rhsElapsed: " << timeElapsed << " ms";
+        timeElapsed = timerRhs.elapsed();
+        Logger(TIME) << "rhsElapsed: " << timeElapsed;
+        //Logger(TIME) << "rhs: " << time << " ms";
         profiler.value2file(ProfilerIds::Time::rhs, time);
         profiler.value2file(ProfilerIds::Time::rhsElapsed, timeElapsed);
 
-        time = GodunovNS::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal,
+        // TODO: what else is needed here?
+
+        Logger(INFO) << "Timestep update with Godunov scheme";
+        time += GodunovNS::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal,
                                                  *simulationTimeHandler->h_dt);
 
         profiler.value2file(ProfilerIds::Time::integrate, time);
@@ -68,10 +67,6 @@ void Godunov::integrate(int step){
 
         *simulationTimeHandler->h_currentTime += *simulationTimeHandler->h_dt;
         simulationTimeHandler->copy(To::device);
-
-#if INTEGRATE_SML
-        cuda::set(particleHandler->d_dsmldt, (real)0, numParticles);
-#endif
 
         Logger(TRACE) << "finished sub step - simulation time: " << *simulationTimeHandler->h_currentTime
                       << " (STEP: " << step << " | subStep: " << subStep
@@ -88,6 +83,9 @@ void Godunov::integrate(int step){
 
         profiler.value2file(ProfilerIds::numParticles, sumParticles);
         profiler.value2file(ProfilerIds::numParticlesLocal, numParticlesLocal);
+
+        timeElapsed = timer.elapsed();
+        Logger(TIME) << "integration step elapsed: " << timeElapsed << " ms";
 
     }
 

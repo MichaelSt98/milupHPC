@@ -89,11 +89,14 @@ typedef int idInteger;
 #define MESHLESS_FINITE_METHOD 1
 
 /// employ an additional pairwise limiter between particles
-#define PAIRWISE_LIMITER 0
+#define PAIRWISE_LIMITER 1
 
 // deprecated flag
 #define ARTIFICIAL_VISCOSITY 1
 #define BALSARA_SWITCH 0
+
+/// applying a pressure floor in MFV/MFM after forward prediction in time
+#define APPLY_PRESSURE_FLOOR 1
 
 // switch for slope limiting (should not be disabled)
 //#define SLOPE_LIMITING 1
@@ -178,6 +181,10 @@ typedef struct SimulationParameters {
     real critCondNum;
     real betaMin;
     real betaMax;
+#if PAIRWISE_LIMITER
+    real psi1;
+    real psi2;
+#endif
 
 } SimulationParameters;
 
@@ -292,23 +299,6 @@ private:
     template<typename T>
     operator T () const;
 };
-
-/*#if MESHLESS_FINITE_METHOD
-struct Riemann
-{
-    enum Solver
-    {
-        exact, hllc
-    };
-    Solver t_;
-    Riemann(Solver t) : t_(t) {}
-    operator Solver() const {return t_;}
-private:
-    template<typename T>
-    operator T () const;
-};
-#endif
-*/
 
 //#define SOLID
 // ideal hydro, navier stokes

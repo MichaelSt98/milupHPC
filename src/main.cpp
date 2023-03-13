@@ -210,11 +210,6 @@ int main(int argc, char** argv)
     parameters.smoothingKernelSelection = confP.getVal<int>("smoothingKernel");
     parameters.sphFixedRadiusNNVersion = confP.getVal<int>("sphFixedRadiusNNVersion");
 //#endif
-#if MESHLESS_FINITE_METHOD
-    parameters.defaultRiemannSolver = confP.getVal<int>("defaultRiemannSolver");
-#else
-    parameters.defaultRiemannSolver = 0; // dummy value as unused anyway
-#endif
     parameters.removeParticles = confP.getVal<bool>("removeParticles");
     parameters.removeParticlesCriterion = confP.getVal<int>("removeParticlesCriterion");
     parameters.removeParticlesDimension = confP.getVal<real>("removeParticlesDimension");

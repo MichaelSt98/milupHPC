@@ -121,6 +121,7 @@ Miluphpc::~Miluphpc() {
     delete simulationTimeHandler;
 
     cuda::free(d_mutex);
+    cuda::free(d_slopeLimitingParameters);
     //cuda::free(d_particles2SendIndices);
     //cuda::free(d_pseudoParticles2SendIndices);
     //cuda::free(d_pseudoParticles2SendLevels);
@@ -188,7 +189,7 @@ void Miluphpc::distributionFromFile(const std::string& filename) {
 
 #if SPH_SIM
     HighFive::DataSet matId = file.getDataSet("/materialId");
-#if INTEGRATE_ENERGY
+#if INTEGRATE_ENERGY || MESHLESS_FINITE_METHOD
     HighFive::DataSet h5_u = file.getDataSet("/u");
 #endif
 #endif
@@ -200,7 +201,7 @@ void Miluphpc::distributionFromFile(const std::string& filename) {
 #if SPH_SIM
     matId.read(materialId);
     //TODO: when do I want to read in the (internal) energy?
-#if INTEGRATE_ENERGY
+#if INTEGRATE_ENERGY || MESHLESS_FINITE_METHOD
     h5_u.read(u);
 #endif
 #endif
@@ -232,7 +233,7 @@ void Miluphpc::distributionFromFile(const std::string& filename) {
 #endif
 
 #if SPH_SIM
-#if INTEGRATE_ENERGY
+#if INTEGRATE_ENERGY || MESHLESS_FINITE_METHOD
         particleHandler->h_particles->e[i] = u[j];
 #endif
         particleHandler->h_particles->materialId[i] = materialId[j];
@@ -2565,7 +2566,7 @@ real Miluphpc::parallel_sph() {
     sendParticles(d_collectedEntries, &particleHandler->d_cs[numParticlesLocal], particleSendLengths,
                   particleReceiveLengths);
 
-    // cs-entry particle exchange
+    // energy-entry particle exchange
     CudaUtils::Kernel::Launch::collectValues(d_particles2SendIndices, particleHandler->d_e, d_collectedEntries,
                                              particleTotalSendLength);
     sendParticles(d_collectedEntries, &particleHandler->d_e[numParticlesLocal], particleSendLengths,
@@ -2763,7 +2764,7 @@ real Miluphpc::parallel_sph() {
     Logger(DEBUG) << "mfv: calculate density";
     // -----------------------------------------------------------------------------------------------------------------
     time = MFV::Kernel::Launch::calculateDensity(kernelHandler.kernel, particleHandler->d_particles,
-                                                 particleHandler->d_nnl,numParticlesLocal);
+                                                 particleHandler->d_nnl, numParticlesLocal);
     // -----------------------------------------------------------------------------------------------------------------
     Logger(TIME) << "mfv: calculateDensity: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::MFV::density, time);
@@ -2792,14 +2793,6 @@ real Miluphpc::parallel_sph() {
     profiler.value2file(ProfilerIds::Time::SPH::density, time);
 #endif
 
-    Logger(DEBUG) << "calculate sound speed";
-    // -----------------------------------------------------------------------------------------------------------------
-    time = SPH::Kernel::Launch::calculateSoundSpeed(particleHandler->d_particles, materialHandler->d_materials,
-                                                    numParticlesLocal); // treeHandler->h_toDeleteLeaf[1]);
-    // -----------------------------------------------------------------------------------------------------------------
-    Logger(TIME) << "sph: calculateSoundSpeed: " << time << " ms";
-    profiler.value2file(ProfilerIds::Time::SPH::soundSpeed, time);
-
 #if BALSARA_SWITCH && !MESHLESS_FINITE_METHODS // no correction needed for MFV/MFM
     Logger(DEBUG) << "balsara switch";
     time = SPH::Kernel::Launch::CalcDivvandCurlv(kernelHandler.kernel, particleHandler->d_particles, particleHandler->d_nnl,
@@ -2813,6 +2806,15 @@ real Miluphpc::parallel_sph() {
     // ---------------------------------------------------------
     Logger(TIME) << "sph: calculatePressure: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::SPH::pressure, time);
+
+    // TODO: for locally isothermal gas the soundspeed needs to be computed before the pressure
+    Logger(DEBUG) << "calculate sound speed";
+    // -----------------------------------------------------------------------------------------------------------------
+    time = SPH::Kernel::Launch::calculateSoundSpeed(particleHandler->d_particles, materialHandler->d_materials,
+                                                    numParticlesLocal); // treeHandler->h_toDeleteLeaf[1]);
+    // -----------------------------------------------------------------------------------------------------------------
+    Logger(TIME) << "sph: calculateSoundSpeed: " << time << " ms";
+    profiler.value2file(ProfilerIds::Time::SPH::soundSpeed, time);
 
     timer.reset();
     //Timer timerTemp;

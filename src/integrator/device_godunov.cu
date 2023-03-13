@@ -14,6 +14,14 @@ __global__ void GodunovNS::Kernel::update(Particles *particles, int numParticles
     //particle loop
     for (i = threadIdx.x + blockIdx.x * blockDim.x; i < numParticles; i+= blockDim.x * gridDim.x){
 
+//        if (abs(particles->massFlux[i]) > ENERGY_FLOOR ||
+//            abs(particles->vxFlux[i]) > ENERGY_FLOOR || abs(particles->vyFlux[i]) > ENERGY_FLOOR ||
+//            abs(particles->vzFlux[i]) > ENERGY_FLOOR || abs(particles->energyFlux[i]) > ENERGY_FLOOR){
+//            printf("Updating particle %i: mF = %e, PxF = %e, PyF = %e, PzF = %e, eF = %e\n", i,
+//                   particles->massFlux[i], particles->vxFlux[i], particles->vyFlux[i], particles->vzFlux[i],
+//                   particles->energyFlux[i]);
+//        }
+
         m = particles->mass[i];
 
         // store old velocities for position update
@@ -40,6 +48,12 @@ __global__ void GodunovNS::Kernel::update(Particles *particles, int numParticles
         /// update mass
         particles->mass[i] -= dt*particles->massFlux[i];
 
+        //if(i == 195 || i == 223 || i == 232 || i == 233){
+        //    printf("DEBUG: m[%i] = %e, mF = %e, e = %e, u = %e, uF = %e,\n       x = [%e, %e, %e]\n"
+        //           , i, m, particles->massFlux[i], particles->e[i], particles->u[i], particles->energyFlux[i],
+        //           particles->x[i], particles->y[i], particles->z[i]);
+        //}
+
         /// update velocity
         particles->vx[i] = (Px - dt*particles->vxFlux[i])/particles->mass[i];
 #if DIM > 1
@@ -61,12 +75,19 @@ __global__ void GodunovNS::Kernel::update(Particles *particles, int numParticles
 #endif
                                               );
 
+        if(particles->e[i] < ENERGY_FLOOR){
+            printf("WARNING: Very small or negative internal energy: e[%i] = %e. Applying floor e = %e\n"
+                   "         u = %e, energyFlux = %e\n", i, particles->e[i], ENERGY_FLOOR, particles->u[i],
+                   particles->energyFlux[i]);
+            particles->e[i] = ENERGY_FLOOR;
+        }
+
         /// update position
         particles->x[i] += .5*(particles->vx[i]+vxOld)*dt;
 #if DIM > 1
-        particles->y[i] += .5*(particles->vy[i]+vxOld)*dt;
+        particles->y[i] += .5*(particles->vy[i]+vyOld)*dt;
 #if DIM == 3
-        particles->z[i] += .5*(particles->vz[i]+vxOld)*dt;
+        particles->z[i] += .5*(particles->vz[i]+vzOld)*dt;
 #endif
 #endif
 

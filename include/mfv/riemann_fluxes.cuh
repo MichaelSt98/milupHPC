@@ -110,6 +110,24 @@ namespace MFV {
          */
         __device__ void gradient(real *grad, real *f, int i, int *interactions, int noi, Particles *particles,
                                  SlopeLimitingParameters *slopeLimitingParameters);
+
+        /**
+         * @brief pairwise limiter for interacting particles
+         *
+         * Using the pairwise limiter for reconstruction of values at the quadrature point proposed by
+         * P.F. Hopkins, 2015
+         *
+         * @param phi0 reconstructed value at xij using slope limited gradients
+         * @param phi_i value at particle location x_i
+         * @param phi_j value at particle location x_j
+         * @param xijxiAbs distance of quadrature point x_ij to particles location x_i
+         * @param xjxiAbs distance of interaction partner x_j to x_i
+         * @param[in] slopeLimitingParameters struct containing parameters \f$ \psi_1 \f$ and
+         *            \f$ \psi_2 \f$ from config file used for the employed slope limiter
+         * @return limited reconstructed value
+         */
+        __device__ double pairwiseLimiter(real &phi0, real &phi_i, real &phi_j, real &xijxiAbs, real &xjxiAbs,
+                                          SlopeLimitingParameters *slopeLimitingParameters);
     }
 
     namespace Kernel {
