@@ -82,11 +82,11 @@ namespace MFV {
          *
          * @param[out] Aij effective face vector from particle i->j
          * @param[in] i index of particle i
-         * @param[in] ip index of interaction partner j
+         * @param[in] ji index of storage of interaction partner j (j+i*MAX_NUM_INTERACTION)
          * @param[in] interaction list of interaction partners (nearest neighbor list)
          * @param[in] particles particles class instance
          */
-        __device__ void effectiveFace(real Aij[DIM], int i, int ip, int *interactions, Particles *particles);
+        __device__ void effectiveFace(real Aij[DIM], int i, int ji, int *interactions, Particles *particles);
 
         /**
          * @brief Compute gradients from vector weights.
@@ -111,6 +111,7 @@ namespace MFV {
         __device__ void gradient(real *grad, real *f, int i, int *interactions, int noi, Particles *particles,
                                  SlopeLimitingParameters *slopeLimitingParameters);
 
+#if PAIRWISE_LIMITER
         /**
          * @brief pairwise limiter for interacting particles
          *
@@ -128,6 +129,7 @@ namespace MFV {
          */
         __device__ double pairwiseLimiter(real &phi0, real &phi_i, real &phi_j, real &xijxiAbs, real &xjxiAbs,
                                           SlopeLimitingParameters *slopeLimitingParameters);
+#endif // PAIRWISE_LIMITER
     }
 
     namespace Kernel {

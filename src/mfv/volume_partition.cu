@@ -184,20 +184,20 @@ namespace MFV {
 
                     kernel(&W, dWdx, &dWdr, dx, sml);
 
-                    particles->psix[ip] = 0.;
+                    particles->psix[i*MAX_NUM_INTERACTIONS+j] = 0.;
 #if DIM > 1
-                    particles->psiy[ip] = 0.;
+                    particles->psiy[i*MAX_NUM_INTERACTIONS+j] = 0.;
 #if DIM > 2
-                    particles->psiz[ip] = 0.;
+                    particles->psiz[i*MAX_NUM_INTERACTIONS+j] = 0.;
 #endif
 #endif
 #pragma unroll
                     for (beta=0; beta<DIM; beta++){
-                        particles->psix[ip] += B[beta]*dx[beta]*W/omg;
+                        particles->psix[i*MAX_NUM_INTERACTIONS+j] += B[beta]*dx[beta]*W/omg;
 #if DIM > 1
-                        particles->psiy[ip] += B[DIM+beta]*dx[beta]*W/omg;
+                        particles->psiy[i*MAX_NUM_INTERACTIONS+j] += B[DIM+beta]*dx[beta]*W/omg;
 #if DIM > 2
-                        particles->psiz[ip] += B[2*DIM+beta]*dx[beta]*W/omg;
+                        particles->psiz[i*MAX_NUM_INTERACTIONS+j] += B[2*DIM+beta]*dx[beta]*W/omg;
 #endif
 #endif
                     }

@@ -7,7 +7,7 @@ import h5py as h5
 import matplotlib.pyplot as plt
 
 #MAX_NUM_INTERACTIONS = 1000
-DELTA_Z = .1
+DELTA_Z = .05
 
 def createPlot(h5File, outDir, plotGrad, plotVel, iNNL):
     data = h5.File(h5File, 'r')
@@ -17,11 +17,11 @@ def createPlot(h5File, outDir, plotGrad, plotVel, iNNL):
     rho2d = []
     
     for i, pos in enumerate(data["x"]):
-        #if pos[2] < DELTA_Z/2. and pos[2] > -DELTA_Z/2.:
-        if pos[1] < DELTA_Z/2. and pos[1] > -DELTA_Z/2.:
-            pos2d.append(np.array([pos[0], pos[2]]))
+        if pos[2] < DELTA_Z/2. and pos[2] > -DELTA_Z/2.:
+        #if pos[1] < DELTA_Z/2. and pos[1] > -DELTA_Z/2.:
+            pos2d.append(np.array([pos[0], pos[1]]))
             rho2d.append(rho[i])
-    print(len(rho2d), "particles in dy inteval")
+    print(len(rho2d), "particles in dz inteval")
     pos2d = np.array(pos2d)
     rho2d = np.array(rho2d)
     
@@ -30,7 +30,7 @@ def createPlot(h5File, outDir, plotGrad, plotVel, iNNL):
     #rhoPlt = ax.scatter(pos[:,0], pos[:,1], c=rho, s=500.) # good for ~100 particles
     #rhoPlt = ax.scatter(pos[:,0], pos[:,1], c=rho, s=200.) # good for ~400 particles
     #rhoPlt = ax.scatter(pos[:,0], pos[:,1], c=rho, s=100.) # good for ~900 particles
-    rhoPlt = ax.scatter(pos2d[:,0], pos2d[:,1], c=rho2d, s=100.) # good for 10**4 particles
+    rhoPlt = ax.scatter(pos2d[:,0], pos2d[:,1], c=rho2d, s=10.) # good for 10**4 particles
 
     #PPlt = ax.scatter(pos[:,0], pos[:,1], c=P, s=200.) # good for ~400 particles
     

@@ -84,9 +84,9 @@ void Godunov::integrate(int step){
         profiler.value2file(ProfilerIds::numParticles, sumParticles);
         profiler.value2file(ProfilerIds::numParticlesLocal, numParticlesLocal);
 
-        timeElapsed = timer.elapsed();
-        Logger(TIME) << "integration step elapsed: " << timeElapsed << " ms";
-
     }
+
+    timeElapsed = timer.elapsed();
+    Logger(TIME) << "integration step elapsed: " << timeElapsed << " ms";
 
 }

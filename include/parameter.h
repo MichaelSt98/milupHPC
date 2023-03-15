@@ -54,16 +54,16 @@ typedef int idInteger;
 
 /** SPH RELATED SWITCHES */
 /// integrate energy equation
-#define INTEGRATE_ENERGY 0
+#define INTEGRATE_ENERGY 1
 
 /// integrate density equation
 #define INTEGRATE_DENSITY 0
 
 /// integrate smoothing length
-#define INTEGRATE_SML 0
+#define INTEGRATE_SML 1
 
 /// decouple smoothing length for pc integrator(s)
-#define DECOUPLE_SML 0
+#define DECOUPLE_SML 1
 
 /// variable smoothing length
 #define VARIABLE_SML 0
@@ -95,8 +95,8 @@ typedef int idInteger;
 #define ARTIFICIAL_VISCOSITY 1
 #define BALSARA_SWITCH 0
 
-/// applying a pressure floor in MFV/MFM after forward prediction in time
-#define APPLY_PRESSURE_FLOOR 1
+// applying a pressure floor in MFV/MFM after forward prediction in time
+//#define APPLY_PRESSURE_FLOOR 1
 
 // switch for slope limiting (should not be disabled)
 //#define SLOPE_LIMITING 1
