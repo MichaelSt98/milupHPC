@@ -533,6 +533,8 @@ namespace MFV {
 //                        printf("        sol: rhoSol = %e, vSol = %e, pSol = %e\n", rhoSol, vSol[0], pSol);
 //                    }
 
+
+
                     if (flagLR == -1){
 #if DIM > 1
                         // right state sampled (naming convention as in this file)
@@ -576,6 +578,19 @@ namespace MFV {
 //                        printf("        sol: rhoSol = %e, vSol = [%e,%e, %e], pSol = %e\n", rhoSol, vSol[0], vSol[1], vSol[2], pSol);
 //                    }
 
+#if MESHLESS_FINITE_METHOD == 2 // MFM
+#pragma unroll
+                    for(d=0; d<DIM; d++){
+                        /*
+                         * This effectively supresses the mass flux  between particles and leads to the
+                         * the same fluxes as computed in
+                         * https://github.com/SWIFTSIM/SWIFT/blob/master/src/riemann/riemann_exact.h
+                         * l. 626ff.
+                         */
+                        vSol[d] = 0.;
+                    }
+#endif
+
                     particles->massFlux[i] += Aij[0]*rhoSol*vSol[0];
                     particles->vxFlux[i] += Aij[0]*(rhoSol*vBuf[0]*vSol[0]+pSol);
                     particles->energyFlux[i] += Aij[0]*(vSol[0]*(pSol/(gamma-1.)+rhoSol*.5*vLab2) + pSol*vBuf[0]);
@@ -593,6 +608,12 @@ namespace MFV {
 #endif
 #endif
                 }
+
+//#if MESHLESS_FINITE_METHOD == 2 // MFM
+//                if (particles->massFlux[i] > MFM_MASSFLUX_TOL){
+//                    printf("WARNING: massFlux[%i] is %e > %e although finite mass (MFM)\n", i, particles->massFlux[i], MFM_MASS_FLUX_TOL);
+//                }
+//#endif
 
                 //real r = sqrt(particles->x[i]*particles->x[i]+particles->y[i]*particles->y[i]+particles->z[i]*particles->z[i]);
                 //if (r < 1e-2){

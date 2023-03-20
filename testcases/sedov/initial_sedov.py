@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import seagen
 import numpy as np
 import h5py
@@ -80,7 +82,8 @@ if __name__ == '__main__':
     # print("min: {} | max: {}".format(min(particles.x), max(particles.x)))
 
     print("Writing to HDF5 file ...")
-
+    
+    h5f.create_dataset("time", data=[0.])
     h5f.create_dataset("x", data=pos)
     h5f.create_dataset("v", data=vel)
     h5f.create_dataset("m", data=mass)

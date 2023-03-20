@@ -14,6 +14,8 @@
 #include "riemann_solver.cuh"
 #include "../cuda_utils/linalg.cuh"
 
+//#define MFM_MASS_FLUX_TOL 1e-5
+
 namespace MFV {
 
     /// Struct holding configuration of the slope limiter(s) employed

@@ -522,6 +522,16 @@ namespace MFV {
         real ustar = 0.5 * (uL + uR) +
                        0.5 * (fb(rhoR, PR, aR, Pstar) - fb(rhoL, PL, aL, Pstar));
 
+#if MESHLESS_FINITE_METHOD == 2
+        // return middle state pressure and velocity as the rest is not needed
+        // compare https://github.com/SWIFTSIM/SWIFT/blob/master/src/riemann/riemann_exact.h
+        // l. 561ff.
+        rhosol = 0.; // DUMMY
+        usol = ustar;
+        Psol = Pstar;
+        return -1; // left state is sampled by default
+#else
+
         // we now have solved the Riemann problem: we have the left, middle and
         // right state, and this completely fixes the solution
         // we just need to sample the solution for x/t = 0.
@@ -536,6 +546,7 @@ namespace MFV {
                               dxdt);
             return -1;
         }
+#endif // MESHLESS_FINITE_METHOD == 2
     }
 
 

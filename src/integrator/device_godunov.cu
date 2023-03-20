@@ -45,6 +45,17 @@ __global__ void GodunovNS::Kernel::update(Particles *particles, int numParticles
 #endif
                             ));
 
+        /// update position
+        // to stay consistent with the effective face movement v_Frame and the appropriately
+        // computed fluxes, we're updating the particle positions with a first order Euler step
+        particles->x[i] += vxOld*dt;
+#if DIM > 1
+        particles->y[i] += vyOld*dt;
+#if DIM == 3
+        particles->z[i] += vzOld*dt;
+#endif
+#endif
+
         /// update mass
         particles->mass[i] -= dt*particles->massFlux[i];
 
@@ -83,13 +94,13 @@ __global__ void GodunovNS::Kernel::update(Particles *particles, int numParticles
         }
 
         /// update position
-        particles->x[i] += .5*(particles->vx[i]+vxOld)*dt;
-#if DIM > 1
-        particles->y[i] += .5*(particles->vy[i]+vyOld)*dt;
-#if DIM == 3
-        particles->z[i] += .5*(particles->vz[i]+vzOld)*dt;
-#endif
-#endif
+//        particles->x[i] += .5*(particles->vx[i]+vxOld)*dt;
+//#if DIM > 1
+//        particles->y[i] += .5*(particles->vy[i]+vyOld)*dt;
+//#if DIM == 3
+//        particles->z[i] += .5*(particles->vz[i]+vzOld)*dt;
+//#endif
+//#endif
 
     }
 }

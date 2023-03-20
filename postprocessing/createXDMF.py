@@ -39,7 +39,7 @@ write_xdmf_header(xdmfh)
 
 # now process input files
 # scalar floats only 
-wanted_attributes = ['rho', 'p', 'sml', 'noi', 'e']
+wanted_attributes = ['rho', 'p', 'sml', 'noi', 'e', 'm']
 
 for hfile in args.input_files:
     print("Processing %s " % hfile)

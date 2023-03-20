@@ -2761,22 +2761,22 @@ real Miluphpc::parallel_sph() {
 
 #if MESHLESS_FINITE_METHOD
 
-    Logger(DEBUG) << "mfv: calculate density";
+    Logger(DEBUG) << "mfv/mfm: calculate density";
     // -----------------------------------------------------------------------------------------------------------------
     time = MFV::Kernel::Launch::calculateDensity(kernelHandler.kernel, particleHandler->d_particles,
                                                  particleHandler->d_nnl, numParticlesLocal);
     // -----------------------------------------------------------------------------------------------------------------
-    Logger(TIME) << "mfv: calculateDensity: " << time << " ms";
+    Logger(TIME) << "mfv/mfm: calculateDensity: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::MFV::density, time);
     totalTime += time;
 
-    Logger(DEBUG) << "mfv: compute vector weights for gradient estimation and effective face computation";
+    Logger(DEBUG) << "mfv/mfm: compute vector weights for gradient estimation and effective face computation";
     // -----------------------------------------------------------------------------------------------------------------
     time = MFV::Kernel::Launch::computeVectorWeights(kernelHandler.kernel, particleHandler->d_particles,
                                                      particleHandler->d_nnl,numParticlesLocal,
                                                      &d_slopeLimitingParameters->critCondNum);
     // -----------------------------------------------------------------------------------------------------------------
-    Logger(TIME) << "mfv: computeVectorWeights: " << time << " ms";
+    Logger(TIME) << "mfv/mfm: computeVectorWeights: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::MFV::vectorWeights, time);
     totalTime += time;
 
@@ -2856,19 +2856,19 @@ real Miluphpc::parallel_sph() {
     totalTime += time;
 
 #if MESHLESS_FINITE_METHOD
-    Logger(DEBUG) << "mfv: compute gradients";
+    Logger(DEBUG) << "mfv/mfm: compute gradients";
     time = MFV::Kernel::Launch::computeGradients(particleHandler->d_particles, particleHandler->d_nnl, numParticlesLocal,
                                                  d_slopeLimitingParameters);
-    Logger(TIME) << "mfv: compute gradients: " << time << " ms";
+    Logger(TIME) << "mfv/mfm: compute gradients: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::MFV::gradients, time);
     totalTime += time;
 
 
-    Logger(DEBUG) << "mfv: compute riemann fluxes";
+    Logger(DEBUG) << "mfv/mfm: compute riemann fluxes";
     time = MFV::Kernel::Launch::riemannFluxes(particleHandler->d_particles, particleHandler->d_nnl, numParticlesLocal,
                                               d_slopeLimitingParameters, simulationTimeHandler->d_dt,
                                               materialHandler->d_materials);
-    Logger(TIME) << "mfv: riemannFluxes: " << time << " ms";
+    Logger(TIME) << "mfv/mfm: riemannFluxes: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::MFV::riemannFluxes, time);
     totalTime += time;
 

@@ -60,10 +60,10 @@ typedef int idInteger;
 #define INTEGRATE_DENSITY 0
 
 /// integrate smoothing length
-#define INTEGRATE_SML 1
+#define INTEGRATE_SML 0
 
 /// decouple smoothing length for pc integrator(s)
-#define DECOUPLE_SML 1
+#define DECOUPLE_SML 0
 
 /// variable smoothing length
 #define VARIABLE_SML 0
@@ -84,7 +84,8 @@ typedef int idInteger;
 
 /** Use meshless particle methods Meshless Finite Volume (MFV) or Meshless finite Mass (MFM)
  *  **MESHLESS_FINITE_METHOD 0:** Use SPH for hydrodynamics
- *  **MESHLESS_FINITE_METHOD 1:** Use MFV or MFM for hydrodynamics (specified in config file)
+ *  **MESHLESS_FINITE_METHOD 1:** Use MFV for hydrodynamics
+ *  **MESHLESS_FINITE_METHOD 2:** Use MFM for hydrodynamics
  */
 #define MESHLESS_FINITE_METHOD 1
 
