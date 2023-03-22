@@ -45,6 +45,7 @@ __global__ void GodunovNS::Kernel::update(Particles *particles, int numParticles
 #endif
                             ));
 
+#if !MFV_FIX_PARTICLES
         /// update position
         // to stay consistent with the effective face movement v_Frame and the appropriately
         // computed fluxes, we're updating the particle positions with a first order Euler step
@@ -55,6 +56,7 @@ __global__ void GodunovNS::Kernel::update(Particles *particles, int numParticles
         particles->z[i] += vzOld*dt;
 #endif
 #endif
+#endif // !MFV_FIX_PARTICLES
 
         /// update mass
         particles->mass[i] -= dt*particles->massFlux[i];

@@ -29,11 +29,21 @@ namespace MFV {
         }
 
         __device__ void frameVelocity(real vFrame[DIM], int i, int ip, Particles *particles){
-        vFrame[0] = (particles->vx[i] + particles->vx[ip])/2.;
+#if !MFV_FIX_PARTICLES
+            vFrame[0] = (particles->vx[i] + particles->vx[ip])/2.;
 #if DIM > 1
-        vFrame[1] = (particles->vy[i] + particles->vy[ip])/2.;
+            vFrame[1] = (particles->vy[i] + particles->vy[ip])/2.;
 #if DIM == 3
-        vFrame[2] = (particles->vz[i] + particles->vz[ip])/2.;
+            vFrame[2] = (particles->vz[i] + particles->vz[ip])/2.;
+#endif
+#endif
+#else
+            vFrame[0] = 0.;
+#if DIM > 1
+            vFrame[1] = 0.;
+#if DIM == 3
+            vFrame[2] = 0.;
+#endif
 #endif
 #endif
         }
@@ -419,7 +429,6 @@ namespace MFV {
                     vjDiv += particles->vzGrad[iGradL+2];
 #endif
 #endif
-
                     // actual forward prediction dimension by dimension
                     rhoR -= *dt/2. * (particles->rho[i]*viDiv + (particles->vx[i]-vFrame[0])*particles->rhoGrad[iGradR]);
                     rhoL -= *dt/2. * (particles->rho[ip]*vjDiv + (particles->vx[ip]-vFrame[0])*particles->rhoGrad[iGradL]);

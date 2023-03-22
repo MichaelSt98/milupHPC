@@ -89,6 +89,9 @@ typedef int idInteger;
  */
 #define MESHLESS_FINITE_METHOD 1
 
+/// do not move particles which is only valid for MFV
+#define MFV_FIX_PARTICLES 0
+
 /// employ an additional pairwise limiter between particles
 #define PAIRWISE_LIMITER 1
 

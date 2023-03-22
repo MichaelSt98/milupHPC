@@ -526,7 +526,7 @@ namespace MFV {
         // return middle state pressure and velocity as the rest is not needed
         // compare https://github.com/SWIFTSIM/SWIFT/blob/master/src/riemann/riemann_exact.h
         // l. 561ff.
-        rhosol = 0.; // DUMMY
+        rhosol = 0.; // dummy
         usol = ustar;
         Psol = Pstar;
         return -1; // left state is sampled by default
