@@ -61,6 +61,12 @@ __global__ void GodunovNS::Kernel::update(Particles *particles, int numParticles
         /// update mass
         particles->mass[i] -= dt*particles->massFlux[i];
 
+#if SAFETY_LEVEL
+        if (particles->mass[i] < 0. || isnan(particles->mass[i])){
+            cudaTerminate("Godunov ERROR: Mass is negative or nan!! m[%i] = %e, massFLux = %e\n", i, particles->mass[i],
+                          particles->massFlux[i]);
+        }
+#endif
         //if(i == 195 || i == 223 || i == 232 || i == 233){
         //    printf("DEBUG: m[%i] = %e, mF = %e, e = %e, u = %e, uF = %e,\n       x = [%e, %e, %e]\n"
         //           , i, m, particles->massFlux[i], particles->e[i], particles->u[i], particles->energyFlux[i],

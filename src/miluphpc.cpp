@@ -494,16 +494,17 @@ void Miluphpc::afterIntegrationStep() {
     }
 
 #if MESHLESS_FINITE_METHOD
-    Logger(DEBUG) << "mfv/mfm: calculate density";
+    //TODO: This should not be necessary
+    Logger(DEBUG) << "mfv/mfm before file dump: calculate density";
     MFV::Kernel::Launch::calculateDensity(kernelHandler.kernel, particleHandler->d_particles,
                                           particleHandler->d_nnl, numParticlesLocal);
-    Logger(DEBUG) << "mfv/mfm: calculate pressure";
+    Logger(DEBUG) << "mfv/mfm before file dump: calculate pressure";
     // -----------------------------------------------------------------------------------------------------------------
     SPH::Kernel::Launch::calculatePressure(materialHandler->d_materials, particleHandler->d_particles,
                                                   numParticlesLocal); // treeHandler->h_toDeleteLeaf[1]);
 
     // TODO: for locally isothermal gas the soundspeed needs to be computed before the pressure
-    Logger(DEBUG) << "mfv/mfm: calculate sound speed";
+    Logger(DEBUG) << "mfv/mfm before file dump: calculate sound speed";
     // -----------------------------------------------------------------------------------------------------------------
     SPH::Kernel::Launch::calculateSoundSpeed(particleHandler->d_particles, materialHandler->d_materials,
                                                     numParticlesLocal); // treeHandler->h_toDeleteLeaf[1]);

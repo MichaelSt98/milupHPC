@@ -67,9 +67,11 @@ namespace MFV {
                 particles->omega[i] = omg;
                 particles->rho[i] = particles->mass[i]*omg;
 
-                if (particles->rho[i] <= 0.) {
-                    cudaTerminate("negative or zero rho! rho[%i] = %e\n", i, particles->rho[i]);
+#if SAFETY_LEVEL
+                if (particles->rho[i] <= 0. || isnan(particles->rho[i])) {
+                    cudaTerminate("Density ERROR: Negative, zero or nan rho! rho[%i] = %e\n", i, particles->rho[i]);
                 }
+#endif
             }
         }
 

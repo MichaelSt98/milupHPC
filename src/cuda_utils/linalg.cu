@@ -24,7 +24,8 @@ namespace CudaUtils {
         v[2] = a[0]*b[1] - a[1]*b[0];
         real cosAB = dotProd(a, b); // a and b MUST be normed
 
-        if (cosAB == -1.){
+        if (cosAB < -1.+FLOAT_ZERO_TOLERANCE && cosAB > -1.-FLOAT_ZERO_TOLERANCE){
+            //printf("WARNING: a and b almost point in opposite directions: cosAB = %e\n", cosAB);
             R[0] = -1.;
             R[1] = 0.;
             R[2] = 0.;
@@ -34,21 +35,19 @@ namespace CudaUtils {
             R[6] = 0.;
             R[7] = 0.;
             R[8] = -1.;
-        } else if (cosAB < -1.+FLOAT_ZERO_TOLERANCE && cosAB > -1.-FLOAT_ZERO_TOLERANCE){
-            printf("WARNING: a and b almost point in opposite directions: cosAB = %e\n", cosAB);
+        } else {
+            real n = 1./(1. + cosAB);
+
+            R[0] = 1.-n*(v[2]*v[2]+v[1]*v[1]);
+            R[1] = -v[2]+n*v[0]*v[1];
+            R[2] = v[1]+n*v[0]*v[2];
+            R[3] = v[2]+n*v[0]*v[1];
+            R[4] = 1.-n*(v[2]*v[2]+v[0]*v[0]);
+            R[5] = -v[0]+n*v[1]*v[2];
+            R[6] = -v[1]+n*v[0]*v[2];
+            R[7] = v[0]+n*v[1]*v[2];
+            R[8] = 1.-n*(v[1]*v[1]+v[0]*v[0]);
         }
-
-        real n = 1./(1. + cosAB);
-
-        R[0] = 1.-n*(v[2]*v[2]+v[1]*v[1]);
-        R[1] = -v[2]+n*v[0]*v[1];
-        R[2] = v[1]+n*v[0]*v[2];
-        R[3] = v[2]+n*v[0]*v[1];
-        R[4] = 1.-n*(v[2]*v[2]+v[0]*v[0]);
-        R[5] = -v[0]+n*v[1]*v[2];
-        R[6] = -v[1]+n*v[0]*v[2];
-        R[7] = v[0]+n*v[1]*v[2];
-        R[8] = 1.-n*(v[1]*v[1]+v[0]*v[0]);
 #else
         printf("ERROR: Rotation matrix for DIM = %i not applicable/implemented.\n", DIM);
 #endif

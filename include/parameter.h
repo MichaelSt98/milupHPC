@@ -54,7 +54,7 @@ typedef int idInteger;
 
 /** SPH RELATED SWITCHES */
 /// integrate energy equation
-#define INTEGRATE_ENERGY 1
+#define INTEGRATE_ENERGY 0
 
 /// integrate density equation
 #define INTEGRATE_DENSITY 0

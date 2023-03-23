@@ -500,7 +500,32 @@ namespace MFV {
                         hatAij[d] = 1./AijNorm*Aij[d];
                     }
 
+#if SAFETY_LEVEL
+#if DIM == 3
+                    if (isnan(Aij[0]) || isnan(Aij[1]) || isnan(Aij[2])){
+                        cudaTerminate("Riemann ERROR: NaN in Aij[%i -> %i] = [%e, %e, %e], Aij_norm = %e\n",
+                                      i, ip, Aij[0], Aij[1], Aij[2], AijNorm);
+                    }
+#endif
+                    if (isnan(rhoL) || isnan(vL[0]) || isnan(pL)
+                        || isnan(rhoR) || isnan(vR[0]) || isnan(pR)){
+                        cudaTerminate("Riemann ERROR: Before rotation. NaN in L or R state. %i -> %i. WL = [%e, %e, %e], WR = [%e, %e, %e]\n",
+                                      i, ip, rhoL, vL[0], pL, rhoR, vR[0], pR);
+                    }
+#endif
+
                     ::CudaUtils::rotationMatrix(R, hatAij, unitX);
+
+#if SAFETY_LEVEL
+#if DIM == 3
+                    if(isnan(R[0]) || isnan(R[1]) || isnan(R[2])
+                       || isnan(R[3]) || isnan(R[4]) || isnan(R[5])
+                       || isnan(R[6]) || isnan(R[7]) || isnan(R[9])){
+                        cudaTerminate("Riemann ERROR: NaN in rotation matrix. %i -> %i. [%e, %e, %e, %e, %e, %e, %e, %e, %e]\n",
+                                      i, ip, R[0], R[1], R[2], R[3], R[4], R[5], R[6], R[7], R[8]);
+                    }
+#endif
+#endif
 
                     // rotate right state
 #pragma unroll
@@ -527,6 +552,14 @@ namespace MFV {
                     //    printf("Rotation effective face: [%e, %e, %e]\n", testRot[0], testRot[1], testRot[2]);
                     //}
 
+#if SAFETY_LEVEL
+                    if (isnan(rhoL) || isnan(vL[0]) || isnan(pL)
+                        || isnan(rhoR) || isnan(vR[0]) || isnan(pR)){
+                        cudaTerminate("Riemann ERROR: Final states. NaN in L or R state. %i -> %i. WL = [%e, %e, %e], WR = [%e, %e, %e]\n",
+                                      i, ip, rhoL, vL[0], pL, rhoR, vR[0], pR);
+                    }
+#endif
+
                     //TODO: R and L state are named the opposite in the exact Riemann solver and the rest of the code
                     flagLR = riemannSolver.solve(rhoR, vR[0], pR,
                                                  rhoL, vL[0], pL,
@@ -541,7 +574,12 @@ namespace MFV {
 //                        printf("        state R: rhoR = %e, vR = %e, pR = %e\n", rhoR, vR[0], pR);
 //                        printf("        sol: rhoSol = %e, vSol = %e, pSol = %e\n", rhoSol, vSol[0], pSol);
 //                    }
-
+#if SAFETY_LEVEL
+                    if(isnan(rhoSol) || isnan(vSol[0]) || isnan(pSol)){
+                        cudaTerminate("Riemann ERROR: NaN in solution. %i -> %i. rhoSol = %e, vSol = %e, pSol = %e\n",
+                                      i, ip, rhoSol, vSol[0], pSol);
+                    }
+#endif
 
 
                     if (flagLR == -1){
