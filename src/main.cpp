@@ -370,7 +370,7 @@ int main(int argc, char** argv)
     real timeElapsed;
     /// MAIN LOOP
     // -----------------------------------------------------------------------------------------------------------------
-    real t = 0;
+    //real t = 0;
     for (int i_step=0; i_step<parameters.numOutputFiles; i_step++) {
 
         //profiler.setStep(i_step);
@@ -394,7 +394,7 @@ int main(int argc, char** argv)
         profiler.value2file(ProfilerIds::Time::IO, timeElapsed);
 
 
-        t += parameters.timeStep;
+        //t += parameters.timeStep;
 
     }
 

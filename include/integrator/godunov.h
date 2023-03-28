@@ -17,6 +17,13 @@
 class Godunov : public Miluphpc {
 
 public:
+
+    int device;
+    struct cudaDeviceProp prop;
+    int *d_blockCount;
+
+    real *d_block_dt;
+
     /**
      * @brief Constructor.
      *

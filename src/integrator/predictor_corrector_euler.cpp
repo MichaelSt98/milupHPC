@@ -41,6 +41,7 @@ PredictorCorrectorEuler::~PredictorCorrectorEuler() {
     cuda::free(d_block_rho);
     cuda::free(d_block_vmax);
 
+    cuda::free(d_blockCount);
     cuda::free(d_blockShared);
 }
 
@@ -103,7 +104,7 @@ void PredictorCorrectorEuler::integrate(int step) {
         simulationTimeHandler->globalizeTimeStep(Execution::device);
         simulationTimeHandler->copy(To::host);
         Logger(INFO) << "h_dt = " << *simulationTimeHandler->h_dt << "  | h_dt_max = "
-                     << *simulationTimeHandler->h_dt_max;;
+                     << *simulationTimeHandler->h_dt_max;
         Logger(INFO) << "h_startTime = " << *simulationTimeHandler->h_startTime;
         Logger(INFO) << "h_subEndTime = " << *simulationTimeHandler->h_subEndTime;
         Logger(INFO) << "h_endTime = " << *simulationTimeHandler->h_endTime;

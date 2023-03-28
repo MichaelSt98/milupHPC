@@ -245,10 +245,21 @@ namespace MFV {
             unitX[2] = 0.;
 #endif
 #endif
+
+//            real mFlux, PxFlux,
+//#if DIM > 1
+//            PyFlux,
+//#if DIM ==3
+//            PzFlux
+//#endif
+//#endif
+//            eFlux; // buffer variables for fluxes
+
             real viDiv, vjDiv; // velocity divergences for forward prediction in time
             real gamma; // adiabatic index
             real rhoSol, vSol[DIM], pSol; // solution vector of Riemann problem
             real vLab2; // length of velocity solution squared in the laboratory frame
+            //real eKin; // kinetic energy of particle
 
 #if PAIRWISE_LIMITER
             real rhoR0, rhoL0, vxR0, vxL0, pR0, pL0;
@@ -636,7 +647,7 @@ namespace MFV {
                          */
                         vSol[d] = 0.;
                     }
-#endif
+#endif // MFM
 
                     particles->massFlux[i] += Aij[0]*rhoSol*vSol[0];
                     particles->vxFlux[i] += Aij[0]*(rhoSol*vBuf[0]*vSol[0]+pSol);
@@ -654,6 +665,28 @@ namespace MFV {
                     particles->energyFlux[i] += Aij[2]*(vSol[2]*(pSol/(gamma-1.)+rhoSol*.5*vLab2) + pSol*vBuf[2]);
 #endif
 #endif
+
+                    // total energy flux correction 2nd order ??
+                    // check at https://github.com/SWIFTSIM/SWIFT/blob/master/src/hydro/Gizmo/MFV/hydro_flux.h l. 116 ff.
+//#if MESHLESS_FINITE_METHOD == 1 && !MFV_FIX_PARTICLES
+//
+//                    eKin = .5 * particles->vx[i] * particles->vx[i];
+//#if DIM > 1
+//                    eKin += .5 * particles->vy[i] * particles->vy[i];
+//#if DIM == 3
+//                    eKin += .5 *particles->vz[i] * particles->vz[i];
+//#endif
+//#endif
+//
+//                    particles->energyFlux[i] -= *dt*(Aij[0]*rhoSol*vSol[0])*eKin;
+//#if DIM > 1
+//                    particles->energyFlux[i] -= *dt*(Aij[1]*rhoSol*vSol[1])*eKin;
+//#if DIM == 3
+//                    particles->energyFlux[i] -= *dt*(Aij[2]*rhoSol*vSol[2])*eKin;
+//#endif
+//#endif
+//#endif // Lagrangian MFV
+
                 }
 
 //#if MESHLESS_FINITE_METHOD == 2 // MFM

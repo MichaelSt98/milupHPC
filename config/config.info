@@ -25,9 +25,10 @@ particlesSent2H5 false
 ; explicit euler [0], predictor-corrector euler [1], leap-frog [2], godunov !!MFV/MFM only!! [3]
 integrator 3
 ; initial time step
-timeStep 5e-5
+; ignored when using MFV/MFM hydro methods
+timeStep 1e-6
 ; max time step allowed
-maxTimeStep 5e-5
+maxTimeStep 1e-4
 ; end time for simulation
 ;timeEnd 1.0
 ;timeEnd 5.0e7

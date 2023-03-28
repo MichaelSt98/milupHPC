@@ -3,16 +3,30 @@
 Godunov::Godunov(SimulationParameters simulationParameters) : Miluphpc(simulationParameters) {
     Logger(DEBUG) << "Godunov()";
     // TODO: init Leapfrog to be able to compute time-centered gravity source terms
+
+    /// helpers to find smallest timestep amongst all particles
+    cudaGetDevice(&device);
+    printf("Device: %i\n", device);
+    cudaGetDeviceProperties(&prop, device);
+    //printf("prop.multiProcessorCount: %i\n", prop.multiProcessorCount);
+    cuda::malloc(d_blockCount, 1);
+    cuda::set(d_blockCount, 0, 1);
+
+    cuda::malloc(d_block_dt, prop.multiProcessorCount);
+
 }
 
 Godunov::~Godunov() {
     Logger(DEBUG) << "~Godunov()";
+
+    cuda::free(d_blockCount);
+    cuda::free(d_block_dt);
 }
 
 void Godunov::integrate(int step){
 
     Timer timer;
-    real time = 0.;
+    real time = 0., timeFluxes = 0.;
 
     real timeElapsed;
 
@@ -43,9 +57,6 @@ void Godunov::integrate(int step){
         }
 
         timerRhs.reset();
-
-        // TODO: set timestep
-
         // -------------------------------------------------------------------------------------------------------------
         time += rhs(step, true, true);
         // -------------------------------------------------------------------------------------------------------------
@@ -55,7 +66,30 @@ void Godunov::integrate(int step){
         profiler.value2file(ProfilerIds::Time::rhs, time);
         profiler.value2file(ProfilerIds::Time::rhsElapsed, timeElapsed);
 
-        // TODO: what else is needed here?
+        Logger(INFO) << "selecting timestep";
+        GodunovNS::Kernel::Launch::selectTimestep(prop.multiProcessorCount,
+                                                  simulationTimeHandler->d_simulationTime,
+                                                  particleHandler->d_particles,
+                                                  numParticlesLocal,
+                                                  d_block_dt, d_blockCount);
+
+        simulationTimeHandler->globalizeTimeStep(Execution::device);
+        simulationTimeHandler->copy(To::host);
+        Logger(INFO) << "h_dt = " << *simulationTimeHandler->h_dt << "  | h_dt_max = "
+                     << *simulationTimeHandler->h_dt_max;
+        Logger(INFO) << "h_startTime = " << *simulationTimeHandler->h_startTime;
+        Logger(INFO) << "h_subEndTime = " << *simulationTimeHandler->h_subEndTime;
+        Logger(INFO) << "h_endTime = " << *simulationTimeHandler->h_endTime;
+        Logger(INFO) << "h_currentTime = " << *simulationTimeHandler->h_currentTime;
+
+        Logger(INFO) << "Computing fluxes for Godunov scheme";
+        timeFluxes = 0.;
+        timeFluxes = MFV::Kernel::Launch::riemannFluxes(particleHandler->d_particles, particleHandler->d_nnl, numParticlesLocal,
+                                                  d_slopeLimitingParameters, simulationTimeHandler->d_dt,
+                                                  materialHandler->d_materials);
+        Logger(TIME) << "mfv/mfm: riemannFluxes: " << timeFluxes << " ms";
+        profiler.value2file(ProfilerIds::Time::MFV::riemannFluxes, timeFluxes);
+        time += timeFluxes;
 
         Logger(INFO) << "Timestep update with Godunov scheme";
         time += GodunovNS::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal,

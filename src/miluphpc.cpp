@@ -2882,15 +2882,6 @@ real Miluphpc::parallel_sph() {
     profiler.value2file(ProfilerIds::Time::MFV::gradients, time);
     totalTime += time;
 
-
-    Logger(DEBUG) << "mfv/mfm: compute riemann fluxes";
-    time = MFV::Kernel::Launch::riemannFluxes(particleHandler->d_particles, particleHandler->d_nnl, numParticlesLocal,
-                                              d_slopeLimitingParameters, simulationTimeHandler->d_dt,
-                                              materialHandler->d_materials);
-    Logger(TIME) << "mfv/mfm: riemannFluxes: " << time << " ms";
-    profiler.value2file(ProfilerIds::Time::MFV::riemannFluxes, time);
-    totalTime += time;
-
 #else
     Logger(DEBUG) << "internal forces";
 

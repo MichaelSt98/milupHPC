@@ -65,7 +65,10 @@ typedef int idInteger;
 /// decouple smoothing length for pc integrator(s)
 #define DECOUPLE_SML 0
 
-/// variable smoothing length
+/** variable smoothing length
+ * SPH: include approximately the interactions as given in material.cfg
+ * MFV/MFM: interactions in material config define the effective neighbor number
+*/
 #define VARIABLE_SML 0
 
 /// correct smoothing length
@@ -94,6 +97,11 @@ typedef int idInteger;
 
 /// employ an additional pairwise limiter between particles
 #define PAIRWISE_LIMITER 1
+
+/** Courant (CFL) number (note that our sml is defined up to the zero of the kernel, not half of it)
+ *  Note that this number is used for different criteria in SPH and MFV/MFM
+ */
+#define COURANT_FACT 0.1
 
 // deprecated flag
 #define ARTIFICIAL_VISCOSITY 1
@@ -127,9 +135,6 @@ typedef int idInteger;
 #define MAX_NUM_INTERACTIONS 180
 #define NUM_THREADS_LIMIT_TIME_STEP 256
 #define NUM_THREADS_CALC_CENTER_OF_MASS 256
-
-// Courant (CFL) number (note that our sml is defined up to the zero of the kernel, not half of it)
-#define COURANT_FACT 0.4
 
 #define FORCES_FACT 0.2
 
