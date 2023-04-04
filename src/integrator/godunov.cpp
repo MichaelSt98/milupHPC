@@ -91,9 +91,14 @@ void Godunov::integrate(int step){
         profiler.value2file(ProfilerIds::Time::MFV::riemannFluxes, timeFluxes);
         time += timeFluxes;
 
+        Logger(INFO) << "Guessing appropriate kernel sizes";
+        MFV::Kernel::Launch::guessSML(particleHandler->d_particles, numParticlesLocal,
+                                      *simulationTimeHandler->h_dt);
+
         Logger(INFO) << "Timestep update with Godunov scheme";
         time += GodunovNS::Kernel::Launch::update(particleHandler->d_particles, numParticlesLocal,
                                                  *simulationTimeHandler->h_dt);
+
 
         profiler.value2file(ProfilerIds::Time::integrate, time);
 

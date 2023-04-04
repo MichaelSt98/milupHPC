@@ -15,6 +15,31 @@
 
 namespace MFV {
 
+    namespace Compute {
+
+        /**
+         * @brief derivative by kernel size/smoothing length of cubbic spline kernel
+         *
+         * @param[out] dWdh derivative of kernel by smoothing length
+         * @param[in] dx vector between particles i and j
+         * @param[in] sml smoothing length or kernel size
+         *
+         */
+        __device__ void dWdh_cubicSpline(real &dWdh, real dx[DIM], real sml);
+
+        /**
+         * @brief worker function to compute invere volume \f$ \omega(\vec{x}_i) \f$.
+         *
+         * @param[out] omg inverse volume/number density
+         * @param[in] i index of particle \f$ i \f$
+         * @param[in] kernel smoothing kernel
+         * @param[in] particles Particles class instance
+         * @param[in] interactions interaction list/interaction partners
+         * @returs derivative of kernel by smoothing length for variable smoothing length mode
+         */
+        __device__ real inverseVolume(real &omg, int i, ::SPH::SPH_kernel kernel, Particles *particles, int *interactions);
+    }
+
     namespace Kernel {
 
         /**

@@ -2684,8 +2684,9 @@ real Miluphpc::parallel_sph() {
 #endif
 
     time = 0.;
-#if VARIABLE_SML
+#if VARIABLE_SML && !MESHLESS_FINITE_METHOD // other version of variable sml for MFV/MFM
     // -----------------------------------------------------------------------------------------------------------------
+    Logger(DEBUG) << "sph: doing neighbor search to find appropriate smoothing length"
     time += SPH::Kernel::Launch::fixedRadiusNN_variableSML(materialHandler->d_materials, treeHandler->d_tree,
                                                            particleHandler->d_particles, particleHandler->d_nnl,
                                                            numParticlesLocal, numParticles, numNodes);
@@ -2735,10 +2736,16 @@ real Miluphpc::parallel_sph() {
 
     Logger(TIME) << "sph: presorting: " << timeSorting << " ms";*/
 
+#if MESHLESS_FINITE_METHOD && VARIABLE_SML
+    Logger(DEBUG) << "Variable SML FRNN for meshless methods MFV/MFM";
+    time = MFV::Kernel::Launch::variableSML_FRNN(treeHandler->d_tree, particleHandler->d_particles,
+                                         particleHandler->d_nnl, diam, numParticlesLocal, numParticles, numNodes,
+                                         materialHandler->d_materials, kernelHandler.kernel);
+#else
     int fixedRadiusNN_version = simulationParameters.sphFixedRadiusNNVersion;
     if (fixedRadiusNN_version == 0) {
         // -------------------------------------------------------------------------------------------------------------
-        time += SPH::Kernel::Launch::fixedRadiusNN(treeHandler->d_tree, particleHandler->d_particles,
+        time = SPH::Kernel::Launch::fixedRadiusNN(treeHandler->d_tree, particleHandler->d_particles,
                                                    particleHandler->d_nnl,
                                                    diam, numParticlesLocal, numParticles, numNodes);
         // -------------------------------------------------------------------------------------------------------------
@@ -2746,13 +2753,13 @@ real Miluphpc::parallel_sph() {
     else if (fixedRadiusNN_version == 1) {
         // ATTENTION: brute-force method
         Logger(WARN) << "Do you really want to use brute force?! - Ok then, see you tomorrow for the next timestep.";
-        time += SPH::Kernel::Launch::fixedRadiusNN_bruteForce(treeHandler->d_tree, particleHandler->d_particles,
+        time = SPH::Kernel::Launch::fixedRadiusNN_bruteForce(treeHandler->d_tree, particleHandler->d_particles,
                                                               particleHandler->d_nnl, numParticlesLocal, numParticles,
                                                               numNodes);
     }
     else if (fixedRadiusNN_version == 2) {
         // using shared memory (not beneficial)
-        time += SPH::Kernel::Launch::fixedRadiusNN_sharedMemory(treeHandler->d_tree, particleHandler->d_particles,
+        time = SPH::Kernel::Launch::fixedRadiusNN_sharedMemory(treeHandler->d_tree, particleHandler->d_particles,
                                                                 particleHandler->d_nnl, numParticlesLocal, numParticles,
                                                                 numNodes);
     }
@@ -2767,6 +2774,7 @@ real Miluphpc::parallel_sph() {
         MPI_Finalize();
         exit(1);
     }
+#endif // MESHLESS_FINITE_METHOD && VARIABLE_SML
 
     profiler.value2file(ProfilerIds::Time::SPH::fixedRadiusNN, time);
     totalTime += time;
@@ -2780,6 +2788,7 @@ real Miluphpc::parallel_sph() {
 
 #if MESHLESS_FINITE_METHOD
 
+#if !Variable_SML // otherwise density has already been calculated
     Logger(DEBUG) << "mfv/mfm: calculate density";
     // -----------------------------------------------------------------------------------------------------------------
     time = MFV::Kernel::Launch::calculateDensity(kernelHandler.kernel, particleHandler->d_particles,
@@ -2788,6 +2797,7 @@ real Miluphpc::parallel_sph() {
     Logger(TIME) << "mfv/mfm: calculateDensity: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::MFV::density, time);
     totalTime += time;
+#endif // !VARIABLE_SML
 
     Logger(DEBUG) << "mfv/mfm: compute vector weights for gradient estimation and effective face computation";
     // -----------------------------------------------------------------------------------------------------------------
@@ -2801,7 +2811,7 @@ real Miluphpc::parallel_sph() {
 
     // TODO: increase kernel size if N_cond > N_cond^crit for particle i
 
-#else
+#else // MESHLESS_FINITE_METHOD
     Logger(DEBUG) << "calculate density";
     // -----------------------------------------------------------------------------------------------------------------
     time = SPH::Kernel::Launch::calculateDensity(kernelHandler.kernel, treeHandler->d_tree,
@@ -2810,7 +2820,7 @@ real Miluphpc::parallel_sph() {
     // -----------------------------------------------------------------------------------------------------------------
     Logger(TIME) << "sph: calculateDensity: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::SPH::density, time);
-#endif
+#endif // MESHLESS_FINITE_METHOD
 
 #if BALSARA_SWITCH && !MESHLESS_FINITE_METHODS // no correction needed for MFV/MFM
     Logger(DEBUG) << "balsara switch";

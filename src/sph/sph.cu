@@ -216,6 +216,11 @@ namespace SPH {
                                     //    assert(0);
                                     //}
                                     // end: debug
+                                    if (noOfInteractions > MAX_NUM_INTERACTIONS) {
+                                        cudaTerminate("noOfInteractions = %i > MAX_NUM_INTERACTIONS = %i\n",
+                                                      noOfInteractions, MAX_NUM_INTERACTIONS);
+                                    }
+
                                     noOfInteractions++;
                                 }
                             }

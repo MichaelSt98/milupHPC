@@ -69,7 +69,7 @@ typedef int idInteger;
  * SPH: include approximately the interactions as given in material.cfg
  * MFV/MFM: interactions in material config define the effective neighbor number
 */
-#define VARIABLE_SML 0
+#define VARIABLE_SML 1
 
 /// correct smoothing length
 #define SML_CORRECTION 0
@@ -135,6 +135,10 @@ typedef int idInteger;
 #define MAX_NUM_INTERACTIONS 180
 #define NUM_THREADS_LIMIT_TIME_STEP 256
 #define NUM_THREADS_CALC_CENTER_OF_MASS 256
+
+/// parameters for variable kernel size for MFV/MFM
+#define ROOT_FOUND_TOL_SML 1e-2
+#define MAX_NUM_SML_ITERATIONS 100
 
 #define FORCES_FACT 0.2
 

@@ -43,6 +43,7 @@
 #include "sph/soundspeed.cuh"
 #include "mfv/volume_partition.cuh"
 #include "mfv/riemann_fluxes.cuh"
+#include "mfv/variable_sml.cuh"
 #include "simulation_time_handler.h"
 
 #include "processing/kernels.cuh"
