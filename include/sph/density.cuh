@@ -59,7 +59,7 @@ namespace SPH {
              */
             real calculateDensity(::SPH::SPH_kernel kernel, Tree *tree, Particles *particles, int *interactions, int numParticles);
         }
-
+    
     }
 }
 

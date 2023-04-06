@@ -30,7 +30,74 @@ namespace SPH {
         boost::mpi::wait_all(reqParticles.begin(), reqParticles.end());
     }
 
+
     namespace Kernel {
+
+        __global__ void createGhostsPeriodic(Tree *tree, Particles *particles, integer *ghostParticleIndices,
+                                           IntegratedParticles *ghostParticles, integer *numGhosts,
+                                           real searchRadius, integer numParticlesLocal) {
+            integer bodyIndex = threadIdx.x + blockIdx.x * blockDim.x;
+            integer stride = blockDim.x * gridDim.x;
+            integer offset = 0;
+
+            // loop over all local particles
+            while (bodyIndex + offset < numParticlesLocal){
+
+                int ghostIndex = -1;
+
+                //TODO: Implement x,y,z locks to omit ghostParticleIndices
+                if (particles->x[bodyIndex + offset] <= *tree->minX + searchRadius){
+                    ghostIndex = atomicAdd(numGhosts, 1);
+                    ghostParticleIndices[ghostIndex] = bodyIndex + offset;
+                    ghostParticles->x[bodyIndex + offset] = *tree->maxX + (particles->x[bodyIndex + offset] - *tree->minX);
+
+                } else if (*tree->maxX - searchRadius < particles->x[bodyIndex + offset]){
+                    if (ghostIndex < 1) ghostIndex = atomicAdd(numGhosts, 1);
+                    ghostParticleIndices[ghostIndex] = bodyIndex + offset;
+                    ghostParticles->x[bodyIndex + offset] = *tree->minX - (*tree->maxX - particles->x[bodyIndex + offset]);
+
+                } else {
+                    ghostParticles->x[bodyIndex + offset] = particles->x[bodyIndex + offset];
+                }
+#if DIM > 1
+                if (particles->y[bodyIndex + offset] <= *tree->minY + searchRadius){
+                    if (ghostIndex < 1) ghostIndex = atomicAdd(numGhosts, 1);
+                    ghostParticleIndices[ghostIndex] = bodyIndex + offset;
+                    ghostParticles->y[bodyIndex + offset] = *tree->maxY + (particles->y[bodyIndex + offset] - *tree->minY);
+
+                } else if (*tree->maxY - searchRadius < particles->y[bodyIndex + offset]){
+                    if (ghostIndex < 1) ghostIndex = atomicAdd(numGhosts, 1);
+                    ghostParticleIndices[ghostIndex] = bodyIndex + offset;
+                    ghostParticles->y[bodyIndex + offset] = *tree->minY - (*tree->maxY - particles->y[bodyIndex + offset]);
+
+                } else {
+                    ghostParticles->y[bodyIndex + offset] = particles->y[bodyIndex + offset];
+                }
+#if DIM == 3
+                if (particles->z[bodyIndex + offset] <= *tree->minZ + searchRadius){
+                    if (ghostIndex < 1) ghostIndex = atomicAdd(numGhosts, 1);
+                    ghostParticleIndices[ghostIndex] = 1;
+                    ghostParticles->z[bodyIndex + offset] = *tree->maxZ + (particles->z[bodyIndex + offset] - *tree->minZ);
+
+                } else if (*tree->maxZ - searchRadius < particles->z[bodyIndex + offset]){
+                    ghostParticleIndices[ghostIndex] = 1;
+                    ghostParticles->z[bodyIndex + offset] = *tree->minZ - (*tree->maxZ - particles->z[bodyIndex + offset]);
+
+                } else {
+                    ghostParticles->z[bodyIndex + offset] = particles->z[bodyIndex + offset];
+                }
+#endif
+#endif
+                //TODO: add missing corner particles and add 3D cases
+                // Copy needed values for sph
+                if (ghostIndex >= 1){
+                    //TODO: any neccessary? propably not
+                }
+                offset += stride;
+            }
+
+        }
+
 
         // Brute-force method (you don't want to use this!)
         __global__ void fixedRadiusNN_bruteForce(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
@@ -3083,6 +3150,14 @@ namespace SPH {
         }
 
         namespace Launch {
+
+            real createGhostsPeriodic(Tree *tree, Particles *particles, integer *ghostParticleIndices,
+                                      IntegratedParticles *ghostParticles, integer &numGhosts,
+                                      real searchRadius, integer numParticlesLocal) {
+                ExecutionPolicy executionPolicy;
+                return cuda::launch(true, executionPolicy, ::SPH::Kernel::createGhostsPeriodic, tree, particles, ghostParticleIndices,
+                                    ghostParticles, &numGhosts, searchRadius, numParticlesLocal);
+            }
 
             real fixedRadiusNN_bruteForce(Tree *tree, Particles *particles, integer *interactions, integer numParticlesLocal,
                                      integer numParticles, integer numNodes) {

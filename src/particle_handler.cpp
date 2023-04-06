@@ -901,7 +901,7 @@ IntegratedParticleHandler::IntegratedParticleHandler(integer numParticles, integ
 
     cuda::malloc(d_uid, numParticles);
 
-    cuda::malloc(d_x, numNodes);
+    cuda::malloc(d_x, numNodes); //TODO: this could fail if numNodes is not enough for ghosts
     cuda::malloc(d_vx, numParticles); // numNodes
     cuda::malloc(d_ax, numParticles); // numNodes
 #if DIM > 1
@@ -926,6 +926,10 @@ IntegratedParticleHandler::IntegratedParticleHandler(integer numParticles, integ
 //#if INTEGRATE_DENSITY
     cuda::malloc(d_drhodt, numParticles);
 //#endif
+#if PERIODIC_BOUNDARIES
+    // TODO: could allocate less in most cases
+    cuda::malloc(d_ghostParticleIndices, numNodes);
+#endif
 
 #if VARIABLE_SML || INTEGRATE_SML
     cuda::malloc(d_dsmldt, numParticles);
@@ -985,6 +989,9 @@ IntegratedParticleHandler::~IntegratedParticleHandler() {
 //#if INTEGRATE_DENSITY
     cuda::free(d_drhodt);
 //#endif
+#if PERIODIC_BOUNDARIES
+    cuda::free(d_ghostParticleIndices);
+#endif
 
 #if VARIABLE_SML || INTEGRATE_SML
     cuda::free(d_dsmldt);
@@ -993,5 +1000,11 @@ IntegratedParticleHandler::~IntegratedParticleHandler() {
     cuda::free(d_integratedParticles);
 
 }
+
+#if PERIODIC_BOUNDARIES
+void IntegratedParticleHandler::copyNumGhosts(To::Target target){
+    cuda::copy(&h_numGhosts, &h_numGhosts, 1, target);
+}
+#endif
 
 

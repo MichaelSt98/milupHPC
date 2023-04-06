@@ -2325,6 +2325,32 @@ real Miluphpc::parallel_sph() {
 
     time = 0;
 
+#if PERIODIC_BOUNDARIES
+    // insert ghost particles
+    // TODO: check if it is neccessary to allocate for the whole particle amount
+    // TODO: crate own handler for ghost particles instead of abusing IntegratedParticles
+    IntegratedParticleHandler *ghostParticleHandler = new IntegratedParticleHandler(numParticlesLocal, numNodes);
+
+    Logger(DEBUG) << "Creating ghost particles ...";
+
+    // reset number of ghosts
+    ghostParticleHandler->h_numGhosts = 0;
+    ghostParticleHandler->copyNumGhosts(To::device);
+
+    SPH::Kernel::Launch::createGhostsPeriodic(treeHandler->d_tree, particleHandler->d_particles,
+                                              ghostParticleHandler->d_ghostParticleIndices,
+                                              ghostParticleHandler->d_integratedParticles, ghostParticleHandler->d_numGhosts,
+                                              h_searchRadius, numParticlesLocal);
+    //TODO: add timings
+
+    ghostParticleHandler->copyNumGhosts(To::host);
+    Logger(TRACE) << "Number of ghost particles: " << ghostParticleHandler->h_numGhosts;
+
+    //TODO: globalize ghost particles
+
+#endif
+
+
     // original master version
     /*
     Logger(DEBUG) << "relevant indices counter: " << relevantIndicesCounter;
@@ -2673,6 +2699,7 @@ real Miluphpc::parallel_sph() {
                                                            numParticlesLocal, numParticles, numNodes);
     // -----------------------------------------------------------------------------------------------------------------
     // TODO: for variable SML
+    // TODO: Check if result is overwritten by fixedRadiusNN_* called later
     // überprüfen inwiefern sich die sml geändert hat, sml_new <= sml_global_search // if sml_new > sml_global_search
 #endif
 
@@ -2747,6 +2774,10 @@ real Miluphpc::parallel_sph() {
         exit(1);
     }
 
+
+    //TODO: globalize ghosts before NNS ?
+    //TODO: ghost particles NNS ?
+
     profiler.value2file(ProfilerIds::Time::SPH::fixedRadiusNN, time);
     totalTime += time;
     Logger(TIME) << "sph: fixedRadiusNN: " << time << " ms";
@@ -2762,6 +2793,11 @@ real Miluphpc::parallel_sph() {
     time = SPH::Kernel::Launch::calculateDensity(kernelHandler.kernel, treeHandler->d_tree,
                                                  particleHandler->d_particles, particleHandler->d_nnl,
                                                  numParticlesLocal); //treeHandler->h_toDeleteLeaf[1]);
+#if PERIODIC_BOUNDARIES
+    time = SPH::Kernel::Launch::addGhostDensity(kernelHandler.kernel, treeHandler->d_tree,
+                                                particleHandler->d_particles, particleHandler->d_nnl,
+                                                numParticlesLocal);
+#endif
     // -----------------------------------------------------------------------------------------------------------------
     Logger(TIME) << "sph: calculateDensity: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::SPH::density, time);
@@ -2832,6 +2868,8 @@ real Miluphpc::parallel_sph() {
                                         particleHandler->d_particles, particleHandler->d_nnl, numParticlesLocal);
     Logger(TIME) << "sph: internalForces: " << time << " ms";
     profiler.value2file(ProfilerIds::Time::SPH::internalForces, time);
+
+    //TODO: add ghost internal forces
 
     time = SubDomainKeyTreeNS::Kernel::Launch::repairTree(subDomainKeyTreeHandler->d_subDomainKeyTree, treeHandler->d_tree,
                                                           particleHandler->d_particles, domainListHandler->d_domainList,

@@ -61,13 +61,18 @@ void PredictorCorrectorEuler::integrate(int step) {
         subStep++;
 
         timer.reset();
+
+#if PERIODIC_BOUNDARIES
+        //TODO: write time to profiler
+        time = moveParticlesPeriodic();
+#else
         if (simulationParameters.removeParticles) {
             time = removeParticles();
         }
         timeElapsed = timer.elapsed();
         profiler.value2file(ProfilerIds::Time::removeParticles, timeElapsed);
         Logger(TIME) << "removing particles: " << timeElapsed << " ms";
-
+#endif
         Logger(INFO) << "rhs::loadBalancing()";
         if (simulationParameters.loadBalancing && step != 0 && step % simulationParameters.loadBalancingInterval == 0) {
             dynamicLoadBalancing();

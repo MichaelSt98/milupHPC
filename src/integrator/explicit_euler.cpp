@@ -35,6 +35,7 @@ void ExplicitEuler::integrate(int step) {
         timer.reset();
 
 #if PERIODIC_BOUNDARIES
+        //TODO: write time to profiler
         time = moveParticlesPeriodic();
 #else
         if (simulationParameters.removeParticles) {

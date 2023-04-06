@@ -38,6 +38,27 @@ namespace SPH {
     namespace Kernel {
 
         /**
+         * @brief Create necessary ghost particles for periodic boundary conditions
+         *
+         * > Corresponding wrapper function: ::SPH::Kernel::Launch::createGhostsPeriodic
+         *
+         * This function is only used for SPH simulations and when PERIODIC_BOUNDARIES is true.
+         * The container `ghostParticles` is filled with the required particles to enforce periodic boundaries.
+         *
+         * @param[in] tree Tree class instance needed for bounding box
+         * @param[in] particles Particles class instance
+         * @param [out] ghostParticleIndices Indices at which ghost particles are located
+         * @param[out] ghostParticles IntegratedParticles instance holding ghost particles
+         * @param[out] numGhosts Number of ghost particles
+         * @param[in] searchRadius Radius which is the maximum distance to the borders for a particle
+         *                         to be mirrored as ghost, typically smoothing length
+         * @param[in] numParticlesLocal number of particles on this process
+         */
+         __global__ void createGhostsPeriodic(Tree *tree, Particles *particles, integer *ghostParticleIndices,
+                                              IntegratedParticles *ghostParticles, integer &numGhosts,
+                                              real searchRadius, integer numParticlesLocal);
+
+        /**
          * @brief Fixed-radius near neighbor search (brute-force method).
          *
          * > Corresponding wrapper function: ::SPH::Kernel::Launch::fixedRadiusNN_bruteForce()
@@ -326,6 +347,15 @@ namespace SPH {
 
         /// SPH related (CUDA) kernel wrappers.
         namespace Launch {
+
+            /**
+             * @brief Wrapper for ::SPH::Kernel::createGhostsPeriodic
+             *
+             * @return Wall time for kernel execution
+             */
+             real createGhostsPeriodic(Tree *tree, Particles *particles, integer *ghostParticleIndices,
+                                       IntegratedParticles *ghostParticles, integer &numGhosts,
+                                       real searchRadius, integer numParticlesLocal);
 
             /**
              * @brief Wrapper for ::SPH::Kernel::fixedRadiusNN_bruteForce().

@@ -465,7 +465,13 @@ public:
 //#if INTEGRATE_DENSITY
     real *d_drhodt;
 //#endif
-
+#if PERIODIC_BOUNDARIES
+    /// number of ghost particles
+    integer d_numGhosts, h_numGhosts;
+    /// using IntegratedParticles instance as container for ghost particles
+    integer *d_ghostParticleIndices;
+    void copyNumGhosts(To::Target target);
+#endif
 #if VARIABLE_SML || INTEGRATE_SML
     real *d_dsmldt;
 #endif

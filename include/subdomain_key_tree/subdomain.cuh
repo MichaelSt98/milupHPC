@@ -731,6 +731,13 @@ namespace ParticlesNS {
         __global__ void moveParticlesPeriodic(Tree *tree, Particles *particles, int numParticles);
 
         namespace Launch {
+            /**
+             *
+             * @param tree
+             * @param particles
+             * @param numParticles
+             * @return
+             */
             real moveParticlesPeriodic(Tree *tree, Particles *particles, int numParticles);
         }
     }
