@@ -25,7 +25,7 @@ namespace MFV {
             if (q < .5){
                 dWdh = sigma*(-6.*(DIM+3.)*q*q*q/sml + 6.*(DIM+2)*q*q/sml - DIM/sml);
             } else if (q <= 1.){
-                dWdh = sigma*(3.*q*(1.-q)*(1.-q)-DIM/sml*(1.-q)*(1.-q)*(1.-q));
+                dWdh = sigma*2.*(3.*q/sml*(1.-q)*(1.-q)-DIM/sml*(1.-q)*(1.-q)*(1.-q));
             } else {
                 dWdh = 0.;
             }

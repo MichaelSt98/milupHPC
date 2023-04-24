@@ -2686,7 +2686,7 @@ real Miluphpc::parallel_sph() {
     time = 0.;
 #if VARIABLE_SML && !MESHLESS_FINITE_METHOD // other version of variable sml for MFV/MFM
     // -----------------------------------------------------------------------------------------------------------------
-    Logger(DEBUG) << "sph: doing neighbor search to find appropriate smoothing length"
+    Logger(DEBUG) << "sph: doing neighbor search to find appropriate smoothing length";
     time += SPH::Kernel::Launch::fixedRadiusNN_variableSML(materialHandler->d_materials, treeHandler->d_tree,
                                                            particleHandler->d_particles, particleHandler->d_nnl,
                                                            numParticlesLocal, numParticles, numNodes);

@@ -236,7 +236,7 @@ if __name__ == '__main__':
     parser.add_argument('--analytical', "-a", action='store_true')
     parser.add_argument('--csv', "-c", action='store_true')
     parser.add_argument("--plot_type", "-p", metavar="int", type=int,
-                        help="plot type ([0]: rho; [1]: rho, p, e;[2]: rho, p, e, noi)", required=True)
+                        help="plot type ([0]: rho; [1]: rho, p, e;[2]: rho, p, e, noi; [3]: p)", required=True)
     parser.add_argument("--radius", "-r", type=float, help="max(radius)", default=0.5)
     args = parser.parse_args()
 
@@ -313,20 +313,27 @@ if __name__ == '__main__':
 
     # font = {'family': 'normal', 'weight': 'bold', 'size': 18}
     # font = {'family': 'normal', 'size': 18}
-    font = {'size': 12}
-    matplotlib.rc('font', **font)
+    #font = {'size': 12}
+    #matplotlib.rc('font', **font)
+
+    plt.rc('text', usetex=True)
+    plt.rcParams.update({'font.size': 18})
+    
 
     if args.plot_type == 0:
-        fig, (ax1) = plt.subplots(nrows=1, sharex=True)
+        fig, (ax1) = plt.subplots(nrows=1, sharex=True, figsize=(7,6), dpi=200)
         plt.subplots_adjust(hspace=0.1)
+        #ax1.scatter(r, rho, c=colors["rho"], s=0.1, alpha=0.3)
+        ax1.scatter(r, rho, c='k', s=0.7, marker='o', label="numerical")#, alpha=0.3)
         if plot_analytical_solution:
-            ax1.plot(r_analytical, rho_analytical, color=colors["rho"])
-        ax1.scatter(r, rho, c=colors["rho"], s=0.1, alpha=0.3)
-        ax1.set_title("Time t = %.2e" % float(time))
+            ax1.plot(r_analytical, rho_analytical, color=colors["rho"], label="analytical")
+        ax1.set_title(r"Density peak at $t = %.2f$" % float(time))
         ax1.set_xlabel(r'$r$')
-        ax1.set_ylabel(r'$\rho$')
+        ax1.set_ylabel(r'$\varrho$')
         ax1.set_xlim(0, r_max)
-        ax1.set_ylim(0, 4.0)
+        ax1.set_ylim(0, 4.2)
+        plt.grid()
+        plt.legend(loc='best')
     elif args.plot_type == 1:
         fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, sharex=True)
         plt.subplots_adjust(hspace=0.1)
@@ -374,6 +381,20 @@ if __name__ == '__main__':
         ax4.set_xlabel(r'$r$')
         ax4.set_ylabel(r'#interactions')
         ax4.set_xlim(0, r_max)
+    elif args.plot_type == 3:
+        fig, (ax1) = plt.subplots(nrows=1, sharex=True, figsize=(7,6), dpi=200)
+        plt.subplots_adjust(hspace=0.1)
+        #ax1.scatter(r, rho, c=colors["rho"], s=0.1, alpha=0.3)
+        ax1.scatter(r, pressure, c='k', s=0.7, marker='o', label="numerical")#, alpha=0.3)
+        if plot_analytical_solution:
+            ax1.plot(r_analytical, pressure_analytical, color=colors["pressure"], label="analytical")
+        ax1.set_title(r"Pressure peak at $t = %.2f$" % float(time))
+        ax1.set_xlabel(r'$r$')
+        ax1.set_ylabel(r'$P$')
+        ax1.set_xlim(0, r_max)
+        ax1.set_ylim(0, 5.)
+        plt.grid()
+        plt.legend(loc='best')
     else:
         sys.exit(1)
 

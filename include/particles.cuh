@@ -134,7 +134,7 @@ public:
     /// (pointer to) pressure (array)
     real *p; // pressure
 
-#if MESHLESS_FINITE_METHOD
+//#if MESHLESS_FINITE_METHOD
     /// (pointer) to inverse effective volume (array)
     real *omega;
 
@@ -170,7 +170,7 @@ public:
     real *energyFlux; // total energy flux
     real *Ncond; // condition number on invertibility of matrix E_i
 
-#endif // MESHLESS_FINITE_METHOD
+//#endif // MESHLESS_FINITE_METHOD
 
     /// (pointer) to max(mu_ij) (array) needed for artificial viscosity and determining timestp
     real *muijmax;

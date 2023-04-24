@@ -44,9 +44,9 @@ __global__ void GodunovNS::Kernel::selectTimestep(SimulationTime *simulationTime
             signalVel = cuda::math::max(signalVel, particles->cs[i] + particles->cs[ip] - temp);
         }
 
-        dt = 2.*COURANT_FACT*particles->sml[i]/abs(signalVel);
+        //dt = 2.*COURANT_FACT*particles->sml[i]/abs(signalVel);
         //TODO: factor 2 allows for quite a large timestep
-        //dt = COURANT_FACT*particles->sml[i]/signalVel;
+        dt = COURANT_FACT*particles->sml[i]/signalVel;
         //printf("Selected timestep dt = %e\n", dt);
     }
     __threadfence();

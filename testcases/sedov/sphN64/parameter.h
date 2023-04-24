@@ -54,13 +54,13 @@ typedef int idInteger;
 
 /** SPH RELATED SWITCHES */
 /// integrate energy equation
-#define INTEGRATE_ENERGY 0
+#define INTEGRATE_ENERGY 1
 
 /// integrate density equation
 #define INTEGRATE_DENSITY 0
 
 /// integrate smoothing length
-#define INTEGRATE_SML 0
+#define INTEGRATE_SML 1
 
 /// decouple smoothing length for pc integrator(s)
 #define DECOUPLE_SML 0
@@ -69,7 +69,7 @@ typedef int idInteger;
  * SPH: include approximately the interactions as given in material.cfg
  * MFV/MFM: interactions in material config define the effective neighbor number
 */
-#define VARIABLE_SML 1
+#define VARIABLE_SML 0
 
 /// correct smoothing length
 #define SML_CORRECTION 0
@@ -90,10 +90,10 @@ typedef int idInteger;
  *  **MESHLESS_FINITE_METHOD 1:** Use MFV for hydrodynamics
  *  **MESHLESS_FINITE_METHOD 2:** Use MFM for hydrodynamics
  */
-#define MESHLESS_FINITE_METHOD 1
+#define MESHLESS_FINITE_METHOD 0
 
 /// do not move particles which is only valid for MFV
-#define MFV_FIX_PARTICLES 0
+#define MFV_FIX_PARTICLES 1
 
 /// employ an additional pairwise limiter between particles
 #define PAIRWISE_LIMITER 1
@@ -101,7 +101,7 @@ typedef int idInteger;
 /** Courant (CFL) number (note that our sml is defined up to the zero of the kernel, not half of it)
  *  Note that this number is used for different criteria in SPH and MFV/MFM
  */
-#define COURANT_FACT 0.2
+#define COURANT_FACT 0.4
 
 // deprecated flag
 #define ARTIFICIAL_VISCOSITY 1
@@ -137,7 +137,7 @@ typedef int idInteger;
 #define NUM_THREADS_CALC_CENTER_OF_MASS 256
 
 /// parameters for variable kernel size for MFV/MFM
-#define ROOT_FOUND_TOL_SML 1e-4
+#define ROOT_FOUND_TOL_SML 1e-2
 #define MAX_NUM_SML_ITERATIONS 100
 
 #define FORCES_FACT 0.2
